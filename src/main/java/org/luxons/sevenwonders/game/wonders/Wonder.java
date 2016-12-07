@@ -7,20 +7,41 @@ import org.luxons.sevenwonders.game.resources.ResourceType;
 
 public class Wonder {
 
-    private final ResourceType initialResource;
+    private String name;
 
-    private final List<WonderLevel> levels;
+    private ResourceType initialResource;
 
-    public Wonder(ResourceType initialResource, WonderLevel... levels) {
+    private List<WonderLevel> levels;
+
+    public Wonder() {
+    }
+
+    public Wonder(String name, ResourceType initialResource, WonderLevel... levels) {
         this.initialResource = initialResource;
         this.levels = Arrays.asList(levels);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ResourceType getInitialResource() {
         return initialResource;
     }
 
+    public void setInitialResource(ResourceType initialResource) {
+        this.initialResource = initialResource;
+    }
+
     public List<WonderLevel> getLevels() {
         return levels;
+    }
+
+    public void setLevels(List<WonderLevel> levels) {
+        this.levels = levels;
     }
 }

@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.effects;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.Science;
 
-public class ScienceIncrease extends InstantEffect {
+public class ScienceProgress extends InstantEffect {
 
     private Science science;
 

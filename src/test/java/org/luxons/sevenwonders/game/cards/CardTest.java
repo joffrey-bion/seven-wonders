@@ -24,9 +24,9 @@ public class CardTest {
     @Before
     public void initBoard() {
         Settings settings = new Settings();
-        board = new Board(new Wonder(ResourceType.WOOD), settings);
-        leftBoard = new Board(new Wonder(ResourceType.STONE), settings);
-        rightBoard = new Board(new Wonder(ResourceType.PAPYRUS), settings);
+        board = new Board(new Wonder("TestWonder", ResourceType.WOOD), settings);
+        leftBoard = new Board(new Wonder("TestWonder", ResourceType.STONE), settings);
+        rightBoard = new Board(new Wonder("TestWonder", ResourceType.PAPYRUS), settings);
 
         Requirements treeFarmRequirements = new Requirements();
         treeFarmRequirements.setGoldCost(1);
