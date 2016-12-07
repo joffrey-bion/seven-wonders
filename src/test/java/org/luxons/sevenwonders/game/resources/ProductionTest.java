@@ -150,7 +150,7 @@ public class ProductionTest {
     @Test
     public void contains_multipleChoices_moreThanEnough() throws Exception {
         Production production = new Production();
-        production.addChoice(ResourceType.LINEN, ResourceType.GLASS, ResourceType.PAPYRUS);
+        production.addChoice(ResourceType.LOOM, ResourceType.GLASS, ResourceType.PAPYRUS);
         production.addChoice(ResourceType.STONE, ResourceType.ORE);
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
         assertTrue(production.contains(resources1Stone1Wood));

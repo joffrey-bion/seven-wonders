@@ -61,7 +61,7 @@ public class ResourcesTest {
         assertEquals(3, resources.getQuantity(ResourceType.CLAY));
         assertEquals(0, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
-        assertEquals(0, resources.getQuantity(ResourceType.LINEN));
+        assertEquals(0, resources.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ResourcesTest {
         assertEquals(3, resources.getQuantity(ResourceType.CLAY));
         assertEquals(0, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
-        assertEquals(0, resources.getQuantity(ResourceType.LINEN));
+        assertEquals(0, resources.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ResourcesTest {
         assertEquals(9, resources.getQuantity(ResourceType.CLAY));
         assertEquals(0, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
-        assertEquals(0, resources.getQuantity(ResourceType.LINEN));
+        assertEquals(0, resources.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ResourcesTest {
         assertEquals(9, resources.getQuantity(ResourceType.CLAY));
         assertEquals(4, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
-        assertEquals(0, resources.getQuantity(ResourceType.LINEN));
+        assertEquals(0, resources.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -218,7 +218,7 @@ public class ResourcesTest {
         assertEquals(3, diff.getQuantity(ResourceType.CLAY));
         assertEquals(0, diff.getQuantity(ResourceType.ORE));
         assertEquals(0, diff.getQuantity(ResourceType.GLASS));
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -232,7 +232,7 @@ public class ResourcesTest {
         assertEquals(0, diff.getQuantity(ResourceType.CLAY));
         assertEquals(0, diff.getQuantity(ResourceType.ORE));
         assertEquals(0, diff.getQuantity(ResourceType.GLASS));
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -250,7 +250,7 @@ public class ResourcesTest {
         assertEquals(0, diff.getQuantity(ResourceType.CLAY));
         assertEquals(0, diff.getQuantity(ResourceType.ORE));
         assertEquals(0, diff.getQuantity(ResourceType.GLASS));
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -268,7 +268,7 @@ public class ResourcesTest {
         assertEquals(1, diff.getQuantity(ResourceType.CLAY));
         assertEquals(0, diff.getQuantity(ResourceType.ORE));
         assertEquals(0, diff.getQuantity(ResourceType.GLASS));
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -285,7 +285,7 @@ public class ResourcesTest {
         assertEquals(1, diff.getQuantity(ResourceType.CLAY));
         assertEquals(0, diff.getQuantity(ResourceType.ORE));
         assertEquals(0, diff.getQuantity(ResourceType.GLASS));
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -302,7 +302,7 @@ public class ResourcesTest {
         assertEquals(0, diff.getQuantity(ResourceType.CLAY));
         assertEquals(0, diff.getQuantity(ResourceType.ORE));
         assertEquals(0, diff.getQuantity(ResourceType.GLASS));
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -322,22 +322,22 @@ public class ResourcesTest {
         Resources resources = new Resources();
 
         Resources resources2 = new Resources();
-        resources2.add(ResourceType.LINEN, 5);
+        resources2.add(ResourceType.LOOM, 5);
 
         Resources diff = resources.minus(resources2);
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
     public void minus_someOfATypeWithZero() {
         Resources resources = new Resources();
-        resources.add(ResourceType.LINEN, 0);
+        resources.add(ResourceType.LOOM, 0);
 
         Resources resources2 = new Resources();
-        resources2.add(ResourceType.LINEN, 5);
+        resources2.add(ResourceType.LOOM, 5);
 
         Resources diff = resources.minus(resources2);
-        assertEquals(0, diff.getQuantity(ResourceType.LINEN));
+        assertEquals(0, diff.getQuantity(ResourceType.LOOM));
     }
 
     @Test
@@ -349,7 +349,7 @@ public class ResourcesTest {
     @Test
     public void isEmpty_singleZeroElement() {
         Resources resources = new Resources();
-        resources.add(ResourceType.LINEN, 0);
+        resources.add(ResourceType.LOOM, 0);
         assertTrue(resources.isEmpty());
     }
 
@@ -358,14 +358,14 @@ public class ResourcesTest {
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 0);
         resources.add(ResourceType.ORE, 0);
-        resources.add(ResourceType.LINEN, 0);
+        resources.add(ResourceType.LOOM, 0);
         assertTrue(resources.isEmpty());
     }
 
     @Test
     public void isEmpty_singleElementMoreThanZero() {
         Resources resources = new Resources();
-        resources.add(ResourceType.LINEN, 3);
+        resources.add(ResourceType.LOOM, 3);
         assertFalse(resources.isEmpty());
     }
 
@@ -373,7 +373,7 @@ public class ResourcesTest {
     public void isEmpty_mixedZeroAndNonZeroElements() {
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 0);
-        resources.add(ResourceType.LINEN, 3);
+        resources.add(ResourceType.LOOM, 3);
         assertFalse(resources.isEmpty());
     }
 

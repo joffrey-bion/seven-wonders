@@ -23,7 +23,7 @@ public class Production {
         alternativeResources.add(optionSet);
     }
 
-    void addAll(Resources resources) {
+    public void addAll(Resources resources) {
         fixedResources.addAll(resources);
     }
 
