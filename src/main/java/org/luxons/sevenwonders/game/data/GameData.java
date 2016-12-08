@@ -1,7 +1,10 @@
 package org.luxons.sevenwonders.game.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -16,7 +19,7 @@ public class GameData {
 
     private List<Wonder> wonders = new ArrayList<>();
 
-    private List<List<Card>> cardsPerAge = new ArrayList<>();
+    private Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
 
     public int getNbAges() {
         return nbAges;
@@ -51,10 +54,10 @@ public class GameData {
     }
 
     public List<Card> getCards(int age) {
-        return cardsPerAge.get(age - 1); // 0-based
+        return cardsPerAge.getOrDefault(age, Collections.emptyList());
     }
 
     public void setCards(int age, List<Card> cards) {
-        cardsPerAge.set(age - 1, cards); // 0-based
+        cardsPerAge.put(age, cards);
     }
 }
