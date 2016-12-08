@@ -104,3 +104,7 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+# Javascript specific files
+node_modules/
+*.log
