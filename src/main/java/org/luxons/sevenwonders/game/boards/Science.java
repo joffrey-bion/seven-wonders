@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.game.boards;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -17,8 +18,47 @@ public class Science {
         jokers += quantity;
     }
 
+    public int getJokers() {
+        return jokers;
+    }
+
     public void addAll(Science science) {
         science.quantities.forEach(this::add);
         jokers += science.jokers;
+    }
+
+    public int getQuantity(ScienceType type) {
+        return quantities.get(type);
+    }
+
+    public int computePoints() {
+        Integer[] values = quantities.values().toArray(new Integer[quantities.size()]);
+        return computePoints(values, jokers);
+    }
+
+    private static int computePoints(Integer[] values, int jokers) {
+        if (jokers == 0) {
+            return computePointsNoJoker(values);
+        }
+        int maxPoints = 0;
+        for (int i = 0; i < values.length; i++) {
+            values[i]++;
+            maxPoints = Math.max(maxPoints, computePoints(values, jokers - 1));
+            values[i]--;
+        }
+        return maxPoints;
+    }
+
+    private static int computePointsNoJoker(Integer[] values) {
+        int independentSquaresSum = Arrays.stream(values).mapToInt(i -> i * i).sum();
+        int nbGroupsOfAll = Arrays.stream(values).mapToInt(i -> i).min().orElse(0);
+        return independentSquaresSum + nbGroupsOfAll * 7;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Science{");
+        quantities.forEach((type, count) -> sb.append(type).append("=").append(count).append(" "));
+        return sb.append("*=").append(jokers).toString();
     }
 }
