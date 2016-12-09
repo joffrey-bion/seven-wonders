@@ -4,7 +4,7 @@ import org.luxons.sevenwonders.game.wonders.WonderSide;
 
 public class Settings {
 
-    private int nbPlayers = 3;
+    private int nbPlayers = 4;
 
     private int initialGold = 3;
 

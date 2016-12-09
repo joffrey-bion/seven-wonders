@@ -29,7 +29,8 @@ public class LobbyController {
         String id = String.valueOf(lastGameId++);
         System.out.println("Creating game " + id);
 
-        Game game = new Game(new Settings(), GameDataLoader.load());
+        Settings settings = new Settings();
+        Game game = new Game(settings, GameDataLoader.load(settings));
         games.put(id, game);
         return id;
     }

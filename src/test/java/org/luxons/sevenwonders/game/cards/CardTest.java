@@ -29,7 +29,7 @@ public class CardTest {
         rightBoard = new Board(new Wonder("TestWonder", ResourceType.PAPYRUS), settings);
 
         Requirements treeFarmRequirements = new Requirements();
-        treeFarmRequirements.setGoldCost(1);
+        treeFarmRequirements.setGold(1);
 
         ProductionIncrease treeFarmEffect = new ProductionIncrease();
         treeFarmEffect.getProduction().addChoice(ResourceType.WOOD, ResourceType.CLAY);

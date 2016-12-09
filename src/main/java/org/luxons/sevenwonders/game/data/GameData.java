@@ -60,4 +60,10 @@ public class GameData {
     public void setCards(int age, List<Card> cards) {
         cardsPerAge.put(age, cards);
     }
+
+    @Override
+    public String toString() {
+        return "GameData{" + "nbAges=" + nbAges + ", minPlayers=" + minPlayers + ", maxPlayers=" + maxPlayers
+                + ", wonders=" + wonders + ", cardsPerAge=" + cardsPerAge + '}';
+    }
 }

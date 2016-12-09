@@ -41,4 +41,10 @@ public class Card {
         requirements.pay(board);
         effect.apply(board, leftNeighbourBoard, rightNeighbourBoard);
     }
+
+    @Override
+    public String toString() {
+        return "Card{" + "name='" + name + '\'' + ", color=" + color + ", requirements=" + requirements + ", effect="
+                + effect + '}';
+    }
 }

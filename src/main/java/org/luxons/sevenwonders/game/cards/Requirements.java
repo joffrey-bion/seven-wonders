@@ -5,16 +5,16 @@ import org.luxons.sevenwonders.game.resources.Resources;
 
 public class Requirements {
 
-    private int goldCost;
+    private int gold;
 
     private Resources resources = new Resources();
 
-    public int getGoldCost() {
-        return goldCost;
+    public int getGold() {
+        return gold;
     }
 
-    public void setGoldCost(int goldCost) {
-        this.goldCost = goldCost;
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 
     public Resources getResources() {
@@ -26,10 +26,10 @@ public class Requirements {
     }
 
     public boolean isAffordedBy(Board board) {
-        return board.getGold() >= goldCost && board.getProduction().contains(resources);
+        return board.getGold() >= gold && board.getProduction().contains(resources);
     }
 
     public void pay(Board board) {
-        board.setGold(board.getGold() - goldCost);
+        board.setGold(board.getGold() - gold);
     }
 }
