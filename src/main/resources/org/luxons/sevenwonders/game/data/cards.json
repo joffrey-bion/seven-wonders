@@ -1,0 +1,1283 @@
+{
+  "age1": [
+    {
+      "name": "Clay Pit",
+      "color": "BROWN",
+      "effect": "C/O",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1
+      }
+    },
+    {
+      "name": "Clay Pool",
+      "color": "BROWN",
+      "effect": "C",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Excavation",
+      "color": "BROWN",
+      "effect": "S/C",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1
+      }
+    },
+    {
+      "name": "Forest Cave",
+      "color": "BROWN",
+      "effect": "W/O",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 0,
+        "5": 1,
+        "6": 1,
+        "7": 1
+      }
+    },
+    {
+      "name": "Lumber Yard",
+      "color": "BROWN",
+      "effect": "W",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Mine",
+      "color": "BROWN",
+      "effect": "O/S",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 1,
+        "7": 1
+      }
+    },
+    {
+      "name": "Ore Vein",
+      "color": "BROWN",
+      "effect": "O",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Stone Pit",
+      "color": "BROWN",
+      "effect": "S",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Timber Yard",
+      "color": "BROWN",
+      "effect": "S/W",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1
+      }
+    },
+    {
+      "name": "Tree Farm",
+      "color": "BROWN",
+      "effect": "W/C",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 1,
+        "7": 1
+      }
+    },
+    {
+      "name": "Glassworks",
+      "color": "GREY",
+      "effect": "G",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Loom",
+      "color": "GREY",
+      "effect": "L",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Press",
+      "color": "GREY",
+      "effect": "P",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "East Trading Post",
+      "color": "YELLOW",
+      "effect": "> CSOW",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [
+        "Forum"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Marketplace",
+      "color": "YELLOW",
+      "effect": "<> LGP",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [
+        "Caravansery"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Tavern",
+      "color": "YELLOW",
+      "effect": "5g",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 3
+      }
+    },
+    {
+      "name": "West Trading Post",
+      "color": "YELLOW",
+      "effect": "< CSOW",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [
+        "Forum"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Altar",
+      "color": "BLUE",
+      "effect": "2p",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [
+        "Temple"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Baths",
+      "color": "BLUE",
+      "effect": "3p",
+      "requirements": {
+        "resources": "S"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Aquaduct"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Pawnshop",
+      "color": "BLUE",
+      "effect": "3p",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Theater",
+      "color": "BLUE",
+      "effect": "2p",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [
+        "Statue"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Apothecary",
+      "color": "GREEN",
+      "effect": "1",
+      "requirements": {
+        "resources": "L"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Stables",
+        "Dispensary"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Scriptorium",
+      "color": "GREEN",
+      "effect": "3",
+      "requirements": {
+        "resources": "P"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Courthouse",
+        "Library"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Workshop",
+      "color": "GREEN",
+      "effect": "2",
+      "requirements": {
+        "resources": "G"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Archery Range",
+        "Laboratory"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Barracks",
+      "color": "RED",
+      "effect": "1",
+      "requirements": {
+        "resources": "O"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Guard Tower",
+      "color": "RED",
+      "effect": "1",
+      "requirements": {
+        "resources": "C"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Stockade",
+      "color": "RED",
+      "effect": "1",
+      "requirements": {
+        "resources": "W"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    }
+  ],
+  "age2": [
+    {
+      "name": "Brickyard",
+      "color": "BROWN",
+      "effect": "CC",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Foundry",
+      "color": "BROWN",
+      "effect": "OO",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Quarry",
+      "color": "BROWN",
+      "effect": "SS",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Sawmill",
+      "color": "BROWN",
+      "effect": "WW",
+      "requirements": {
+        "gold": 1
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Glassworks",
+      "color": "GREY",
+      "effect": "G",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Loom",
+      "color": "GREY",
+      "effect": "L",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Press",
+      "color": "GREY",
+      "effect": "P",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Bazar",
+      "color": "YELLOW",
+      "effect": "<V> grey 2",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Caravansery",
+      "color": "YELLOW",
+      "effect": "C/S/O/W",
+      "requirements": {
+        "resources": "WW"
+      },
+      "chainParent": "Marketplace",
+      "chainChildren": [
+        "Lighthouse"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 3,
+        "7": 3
+      }
+    },
+    {
+      "name": "Forum",
+      "color": "YELLOW",
+      "effect": "L/G/P",
+      "requirements": {
+        "resources": "CC"
+      },
+      "chainParent": "East Trading Post",
+      "chainChildren": [
+        "Haven"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 3
+      }
+    },
+    {
+      "name": "Vineyard",
+      "color": "YELLOW",
+      "effect": "<V> brown 1",
+      "requirements": null,
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Aqueduct",
+      "color": "BLUE",
+      "effect": "5p",
+      "requirements": {
+        "resources": "SSS"
+      },
+      "chainParent": "Baths",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Courthouse",
+      "color": "BLUE",
+      "effect": "4p",
+      "requirements": {
+        "resources": "CCL"
+      },
+      "chainParent": "Scriptorium",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Statue",
+      "color": "BLUE",
+      "effect": "4p",
+      "requirements": {
+        "resources": "WOO"
+      },
+      "chainParent": "Theater",
+      "chainChildren": [
+        "Gardens"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Temple",
+      "color": "BLUE",
+      "effect": "3p",
+      "requirements": {
+        "resources": "WCG"
+      },
+      "chainParent": "Altar",
+      "chainChildren": [
+        "Pantheon"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Dispensary",
+      "color": "GREEN",
+      "effect": "1",
+      "requirements": {
+        "resources": "OOG"
+      },
+      "chainParent": "Apothecary",
+      "chainChildren": [
+        "Arena",
+        "Lodge"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Laboratory",
+      "color": "GREEN",
+      "effect": "2",
+      "requirements": {
+        "resources": "CCP"
+      },
+      "chainParent": "Workshop",
+      "chainChildren": [
+        "Siege Workshop",
+        "Observatory"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Library",
+      "color": "GREEN",
+      "effect": "3",
+      "requirements": {
+        "resources": "SSL"
+      },
+      "chainParent": "Scriptorium",
+      "chainChildren": [
+        "Senate",
+        "University"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "School",
+      "color": "GREEN",
+      "effect": "3",
+      "requirements": {
+        "resources": "WP"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Academy",
+        "Study"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Archery Range",
+      "color": "RED",
+      "effect": "2",
+      "requirements": {
+        "resources": "WWO"
+      },
+      "chainParent": "Workshop",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Stables",
+      "color": "RED",
+      "effect": "2",
+      "requirements": {
+        "resources": "OCW"
+      },
+      "chainParent": "Apothecary",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Training Ground",
+      "color": "RED",
+      "effect": "2",
+      "requirements": {
+        "resources": "WOO"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Circus"
+      ],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 3
+      }
+    },
+    {
+      "name": "Walls",
+      "color": "RED",
+      "effect": "2",
+      "requirements": {
+        "resources": "SSS"
+      },
+      "chainParent": null,
+      "chainChildren": [
+        "Fortifications"
+      ],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    }
+  ],
+  "age3": [
+    {
+      "name": "Arena",
+      "color": "YELLOW",
+      "effect": "(3){1} wonder",
+      "requirements": {
+        "resources": "OSS"
+      },
+      "chainParent": "Dispensary",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 3
+      }
+    },
+    {
+      "name": "Chamber of Commerce",
+      "color": "YELLOW",
+      "effect": "(2){2} grey",
+      "requirements": {
+        "resources": "CCP"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Haven",
+      "color": "YELLOW",
+      "effect": "(1){1} brown",
+      "requirements": {
+        "resources": "LOW"
+      },
+      "chainParent": "Forum",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Lighthouse",
+      "color": "YELLOW",
+      "effect": "(1){1} grey",
+      "requirements": {
+        "resources": "GS"
+      },
+      "chainParent": "Caravansery",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Gardens",
+      "color": "BLUE",
+      "effect": "5p",
+      "requirements": {
+        "resources": "WCC"
+      },
+      "chainParent": "Statue",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Palace",
+      "color": "BLUE",
+      "effect": "8p",
+      "requirements": {
+        "resources": "GPLCWOS"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Pantheon",
+      "color": "BLUE",
+      "effect": "7p",
+      "requirements": {
+        "resources": "CCOGPL"
+      },
+      "chainParent": "Temple",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Senate",
+      "color": "BLUE",
+      "effect": "6p",
+      "requirements": {
+        "resources": "OSWW"
+      },
+      "chainParent": "Library",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Town Hall",
+      "color": "BLUE",
+      "effect": "6p",
+      "requirements": {
+        "resources": "GOSS"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 3,
+        "7": 3
+      }
+    },
+    {
+      "name": "Academy",
+      "color": "GREEN",
+      "effect": "1",
+      "requirements": {
+        "resources": "SSSG"
+      },
+      "chainParent": "School",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Lodge",
+      "color": "GREEN",
+      "effect": "1",
+      "requirements": {
+        "resources": "CCLP"
+      },
+      "chainParent": "Dispensary",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Observatory",
+      "color": "GREEN",
+      "effect": "2",
+      "requirements": {
+        "resources": "OOGL"
+      },
+      "chainParent": "Laboratory",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Study",
+      "color": "GREEN",
+      "effect": "2",
+      "requirements": {
+        "resources": "WPL"
+      },
+      "chainParent": "School",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "University",
+      "color": "GREEN",
+      "effect": "3",
+      "requirements": {
+        "resources": "WWPG"
+      },
+      "chainParent": "Library",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    },
+    {
+      "name": "Arsenal",
+      "color": "RED",
+      "effect": "3",
+      "requirements": {
+        "resources": "OWWL"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 3
+      }
+    },
+    {
+      "name": "Circus",
+      "color": "RED",
+      "effect": "3",
+      "requirements": {
+        "resources": "SSSO"
+      },
+      "chainParent": "Training Ground",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 0,
+        "4": 1,
+        "5": 2,
+        "6": 3,
+        "7": 3
+      }
+    },
+    {
+      "name": "Fortifications",
+      "color": "RED",
+      "effect": "3",
+      "requirements": {
+        "resources": "SOOO"
+      },
+      "chainParent": "Walls",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 2
+      }
+    },
+    {
+      "name": "Siege Workshop",
+      "color": "RED",
+      "effect": "3",
+      "requirements": {
+        "resources": "WCCC"
+      },
+      "chainParent": "Laboratory",
+      "chainChildren": [],
+      "countPerNbPlayer": {
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "7": 2
+      }
+    }
+  ],
+  "guild": [
+    {
+      "name": "Builders Guild",
+      "color": "PURPLE",
+      "effect": "<V> wonder 1",
+      "requirements": {
+        "resources": "SSCCG"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Craftsmens Guild",
+      "color": "PURPLE",
+      "effect": "<> grey 2",
+      "requirements": {
+        "resources": "OOSS"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Magistrates Guild",
+      "color": "PURPLE",
+      "effect": "<> blue 1",
+      "requirements": {
+        "resources": "WWWSL"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Philosophers Guild",
+      "color": "PURPLE",
+      "effect": "<> green 1",
+      "requirements": {
+        "resources": "CCCLP"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Scientists Guild",
+      "color": "PURPLE",
+      "effect": "&/@/#",
+      "requirements": {
+        "resources": "WWOOP"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Shipowners Guild",
+      "color": "PURPLE",
+      "effect": "V brown,grey,blue 1",
+      "requirements": {
+        "resources": "WWWPG"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Spies Guild",
+      "color": "PURPLE",
+      "effect": "<> red 1",
+      "requirements": {
+        "resources": "CCCG"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Strategists Guild",
+      "color": "PURPLE",
+      "effect": "<> -1 1",
+      "requirements": {
+        "resources": "OOSL"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Traders Guild",
+      "color": "PURPLE",
+      "effect": "<> yellow 1",
+      "requirements": {
+        "resources": "LPG"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    },
+    {
+      "name": "Workers Guild",
+      "color": "PURPLE",
+      "effect": "<> brown 1",
+      "requirements": {
+        "resources": "OOCSW"
+      },
+      "chainParent": null,
+      "chainChildren": [],
+      "countPerNbPlayer": null
+    }
+  ]
+}
