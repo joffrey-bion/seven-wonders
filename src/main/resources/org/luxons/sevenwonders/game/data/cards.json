@@ -1140,7 +1140,11 @@
       "name": "Arena",
       "color": "YELLOW",
       "effect": {
-        "perWonderLevel": {
+        "perBoardElement": {
+          "boards": [
+            "SELF"
+          ],
+          "type": "WONDER_LEVEL",
           "gold": 3,
           "points": 1
         }
