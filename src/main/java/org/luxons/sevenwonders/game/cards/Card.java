@@ -39,6 +39,8 @@ public class Card {
     }
 
     public void play(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+        // adding the card must be done first, as some effects count the number of cards
+        // FIXME this is actually broken as ALL cards in the turn need to be added to the board before any effect
         board.addCard(this);
         requirements.pay(board);
         effects.forEach(e -> e.apply(board, leftNeighbourBoard, rightNeighbourBoard));
