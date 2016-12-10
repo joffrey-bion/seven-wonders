@@ -4,13 +4,13 @@ import org.luxons.sevenwonders.game.boards.Board;
 
 public class GoldIncrease extends InstantEffect {
 
-    private int amount;
+    private final int amount;
 
     public int getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public GoldIncrease(int amount) {
         this.amount = amount;
     }
 

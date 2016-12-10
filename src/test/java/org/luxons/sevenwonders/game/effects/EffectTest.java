@@ -55,8 +55,7 @@ public class EffectTest {
 
     @Test
     public void testGoldIncrease() {
-        GoldIncrease effect = new GoldIncrease();
-        effect.setAmount(6);
+        GoldIncrease effect = new GoldIncrease(6);
         effect.apply(board, leftBoard, rightBoard);
         assertEquals(INITIAL_GOLD + 6, board.getGold());
         assertEquals(INITIAL_GOLD, leftBoard.getGold());

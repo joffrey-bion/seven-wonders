@@ -4,13 +4,13 @@ import org.luxons.sevenwonders.game.boards.Board;
 
 public class MilitaryReinforcements extends InstantEffect {
 
-    private int count;
+    private final int count;
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public MilitaryReinforcements(int count) {
         this.count = count;
     }
 
