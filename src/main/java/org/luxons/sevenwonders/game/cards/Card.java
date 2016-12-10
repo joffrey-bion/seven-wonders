@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.game.cards;
 
+import java.util.List;
+
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.effects.Effect;
 
@@ -11,13 +13,13 @@ public class Card {
 
     private final Requirements requirements;
 
-    private final Effect effect;
+    private final List<Effect> effects;
 
-    public Card(String name, Color color, Requirements requirements, Effect effect) {
+    public Card(String name, Color color, Requirements requirements, List<Effect> effects) {
         this.name = name;
         this.color = color;
         this.requirements = requirements;
-        this.effect = effect;
+        this.effects = effects;
     }
 
     public String getName() {
@@ -32,19 +34,19 @@ public class Card {
         return requirements;
     }
 
-    public Effect getEffect() {
-        return effect;
+    public List<Effect> getEffects() {
+        return effects;
     }
 
     public void play(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
         board.addCard(this);
         requirements.pay(board);
-        effect.apply(board, leftNeighbourBoard, rightNeighbourBoard);
+        effects.forEach(e -> e.apply(board, leftNeighbourBoard, rightNeighbourBoard));
     }
 
     @Override
     public String toString() {
-        return "Card{" + "name='" + name + '\'' + ", color=" + color + ", requirements=" + requirements + ", effect="
-                + effect + '}';
+        return "Card{" + "name='" + name + '\'' + ", color=" + color + ", requirements=" + requirements + ", effects="
+                + effects + '}';
     }
 }
