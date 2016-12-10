@@ -3,12 +3,12 @@ package org.luxons.sevenwonders.game.boards;
 import java.util.EnumMap;
 import java.util.Map;
 
-import org.luxons.sevenwonders.game.RelativePlayerPosition;
+import org.luxons.sevenwonders.game.effects.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 
 public class TradingRules {
 
-    private final Map<ResourceType, Map<RelativePlayerPosition, Integer>> costs = new EnumMap<>(ResourceType.class);
+    private final Map<ResourceType, Map<Provider, Integer>> costs = new EnumMap<>(ResourceType.class);
 
     private final int defaultCost;
 
@@ -16,11 +16,11 @@ public class TradingRules {
         this.defaultCost = defaultCost;
     }
 
-    public int getCost(ResourceType type, RelativePlayerPosition target) {
-        return costs.computeIfAbsent(type, t -> new EnumMap<>(RelativePlayerPosition.class)).getOrDefault(target, defaultCost);
+    public int getCost(ResourceType type, Provider provider) {
+        return costs.computeIfAbsent(type, t -> new EnumMap<>(Provider.class)).getOrDefault(provider, defaultCost);
     }
 
-    public void setCost(ResourceType type, RelativePlayerPosition target, int cost) {
-        costs.computeIfAbsent(type, t -> new EnumMap<>(RelativePlayerPosition.class)).put(target, cost);
+    public void setCost(ResourceType type, Provider provider, int cost) {
+        costs.computeIfAbsent(type, t -> new EnumMap<>(Provider.class)).put(provider, cost);
     }
 }

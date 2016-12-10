@@ -763,8 +763,8 @@
         "perBoardElement": {
           "boards": [
             "SELF",
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "GREY",
@@ -839,8 +839,8 @@
         "perBoardElement": {
           "boards": [
             "SELF",
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "BROWN",
@@ -1572,8 +1572,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "GREY",
@@ -1595,8 +1595,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "BLUE",
@@ -1618,8 +1618,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "GREEN",
@@ -1682,8 +1682,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "colors": [
@@ -1707,8 +1707,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "DEFEAT_TOKEN",
           "points": 1
@@ -1729,8 +1729,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "YELLOW",
@@ -1752,8 +1752,8 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
-            "RIGHT_PLAYER"
+            "LEFT",
+            "RIGHT"
           ],
           "type": "CARD",
           "color": "BROWN",

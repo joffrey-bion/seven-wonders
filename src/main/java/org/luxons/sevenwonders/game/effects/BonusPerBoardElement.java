@@ -3,12 +3,11 @@ package org.luxons.sevenwonders.game.effects;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.boards.Board;
-import org.luxons.sevenwonders.game.RelativePlayerPosition;
 import org.luxons.sevenwonders.game.cards.Color;
 
 public class BonusPerBoardElement implements Effect {
 
-    private List<RelativePlayerPosition> boards;
+    private List<RelativeBoardPosition> boards;
 
     private int gold;
 
@@ -19,11 +18,11 @@ public class BonusPerBoardElement implements Effect {
     // only relevant if type=CARD
     private List<Color> colors;
 
-    public List<RelativePlayerPosition> getBoards() {
+    public List<RelativeBoardPosition> getBoards() {
         return boards;
     }
 
-    public void setBoards(List<RelativePlayerPosition> boards) {
+    public void setBoards(List<RelativeBoardPosition> boards) {
         this.boards = boards;
     }
 
@@ -72,13 +71,13 @@ public class BonusPerBoardElement implements Effect {
 
     private int computeNbOfMatchingElementsIn(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
         int totalCount = 0;
-        if (boards.contains(RelativePlayerPosition.SELF)) {
+        if (boards.contains(RelativeBoardPosition.SELF)) {
             totalCount += computeNbOfMatchingElementsIn(board);
         }
-        if (boards.contains(RelativePlayerPosition.LEFT_PLAYER)) {
+        if (boards.contains(RelativeBoardPosition.LEFT)) {
             totalCount += computeNbOfMatchingElementsIn(leftNeighbourBoard);
         }
-        if (boards.contains(RelativePlayerPosition.RIGHT_PLAYER)) {
+        if (boards.contains(RelativeBoardPosition.RIGHT)) {
             totalCount += computeNbOfMatchingElementsIn(rightNeighbourBoard);
         }
         return totalCount;
