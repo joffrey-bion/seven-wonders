@@ -28,7 +28,11 @@ public class Science {
     }
 
     public int getQuantity(ScienceType type) {
-        return quantities.get(type);
+        return quantities.getOrDefault(type, 0);
+    }
+
+    public int size() {
+        return quantities.size() + jokers;
     }
 
     public int computePoints() {
