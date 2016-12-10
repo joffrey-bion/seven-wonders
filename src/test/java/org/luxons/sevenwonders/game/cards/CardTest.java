@@ -1,9 +1,13 @@
 package org.luxons.sevenwonders.game.cards;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -34,7 +38,9 @@ public class CardTest {
         ProductionIncrease treeFarmEffect = new ProductionIncrease();
         treeFarmEffect.getProduction().addChoice(ResourceType.WOOD, ResourceType.CLAY);
 
-        treeFarmCard = new Card("Tree Farm", Color.BROWN, treeFarmRequirements, treeFarmEffect);
+        List<Effect> effects = Collections.singletonList(treeFarmEffect);
+
+        treeFarmCard = new Card("Tree Farm", Color.BROWN, treeFarmRequirements, effects);
     }
 
     @Test
