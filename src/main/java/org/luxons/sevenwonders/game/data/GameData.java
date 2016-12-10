@@ -1,17 +1,11 @@
 package org.luxons.sevenwonders.game.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class GameData {
-
-    private int nbAges = 3;
 
     private int minPlayers = 3;
 
@@ -19,15 +13,7 @@ public class GameData {
 
     private List<Wonder> wonders = new ArrayList<>();
 
-    private Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
-
-    public int getNbAges() {
-        return nbAges;
-    }
-
-    public void setNbAges(int nbAges) {
-        this.nbAges = nbAges;
-    }
+    private Decks decks;
 
     public int getMinPlayers() {
         return minPlayers;
@@ -53,17 +39,11 @@ public class GameData {
         this.wonders = wonders;
     }
 
-    public List<Card> getCards(int age) {
-        return cardsPerAge.getOrDefault(age, Collections.emptyList());
+    public Decks getDecks() {
+        return decks;
     }
 
-    public void setCards(int age, List<Card> cards) {
-        cardsPerAge.put(age, cards);
-    }
-
-    @Override
-    public String toString() {
-        return "GameData{" + "nbAges=" + nbAges + ", minPlayers=" + minPlayers + ", maxPlayers=" + maxPlayers
-                + ", wonders=" + wonders + ", cardsPerAge=" + cardsPerAge + '}';
+    public void setDecks(Decks decks) {
+        this.decks = decks;
     }
 }

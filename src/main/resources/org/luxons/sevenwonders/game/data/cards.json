@@ -4,13 +4,11 @@
       "name": "Clay Pit",
       "color": "BROWN",
       "effect": {
-        "production": "C/O"
+        "production": "O/C"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -28,10 +26,8 @@
         "production": "C"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -49,10 +45,8 @@
         "production": "S/C"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -70,10 +64,8 @@
         "production": "W/O"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -91,10 +83,8 @@
         "production": "W"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -109,13 +99,11 @@
       "name": "Mine",
       "color": "BROWN",
       "effect": {
-        "production": "O/S"
+        "production": "S/O"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -133,10 +121,8 @@
         "production": "O"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -154,10 +140,8 @@
         "production": "S"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -172,13 +156,11 @@
       "name": "Timber Yard",
       "color": "BROWN",
       "effect": {
-        "production": "S/W"
+        "production": "W/S"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -196,10 +178,8 @@
         "production": "W/C"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -217,10 +197,8 @@
         "production": "G"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -238,10 +216,8 @@
         "production": "L"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -259,10 +235,8 @@
         "production": "P"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -278,18 +252,16 @@
       "color": "YELLOW",
       "effect": {
         "discount": {
+          "resourceTypes": "CSOW",
           "providers": [
             "RIGHT_PLAYER"
           ],
-          "resourceTypes": "CSOW",
           "discountedPrice": 1
         }
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [
         "Forum"
       ],
@@ -307,19 +279,17 @@
       "color": "YELLOW",
       "effect": {
         "discount": {
+          "resourceTypes": "LGP",
           "providers": [
             "LEFT_PLAYER",
             "RIGHT_PLAYER"
           ],
-          "resourceTypes": "LGP",
           "discountedPrice": 1
         }
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [
         "Caravansery"
       ],
@@ -339,10 +309,8 @@
         "gold": 5
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -358,18 +326,16 @@
       "color": "YELLOW",
       "effect": {
         "discount": {
+          "resourceTypes": "CSOW",
           "providers": [
             "LEFT_PLAYER"
           ],
-          "resourceTypes": "CSOW",
           "discountedPrice": 1
         }
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [
         "Forum"
       ],
@@ -389,10 +355,8 @@
         "points": 2
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [
         "Temple"
       ],
@@ -415,7 +379,6 @@
         "gold": 0,
         "resources": "S"
       },
-      "chainParent": null,
       "chainChildren": [
         "Aquaduct"
       ],
@@ -435,10 +398,8 @@
         "points": 3
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -456,10 +417,8 @@
         "points": 2
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [
         "Statue"
       ],
@@ -482,7 +441,6 @@
         "gold": 0,
         "resources": "L"
       },
-      "chainParent": null,
       "chainChildren": [
         "Stables",
         "Dispensary"
@@ -506,7 +464,6 @@
         "gold": 0,
         "resources": "P"
       },
-      "chainParent": null,
       "chainChildren": [
         "Courthouse",
         "Library"
@@ -530,7 +487,6 @@
         "gold": 0,
         "resources": "G"
       },
-      "chainParent": null,
       "chainChildren": [
         "Archery Range",
         "Laboratory"
@@ -554,7 +510,6 @@
         "gold": 0,
         "resources": "O"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -575,7 +530,6 @@
         "gold": 0,
         "resources": "C"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -596,7 +550,6 @@
         "gold": 0,
         "resources": "W"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -616,10 +569,8 @@
         "production": "CC"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -637,10 +588,8 @@
         "production": "OO"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -658,10 +607,8 @@
         "production": "SS"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -679,10 +626,8 @@
         "production": "WW"
       },
       "requirements": {
-        "gold": 1,
-        "resources": ""
+        "gold": 1
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -700,10 +645,8 @@
         "production": "G"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -721,10 +664,8 @@
         "production": "L"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -742,10 +683,8 @@
         "production": "P"
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -766,16 +705,17 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 2,
           "type": "CARD",
-          "colors": ["GREY"],
-          "points": 2
+          "colors": [
+            "GREY"
+          ]
         }
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -790,7 +730,7 @@
       "name": "Caravansery",
       "color": "YELLOW",
       "effect": {
-        "production": "C/S/O/W"
+        "production": "W/S/O/C"
       },
       "requirements": {
         "gold": 0,
@@ -813,7 +753,7 @@
       "name": "Forum",
       "color": "YELLOW",
       "effect": {
-        "production": "L/G/P"
+        "production": "G/P/L"
       },
       "requirements": {
         "gold": 0,
@@ -842,18 +782,17 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "BROWN"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
-        "gold": 0,
-        "resources": ""
+        "gold": 0
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -1034,7 +973,6 @@
         "gold": 0,
         "resources": "WP"
       },
-      "chainParent": null,
       "chainChildren": [
         "Academy",
         "Study"
@@ -1100,7 +1038,6 @@
         "gold": 0,
         "resources": "WOO"
       },
-      "chainParent": null,
       "chainChildren": [
         "Circus"
       ],
@@ -1123,7 +1060,6 @@
         "gold": 0,
         "resources": "SSS"
       },
-      "chainParent": null,
       "chainChildren": [
         "Fortifications"
       ],
@@ -1146,9 +1082,9 @@
           "boards": [
             "SELF"
           ],
-          "type": "WONDER_LEVEL",
           "gold": 3,
-          "points": 1
+          "points": 1,
+          "type": "WONDER_LEVEL"
         }
       },
       "requirements": {
@@ -1174,19 +1110,18 @@
           "boards": [
             "SELF"
           ],
+          "gold": 2,
+          "points": 2,
           "type": "CARD",
           "colors": [
             "GREY"
-          ],
-          "gold": 2,
-          "points": 2
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "CCP"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
@@ -1205,12 +1140,12 @@
           "boards": [
             "SELF"
           ],
+          "gold": 1,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "BROWN"
-          ],
-          "gold": 1,
-          "points": 1
+          ]
         }
       },
       "requirements": {
@@ -1236,12 +1171,12 @@
           "boards": [
             "SELF"
           ],
+          "gold": 1,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "GREY"
-          ],
-          "gold": 1,
-          "points": 1
+          ]
         }
       },
       "requirements": {
@@ -1290,7 +1225,6 @@
         "gold": 0,
         "resources": "WSOCGPL"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -1353,7 +1287,6 @@
         "gold": 0,
         "resources": "SSOG"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -1479,7 +1412,6 @@
         "gold": 0,
         "resources": "WWOL"
       },
-      "chainParent": null,
       "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
@@ -1565,17 +1497,16 @@
             "SELF",
             "RIGHT"
           ],
-          "type": "WONDER_LEVEL",
-          "points": 1
+          "gold": 0,
+          "points": 1,
+          "type": "WONDER_LEVEL"
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "SSCCG"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "buildersguild.png"
     },
     {
@@ -1587,20 +1518,19 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 2,
           "type": "CARD",
           "colors": [
             "GREY"
-          ],
-          "points": 2
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "SSOO"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "craftsmensguild.png"
     },
     {
@@ -1612,20 +1542,19 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "BLUE"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "WWWSL"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "magistratesguild.png"
     },
     {
@@ -1637,20 +1566,19 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "GREEN"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "CCCPL"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "philosophersguild.png"
     },
     {
@@ -1663,9 +1591,7 @@
         "gold": 0,
         "resources": "WWOOP"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "scientistsguild.png"
     },
     {
@@ -1676,22 +1602,21 @@
           "boards": [
             "SELF"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "BROWN",
             "GREY",
             "BLUE"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "WWWGP"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "shipownersguild.png"
     },
     {
@@ -1703,20 +1628,19 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "RED"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "CCCG"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "spiesguild.png"
     },
     {
@@ -1728,17 +1652,16 @@
             "LEFT",
             "RIGHT"
           ],
-          "type": "DEFEAT_TOKEN",
-          "points": 1
+          "gold": 0,
+          "points": 1,
+          "type": "DEFEAT_TOKEN"
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "SOOL"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "strategistsguild.png"
     },
     {
@@ -1750,20 +1673,19 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "YELLOW"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "GPL"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "tradersguild.png"
     },
     {
@@ -1775,20 +1697,19 @@
             "LEFT",
             "RIGHT"
           ],
+          "gold": 0,
+          "points": 1,
           "type": "CARD",
           "colors": [
             "BROWN"
-          ],
-          "points": 1
+          ]
         }
       },
       "requirements": {
         "gold": 0,
         "resources": "WSOOC"
       },
-      "chainParent": null,
       "chainChildren": [],
-      "countPerNbPlayer": null,
       "image": "workersguild.png"
     }
   ]

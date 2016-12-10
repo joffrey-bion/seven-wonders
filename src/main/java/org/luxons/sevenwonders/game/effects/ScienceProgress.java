@@ -7,6 +7,10 @@ public class ScienceProgress extends InstantEffect {
 
     private Science science;
 
+    public Science getScience() {
+        return science;
+    }
+
     public void setScience(Science science) {
         this.science = science;
     }

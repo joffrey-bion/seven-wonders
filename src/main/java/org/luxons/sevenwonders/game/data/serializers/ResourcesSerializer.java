@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game.data;
+package org.luxons.sevenwonders.game.data.serializers;
 
 import java.lang.reflect.Type;
 import java.util.stream.Collectors;
@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
@@ -24,7 +25,7 @@ public class ResourcesSerializer implements JsonSerializer<Resources>, JsonDeser
                             .flatMap(e -> Stream.generate(() -> e.getKey().getSymbol()).limit(e.getValue()))
                             .map(Object::toString)
                             .collect(Collectors.joining());
-        return new JsonPrimitive(s);
+        return s.isEmpty() ? JsonNull.INSTANCE : new JsonPrimitive(s);
     }
 
     @Override

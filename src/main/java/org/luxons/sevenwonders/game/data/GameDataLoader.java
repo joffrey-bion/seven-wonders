@@ -4,15 +4,27 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.luxons.sevenwonders.game.Settings;
-import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.data.definitions.CardDefinition;
+import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
+import org.luxons.sevenwonders.game.data.serializers.NumericEffectSerializer;
+import org.luxons.sevenwonders.game.data.serializers.ProductionIncreaseSerializer;
+import org.luxons.sevenwonders.game.data.serializers.ResourceTypesSerializer;
+import org.luxons.sevenwonders.game.data.serializers.ResourcesSerializer;
+import org.luxons.sevenwonders.game.data.serializers.ScienceProgressSerializer;
+import org.luxons.sevenwonders.game.effects.GoldIncrease;
+import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
+import org.luxons.sevenwonders.game.effects.ProductionIncrease;
+import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
+import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -23,22 +35,18 @@ public class GameDataLoader {
 
     private static final String BASE_PACKAGE_PATH = '/' + BASE_PACKAGE.replace('.', '/');
 
-    private static final String wondersFile = "wonders.json";
+    private static final String CARDS_FILE = "cards.json";
+
+    private static final String WONDERS_FILE = "wonders.json";
 
     public static GameData load(Settings settings) {
         GameData data = new GameData();
-        data.setWonders(loadWonders());
 
-        int nbPlayers = settings.getNbPlayers();
+        List<Wonder> wonders = loadWonders();
+        data.setWonders(wonders);
 
-        DecksDefinition defs = loadDecks();
-        data.setCards(1, createCards(defs.getAge1(), nbPlayers));
-        data.setCards(2, createCards(defs.getAge2(), nbPlayers));
-
-        List<Card> age3 = createCards(defs.getAge3(), nbPlayers);
-        List<Card> guild = createGuildCards(defs.getGuild(), nbPlayers);
-        age3.addAll(guild);
-        data.setCards(3, age3);
+        DecksDefinition decksDefinition = loadDecks();
+        data.setDecks(new Decks(decksDefinition, settings));
         return data;
     }
 
@@ -55,24 +63,8 @@ public class GameDataLoader {
         return wonders;
     }
 
-    private static List<Card> createCards(List<CardDefinition> defs, int nbPlayers) {
-        List<Card> cards = new ArrayList<>();
-        for (CardDefinition def : defs) {
-            for (int i = 0; i < def.getCountPerNbPlayer().get(nbPlayers); i++) {
-                cards.add(def.createCard());
-            }
-        }
-        return cards;
-    }
-
-    private static List<Card> createGuildCards(List<CardDefinition> defs, int nbPlayers) {
-        List<Card> guild = defs.stream().map(CardDefinition::createCard).collect(Collectors.toList());
-        Collections.shuffle(guild);
-        return guild.subList(0, nbPlayers + 2);
-    }
-
     private static DecksDefinition loadDecks() {
-        return readJsonFile("cards.json", DecksDefinition.class);
+        return readJsonFile(CARDS_FILE, DecksDefinition.class);
     }
 
     private static <T> T readJsonFile(String filename, Class<T> clazz) {
@@ -83,10 +75,42 @@ public class GameDataLoader {
     }
 
     private static Gson createGson() {
+        Type resourceTypeList = new TypeToken<List<ResourceType>>() {}.getType();
         return new GsonBuilder().disableHtmlEscaping()
-                                .serializeNulls()
                                 .registerTypeAdapter(Resources.class, new ResourcesSerializer())
-                                .setPrettyPrinting()
+                                .registerTypeAdapter(resourceTypeList, new ResourceTypesSerializer())
+                                .registerTypeAdapter(ProductionIncrease.class, new ProductionIncreaseSerializer())
+                                .registerTypeAdapter(MilitaryReinforcements.class, new NumericEffectSerializer())
+                                .registerTypeAdapter(RawPointsIncrease.class, new NumericEffectSerializer())
+                                .registerTypeAdapter(GoldIncrease.class, new NumericEffectSerializer())
+                                .registerTypeAdapter(ScienceProgress.class, new ScienceProgressSerializer())
+//                                .setPrettyPrinting()
                                 .create();
+    }
+
+    public static void main(String[] args) {
+        DecksDefinition decksDef = loadDecks();
+        Comparator<CardDefinition> comparator =
+                Comparator.comparing(CardDefinition::getColor).thenComparing(CardDefinition::getName);
+        List<List<CardDefinition>> decks = new ArrayList<>();
+        decks.add(decksDef.getAge1());
+        decks.add(decksDef.getAge2());
+        decks.add(decksDef.getAge3());
+        decks.add(decksDef.getGuildCards());
+
+        for (List<CardDefinition> deck : decks) {
+            deck.sort(comparator);
+            for (CardDefinition cardDefinition : deck) {
+                cardDefinition.setImage(computeImageName(cardDefinition.getName()));
+            }
+        }
+        Gson gson = createGson();
+
+        System.out.println(gson.toJson(decksDef));
+//        System.out.println(load(5));
+    }
+
+    private static String computeImageName(String name) {
+        return name.toLowerCase().replaceAll("\\s", "") + ".png";
     }
 }

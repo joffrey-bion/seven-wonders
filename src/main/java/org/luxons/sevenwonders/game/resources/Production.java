@@ -32,6 +32,14 @@ public class Production {
         alternativeResources.addAll(production.alternativeResources);
     }
 
+    public Resources getFixedResources() {
+        return fixedResources;
+    }
+
+    public List<Set<ResourceType>> getAlternativeResources() {
+        return alternativeResources;
+    }
+
     public boolean contains(Resources resources) {
         if (fixedResources.contains(resources)) {
             return true;
