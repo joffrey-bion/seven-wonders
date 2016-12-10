@@ -77,13 +77,13 @@ public class Board {
         return wonderLevel;
     }
 
-    public void upgradeWonderLevel() {
+    public void upgradeWonderLevel(Board leftNeighbourBoard, Board rightNeighbourBoard) {
         int maxLevel = wonder.getLevels().size();
         if (maxLevel == wonderLevel) {
             throw new IllegalStateException("This wonder has already reached its maximum level");
         }
         this.wonderLevel++;
-        wonder.getLevels().get(wonderLevel).getEffect().apply(this, null, null);
+        wonder.getLevels().get(wonderLevel).activate(this, leftNeighbourBoard, rightNeighbourBoard);
     }
 
     public int getNbWarSymbols() {

@@ -13,6 +13,8 @@ public class Wonder {
 
     private List<WonderLevel> levels;
 
+    private String image;
+
     public Wonder() {
     }
 
@@ -43,5 +45,13 @@ public class Wonder {
 
     public void setLevels(List<WonderLevel> levels) {
         this.levels = levels;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
