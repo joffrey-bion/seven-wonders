@@ -17,7 +17,7 @@ public class BonusPerBoardElement implements Effect {
     private BoardElementType type;
 
     // only relevant if type=CARD
-    private Color color;
+    private List<Color> colors;
 
     public List<RelativePlayerPosition> getBoards() {
         return boards;
@@ -51,12 +51,12 @@ public class BonusPerBoardElement implements Effect {
         this.type = type;
     }
 
-    public Color getColor() {
-        return color;
+    public List<Color> getColors() {
+        return colors;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public void setColors(List<Color> colors) {
+        this.colors = colors;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class BonusPerBoardElement implements Effect {
     private int computeNbOfMatchingElementsIn(Board board) {
         switch (type) {
             case CARD:
-                return board.getNbCardsOfColor(color);
+                return board.getNbCardsOfColor(colors);
             case WONDER_LEVEL:
                 return board.getWonderLevel();
             case DEFEAT_TOKEN:

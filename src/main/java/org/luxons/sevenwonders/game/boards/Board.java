@@ -49,8 +49,8 @@ public class Board {
         playedCards.add(card);
     }
 
-    public int getNbCardsOfColor(Color color) {
-        return (int) playedCards.stream().filter(c -> c.getColor() == color).count();
+    public int getNbCardsOfColor(List<Color> colorFilter) {
+        return (int) playedCards.stream().filter(c -> colorFilter.contains(c.getColor())).count();
     }
 
     public Production getProduction() {
