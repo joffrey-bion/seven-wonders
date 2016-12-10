@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
@@ -24,6 +25,8 @@ public class Board {
 
     private int wonderLevel;
 
+    private int nbDefeatTokens;
+
     public Board(Wonder wonder, Settings settings) {
         this.wonder = wonder;
         this.wonderLevel = 0;
@@ -42,6 +45,10 @@ public class Board {
 
     public void addCard(Card card) {
         playedCards.add(card);
+    }
+
+    public int getNbCardsOfColor(Color color) {
+        return (int) playedCards.stream().filter(c -> c.getColor() == color).count();
     }
 
     public Production getProduction() {
@@ -75,5 +82,13 @@ public class Board {
         }
         this.wonderLevel++;
         wonder.getLevels().get(wonderLevel).getEffect().apply(this, null, null);
+    }
+
+    public int getNbDefeatTokens() {
+        return nbDefeatTokens;
+    }
+
+    public void setNbDefeatTokens(int nbDefeatTokens) {
+        this.nbDefeatTokens= nbDefeatTokens;
     }
 }

@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.effects;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.luxons.sevenwonders.game.boards.Neighbour;
+import org.luxons.sevenwonders.game.RelativePlayerPosition;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.TradingRules;
 import org.luxons.sevenwonders.game.resources.ResourceType;
@@ -12,16 +12,16 @@ public class Discount extends InstantEffect {
 
     private final List<ResourceType> resourceTypes = new ArrayList<>();
 
-    private final List<Neighbour> neighbours = new ArrayList<>();
+    private final List<RelativePlayerPosition> targets = new ArrayList<>();
 
-    private int discountedPrice;
+    private int discountedPrice = 1;
 
     public List<ResourceType> getResourceTypes() {
         return resourceTypes;
     }
 
-    public List<Neighbour> getNeighbours() {
-        return neighbours;
+    public List<RelativePlayerPosition> getTargets() {
+        return targets;
     }
 
     public int getDiscountedPrice() {
@@ -36,8 +36,8 @@ public class Discount extends InstantEffect {
     public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
         TradingRules rules = board.getTradingRules();
         for (ResourceType type : resourceTypes) {
-            for (Neighbour neighbour : neighbours) {
-                rules.setCost(type, neighbour, discountedPrice);
+            for (RelativePlayerPosition target : targets) {
+                rules.setCost(type, target, discountedPrice);
             }
         }
     }
