@@ -767,7 +767,7 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "GREY",
+          "colors": ["GREY"],
           "points": 2
         }
       },
@@ -843,7 +843,9 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "BROWN",
+          "colors": [
+            "BROWN"
+          ],
           "points": 1
         }
       },
@@ -1173,7 +1175,9 @@
             "SELF"
           ],
           "type": "CARD",
-          "color": "GREY",
+          "colors": [
+            "GREY"
+          ],
           "gold": 2,
           "points": 2
         }
@@ -1202,7 +1206,9 @@
             "SELF"
           ],
           "type": "CARD",
-          "color": "BROWN",
+          "colors": [
+            "BROWN"
+          ],
           "gold": 1,
           "points": 1
         }
@@ -1231,7 +1237,9 @@
             "SELF"
           ],
           "type": "CARD",
-          "color": "GREY",
+          "colors": [
+            "GREY"
+          ],
           "gold": 1,
           "points": 1
         }
@@ -1553,9 +1561,9 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT_PLAYER",
+            "LEFT",
             "SELF",
-            "RIGHT_PLAYER"
+            "RIGHT"
           ],
           "type": "WONDER_LEVEL",
           "points": 1
@@ -1580,7 +1588,9 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "GREY",
+          "colors": [
+            "GREY"
+          ],
           "points": 2
         }
       },
@@ -1603,7 +1613,9 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "BLUE",
+          "colors": [
+            "BLUE"
+          ],
           "points": 1
         }
       },
@@ -1626,7 +1638,9 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "GREEN",
+          "colors": [
+            "GREEN"
+          ],
           "points": 1
         }
       },
@@ -1737,7 +1751,9 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "YELLOW",
+          "colors": [
+            "YELLOW"
+          ],
           "points": 1
         }
       },
@@ -1760,7 +1776,9 @@
             "RIGHT"
           ],
           "type": "CARD",
-          "color": "BROWN",
+          "colors": [
+            "BROWN"
+          ],
           "points": 1
         }
       },
