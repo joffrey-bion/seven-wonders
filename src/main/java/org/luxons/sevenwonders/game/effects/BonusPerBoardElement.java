@@ -6,7 +6,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.RelativePlayerPosition;
 import org.luxons.sevenwonders.game.cards.Color;
 
-public class BonusPerBoardElement extends Effect {
+public class BonusPerBoardElement implements Effect {
 
     private List<RelativePlayerPosition> boards;
 
