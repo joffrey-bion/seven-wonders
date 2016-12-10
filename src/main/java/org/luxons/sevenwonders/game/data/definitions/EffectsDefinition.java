@@ -12,6 +12,8 @@ import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
+import org.luxons.sevenwonders.game.effects.SpecialAction;
+import org.luxons.sevenwonders.game.effects.SpecialActionTrigger;
 
 public class EffectsDefinition implements Definition<List<Effect>> {
 
@@ -28,6 +30,8 @@ public class EffectsDefinition implements Definition<List<Effect>> {
     private ProductionIncrease production;
 
     private RawPointsIncrease points;
+
+    private SpecialAction action;
 
     @Override
     public List<Effect> create(Settings settings) {
@@ -52,6 +56,9 @@ public class EffectsDefinition implements Definition<List<Effect>> {
         }
         if (points != null) {
             effects.add(points);
+        }
+        if (action != null) {
+            effects.add(new SpecialActionTrigger(action));
         }
         return effects;
     }
