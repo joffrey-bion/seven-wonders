@@ -25,6 +25,8 @@ public class Board {
 
     private int wonderLevel;
 
+    private int nbWarSymbols;
+
     private int nbDefeatTokens;
 
     public Board(Wonder wonder, Settings settings) {
@@ -82,6 +84,14 @@ public class Board {
         }
         this.wonderLevel++;
         wonder.getLevels().get(wonderLevel).getEffect().apply(this, null, null);
+    }
+
+    public int getNbWarSymbols() {
+        return nbWarSymbols;
+    }
+
+    public void setNbWarSymbols(int nbWarSymbols) {
+        this.nbWarSymbols = nbWarSymbols;
     }
 
     public int getNbDefeatTokens() {
