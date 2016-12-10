@@ -1,51 +1,44 @@
 package org.luxons.sevenwonders.game.boards;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assume.assumeThat;
 
 @RunWith(Theories.class)
 public class ScienceTest {
 
     @DataPoints
-    public static int[][] expectations() {
+    public static int[][] quantitiesWithExpectedPoints() {
+        System.out.println("computing expectations");
         // compasses, wheels, tablets, jokers, expected points
         return new int[][]{
                 {0, 0, 0, 1, 1},
                 {0, 0, 1, 0, 1},
                 {0, 0, 0, 2, 4},
+                {0, 0, 1, 1, 4},
                 {0, 0, 2, 0, 4},
                 {0, 0, 0, 3, 10},
+                {0, 0, 1, 2, 10},
+                {0, 1, 1, 1, 10},
                 {1, 1, 1, 0, 10},
                 {0, 0, 0, 4, 16},
+                {0, 0, 1, 3, 16},
+                {0, 0, 2, 2, 16},
+                {0, 0, 3, 1, 16},
                 {0, 0, 4, 0, 16}};
     }
 
     @DataPoints
-    public static Iterable<Science> dataPoints() {
-        List<Science> dataPoints = new ArrayList<>();
-        for (int c = 0; c < 5; c++) {
-            for (int w = 0; w < 5; w++) {
-                for (int t = 0; t < 5; t++) {
-                    for (int j = 0; j < 5; j++) {
-                        dataPoints.add(science(c, w, t, j));
-                    }
-                }
-            }
-        }
-        return dataPoints;
+    public static int[] quantitiesDataPoints() {
+        return new int[] {0, 1, 3, 5, 8};
     }
 
     private static Science science(int compasses, int wheels, int tablets, int jokers) {
+        System.out.println("computing science");
         Science science = new Science();
         science.add(ScienceType.COMPASS, compasses);
         science.add(ScienceType.WHEEL, wheels);
@@ -99,41 +92,27 @@ public class ScienceTest {
     }
 
     @Theory
-    public void computePoints_compassesOnly_noJoker(Science science) {
-        assumeThat(science.getJokers(), is(0));
-        assumeThat(science.getQuantity(ScienceType.WHEEL), is(0));
-        assumeThat(science.getQuantity(ScienceType.TABLET), is(0));
-        int compasses = science.getQuantity(ScienceType.COMPASS);
+    public void computePoints_compassesOnly_noJoker(int compasses) {
+        Science science = science(compasses, 0, 0, 0);
         assertEquals(compasses * compasses, science.computePoints());
     }
 
     @Theory
-    public void computePoints_wheelsOnly_noJoker(Science science) {
-        assumeThat(science.getJokers(), is(0));
-        assumeThat(science.getQuantity(ScienceType.COMPASS), is(0));
-        assumeThat(science.getQuantity(ScienceType.TABLET), is(0));
-        int wheels = science.getQuantity(ScienceType.WHEEL);
+    public void computePoints_wheelsOnly_noJoker(int wheels) {
+        Science science = science(0, wheels, 0, 0);
         assertEquals(wheels * wheels, science.computePoints());
     }
 
     @Theory
-    public void computePoints_tabletsOnly_noJoker(Science science) {
-        assumeThat(science.getJokers(), is(0));
-        assumeThat(science.getQuantity(ScienceType.COMPASS), is(0));
-        assumeThat(science.getQuantity(ScienceType.WHEEL), is(0));
-        int tablets = science.getQuantity(ScienceType.TABLET);
+    public void computePoints_tabletsOnly_noJoker(int tablets) {
+        Science science = science(0, 0, tablets, 0);
         assertEquals(tablets * tablets, science.computePoints());
     }
 
     @Theory
-    public void computePoints_allSameNoJoker(Science science) {
-        assumeThat(science.getJokers(), is(0));
-        int compasses = science.getQuantity(ScienceType.COMPASS);
-        int wheels = science.getQuantity(ScienceType.WHEEL);
-        int tablets = science.getQuantity(ScienceType.TABLET);
-        assumeThat(compasses, is(wheels));
-        assumeThat(compasses, is(tablets));
-        assertEquals(3 * compasses * compasses + 7 * compasses, science.computePoints());
+    public void computePoints_allSameNoJoker(int eachSymbol) {
+        Science science = science(eachSymbol, eachSymbol, eachSymbol, 0);
+        assertEquals(3 * eachSymbol * eachSymbol + 7 * eachSymbol, science.computePoints());
     }
 
     @Theory
