@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.boards.Board;
-import org.luxons.sevenwonders.game.data.GameData;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class Game {
@@ -14,9 +13,9 @@ public class Game {
 
     private final Settings settings;
 
-    private List<Player> players;
+    private final List<Player> players;
 
-    private List<Board> boards;
+    private final List<Board> boards;
 
     private State state = State.LOBBY;
 
@@ -36,8 +35,15 @@ public class Game {
         }
         int playerId = players.size();
         players.add(player);
-        boards.add(new Board(pickWonder(), settings));
         return playerId;
+    }
+
+    public synchronized void startGame() {
+        if (!hasEnoughPlayers()) {
+            throw new PlayerUnderflowException();
+        }
+        state = State.PLAYING;
+        randomizeBoards();
     }
 
     private boolean hasStarted() {
@@ -48,26 +54,14 @@ public class Game {
         return players.size() >= data.getMaxPlayers();
     }
 
-    private Wonder pickWonder() {
-        List<Wonder> availableWonders = new ArrayList<>(data.getWonders());
-        removeAlreadyUsedWondersFrom(availableWonders);
-        Collections.shuffle(availableWonders);
-        return availableWonders.get(0);
-    }
-
-    private void removeAlreadyUsedWondersFrom(List<Wonder> wonders) {
-        boards.stream().map(Board::getWonder).forEach(wonders::remove);
-    }
-
-    public synchronized void startGame() {
-        if (!hasEnoughPlayers()) {
-            throw new PlayerUnderflowException();
-        }
-        state = State.PLAYING;
-    }
-
     private boolean hasEnoughPlayers() {
         return players.size() >= data.getMinPlayers();
+    }
+
+    private void randomizeBoards() {
+        List<Wonder> randomizedWonders = new ArrayList<>(data.getWonders());
+        Collections.shuffle(randomizedWonders, settings.getRandom());
+        randomizedWonders.stream().map(w -> new Board(w, settings)).forEach(boards::add);
     }
 
     public class GameAlreadyStartedException extends IllegalStateException {

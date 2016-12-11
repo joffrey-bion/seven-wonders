@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game.data;
+package org.luxons.sevenwonders.game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,28 +7,25 @@ import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class GameData {
 
-    private int minPlayers = 3;
+    private final int minPlayers;
 
-    private int maxPlayers = 7;
+    private final int maxPlayers;
 
     private List<Wonder> wonders = new ArrayList<>();
 
     private Decks decks;
 
+    public GameData(int minPlayers, int maxPlayers) {
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
+    }
+
     public int getMinPlayers() {
         return minPlayers;
     }
 
-    public void setMinPlayers(int minPlayers) {
-        this.minPlayers = minPlayers;
-    }
-
     public int getMaxPlayers() {
         return maxPlayers;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
     }
 
     public List<Wonder> getWonders() {

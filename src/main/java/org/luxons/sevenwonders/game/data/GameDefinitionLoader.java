@@ -5,15 +5,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
+import org.luxons.sevenwonders.game.data.definitions.GameDefinition;
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition;
 import org.luxons.sevenwonders.game.data.serializers.NumericEffectSerializer;
 import org.luxons.sevenwonders.game.data.serializers.ProductionIncreaseSerializer;
@@ -28,10 +26,12 @@ import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
+import org.springframework.stereotype.Component;
 
-public class GameDataLoader {
+@Component
+public class GameDefinitionLoader {
 
-    private static final String BASE_PACKAGE = GameDataLoader.class.getPackage().getName();
+    private static final String BASE_PACKAGE = GameDefinitionLoader.class.getPackage().getName();
 
     private static final String BASE_PACKAGE_PATH = '/' + BASE_PACKAGE.replace('.', '/');
 
@@ -39,15 +39,18 @@ public class GameDataLoader {
 
     private static final String WONDERS_FILE = "wonders.json";
 
-    public static GameData load(Settings settings) {
-        GameData data = new GameData();
+    private final GameDefinition gameDefinition;
 
-        WonderDefinition[] wonders = loadWonders();
-        data.setWonders(Arrays.stream(wonders).map(def -> def.create(settings)).collect(Collectors.toList()));
+    public GameDefinitionLoader() {
+        gameDefinition = new GameDefinition(loadWonders(), loadDecks());
+    }
 
-        DecksDefinition decksDefinition = loadDecks();
-        data.setDecks(decksDefinition.create(settings));
-        return data;
+    public GameDefinition getGameDefinition() {
+        return gameDefinition;
+    }
+
+    public static GameDefinition load() {
+        return new GameDefinition(loadWonders(), loadDecks());
     }
 
     private static WonderDefinition[] loadWonders() {
@@ -59,7 +62,7 @@ public class GameDataLoader {
     }
 
     private static <T> T readJsonFile(String filename, Class<T> clazz) {
-        InputStream in = GameDataLoader.class.getResourceAsStream(BASE_PACKAGE_PATH + '/' + filename);
+        InputStream in = GameDefinitionLoader.class.getResourceAsStream(BASE_PACKAGE_PATH + '/' + filename);
         Reader reader = new BufferedReader(new InputStreamReader(in));
         Gson gson = createGson();
         return gson.fromJson(reader, clazz);

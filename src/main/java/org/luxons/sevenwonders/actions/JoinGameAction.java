@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.app.actions;
+package org.luxons.sevenwonders.actions;
 
 public class JoinGameAction {
 

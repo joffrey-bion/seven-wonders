@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.app;
+package org.luxons.sevenwonders;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,7 +12,11 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/broadcast");
+        // prefixes for all subscriptions
+        config.enableSimpleBroker("/broadcast", "/queue", "/topic");
+        config.setUserDestinationPrefix("/user");
+
+        // prefix for all calls from clients
         config.setApplicationDestinationPrefixes("/app");
     }
 
