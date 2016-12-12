@@ -1,75 +1,29 @@
 package org.luxons.sevenwonders.game;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.luxons.sevenwonders.game.boards.Board;
-import org.luxons.sevenwonders.game.wonders.Wonder;
+
+import java.util.List;
 
 public class Game {
 
-    private final GameData data;
-
     private final Settings settings;
-
-    private final List<Player> players;
 
     private final List<Board> boards;
 
-    private State state = State.LOBBY;
+    private final Decks decks;
 
-    public Game(Settings settings, GameData data) {
+    public Game(Settings settings, List<Board> boards, Decks decks) {
         this.settings = settings;
-        this.data = data;
-        this.players = new ArrayList<>(3);
-        this.boards = new ArrayList<>(3);
+        this.boards = boards;
+        this.decks = decks;
     }
 
-    public synchronized int addPlayer(Player player) {
-        if (hasStarted()) {
-            throw new GameAlreadyStartedException();
-        }
-        if (maxPlayersReached()) {
-            throw new PlayerOverflowException();
-        }
-        int playerId = players.size();
-        players.add(player);
-        return playerId;
+    public List<Board> getBoards() {
+        return boards;
     }
 
-    public synchronized void startGame() {
-        if (!hasEnoughPlayers()) {
-            throw new PlayerUnderflowException();
-        }
-        state = State.PLAYING;
-        randomizeBoards();
+    public Decks getDecks() {
+        return decks;
     }
 
-    private boolean hasStarted() {
-        return state == State.PLAYING;
-    }
-
-    private boolean maxPlayersReached() {
-        return players.size() >= data.getMaxPlayers();
-    }
-
-    private boolean hasEnoughPlayers() {
-        return players.size() >= data.getMinPlayers();
-    }
-
-    private void randomizeBoards() {
-        List<Wonder> randomizedWonders = new ArrayList<>(data.getWonders());
-        Collections.shuffle(randomizedWonders, settings.getRandom());
-        randomizedWonders.stream().map(w -> new Board(w, settings)).forEach(boards::add);
-    }
-
-    public class GameAlreadyStartedException extends IllegalStateException {
-    }
-
-    public class PlayerOverflowException extends IllegalStateException {
-    }
-
-    public class PlayerUnderflowException extends IllegalStateException {
-    }
 }

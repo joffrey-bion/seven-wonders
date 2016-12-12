@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
-import org.luxons.sevenwonders.game.data.definitions.GameDefinition;
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition;
 import org.luxons.sevenwonders.game.data.serializers.NumericEffectSerializer;
 import org.luxons.sevenwonders.game.data.serializers.ProductionIncreaseSerializer;

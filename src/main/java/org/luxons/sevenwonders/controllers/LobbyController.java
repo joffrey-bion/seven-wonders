@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.game.Game;
+import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
-import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,6 +21,8 @@ public class LobbyController {
     private final GameDefinitionLoader gameDefinitionLoader;
 
     private long lastGameId = 0;
+
+    private Map<String, Lobby> lobbies = new HashMap<>();
 
     private Map<String, Game> games = new HashMap<>();
 
@@ -38,9 +40,8 @@ public class LobbyController {
         String id = String.valueOf(lastGameId++);
         System.out.println("Creating game " + id);
 
-        Settings settings = new Settings();
-        Game game = new Game(settings, GameDefinitionLoader.load().create(settings));
-        games.put(id, game);
+        Lobby lobby = new Lobby(lastGameId, gameDefinitionLoader.getGameDefinition());
+        lobbies.put(id, lobby);
         return id;
     }
 
@@ -50,17 +51,19 @@ public class LobbyController {
         Thread.sleep(1000); // simulated delay
 
         Player player = (Player)headerAccessor.getSessionAttributes().get("player");
-        if (player != null) {
-            System.out.println("Client has already joined game under the name " + player.getName());
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get("lobby");
+        if (player != null && lobby != null) {
+            System.out.println("Client has already joined game " + lobby.getId() + "under the name " + player.getName());
             return player;
         }
         System.out.println("Player " + joinAction.getPlayerName() + " joined game " + joinAction.getGameId());
 
-        Game game = games.get(joinAction.getGameId());
+        lobby = lobbies.get(joinAction.getGameId());
         Player newPlayer = new Player(joinAction.getPlayerName());
-        game.addPlayer(newPlayer);
+        lobby.addPlayer(newPlayer);
 
         headerAccessor.getSessionAttributes().put("player", newPlayer);
+        headerAccessor.getSessionAttributes().put("lobby", lobby);
 
         return newPlayer;
     }
