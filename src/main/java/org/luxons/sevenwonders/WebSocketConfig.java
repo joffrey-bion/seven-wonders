@@ -13,7 +13,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // prefixes for all subscriptions
-        config.enableSimpleBroker("/broadcast", "/queue", "/topic");
+        config.enableSimpleBroker("/queue", "/topic");
         config.setUserDestinationPrefix("/user");
 
         // prefix for all calls from clients

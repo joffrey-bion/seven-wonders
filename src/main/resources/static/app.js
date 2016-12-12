@@ -18,12 +18,12 @@ function connect() {
     setConnected(true);
     console.log('Connected: ' + frame);
 
-    stompClient.subscribe('/broadcast/games', function (gameId) {
+    stompClient.subscribe('/topic/games', function (gameId) {
       console.log("Received new game: " + gameId);
       addNewGame(gameId.body);
     });
 
-    stompClient.subscribe('/broadcast/players', function (player) {
+    stompClient.subscribe('/topic/players', function (player) {
       console.log("Received new player: " + player);
       addNewPlayer(JSON.parse(player.body));
     });

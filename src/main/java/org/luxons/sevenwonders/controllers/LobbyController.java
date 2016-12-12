@@ -15,7 +15,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-//@MessageMapping("/lobby")
+@MessageMapping("/lobby")
 public class LobbyController {
 
     private final GameDefinitionLoader gameDefinitionLoader;
@@ -32,21 +32,22 @@ public class LobbyController {
     }
 
     @MessageMapping("/create-game")
-    @SendTo("/broadcast/games")
+    @SendTo("/topic/games")
     public String createGame(SimpMessageHeaderAccessor headerAccessor) throws Exception {
         System.out.println("Received message: " + headerAccessor.getSessionId());
         Thread.sleep(1000); // simulated delay
 
-        String id = String.valueOf(lastGameId++);
+        long newId = lastGameId++;
+        String id = String.valueOf(newId);
         System.out.println("Creating game " + id);
 
-        Lobby lobby = new Lobby(lastGameId, gameDefinitionLoader.getGameDefinition());
+        Lobby lobby = new Lobby(newId, gameDefinitionLoader.getGameDefinition());
         lobbies.put(id, lobby);
         return id;
     }
 
     @MessageMapping("/join-game")
-    @SendTo("/broadcast/players")
+    @SendTo("/topic/players")
     public Player joinGame(SimpMessageHeaderAccessor headerAccessor, JoinGameAction joinAction) throws Exception {
         Thread.sleep(1000); // simulated delay
 

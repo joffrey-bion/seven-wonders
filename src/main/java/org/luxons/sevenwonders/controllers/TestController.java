@@ -52,8 +52,8 @@ public class TestController {
         return "success test5";
     }
 
-    // sent to the caller user if he subscribed to /user/queue/test5
-    // other subscribers of /user/queue/test5 are NOT notified
+    // sent to the caller user if he subscribed to /user/queue/test6
+    // other subscribers of /user/queue/test6 are NOT notified
     @MessageMapping("/test6")
     // TODO
     public String test6(SimpMessageHeaderAccessor headerAccessor) throws Exception {
