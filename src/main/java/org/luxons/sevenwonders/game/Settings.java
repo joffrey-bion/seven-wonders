@@ -6,7 +6,7 @@ import org.luxons.sevenwonders.game.wonders.WonderSide;
 
 public class Settings {
 
-    private int nbPlayers = 4;
+    private int nbPlayers = -1;
 
     private int initialGold = 3;
 
@@ -14,11 +14,15 @@ public class Settings {
 
     private WonderSide wonderSide = WonderSide.A;
 
+    // will default to nbPlayers + 2
     private Integer nbGuildCards = null;
 
     private long randomSeedForTests = 0;
 
     public int getNbPlayers() {
+        if (nbPlayers < 0) {
+            throw new IllegalStateException("The number of players has not been initialized");
+        }
         return nbPlayers;
     }
 
@@ -51,7 +55,7 @@ public class Settings {
     }
 
     public int getNbGuildCards() {
-        return nbGuildCards == null ? nbPlayers + 2 : nbGuildCards;
+        return nbGuildCards == null ? getNbPlayers() + 2 : nbGuildCards;
     }
 
     public void setNbGuildCards(int nbGuildCards) {
