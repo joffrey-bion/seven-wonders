@@ -25,11 +25,19 @@ public class Requirements {
         this.resources = resources;
     }
 
-    public boolean isAffordedBy(Board board) {
+    boolean isAffordedBy(Board board) {
         return board.getGold() >= gold && board.getProduction().contains(resources);
     }
 
-    public void pay(Board board) {
+    boolean isAffordedBy(Board board, Board left, Board right) {
+        if (isAffordedBy(board)) {
+            return true;
+        }
+        // TODO take into account resources buyable from neighbours
+        return false;
+    }
+
+    void pay(Board board) {
         board.setGold(board.getGold() - gold);
     }
 }

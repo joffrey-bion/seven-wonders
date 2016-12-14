@@ -28,7 +28,7 @@ public class CardDefinition implements Definition<Card> {
 
     @Override
     public Card create(Settings settings) {
-        return new Card(name, color, requirements, effect.create(settings));
+        return new Card(name, color, requirements, chainParent, effect.create(settings), chainChildren);
     }
 
     public String getName() {

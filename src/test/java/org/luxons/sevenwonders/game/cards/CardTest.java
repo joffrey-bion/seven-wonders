@@ -12,7 +12,6 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class CardTest {
@@ -40,7 +39,7 @@ public class CardTest {
 
         List<Effect> effects = Collections.singletonList(treeFarmEffect);
 
-        treeFarmCard = new Card("Tree Farm", Color.BROWN, treeFarmRequirements, effects);
+        treeFarmCard = new Card("Tree Farm", Color.BROWN, treeFarmRequirements, "", effects, null);
     }
 
     @Test
@@ -51,9 +50,8 @@ public class CardTest {
     @Test
     public void playCardCostingMoney() {
         board.setGold(3);
-        treeFarmCard.play(board, leftBoard, rightBoard);
+        treeFarmCard.applyTo(board, leftBoard, rightBoard);
         assertEquals(2, board.getGold());
-        assertTrue(board.getPlayedCards().contains(treeFarmCard));
     }
 
 }

@@ -53,6 +53,10 @@ public class Board {
         return (int) playedCards.stream().filter(c -> colorFilter.contains(c.getColor())).count();
     }
 
+    public boolean isPlayed(String cardName) {
+        return getPlayedCards().stream().map(Card::getName).filter(name -> name.equals(cardName)).count() > 0;
+    }
+
     public Production getProduction() {
         return production;
     }

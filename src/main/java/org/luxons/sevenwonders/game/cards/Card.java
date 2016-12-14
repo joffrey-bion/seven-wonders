@@ -13,13 +13,20 @@ public class Card {
 
     private final Requirements requirements;
 
+    private final String chainParent;
+
     private final List<Effect> effects;
 
-    public Card(String name, Color color, Requirements requirements, List<Effect> effects) {
+    private final List<String> chainChildren;
+
+    public Card(String name, Color color, Requirements requirements, String chainParent, List<Effect> effects,
+                List<String> chainChildren) {
         this.name = name;
         this.color = color;
         this.requirements = requirements;
+        this.chainParent = chainParent;
         this.effects = effects;
+        this.chainChildren = chainChildren;
     }
 
     public String getName() {
@@ -30,6 +37,10 @@ public class Card {
         return color;
     }
 
+    public String getChainParent() {
+        return chainParent;
+    }
+
     public Requirements getRequirements() {
         return requirements;
     }
@@ -38,12 +49,29 @@ public class Card {
         return effects;
     }
 
-    public void play(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        // adding the card must be done first, as some effects count the number of cards
-        // FIXME this is actually broken as ALL cards in the turn need to be added to the board before any effect
-        board.addCard(this);
-        requirements.pay(board);
-        effects.forEach(e -> e.apply(board, leftNeighbourBoard, rightNeighbourBoard));
+    public List<String> getChainChildren() {
+        return chainChildren;
+    }
+
+    public boolean isChainableOn(Board board) {
+        return board.isPlayed(chainParent);
+    }
+
+    public boolean isAffordedBy(Board board) {
+        return requirements.isAffordedBy(board);
+    }
+
+    public boolean isPlayable(Board board, Board left, Board right) {
+        return !board.isPlayed(name) && (isChainableOn(board) || requirements.isAffordedBy(board, left, right));
+    }
+
+    public void applyTo(Board board, Board left, Board right) {
+        // TODO add paid resources cost deduction
+        if (!isChainableOn(board)) {
+            // TODO add paid resources exemption
+            requirements.pay(board);
+        }
+        effects.forEach(e -> e.apply(board, left, right));
     }
 
     @Override
