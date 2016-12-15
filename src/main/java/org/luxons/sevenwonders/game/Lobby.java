@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.game;
 
-import org.luxons.sevenwonders.game.data.GameDefinition;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.luxons.sevenwonders.game.data.GameDefinition;
 
 public class Lobby {
 
@@ -15,9 +15,9 @@ public class Lobby {
 
     private State state = State.LOBBY;
 
-    public Lobby(long id, GameDefinition gameDefintion) {
+    public Lobby(long id, GameDefinition gameDefinition) {
         this.id = id;
-        this.gameDefinition = gameDefintion;
+        this.gameDefinition = gameDefinition;
         this.players = new ArrayList<>(3);
     }
 
@@ -25,7 +25,7 @@ public class Lobby {
         return id;
     }
 
-    public synchronized int addPlayer(Player player) {
+    public synchronized int addPlayer(Player player) throws GameAlreadyStartedException, PlayerOverflowException {
         if (hasStarted()) {
             throw new GameAlreadyStartedException();
         }
@@ -41,17 +41,17 @@ public class Lobby {
         return state != State.LOBBY;
     }
 
-    public synchronized Game startGame(Settings settings) {
+    private boolean maxPlayersReached() {
+        return players.size() >= gameDefinition.getMaxPlayers();
+    }
+
+    public synchronized Game startGame(Settings settings) throws PlayerUnderflowException {
         if (!hasEnoughPlayers()) {
             throw new PlayerUnderflowException();
         }
         state = State.PLAYING;
         settings.setNbPlayers(players.size());
-        return gameDefinition.initGame(settings);
-    }
-
-    private boolean maxPlayersReached() {
-        return players.size() >= gameDefinition.getMaxPlayers();
+        return gameDefinition.initGame(id, settings, players);
     }
 
     private boolean hasEnoughPlayers() {

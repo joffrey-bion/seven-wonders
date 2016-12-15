@@ -17,6 +17,15 @@ public class Decks {
         this.cardsPerAge = cardsPerAge;
     }
 
+    Card getCard(String cardName) throws CardNotFoundException {
+        return cardsPerAge.values()
+                          .stream()
+                          .flatMap(List::stream)
+                          .filter(c -> c.getName().equals(cardName))
+                          .findAny()
+                          .orElseThrow(CardNotFoundException::new);
+    }
+
     Map<Integer, List<Card>> deal(int age, int nbPlayers) {
         List<Card> deck = getDeck(age);
         validateNbCards(deck, nbPlayers);
@@ -44,5 +53,8 @@ public class Decks {
             hands.putIfAbsent(i % nbPlayers, new ArrayList<>()).add(deck.get(i));
         }
         return hands;
+    }
+
+    public class CardNotFoundException extends RuntimeException {
     }
 }

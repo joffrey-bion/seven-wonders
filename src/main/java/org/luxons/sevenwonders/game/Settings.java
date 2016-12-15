@@ -10,6 +10,8 @@ public class Settings {
 
     private int initialGold = 3;
 
+    private int discardedCardGold = 3;
+
     private int defaultTradingCost = 2;
 
     private WonderSide wonderSide = WonderSide.A;
@@ -36,6 +38,14 @@ public class Settings {
 
     public void setInitialGold(int initialGold) {
         this.initialGold = initialGold;
+    }
+
+    public int getDiscardedCardGold() {
+        return discardedCardGold;
+    }
+
+    public void setDiscardedCardGold(int discardedCardGold) {
+        this.discardedCardGold = discardedCardGold;
     }
 
     public int getDefaultTradingCost() {
