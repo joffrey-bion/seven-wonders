@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.controllers;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +49,8 @@ public class LobbyController {
 
     @MessageMapping("/join-game")
     @SendTo("/topic/players")
-    public Player joinGame(SimpMessageHeaderAccessor headerAccessor, JoinGameAction joinAction) throws Exception {
+    public Player joinGame(SimpMessageHeaderAccessor headerAccessor, JoinGameAction joinAction, Principal principal)
+            throws Exception {
         Thread.sleep(1000); // simulated delay
 
         Player player = (Player)headerAccessor.getSessionAttributes().get("player");
@@ -61,6 +63,7 @@ public class LobbyController {
 
         lobby = lobbies.get(joinAction.getGameId());
         Player newPlayer = new Player(joinAction.getPlayerName());
+        newPlayer.setUserName(principal.getName());
         lobby.addPlayer(newPlayer);
 
         headerAccessor.getSessionAttributes().put("player", newPlayer);
