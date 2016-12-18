@@ -7,11 +7,13 @@ import java.util.Map;
 
 import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
 import org.luxons.sevenwonders.actions.StartGameAction;
+import org.luxons.sevenwonders.errors.UniqueIdAlreadyUsedException;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
+import org.luxons.sevenwonders.session.SessionAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,6 @@ import org.springframework.validation.annotation.Validated;
 public class LobbyController {
 
     private static final Logger logger = LoggerFactory.getLogger(LobbyController.class);
-
-    public static final String ATTR_LOBBY = "lobby";
 
     private final GameDefinitionLoader gameDefinitionLoader;
 
@@ -59,7 +59,7 @@ public class LobbyController {
     @SendTo("/topic/games")
     public Lobby createGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
             Principal principal) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(ATTR_LOBBY);
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
         if (lobby != null) {
             logger.warn("Client already in game '{}', cannot create a new game", lobby.getName());
             return lobby;
@@ -68,7 +68,7 @@ public class LobbyController {
         Player player = createPlayer(action.getPlayerName(), principal);
         lobby = createGame(action.getGameName(), player);
 
-        headerAccessor.getSessionAttributes().put(ATTR_LOBBY, lobby);
+        headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
 
         logger.info("Game '{}' (id={}) created by {} ({})", lobby.getName(), lobby.getId(), player.getDisplayName(),
                 player.getUserName());
@@ -79,7 +79,7 @@ public class LobbyController {
     @SendToUser("/queue/join-game")
     public Lobby joinGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
             Principal principal) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(ATTR_LOBBY);
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
         if (lobby != null) {
             logger.warn("Client already in game '{}', cannot join a different game", lobby.getName());
             return lobby;
@@ -93,7 +93,7 @@ public class LobbyController {
         Player newPlayer = createPlayer(action.getPlayerName(), principal);
         lobby.addPlayer(newPlayer);
 
-        headerAccessor.getSessionAttributes().put(ATTR_LOBBY, lobby);
+        headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
 
         logger.warn("Player {} joined game {}", action.getPlayerName(), action.getGameName());
 
@@ -103,9 +103,9 @@ public class LobbyController {
     @MessageMapping("/start-game")
     public void startGame(SimpMessageHeaderAccessor headerAccessor, @Validated StartGameAction action,
             Principal principal) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(ATTR_LOBBY);
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
         if (lobby == null) {
-            logger.error("User {} is not in a game", principal.getName());
+            logger.error("User {} is not in a lobby", principal.getName());
             template.convertAndSendToUser(principal.getName(), "/queue/errors", "No game to start");
             return;
         }
