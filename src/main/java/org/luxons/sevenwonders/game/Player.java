@@ -2,28 +2,21 @@ package org.luxons.sevenwonders.game;
 
 public class Player {
 
-    private String displayName;
+    private final String displayName;
 
-    private String userName;
+    private final String userName;
 
-    public Player(String displayName) {
+    public Player(String displayName, String userName) {
         this.displayName = displayName;
+        this.userName = userName;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public String getUserName() {
         return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     @Override

@@ -12,6 +12,8 @@ public class Lobby {
 
     private final String name;
 
+    private final Player owner;
+
     private final List<Player> players;
 
     private final GameDefinition gameDefinition;
@@ -21,6 +23,7 @@ public class Lobby {
     public Lobby(long id, String name, Player owner, GameDefinition gameDefinition) {
         this.id = id;
         this.name = name;
+        this.owner = owner;
         this.gameDefinition = gameDefinition;
         this.players = new ArrayList<>(gameDefinition.getMinPlayers());
         players.add(owner);
@@ -77,6 +80,10 @@ public class Lobby {
     @Override
     public String toString() {
         return "Lobby{" + "id=" + id + ", name='" + name + '\'' + ", state=" + state + '}';
+    }
+
+    public boolean isOwner(String userName) {
+        return owner.getUserName().equals(userName);
     }
 
     public class GameAlreadyStartedException extends IllegalStateException {

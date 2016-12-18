@@ -2,12 +2,15 @@ package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
+import org.luxons.sevenwonders.actions.StartGameAction;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
+import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +34,8 @@ public class LobbyController {
 
     private final GameDefinitionLoader gameDefinitionLoader;
 
+    private final SimpMessagingTemplate template;
+
     private long lastGameId = 0;
 
     private Map<String, Lobby> lobbies = new HashMap<>();
@@ -37,8 +43,9 @@ public class LobbyController {
     private Map<String, Game> games = new HashMap<>();
 
     @Autowired
-    public LobbyController(GameDefinitionLoader gameDefinitionLoader) {
+    public LobbyController(GameDefinitionLoader gameDefinitionLoader, SimpMessagingTemplate template) {
         this.gameDefinitionLoader = gameDefinitionLoader;
+        this.template = template;
     }
 
     @MessageExceptionHandler
@@ -93,10 +100,35 @@ public class LobbyController {
         return lobby;
     }
 
+    @MessageMapping("/start-game")
+    public void startGame(SimpMessageHeaderAccessor headerAccessor, @Validated StartGameAction action,
+            Principal principal) {
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(ATTR_LOBBY);
+        if (lobby == null) {
+            logger.error("User {} is not in a game", principal.getName());
+            template.convertAndSendToUser(principal.getName(), "/queue/errors", "No game to start");
+            return;
+        }
+
+        if (!lobby.isOwner(principal.getName())) {
+            logger.error("User {} is not the owner of the game '{}'", principal.getName(), lobby.getName());
+            template.convertAndSendToUser(principal.getName(), "/queue/errors", "Only the owner can start the game");
+            return;
+        }
+
+        Game game = lobby.startGame(action.getSettings());
+        logger.info("Game {} successfully started", game.getId());
+
+        List<PlayerTurnInfo> playerTurnInfos = game.startTurn();
+        for (PlayerTurnInfo playerTurnInfo : playerTurnInfos) {
+            Player player = playerTurnInfo.getTable().getPlayers().get(playerTurnInfo.getPlayerIndex());
+            String userName = player.getUserName();
+            template.convertAndSendToUser(userName, "/queue/game/turn", playerTurnInfo);
+        }
+    }
+
     private Player createPlayer(String name, Principal principal) {
-        Player player = new Player(name);
-        player.setUserName(principal.getName());
-        return player;
+        return new Player(name, principal.getName());
     }
 
     private Lobby createGame(String name, Player owner) {
@@ -114,7 +146,6 @@ public class LobbyController {
         public GameNotFoundException(String name) {
             super(name);
         }
-
     }
 
     private class GameNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
@@ -123,5 +154,4 @@ public class LobbyController {
             super(name);
         }
     }
-
 }

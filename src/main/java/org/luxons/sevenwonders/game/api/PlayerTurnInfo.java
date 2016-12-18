@@ -8,6 +8,8 @@ public class PlayerTurnInfo {
 
     private final Table table;
 
+    private int currentAge;
+
     private List<HandCard> hand;
 
     private String message;
@@ -23,6 +25,14 @@ public class PlayerTurnInfo {
 
     public Table getTable() {
         return table;
+    }
+
+    public int getCurrentAge() {
+        return currentAge;
+    }
+
+    public void setCurrentAge(int currentAge) {
+        this.currentAge = currentAge;
     }
 
     public List<HandCard> getHand() {
