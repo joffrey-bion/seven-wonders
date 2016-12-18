@@ -3,22 +3,22 @@ package org.luxons.sevenwonders.actions;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class JoinGameAction {
+public class JoinOrCreateGameAction {
 
     @NotNull
     @Size(min=2, max=30)
-    private String gameId;
+    private String gameName;
 
     @NotNull
     @Size(min=2, max=20)
     private String playerName;
 
-    public String getGameId() {
-        return gameId;
+    public String getGameName() {
+        return gameName;
     }
 
-    public void setGameId(String gameId) {
-        this.gameId = gameId;
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
     public String getPlayerName() {

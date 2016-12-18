@@ -18,14 +18,20 @@ function connect() {
     setConnected(true);
     console.log('Connected: ' + frame);
 
-    stompClient.subscribe('/topic/games', function (gameId) {
-      console.log("Received new game: " + gameId);
-      addNewGame(gameId.body);
+    stompClient.subscribe('/user/queue/errors', function (msg) {
+      console.error(msg.body);
     });
 
-    stompClient.subscribe('/topic/players', function (player) {
-      console.log("Received new player: " + player);
-      addNewPlayer(JSON.parse(player.body));
+    stompClient.subscribe('/topic/games', function (msg) {
+      var game = JSON.parse(msg.body);
+      console.log("Received new game: " + game);
+      addNewGame(game);
+    });
+
+    stompClient.subscribe('/user/queue/join-game', function (msg) {
+      var game = JSON.parse(msg.body);
+      console.log("Joined game: " + game);
+      addNewPlayer(game);
     });
   });
 }
@@ -38,20 +44,26 @@ function disconnect() {
   console.log("Disconnected");
 }
 
-function sendCreateGame() {
-  stompClient.send("/app/lobby/create-game", {}, "");
+function sendCreateGame(gameName, playerName) {
+  stompClient.send("/app/lobby/create-game", {}, JSON.stringify({
+    'gameName': gameName,
+    'playerName': playerName
+  }));
 }
 
-function sendJoinGame(gameId) {
-  stompClient.send("/app/lobby/join-game", {},
-          JSON.stringify({'gameId': gameId, 'playerName': $("#player-name-field").val()}));
+function sendJoinGame(gameName, playerName) {
+  stompClient.send("/app/lobby/join-game", {}, JSON.stringify({
+    'gameName': gameName,
+    'playerName': playerName
+  }));
 }
 
-function addNewGame(gameId) {
-  console.log(gameId);
-  $("#game-list-content").append('<tr><td>' + gameId + '</td><td><button id="join-' + gameId + '" type="submit">Join</button></td></tr>');
-  $("#join-" + gameId).click(function () {
-    sendJoinGame(gameId);
+function addNewGame(game) {
+  console.log(game);
+  $("#game-list-content").append('<tr><td>' + game.name + '</td><td><button id="join-' + game.id +
+          '" type="submit">Join</button></td></tr>');
+  $("#join-" + game.id).click(function () {
+    sendJoinGame(game.name, $("#player-name-field").val());
   });
 }
 
@@ -70,9 +82,6 @@ $(function () {
     disconnect();
   });
   $("#create-game").click(function () {
-    sendCreateGame();
-  });
-  $("#join-game").click(function () {
-    sendJoinGame();
+    sendCreateGame($("#game-name-field").val(), $("#player-name-field").val());
   });
 });
