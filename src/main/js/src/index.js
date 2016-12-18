@@ -7,19 +7,15 @@ import configureStore from './store'
 const initialState = {}
 const store = configureStore(initialState)
 
-import './index.css'
+import './global-styles.css'
 import App from './containers/App'
-
-const NoMatch  = () => {
-    return <h1>No Match</h1>
-}
-
+import Error404 from './components/errors/Error404'
 ReactDOM.render(
   <Provider store={store}>
       <BrowserRouter>
           <div className="app">
               <Match exactly pattern="/" component={App} />
-              <Miss component={NoMatch} />
+              <Miss component={Error404} />
           </div>
       </BrowserRouter>
   </Provider>,
