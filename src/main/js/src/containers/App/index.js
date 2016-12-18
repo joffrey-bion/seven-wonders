@@ -1,5 +1,8 @@
 import React from 'react'
-
+import { Link } from 'react-router'
 export default () => {
-    return <h1>Hello World</h1>
+    return <div>
+        <h1>Hello World</h1>
+        <Link to="/404">Go to 404</Link>
+    </div>
 }
