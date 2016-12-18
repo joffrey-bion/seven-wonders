@@ -11,7 +11,7 @@ if (window.devToolsExtension) {
     window.devToolsExtension.updateStore(store)
 }
 
-import App from './App'
+import App from './containers/App'
 
 ReactDOM.render(
   <Provider store={store}>
