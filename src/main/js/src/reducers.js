@@ -1,5 +1,8 @@
-import { combineReducer } from 'redux'
+import { combineReducers } from 'redux'
 
+import counterReducer from './containers/Counter/reducer'
 export default function createReducer() {
-    return () => ({})
+    return combineReducers({
+        counter: counterReducer
+    })
 }
