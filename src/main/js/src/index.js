@@ -7,10 +7,6 @@ import configureStore from './store'
 const initialState = {}
 const store = configureStore(initialState)
 
-if (window.devToolsExtension) {
-    window.devToolsExtension.updateStore(store)
-}
-
 import './index.css'
 import App from './containers/App'
 
