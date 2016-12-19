@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
 import org.luxons.sevenwonders.actions.StartGameAction;
+import org.luxons.sevenwonders.errors.ErrorFactory;
+import org.luxons.sevenwonders.errors.UIError;
 import org.luxons.sevenwonders.errors.UniqueIdAlreadyUsedException;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
@@ -36,6 +38,8 @@ public class LobbyController {
 
     private final SimpMessagingTemplate template;
 
+    private final ErrorFactory errorFactory;
+
     private long lastGameId = 0;
 
     private Map<String, Lobby> lobbies = new HashMap<>();
@@ -43,16 +47,18 @@ public class LobbyController {
     private Map<String, Game> games = new HashMap<>();
 
     @Autowired
-    public LobbyController(GameDefinitionLoader gameDefinitionLoader, SimpMessagingTemplate template) {
+    public LobbyController(GameDefinitionLoader gameDefinitionLoader, SimpMessagingTemplate template,
+            ErrorFactory errorFactory) {
         this.gameDefinitionLoader = gameDefinitionLoader;
         this.template = template;
+        this.errorFactory = errorFactory;
     }
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    public String handleException(Throwable exception) {
+    public UIError handleException(Throwable exception) {
         logger.error("An error occured during message handling", exception);
-        return exception.getClass().getSimpleName() + ": " + exception.getMessage();
+        return errorFactory.createError(exception);
     }
 
     @MessageMapping("/create-game")

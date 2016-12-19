@@ -19,7 +19,8 @@ function connect() {
     console.log('Connected: ' + frame);
 
     stompClient.subscribe('/user/queue/errors', function (msg) {
-      console.error(msg.body);
+      var error = JSON.parse(msg.body);
+      console.error(error);
     });
 
     stompClient.subscribe('/topic/games', function (msg) {

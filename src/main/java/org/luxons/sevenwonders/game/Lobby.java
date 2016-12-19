@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.luxons.sevenwonders.controllers.UniqueIdAlreadyUsedException;
+import org.luxons.sevenwonders.errors.UniqueIdAlreadyUsedException;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
 public class Lobby {

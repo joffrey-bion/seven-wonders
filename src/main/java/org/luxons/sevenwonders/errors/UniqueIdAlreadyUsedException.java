@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.controllers;
+package org.luxons.sevenwonders.errors;
 
 public class UniqueIdAlreadyUsedException extends RuntimeException {
 
