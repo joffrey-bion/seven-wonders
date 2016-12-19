@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
 import {
   Banner,
   Heading,
@@ -55,13 +54,13 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-
-})
-
-import { initializeWs } from "./actions";
-const mapDispatchToProps = {
-  initializeWs
-}
+// const mapStateToProps = (state) => ({
+//
+// })
+//
+// import { initializeWs } from "./actions";
+// const mapDispatchToProps = {
+//   initializeWs
+// }
 
 export default App
