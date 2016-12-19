@@ -86,18 +86,17 @@ public class Lobby {
         return owner.getUserName().equals(userName);
     }
 
-    public class GameAlreadyStartedException extends IllegalStateException {
+    private static class GameAlreadyStartedException extends IllegalStateException {
     }
 
-    public class PlayerOverflowException extends IllegalStateException {
+    private static class PlayerOverflowException extends IllegalStateException {
     }
 
-    public class PlayerUnderflowException extends IllegalStateException {
+    private static class PlayerUnderflowException extends IllegalStateException {
     }
 
-    public class PlayerNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
-
-        public PlayerNameAlreadyUsedException(String name) {
+    private static class PlayerNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
+        PlayerNameAlreadyUsedException(String name) {
             super(name);
         }
     }

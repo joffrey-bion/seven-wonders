@@ -27,13 +27,13 @@ public class GameRepository {
         return game;
     }
 
-    private class GameNotFoundException extends ApiMisuseException {
+    private static class GameNotFoundException extends ApiMisuseException {
         GameNotFoundException(long id) {
             super("Game " + id + " doesn't exist");
         }
     }
 
-    private class GameAlreadyExistsException extends ApiMisuseException {
+    private static class GameAlreadyExistsException extends ApiMisuseException {
         GameAlreadyExistsException(long id) {
             super("Game " + id + " already exists");
         }

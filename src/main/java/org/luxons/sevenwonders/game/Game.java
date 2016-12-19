@@ -131,8 +131,7 @@ public class Game {
     }
 
     private static class MissingPreparedMoveException extends RuntimeException {
-
-        public MissingPreparedMoveException(int playerIndex) {
+        MissingPreparedMoveException(int playerIndex) {
             super("Player " + playerIndex + " is not ready to play");
         }
     }

@@ -42,16 +42,14 @@ public class LobbyRepository {
         return lobby;
     }
 
-    private class LobbyNotFoundException extends RuntimeException {
-
-        public LobbyNotFoundException(String name) {
+    private static class LobbyNotFoundException extends RuntimeException {
+        LobbyNotFoundException(String name) {
             super("Lobby not found for game '" + name + "'");
         }
     }
 
-    private class GameNameAlreadyUsedException extends UserInputException {
-
-        public GameNameAlreadyUsedException(String name) {
+    private static class GameNameAlreadyUsedException extends UserInputException {
+        GameNameAlreadyUsedException(String name) {
             super("Game name '" + name + "' already exists");
         }
     }

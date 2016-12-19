@@ -110,13 +110,13 @@ public class LobbyController {
         return lobby;
     }
 
-    private class UserOwnsNoLobbyException extends ApiMisuseException {
+    private static class UserOwnsNoLobbyException extends ApiMisuseException {
         UserOwnsNoLobbyException(String message) {
             super(message);
         }
     }
 
-    private class UserAlreadyInGameException extends ApiMisuseException {
+    private static class UserAlreadyInGameException extends ApiMisuseException {
         UserAlreadyInGameException(String gameName, String impossibleActionDescription) {
             super("Client already in game '" + gameName + "', " + impossibleActionDescription);
         }

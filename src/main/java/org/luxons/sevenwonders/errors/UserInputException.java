@@ -11,11 +11,11 @@ public class UserInputException extends RuntimeException {
         this.params = params;
     }
 
-    public String getMessageResourceKey() {
+    String getMessageResourceKey() {
         return messageResourceKey;
     }
 
-    public Object[] getParams() {
+    Object[] getParams() {
         return params;
     }
 }
