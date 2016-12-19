@@ -24,5 +24,6 @@
   },
   "eslintConfig": {
     "extends": "react-app"
-  }
+  },
+  "proxy": "ws://localhost:8080"
 }
