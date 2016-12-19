@@ -5,10 +5,10 @@ import { increment } from './actions'
 import { INCREMENT_ASYNC } from './constants'
 
 export function* incrementAsync() {
-    yield call(delay, 1000)
-    yield put(increment())
+  yield call(delay, 1000)
+  yield put(increment())
 }
 
 export default function* counterSaga() {
-    yield takeEvery(INCREMENT_ASYNC, incrementAsync)
+  yield takeEvery(INCREMENT_ASYNC, incrementAsync)
 }

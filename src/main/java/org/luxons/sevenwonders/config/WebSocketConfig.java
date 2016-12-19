@@ -24,7 +24,10 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/seven-wonders-websocket").setHandshakeHandler(handshakeHandler()).withSockJS();
+        registry.addEndpoint("/seven-wonders-websocket")
+                .setHandshakeHandler(handshakeHandler())
+                .setAllowedOrigins("http://localhost:3000") // to allow frontend server proxy requests in dev mode
+                .withSockJS();
     }
 
     @Bean

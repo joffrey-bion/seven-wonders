@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.luxons.sevenwonders.controllers.UniqueIdAlreadyUsedException;
+import org.luxons.sevenwonders.errors.UniqueIdAlreadyUsedException;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
 public class Lobby {
@@ -11,6 +11,8 @@ public class Lobby {
     private final long id;
 
     private final String name;
+
+    private final Player owner;
 
     private final List<Player> players;
 
@@ -21,6 +23,7 @@ public class Lobby {
     public Lobby(long id, String name, Player owner, GameDefinition gameDefinition) {
         this.id = id;
         this.name = name;
+        this.owner = owner;
         this.gameDefinition = gameDefinition;
         this.players = new ArrayList<>(gameDefinition.getMinPlayers());
         players.add(owner);
@@ -77,6 +80,10 @@ public class Lobby {
     @Override
     public String toString() {
         return "Lobby{" + "id=" + id + ", name='" + name + '\'' + ", state=" + state + '}';
+    }
+
+    public boolean isOwner(String userName) {
+        return owner.getUserName().equals(userName);
     }
 
     public class GameAlreadyStartedException extends IllegalStateException {

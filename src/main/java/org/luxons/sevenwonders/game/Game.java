@@ -37,22 +37,23 @@ public class Game {
         this.discardedCards = new ArrayList<>();
         this.hands = new HashMap<>();
         this.preparedMoves = new HashMap<>();
+        startNewAge();
     }
 
     public long getId() {
         return id;
     }
 
-    public int startNewAge() {
+    private void startNewAge() {
         currentAge++;
         hands = decks.deal(currentAge, table.getNbPlayers());
-        return currentAge;
     }
 
     public List<PlayerTurnInfo> startTurn() {
         return hands.entrySet()
                     .stream()
                     .map(e -> table.createPlayerTurnInfo(e.getKey(), e.getValue()))
+                    .peek(ptu -> ptu.setCurrentAge(currentAge))
                     .collect(Collectors.toList());
     }
 
@@ -69,10 +70,27 @@ public class Game {
         return preparedMoves.size() == table.getPlayers().size();
     }
 
-    public void playTurn() {
+    public List<Move> playTurn() {
+        List<Move> playedMoves = mapToList(preparedMoves);
+
         // cards need to be all placed first as some effects depend on just-played cards
         placePreparedCards();
         playPreparedCards();
+        preparedMoves.clear();
+
+        return playedMoves;
+    }
+
+    private static List<Move> mapToList(Map<Integer, Move> movesPerPlayer) {
+        List<Move> moves = new ArrayList<>(movesPerPlayer.size());
+        for (int p = 0; p < movesPerPlayer.size(); p++) {
+            Move move = movesPerPlayer.get(p);
+            if (move == null) {
+                throw new MissingPreparedMoveException(p);
+            }
+            moves.add(move);
+        }
+        return moves;
     }
 
     private void placePreparedCards() {
@@ -85,10 +103,10 @@ public class Game {
                     // TODO pre-upgrade the level of wonder without effect
                     break;
                 case DISCARD:
+                    discardedCards.add(decks.getCard(move.getCardName()));
                     break;
             }
         });
-
     }
 
     private void playPreparedCards() {
@@ -108,6 +126,13 @@ public class Game {
 
     }
 
-    public class InvalidMoveException extends RuntimeException {
+    private static class MissingPreparedMoveException extends RuntimeException {
+
+        public MissingPreparedMoveException(int playerIndex) {
+            super("Player " + playerIndex + " is not ready to play");
+        }
+    }
+
+    private static class InvalidMoveException extends RuntimeException {
     }
 }

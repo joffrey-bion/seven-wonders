@@ -2,13 +2,20 @@ package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
+import org.luxons.sevenwonders.actions.StartGameAction;
+import org.luxons.sevenwonders.errors.ErrorFactory;
+import org.luxons.sevenwonders.errors.UIError;
+import org.luxons.sevenwonders.errors.UniqueIdAlreadyUsedException;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
+import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
+import org.luxons.sevenwonders.session.SessionAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +23,7 @@ import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -26,9 +34,11 @@ public class LobbyController {
 
     private static final Logger logger = LoggerFactory.getLogger(LobbyController.class);
 
-    public static final String ATTR_LOBBY = "lobby";
-
     private final GameDefinitionLoader gameDefinitionLoader;
+
+    private final SimpMessagingTemplate template;
+
+    private final ErrorFactory errorFactory;
 
     private long lastGameId = 0;
 
@@ -37,22 +47,25 @@ public class LobbyController {
     private Map<String, Game> games = new HashMap<>();
 
     @Autowired
-    public LobbyController(GameDefinitionLoader gameDefinitionLoader) {
+    public LobbyController(GameDefinitionLoader gameDefinitionLoader, SimpMessagingTemplate template,
+            ErrorFactory errorFactory) {
         this.gameDefinitionLoader = gameDefinitionLoader;
+        this.template = template;
+        this.errorFactory = errorFactory;
     }
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    public String handleException(Throwable exception) {
+    public UIError handleException(Throwable exception) {
         logger.error("An error occured during message handling", exception);
-        return exception.getClass().getSimpleName() + ": " + exception.getMessage();
+        return errorFactory.createError(exception);
     }
 
     @MessageMapping("/create-game")
     @SendTo("/topic/games")
     public Lobby createGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
             Principal principal) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(ATTR_LOBBY);
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
         if (lobby != null) {
             logger.warn("Client already in game '{}', cannot create a new game", lobby.getName());
             return lobby;
@@ -61,7 +74,7 @@ public class LobbyController {
         Player player = createPlayer(action.getPlayerName(), principal);
         lobby = createGame(action.getGameName(), player);
 
-        headerAccessor.getSessionAttributes().put(ATTR_LOBBY, lobby);
+        headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
 
         logger.info("Game '{}' (id={}) created by {} ({})", lobby.getName(), lobby.getId(), player.getDisplayName(),
                 player.getUserName());
@@ -72,7 +85,7 @@ public class LobbyController {
     @SendToUser("/queue/join-game")
     public Lobby joinGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
             Principal principal) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(ATTR_LOBBY);
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
         if (lobby != null) {
             logger.warn("Client already in game '{}', cannot join a different game", lobby.getName());
             return lobby;
@@ -86,17 +99,42 @@ public class LobbyController {
         Player newPlayer = createPlayer(action.getPlayerName(), principal);
         lobby.addPlayer(newPlayer);
 
-        headerAccessor.getSessionAttributes().put(ATTR_LOBBY, lobby);
+        headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
 
         logger.warn("Player {} joined game {}", action.getPlayerName(), action.getGameName());
 
         return lobby;
     }
 
+    @MessageMapping("/start-game")
+    public void startGame(SimpMessageHeaderAccessor headerAccessor, @Validated StartGameAction action,
+            Principal principal) {
+        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
+        if (lobby == null) {
+            logger.error("User {} is not in a lobby", principal.getName());
+            template.convertAndSendToUser(principal.getName(), "/queue/errors", "No game to start");
+            return;
+        }
+
+        if (!lobby.isOwner(principal.getName())) {
+            logger.error("User {} is not the owner of the game '{}'", principal.getName(), lobby.getName());
+            template.convertAndSendToUser(principal.getName(), "/queue/errors", "Only the owner can start the game");
+            return;
+        }
+
+        Game game = lobby.startGame(action.getSettings());
+        logger.info("Game {} successfully started", game.getId());
+
+        List<PlayerTurnInfo> playerTurnInfos = game.startTurn();
+        for (PlayerTurnInfo playerTurnInfo : playerTurnInfos) {
+            Player player = playerTurnInfo.getTable().getPlayers().get(playerTurnInfo.getPlayerIndex());
+            String userName = player.getUserName();
+            template.convertAndSendToUser(userName, "/queue/game/turn", playerTurnInfo);
+        }
+    }
+
     private Player createPlayer(String name, Principal principal) {
-        Player player = new Player(name);
-        player.setUserName(principal.getName());
-        return player;
+        return new Player(name, principal.getName());
     }
 
     private Lobby createGame(String name, Player owner) {
@@ -114,7 +152,6 @@ public class LobbyController {
         public GameNotFoundException(String name) {
             super(name);
         }
-
     }
 
     private class GameNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
@@ -123,5 +160,4 @@ public class LobbyController {
             super(name);
         }
     }
-
 }

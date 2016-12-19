@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'ch.qos.logback:logback-classic:1.0.13'
+    compile 'ch.qos.logback:logback-classic:1.1.8'
 
     compile 'org.springframework.boot:spring-boot-starter-websocket'
     compile 'org.webjars:webjars-locator'
