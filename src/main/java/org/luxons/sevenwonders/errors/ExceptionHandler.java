@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.errors;
 import java.util.List;
 import java.util.Locale;
 
-import org.luxons.sevenwonders.controllers.GameController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @ControllerAdvice
 public class ExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandler.class);
 
     private static final String ERROR_CODE_VALIDATION = "VALIDATION_ERROR";
 
