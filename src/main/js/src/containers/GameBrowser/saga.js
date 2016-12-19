@@ -45,6 +45,7 @@ export function* watchOnNewGames() {
 
   while (true) {
     const { type, response } = yield take(socketChannel)
+    console.info('RESPONSE', response)
     switch (type) {
       case NEW_GAME:
         yield put(newGame(response))
