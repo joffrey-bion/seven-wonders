@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.Collection;
 
 import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
 import org.luxons.sevenwonders.actions.StartGameAction;
@@ -9,7 +9,6 @@ import org.luxons.sevenwonders.errors.ApiMisuseException;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
-import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.repositories.GameRepository;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.luxons.sevenwonders.session.SessionAttributes;
@@ -21,11 +20,11 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
 @Controller
-@MessageMapping("/lobby")
 public class LobbyController {
 
     private static final Logger logger = LoggerFactory.getLogger(LobbyController.class);
@@ -44,7 +43,13 @@ public class LobbyController {
         this.gameRepository = gameRepository;
     }
 
-    @MessageMapping("/create-game")
+    @SubscribeMapping("/games") // prefix /topic not shown
+    public Collection<Lobby> listGames() {
+        logger.info("Subscribed to /games");
+        return lobbyRepository.list();
+    }
+
+    @MessageMapping("/lobby/create-game")
     @SendTo("/topic/games")
     public Lobby createGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
             Principal principal) {
@@ -59,7 +64,7 @@ public class LobbyController {
         return lobby;
     }
 
-    @MessageMapping("/join-game")
+    @MessageMapping("/lobby/join-game")
     @SendToUser("/queue/join-game")
     public Lobby joinGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
             Principal principal) {
@@ -82,7 +87,7 @@ public class LobbyController {
         }
     }
 
-    @MessageMapping("/start-game")
+    @MessageMapping("/lobby/start-game")
     public void startGame(SimpMessageHeaderAccessor headerAccessor, @Validated StartGameAction action,
             Principal principal) {
         Lobby lobby = getOwnedLobby(headerAccessor, principal);
@@ -90,13 +95,6 @@ public class LobbyController {
         gameRepository.add(game);
 
         logger.info("Game {} successfully started", game.getId());
-
-        List<PlayerTurnInfo> playerTurnInfos = game.startTurn();
-        for (PlayerTurnInfo playerTurnInfo : playerTurnInfos) {
-            Player player = playerTurnInfo.getTable().getPlayers().get(playerTurnInfo.getPlayerIndex());
-            String userName = player.getUserName();
-            template.convertAndSendToUser(userName, "/queue/game/turn", playerTurnInfo);
-        }
     }
 
     private Lobby getOwnedLobby(SimpMessageHeaderAccessor headerAccessor, Principal principal) {

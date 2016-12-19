@@ -25,8 +25,15 @@ function connect() {
 
     stompClient.subscribe('/topic/games', function (msg) {
       var game = JSON.parse(msg.body);
-      console.log("Received new game: " + game);
-      addNewGame(game);
+      if (Array.isArray(game)) {
+        console.log("Received new games: " + game);
+        for (var i = 0; i < game.length; i++) {
+          addNewGame(game[i]);
+        }
+      } else {
+        console.log("Received new game: " + game);
+        addNewGame(game);
+      }
     });
 
     stompClient.subscribe('/user/queue/join-game', function (msg) {

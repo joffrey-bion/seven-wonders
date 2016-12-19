@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.repositories;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,10 @@ public class LobbyRepository {
     @Autowired
     public LobbyRepository(GameDefinitionLoader gameDefinitionLoader) {
         this.gameDefinitionLoader = gameDefinitionLoader;
+    }
+
+    public Collection<Lobby> list() {
+        return lobbies.values();
     }
 
     public Lobby create(String gameName, Player owner) {

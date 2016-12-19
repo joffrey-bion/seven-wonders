@@ -19,7 +19,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         config.setUserDestinationPrefix("/user");
 
         // prefix for all calls from clients
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/app", "/topic");
     }
 
     @Override
