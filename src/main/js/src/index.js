@@ -16,13 +16,13 @@ import Error404 from './components/errors/Error404'
 
 ReactDOM.render(
   <Provider store={store}>
-      <BrowserRouter>
-          <div className="app">
-              <Match exactly pattern="/" component={App} />
-              <Match exactly pattern="/counter" component={Counter}/>
-              <Miss component={Error404} />
-          </div>
-      </BrowserRouter>
+    <BrowserRouter>
+      <div className="app">
+        <Match exactly pattern="/" component={App}/>
+        <Match exactly pattern="/counter" component={Counter}/>
+        <Miss component={Error404}/>
+      </div>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );
