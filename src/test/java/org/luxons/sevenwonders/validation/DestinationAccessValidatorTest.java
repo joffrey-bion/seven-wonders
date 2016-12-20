@@ -8,6 +8,7 @@ import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.repositories.GameRepository;
+import org.luxons.sevenwonders.repositories.GameRepository.GameNotFoundException;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.luxons.sevenwonders.repositories.LobbyRepository.LobbyNotFoundException;
 
@@ -46,6 +47,11 @@ public class DestinationAccessValidatorTest {
     }
 
     @Test
+    public void validate_failsOnNullUser() {
+        assertFalse(destinationAccessValidator.hasAccess(null, "doesNotMatter"));
+    }
+
+    @Test
     public void validate_successWhenNoReference() {
         assertTrue(destinationAccessValidator.hasAccess("", ""));
         assertTrue(destinationAccessValidator.hasAccess("", "test"));
@@ -77,17 +83,35 @@ public class DestinationAccessValidatorTest {
         destinationAccessValidator.hasAccess("", "/lobby/0");
     }
 
+    @Test(expected = GameNotFoundException.class)
+    public void validate_failWhenNoGameExist() {
+        destinationAccessValidator.hasAccess("", "/game/0");
+    }
+
     @Test(expected = LobbyNotFoundException.class)
     public void validate_failWhenReferencedLobbyDoesNotExist() {
         createLobby("Test Game", "ownerUser1");
         createLobby("Test Game 2", "ownerUser2");
-        destinationAccessValidator.hasAccess("", "/lobby/3");
+        destinationAccessValidator.hasAccess("doesNotMatter", "/lobby/3");
+    }
+
+    @Test(expected = GameNotFoundException.class)
+    public void validate_failWhenReferencedGameDoesNotExist() {
+        createGame("Test Game 1", "user1", "user2", "user3");
+        createGame("Test Game 2", "user4", "user5", "user6");
+        destinationAccessValidator.hasAccess("doesNotMatter", "/game/3");
     }
 
     @Test
     public void validate_failWhenUserIsNotPartOfReferencedLobby() {
         createLobby("Test Game", "ownerUser");
-        destinationAccessValidator.hasAccess("", "/lobby/0");
+        destinationAccessValidator.hasAccess("userNotInLobby", "/lobby/0");
+    }
+
+    @Test
+    public void validate_failWhenUserIsNotPartOfReferencedGame() {
+        createGame("Test Game", "ownerUser", "otherUser1", "otherUser2");
+        destinationAccessValidator.hasAccess("userNotInGame", "/game/0");
     }
 
     @Test
@@ -107,19 +131,19 @@ public class DestinationAccessValidatorTest {
     }
 
     @Test
-    public void validate_successWhenUserIsMemberOfReferencedGame() {
-        createGame("Test Game 1", "user1", "user2", "user3");
-        assertTrue(destinationAccessValidator.hasAccess("user2", "/game/0"));
-        createGame("Test Game 2", "user4", "user5", "user6");
-        assertTrue(destinationAccessValidator.hasAccess("user6", "/game/1"));
+    public void validate_successWhenUserIsOwnerOfReferencedGame() {
+        createGame("Test Game 1", "owner1", "user2", "user3");
+        assertTrue(destinationAccessValidator.hasAccess("owner1", "/game/0"));
+        createGame("Test Game 2", "owner4", "user5", "user6");
+        assertTrue(destinationAccessValidator.hasAccess("owner4", "/game/1"));
     }
 
     @Test
-    public void validate_failsWhenUserPartOfReferencedGame() {
-//        lobbyRepository.create("Test Game Name");
-//        gameRepository.add();
-        assertTrue(destinationAccessValidator.hasAccess("", "/game/notAnId"));
-        assertTrue(destinationAccessValidator.hasAccess("", "/lobby/notAnId"));
+    public void validate_successWhenUserIsMemberOfReferencedGame() {
+        createGame("Test Game 1", "owner1", "user2", "user3");
+        assertTrue(destinationAccessValidator.hasAccess("user2", "/game/0"));
+        createGame("Test Game 2", "owner4", "user5", "user6");
+        assertTrue(destinationAccessValidator.hasAccess("user6", "/game/1"));
     }
 
 }

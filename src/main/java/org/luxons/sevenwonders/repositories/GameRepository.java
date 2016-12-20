@@ -27,7 +27,7 @@ public class GameRepository {
         return game;
     }
 
-    private static class GameNotFoundException extends ApiMisuseException {
+    public static class GameNotFoundException extends ApiMisuseException {
         GameNotFoundException(long id) {
             super("Game " + id + " doesn't exist");
         }

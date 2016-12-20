@@ -71,9 +71,6 @@ public class DestinationAccessValidator {
 
     private static int extractId(Matcher matcher) {
         String id = matcher.group("id");
-        if (id == null) {
-            throw new IllegalArgumentException("No id matched in the destination");
-        }
         return Integer.parseInt(id);
     }
 }
