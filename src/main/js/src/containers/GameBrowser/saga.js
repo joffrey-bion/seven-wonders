@@ -8,6 +8,7 @@ function createSocketChannel(socket) {
   return eventChannel(emit => {
     const makeHandler = (type) => (event) => {
       const response = JSON.parse(event.body)
+
       emit({
         type,
         response

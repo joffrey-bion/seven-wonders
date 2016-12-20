@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga'
 
 function createSocketChannel(socket) {
   return eventChannel(emit => {
-    const errorHandler = event => emit(JSON.parse(event))
+    const errorHandler = event => emit(JSON.parse(event.body))
 
     const userErrors = socket.subscribe('/user/queue/errors', errorHandler)
 
