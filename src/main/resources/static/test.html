@@ -21,9 +21,19 @@
 
 <form class="form-inline">
     <div class="form-group">
-        <label for="test-index-field">Send to /app/testX, with X in </label>
-        <input id="test-index-field">
-        <button id="send-test" class="btn btn-default" type="submit">Send</button>
+        <label for="subscribe-path-field">Path:</label>
+        <input id="subscribe-path-field" placeholder="path">
+        <button id="subscribe-btn" class="btn btn-default" type="submit">Subscribe</button>
+    </div>
+</form>
+
+<form class="form-inline">
+    <div class="form-group">
+        <label for="path-field">Path:</label>
+        <input id="path-field" placeholder="path">
+        <label for="payload-field">Payload:</label>
+        <input id="payload-field" placeholder="JSON payload">
+        <button id="send-btn" class="btn btn-default" type="submit">Send</button>
     </div>
 </form>
 
