@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.messaging.converter.MessageConversionException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -20,7 +21,11 @@ public class ExceptionHandler {
 
     private static final String ERROR_CODE_VALIDATION = "VALIDATION_ERROR";
 
-    private static final String ERROR_MSG_VALIDATION = "Input invalid";
+    private static final String ERROR_CODE_CONVERSION = "MESSAGE_FORMAT_ERROR";
+
+    private static final String ERROR_MSG_VALIDATION = "Invalid input data";
+
+    private static final String ERROR_MSG_CONVERSION = "Invalid input format";
 
     private final MessageSource messageSource;
 
@@ -37,6 +42,13 @@ public class ExceptionHandler {
         UIError uiError = new UIError(ERROR_CODE_VALIDATION, ERROR_MSG_VALIDATION, ErrorType.VALIDATION);
         uiError.setValidationErrors(errors);
         return uiError;
+    }
+
+    @MessageExceptionHandler
+    @SendToUser("/queue/errors")
+    private UIError handleConversionError(MessageConversionException exception) {
+        logger.error("Error interpreting the message", exception);
+        return new UIError(ERROR_CODE_CONVERSION, ERROR_MSG_CONVERSION, ErrorType.VALIDATION);
     }
 
     @MessageExceptionHandler
