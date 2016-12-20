@@ -1,6 +1,5 @@
-import { call, put, take } from 'redux-saga/effects'
+import { put, take } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
-import createWebSocketConnection from "../../utils/createWebSocketConnection";
 
 function createSocketChannel(socket) {
   return eventChannel(emit => {
@@ -16,18 +15,9 @@ function createSocketChannel(socket) {
   })
 }
 
-export function* watchOnErrors() {
-  let socketChannel
-  try {
-    const { socket } = yield call(createWebSocketConnection)
-    socketChannel = createSocketChannel(socket)
-  } catch (error) {
-    console.error('Error connecting to socket', error)
-  }
-
-  if (!socketChannel) {
-    return
-  }
+export function* watchOnErrors(socketConnection) {
+  const { socket } = socketConnection
+  const socketChannel = createSocketChannel(socket)
 
   while (true) {
     const payload = yield take(socketChannel)

@@ -1,11 +1,27 @@
-import { fork } from 'redux-saga/effects'
+import { fork, call } from 'redux-saga/effects'
+
+import createWsConnection from './utils/createWebSocketConnection'
 
 import counterSaga from './containers/Counter/saga'
 import errorSaga from './containers/App/saga'
 import newGamesSaga from './containers/GameBrowser/saga'
 
+function* wsAwareSagas() {
+  let wsConnection
+  try {
+    wsConnection = yield call(createWsConnection)
+  } catch (error) {
+    console.error('Could not connect to socket')
+    return
+  }
+
+  yield fork(errorSaga, wsConnection)
+  yield fork(newGamesSaga, wsConnection)
+}
+
 export default function* rootSaga() {
-  yield fork(counterSaga)
-  yield fork(errorSaga)
-  yield fork(newGamesSaga)
+  yield [
+    call(counterSaga),
+    call(wsAwareSagas)
+  ]
 }

@@ -1,6 +1,5 @@
-import { call, put, take } from 'redux-saga/effects'
+import { put, take } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
-import createWebSocketConnection from '../../utils/createWebSocketConnection'
 
 import { NEW_GAME, JOIN_GAME } from './constants'
 import { newGame, joinGame } from './actions'
@@ -30,22 +29,14 @@ function createSocketChannel(socket) {
   })
 }
 
-export function* watchOnNewGames() {
-  let socketChannel
-  try {
-    const { socket } = yield call(createWebSocketConnection)
-    socketChannel = createSocketChannel(socket)
-  } catch (error) {
-    console.error('Cannot connect to socket', error)
-  }
+export function* watchOnNewGames(socketConnection) {
 
-  if (!socketChannel) {
-    return
-  }
+  const { socket } = socketConnection
+  const socketChannel = createSocketChannel(socket)
 
   while (true) {
     const { type, response } = yield take(socketChannel)
-    console.info('RESPONSE', response)
+
     switch (type) {
       case NEW_GAME:
         yield put(newGame(response))
@@ -54,7 +45,7 @@ export function* watchOnNewGames() {
         yield put(joinGame(response))
         break;
       default:
-        console.error('Unknown error')
+        console.error('Unknown type')
     }
   }
 }
