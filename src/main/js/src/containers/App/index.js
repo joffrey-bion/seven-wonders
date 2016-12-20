@@ -30,7 +30,9 @@ class App extends Component {
 
   createGame = (e) => {
     e.preventDefault()
-    this.props.createGame(this._gameName)
+    if (this._gameName !== undefined) {
+      this.props.createGame(this._gameName)
+    }
   }
 
   render() {
