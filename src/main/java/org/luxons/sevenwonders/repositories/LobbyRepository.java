@@ -18,6 +18,8 @@ public class LobbyRepository {
 
     private Map<String, Lobby> lobbies = new HashMap<>();
 
+    private Map<Long, Lobby> lobbiesById = new HashMap<>();
+
     private long lastGameId = 0;
 
     @Autowired
@@ -36,6 +38,7 @@ public class LobbyRepository {
         long id = lastGameId++;
         Lobby lobby = new Lobby(id, gameName, owner, gameDefinitionLoader.getGameDefinition());
         lobbies.put(gameName, lobby);
+        lobbiesById.put(id, lobby);
         return lobby;
     }
 
@@ -47,7 +50,15 @@ public class LobbyRepository {
         return lobby;
     }
 
-    private static class LobbyNotFoundException extends RuntimeException {
+    public Lobby find(long lobbyId) {
+        Lobby lobby = lobbiesById.get(lobbyId);
+        if (lobby == null) {
+            throw new LobbyNotFoundException(String.valueOf(lobbyId));
+        }
+        return lobby;
+    }
+
+    public static class LobbyNotFoundException extends RuntimeException {
         LobbyNotFoundException(String name) {
             super("Lobby not found for game '" + name + "'");
         }

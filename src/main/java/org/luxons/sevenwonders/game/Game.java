@@ -48,6 +48,10 @@ public class Game {
         return table.getPlayers();
     }
 
+    public boolean containsUser(String userName) {
+        return getPlayers().stream().anyMatch(p -> p.getUserName().equals(userName));
+    }
+
     private void startNewAge() {
         currentAge++;
         hands = decks.deal(currentAge, table.getNbPlayers());

@@ -86,6 +86,10 @@ public class Lobby {
         return owner.getUserName().equals(userName);
     }
 
+    public boolean containsUser(String userName) {
+        return players.stream().anyMatch(p -> p.getUserName().equals(userName));
+    }
+
     private static class GameAlreadyStartedException extends IllegalStateException {
     }
 

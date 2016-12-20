@@ -9,8 +9,6 @@ import org.luxons.sevenwonders.game.cards.Card;
 
 public class Decks {
 
-    private static final int HAND_SIZE = 7;
-
     private Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
 
     public Decks(Map<Integer, List<Card>> cardsPerAge) {
@@ -23,7 +21,7 @@ public class Decks {
                           .flatMap(List::stream)
                           .filter(c -> c.getName().equals(cardName))
                           .findAny()
-                          .orElseThrow(CardNotFoundException::new);
+                          .orElseThrow(() -> new CardNotFoundException(cardName));
     }
 
     Map<Integer, List<Card>> deal(int age, int nbPlayers) {
@@ -41,20 +39,24 @@ public class Decks {
     }
 
     private void validateNbCards(List<Card> deck, int nbPlayers) {
-        if (nbPlayers * HAND_SIZE != deck.size()) {
+        if (deck.size() % nbPlayers != 0) {
             throw new IllegalArgumentException(
-                    String.format("%d cards is not the expected number for %d players", deck.size(), nbPlayers));
+                    String.format("Cannot deal %d cards evenly between %d players", deck.size(), nbPlayers));
         }
     }
 
     private Map<Integer, List<Card>> deal(List<Card> deck, int nbPlayers) {
         Map<Integer, List<Card>> hands = new HashMap<>(nbPlayers);
         for (int i = 0; i < deck.size(); i++) {
-            hands.putIfAbsent(i % nbPlayers, new ArrayList<>()).add(deck.get(i));
+            hands.putIfAbsent(i % nbPlayers, new ArrayList<>());
+            hands.get(i % nbPlayers).add(deck.get(i));
         }
         return hands;
     }
 
     public class CardNotFoundException extends RuntimeException {
+        CardNotFoundException(String message) {
+            super(message);
+        }
     }
 }
