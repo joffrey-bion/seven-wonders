@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.resources;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class Resources {
 
@@ -43,5 +44,22 @@ public class Resources {
 
     public boolean isEmpty() {
         return quantities.values().stream().reduce(0, Integer::sum) == 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Resources resources = (Resources)o;
+        return Objects.equals(quantities, resources.quantities);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(quantities);
     }
 }
