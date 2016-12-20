@@ -32,7 +32,7 @@ public class Science {
     }
 
     public int size() {
-        return quantities.size() + jokers;
+        return quantities.values().stream().mapToInt(q -> q).sum() + jokers;
     }
 
     public int computePoints() {

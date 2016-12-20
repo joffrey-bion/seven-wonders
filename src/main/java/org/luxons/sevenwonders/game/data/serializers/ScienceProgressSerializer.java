@@ -2,6 +2,10 @@ package org.luxons.sevenwonders.game.data.serializers;
 
 import java.lang.reflect.Type;
 
+import org.luxons.sevenwonders.game.boards.Science;
+import org.luxons.sevenwonders.game.boards.ScienceType;
+import org.luxons.sevenwonders.game.effects.ScienceProgress;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -10,9 +14,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import org.luxons.sevenwonders.game.boards.Science;
-import org.luxons.sevenwonders.game.boards.ScienceType;
-import org.luxons.sevenwonders.game.effects.ScienceProgress;
 
 public class ScienceProgressSerializer implements JsonSerializer<ScienceProgress>, JsonDeserializer<ScienceProgress> {
 
@@ -47,9 +48,17 @@ public class ScienceProgressSerializer implements JsonSerializer<ScienceProgress
         if ("any".equals(s)) {
             science.addJoker(1);
         } else {
-            science.add(context.deserialize(json, ScienceType.class), 1);
+            science.add(deserializeScienceType(json, context), 1);
         }
         scienceProgress.setScience(science);
         return scienceProgress;
+    }
+
+    private ScienceType deserializeScienceType(JsonElement json, JsonDeserializationContext context) {
+        ScienceType type = context.deserialize(json, ScienceType.class);
+        if (type == null) {
+            throw new IllegalArgumentException("Invalid science type " + json.getAsString());
+        }
+        return type;
     }
 }
