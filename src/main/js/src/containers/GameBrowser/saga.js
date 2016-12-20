@@ -1,7 +1,7 @@
-import { put, take } from 'redux-saga/effects'
+import { call, put, take } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 
-import { NEW_GAME, JOIN_GAME } from './constants'
+import { NEW_GAME, JOIN_GAME, CREATE_GAME } from './constants'
 import { newGame, joinGame } from './actions'
 
 function createSocketChannel(socket) {
@@ -29,7 +29,7 @@ function createSocketChannel(socket) {
   })
 }
 
-export function* watchOnNewGames(socketConnection) {
+export function* watchGames(socketConnection) {
 
   const { socket } = socketConnection
   const socketChannel = createSocketChannel(socket)
@@ -50,4 +50,21 @@ export function* watchOnNewGames(socketConnection) {
   }
 }
 
-export default watchOnNewGames
+export function* createGame(socketConnection) {
+  const { name } = yield take(CREATE_GAME)
+  const { socket } = socketConnection
+  console.log(socket)
+  socket.send("/app/lobby/create-game", JSON.stringify({
+    'gameName': name,
+    'playerName': 'Cesar92'
+  }), {})
+}
+
+export function* gameBrowserSaga(socketConnection) {
+  yield [
+    call(watchGames, socketConnection),
+    call(createGame, socketConnection)
+  ]
+}
+
+export default gameBrowserSaga

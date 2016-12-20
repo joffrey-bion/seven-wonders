@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
   Banner,
   Heading,
   Space,
   Button,
+  InlineForm,
   Text
 } from 'rebass'
 import { Flex } from 'reflexbox'
@@ -12,7 +14,7 @@ import GameBrowser from '../GameBrowser'
 
 class App extends Component {
   state = {
-    usernameModal: false
+    usernameModal: false,
   }
 
   componentDidMount() {
@@ -26,6 +28,11 @@ class App extends Component {
     }
   }
 
+  createGame = (e) => {
+    e.preventDefault()
+    this.props.createGame(this._gameName)
+  }
+
   render() {
     return (
       <div>
@@ -37,9 +44,15 @@ class App extends Component {
           <Heading level={1}>Seven Wonders</Heading>
         </Banner>
         <Flex align="center" p={1}>
-          <Button
-            theme="success"
-            children="Create Game"/>
+          <InlineForm
+            buttonLabel="Create Game"
+            label="Game name"
+            name="game_name"
+            onChange={(e) => this._gameName = e.target.value}
+            onClick={this.createGame}
+          >
+
+          </InlineForm>
           <Space auto />
           <Text><b>Username:</b> Cesar92</Text>
           <Space x={1} />
@@ -54,13 +67,15 @@ class App extends Component {
   }
 }
 
-// const mapStateToProps = (state) => ({
-//
-// })
-//
-// import { initializeWs } from "./actions";
-// const mapDispatchToProps = {
-//   initializeWs
-// }
+const mapStateToProps = (state) => ({
 
-export default App
+})
+
+import { initializeWs } from "./actions";
+import { createGame } from '../GameBrowser/actions'
+const mapDispatchToProps = {
+  initializeWs,
+  createGame
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
