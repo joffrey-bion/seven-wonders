@@ -14,9 +14,9 @@ public class CardDefinition implements Definition<Card> {
 
     private Color color;
 
-    private EffectsDefinition effect;
-
     private Requirements requirements;
+
+    private EffectsDefinition effect;
 
     private String chainParent;
 
@@ -28,7 +28,7 @@ public class CardDefinition implements Definition<Card> {
 
     @Override
     public Card create(Settings settings) {
-        return new Card(name, color, requirements, chainParent, effect.create(settings), chainChildren);
+        return new Card(name, color, requirements, effect.create(settings), chainParent, chainChildren, image);
     }
 
     public String getName() {

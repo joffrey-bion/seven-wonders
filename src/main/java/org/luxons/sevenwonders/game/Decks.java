@@ -39,6 +39,9 @@ public class Decks {
     }
 
     private void validateNbCards(List<Card> deck, int nbPlayers) {
+        if (nbPlayers == 0) {
+            throw new IllegalArgumentException("Cannot deal cards between 0 players");
+        }
         if (deck.size() % nbPlayers != 0) {
             throw new IllegalArgumentException(
                     String.format("Cannot deal %d cards evenly between %d players", deck.size(), nbPlayers));

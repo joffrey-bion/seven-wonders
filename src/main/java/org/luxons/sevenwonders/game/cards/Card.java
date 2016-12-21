@@ -13,20 +13,23 @@ public class Card {
 
     private final Requirements requirements;
 
-    private final String chainParent;
-
     private final List<Effect> effects;
+
+    private final String chainParent;
 
     private final List<String> chainChildren;
 
-    public Card(String name, Color color, Requirements requirements, String chainParent, List<Effect> effects,
-                List<String> chainChildren) {
+    private final String image;
+
+    public Card(String name, Color color, Requirements requirements, List<Effect> effects, String chainParent,
+            List<String> chainChildren, String image) {
         this.name = name;
         this.color = color;
         this.requirements = requirements;
         this.chainParent = chainParent;
         this.effects = effects;
         this.chainChildren = chainChildren;
+        this.image = image;
     }
 
     public String getName() {

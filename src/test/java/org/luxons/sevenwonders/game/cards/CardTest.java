@@ -39,7 +39,7 @@ public class CardTest {
 
         List<Effect> effects = Collections.singletonList(treeFarmEffect);
 
-        treeFarmCard = new Card("Tree Farm", Color.BROWN, treeFarmRequirements, "", effects, null);
+        treeFarmCard = new Card("Tree Farm", Color.BROWN, treeFarmRequirements, effects, "", null, null);
     }
 
     @Test
