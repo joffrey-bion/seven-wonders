@@ -26,21 +26,21 @@ public class ResourcesSerializerTest {
     @Test
     public void serialize_emptyResourcesToNull() {
         Resources resources = new Resources();
-        assertEquals("null", gson.toJson(resources, Resources.class));
+        assertEquals("null", gson.toJson(resources));
     }
 
     @Test
     public void serialize_singleType() {
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 1);
-        assertEquals("\"W\"", gson.toJson(resources, Resources.class));
+        assertEquals("\"W\"", gson.toJson(resources));
     }
 
     @Test
     public void serialize_multipleTimesSameType() {
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 3);
-        assertEquals("\"WWW\"", gson.toJson(resources, Resources.class));
+        assertEquals("\"WWW\"", gson.toJson(resources));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ResourcesSerializerTest {
         resources.add(ResourceType.WOOD, 1);
         resources.add(ResourceType.STONE, 1);
         resources.add(ResourceType.CLAY, 1);
-        assertEquals("\"WSC\"", gson.toJson(resources, Resources.class));
+        assertEquals("\"WSC\"", gson.toJson(resources));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ResourcesSerializerTest {
         resources.add(ResourceType.WOOD, 2);
         resources.add(ResourceType.CLAY, 1);
         resources.add(ResourceType.STONE, 1);
-        assertEquals("\"WWSCC\"", gson.toJson(resources, Resources.class));
+        assertEquals("\"WWSCC\"", gson.toJson(resources));
     }
 
     @Test
