@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.game.cards;
 
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Resources;
 
@@ -29,7 +30,8 @@ public class Requirements {
         return board.getGold() >= gold && board.getProduction().contains(resources);
     }
 
-    boolean isAffordedBy(Board board, Board left, Board right) {
+    boolean isAffordedBy(Table table, int playerIndex) {
+        Board board = table.getBoard(playerIndex);
         if (isAffordedBy(board)) {
             return true;
         }

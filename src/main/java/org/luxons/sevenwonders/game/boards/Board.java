@@ -3,7 +3,9 @@ package org.luxons.sevenwonders.game.boards;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.resources.Production;
@@ -12,6 +14,8 @@ import org.luxons.sevenwonders.game.wonders.Wonder;
 public class Board {
 
     private final Wonder wonder;
+
+    private final Player player;
 
     private final List<Card> playedCards = new ArrayList<>();
 
@@ -29,8 +33,9 @@ public class Board {
 
     private int nbDefeatTokens;
 
-    public Board(Wonder wonder, Settings settings) {
+    public Board(Wonder wonder, Player player, Settings settings) {
         this.wonder = wonder;
+        this.player = player;
         this.wonderLevel = 0;
         this.gold = settings.getInitialGold();
         this.tradingRules = new TradingRules(settings.getDefaultTradingCost());
@@ -39,6 +44,10 @@ public class Board {
 
     public Wonder getWonder() {
         return wonder;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public List<Card> getPlayedCards() {
@@ -89,12 +98,8 @@ public class Board {
         this.wonderLevel++;
     }
 
-    public void activateCurrentWonderLevel(Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        activateWonderLevel(wonderLevel, leftNeighbourBoard, rightNeighbourBoard);
-    }
-
-    public void activateWonderLevel(int level, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        wonder.getLevels().get(level).activate(this, leftNeighbourBoard, rightNeighbourBoard);
+    public void activateCurrentWonderLevel(Table table, int playerIndex) {
+        wonder.getLevels().get(wonderLevel).activate(table, playerIndex);
     }
 
     public int getNbWarSymbols() {

@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.effects;
 
-import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.api.Table;
 
 /**
  * Represents an effect than can be applied to a player's board when playing a card or building his wonder. The effect
@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.game.boards.Board;
  */
 public interface Effect {
 
-    void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard);
+    void apply(Table table, int playerIndex);
 
-    int computePoints(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard);
+    int computePoints(Table table, int playerIndex);
 }

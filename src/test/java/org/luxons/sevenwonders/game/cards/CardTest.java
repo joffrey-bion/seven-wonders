@@ -1,11 +1,13 @@
 package org.luxons.sevenwonders.game.cards;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
@@ -16,20 +18,19 @@ import static org.junit.Assert.assertEquals;
 
 public class CardTest {
 
-    private Board board;
-
-    private Board leftBoard;
-
-    private Board rightBoard;
+    private Table table;
 
     private Card treeFarmCard;
 
     @Before
     public void initBoard() {
         Settings settings = new Settings();
-        board = new Board(new Wonder("TestWonder", ResourceType.WOOD), settings);
-        leftBoard = new Board(new Wonder("TestWonder", ResourceType.STONE), settings);
-        rightBoard = new Board(new Wonder("TestWonder", ResourceType.PAPYRUS), settings);
+
+        List<Board> boards = new ArrayList<>(3);
+        boards.add(new Board(new Wonder("TestWonder", ResourceType.WOOD), null, settings));
+        boards.add(new Board(new Wonder("TestWonder", ResourceType.STONE), null, settings));
+        boards.add(new Board(new Wonder("TestWonder", ResourceType.PAPYRUS), null, settings));
+        table = new Table(boards);
 
         Requirements treeFarmRequirements = new Requirements();
         treeFarmRequirements.setGold(1);
@@ -43,15 +44,13 @@ public class CardTest {
     }
 
     @Test
-    public void testInitialBoard() {
-        assertEquals(3, board.getGold());
-    }
-
-    @Test
     public void playCardCostingMoney() {
-        board.setGold(3);
-        treeFarmCard.applyTo(board, leftBoard, rightBoard);
-        assertEquals(2, board.getGold());
+        table.getBoard(0).setGold(3);
+        table.getBoard(1).setGold(3);
+        table.getBoard(2).setGold(3);
+        treeFarmCard.applyTo(table, 0);
+        assertEquals(2, table.getBoard(0).getGold());
+        assertEquals(3, table.getBoard(1).getGold());
+        assertEquals(3, table.getBoard(2).getGold());
     }
-
 }

@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.game.boards;
 import java.util.EnumMap;
 import java.util.Map;
 
-import org.luxons.sevenwonders.game.effects.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 
 public class TradingRules {

@@ -12,7 +12,7 @@ public class TestUtils {
     public static Board createBoard(ResourceType initialResource) {
         Settings settings = new Settings();
         Wonder wonder = new Wonder("Test Wonder " + initialResource.getSymbol(), initialResource);
-        return new Board(wonder, settings);
+        return new Board(wonder, null, settings);
     }
 
     public static Board createBoard(ResourceType initialResource, ResourceType... production) {

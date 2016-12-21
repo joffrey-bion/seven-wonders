@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.luxons.sevenwonders.game.boards.Board;
 
-public class GoldIncrease extends InstantEffect {
+public class GoldIncrease extends InstantOwnBoardEffect {
 
     private final int amount;
 
@@ -17,7 +17,7 @@ public class GoldIncrease extends InstantEffect {
     }
 
     @Override
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public void apply(Board board) {
         board.setGold(board.getGold() + amount);
     }
 

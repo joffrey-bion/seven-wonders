@@ -5,7 +5,7 @@ import java.util.Objects;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Production;
 
-public class ProductionIncrease extends InstantEffect {
+public class ProductionIncrease extends InstantOwnBoardEffect {
 
     private Production production = new Production();
 
@@ -17,7 +17,7 @@ public class ProductionIncrease extends InstantEffect {
         this.production = production;
     }
 
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public void apply(Board board) {
         board.getProduction().addAll(production);
     }
 

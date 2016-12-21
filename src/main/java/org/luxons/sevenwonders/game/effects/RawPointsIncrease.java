@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.effects;
 
 import java.util.Objects;
 
-import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.api.Table;
 
 public class RawPointsIncrease extends EndGameEffect {
 
@@ -17,7 +17,7 @@ public class RawPointsIncrease extends EndGameEffect {
     }
 
     @Override
-    public int computePoints(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public int computePoints(Table table, int playerIndex) {
         return points;
     }
 

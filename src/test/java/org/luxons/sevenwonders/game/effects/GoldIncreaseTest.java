@@ -28,7 +28,7 @@ public class GoldIncreaseTest {
         Board board = TestUtils.createBoard(type, initialAmount);
         GoldIncrease goldIncrease = new GoldIncrease(goldIncreaseAmount);
 
-        goldIncrease.apply(board, null, null);
+        goldIncrease.apply(board);
 
         assertEquals(initialAmount + goldIncreaseAmount, board.getGold());
     }

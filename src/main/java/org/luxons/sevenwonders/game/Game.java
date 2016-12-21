@@ -17,6 +17,8 @@ public class Game {
 
     private final Settings settings;
 
+    private final List<Player> players;
+
     private final Table table;
 
     private final Decks decks;
@@ -32,7 +34,8 @@ public class Game {
     public Game(long id, Settings settings, List<Player> players, List<Board> boards, Decks decks) {
         this.id = id;
         this.settings = settings;
-        this.table = new Table(players, boards);
+        this.players = players;
+        this.table = new Table(boards);
         this.decks = decks;
         this.discardedCards = new ArrayList<>();
         this.hands = new HashMap<>();
@@ -44,12 +47,8 @@ public class Game {
         return id;
     }
 
-    public List<Player> getPlayers() {
-        return table.getPlayers();
-    }
-
     public boolean containsUser(String userName) {
-        return getPlayers().stream().anyMatch(p -> p.getUserName().equals(userName));
+        return players.stream().anyMatch(p -> p.getUserName().equals(userName));
     }
 
     private void startNewAge() {
@@ -65,17 +64,15 @@ public class Game {
                     .collect(Collectors.toList());
     }
 
-    public void prepareCard(int playerIndex, Move move) throws InvalidMoveException {
-        validateMove(playerIndex, move);
-        preparedMoves.put(playerIndex, move);
-    }
-
-    private void validateMove(int playerIndex, Move move) throws InvalidMoveException {
-        // TODO throw if invalid
+    public void prepareCard(Move move) throws InvalidMoveException {
+        if (!move.isValid(table)) {
+            throw new InvalidMoveException();
+        }
+        preparedMoves.put(move.getPlayerIndex(), move);
     }
 
     public boolean areAllPlayersReady() {
-        return preparedMoves.size() == table.getPlayers().size();
+        return preparedMoves.size() == players.size();
     }
 
     public List<Move> playTurn() {
@@ -131,7 +128,6 @@ public class Game {
                     break;
             }
         });
-
     }
 
     private static class MissingPreparedMoveException extends RuntimeException {

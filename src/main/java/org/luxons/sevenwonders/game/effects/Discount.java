@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.boards.Provider;
 import org.luxons.sevenwonders.game.boards.TradingRules;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 
-public class Discount extends InstantEffect {
+public class Discount extends InstantOwnBoardEffect {
 
     private final List<ResourceType> resourceTypes = new ArrayList<>();
 
@@ -32,7 +33,7 @@ public class Discount extends InstantEffect {
     }
 
     @Override
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public void apply(Board board) {
         TradingRules rules = board.getTradingRules();
         for (ResourceType type : resourceTypes) {
             for (Provider provider : providers) {

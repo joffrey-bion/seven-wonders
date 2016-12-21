@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.game.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.Decks;
 import org.luxons.sevenwonders.game.Game;
@@ -12,6 +12,7 @@ import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition;
+import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class GameDefinition {
 
@@ -43,18 +44,22 @@ public class GameDefinition {
     }
 
     public Game initGame(long id, Settings settings, List<Player> orderedPlayers) {
-        List<Board> boards = pickRandomBoards(settings);
+        List<Board> boards = assignBoards(settings, orderedPlayers);
         Decks decks = decksDefinition.create(settings);
         return new Game(id, settings, orderedPlayers, boards, decks);
     }
 
-    private List<Board> pickRandomBoards(Settings settings) {
+    private List<Board> assignBoards(Settings settings, List<Player> orderedPlayers) {
         List<WonderDefinition> randomizedWonders = Arrays.asList(wonders);
         Collections.shuffle(randomizedWonders, settings.getRandom());
-        return Arrays.stream(wonders)
-                     .map(def -> def.create(settings))
-                     .map(w -> new Board(w, settings))
-                     .limit(settings.getNbPlayers())
-                     .collect(Collectors.toList());
+
+        List<Board> boards = new ArrayList<>(orderedPlayers.size());
+        for (Player player : orderedPlayers) {
+            WonderDefinition def = randomizedWonders.remove(0);
+            Wonder w = def.create(settings);
+            Board b = new Board(w, player, settings);
+            boards.add(b);
+        }
+        return boards;
     }
 }

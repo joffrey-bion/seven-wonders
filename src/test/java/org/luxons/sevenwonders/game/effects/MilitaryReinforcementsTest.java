@@ -30,7 +30,7 @@ public class MilitaryReinforcementsTest {
 
         MilitaryReinforcements reinforcements = new MilitaryReinforcements(additionalShields);
 
-        reinforcements.apply(board, null, null);
+        reinforcements.apply(board);
 
         assertEquals(initialShields + additionalShields, board.getNbWarSymbols());
     }

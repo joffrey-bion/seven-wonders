@@ -31,7 +31,7 @@ public class ProductionIncreaseTest {
         Board board = TestUtils.createBoard(initialType);
         ProductionIncrease effect = createProductionIncrease(addedType);
 
-        effect.apply(board, null, null);
+        effect.apply(board);
 
         Resources resources = TestUtils.createResources(initialType, addedType);
         assertTrue(board.getProduction().contains(resources));

@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.effects;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.Science;
 
-public class ScienceProgress extends InstantEffect {
+public class ScienceProgress extends InstantOwnBoardEffect {
 
     private Science science;
 
@@ -16,7 +16,7 @@ public class ScienceProgress extends InstantEffect {
     }
 
     @Override
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public void apply(Board board) {
         board.getScience().addAll(science);
     }
 }

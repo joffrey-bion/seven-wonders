@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game.cards;
 
 import java.util.List;
 
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.effects.Effect;
 
@@ -64,17 +65,19 @@ public class Card {
         return requirements.isAffordedBy(board);
     }
 
-    public boolean isPlayable(Board board, Board left, Board right) {
-        return !board.isPlayed(name) && (isChainableOn(board) || requirements.isAffordedBy(board, left, right));
+    public boolean isPlayable(Table table, int playerIndex) {
+        Board board = table.getBoard(playerIndex);
+        return !board.isPlayed(name) && (isChainableOn(board) || requirements.isAffordedBy(table, playerIndex));
     }
 
-    public void applyTo(Board board, Board left, Board right) {
+    public void applyTo(Table table, int playerIndex) {
         // TODO add paid resources cost deduction
-        if (!isChainableOn(board)) {
+        Board playerBoard = table.getBoard(playerIndex);
+        if (!isChainableOn(playerBoard)) {
             // TODO add paid resources exemption
-            requirements.pay(board);
+            requirements.pay(playerBoard);
         }
-        effects.forEach(e -> e.apply(board, left, right));
+        effects.forEach(e -> e.apply(table, playerIndex));
     }
 
     @Override

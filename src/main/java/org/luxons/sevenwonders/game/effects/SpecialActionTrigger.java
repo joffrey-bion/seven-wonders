@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.effects;
 
-import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.api.Table;
 
 public class SpecialActionTrigger implements Effect {
 
@@ -15,12 +15,12 @@ public class SpecialActionTrigger implements Effect {
     }
 
     @Override
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-
+    public void apply(Table table, int playerIndex) {
+        // TODO do something to activate the special action
     }
 
     @Override
-    public int computePoints(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public int computePoints(Table table, int playerIndex) {
         return 0;
     }
 }

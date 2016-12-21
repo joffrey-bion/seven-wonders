@@ -3,8 +3,8 @@ package org.luxons.sevenwonders.game.api;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Card;
 
 /**
@@ -15,27 +15,23 @@ public class Table {
 
     private final int nbPlayers;
 
-    private final List<Player> players;
-
     private final List<Board> boards;
 
-    public Table(List<Player> players, List<Board> boards) {
-        this.nbPlayers = players.size();
-        this.players = players;
+    public Table(List<Board> boards) {
+        this.nbPlayers = boards.size();
         this.boards = boards;
-        if (players.size() != boards.size()) {
-            throw new IllegalArgumentException(
-                    String.format("There are %d boards for %d players, it doesn't make sense", boards.size(),
-                            players.size()));
-        }
-    }
-
-    public List<Player> getPlayers() {
-        return players;
     }
 
     public List<Board> getBoards() {
         return boards;
+    }
+
+    public Board getBoard(int playerIndex) {
+        return boards.get(playerIndex);
+    }
+
+    public Board getBoard(int playerIndex, RelativeBoardPosition position) {
+        return boards.get(position.getIndexFrom(playerIndex, nbPlayers));
     }
 
     public int getNbPlayers() {
@@ -53,26 +49,17 @@ public class Table {
     }
 
     public void activateCard(int playerIndex, Card card) {
-        Board board = boards.get(playerIndex);
-        Board left = boards.get(wrapIndex(playerIndex - 1));
-        Board right = boards.get(wrapIndex(playerIndex + 1));
-        card.applyTo(board, left, right);
+        card.applyTo(this, playerIndex);
     }
 
     public void activateCurrentWonderStage(int playerIndex) {
         Board board = boards.get(playerIndex);
-        Board left = boards.get(wrapIndex(playerIndex - 1));
-        Board right = boards.get(wrapIndex(playerIndex + 1));
-        board.activateCurrentWonderLevel(left, right);
+        board.activateCurrentWonderLevel(this, playerIndex);
     }
 
     public void discard(int playerIndex, int goldBonus) {
         Board board = boards.get(playerIndex);
         board.setGold(board.getGold() + goldBonus);
-    }
-
-    private int wrapIndex(int index) {
-        return Math.floorMod(index, nbPlayers);
     }
 
     public PlayerTurnInfo createPlayerTurnInfo(int playerIndex, List<Card> cards) {
@@ -82,17 +69,6 @@ public class Table {
     }
 
     private List<HandCard> createHand(int playerIndex, List<Card> cards) {
-        return cards.stream().map(c -> createHandCard(playerIndex, c)).collect(Collectors.toList());
-    }
-
-    private HandCard createHandCard(int playerIndex, Card card) {
-        Board board = boards.get(playerIndex);
-        Board left = boards.get(wrapIndex(playerIndex - 1));
-        Board right = boards.get(wrapIndex(playerIndex + 1));
-        HandCard handCard = new HandCard(card);
-        handCard.setChainable(card.isChainableOn(board));
-        handCard.setFree(card.isAffordedBy(board) && card.getRequirements().getGold() == 0);
-        handCard.setPlayable(card.isPlayable(board, left, right));
-        return handCard;
+        return cards.stream().map(c -> new HandCard(c, this, playerIndex)).collect(Collectors.toList());
     }
 }

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.luxons.sevenwonders.game.boards.Board;
 
-public class MilitaryReinforcements extends InstantEffect {
+public class MilitaryReinforcements extends InstantOwnBoardEffect {
 
     private final int count;
 
@@ -17,7 +17,7 @@ public class MilitaryReinforcements extends InstantEffect {
     }
 
     @Override
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
+    public void apply(Board board) {
         board.setNbWarSymbols(board.getNbWarSymbols() + count);
     }
 

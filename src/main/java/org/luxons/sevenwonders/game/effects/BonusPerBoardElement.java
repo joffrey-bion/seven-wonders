@@ -2,7 +2,10 @@ package org.luxons.sevenwonders.game.effects;
 
 import java.util.List;
 
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.boards.BoardElementType;
+import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Color;
 
 public class BonusPerBoardElement implements Effect {
@@ -59,28 +62,22 @@ public class BonusPerBoardElement implements Effect {
     }
 
     @Override
-    public void apply(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        int goldGain = gold * computeNbOfMatchingElementsIn(board, leftNeighbourBoard, rightNeighbourBoard);
+    public void apply(Table table, int playerIndex) {
+        int goldGain = gold * computeNbOfMatchingElementsIn(table, playerIndex);
+        Board board = table.getBoard(playerIndex);
         board.setGold(board.getGold() + goldGain);
     }
 
     @Override
-    public int computePoints(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        return points * computeNbOfMatchingElementsIn(board, leftNeighbourBoard, rightNeighbourBoard);
+    public int computePoints(Table table, int playerIndex) {
+        return points * computeNbOfMatchingElementsIn(table, playerIndex);
     }
 
-    private int computeNbOfMatchingElementsIn(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        int totalCount = 0;
-        if (boards.contains(RelativeBoardPosition.SELF)) {
-            totalCount += computeNbOfMatchingElementsIn(board);
-        }
-        if (boards.contains(RelativeBoardPosition.LEFT)) {
-            totalCount += computeNbOfMatchingElementsIn(leftNeighbourBoard);
-        }
-        if (boards.contains(RelativeBoardPosition.RIGHT)) {
-            totalCount += computeNbOfMatchingElementsIn(rightNeighbourBoard);
-        }
-        return totalCount;
+    private int computeNbOfMatchingElementsIn(Table table, int playerIndex) {
+        return boards.stream()
+                     .map(pos -> table.getBoard(playerIndex, pos))
+                     .mapToInt(this::computeNbOfMatchingElementsIn)
+                     .sum();
     }
 
     private int computeNbOfMatchingElementsIn(Board board) {

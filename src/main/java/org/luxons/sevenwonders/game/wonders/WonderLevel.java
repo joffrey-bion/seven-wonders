@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.wonders;
 
 import java.util.List;
 
-import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
 
@@ -28,7 +28,7 @@ public class WonderLevel {
         this.effects = effects;
     }
 
-    public void activate(Board board, Board leftNeighbourBoard, Board rightNeighbourBoard) {
-        effects.forEach(e -> e.apply(board, leftNeighbourBoard, rightNeighbourBoard));
+    public void activate(Table table, int playerIndex) {
+        effects.forEach(e -> e.apply(table, playerIndex));
     }
 }

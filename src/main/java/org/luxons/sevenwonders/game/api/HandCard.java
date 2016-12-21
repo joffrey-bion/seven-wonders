@@ -1,19 +1,24 @@
 package org.luxons.sevenwonders.game.api;
 
+import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 
 public class HandCard {
 
     private final Card data;
 
-    private boolean chainable;
+    private final boolean chainable;
 
-    private boolean free;
+    private final boolean free;
 
-    private boolean playable;
+    private final boolean playable;
 
-    public HandCard(Card card) {
+    public HandCard(Card card, Table table, int playerIndex) {
+        Board board = table.getBoard(playerIndex);
         this.data = card;
+        this.chainable = card.isChainableOn(board);
+        this.free = card.isAffordedBy(board) && card.getRequirements().getGold() == 0;
+        this.playable = card.isPlayable(table, playerIndex);
     }
 
     public Card getData() {
@@ -24,23 +29,12 @@ public class HandCard {
         return chainable;
     }
 
-    public void setChainable(boolean chainable) {
-        this.chainable = chainable;
-    }
-
     public boolean isFree() {
         return free;
-    }
-
-    public void setFree(boolean free) {
-        this.free = free;
     }
 
     public boolean isPlayable() {
         return playable;
     }
 
-    public void setPlayable(boolean playable) {
-        this.playable = playable;
-    }
 }

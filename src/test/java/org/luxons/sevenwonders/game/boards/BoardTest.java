@@ -17,7 +17,7 @@ public class BoardTest {
 
     @DataPoints
     public static int[] goldAmounts() {
-        return new int[]{-5, -1, 0, 1, 2, 5, 10};
+        return new int[]{-5, -1, 0, 1, 2, 3, 5, 10};
     }
 
     @DataPoints
@@ -29,13 +29,13 @@ public class BoardTest {
     public void initialGold_respectsSettings(int goldAmountInSettings) {
         Settings settings = new Settings();
         settings.setInitialGold(goldAmountInSettings);
-        Board board = new Board(TestUtils.createWonder(), settings);
+        Board board = new Board(TestUtils.createWonder(), null, settings);
         assertEquals(goldAmountInSettings, board.getGold());
     }
 
     @Theory
     public void initialProduction_containsInitialResource(ResourceType type) {
-        Board board = new Board(TestUtils.createWonder(type), new Settings());
+        Board board = new Board(TestUtils.createWonder(type), null, new Settings());
         Resources resources = TestUtils.createResources(type);
         assertTrue(board.getProduction().contains(resources));
     }
