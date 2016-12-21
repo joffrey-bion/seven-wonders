@@ -108,7 +108,7 @@ public class Game {
                     table.placeCard(playerIndex, decks.getCard(move.getCardName()));
                     break;
                 case UPGRADE_WONDER:
-                    // TODO pre-upgrade the level of wonder without effect
+                    table.upgradeWonderStage(playerIndex);
                     break;
                 case DISCARD:
                     discardedCards.add(decks.getCard(move.getCardName()));
@@ -121,10 +121,10 @@ public class Game {
         preparedMoves.forEach((playerIndex, move) -> {
             switch (move.getType()) {
                 case PLAY:
-                    table.playCard(playerIndex, decks.getCard(move.getCardName()));
+                    table.activateCard(playerIndex, decks.getCard(move.getCardName()));
                     break;
                 case UPGRADE_WONDER:
-                    table.upgradeWonder(playerIndex);
+                    table.activateCurrentWonderStage(playerIndex);
                     break;
                 case DISCARD:
                     table.discard(playerIndex, settings.getDiscardedCardGold());

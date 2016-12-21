@@ -47,18 +47,23 @@ public class Table {
         board.addCard(card);
     }
 
-    public void upgradeWonder(int playerIndex) {
+    public void upgradeWonderStage(int playerIndex) {
         Board board = boards.get(playerIndex);
-        Board left = boards.get(wrapIndex(playerIndex - 1));
-        Board right = boards.get(wrapIndex(playerIndex + 1));
-        board.upgradeWonderLevel(left, right);
+        board.increaseWonderLevel();
     }
 
-    public void playCard(int playerIndex, Card card) {
+    public void activateCard(int playerIndex, Card card) {
         Board board = boards.get(playerIndex);
         Board left = boards.get(wrapIndex(playerIndex - 1));
         Board right = boards.get(wrapIndex(playerIndex + 1));
         card.applyTo(board, left, right);
+    }
+
+    public void activateCurrentWonderStage(int playerIndex) {
+        Board board = boards.get(playerIndex);
+        Board left = boards.get(wrapIndex(playerIndex - 1));
+        Board right = boards.get(wrapIndex(playerIndex + 1));
+        board.activateCurrentWonderLevel(left, right);
     }
 
     public void discard(int playerIndex, int goldBonus) {
