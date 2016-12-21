@@ -11,5 +11,14 @@ import org.luxons.sevenwonders.game.Settings;
  */
 public interface Definition<T> {
 
+    /**
+     * Creates a T object from the given settings. This method mustn't mutate this Definition as it may be called
+     * multiple times with different settings.
+     *
+     * @param settings
+     *         the game settings to use to generate a game-specific object from this definition
+     *
+     * @return the new game-specific object created from this definition
+     */
     T create(Settings settings);
 }
