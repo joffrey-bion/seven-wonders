@@ -7,17 +7,17 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.20.0",
+    "immutable": "^3.8.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
     "react-router": "4.0.0-alpha.6",
     "rebass": "^0.3.3",
-    "reflexbox": "^2.2.3",
     "redux": "^3.6.0",
     "redux-saga": "^0.13.0",
+    "reflexbox": "^2.2.3",
     "sockjs-client": "latest",
-    "webstomp-client": "^1.0.3",
-    "redux-saga": "^0.13.0"
+    "webstomp-client": "^1.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
