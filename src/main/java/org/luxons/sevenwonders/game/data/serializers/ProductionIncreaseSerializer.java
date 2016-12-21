@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.luxons.sevenwonders.game.effects.ProductionIncrease;
+import org.luxons.sevenwonders.game.resources.Production;
+import org.luxons.sevenwonders.game.resources.ResourceType;
+import org.luxons.sevenwonders.game.resources.Resources;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -13,10 +18,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import org.luxons.sevenwonders.game.effects.ProductionIncrease;
-import org.luxons.sevenwonders.game.resources.Production;
-import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.resources.Resources;
 
 public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIncrease>,
         JsonDeserializer<ProductionIncrease> {
@@ -29,8 +30,10 @@ public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIn
         List<Set<ResourceType>> choices = production.getAlternativeResources();
         if (fixedResources.isEmpty()) {
             return serializeAsChoice(choices, context);
-        } else {
+        } else if (choices.isEmpty()) {
             return serializeAsResources(fixedResources, context);
+        } else {
+            throw new IllegalArgumentException("Cannot serialize a production with mixed fixed resources and choices");
         }
     }
 
@@ -43,7 +46,7 @@ public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIn
             return JsonNull.INSTANCE;
         }
         if (choices.size() > 1) {
-            throw new UnsupportedOperationException("Cannot serialize a production with more than one choice");
+            throw new IllegalArgumentException("Cannot serialize a production with more than one choice");
         }
         String str = choices.get(0).stream()
                             .map(ResourceType::getSymbol)
@@ -72,6 +75,9 @@ public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIn
         String[] symbols = choiceStr.split("/");
         ResourceType[] choice = new ResourceType[symbols.length];
         for (int i = 0; i < symbols.length; i++) {
+            if (symbols[i].length() != 1) {
+                throw new IllegalArgumentException("Choice elements must be resource types, got " + symbols[i]);
+            }
             choice[i] = ResourceType.fromSymbol(symbols[i].charAt(0));
         }
         return choice;

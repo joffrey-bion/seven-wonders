@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 public class Production {
@@ -80,5 +81,23 @@ public class Production {
 
     private static Set<ResourceType> findFirstAlternativeContaining(List<Set<ResourceType>> alternatives, ResourceType type) {
         return alternatives.stream().filter(a -> a.contains(type)).findAny().orElse(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Production that = (Production)o;
+        return Objects.equals(fixedResources, that.fixedResources) && Objects.equals(alternativeResources,
+                that.alternativeResources);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fixedResources, alternativeResources);
     }
 }
