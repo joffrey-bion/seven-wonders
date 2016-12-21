@@ -2,6 +2,11 @@ package org.luxons.sevenwonders.game.data.serializers;
 
 import java.lang.reflect.Type;
 
+import org.luxons.sevenwonders.game.effects.Effect;
+import org.luxons.sevenwonders.game.effects.GoldIncrease;
+import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
+import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -9,10 +14,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import org.luxons.sevenwonders.game.effects.Effect;
-import org.luxons.sevenwonders.game.effects.GoldIncrease;
-import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
-import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 
 public class NumericEffectSerializer implements JsonSerializer<Effect>, JsonDeserializer<Effect> {
 
@@ -25,6 +26,8 @@ public class NumericEffectSerializer implements JsonSerializer<Effect>, JsonDese
             value =  ((GoldIncrease)effect).getAmount();
         } else if (RawPointsIncrease.class.equals(typeOfSrc)) {
             value =  ((RawPointsIncrease)effect).getPoints();
+        } else {
+            throw new IllegalArgumentException("Unknown numeric effet " + typeOfSrc.getTypeName());
         }
         return new JsonPrimitive(value);
     }
