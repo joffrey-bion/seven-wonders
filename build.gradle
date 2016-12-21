@@ -25,6 +25,7 @@ dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.8'
 
     compile 'org.springframework.boot:spring-boot-starter-websocket'
+    compile 'org.springframework.security:spring-security-core:4.2.0.RELEASE'
     compile 'org.webjars:webjars-locator'
     compile 'org.webjars:sockjs-client:1.0.2'
     compile 'org.webjars:stomp-websocket:2.3.3'

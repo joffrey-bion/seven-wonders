@@ -4,10 +4,9 @@ import java.security.Principal;
 import java.util.Map;
 
 import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
-
-import sun.security.acl.PrincipalImpl;
 
 class AnonymousUsersHandshakeHandler extends DefaultHandshakeHandler {
 
@@ -16,9 +15,9 @@ class AnonymousUsersHandshakeHandler extends DefaultHandshakeHandler {
     @Override
     public Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler,
             Map<String, Object> attributes) {
-        Principal p = request.getPrincipal();
+        Principal p = super.determineUser(request, wsHandler, attributes);
         if (p == null) {
-            p = new PrincipalImpl("player" + playerId++);
+            p = new UsernamePasswordAuthenticationToken("player" + playerId++, null);
         }
         return p;
     }
