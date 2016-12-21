@@ -10,11 +10,11 @@ import org.luxons.sevenwonders.game.wonders.WonderLevel;
 
 public class WonderDefinition implements Definition<Wonder> {
 
-    public String name;
+    private String name;
 
-    public WonderSideDefinition a;
+    private WonderSideDefinition a;
 
-    public WonderSideDefinition b;
+    private WonderSideDefinition b;
 
     @Override
     public Wonder create(Settings settings) {
@@ -44,17 +44,17 @@ public class WonderDefinition implements Definition<Wonder> {
 
         private List<WonderLevelDefinition> stages;
 
-        public String image;
+        private String image;
 
-        public ResourceType getInitialResource() {
+        ResourceType getInitialResource() {
             return initialResource;
         }
 
-        public List<WonderLevel> createStages(Settings settings) {
+        List<WonderLevel> createStages(Settings settings) {
             return stages.stream().map(def -> def.create(settings)).collect(Collectors.toList());
         }
 
-        public String getImage() {
+        String getImage() {
             return image;
         }
     }

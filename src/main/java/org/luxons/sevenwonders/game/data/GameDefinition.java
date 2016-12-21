@@ -42,10 +42,10 @@ public class GameDefinition {
         return MAX_PLAYERS;
     }
 
-    public Game initGame(long id, Settings settings, List<Player> players) {
+    public Game initGame(long id, Settings settings, List<Player> orderedPlayers) {
         List<Board> boards = pickRandomBoards(settings);
         Decks decks = decksDefinition.create(settings);
-        return new Game(id, settings, players, boards, decks);
+        return new Game(id, settings, orderedPlayers, boards, decks);
     }
 
     private List<Board> pickRandomBoards(Settings settings) {

@@ -16,10 +16,7 @@ public class Settings {
 
     private WonderSide wonderSide = WonderSide.A;
 
-    // will default to nbPlayers + 2
-    private Integer nbGuildCards = null;
-
-    private long randomSeedForTests = 0;
+    private long randomSeedForTests = -1;
 
     public int getNbPlayers() {
         if (nbPlayers < 0) {
@@ -64,14 +61,6 @@ public class Settings {
         this.wonderSide = wonderSide;
     }
 
-    public int getNbGuildCards() {
-        return nbGuildCards == null ? getNbPlayers() + 2 : nbGuildCards;
-    }
-
-    public void setNbGuildCards(int nbGuildCards) {
-        this.nbGuildCards = nbGuildCards;
-    }
-
     public long getRandomSeedForTests() {
         return randomSeedForTests;
     }
@@ -81,6 +70,6 @@ public class Settings {
     }
 
     public Random getRandom() {
-        return new Random(randomSeedForTests);
+        return randomSeedForTests > 0 ? new Random(randomSeedForTests) : new Random();
     }
 }
