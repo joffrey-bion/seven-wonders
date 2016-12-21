@@ -84,17 +84,6 @@ public class BonusPerBoardElement implements Effect {
     }
 
     private int computeNbOfMatchingElementsIn(Board board) {
-        switch (type) {
-            case CARD:
-                return board.getNbCardsOfColor(colors);
-            case WONDER_LEVEL:
-                return board.getWonderLevel();
-            case DEFEAT_TOKEN:
-                return board.getNbDefeatTokens();
-        }
-        throw new UnsupportedBoardElementType();
-    }
-
-    private class UnsupportedBoardElementType extends RuntimeException {
+        return type.getElementCount(board, colors);
     }
 }
