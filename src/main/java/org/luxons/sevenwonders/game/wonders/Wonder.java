@@ -19,6 +19,7 @@ public class Wonder {
     }
 
     public Wonder(String name, ResourceType initialResource, WonderLevel... levels) {
+        this.name = name;
         this.initialResource = initialResource;
         this.levels = Arrays.asList(levels);
     }
