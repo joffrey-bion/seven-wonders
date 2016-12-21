@@ -6,11 +6,9 @@ import { Text, Space } from 'rebass'
 class GameBrowser extends Component {
 
   listGames = (games) => {
-    return Object.keys(games).map(key => {
-      const game = games[key]
-      console.log('game', game, key)
-      return (<Flex key={key}>
-        <Text>{game.name}</Text>
+    return games.valueSeq().map((game, index) => {
+      return (<Flex key={index}>
+        <Text>{game.get('name')}</Text>
         <Space auto />
         <a href="#">Join</a>
       </Flex>)

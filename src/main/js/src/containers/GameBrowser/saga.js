@@ -1,5 +1,6 @@
 import { call, put, take } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
+import { fromJS } from 'immutable'
 
 import { NEW_GAME, JOIN_GAME, CREATE_GAME } from './constants'
 import { newGame, joinGame } from './actions'
@@ -7,7 +8,7 @@ import { newGame, joinGame } from './actions'
 function createSocketChannel(socket) {
   return eventChannel(emit => {
     const makeHandler = (type) => (event) => {
-      const response = JSON.parse(event.body)
+      const response = fromJS(JSON.parse(event.body))
 
       emit({
         type,
@@ -54,7 +55,7 @@ export function* watchGames(socketConnection) {
 export function* createGame(socketConnection) {
   const { name } = yield take(CREATE_GAME)
   const { socket } = socketConnection
-  console.log(socket)
+
   socket.send("/app/lobby/create-game", JSON.stringify({
     'gameName': name,
     'playerName': 'Cesar92'
