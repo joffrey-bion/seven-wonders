@@ -72,6 +72,6 @@ public class DecksDefinition implements Definition<Decks> {
     private static List<Card> createGuildCards(List<CardDefinition> defs, Settings settings) {
         List<Card> guild = defs.stream().map((def) -> def.create(settings)).collect(Collectors.toList());
         Collections.shuffle(guild, settings.getRandom());
-        return guild.subList(0, settings.getNbPlayers());
+        return guild.subList(0, settings.getNbPlayers() + 2);
     }
 }
