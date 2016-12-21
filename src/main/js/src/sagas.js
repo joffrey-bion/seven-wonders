@@ -2,7 +2,6 @@ import { fork, call } from 'redux-saga/effects'
 
 import createWsConnection from './utils/createWebSocketConnection'
 
-import counterSaga from './containers/Counter/saga'
 import errorSaga from './containers/App/saga'
 import newGamesSaga from './containers/GameBrowser/saga'
 
@@ -21,7 +20,6 @@ function* wsAwareSagas() {
 
 export default function* rootSaga() {
   yield [
-    call(counterSaga),
     call(wsAwareSagas)
   ]
 }
