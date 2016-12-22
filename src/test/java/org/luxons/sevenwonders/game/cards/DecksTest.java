@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game;
+package org.luxons.sevenwonders.game.cards;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.luxons.sevenwonders.game.Decks.CardNotFoundException;
-import org.luxons.sevenwonders.game.cards.Card;
-import org.luxons.sevenwonders.game.cards.Color;
+import org.luxons.sevenwonders.game.cards.Decks.CardNotFoundException;
 
 import static org.junit.Assert.*;
 

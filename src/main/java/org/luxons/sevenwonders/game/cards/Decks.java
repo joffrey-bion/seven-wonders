@@ -1,11 +1,9 @@
-package org.luxons.sevenwonders.game;
+package org.luxons.sevenwonders.game.cards;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.luxons.sevenwonders.game.cards.Card;
 
 public class Decks {
 
@@ -15,7 +13,7 @@ public class Decks {
         this.cardsPerAge = cardsPerAge;
     }
 
-    Card getCard(String cardName) throws CardNotFoundException {
+    public Card getCard(String cardName) throws CardNotFoundException {
         return cardsPerAge.values()
                           .stream()
                           .flatMap(List::stream)
@@ -24,7 +22,7 @@ public class Decks {
                           .orElseThrow(() -> new CardNotFoundException(cardName));
     }
 
-    Map<Integer, List<Card>> deal(int age, int nbPlayers) {
+    public Map<Integer, List<Card>> deal(int age, int nbPlayers) {
         List<Card> deck = getDeck(age);
         validateNbCards(deck, nbPlayers);
         return deal(deck, nbPlayers);
@@ -57,7 +55,7 @@ public class Decks {
         return hands;
     }
 
-    public class CardNotFoundException extends RuntimeException {
+    class CardNotFoundException extends RuntimeException {
         CardNotFoundException(String message) {
             super(message);
         }

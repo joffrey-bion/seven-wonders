@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.cards.Card;
-import org.luxons.sevenwonders.game.Decks;
+import org.luxons.sevenwonders.game.cards.Decks;
 
 public class DecksDefinition implements Definition<Decks> {
 

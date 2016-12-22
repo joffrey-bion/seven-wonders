@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.luxons.sevenwonders.game.Decks;
+import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;

@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.Decks;
 
 public class Game {
 
