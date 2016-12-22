@@ -11,10 +11,10 @@ public enum BoardElementType {
             return board.getNbCardsOfColor(colors);
         }
     },
-    WONDER_LEVEL {
+    BUILT_WONDER_STAGES {
         @Override
         public int getElementCount(Board board, List<Color> colors) {
-            return board.getWonderLevel();
+            return board.getWonder().getNbBuiltStages();
         }
     },
     DEFEAT_TOKEN {

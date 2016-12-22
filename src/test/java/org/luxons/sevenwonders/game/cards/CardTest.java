@@ -48,7 +48,7 @@ public class CardTest {
         table.getBoard(0).setGold(3);
         table.getBoard(1).setGold(3);
         table.getBoard(2).setGold(3);
-        treeFarmCard.applyTo(table, 0);
+        treeFarmCard.applyTo(table, 0, new ArrayList<>());
         assertEquals(2, table.getBoard(0).getGold());
         assertEquals(3, table.getBoard(1).getGold());
         assertEquals(3, table.getBoard(2).getGold());

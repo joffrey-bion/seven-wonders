@@ -147,15 +147,16 @@ public class Game {
     }
 
     private void placeCard(Move move) {
+        Card card = decks.getCard(move.getCardName());
         switch (move.getType()) {
         case PLAY:
-            table.placeCard(move.getPlayerIndex(), decks.getCard(move.getCardName()));
+            table.placeCard(move.getPlayerIndex(), card);
             break;
         case UPGRADE_WONDER:
-            table.upgradeWonderStage(move.getPlayerIndex());
+            table.buildWonderStage(move.getPlayerIndex(), card.getBack());
             break;
         case DISCARD:
-            discardedCards.add(decks.getCard(move.getCardName()));
+            discardedCards.add(card);
             break;
         }
     }
@@ -173,10 +174,10 @@ public class Game {
     private void activateCard(Move move) {
         switch (move.getType()) {
         case PLAY:
-            table.activateCard(move.getPlayerIndex(), decks.getCard(move.getCardName()));
+            table.activateCard(move.getPlayerIndex(), decks.getCard(move.getCardName()), move.getBoughtResources());
             break;
         case UPGRADE_WONDER:
-            table.activateCurrentWonderStage(move.getPlayerIndex());
+            table.activateCurrentWonderStage(move.getPlayerIndex(), move.getBoughtResources());
             break;
         case DISCARD:
             table.discard(move.getPlayerIndex(), settings.getDiscardedCardGold());

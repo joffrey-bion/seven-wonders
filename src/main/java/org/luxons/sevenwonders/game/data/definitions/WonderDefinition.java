@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.wonders.Wonder;
-import org.luxons.sevenwonders.game.wonders.WonderLevel;
+import org.luxons.sevenwonders.game.wonders.WonderStage;
 
 public class WonderDefinition implements Definition<Wonder> {
 
@@ -23,7 +23,7 @@ public class WonderDefinition implements Definition<Wonder> {
 
         WonderSideDefinition wonderSideDef = pickSide(settings);
         wonder.setInitialResource(wonderSideDef.getInitialResource());
-        wonder.setLevels(wonderSideDef.createStages(settings));
+        wonder.setStages(wonderSideDef.createStages(settings));
         wonder.setImage(wonderSideDef.getImage());
         return wonder;
     }
@@ -42,7 +42,7 @@ public class WonderDefinition implements Definition<Wonder> {
 
         private ResourceType initialResource;
 
-        private List<WonderLevelDefinition> stages;
+        private List<WonderStageDefinition> stages;
 
         private String image;
 
@@ -50,7 +50,7 @@ public class WonderDefinition implements Definition<Wonder> {
             return initialResource;
         }
 
-        List<WonderLevel> createStages(Settings settings) {
+        List<WonderStage> createStages(Settings settings) {
             return stages.stream().map(def -> def.create(settings)).collect(Collectors.toList());
         }
 

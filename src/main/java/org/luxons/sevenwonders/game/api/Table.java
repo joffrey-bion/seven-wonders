@@ -5,6 +5,7 @@ import java.util.List;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.CardBack;
 
 /**
  * The table contains what is visible by all the players in the game: the boards and their played cards, and the
@@ -52,18 +53,18 @@ public class Table {
         board.addCard(card);
     }
 
-    public void upgradeWonderStage(int playerIndex) {
+    public void buildWonderStage(int playerIndex, CardBack cardBack) {
         Board board = boards.get(playerIndex);
-        board.increaseWonderLevel();
+        board.buildWonderStage(cardBack);
     }
 
-    public void activateCard(int playerIndex, Card card) {
-        card.applyTo(this, playerIndex);
+    public void activateCard(int playerIndex, Card card, List<BoughtResources> boughtResources) {
+        card.applyTo(this, playerIndex, boughtResources);
     }
 
-    public void activateCurrentWonderStage(int playerIndex) {
+    public void activateCurrentWonderStage(int playerIndex, List<BoughtResources> boughtResources) {
         Board board = boards.get(playerIndex);
-        board.activateCurrentWonderLevel(this, playerIndex);
+        board.activateCurrentWonderLevel(this, playerIndex, boughtResources);
     }
 
     public void discard(int playerIndex, int goldBonus) {

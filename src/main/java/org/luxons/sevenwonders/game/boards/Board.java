@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -27,8 +29,6 @@ public class Board {
 
     private int gold;
 
-    private int wonderLevel;
-
     private int nbWarSymbols;
 
     private int nbDefeatTokens;
@@ -36,7 +36,6 @@ public class Board {
     public Board(Wonder wonder, Player player, Settings settings) {
         this.wonder = wonder;
         this.player = player;
-        this.wonderLevel = 0;
         this.gold = settings.getInitialGold();
         this.tradingRules = new TradingRules(settings.getDefaultTradingCost());
         production.addFixedResource(wonder.getInitialResource(), 1);
@@ -86,20 +85,12 @@ public class Board {
         this.gold = amount;
     }
 
-    public int getWonderLevel() {
-        return wonderLevel;
+    public void buildWonderStage(CardBack cardBack) {
+        wonder.buildLevel(cardBack);
     }
 
-    public void increaseWonderLevel() {
-        int maxLevel = wonder.getLevels().size();
-        if (maxLevel == wonderLevel) {
-            throw new IllegalStateException("This wonder has already reached its maximum level");
-        }
-        this.wonderLevel++;
-    }
-
-    public void activateCurrentWonderLevel(Table table, int playerIndex) {
-        wonder.getLevels().get(wonderLevel).activate(table, playerIndex);
+    public void activateCurrentWonderLevel(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+        wonder.activateLastBuiltStage(table, playerIndex, boughtResources);
     }
 
     public int getNbWarSymbols() {

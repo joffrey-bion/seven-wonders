@@ -2,15 +2,19 @@ package org.luxons.sevenwonders.game.wonders;
 
 import java.util.List;
 
+import org.luxons.sevenwonders.game.api.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
+import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
 
-public class WonderLevel {
+public class WonderStage {
 
     private Requirements requirements;
 
     private List<Effect> effects;
+
+    private CardBack cardBack;
 
     public Requirements getRequirements() {
         return requirements;
@@ -28,7 +32,19 @@ public class WonderLevel {
         this.effects = effects;
     }
 
-    public void activate(Table table, int playerIndex) {
+    public boolean isBuilt() {
+        return cardBack != null;
+    }
+
+    public boolean isBuildable(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+        return requirements.isAffordedBy(table, playerIndex, boughtResources);
+    }
+
+    void build(CardBack cardBack) {
+        this.cardBack = cardBack;
+    }
+
+    void activate(Table table, int playerIndex, List<BoughtResources> boughtResources) {
         effects.forEach(e -> e.apply(table, playerIndex));
     }
 }

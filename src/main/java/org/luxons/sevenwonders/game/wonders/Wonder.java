@@ -3,6 +3,9 @@ package org.luxons.sevenwonders.game.wonders;
 import java.util.Arrays;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.api.BoughtResources;
+import org.luxons.sevenwonders.game.api.Table;
+import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 
 public class Wonder {
@@ -11,17 +14,17 @@ public class Wonder {
 
     private ResourceType initialResource;
 
-    private List<WonderLevel> levels;
+    private List<WonderStage> stages;
 
     private String image;
 
     public Wonder() {
     }
 
-    public Wonder(String name, ResourceType initialResource, WonderLevel... levels) {
+    public Wonder(String name, ResourceType initialResource, WonderStage... stages) {
         this.name = name;
         this.initialResource = initialResource;
-        this.levels = Arrays.asList(levels);
+        this.stages = Arrays.asList(stages);
     }
 
     public String getName() {
@@ -40,12 +43,16 @@ public class Wonder {
         this.initialResource = initialResource;
     }
 
-    public List<WonderLevel> getLevels() {
-        return levels;
+    public List<WonderStage> getStages() {
+        return stages;
     }
 
-    public void setLevels(List<WonderLevel> levels) {
-        this.levels = levels;
+    public void setStages(List<WonderStage> stages) {
+        this.stages = stages;
+    }
+
+    public int getNbBuiltStages() {
+        return (int)stages.stream().filter(WonderStage::isBuilt).count();
     }
 
     public String getImage() {
@@ -54,5 +61,26 @@ public class Wonder {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void buildLevel(CardBack cardBack) {
+        getNextStage().build(cardBack);
+    }
+
+    private WonderStage getNextStage() {
+        int nextLevel = getNbBuiltStages();
+        if (nextLevel == stages.size()) {
+            throw new IllegalStateException("This wonder has already reached its maximum level");
+        }
+        return stages.get(nextLevel);
+    }
+
+    public void activateLastBuiltStage(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+        getLastBuiltStage().activate(table, playerIndex, boughtResources);
+    }
+
+    private WonderStage getLastBuiltStage() {
+        int lastLevel = getNbBuiltStages() - 1;
+        return stages.get(lastLevel);
     }
 }

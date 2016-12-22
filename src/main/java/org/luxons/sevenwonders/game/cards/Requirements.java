@@ -1,5 +1,8 @@
 package org.luxons.sevenwonders.game.cards;
 
+import java.util.List;
+
+import org.luxons.sevenwonders.game.api.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Resources;
@@ -30,7 +33,16 @@ public class Requirements {
         return board.getGold() >= gold && board.getProduction().contains(resources);
     }
 
-    boolean isAffordedBy(Table table, int playerIndex) {
+    public boolean isAffordedBy(Table table, int playerIndex) {
+        Board board = table.getBoard(playerIndex);
+        if (isAffordedBy(board)) {
+            return true;
+        }
+        // TODO take into account resources buyable from neighbours
+        return false;
+    }
+
+    public boolean isAffordedBy(Table table, int playerIndex, List<BoughtResources> boughtResources) {
         Board board = table.getBoard(playerIndex);
         if (isAffordedBy(board)) {
             return true;
