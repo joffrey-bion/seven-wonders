@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game;
 
 import java.util.Random;
 
-import org.luxons.sevenwonders.game.wonders.WonderSide;
+import org.luxons.sevenwonders.game.data.definitions.WonderSide;
 
 public class Settings {
 

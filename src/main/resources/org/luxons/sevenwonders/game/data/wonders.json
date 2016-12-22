@@ -1,501 +1,515 @@
 [
   {
     "name": "alexandria",
-    "a": {
-      "initialResource": "G",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SS"
+    "sides": {
+      "A": {
+        "initialResource": "G",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SS"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OO"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OO"
+            },
+            "effects": {
+              "production": "W/S/O/C"
+            }
           },
-          "effects": {
-            "production": "W/S/O/C"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "GG"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "GG"
+        ],
+        "image": "alexandriaA.png"
+      },
+      "B": {
+        "initialResource": "G",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CC"
+            },
+            "effects": {
+              "production": "W/S/O/C"
+            }
           },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "alexandriaA.png"
-    },
-    "b": {
-      "initialResource": "G",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CC"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "production": "G/P/L"
+            }
           },
-          "effects": {
-            "production": "W/S/O/C"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SSS"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
-          },
-          "effects": {
-            "production": "G/P/L"
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SSS"
-          },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "alexandriaB.png"
+        ],
+        "image": "alexandriaB.png"
+      }
     }
   },
   {
     "name": "babylon",
-    "a": {
-      "initialResource": "C",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CC"
+    "sides": {
+      "A": {
+        "initialResource": "C",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CC"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WWW"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WWW"
+            },
+            "effects": {
+              "science": "any"
+            }
           },
-          "effects": {
-            "science": "any"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CCCC"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CCCC"
+        ],
+        "image": "babylonA.png"
+      },
+      "B": {
+        "initialResource": "C",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CL"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "babylonA.png"
-    },
-    "b": {
-      "initialResource": "C",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CL"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WWG"
+            },
+            "effects": {
+              "action": "PLAY_LAST_CARD"
+            }
           },
-          "effects": {
-            "points": 3
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CCCP"
+            },
+            "effects": {
+              "science": "any"
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WWG"
-          },
-          "effects": {
-            "action": "PLAY_LAST_CARD"
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CCCP"
-          },
-          "effects": {
-            "science": "any"
-          }
-        }
-      ],
-      "image": "babylonB.png"
+        ],
+        "image": "babylonB.png"
+      }
     }
   },
   {
     "name": "ephesos",
-    "a": {
-      "initialResource": "P",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SS"
+    "sides": {
+      "A": {
+        "initialResource": "P",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SS"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "gold": 9
+            }
           },
-          "effects": {
-            "gold": 9
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "PP"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "PP"
+        ],
+        "image": "ephesosA.png"
+      },
+      "B": {
+        "initialResource": "P",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SS"
+            },
+            "effects": {
+              "gold": 4,
+              "points": 2
+            }
           },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "ephesosA.png"
-    },
-    "b": {
-      "initialResource": "P",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SS"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "gold": 4,
+              "points": 3
+            }
           },
-          "effects": {
-            "gold": 4,
-            "points": 2
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "GPL"
+            },
+            "effects": {
+              "gold": 4,
+              "points": 5
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
-          },
-          "effects": {
-            "gold": 4,
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "GPL"
-          },
-          "effects": {
-            "gold": 4,
-            "points": 5
-          }
-        }
-      ],
-      "image": "ephesosB.png"
+        ],
+        "image": "ephesosB.png"
+      }
     }
   },
   {
     "name": "gizah",
-    "a": {
-      "initialResource": "S",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SS"
+    "sides": {
+      "A": {
+        "initialResource": "S",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SS"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WWW"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WWW"
+            },
+            "effects": {
+              "points": 5
+            }
           },
-          "effects": {
-            "points": 5
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SSSS"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SSSS"
+        ],
+        "image": "gizahA.png"
+      },
+      "B": {
+        "initialResource": "S",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "gizahA.png"
-    },
-    "b": {
-      "initialResource": "S",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SSS"
+            },
+            "effects": {
+              "points": 5
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SSS"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CCC"
+            },
+            "effects": {
+              "points": 5
+            }
           },
-          "effects": {
-            "points": 5
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SSSSP"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CCC"
-          },
-          "effects": {
-            "points": 5
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SSSSP"
-          },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "gizahB.png"
+        ],
+        "image": "gizahB.png"
+      }
     }
   },
   {
     "name": "halikarnassus",
-    "a": {
-      "initialResource": "L",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CC"
+    "sides": {
+      "A": {
+        "initialResource": "L",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CC"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OOO"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OOO"
+            },
+            "effects": {
+              "action": "PLAY_DISCARDED"
+            }
           },
-          "effects": {
-            "action": "PLAY_DISCARDED"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "LL"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "LL"
+        ],
+        "image": "halikarnassusA.png"
+      },
+      "B": {
+        "initialResource": "L",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OO"
+            },
+            "effects": {
+              "points": 2,
+              "action": "PLAY_DISCARDED"
+            }
           },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "halikarnassusA.png"
-    },
-    "b": {
-      "initialResource": "L",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OO"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CCC"
+            },
+            "effects": {
+              "points": 1,
+              "action": "PLAY_DISCARDED"
+            }
           },
-          "effects": {
-            "points": 2,
-            "action": "PLAY_DISCARDED"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "GPL"
+            },
+            "effects": {
+              "action": "PLAY_DISCARDED"
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CCC"
-          },
-          "effects": {
-            "points": 1,
-            "action": "PLAY_DISCARDED"
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "GPL"
-          },
-          "effects": {
-            "action": "PLAY_DISCARDED"
-          }
-        }
-      ],
-      "image": "halikarnassusB.png"
+        ],
+        "image": "halikarnassusB.png"
+      }
     }
   },
   {
     "name": "olympia",
-    "a": {
-      "initialResource": "W",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
+    "sides": {
+      "A": {
+        "initialResource": "W",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SS"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SS"
+            },
+            "effects": {
+              "action": "ONE_FREE"
+            }
           },
-          "effects": {
-            "action": "ONE_FREE"
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OO"
-          },
-          "effects": {
-            "points": 7
-          }
-        }
-      ],
-      "image": "olympiaA.png"
-    },
-    "b": {
-      "initialResource": "W",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
-          },
-          "effects": {
-            "discount": {
-              "resourceTypes": "WSOC",
-              "providers": [
-                "LEFT_PLAYER",
-                "RIGHT_PLAYER"
-              ],
-              "discountedPrice": 1
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OO"
+            },
+            "effects": {
+              "points": 7
             }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SS"
+        ],
+        "image": "olympiaA.png"
+      },
+      "B": {
+        "initialResource": "W",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "discount": {
+                "resourceTypes": "WSOC",
+                "providers": [
+                  "LEFT_PLAYER",
+                  "RIGHT_PLAYER"
+                ],
+                "discountedPrice": 1
+              }
+            }
           },
-          "effects": {
-            "points": 5
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OOL"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SS"
+            },
+            "effects": {
+              "points": 5
+            }
           },
-          "effects": {
-            "action": "COPY_GUILD"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OOL"
+            },
+            "effects": {
+              "action": "COPY_GUILD"
+            }
           }
-        }
-      ],
-      "image": "olympiaB.png"
+        ],
+        "image": "olympiaB.png"
+      }
     }
   },
   {
     "name": "rhodos",
-    "a": {
-      "initialResource": "O",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "WW"
+    "sides": {
+      "A": {
+        "initialResource": "O",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "WW"
+            },
+            "effects": {
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "CCC"
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "CCC"
+            },
+            "effects": {
+              "military": 2
+            }
           },
-          "effects": {
-            "military": 2
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OOOO"
+            },
+            "effects": {
+              "points": 7
+            }
           }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OOOO"
+        ],
+        "image": "rhodosA.png"
+      },
+      "B": {
+        "initialResource": "O",
+        "stages": [
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "SSS"
+            },
+            "effects": {
+              "gold": 3,
+              "military": 1,
+              "points": 3
+            }
           },
-          "effects": {
-            "points": 7
+          {
+            "requirements": {
+              "gold": 0,
+              "resources": "OOOO"
+            },
+            "effects": {
+              "gold": 4,
+              "military": 1,
+              "points": 4
+            }
           }
-        }
-      ],
-      "image": "rhodosA.png"
-    },
-    "b": {
-      "initialResource": "O",
-      "stages": [
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "SSS"
-          },
-          "effects": {
-            "gold": 3,
-            "military": 1,
-            "points": 3
-          }
-        },
-        {
-          "requirements": {
-            "gold": 0,
-            "resources": "OOOO"
-          },
-          "effects": {
-            "gold": 4,
-            "military": 1,
-            "points": 4
-          }
-        }
-      ],
-      "image": "rhodosB.png"
+        ],
+        "image": "rhodosB.png"
+      }
     }
   }
 ]

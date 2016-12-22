@@ -7,9 +7,6 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition;
 import org.luxons.sevenwonders.game.data.serializers.NumericEffectSerializer;
@@ -27,6 +24,10 @@ import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 @Component
 public class GameDefinitionLoader {
 
@@ -41,14 +42,14 @@ public class GameDefinitionLoader {
     private final GameDefinition gameDefinition;
 
     public GameDefinitionLoader() {
-        gameDefinition = new GameDefinition(loadWonders(), loadDecks());
+        gameDefinition = load();
     }
 
     public GameDefinition getGameDefinition() {
         return gameDefinition;
     }
 
-    public static GameDefinition load() {
+    private static GameDefinition load() {
         return new GameDefinition(loadWonders(), loadDecks());
     }
 

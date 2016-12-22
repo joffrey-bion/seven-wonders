@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
@@ -30,10 +31,26 @@ public class TestUtils {
         return boards;
     }
 
+    public static List<Player> createPlayers(int count) {
+        List<Player> players = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            String userName = "testUser" + i;
+            String displayName = "Test User " + i;
+            Player player = new Player(displayName, userName);
+            players.add(player);
+        }
+        return players;
+    }
+
     public static Board createBoard(ResourceType initialResource) {
         Settings settings = new Settings();
         Wonder wonder = new Wonder("Test Wonder " + initialResource.getSymbol(), initialResource);
-        return new Board(wonder, null, settings);
+
+        String userName = "testUser" + initialResource.getSymbol();
+        String displayName = "Test User " + initialResource.getSymbol();
+        Player player = new Player(displayName, userName);
+
+        return new Board(wonder, player, settings);
     }
 
     public static Board createBoard(ResourceType initialResource, ResourceType... production) {

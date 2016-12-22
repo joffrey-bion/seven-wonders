@@ -31,23 +31,7 @@ public class CardDefinition implements Definition<Card> {
         return new Card(name, color, requirements, effect.create(settings), chainParent, chainChildren, image);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public Map<Integer, Integer> getCountPerNbPlayer() {
+    Map<Integer, Integer> getCountPerNbPlayer() {
         return countPerNbPlayer;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 }
