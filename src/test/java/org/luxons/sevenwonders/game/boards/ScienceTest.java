@@ -13,7 +13,6 @@ public class ScienceTest {
 
     @DataPoints
     public static int[][] quantitiesWithExpectedPoints() {
-        System.out.println("computing expectations");
         // compasses, wheels, tablets, jokers, expected points
         return new int[][]{
                 {0, 0, 0, 1, 1},
@@ -38,7 +37,6 @@ public class ScienceTest {
     }
 
     private static Science science(int compasses, int wheels, int tablets, int jokers) {
-        System.out.println("computing science");
         Science science = new Science();
         science.add(ScienceType.COMPASS, compasses);
         science.add(ScienceType.WHEEL, wheels);
