@@ -1,10 +1,7 @@
-package org.luxons.sevenwonders.game;
+package org.luxons.sevenwonders.game.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.luxons.sevenwonders.game.api.Table;
-import org.luxons.sevenwonders.game.resources.Resources;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Move {
 
@@ -12,9 +9,9 @@ public class Move {
 
     private String cardName;
 
-    private MoveType moveType;
+    private MoveType type;
 
-    private Map<Integer, Resources> boughtResources = new HashMap<>();
+    private List<BoughtResources> boughtResources = new ArrayList<>();
 
     public int getPlayerIndex() {
         return playerIndex;
@@ -33,23 +30,23 @@ public class Move {
     }
 
     public MoveType getType() {
-        return moveType;
+        return type;
     }
 
-    public void setMoveType(MoveType moveType) {
-        this.moveType = moveType;
+    public void setType(MoveType type) {
+        this.type = type;
     }
 
-    public Map<Integer, Resources> getBoughtResources() {
+    public List<BoughtResources> getBoughtResources() {
         return boughtResources;
     }
 
-    public void setBoughtResources(Map<Integer, Resources> boughtResources) {
+    public void setBoughtResources(List<BoughtResources> boughtResources) {
         this.boughtResources = boughtResources;
     }
 
     public boolean isValid(Table table) {
-        if (moveType == MoveType.DISCARD) {
+        if (type == MoveType.DISCARD) {
             return true;
         }
         // TODO create a version of the Move class with actual card data?

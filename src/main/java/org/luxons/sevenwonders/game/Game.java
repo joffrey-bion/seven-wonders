@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.luxons.sevenwonders.game.api.Move;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;

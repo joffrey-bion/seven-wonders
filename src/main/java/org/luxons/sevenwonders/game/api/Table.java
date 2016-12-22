@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.game.api;
 
 import java.util.List;
 
-import org.luxons.sevenwonders.game.Move;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Card;
