@@ -42,6 +42,20 @@ public class Hands {
         return new Hands(newHands, nbPlayers);
     }
 
+    public boolean isEmpty() {
+        return hands.values().stream().allMatch(List::isEmpty);
+    }
+
+    public boolean maxOneCardRemains() {
+        return hands.values().stream().mapToInt(List::size).max().orElse(0) <= 1;
+    }
+
+    public List<Card> gatherAndClear() {
+        List<Card> remainingCards = hands.values().stream().flatMap(List::stream).collect(Collectors.toList());
+        hands.clear();
+        return remainingCards;
+    }
+
     class PlayerIndexOutOfBoundsException extends ArrayIndexOutOfBoundsException {
         PlayerIndexOutOfBoundsException(int index) {
             super(index);

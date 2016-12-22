@@ -96,18 +96,31 @@ public class Game {
     }
 
     public void playTurn() {
-        List<Move> playedMoves = mapToList(preparedMoves);
-
-        // cards need to be all placed first as some effects depend on just-played cards
-        placePreparedCards(playedMoves);
-        activatePlayedCards(playedMoves);
-        table.setLastPlayedMoves(playedMoves);
-        preparedMoves.clear();
+        makeMoves();
         if (endOfAgeReached()) {
+            executeEndOfAgeEvents();
             startNewAge();
         } else {
             hands.rotate(getHandRotationOffset());
         }
+    }
+
+    private void makeMoves() {
+        List<Move> playedMoves = mapToList(preparedMoves);
+
+        // all cards from this turn need to be placed before executing any effect
+        // because effects depending on played cards need to take the ones from the current turn into account too
+        placePreparedCards(playedMoves);
+
+        // same goes for the discarded cards during the last turn, which should be available for special actions
+        if (lastTurnOfAge()) {
+            discardedCards.addAll(hands.gatherAndClear());
+        }
+
+        activatePlayedCards(playedMoves);
+
+        table.setLastPlayedMoves(playedMoves);
+        preparedMoves.clear();
     }
 
     private static List<Move> mapToList(Map<Integer, Move> movesPerPlayer) {
@@ -125,9 +138,12 @@ public class Game {
     private void placePreparedCards(List<Move> playedMoves) {
         playedMoves.forEach(move -> {
             placeCard(move);
-            Card card = decks.getCard(move.getCardName());
-            hands.get(move.getPlayerIndex()).remove(card);
+            removeFromHand(move.getPlayerIndex(), move.getCardName());
         });
+    }
+
+    private boolean lastTurnOfAge() {
+        return hands.maxOneCardRemains();
     }
 
     private void placeCard(Move move) {
@@ -142,6 +158,12 @@ public class Game {
             discardedCards.add(decks.getCard(move.getCardName()));
             break;
         }
+    }
+
+    private void removeFromHand(int playerIndex, String cardName) {
+        Card card = decks.getCard(cardName);
+        List<Card> hand = hands.get(playerIndex);
+        hand.remove(card);
     }
 
     private void activatePlayedCards(List<Move> playedMoves) {
@@ -163,7 +185,11 @@ public class Game {
     }
 
     private boolean endOfAgeReached() {
-        return hands.get(0).size() == 1;
+        return hands.isEmpty();
+    }
+
+    private void executeEndOfAgeEvents() {
+        // TODO resolve military conflicts
     }
 
     private int getHandRotationOffset() {
