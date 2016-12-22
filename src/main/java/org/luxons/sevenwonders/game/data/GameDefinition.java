@@ -54,8 +54,9 @@ public class GameDefinition {
         Collections.shuffle(randomizedWonders, settings.getRandom());
 
         List<Board> boards = new ArrayList<>(orderedPlayers.size());
-        for (Player player : orderedPlayers) {
-            WonderDefinition def = randomizedWonders.remove(0);
+        for (int i = 0; i < orderedPlayers.size(); i++) {
+            Player player = orderedPlayers.get(i);
+            WonderDefinition def = randomizedWonders.get(i);
             Wonder w = def.create(settings);
             Board b = new Board(w, player, settings);
             boards.add(b);
