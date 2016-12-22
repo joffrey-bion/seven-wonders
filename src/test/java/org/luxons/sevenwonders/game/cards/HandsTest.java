@@ -10,6 +10,8 @@ import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+import org.luxons.sevenwonders.game.api.HandCard;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Hands.PlayerIndexOutOfBoundsException;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
@@ -136,5 +138,22 @@ public class HandsTest {
         assertEquals(rotated.get(1), hands.get(0));
         assertEquals(rotated.get(2), hands.get(1));
         assertEquals(rotated.get(0), hands.get(2));
+    }
+
+    @Test
+    public void createHand_containsAllCards() {
+        List<Card> hand0 = TestUtils.createSampleCards(0, 5);
+        List<Card> hand1 = TestUtils.createSampleCards(5, 10);
+        Map<Integer, List<Card>> handsMap = new HashMap<>();
+        handsMap.put(0, hand0);
+        handsMap.put(1, hand1);
+        Hands hands = new Hands(handsMap, 2);
+
+        Table table = TestUtils.createTable(2);
+        List<HandCard> hand = hands.createHand(table, 0);
+
+        for (HandCard handCard : hand) {
+            assertTrue(hand0.contains(handCard.getCard()));
+        }
     }
 }

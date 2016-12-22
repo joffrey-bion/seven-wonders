@@ -4,15 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
+import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class TestUtils {
+
+    public static Table createTable(int nbPlayers) {
+        return new Table(createBoards(nbPlayers));
+    }
+
+    public static List<Board> createBoards(int count) {
+        List<Board> boards = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
+            boards.add(createBoard(ResourceType.WOOD));
+        }
+        return boards;
+    }
 
     public static Board createBoard(ResourceType initialResource) {
         Settings settings = new Settings();
@@ -58,7 +72,7 @@ public class TestUtils {
     public static List<Card> createSampleCards(int fromIndex, int nbCards) {
         List<Card> sampleCards = new ArrayList<>();
         for (int i = fromIndex; i < fromIndex + nbCards; i++) {
-            sampleCards.add(new Card("Test Card " + i, Color.BLUE, null, null, null, null, null));
+            sampleCards.add(new Card("Test Card " + i, Color.BLUE, new Requirements(), null, null, null, null));
         }
         return sampleCards;
     }
