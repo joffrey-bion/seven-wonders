@@ -14,7 +14,7 @@ public class Resources {
     }
 
     public void addAll(Resources resources) {
-        resources.quantities.forEach(this::add);
+        resources.getQuantities().forEach(this::add);
     }
 
     public int getQuantity(ResourceType type) {

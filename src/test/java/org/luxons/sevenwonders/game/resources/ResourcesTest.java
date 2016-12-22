@@ -384,4 +384,48 @@ public class ResourcesTest {
         resources.add(ResourceType.PAPYRUS, 0);
         assertFalse(resources.isEmpty());
     }
+
+    @Test
+    public void equals_falseWhenNull() {
+        Resources resources = new Resources();
+        resources.add(ResourceType.GLASS, 1);
+        //noinspection ObjectEqualsNull
+        assertFalse(resources.equals(null));
+    }
+
+    @Test
+    public void equals_falseWhenDifferentClass() {
+        Resources resources = new Resources();
+        resources.add(ResourceType.GLASS, 1);
+        Production production = new Production();
+        production.addFixedResource(ResourceType.GLASS, 1);
+        //noinspection EqualsBetweenInconvertibleTypes
+        assertFalse(resources.equals(production));
+    }
+
+    @Test
+    public void equals_trueWhenSame() {
+        Resources resources = new Resources();
+        assertEquals(resources, resources);
+    }
+
+    @Test
+    public void equals_trueWhenSameContent() {
+        Resources resources1 = new Resources();
+        Resources resources2 = new Resources();
+        assertTrue(resources1.equals(resources2));
+        resources1.add(ResourceType.GLASS, 1);
+        resources2.add(ResourceType.GLASS, 1);
+        assertTrue(resources1.equals(resources2));
+    }
+
+    @Test
+    public void hashCode_sameWhenSameContent() {
+        Resources resources1 = new Resources();
+        Resources resources2 = new Resources();
+        assertEquals(resources1.hashCode(), resources2.hashCode());
+        resources1.add(ResourceType.GLASS, 1);
+        resources2.add(ResourceType.GLASS, 1);
+        assertEquals(resources1.hashCode(), resources2.hashCode());
+    }
 }

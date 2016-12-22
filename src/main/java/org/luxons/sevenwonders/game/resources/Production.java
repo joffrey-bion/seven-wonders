@@ -29,8 +29,8 @@ public class Production {
     }
 
     public void addAll(Production production) {
-        fixedResources.addAll(production.fixedResources);
-        alternativeResources.addAll(production.alternativeResources);
+        fixedResources.addAll(production.getFixedResources());
+        alternativeResources.addAll(production.getAlternativeResources());
     }
 
     public Resources getFixedResources() {

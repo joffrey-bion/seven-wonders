@@ -3,8 +3,7 @@ package org.luxons.sevenwonders.game.resources;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ProductionTest {
 
@@ -43,40 +42,40 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_newProductionContainsEmpty() throws Exception {
+    public void contains_newProductionContainsEmpty() {
         Production production = new Production();
         assertTrue(production.contains(emptyResources));
     }
 
     @Test
-    public void contains_singleFixedResource_noneAtAll() throws Exception {
+    public void contains_singleFixedResource_noneAtAll() {
         Production production = new Production();
         assertFalse(production.contains(resources2Stones));
     }
 
     @Test
-    public void contains_singleFixedResource_notEnough() throws Exception {
+    public void contains_singleFixedResource_notEnough() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 1);
         assertFalse(production.contains(resources2Stones));
     }
 
     @Test
-    public void contains_singleFixedResource_justEnough() throws Exception {
+    public void contains_singleFixedResource_justEnough() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 2);
         assertTrue(production.contains(resources2Stones));
     }
 
     @Test
-    public void contains_singleFixedResource_moreThanEnough() throws Exception {
+    public void contains_singleFixedResource_moreThanEnough() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 3);
         assertTrue(production.contains(resources2Stones));
     }
 
     @Test
-    public void contains_singleFixedResource_moreThanEnough_amongOthers() throws Exception {
+    public void contains_singleFixedResource_moreThanEnough_amongOthers() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 3);
         production.addFixedResource(ResourceType.CLAY, 2);
@@ -84,7 +83,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleFixedResources_notEnoughOfOne() throws Exception {
+    public void contains_multipleFixedResources_notEnoughOfOne() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 3);
         production.addFixedResource(ResourceType.CLAY, 1);
@@ -92,7 +91,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleFixedResources_notEnoughOfBoth() throws Exception {
+    public void contains_multipleFixedResources_notEnoughOfBoth() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 1);
         production.addFixedResource(ResourceType.CLAY, 1);
@@ -100,7 +99,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleFixedResources_moreThanEnough() throws Exception {
+    public void contains_multipleFixedResources_moreThanEnough() {
         Production production = new Production();
         production.addFixedResource(ResourceType.STONE, 3);
         production.addFixedResource(ResourceType.CLAY, 5);
@@ -108,14 +107,14 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_singleChoice_containsEmpty() throws Exception {
+    public void contains_singleChoice_containsEmpty() {
         Production production = new Production();
         production.addChoice(ResourceType.STONE, ResourceType.CLAY);
         assertTrue(production.contains(emptyResources));
     }
 
     @Test
-    public void contains_singleChoice_enough() throws Exception {
+    public void contains_singleChoice_enough() {
         Production production = new Production();
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
         assertTrue(production.contains(resources1Wood));
@@ -123,7 +122,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleChoices_notBoth() throws Exception {
+    public void contains_multipleChoices_notBoth() {
         Production production = new Production();
         production.addChoice(ResourceType.STONE, ResourceType.CLAY);
         production.addChoice(ResourceType.STONE, ResourceType.CLAY);
@@ -132,7 +131,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleChoices_enough() throws Exception {
+    public void contains_multipleChoices_enough() {
         Production production = new Production();
         production.addChoice(ResourceType.STONE, ResourceType.ORE);
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
@@ -140,7 +139,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleChoices_enoughReverseOrder() throws Exception {
+    public void contains_multipleChoices_enoughReverseOrder() {
         Production production = new Production();
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
         production.addChoice(ResourceType.STONE, ResourceType.ORE);
@@ -148,7 +147,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_multipleChoices_moreThanEnough() throws Exception {
+    public void contains_multipleChoices_moreThanEnough() {
         Production production = new Production();
         production.addChoice(ResourceType.LOOM, ResourceType.GLASS, ResourceType.PAPYRUS);
         production.addChoice(ResourceType.STONE, ResourceType.ORE);
@@ -157,7 +156,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void contains_mixedFixedAndChoice_enough() throws Exception {
+    public void contains_mixedFixedAndChoice_enough() {
         Production production = new Production();
         production.addFixedResource(ResourceType.WOOD, 1);
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
@@ -165,28 +164,28 @@ public class ProductionTest {
     }
 
     @Test
-    public void addAll_empty() throws Exception {
+    public void addAll_empty() {
         Production production = new Production();
         production.addAll(emptyResources);
         assertTrue(production.contains(emptyResources));
     }
 
     @Test
-    public void addAll_singleResource() throws Exception {
+    public void addAll_singleResource() {
         Production production = new Production();
         production.addAll(resources1Stone);
         assertTrue(production.contains(resources1Stone));
     }
 
     @Test
-    public void addAll_multipleResources() throws Exception {
+    public void addAll_multipleResources() {
         Production production = new Production();
         production.addAll(resources2Stones3Clay);
         assertTrue(production.contains(resources2Stones3Clay));
     }
 
     @Test
-    public void addAll_production_multipleFixedResources() throws Exception {
+    public void addAll_production_multipleFixedResources() {
         Production production = new Production();
         production.addAll(resources2Stones3Clay);
 
@@ -197,7 +196,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void addAll_production_multipleChoices() throws Exception {
+    public void addAll_production_multipleChoices() {
         Production production = new Production();
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
         production.addChoice(ResourceType.STONE, ResourceType.ORE);
@@ -208,7 +207,7 @@ public class ProductionTest {
     }
 
     @Test
-    public void addAll_production_mixedFixedResourcesAndChoices() throws Exception {
+    public void addAll_production_mixedFixedResourcesAndChoices() {
         Production production = new Production();
         production.addFixedResource(ResourceType.WOOD, 1);
         production.addChoice(ResourceType.STONE, ResourceType.WOOD);
@@ -217,5 +216,56 @@ public class ProductionTest {
         production2.addAll(production);
 
         assertTrue(production.contains(resources1Stone1Wood));
+    }
+
+    @Test
+    public void equals_falseWhenNull() {
+        Production production = new Production();
+        production.addFixedResource(ResourceType.GLASS, 1);
+        production.addChoice(ResourceType.ORE, ResourceType.WOOD);
+        //noinspection ObjectEqualsNull
+        assertFalse(production.equals(null));
+    }
+
+    @Test
+    public void equals_falseWhenDifferentClass() {
+        Production production = new Production();
+        production.addFixedResource(ResourceType.GLASS, 1);
+        Resources resources = new Resources();
+        resources.add(ResourceType.GLASS, 1);
+        //noinspection EqualsBetweenInconvertibleTypes
+        assertFalse(production.equals(resources));
+    }
+
+    @Test
+    public void equals_trueWhenSame() {
+        Production production = new Production();
+        assertEquals(production, production);
+    }
+
+    @Test
+    public void equals_trueWhenSameContent() {
+        Production production1 = new Production();
+        Production production2 = new Production();
+        assertTrue(production1.equals(production2));
+        production1.addFixedResource(ResourceType.GLASS, 1);
+        production2.addFixedResource(ResourceType.GLASS, 1);
+        assertTrue(production1.equals(production2));
+        production1.addChoice(ResourceType.ORE, ResourceType.WOOD);
+        production2.addChoice(ResourceType.ORE, ResourceType.WOOD);
+        assertTrue(production1.equals(production2));
+    }
+
+    @Test
+    public void hashCode_sameWhenSameContent() {
+        Production production1 = new Production();
+        Production production2 = new Production();
+        assertEquals(production1.hashCode(), production2.hashCode());
+        production1.addFixedResource(ResourceType.GLASS, 1);
+        production2.addFixedResource(ResourceType.GLASS, 1);
+        assertEquals(production1.hashCode(), production2.hashCode());
+        production1.addChoice(ResourceType.ORE, ResourceType.WOOD);
+        production2.addChoice(ResourceType.ORE, ResourceType.WOOD);
+        assertEquals(production1.hashCode(), production2.hashCode());
     }
 }
