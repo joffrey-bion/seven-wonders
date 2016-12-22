@@ -22,7 +22,7 @@ public class Decks {
                           .orElseThrow(() -> new CardNotFoundException(cardName));
     }
 
-    public Map<Integer, List<Card>> deal(int age, int nbPlayers) {
+    public Hands deal(int age, int nbPlayers) {
         List<Card> deck = getDeck(age);
         validateNbCards(deck, nbPlayers);
         return deal(deck, nbPlayers);
@@ -46,13 +46,15 @@ public class Decks {
         }
     }
 
-    private Map<Integer, List<Card>> deal(List<Card> deck, int nbPlayers) {
+    private Hands deal(List<Card> deck, int nbPlayers) {
         Map<Integer, List<Card>> hands = new HashMap<>(nbPlayers);
+        for (int i = 0; i < nbPlayers; i++) {
+            hands.put(i, new ArrayList<>());
+        }
         for (int i = 0; i < deck.size(); i++) {
-            hands.putIfAbsent(i % nbPlayers, new ArrayList<>());
             hands.get(i % nbPlayers).add(deck.get(i));
         }
-        return hands;
+        return new Hands(hands, nbPlayers);
     }
 
     class CardNotFoundException extends RuntimeException {

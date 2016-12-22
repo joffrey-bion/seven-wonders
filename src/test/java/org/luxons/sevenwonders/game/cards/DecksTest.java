@@ -1,32 +1,40 @@
 package org.luxons.sevenwonders.game.cards;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.cards.Decks.CardNotFoundException;
+import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.*;
 
+@RunWith(Theories.class)
 public class DecksTest {
+
+    @DataPoints
+    public static int[] dataPoints() {
+        return new int[] {1, 2, 3, 5, 10};
+    }
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     private static Decks createDecks(int nbAges, int nbCardsPerAge) {
         Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
         for (int age = 1; age <= nbAges; age++) {
             int firstCardNumber = (age - 1) * nbCardsPerAge;
-            cardsPerAge.put(age, createSampleCards(firstCardNumber, nbCardsPerAge));
+            cardsPerAge.put(age, TestUtils.createSampleCards(firstCardNumber, nbCardsPerAge));
         }
         return new Decks(cardsPerAge);
-    }
-
-    private static List<Card> createSampleCards(int fromIndex, int nbCards) {
-        List<Card> sampleCards = new ArrayList<>();
-        for (int i = fromIndex; i < fromIndex + nbCards; i++) {
-            sampleCards.add(new Card("Test Card " + i, Color.BLUE, null, null, null, null, null));
-        }
-        return sampleCards;
     }
 
     @Test(expected = CardNotFoundException.class)
@@ -72,29 +80,31 @@ public class DecksTest {
         decks.deal(4, 10);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void deal_failsWhenTooFewPlayers() {
-        Decks decks = createDecks(3, 28);
-        decks.deal(1, 3);
+    @Theory
+    public void deal_failsWhenTooFewPlayers(int nbPlayers, int nbCards) {
+        assumeTrue(nbCards % nbPlayers != 0);
+        thrown.expect(IllegalArgumentException.class);
+        Decks decks = createDecks(1, nbCards);
+        decks.deal(1, nbPlayers);
     }
 
-    @Test
-    public void deal_succeedsOnZeroCards() {
-        Decks decks = createDecks(3, 0);
-        Map<Integer, List<Card>> hands = decks.deal(1, 10);
-        for (List<Card> hand : hands.values()) {
-            assertTrue(hand.isEmpty());
+    @Theory
+    public void deal_succeedsOnZeroCards(int nbPlayers) {
+        Decks decks = createDecks(1, 0);
+        Hands hands = decks.deal(1, nbPlayers);
+        for (int i = 0; i < nbPlayers; i++) {
+            assertNotNull(hands.get(i));
+            assertTrue(hands.get(i).isEmpty());
         }
     }
 
-    @Test
-    public void deal_evenDistribution() {
-        int nbCardsPerAge = 12;
-        int nbPlayers = 4;
-        Decks decks = createDecks(3, nbCardsPerAge);
-        Map<Integer, List<Card>> hands = decks.deal(1, nbPlayers);
-        for (List<Card> hand : hands.values()) {
-            assertEquals(nbCardsPerAge / nbPlayers, hand.size());
+    @Theory
+    public void deal_evenDistribution(int nbPlayers, int nbCardsPerPlayer) {
+        int nbCardsPerAge = nbPlayers * nbCardsPerPlayer;
+        Decks decks = createDecks(1, nbCardsPerAge);
+        Hands hands = decks.deal(1, nbPlayers);
+        for (int i = 0; i < nbPlayers; i++) {
+            assertEquals(nbCardsPerPlayer, hands.get(i).size());
         }
     }
 }

@@ -1,7 +1,12 @@
 package org.luxons.sevenwonders.game.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
@@ -48,5 +53,13 @@ public class TestUtils {
             resources.add(producedType, 1);
         }
         return resources;
+    }
+
+    public static List<Card> createSampleCards(int fromIndex, int nbCards) {
+        List<Card> sampleCards = new ArrayList<>();
+        for (int i = fromIndex; i < fromIndex + nbCards; i++) {
+            sampleCards.add(new Card("Test Card " + i, Color.BLUE, null, null, null, null, null));
+        }
+        return sampleCards;
     }
 }

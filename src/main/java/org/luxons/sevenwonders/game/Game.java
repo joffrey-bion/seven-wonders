@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import org.luxons.sevenwonders.game.api.HandCard;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Decks;
+import org.luxons.sevenwonders.game.cards.Hands;
 
 public class Game {
 
@@ -29,7 +30,7 @@ public class Game {
 
     private final Map<Integer, Move> preparedMoves;
 
-    private Map<Integer, List<Card>> hands;
+    private Hands hands;
 
     private int currentAge = 0;
 
@@ -40,7 +41,6 @@ public class Game {
         this.table = new Table(boards);
         this.decks = decks;
         this.discardedCards = new ArrayList<>();
-        this.hands = new HashMap<>();
         this.preparedMoves = new HashMap<>();
         startNewAge();
     }
@@ -59,19 +59,14 @@ public class Game {
     }
 
     public List<PlayerTurnInfo> getTurnInfo() {
-        return hands.entrySet().stream().map(e -> createPlayerTurnInfo(e.getKey(), e.getValue()))
-                    .collect(Collectors.toList());
+        return IntStream.range(0, players.size()).mapToObj(this::createPlayerTurnInfo).collect(Collectors.toList());
     }
 
-    private PlayerTurnInfo createPlayerTurnInfo(int playerIndex, List<Card> cards) {
+    private PlayerTurnInfo createPlayerTurnInfo(int playerIndex) {
         PlayerTurnInfo pti = new PlayerTurnInfo(playerIndex, table);
-        pti.setHand(createHand(playerIndex, cards));
+        pti.setHand(hands.createHand(table, playerIndex));
         pti.setCurrentAge(currentAge);
         return pti;
-    }
-
-    private List<HandCard> createHand(int playerIndex, List<Card> cards) {
-        return cards.stream().map(c -> new HandCard(c, table, playerIndex)).collect(Collectors.toList());
     }
 
     public void prepareCard(Move move) throws InvalidMoveException {
@@ -110,7 +105,7 @@ public class Game {
         if (endOfAgeReached()) {
             startNewAge();
         } else {
-            rotateHands();
+            hands.rotate(getHandRotationOffset());
         }
     }
 
@@ -168,16 +163,6 @@ public class Game {
 
     private boolean endOfAgeReached() {
         return hands.get(0).size() == 1;
-    }
-
-    private void rotateHands() {
-        int offset = getHandRotationOffset();
-        Map<Integer, List<Card>> newHands = new HashMap<>(hands.size());
-        for (int i = 0; i < players.size(); i++) {
-            int newIndex = Math.floorMod(i + offset, players.size());
-            newHands.put(newIndex, hands.get(i));
-        }
-        hands = newHands;
     }
 
     private int getHandRotationOffset() {
