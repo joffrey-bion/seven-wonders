@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.cards;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
@@ -78,6 +79,23 @@ public class Card {
             requirements.pay(playerBoard);
         }
         effects.forEach(e -> e.apply(table, playerIndex));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Card card = (Card)o;
+        return Objects.equals(name, card.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     @Override

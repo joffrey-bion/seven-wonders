@@ -49,7 +49,10 @@ public class Move {
     }
 
     public boolean isValid(Table table) {
-        // TODO
+        if (moveType == MoveType.DISCARD) {
+            return true;
+        }
+        // TODO create a version of the Move class with actual card data?
         return false;
     }
 }

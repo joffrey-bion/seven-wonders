@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.game.api;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.luxons.sevenwonders.game.Move;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Card;
@@ -17,9 +17,15 @@ public class Table {
 
     private final List<Board> boards;
 
+    private List<Move> lastPlayedMoves;
+
     public Table(List<Board> boards) {
         this.nbPlayers = boards.size();
         this.boards = boards;
+    }
+
+    public int getNbPlayers() {
+        return nbPlayers;
     }
 
     public List<Board> getBoards() {
@@ -34,8 +40,12 @@ public class Table {
         return boards.get(position.getIndexFrom(playerIndex, nbPlayers));
     }
 
-    public int getNbPlayers() {
-        return nbPlayers;
+    public List<Move> getLastPlayedMoves() {
+        return lastPlayedMoves;
+    }
+
+    public void setLastPlayedMoves(List<Move> lastPlayedMoves) {
+        this.lastPlayedMoves = lastPlayedMoves;
     }
 
     public void placeCard(int playerIndex, Card card) {
@@ -60,15 +70,5 @@ public class Table {
     public void discard(int playerIndex, int goldBonus) {
         Board board = boards.get(playerIndex);
         board.setGold(board.getGold() + goldBonus);
-    }
-
-    public PlayerTurnInfo createPlayerTurnInfo(int playerIndex, List<Card> cards) {
-        PlayerTurnInfo pti = new PlayerTurnInfo(playerIndex, this);
-        pti.setHand(createHand(playerIndex, cards));
-        return pti;
-    }
-
-    private List<HandCard> createHand(int playerIndex, List<Card> cards) {
-        return cards.stream().map(c -> new HandCard(c, this, playerIndex)).collect(Collectors.toList());
     }
 }
