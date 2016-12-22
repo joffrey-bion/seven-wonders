@@ -6,6 +6,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.CardBack;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
 
 /**
  * The table contains what is visible by all the players in the game: the boards and their played cards, and the

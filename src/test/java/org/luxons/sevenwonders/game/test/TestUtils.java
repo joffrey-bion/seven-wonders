@@ -9,7 +9,9 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.cards.Requirements;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Production;
+import org.luxons.sevenwonders.game.resources.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -67,6 +69,13 @@ public class TestUtils {
             resources.add(producedType, 1);
         }
         return resources;
+    }
+
+    public static BoughtResources createBoughtResources(Provider provider, ResourceType... resources) {
+        BoughtResources boughtResources = new BoughtResources();
+        boughtResources.setProvider(provider);
+        boughtResources.setResources(TestUtils.createResources(resources));
+        return boughtResources;
     }
 
     public static List<Card> createSampleCards(int fromIndex, int nbCards) {

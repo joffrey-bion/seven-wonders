@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.wonders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.luxons.sevenwonders.game.api.BoughtResources;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.resources.ResourceType;

@@ -3,6 +3,8 @@ package org.luxons.sevenwonders.game.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.resources.BoughtResources;
+
 public class Move {
 
     private int playerIndex;

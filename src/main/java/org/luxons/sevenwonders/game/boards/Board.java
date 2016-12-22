@@ -8,6 +8,7 @@ import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.resources.Production;
+import org.luxons.sevenwonders.game.resources.TradingRules;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class Board {

@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.cards;
 
 import java.util.List;
 
-import org.luxons.sevenwonders.game.api.BoughtResources;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Resources;
@@ -52,6 +52,16 @@ public class Requirements {
     }
 
     void pay(Board board) {
-        board.setGold(board.getGold() - gold);
+        int newBalance = board.getGold() - gold;
+        if (newBalance < 0) {
+            throw new InsufficientFundsException(board.getGold(), gold);
+        }
+        board.setGold(newBalance);
+    }
+
+    private class InsufficientFundsException extends RuntimeException {
+        InsufficientFundsException(int current, int required) {
+            super(String.format("Current balance is %d gold, but %d are required", current, required));
+        }
     }
 }

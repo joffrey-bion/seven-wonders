@@ -1,7 +1,4 @@
-package org.luxons.sevenwonders.game.api;
-
-import org.luxons.sevenwonders.game.boards.Provider;
-import org.luxons.sevenwonders.game.resources.Resources;
+package org.luxons.sevenwonders.game.resources;
 
 public class BoughtResources {
 
