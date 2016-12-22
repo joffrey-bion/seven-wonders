@@ -55,7 +55,7 @@ public class Table {
 
     public void buildWonderStage(int playerIndex, CardBack cardBack) {
         Board board = boards.get(playerIndex);
-        board.buildWonderStage(cardBack);
+        board.getWonder().buildLevel(cardBack);
     }
 
     public void activateCard(int playerIndex, Card card, List<BoughtResources> boughtResources) {
@@ -64,7 +64,7 @@ public class Table {
 
     public void activateCurrentWonderStage(int playerIndex, List<BoughtResources> boughtResources) {
         Board board = boards.get(playerIndex);
-        board.activateCurrentWonderLevel(this, playerIndex, boughtResources);
+        board.getWonder().activateLastBuiltStage(this, playerIndex, boughtResources);
     }
 
     public void discard(int playerIndex, int goldBonus) {

@@ -5,10 +5,7 @@ import java.util.List;
 
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
-import org.luxons.sevenwonders.game.api.BoughtResources;
-import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
-import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -83,14 +80,6 @@ public class Board {
 
     public void setGold(int amount) {
         this.gold = amount;
-    }
-
-    public void buildWonderStage(CardBack cardBack) {
-        wonder.buildLevel(cardBack);
-    }
-
-    public void activateCurrentWonderLevel(Table table, int playerIndex, List<BoughtResources> boughtResources) {
-        wonder.activateLastBuiltStage(table, playerIndex, boughtResources);
     }
 
     public int getNbWarSymbols() {
