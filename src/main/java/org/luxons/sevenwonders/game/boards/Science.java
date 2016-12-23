@@ -36,7 +36,11 @@ public class Science {
     }
 
     public int computePoints() {
-        Integer[] values = quantities.values().toArray(new Integer[quantities.size()]);
+        ScienceType[] types = ScienceType.values();
+        Integer[] values = new Integer[types.length];
+        for (int i = 0; i < types.length; i++) {
+            values[i] = quantities.getOrDefault(types[i], 0);
+        }
         return computePoints(values, jokers);
     }
 
