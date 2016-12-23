@@ -1,4 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
+import { browserHistory} from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 import createReducer from './reducers'
 import createSagaMiddleware from 'redux-saga'
@@ -29,5 +31,8 @@ export default function configureStore(initialState = {}) {
 
   sagaMiddleware.run(rootSaga)
 
-  return store
+  return {
+    store,
+    history: syncHistoryWithStore(browserHistory, store)
+  }
 }
