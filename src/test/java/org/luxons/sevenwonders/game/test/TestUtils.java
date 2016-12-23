@@ -7,9 +7,12 @@ import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.boards.Science;
+import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.cards.Requirements;
+import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.Provider;
@@ -101,5 +104,28 @@ public class TestUtils {
             sampleCards.add(new Card("Test Card " + i, Color.BLUE, new Requirements(), null, null, null, null));
         }
         return sampleCards;
+    }
+
+    public static ScienceProgress createScienceProgress(int compasses, int wheels, int tablets, int jokers) {
+        ScienceProgress progress = new ScienceProgress();
+        progress.setScience(TestUtils.createScience(compasses, wheels, tablets, jokers));
+        return progress;
+    }
+
+    public static Science createScience(int compasses, int wheels, int tablets, int jokers) {
+        Science science = new Science();
+        if (compasses > 0) {
+            science.add(ScienceType.COMPASS, compasses);
+        }
+        if (wheels > 0) {
+            science.add(ScienceType.WHEEL, wheels);
+        }
+        if (tablets > 0) {
+            science.add(ScienceType.TABLET, tablets);
+        }
+        if (jokers > 0) {
+            science.addJoker(jokers);
+        }
+        return science;
     }
 }

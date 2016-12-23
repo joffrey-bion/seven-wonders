@@ -5,6 +5,7 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,18 +37,9 @@ public class ScienceTest {
         return new int[] {0, 1, 3, 5, 8};
     }
 
-    private static Science science(int compasses, int wheels, int tablets, int jokers) {
-        Science science = new Science();
-        science.add(ScienceType.COMPASS, compasses);
-        science.add(ScienceType.WHEEL, wheels);
-        science.add(ScienceType.TABLET, tablets);
-        science.addJoker(jokers);
-        return science;
-    }
-
     @Test
     public void addAll_empty() {
-        Science initial = science(3, 4, 5, 1);
+        Science initial = TestUtils.createScience(3, 4, 5, 1);
         Science empty = new Science();
         initial.addAll(empty);
         assertEquals(3, initial.getQuantity(ScienceType.COMPASS));
@@ -58,8 +50,8 @@ public class ScienceTest {
 
     @Test
     public void addAll_noJoker() {
-        Science initial = science(3, 4, 5, 1);
-        Science other = science(1, 2, 3, 0);
+        Science initial = TestUtils.createScience(3, 4, 5, 1);
+        Science other = TestUtils.createScience(1, 2, 3, 0);
         initial.addAll(other);
         assertEquals(4, initial.getQuantity(ScienceType.COMPASS));
         assertEquals(6, initial.getQuantity(ScienceType.WHEEL));
@@ -69,8 +61,8 @@ public class ScienceTest {
 
     @Test
     public void addAll_withJokers() {
-        Science initial = science(3, 4, 5, 1);
-        Science other = science(0, 0, 0, 3);
+        Science initial = TestUtils.createScience(3, 4, 5, 1);
+        Science other = TestUtils.createScience(0, 0, 0, 3);
         initial.addAll(other);
         assertEquals(3, initial.getQuantity(ScienceType.COMPASS));
         assertEquals(4, initial.getQuantity(ScienceType.WHEEL));
@@ -80,8 +72,8 @@ public class ScienceTest {
 
     @Test
     public void addAll_mixed() {
-        Science initial = science(3, 4, 5, 1);
-        Science other = science(1, 2, 3, 4);
+        Science initial = TestUtils.createScience(3, 4, 5, 1);
+        Science other = TestUtils.createScience(1, 2, 3, 4);
         initial.addAll(other);
         assertEquals(4, initial.getQuantity(ScienceType.COMPASS));
         assertEquals(6, initial.getQuantity(ScienceType.WHEEL));
@@ -91,31 +83,31 @@ public class ScienceTest {
 
     @Theory
     public void computePoints_compassesOnly_noJoker(int compasses) {
-        Science science = science(compasses, 0, 0, 0);
+        Science science = TestUtils.createScience(compasses, 0, 0, 0);
         assertEquals(compasses * compasses, science.computePoints());
     }
 
     @Theory
     public void computePoints_wheelsOnly_noJoker(int wheels) {
-        Science science = science(0, wheels, 0, 0);
+        Science science = TestUtils.createScience(0, wheels, 0, 0);
         assertEquals(wheels * wheels, science.computePoints());
     }
 
     @Theory
     public void computePoints_tabletsOnly_noJoker(int tablets) {
-        Science science = science(0, 0, tablets, 0);
+        Science science = TestUtils.createScience(0, 0, tablets, 0);
         assertEquals(tablets * tablets, science.computePoints());
     }
 
     @Theory
     public void computePoints_allSameNoJoker(int eachSymbol) {
-        Science science = science(eachSymbol, eachSymbol, eachSymbol, 0);
+        Science science = TestUtils.createScience(eachSymbol, eachSymbol, eachSymbol, 0);
         assertEquals(3 * eachSymbol * eachSymbol + 7 * eachSymbol, science.computePoints());
     }
 
     @Theory
     public void computePoints_expectation(int[] expectation) {
-        Science science = science(expectation[0], expectation[1], expectation[2], expectation[3]);
+        Science science = TestUtils.createScience(expectation[0], expectation[1], expectation[2], expectation[3]);
         assertEquals(expectation[4], science.computePoints());
     }
 }
