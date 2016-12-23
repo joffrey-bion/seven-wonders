@@ -15,6 +15,7 @@ import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.effects.SpecialAction;
 import org.luxons.sevenwonders.game.effects.SpecialActionTrigger;
 
+@SuppressWarnings("unused") // the fields are injected by Gson
 public class EffectsDefinition implements Definition<List<Effect>> {
 
     private GoldIncrease gold;

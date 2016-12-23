@@ -8,6 +8,7 @@ import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.cards.Requirements;
 
+@SuppressWarnings("unused") // the fields are injected by Gson
 public class CardDefinition implements Definition<Card> {
 
     private String name;

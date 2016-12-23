@@ -12,6 +12,7 @@ import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Decks;
 
+@SuppressWarnings("unused,MismatchedQueryAndUpdateOfCollection") // the fields are injected by Gson
 public class DecksDefinition implements Definition<Decks> {
 
     private List<CardDefinition> age1;
