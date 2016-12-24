@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 
 public class Move {
@@ -47,11 +48,8 @@ public class Move {
         this.boughtResources = boughtResources;
     }
 
-    public boolean isValid(Table table) {
-        if (type == MoveType.DISCARD) {
-            return true;
-        }
-        // TODO create a version of the Move class with actual card data?
-        return false;
+    public boolean isValid(Table table, Card resolvedCard) {
+        return type == MoveType.DISCARD || resolvedCard.getRequirements()
+                                                       .isAffordedBy(table, playerIndex, boughtResources);
     }
 }

@@ -85,7 +85,7 @@ public class Game {
             throw new InvalidMoveException(
                     "Player " + move.getPlayerIndex() + " does not have the card " + move.getCardName());
         }
-        if (!move.isValid(table)) {
+        if (!move.isValid(table, card)) {
             throw new InvalidMoveException(
                     "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCardName());
         }

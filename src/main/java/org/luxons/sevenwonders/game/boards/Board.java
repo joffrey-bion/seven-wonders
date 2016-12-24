@@ -88,6 +88,9 @@ public class Board {
     }
 
     public void removeGold(int amount) {
+        if (gold < amount) {
+            throw new InsufficientFundsException(gold, amount);
+        }
         this.gold -= amount;
     }
 
@@ -105,5 +108,11 @@ public class Board {
 
     public void setNbDefeatTokens(int nbDefeatTokens) {
         this.nbDefeatTokens= nbDefeatTokens;
+    }
+
+    private static class InsufficientFundsException extends RuntimeException {
+        InsufficientFundsException(int current, int required) {
+            super(String.format("Current balance is %d gold, but %d are required", current, required));
+        }
     }
 }

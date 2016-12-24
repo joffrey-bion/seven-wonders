@@ -27,7 +27,7 @@ public class TradingRules {
         return boughtResources.stream().mapToInt(this::computeCost).sum();
     }
 
-    private int computeCost(BoughtResources boughtResources) {
+    public int computeCost(BoughtResources boughtResources) {
         Resources resources = boughtResources.getResources();
         int total = 0;
         for (Entry<ResourceType, Integer> entry : resources.getQuantities().entrySet()) {

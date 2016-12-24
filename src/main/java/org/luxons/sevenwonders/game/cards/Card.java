@@ -86,15 +86,13 @@ public class Card {
         if (board.isPlayed(name)) {
             return false; // cannot play twice the same card
         }
-        return isChainableOn(board) || requirements.isAffordedBy(table, playerIndex);
+        return isChainableOn(board) || requirements.couldBeAffordedBy(table, playerIndex);
     }
 
     public void applyTo(Table table, int playerIndex, List<BoughtResources> boughtResources) {
-        // TODO add paid resources cost deduction
         Board playerBoard = table.getBoard(playerIndex);
         if (!isChainableOn(playerBoard)) {
-            // TODO add paid resources exemption
-            requirements.pay(playerBoard);
+            requirements.pay(table, playerIndex, boughtResources);
         }
         effects.forEach(e -> e.apply(table, playerIndex));
     }
