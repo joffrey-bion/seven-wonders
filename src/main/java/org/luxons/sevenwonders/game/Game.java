@@ -180,7 +180,7 @@ public class Game {
             table.activateCurrentWonderStage(move.getPlayerIndex(), move.getBoughtResources());
             break;
         case DISCARD:
-            table.discard(move.getPlayerIndex(), settings.getDiscardedCardGold());
+            table.giveGoldForDiscarded(move.getPlayerIndex(), settings.getDiscardedCardGold());
             break;
         }
     }
