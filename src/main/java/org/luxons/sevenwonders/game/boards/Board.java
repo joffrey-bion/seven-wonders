@@ -83,6 +83,14 @@ public class Board {
         this.gold = amount;
     }
 
+    public void addGold(int amount) {
+        this.gold += amount;
+    }
+
+    public void removeGold(int amount) {
+        this.gold -= amount;
+    }
+
     public int getNbWarSymbols() {
         return nbWarSymbols;
     }

@@ -18,7 +18,7 @@ public class GoldIncrease extends InstantOwnBoardEffect {
 
     @Override
     public void apply(Board board) {
-        board.setGold(board.getGold() + amount);
+        board.addGold(amount);
     }
 
     @Override
