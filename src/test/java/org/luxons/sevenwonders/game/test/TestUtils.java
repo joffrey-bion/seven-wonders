@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.Player;
@@ -113,8 +114,30 @@ public class TestUtils {
         return sampleCards;
     }
 
-    public static Card createCard(int num, Color color) {
+    private static Card createCard(int num, Color color) {
         return new Card("Test Card " + num, color, new Requirements(), null, null, null, null);
+    }
+
+    public static void addCards(Board board, int nbCardsOfColor, int nbOtherCards, Color color) {
+        addCards(board, nbCardsOfColor, color);
+        Color otherColor = getDifferentColorFrom(color);
+        addCards(board, nbOtherCards, otherColor);
+    }
+
+    public static void addCards(Board board, int nbCards, Color color) {
+        for (int i = 0; i < nbCards; i++) {
+            board.addCard(createCard(i, color));
+        }
+    }
+
+    public static Color getDifferentColorFrom(Color... colors) {
+        List<Color> forbiddenColors = Arrays.asList(colors);
+        for (Color color : Color.values()) {
+            if (!forbiddenColors.contains(color)) {
+                return color;
+            }
+        }
+        throw new IllegalArgumentException("All colors are forbidden!");
     }
 
     public static ScienceProgress createScienceProgress(int compasses, int wheels, int tablets, int jokers) {
