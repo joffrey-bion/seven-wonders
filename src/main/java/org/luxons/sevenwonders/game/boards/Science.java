@@ -62,11 +62,4 @@ public class Science {
         int nbGroupsOfAll = Arrays.stream(values).mapToInt(i -> i).min().orElse(0);
         return independentSquaresSum + nbGroupsOfAll * 7;
     }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Science{");
-        quantities.forEach((type, count) -> sb.append(type).append("=").append(count).append(" "));
-        return sb.append("*=").append(jokers).toString();
-    }
 }

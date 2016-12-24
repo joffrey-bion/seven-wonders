@@ -18,9 +18,4 @@ public class Player {
     public String getUserName() {
         return userName;
     }
-
-    @Override
-    public String toString() {
-        return "Player{" + "name='" + displayName + '\'' + ", userName='" + userName + '\'' + '}';
-    }
 }

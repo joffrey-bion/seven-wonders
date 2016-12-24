@@ -77,11 +77,6 @@ public class Lobby {
         return players.size() >= gameDefinition.getMinPlayers();
     }
 
-    @Override
-    public String toString() {
-        return "Lobby{" + "id=" + id + ", name='" + name + '\'' + ", state=" + state + '}';
-    }
-
     public boolean isOwner(String userName) {
         return owner.getUserName().equals(userName);
     }

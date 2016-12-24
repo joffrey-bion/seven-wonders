@@ -3,10 +3,10 @@ package org.luxons.sevenwonders.game.cards;
 import java.util.List;
 import java.util.Objects;
 
-import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.effects.Effect;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
 
 public class Card {
 
@@ -114,11 +114,5 @@ public class Card {
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" + "name='" + name + '\'' + ", color=" + color + ", requirements=" + requirements + ", effects="
-                + effects + '}';
     }
 }
