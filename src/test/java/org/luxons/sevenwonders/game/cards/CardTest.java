@@ -14,7 +14,8 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.luxons.sevenwonders.game.test.TestUtils.*;
 
 public class CardTest {
 
@@ -52,5 +53,54 @@ public class CardTest {
         assertEquals(2, table.getBoard(0).getGold());
         assertEquals(3, table.getBoard(1).getGold());
         assertEquals(3, table.getBoard(2).getGold());
+    }
+
+    @Test
+    public void equals_falseWhenNull() {
+        Card card = createCard("TestCard");
+        //noinspection ObjectEqualsNull
+        assertFalse(card.equals(null));
+    }
+
+    @Test
+    public void equals_falseWhenDifferentClass() {
+        Card card = createCard("TestCard");
+        Object object = new Object();
+        //noinspection EqualsBetweenInconvertibleTypes
+        assertFalse(card.equals(object));
+    }
+
+    @Test
+    public void equals_trueWhenSame() {
+        Card card = createCard("TestCard");
+        assertEquals(card, card);
+    }
+
+    @Test
+    public void equals_trueWhenSameContent() {
+        Card card1 = createCard("TestCard");
+        Card card2 = createCard("TestCard");
+        assertTrue(card1.equals(card2));
+    }
+
+    @Test
+    public void equals_falseWhenDifferentName() {
+        Card card1 = createCard("TestCard1");
+        Card card2 = createCard("TestCard2");
+        assertFalse(card1.equals(card2));
+    }
+
+    @Test
+    public void hashCode_sameWhenSameContent() {
+        Card card1 = createCard("TestCard");
+        Card card2 = createCard("TestCard");
+        assertEquals(card1.hashCode(), card2.hashCode());
+    }
+
+    @Test
+    public void hashCode_differentWhenDifferentName() {
+        Card card1 = createCard("TestCard1");
+        Card card2 = createCard("TestCard2");
+        assertNotEquals(card1.hashCode(), card2.hashCode());
     }
 }

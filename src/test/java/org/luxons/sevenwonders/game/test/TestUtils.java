@@ -114,6 +114,10 @@ public class TestUtils {
         return sampleCards;
     }
 
+    public static Card createCard(String name) {
+        return new Card(name, Color.BLUE, new Requirements(), null, null, null, null);
+    }
+
     private static Card createCard(int num, Color color) {
         return new Card("Test Card " + num, color, new Requirements(), null, null, null, null);
     }
