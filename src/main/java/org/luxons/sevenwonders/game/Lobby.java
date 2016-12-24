@@ -90,16 +90,16 @@ public class Lobby {
         return players.stream().anyMatch(p -> p.getUserName().equals(userName));
     }
 
-    private static class GameAlreadyStartedException extends IllegalStateException {
+    static class GameAlreadyStartedException extends IllegalStateException {
     }
 
-    private static class PlayerOverflowException extends IllegalStateException {
+    static class PlayerOverflowException extends IllegalStateException {
     }
 
-    private static class PlayerUnderflowException extends IllegalStateException {
+    static class PlayerUnderflowException extends IllegalStateException {
     }
 
-    private static class PlayerNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
+    static class PlayerNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
         PlayerNameAlreadyUsedException(String name) {
             super(name);
         }
