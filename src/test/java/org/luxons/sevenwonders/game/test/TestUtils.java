@@ -19,6 +19,7 @@ import org.luxons.sevenwonders.game.resources.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.wonders.Wonder;
+import org.luxons.sevenwonders.game.wonders.WonderStage;
 
 public class TestUtils {
 
@@ -47,7 +48,7 @@ public class TestUtils {
 
     public static Board createBoard(ResourceType initialResource) {
         Settings settings = new Settings();
-        Wonder wonder = new Wonder("Test Wonder " + initialResource.getSymbol(), initialResource);
+        Wonder wonder = createWonder(initialResource);
 
         String userName = "testUser" + initialResource.getSymbol();
         String displayName = "Test User " + initialResource.getSymbol();
@@ -73,7 +74,13 @@ public class TestUtils {
     }
 
     public static Wonder createWonder(ResourceType initialResource) {
-        return new Wonder("Test Wonder " + initialResource.getSymbol(), initialResource);
+        WonderStage stage1 = new WonderStage();
+        stage1.setRequirements(new Requirements());
+        WonderStage stage2 = new WonderStage();
+        stage1.setRequirements(new Requirements());
+        WonderStage stage3 = new WonderStage();
+        stage1.setRequirements(new Requirements());
+        return new Wonder("Test Wonder " + initialResource.getSymbol(), initialResource, stage1, stage2, stage3);
     }
 
     public static Production createFixedProduction(ResourceType... producedTypes) {
@@ -101,9 +108,13 @@ public class TestUtils {
     public static List<Card> createSampleCards(int fromIndex, int nbCards) {
         List<Card> sampleCards = new ArrayList<>();
         for (int i = fromIndex; i < fromIndex + nbCards; i++) {
-            sampleCards.add(new Card("Test Card " + i, Color.BLUE, new Requirements(), null, null, null, null));
+            sampleCards.add(createCard(i, Color.BLUE));
         }
         return sampleCards;
+    }
+
+    public static Card createCard(int num, Color color) {
+        return new Card("Test Card " + num, color, new Requirements(), null, null, null, null);
     }
 
     public static ScienceProgress createScienceProgress(int compasses, int wheels, int tablets, int jokers) {
