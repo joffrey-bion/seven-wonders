@@ -67,7 +67,9 @@ public class BonusPerBoardElementTest {
     @Theory
     public void computePoints_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points, int gold) {
         Board board = table.getBoard(0, boardPosition);
-        board.setNbDefeatTokens(nbDefeatTokens);
+        for (int i = 0; i < nbDefeatTokens; i++) {
+            board.getMilitary().defeat();
+        }
 
         BonusPerBoardElement bonus = createBonus(BoardElementType.DEFEAT_TOKEN, gold, points);
         bonus.setBoards(Collections.singletonList(boardPosition));
@@ -106,7 +108,9 @@ public class BonusPerBoardElementTest {
     @Theory
     public void apply_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points, int gold) {
         Board board = table.getBoard(0, boardPosition);
-        board.setNbDefeatTokens(nbDefeatTokens);
+        for (int i = 0; i < nbDefeatTokens; i++) {
+            board.getMilitary().defeat();
+        }
 
         BonusPerBoardElement bonus = createBonus(BoardElementType.DEFEAT_TOKEN, gold, points);
         bonus.setBoards(Collections.singletonList(boardPosition));

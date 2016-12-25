@@ -27,12 +27,12 @@ public class MilitaryReinforcementsTest {
     @Theory
     public void apply_increaseGoldWithRightAmount(int initialShields, int additionalShields, ResourceType type) {
         Board board = TestUtils.createBoard(type);
-        board.setNbWarSymbols(initialShields);
+        board.getMilitary().addShields(initialShields);
 
         MilitaryReinforcements reinforcements = new MilitaryReinforcements(additionalShields);
         reinforcements.apply(board);
 
-        assertEquals(initialShields + additionalShields, board.getNbWarSymbols());
+        assertEquals(initialShields + additionalShields, board.getMilitary().getNbShields());
     }
 
     @Theory

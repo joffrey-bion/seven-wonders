@@ -20,7 +20,7 @@ public enum BoardElementType {
     DEFEAT_TOKEN {
         @Override
         public int getElementCount(Board board, List<Color> colors) {
-            return board.getNbDefeatTokens();
+            return board.getMilitary().getNbDefeatTokens();
         }
     };
 

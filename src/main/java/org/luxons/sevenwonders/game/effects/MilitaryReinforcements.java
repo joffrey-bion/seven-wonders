@@ -18,7 +18,7 @@ public class MilitaryReinforcements extends InstantOwnBoardEffect {
 
     @Override
     public void apply(Board board) {
-        board.setNbWarSymbols(board.getNbWarSymbols() + count);
+        board.getMilitary().addShields(count);
     }
 
     @Override

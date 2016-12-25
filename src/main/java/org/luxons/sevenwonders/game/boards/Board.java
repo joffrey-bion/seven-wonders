@@ -25,17 +25,16 @@ public class Board {
 
     private final TradingRules tradingRules;
 
+    private final Military military;
+
     private int gold;
-
-    private int nbWarSymbols;
-
-    private int nbDefeatTokens;
 
     public Board(Wonder wonder, Player player, Settings settings) {
         this.wonder = wonder;
         this.player = player;
         this.gold = settings.getInitialGold();
         this.tradingRules = new TradingRules(settings.getDefaultTradingCost());
+        this.military = new Military(settings);
         production.addFixedResource(wonder.getInitialResource(), 1);
     }
 
@@ -94,20 +93,8 @@ public class Board {
         this.gold -= amount;
     }
 
-    public int getNbWarSymbols() {
-        return nbWarSymbols;
-    }
-
-    public void setNbWarSymbols(int nbWarSymbols) {
-        this.nbWarSymbols = nbWarSymbols;
-    }
-
-    public int getNbDefeatTokens() {
-        return nbDefeatTokens;
-    }
-
-    public void setNbDefeatTokens(int nbDefeatTokens) {
-        this.nbDefeatTokens= nbDefeatTokens;
+    public Military getMilitary() {
+        return military;
     }
 
     private static class InsufficientFundsException extends RuntimeException {
