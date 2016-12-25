@@ -24,15 +24,10 @@ function connect() {
     });
 
     stompClient.subscribe('/topic/games', function (msg) {
-      var game = JSON.parse(msg.body);
-      if (Array.isArray(game)) {
-        console.log("Received new games: " + game);
-        for (var i = 0; i < game.length; i++) {
-          addNewGame(game[i]);
-        }
-      } else {
-        console.log("Received new game: " + game);
-        addNewGame(game);
+      var games = JSON.parse(msg.body);
+      console.log("Received new games: " + games);
+      for (var i = 0; i < games.length; i++) {
+        addNewGame(games[i]);
       }
     });
 
@@ -45,7 +40,7 @@ function connect() {
 }
 
 function disconnect() {
-  if (stompClient != null) {
+  if (stompClient !== null) {
     stompClient.disconnect();
   }
   setConnected(false);

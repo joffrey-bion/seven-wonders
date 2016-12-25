@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
 import org.luxons.sevenwonders.actions.StartGameAction;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
@@ -29,16 +29,12 @@ public class LobbyController {
 
     private static final Logger logger = LoggerFactory.getLogger(LobbyController.class);
 
-    private final SimpMessagingTemplate template;
-
     private final LobbyRepository lobbyRepository;
 
     private final GameRepository gameRepository;
 
     @Autowired
-    public LobbyController(SimpMessagingTemplate template, LobbyRepository lobbyRepository,
-            GameRepository gameRepository) {
-        this.template = template;
+    public LobbyController(LobbyRepository lobbyRepository, GameRepository gameRepository) {
         this.lobbyRepository = lobbyRepository;
         this.gameRepository = gameRepository;
     }
@@ -51,8 +47,8 @@ public class LobbyController {
 
     @MessageMapping("/lobby/create-game")
     @SendTo("/topic/games")
-    public Lobby createGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
-            Principal principal) {
+    public Collection<Lobby> createGame(SimpMessageHeaderAccessor headerAccessor,
+            @Validated JoinOrCreateGameAction action, Principal principal) {
         checkThatUserIsNotInAGame(headerAccessor, "cannot create another game");
 
         Player gameOwner = new Player(action.getPlayerName(), principal.getName());
@@ -61,13 +57,13 @@ public class LobbyController {
 
         logger.info("Game '{}' (id={}) created by {} ({})", lobby.getName(), lobby.getId(), gameOwner.getDisplayName(),
                 gameOwner.getUserName());
-        return lobby;
+        return Collections.singletonList(lobby);
     }
 
     @MessageMapping("/lobby/join-game")
     @SendToUser("/queue/join-game")
-    public Lobby joinGame(SimpMessageHeaderAccessor headerAccessor, @Validated JoinOrCreateGameAction action,
-            Principal principal) {
+    public Collection<Lobby> joinGame(SimpMessageHeaderAccessor headerAccessor,
+            @Validated JoinOrCreateGameAction action, Principal principal) {
         checkThatUserIsNotInAGame(headerAccessor, "cannot join another game");
 
         Lobby lobby = lobbyRepository.find(action.getGameName());
@@ -76,7 +72,7 @@ public class LobbyController {
         headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
 
         logger.info("Player {} joined game {}", action.getPlayerName(), action.getGameName());
-        return lobby;
+        return Collections.singletonList(lobby);
     }
 
     private void checkThatUserIsNotInAGame(SimpMessageHeaderAccessor headerAccessor,
