@@ -65,7 +65,7 @@ public class BonusPerBoardElement implements Effect {
     public void apply(Table table, int playerIndex) {
         int goldGain = gold * computeNbOfMatchingElementsIn(table, playerIndex);
         Board board = table.getBoard(playerIndex);
-        board.setGold(board.getGold() + goldGain);
+        board.addGold(goldGain);
     }
 
     @Override

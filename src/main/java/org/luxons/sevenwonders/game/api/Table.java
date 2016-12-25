@@ -70,6 +70,6 @@ public class Table {
 
     public void giveGoldForDiscarded(int playerIndex, int goldBonus) {
         Board board = boards.get(playerIndex);
-        board.setGold(board.getGold() + goldBonus);
+        board.addGold(goldBonus);
     }
 }
