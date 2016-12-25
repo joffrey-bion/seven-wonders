@@ -33,7 +33,10 @@ public class Military {
     }
 
     public void victory(int age) {
-        int wonPoints = settings.getWonPointsPerVictoryPerAge().get(age);
+        Integer wonPoints = settings.getWonPointsPerVictoryPerAge().get(age);
+        if (wonPoints == null) {
+            throw new UnknownAgeException(age);
+        }
         totalPoints += wonPoints;
     }
 
@@ -41,5 +44,11 @@ public class Military {
         int lostPoints = settings.getLostPointsPerDefeat();
         totalPoints -= lostPoints;
         nbDefeatTokens++;
+    }
+
+    static final class UnknownAgeException extends IllegalArgumentException {
+        UnknownAgeException(int unknownAge) {
+            super(String.valueOf(unknownAge));
+        }
     }
 }
