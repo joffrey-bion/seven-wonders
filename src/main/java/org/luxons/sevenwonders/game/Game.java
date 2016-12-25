@@ -190,7 +190,7 @@ public class Game {
     }
 
     private void executeEndOfAgeEvents() {
-        // TODO resolve military conflicts
+        table.resolveMilitaryConflicts(currentAge);
     }
 
     private int getHandRotationOffset() {
