@@ -7,13 +7,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.luxons.sevenwonders.game.api.Move;
+import org.luxons.sevenwonders.game.api.PlayerMove;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Hands;
+import org.luxons.sevenwonders.game.moves.Move;
 
 public class Game {
 
@@ -70,9 +71,11 @@ public class Game {
         return pti;
     }
 
-    public void prepareCard(Move move) throws InvalidMoveException {
+    public void prepareCard(int playerIndex, PlayerMove playerMove) throws InvalidMoveException {
+        Card card = decks.getCard(playerMove.getCardName());
+        Move move = playerMove.getType().resolve(playerIndex, card, playerMove);
         validate(move);
-        preparedMoves.put(move.getPlayerIndex(), move);
+        preparedMoves.put(playerIndex, move);
     }
 
     private void validate(Move move) throws InvalidMoveException {
@@ -80,14 +83,14 @@ public class Game {
         if (hand == null) {
             throw new InvalidMoveException("Invalid player index " + move.getPlayerIndex());
         }
-        Card card = decks.getCard(move.getCardName());
+        Card card = move.getCard();
         if (!hand.contains(card)) {
             throw new InvalidMoveException(
-                    "Player " + move.getPlayerIndex() + " does not have the card " + move.getCardName());
+                    "Player " + move.getPlayerIndex() + " does not have the card " + move.getCard().getName());
         }
-        if (!move.isValid(table, card)) {
+        if (!move.isValid(table)) {
             throw new InvalidMoveException(
-                    "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCardName());
+                    "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCard().getName());
         }
     }
 
@@ -137,8 +140,8 @@ public class Game {
 
     private void placePreparedCards(List<Move> playedMoves) {
         playedMoves.forEach(move -> {
-            placeCard(move);
-            removeFromHand(move.getPlayerIndex(), move.getCardName());
+            move.place(table, discardedCards, settings);
+            removeFromHand(move.getPlayerIndex(), move.getCard());
         });
     }
 
@@ -146,43 +149,12 @@ public class Game {
         return hands.maxOneCardRemains();
     }
 
-    private void placeCard(Move move) {
-        Card card = decks.getCard(move.getCardName());
-        switch (move.getType()) {
-        case PLAY:
-            table.placeCard(move.getPlayerIndex(), card);
-            break;
-        case UPGRADE_WONDER:
-            table.buildWonderStage(move.getPlayerIndex(), card.getBack());
-            break;
-        case DISCARD:
-            discardedCards.add(card);
-            break;
-        }
-    }
-
-    private void removeFromHand(int playerIndex, String cardName) {
-        Card card = decks.getCard(cardName);
-        List<Card> hand = hands.get(playerIndex);
-        hand.remove(card);
+    private void removeFromHand(int playerIndex, Card card) {
+        hands.get(playerIndex).remove(card);
     }
 
     private void activatePlayedCards(List<Move> playedMoves) {
-        playedMoves.forEach(this::activateCard);
-    }
-
-    private void activateCard(Move move) {
-        switch (move.getType()) {
-        case PLAY:
-            table.activateCard(move.getPlayerIndex(), decks.getCard(move.getCardName()), move.getBoughtResources());
-            break;
-        case UPGRADE_WONDER:
-            table.activateCurrentWonderStage(move.getPlayerIndex(), move.getBoughtResources());
-            break;
-        case DISCARD:
-            table.giveGoldForDiscarded(move.getPlayerIndex(), settings.getDiscardedCardGold());
-            break;
-        }
+        playedMoves.forEach(move -> move.activate(table, discardedCards, settings));
     }
 
     private boolean endOfAgeReached() {

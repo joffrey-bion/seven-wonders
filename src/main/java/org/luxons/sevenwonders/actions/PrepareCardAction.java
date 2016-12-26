@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.actions;
 
-import org.luxons.sevenwonders.game.api.Move;
+import org.luxons.sevenwonders.game.moves.Move;
 
 public class PrepareCardAction {
 

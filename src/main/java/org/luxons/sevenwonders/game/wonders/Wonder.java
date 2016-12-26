@@ -3,9 +3,9 @@ package org.luxons.sevenwonders.game.wonders;
 import java.util.Arrays;
 import java.util.List;
 
-import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.CardBack;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 
 public class Wonder {
@@ -61,6 +61,14 @@ public class Wonder {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public boolean isNextStageBuildable(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+        int nextLevel = getNbBuiltStages();
+        if (nextLevel == stages.size()) {
+            return false;
+        }
+        return getNextStage().isBuildable(table, playerIndex, boughtResources);
     }
 
     public void buildLevel(CardBack cardBack) {
