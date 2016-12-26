@@ -1,16 +1,16 @@
 package org.luxons.sevenwonders.actions;
 
-import org.luxons.sevenwonders.game.moves.Move;
+import org.luxons.sevenwonders.game.api.PlayerMove;
 
 public class PrepareCardAction {
 
-    private Move move;
+    private PlayerMove move;
 
-    public Move getMove() {
+    public PlayerMove getMove() {
         return move;
     }
 
-    public void setMove(Move move) {
+    public void setMove(PlayerMove move) {
         this.move = move;
     }
 }

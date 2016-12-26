@@ -6,6 +6,8 @@ public class Player {
 
     private final String userName;
 
+    private int index;
+
     public Player(String displayName, String userName) {
         this.displayName = displayName;
         this.userName = userName;
@@ -17,5 +19,13 @@ public class Player {
 
     public String getUserName() {
         return userName;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

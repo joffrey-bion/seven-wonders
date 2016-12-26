@@ -37,4 +37,9 @@ public class PlayerMove {
     public void setBoughtResources(List<BoughtResources> boughtResources) {
         this.boughtResources = boughtResources;
     }
+
+    @Override
+    public String toString() {
+        return type +  " '" + cardName + '\'';
+    }
 }

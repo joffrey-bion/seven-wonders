@@ -2,9 +2,11 @@ package org.luxons.sevenwonders.game.api;
 
 import java.util.List;
 
+import org.luxons.sevenwonders.game.Player;
+
 public class PlayerTurnInfo {
 
-    private final int playerIndex;
+    private final Player player;
 
     private final Table table;
 
@@ -14,13 +16,13 @@ public class PlayerTurnInfo {
 
     private String message;
 
-    public PlayerTurnInfo(int playerIndex, Table table) {
-        this.playerIndex = playerIndex;
+    public PlayerTurnInfo(Player player, Table table) {
+        this.player = player;
         this.table = table;
     }
 
-    public int getPlayerIndex() {
-        return playerIndex;
+    public Player getPlayer() {
+        return player;
     }
 
     public Table getTable() {
