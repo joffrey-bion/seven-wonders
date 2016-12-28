@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.game;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.luxons.sevenwonders.errors.UniqueIdAlreadyUsedException;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
 public class Lobby {
@@ -94,7 +93,7 @@ public class Lobby {
     static class PlayerUnderflowException extends IllegalStateException {
     }
 
-    static class PlayerNameAlreadyUsedException extends UniqueIdAlreadyUsedException {
+    static class PlayerNameAlreadyUsedException extends RuntimeException {
         PlayerNameAlreadyUsedException(String name) {
             super(name);
         }
