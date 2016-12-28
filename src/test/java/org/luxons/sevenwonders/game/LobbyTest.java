@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.game;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -13,6 +15,7 @@ import org.luxons.sevenwonders.game.Lobby.GameAlreadyStartedException;
 import org.luxons.sevenwonders.game.Lobby.PlayerNameAlreadyUsedException;
 import org.luxons.sevenwonders.game.Lobby.PlayerOverflowException;
 import org.luxons.sevenwonders.game.Lobby.PlayerUnderflowException;
+import org.luxons.sevenwonders.game.Lobby.UnknownPlayerException;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 
@@ -108,6 +111,31 @@ public class LobbyTest {
             Player player = new Player("Test User " + i, "testuser" + i);
             lobby.addPlayer(player);
         }
+    }
+
+    @Test
+    public void reorderPlayers_failsOnSameName() {
+        Player player1 = new Player("Test User 1", "testuser1");
+        Player player2 = new Player("Test User 2", "testuser2");
+        Player player3 = new Player("Test User 3", "testuser3");
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+        lobby.addPlayer(player3);
+        lobby.reorderPlayers(Arrays.asList("testuser3", "testuser1", "testuser2"));
+        assertEquals("testuser3", lobby.getPlayers().get(0).getUserName());
+        assertEquals("testuser1", lobby.getPlayers().get(1).getUserName());
+        assertEquals("testuser2", lobby.getPlayers().get(2).getUserName());
+    }
+
+    @Test(expected = UnknownPlayerException.class)
+    public void reorderPlayers_failsOnUnknownPlayer() {
+        Player player1 = new Player("Test User 1", "testuser1");
+        Player player2 = new Player("Test User 2", "testuser2");
+        Player player3 = new Player("Test User 3", "testuser3");
+        lobby.addPlayer(player1);
+        lobby.addPlayer(player2);
+        lobby.addPlayer(player3);
+        lobby.reorderPlayers(Arrays.asList("testuser4", "testuser1", "testuser2"));
     }
 
     @Theory

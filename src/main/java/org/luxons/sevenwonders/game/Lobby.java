@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
@@ -13,9 +14,9 @@ public class Lobby {
 
     private final Player owner;
 
-    private final List<Player> players;
-
     private final GameDefinition gameDefinition;
+
+    private List<Player> players;
 
     private State state = State.LOBBY;
 
@@ -34,6 +35,10 @@ public class Lobby {
 
     public String getName() {
         return name;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 
     public synchronized int addPlayer(Player player) throws GameAlreadyStartedException, PlayerOverflowException {
@@ -76,6 +81,17 @@ public class Lobby {
         return players.size() >= gameDefinition.getMinPlayers();
     }
 
+    public void reorderPlayers(List<String> orderedUserNames) {
+        players = orderedUserNames.stream().map(this::getPlayer).collect(Collectors.toList());
+    }
+
+    private Player getPlayer(String userName) {
+        return players.stream()
+                      .filter(p -> p.getUserName().equals(userName))
+                      .findAny()
+                      .orElseThrow(() -> new UnknownPlayerException(userName));
+    }
+
     public boolean isOwner(String userName) {
         return owner.getUserName().equals(userName);
     }
@@ -96,6 +112,12 @@ public class Lobby {
     static class PlayerNameAlreadyUsedException extends RuntimeException {
         PlayerNameAlreadyUsedException(String name) {
             super(name);
+        }
+    }
+
+    static class UnknownPlayerException extends IllegalArgumentException {
+        UnknownPlayerException(String userName) {
+            super(userName);
         }
     }
 }
