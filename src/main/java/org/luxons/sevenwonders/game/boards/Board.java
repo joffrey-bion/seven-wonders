@@ -97,7 +97,7 @@ public class Board {
         return military;
     }
 
-    private static class InsufficientFundsException extends RuntimeException {
+    static class InsufficientFundsException extends RuntimeException {
         InsufficientFundsException(int current, int required) {
             super(String.format("Current balance is %d gold, but %d are required", current, required));
         }
