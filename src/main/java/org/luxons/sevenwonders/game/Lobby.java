@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.game;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
@@ -16,7 +15,9 @@ public class Lobby {
 
     private final GameDefinition gameDefinition;
 
-    private List<Player> players;
+    private final List<Player> players;
+
+    private Settings settings;
 
     private State state = State.LOBBY;
 
@@ -26,6 +27,7 @@ public class Lobby {
         this.owner = owner;
         this.gameDefinition = gameDefinition;
         this.players = new ArrayList<>(gameDefinition.getMinPlayers());
+        this.settings = new Settings();
         players.add(owner);
     }
 
@@ -41,7 +43,15 @@ public class Lobby {
         return players;
     }
 
-    public synchronized int addPlayer(Player player) throws GameAlreadyStartedException, PlayerOverflowException {
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    public synchronized void addPlayer(Player player) throws GameAlreadyStartedException, PlayerOverflowException {
         if (hasStarted()) {
             throw new GameAlreadyStartedException();
         }
@@ -51,9 +61,8 @@ public class Lobby {
         if (playerNameAlreadyUsed(player.getDisplayName())) {
             throw new PlayerNameAlreadyUsedException(player.getDisplayName());
         }
-        int playerId = players.size();
+        player.setIndex(players.size());
         players.add(player);
-        return playerId;
     }
 
     private boolean hasStarted() {
@@ -68,7 +77,7 @@ public class Lobby {
         return players.stream().anyMatch(p -> p.getDisplayName().equals(name));
     }
 
-    public synchronized Game startGame(Settings settings) throws PlayerUnderflowException {
+    public synchronized Game startGame() throws PlayerUnderflowException {
         if (!hasEnoughPlayers()) {
             throw new PlayerUnderflowException();
         }
@@ -82,10 +91,16 @@ public class Lobby {
     }
 
     public void reorderPlayers(List<String> orderedUserNames) {
-        players = orderedUserNames.stream().map(this::getPlayer).collect(Collectors.toList());
+        List<Player> formerList = new ArrayList<>(players);
+        players.clear();
+        for (int i = 0; i < orderedUserNames.size(); i++) {
+            Player player = getPlayer(formerList, orderedUserNames.get(i));
+            players.add(player);
+            player.setIndex(i);
+        }
     }
 
-    private Player getPlayer(String userName) {
+    private static Player getPlayer(List<Player> players, String userName) {
         return players.stream()
                       .filter(p -> p.getUserName().equals(userName))
                       .findAny()

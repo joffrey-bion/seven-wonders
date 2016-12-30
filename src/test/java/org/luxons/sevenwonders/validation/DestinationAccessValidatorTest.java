@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
-import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.repositories.GameRepository;
 import org.luxons.sevenwonders.repositories.GameRepository.GameNotFoundException;
@@ -39,11 +38,10 @@ public class DestinationAccessValidatorTest {
         return lobby;
     }
 
-    private Game createGame(String gameName, String ownerUserName, String... otherPlayers) {
+    private void createGame(String gameName, String ownerUserName, String... otherPlayers) {
         Lobby lobby = createLobby(gameName, ownerUserName, otherPlayers);
-        Game game = lobby.startGame(new Settings());
+        Game game = lobby.startGame();
         gameRepository.add(game);
-        return game;
     }
 
     @Test

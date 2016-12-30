@@ -102,7 +102,7 @@ public class LobbyTest {
     public void addPlayer_failWhenGameStarted() {
         // total with owner is the minimum
         addPlayers(gameDefinition.getMinPlayers() - 1);
-        lobby.startGame(new Settings());
+        lobby.startGame();
         lobby.addPlayer(new Player("The Late Guy", "soonerNextTime"));
     }
 
@@ -144,7 +144,7 @@ public class LobbyTest {
         thrown.expect(PlayerUnderflowException.class);
         // there is already the owner
         addPlayers(nbPlayers - 1);
-        lobby.startGame(new Settings());
+        lobby.startGame();
     }
 
     @Theory
@@ -153,6 +153,6 @@ public class LobbyTest {
         assumeTrue(nbPlayers < gameDefinition.getMaxPlayers());
         // there is already the owner
         addPlayers(nbPlayers - 1);
-        lobby.startGame(new Settings());
+        lobby.startGame();
     }
 }

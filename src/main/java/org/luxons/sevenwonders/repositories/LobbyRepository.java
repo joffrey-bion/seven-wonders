@@ -42,14 +42,6 @@ public class LobbyRepository {
         return lobby;
     }
 
-    public Lobby find(String gameName) {
-        Lobby lobby = lobbies.get(gameName);
-        if (lobby == null) {
-            throw new LobbyNotFoundException(gameName);
-        }
-        return lobby;
-    }
-
     public Lobby find(long lobbyId) {
         Lobby lobby = lobbiesById.get(lobbyId);
         if (lobby == null) {

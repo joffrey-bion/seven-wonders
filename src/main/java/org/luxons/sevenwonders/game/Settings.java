@@ -6,6 +6,8 @@ import java.util.Random;
 
 import org.luxons.sevenwonders.game.data.definitions.WonderSide;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Settings {
 
     private int nbPlayers = -1;
@@ -30,6 +32,7 @@ public class Settings {
         wonPointsPerVictoryPerAge.put(3, 5);
     }
 
+    @JsonIgnore
     public int getNbPlayers() {
         if (nbPlayers < 0) {
             throw new IllegalStateException("The number of players has not been initialized");
@@ -97,6 +100,7 @@ public class Settings {
         this.randomSeedForTests = randomSeedForTests;
     }
 
+    @JsonIgnore
     public Random getRandom() {
         return randomSeedForTests > 0 ? new Random(randomSeedForTests) : new Random();
     }

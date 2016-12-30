@@ -1,24 +1,38 @@
 package org.luxons.sevenwonders.game;
 
-public class Player {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    private final String displayName;
+public class Player {
 
     private final String userName;
 
+    private String displayName;
+
     private int index;
 
-    public Player(String displayName, String userName) {
-        this.displayName = displayName;
+    private transient Lobby lobby;
+
+    private transient Game game;
+
+    public Player(String userName) {
         this.userName = userName;
+    }
+
+    public Player(String displayName, String userName) {
+        this(userName);
+        setDisplayName(displayName);
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public String getUserName() {
-        return userName;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public int getIndex() {
@@ -27,5 +41,23 @@ public class Player {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @JsonIgnore
+    public Lobby getLobby() {
+        return lobby;
+    }
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
+
+    @JsonIgnore
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

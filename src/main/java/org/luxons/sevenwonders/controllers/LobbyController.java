@@ -4,21 +4,25 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.luxons.sevenwonders.actions.JoinOrCreateGameAction;
+import org.luxons.sevenwonders.actions.ChooseNameAction;
+import org.luxons.sevenwonders.actions.CreateGameAction;
+import org.luxons.sevenwonders.actions.JoinGameAction;
+import org.luxons.sevenwonders.actions.ReorderPlayersAction;
 import org.luxons.sevenwonders.actions.StartGameAction;
+import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Lobby;
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.repositories.GameRepository;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
-import org.luxons.sevenwonders.session.SessionAttributes;
+import org.luxons.sevenwonders.repositories.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
@@ -33,80 +37,126 @@ public class LobbyController {
 
     private final GameRepository gameRepository;
 
+    private final PlayerRepository playerRepository;
+
+    private final SimpMessagingTemplate template;
+
     @Autowired
-    public LobbyController(LobbyRepository lobbyRepository, GameRepository gameRepository) {
+    public LobbyController(LobbyRepository lobbyRepository, GameRepository gameRepository,
+            PlayerRepository playerRepository, SimpMessagingTemplate template) {
         this.lobbyRepository = lobbyRepository;
         this.gameRepository = gameRepository;
+        this.playerRepository = playerRepository;
+        this.template = template;
+    }
+
+    @MessageMapping("/chooseName")
+    public void chooseName(@Validated ChooseNameAction action, Principal principal) {
+        String userName = principal.getName();
+        Player player = playerRepository.updateOrCreatePlayer(userName, action.getPlayerName());
+
+        logger.info("Player '{}' chose the name '{}'", userName, player.getDisplayName());
     }
 
     @SubscribeMapping("/games") // prefix /topic not shown
-    public Collection<Lobby> listGames() {
-        logger.info("Subscribed to /games");
+    public Collection<Lobby> listGames(Principal principal) {
+        logger.info("Player '{}' subscribed to /topic/games", principal.getName());
         return lobbyRepository.list();
     }
 
-    @MessageMapping("/lobby/create-game")
+    @MessageMapping("/lobby/create")
     @SendTo("/topic/games")
-    public Collection<Lobby> createGame(SimpMessageHeaderAccessor headerAccessor,
-            @Validated JoinOrCreateGameAction action, Principal principal) {
-        checkThatUserIsNotInAGame(headerAccessor, "cannot create another game");
+    public Collection<Lobby> createGame(@Validated CreateGameAction action, Principal principal) {
+        checkThatUserIsNotInAGame(principal, "cannot create another game");
 
-        Player gameOwner = new Player(action.getPlayerName(), principal.getName());
+        Player gameOwner = playerRepository.find(principal.getName());
         Lobby lobby = lobbyRepository.create(action.getGameName(), gameOwner);
-        headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
+        gameOwner.setLobby(lobby);
 
-        logger.info("Game '{}' (id={}) created by {} ({})", lobby.getName(), lobby.getId(), gameOwner.getDisplayName(),
+        logger.info("Game '{}' ({}) created by {} ({})", lobby.getName(), lobby.getId(), gameOwner.getDisplayName(),
                 gameOwner.getUserName());
         return Collections.singletonList(lobby);
     }
 
-    @MessageMapping("/lobby/join-game")
-    @SendToUser("/queue/join-game")
-    public Collection<Lobby> joinGame(SimpMessageHeaderAccessor headerAccessor,
-            @Validated JoinOrCreateGameAction action, Principal principal) {
-        checkThatUserIsNotInAGame(headerAccessor, "cannot join another game");
+    @MessageMapping("/lobby/join")
+    @SendToUser("/queue/lobby")
+    public Collection<Lobby> joinGame(@Validated JoinGameAction action, Principal principal) {
+        checkThatUserIsNotInAGame(principal, "cannot join another game");
 
-        Lobby lobby = lobbyRepository.find(action.getGameName());
-        Player newPlayer = new Player(action.getPlayerName(), principal.getName());
+        Lobby lobby = lobbyRepository.find(action.getGameId());
+        Player newPlayer = playerRepository.find(principal.getName());
         lobby.addPlayer(newPlayer);
-        headerAccessor.getSessionAttributes().put(SessionAttributes.ATTR_LOBBY, lobby);
+        newPlayer.setLobby(lobby);
 
-        logger.info("Player {} joined game {}", action.getPlayerName(), action.getGameName());
+        logger.info("Player '{}' ({}) joined game {}", newPlayer.getDisplayName(), newPlayer.getUserName(),
+                lobby.getName());
         return Collections.singletonList(lobby);
     }
 
-    private void checkThatUserIsNotInAGame(SimpMessageHeaderAccessor headerAccessor,
-            String impossibleActionDescription) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
+    private void checkThatUserIsNotInAGame(Principal principal, String impossibleActionDescription) {
+        Lobby lobby = playerRepository.find(principal.getName()).getLobby();
         if (lobby != null) {
             throw new UserAlreadyInGameException(lobby.getName(), impossibleActionDescription);
         }
     }
 
-    @MessageMapping("/lobby/start-game")
-    public void startGame(SimpMessageHeaderAccessor headerAccessor, @Validated StartGameAction action,
-            Principal principal) {
-        Lobby lobby = getOwnedLobby(headerAccessor, principal);
-        Game game = lobby.startGame(action.getSettings());
+    @MessageMapping("/lobby/reorderPlayers")
+    public void reorderPlayers(@Validated ReorderPlayersAction action, Principal principal) {
+        Lobby lobby = getLobby(principal);
+        lobby.reorderPlayers(action.getOrderedPlayers());
+
+        logger.info("Players in game {} reordered to {}", lobby.getName(), action.getOrderedPlayers());
+        sendLobbyUpdateToPlayers(lobby);
+    }
+
+    @MessageMapping("/lobby/updateSettings")
+    public void updateSettings(@Validated UpdateSettingsAction action, Principal principal) {
+        Lobby lobby = getLobby(principal);
+        lobby.setSettings(action.getSettings());
+
+        logger.info("Updated settings of game {}", lobby.getName());
+        sendLobbyUpdateToPlayers(lobby);
+    }
+
+    private void sendLobbyUpdateToPlayers(Lobby lobby) {
+        template.convertAndSend("/topic/lobby/" + lobby.getId() + "/updated", lobby);
+    }
+
+    @MessageMapping("/lobby/start")
+    public void startGame(@Validated StartGameAction action, Principal principal) {
+        Lobby lobby = getOwnedLobby(principal);
+        Game game = lobby.startGame();
         gameRepository.add(game);
 
         logger.info("Game {} successfully started", game.getId());
+        template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", (Object)null);
     }
 
-    private Lobby getOwnedLobby(SimpMessageHeaderAccessor headerAccessor, Principal principal) {
-        Lobby lobby = (Lobby)headerAccessor.getSessionAttributes().get(SessionAttributes.ATTR_LOBBY);
-        if (lobby == null) {
-            throw new UserOwnsNoLobbyException("User " + principal.getName() + " is not in a lobby");
-        }
+    private Lobby getOwnedLobby(Principal principal) {
+        Lobby lobby = getLobby(principal);
         if (!lobby.isOwner(principal.getName())) {
-            throw new UserOwnsNoLobbyException("User " + principal.getName() + " does not own the lobby he's in");
+            throw new UserIsNotOwnerException(principal.getName());
         }
         return lobby;
     }
 
-    private static class UserOwnsNoLobbyException extends ApiMisuseException {
-        UserOwnsNoLobbyException(String message) {
-            super(message);
+    private Lobby getLobby(Principal principal) {
+        Lobby lobby = playerRepository.find(principal.getName()).getLobby();
+        if (lobby == null) {
+            throw new UserNotInLobbyException(principal.getName());
+        }
+        return lobby;
+    }
+
+    private static class UserNotInLobbyException extends ApiMisuseException {
+        UserNotInLobbyException(String userName) {
+            super("User " + userName + " is not in a lobby, create or join a game first");
+        }
+    }
+
+    private static class UserIsNotOwnerException extends ApiMisuseException {
+        UserIsNotOwnerException(String userName) {
+            super("User " + userName + " does not own the lobby he's in");
         }
     }
 
