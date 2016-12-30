@@ -15,7 +15,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
@@ -52,7 +51,7 @@ public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIn
                             .map(ResourceType::getSymbol)
                             .map(Object::toString)
                             .collect(Collectors.joining("/"));
-        return new JsonPrimitive(str);
+        return context.serialize(str);
     }
 
     @Override
