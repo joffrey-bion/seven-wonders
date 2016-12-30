@@ -6,6 +6,7 @@ function connect() {
   stompClient = Stomp.over(socket);
   stompClient.connect({}, function (frame) {
     console.log('Connected: ' + frame);
+    subscribeTo('/user/queue/errors');
   });
 }
 
