@@ -5,6 +5,7 @@ import java.util.List;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 import org.luxons.sevenwonders.game.api.Table;
+import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 
 public class DiscardMove extends Move {
@@ -13,6 +14,7 @@ public class DiscardMove extends Move {
         super(playerIndex, card, move);
     }
 
+    @Override
     public boolean isValid(Table table) {
         return true;
     }
@@ -24,6 +26,7 @@ public class DiscardMove extends Move {
 
     @Override
     public void activate(Table table, List<Card> discardedCards, Settings settings) {
-        table.giveGoldForDiscarded(getPlayerIndex(), settings.getDiscardedCardGold());
+        Board board = table.getBoard(getPlayerIndex());
+        board.addGold(settings.getDiscardedCardGold());
     }
 }

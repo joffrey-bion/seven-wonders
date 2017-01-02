@@ -14,6 +14,7 @@ public class BuildWonderMove extends Move {
         super(playerIndex, card, move);
     }
 
+    @Override
     public boolean isValid(Table table) {
         Board board = table.getBoard(getPlayerIndex());
         return board.getWonder().isNextStageBuildable(table, getPlayerIndex(), getBoughtResources());
@@ -21,11 +22,14 @@ public class BuildWonderMove extends Move {
 
     @Override
     public void place(Table table, List<Card> discardedCards, Settings settings) {
-        table.buildWonderStage(getPlayerIndex(), getCard().getBack());
+        Board board = table.getBoard(getPlayerIndex());
+        board.getWonder().buildLevel(getCard().getBack());
     }
 
     @Override
     public void activate(Table table, List<Card> discardedCards, Settings settings) {
-        table.activateCurrentWonderStage(getPlayerIndex(), getBoughtResources());
+        int playerIndex = getPlayerIndex();
+        Board board = table.getBoard(playerIndex);
+        board.getWonder().activateLastBuiltStage(table, playerIndex, getBoughtResources());
     }
 }
