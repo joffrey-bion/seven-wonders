@@ -17,6 +17,7 @@ public class ProductionIncrease extends InstantOwnBoardEffect {
         this.production = production;
     }
 
+    @Override
     public void apply(Board board) {
         board.getProduction().addAll(production);
     }

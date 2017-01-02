@@ -21,7 +21,7 @@ public class PlayerRepository {
     }
 
     private Player createPlayer(String userName, String displayName) {
-        Player player = new Player(displayName, userName);
+        Player player = new Player(userName, displayName);
         add(player);
         return player;
     }

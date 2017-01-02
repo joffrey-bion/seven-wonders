@@ -14,13 +14,9 @@ public class Player {
 
     private transient Game game;
 
-    public Player(String userName) {
+    public Player(String userName, String displayName) {
         this.userName = userName;
-    }
-
-    public Player(String displayName, String userName) {
-        this(userName);
-        setDisplayName(displayName);
+        this.displayName = displayName;
     }
 
     public String getUserName() {

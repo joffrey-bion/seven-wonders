@@ -63,7 +63,7 @@ public class BoardTest {
     }
 
     @Theory
-    public void removeOld_successfulWhenNotTooMuch(@FromDataPoints("gold") int initialGold,
+    public void removeGold_successfulWhenNotTooMuch(@FromDataPoints("gold") int initialGold,
             @FromDataPoints("gold") int goldRemoved) {
         assumeTrue(goldRemoved >= 0);
         assumeTrue(initialGold >= goldRemoved);
@@ -74,7 +74,7 @@ public class BoardTest {
     }
 
     @Theory
-    public void removeOld_failsWhenTooMuch(@FromDataPoints("gold") int initialGold,
+    public void removeGold_failsWhenTooMuch(@FromDataPoints("gold") int initialGold,
             @FromDataPoints("gold") int goldRemoved) {
         assumeTrue(goldRemoved >= 0);
         assumeTrue(initialGold < goldRemoved);

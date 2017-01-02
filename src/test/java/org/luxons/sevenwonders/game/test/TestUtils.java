@@ -41,7 +41,7 @@ public class TestUtils {
         for (int i = 0; i < count; i++) {
             String userName = "testUser" + i;
             String displayName = "Test User " + i;
-            Player player = new Player(displayName, userName);
+            Player player = new Player(userName, displayName);
             players.add(player);
         }
         return players;
@@ -53,7 +53,7 @@ public class TestUtils {
 
         String userName = "testUser" + initialResource.getSymbol();
         String displayName = "Test User " + initialResource.getSymbol();
-        Player player = new Player(displayName, userName);
+        Player player = new Player(userName, displayName);
 
         return new Board(wonder, player, settings);
     }

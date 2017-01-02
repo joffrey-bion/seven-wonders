@@ -46,7 +46,7 @@ public class LobbyTest {
 
     @Before
     public void setUp() {
-        gameOwner = new Player("Game owner", "gameowner");
+        gameOwner = new Player("gameowner", "Game owner");
         lobby = new Lobby(0, "Test Game", gameOwner, gameDefinition);
     }
 
@@ -72,22 +72,22 @@ public class LobbyTest {
 
     @Test
     public void isOwner_falseWhenOtherPlayerName() {
-        Player player = new Player("Test User", "testuser");
+        Player player = new Player("testuser", "Test User");
         lobby.addPlayer(player);
         assertFalse(lobby.isOwner(player.getUserName()));
     }
 
     @Test
     public void addPlayer_success() {
-        Player player = new Player("Test User", "testuser");
+        Player player = new Player("testuser", "Test User");
         lobby.addPlayer(player);
         assertTrue(lobby.containsUser("testuser"));
     }
 
     @Test(expected = PlayerNameAlreadyUsedException.class)
     public void addPlayer_failsOnSameName() {
-        Player player = new Player("Test User", "testuser");
-        Player player2 = new Player("Test User", "testuser2");
+        Player player = new Player("testuser", "Test User");
+        Player player2 = new Player("testuser2", "Test User");
         lobby.addPlayer(player);
         lobby.addPlayer(player2);
     }
@@ -103,21 +103,21 @@ public class LobbyTest {
         // total with owner is the minimum
         addPlayers(gameDefinition.getMinPlayers() - 1);
         lobby.startGame();
-        lobby.addPlayer(new Player("The Late Guy", "soonerNextTime"));
+        lobby.addPlayer(new Player("soonerNextTime", "The Late Guy"));
     }
 
     private void addPlayers(int nbPlayers) {
         for (int i = 0; i < nbPlayers; i++) {
-            Player player = new Player("Test User " + i, "testuser" + i);
+            Player player = new Player("testuser" + i, "Test User " + i);
             lobby.addPlayer(player);
         }
     }
 
     @Test
     public void reorderPlayers_failsOnSameName() {
-        Player player1 = new Player("Test User 1", "testuser1");
-        Player player2 = new Player("Test User 2", "testuser2");
-        Player player3 = new Player("Test User 3", "testuser3");
+        Player player1 = new Player("testuser1", "Test User 1");
+        Player player2 = new Player("testuser2", "Test User 2");
+        Player player3 = new Player("testuser3", "Test User 3");
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
         lobby.addPlayer(player3);
@@ -129,9 +129,9 @@ public class LobbyTest {
 
     @Test(expected = UnknownPlayerException.class)
     public void reorderPlayers_failsOnUnknownPlayer() {
-        Player player1 = new Player("Test User 1", "testuser1");
-        Player player2 = new Player("Test User 2", "testuser2");
-        Player player3 = new Player("Test User 3", "testuser3");
+        Player player1 = new Player("testuser1", "Test User 1");
+        Player player2 = new Player("testuser2", "Test User 2");
+        Player player3 = new Player("testuser3", "Test User 3");
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
         lobby.addPlayer(player3);

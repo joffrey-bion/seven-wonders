@@ -10,7 +10,7 @@ public abstract class InstantOwnBoardEffect implements Effect {
         apply(table.getBoard(playerIndex));
     }
 
-    public abstract void apply(Board board);
+    protected abstract void apply(Board board);
 
     @Override
     public int computePoints(Table table, int playerIndex) {

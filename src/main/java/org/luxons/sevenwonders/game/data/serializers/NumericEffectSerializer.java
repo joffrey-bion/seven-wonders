@@ -19,7 +19,7 @@ public class NumericEffectSerializer implements JsonSerializer<Effect>, JsonDese
 
     @Override
     public JsonElement serialize(Effect effect, Type typeOfSrc, JsonSerializationContext context) {
-        int value = 0;
+        int value;
         if (MilitaryReinforcements.class.equals(typeOfSrc)) {
             value =  ((MilitaryReinforcements)effect).getCount();
         } else if (GoldIncrease.class.equals(typeOfSrc)) {
@@ -27,7 +27,7 @@ public class NumericEffectSerializer implements JsonSerializer<Effect>, JsonDese
         } else if (RawPointsIncrease.class.equals(typeOfSrc)) {
             value =  ((RawPointsIncrease)effect).getPoints();
         } else {
-            throw new IllegalArgumentException("Unknown numeric effet " + typeOfSrc.getTypeName());
+            throw new IllegalArgumentException("Unknown numeric effect " + typeOfSrc.getTypeName());
         }
         return new JsonPrimitive(value);
     }
