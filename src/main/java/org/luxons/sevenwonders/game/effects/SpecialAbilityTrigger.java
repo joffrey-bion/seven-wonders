@@ -2,16 +2,16 @@ package org.luxons.sevenwonders.game.effects;
 
 import org.luxons.sevenwonders.game.api.Table;
 
-public class SpecialActionTrigger implements Effect {
+public class SpecialAbilityTrigger implements Effect {
 
-    private final SpecialAction specialAction;
+    private final SpecialAbility specialAbility;
 
-    public SpecialActionTrigger(SpecialAction specialAction) {
-        this.specialAction = specialAction;
+    public SpecialAbilityTrigger(SpecialAbility specialAbility) {
+        this.specialAbility = specialAbility;
     }
 
-    public SpecialAction getSpecialAction() {
-        return specialAction;
+    public SpecialAbility getSpecialAbility() {
+        return specialAbility;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.game.effects;
 
-public enum SpecialAction {
+import org.luxons.sevenwonders.game.boards.Board;
+
+public enum SpecialAbility {
     /**
      * The player can play the last card of each age instead of discarding it. This card can be played by paying its
      * cost, discarded to gain 3 coins or used in the construction of his or her Wonder.
@@ -10,7 +12,7 @@ public enum SpecialAction {
     /**
      * Once per age, a player can construct a building from his or her hand for free.
      */
-    ONE_FREE,
+    ONE_FREE_PER_AGE,
 
     /**
      * The player can look at all cards discarded since the beginning of the game, pick one and build it for free.
@@ -22,4 +24,8 @@ public enum SpecialAction {
      * her two neighboring cities.
      */
     COPY_GUILD;
+
+    protected void apply(Board board) {
+        board.addSpecial(this);
+    }
 }

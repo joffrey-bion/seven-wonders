@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.luxons.sevenwonders.game.api.Action;
+import org.luxons.sevenwonders.game.api.HandCard;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.api.PreparedCard;
@@ -14,6 +16,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Hands;
+import org.luxons.sevenwonders.game.effects.SpecialAbility;
 import org.luxons.sevenwonders.game.moves.Move;
 
 public class Game {
@@ -70,9 +73,25 @@ public class Game {
 
     private PlayerTurnInfo createPlayerTurnInfo(Player player) {
         PlayerTurnInfo pti = new PlayerTurnInfo(player, table);
-        pti.setHand(hands.createHand(table, player.getIndex()));
+        List<HandCard> hand = hands.createHand(table, player.getIndex());
+        pti.setHand(hand);
         pti.setCurrentAge(currentAge);
+        Action action = determineAction(hand, table.getBoard(player.getIndex()));
+        pti.setAction(action);
+        pti.setMessage(action.getMessage());
         return pti;
+    }
+
+    private Action determineAction(List<HandCard> hand, Board board) {
+        if (hand.isEmpty()) {
+            return Action.WAIT;
+        } else if (hand.size() == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
+            return Action.PLAY_LAST;
+        } else if (hand.size() == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
+            return Action.PLAY_2;
+        } else {
+            return Action.PLAY;
+        }
     }
 
     public PreparedCard prepareCard(String userName, PlayerMove playerMove) throws InvalidMoveException {
@@ -116,7 +135,8 @@ public class Game {
         if (endOfAgeReached()) {
             executeEndOfAgeEvents();
             startNewAge();
-        } else {
+        } else if (!hands.maxOneCardRemains()) {
+            // we don't rotate hands if some player can play his last card (with the special ability)
             hands.rotate(getHandRotationOffset());
         }
     }
@@ -129,8 +149,8 @@ public class Game {
         placePreparedCards(playedMoves);
 
         // same goes for the discarded cards during the last turn, which should be available for special actions
-        if (lastTurnOfAge()) {
-            discardedCards.addAll(hands.gatherAndClear());
+        if (hands.maxOneCardRemains()) {
+            discardLastCardsOfHands();
         }
 
         activatePlayedCards(playedMoves);
@@ -158,8 +178,19 @@ public class Game {
         });
     }
 
-    private boolean lastTurnOfAge() {
-        return hands.maxOneCardRemains();
+    private void discardLastCardsOfHands() {
+        for (Player p : players) {
+            Board board = table.getBoard(p.getIndex());
+            if (!board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
+                discardHand(p.getIndex());
+            }
+        }
+    }
+
+    private void discardHand(int playerIndex) {
+        List<Card> hand = hands.get(playerIndex);
+        discardedCards.addAll(hand);
+        hand.clear();
     }
 
     private void removeFromHand(int playerIndex, Card card) {

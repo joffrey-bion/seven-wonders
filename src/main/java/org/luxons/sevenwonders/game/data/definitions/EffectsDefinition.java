@@ -12,8 +12,8 @@ import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
-import org.luxons.sevenwonders.game.effects.SpecialAction;
-import org.luxons.sevenwonders.game.effects.SpecialActionTrigger;
+import org.luxons.sevenwonders.game.effects.SpecialAbility;
+import org.luxons.sevenwonders.game.effects.SpecialAbilityTrigger;
 
 @SuppressWarnings("unused") // the fields are injected by Gson
 public class EffectsDefinition implements Definition<List<Effect>> {
@@ -32,7 +32,7 @@ public class EffectsDefinition implements Definition<List<Effect>> {
 
     private RawPointsIncrease points;
 
-    private SpecialAction action;
+    private SpecialAbility action;
 
     @Override
     public List<Effect> create(Settings settings) {
@@ -59,7 +59,7 @@ public class EffectsDefinition implements Definition<List<Effect>> {
             effects.add(points);
         }
         if (action != null) {
-            effects.add(new SpecialActionTrigger(action));
+            effects.add(new SpecialAbilityTrigger(action));
         }
         return effects;
     }

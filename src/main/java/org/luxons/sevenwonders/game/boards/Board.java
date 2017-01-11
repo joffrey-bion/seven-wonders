@@ -1,12 +1,15 @@
 package org.luxons.sevenwonders.game.boards;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
+import org.luxons.sevenwonders.game.effects.SpecialAbility;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.TradingRules;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -26,6 +29,8 @@ public class Board {
     private final TradingRules tradingRules;
 
     private final Military military;
+
+    private final Set<SpecialAbility> specialAbilities = EnumSet.noneOf(SpecialAbility.class);
 
     private int gold;
 
@@ -95,6 +100,14 @@ public class Board {
 
     public Military getMilitary() {
         return military;
+    }
+
+    public void addSpecial(SpecialAbility specialAbility) {
+        specialAbilities.add(specialAbility);
+    }
+
+    public boolean hasSpecial(SpecialAbility specialAbility) {
+        return specialAbilities.contains(specialAbility);
     }
 
     static class InsufficientFundsException extends RuntimeException {

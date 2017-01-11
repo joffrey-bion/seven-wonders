@@ -12,6 +12,8 @@ public class PlayerTurnInfo {
 
     private int currentAge;
 
+    private Action action;
+
     private List<HandCard> hand;
 
     private String message;
@@ -43,6 +45,14 @@ public class PlayerTurnInfo {
 
     public void setHand(List<HandCard> hand) {
         this.hand = hand;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
     }
 
     public String getMessage() {
