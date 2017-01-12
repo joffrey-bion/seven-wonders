@@ -17,7 +17,7 @@ public class WonderDefinition implements Definition<Wonder> {
         Wonder wonder = new Wonder();
         wonder.setName(name);
 
-        WonderSideDefinition wonderSideDef = sides.get(settings.getWonderSide());
+        WonderSideDefinition wonderSideDef = sides.get(settings.pickWonderSide());
         wonder.setInitialResource(wonderSideDef.getInitialResource());
         wonder.setStages(wonderSideDef.createStages(settings));
         wonder.setImage(wonderSideDef.getImage());

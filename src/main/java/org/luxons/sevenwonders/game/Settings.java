@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.luxons.sevenwonders.game.data.definitions.WonderSide;
+import org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,9 +19,13 @@ public class Settings {
 
     private int defaultTradingCost = 2;
 
-    private WonderSide wonderSide = WonderSide.A;
+    private WonderSidePickMethod wonderSidePickMethod = WonderSidePickMethod.EACH_RANDOM;
+
+    private transient WonderSide lastPickedSide = null;
 
     private long randomSeedForTests = -1;
+
+    private transient Random random;
 
     private int lostPointsPerDefeat = 1;
 
@@ -68,12 +73,16 @@ public class Settings {
         this.defaultTradingCost = defaultTradingCost;
     }
 
-    public WonderSide getWonderSide() {
-        return wonderSide;
+    public WonderSidePickMethod getWonderSidePickMethod() {
+        return wonderSidePickMethod;
     }
 
-    public void setWonderSide(WonderSide wonderSide) {
-        this.wonderSide = wonderSide;
+    public void setWonderSidePickMethod(WonderSidePickMethod wonderSidePickMethod) {
+        this.wonderSidePickMethod = wonderSidePickMethod;
+    }
+
+    public WonderSide pickWonderSide() {
+        return lastPickedSide = wonderSidePickMethod.pickSide(getRandom(), lastPickedSide);
     }
 
     public int getLostPointsPerDefeat() {
@@ -102,6 +111,9 @@ public class Settings {
 
     @JsonIgnore
     public Random getRandom() {
-        return randomSeedForTests > 0 ? new Random(randomSeedForTests) : new Random();
+        if (random == null) {
+            random = randomSeedForTests > 0 ? new Random(randomSeedForTests) : new Random();
+        }
+        return random;
     }
 }
