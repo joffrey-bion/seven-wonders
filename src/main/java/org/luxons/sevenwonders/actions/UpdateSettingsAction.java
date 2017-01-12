@@ -2,18 +2,18 @@ package org.luxons.sevenwonders.actions;
 
 import javax.validation.constraints.NotNull;
 
-import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.CustomizableSettings;
 
 public class UpdateSettingsAction {
 
     @NotNull
-    private Settings settings;
+    private CustomizableSettings settings;
 
-    public Settings getSettings() {
+    public CustomizableSettings getSettings() {
         return settings;
     }
 
-    public void setSettings(Settings settings) {
+    public void setSettings(CustomizableSettings settings) {
         this.settings = settings;
     }
 }

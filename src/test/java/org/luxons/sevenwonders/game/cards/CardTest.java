@@ -25,7 +25,7 @@ public class CardTest {
 
     @Before
     public void initBoard() {
-        Settings settings = new Settings();
+        Settings settings = new Settings(5);
 
         List<Board> boards = new ArrayList<>(3);
         boards.add(new Board(new Wonder("TestWonder", ResourceType.WOOD), null, settings));

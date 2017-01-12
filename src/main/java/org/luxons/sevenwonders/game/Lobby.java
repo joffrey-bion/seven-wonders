@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
 public class Lobby {
@@ -17,7 +18,7 @@ public class Lobby {
 
     private final List<Player> players;
 
-    private Settings settings;
+    private CustomizableSettings settings;
 
     private State state = State.LOBBY;
 
@@ -27,7 +28,7 @@ public class Lobby {
         this.owner = owner;
         this.gameDefinition = gameDefinition;
         this.players = new ArrayList<>(gameDefinition.getMinPlayers());
-        this.settings = new Settings();
+        this.settings = new CustomizableSettings();
         players.add(owner);
     }
 
@@ -43,11 +44,11 @@ public class Lobby {
         return players;
     }
 
-    public Settings getSettings() {
+    public CustomizableSettings getSettings() {
         return settings;
     }
 
-    public void setSettings(Settings settings) {
+    public void setSettings(CustomizableSettings settings) {
         this.settings = settings;
     }
 
@@ -82,7 +83,6 @@ public class Lobby {
             throw new PlayerUnderflowException();
         }
         state = State.PLAYING;
-        settings.setNbPlayers(players.size());
         return gameDefinition.initGame(id, settings, players);
     }
 

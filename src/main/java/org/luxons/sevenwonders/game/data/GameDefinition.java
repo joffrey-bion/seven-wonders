@@ -5,11 +5,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -43,7 +44,8 @@ public class GameDefinition {
         return MAX_PLAYERS;
     }
 
-    public Game initGame(long id, Settings settings, List<Player> orderedPlayers) {
+    public Game initGame(long id, CustomizableSettings customSettings, List<Player> orderedPlayers) {
+        Settings settings = new Settings(orderedPlayers.size(), customSettings);
         List<Board> boards = assignBoards(settings, orderedPlayers);
         Decks decks = decksDefinition.create(settings);
         return new Game(id, settings, orderedPlayers, boards, decks);
