@@ -8,7 +8,6 @@ import org.luxons.sevenwonders.actions.ChooseNameAction;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.actions.ReorderPlayersAction;
-import org.luxons.sevenwonders.actions.StartGameAction;
 import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
 import org.luxons.sevenwonders.game.Game;
@@ -51,11 +50,13 @@ public class LobbyController {
     }
 
     @MessageMapping("/chooseName")
-    public void chooseName(@Validated ChooseNameAction action, Principal principal) {
+    @SendToUser("/queue/nameChoice")
+    public Player chooseName(@Validated ChooseNameAction action, Principal principal) {
         String userName = principal.getName();
         Player player = playerRepository.updateOrCreatePlayer(userName, action.getPlayerName());
 
         logger.info("Player '{}' chose the name '{}'", userName, player.getDisplayName());
+        return player;
     }
 
     @SubscribeMapping("/games") // prefix /topic not shown
@@ -79,8 +80,8 @@ public class LobbyController {
     }
 
     @MessageMapping("/lobby/join")
-    @SendToUser("/queue/lobby")
-    public Collection<Lobby> joinGame(@Validated JoinGameAction action, Principal principal) {
+    @SendToUser("/queue/lobby/joined")
+    public Lobby joinGame(@Validated JoinGameAction action, Principal principal) {
         checkThatUserIsNotInAGame(principal, "cannot join another game");
 
         Lobby lobby = lobbyRepository.find(action.getGameId());
@@ -90,7 +91,8 @@ public class LobbyController {
 
         logger.info("Player '{}' ({}) joined game {}", newPlayer.getDisplayName(), newPlayer.getUserName(),
                 lobby.getName());
-        return Collections.singletonList(lobby);
+        sendLobbyUpdateToPlayers(lobby);
+        return lobby;
     }
 
     private void checkThatUserIsNotInAGame(Principal principal, String impossibleActionDescription) {
@@ -123,7 +125,7 @@ public class LobbyController {
     }
 
     @MessageMapping("/lobby/start")
-    public void startGame(@Validated StartGameAction action, Principal principal) {
+    public void startGame(Principal principal) {
         Lobby lobby = getOwnedLobby(principal);
         Game game = lobby.startGame();
         gameRepository.add(game);

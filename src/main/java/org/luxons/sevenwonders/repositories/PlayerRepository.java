@@ -20,26 +20,26 @@ public class PlayerRepository {
         }
     }
 
-    private Player createPlayer(String userName, String displayName) {
+    private Player createPlayer(String userName, String displayName) throws PlayerAlreadyExistsException {
         Player player = new Player(userName, displayName);
         add(player);
         return player;
     }
 
-    private void add(Player player) {
+    private void add(Player player) throws PlayerAlreadyExistsException {
         if (players.containsKey(player.getUserName())) {
             throw new PlayerAlreadyExistsException(player.getUserName());
         }
         players.put(player.getUserName(), player);
     }
 
-    private Player updatePlayerName(String userName, String displayName) {
+    private Player updatePlayerName(String userName, String displayName) throws PlayerNotFoundException {
         Player player = find(userName);
         player.setDisplayName(displayName);
         return player;
     }
 
-    public Player find(String userName) {
+    public Player find(String userName) throws PlayerNotFoundException {
         Player player = players.get(userName);
         if (player == null) {
             throw new PlayerNotFoundException(userName);
