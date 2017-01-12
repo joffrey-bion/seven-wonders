@@ -3,7 +3,7 @@ import { fork, call } from 'redux-saga/effects'
 import createWsConnection from './utils/createWebSocketConnection'
 
 import errorSaga from './containers/App/saga'
-import newGamesSaga from './containers/GameBrowser/saga'
+import homeSaga from './containers/HomePage/saga'
 
 function* wsAwareSagas() {
   let wsConnection
@@ -15,7 +15,7 @@ function* wsAwareSagas() {
   }
 
   yield fork(errorSaga, wsConnection)
-  yield fork(newGamesSaga, wsConnection)
+  yield fork(homeSaga, wsConnection)
 }
 
 export default function* rootSaga() {

@@ -10,14 +10,14 @@ const initialState = {}
 const { store, history } = configureStore(initialState)
 
 import './global-styles.css'
-import App from './containers/App'
+import HomePage from './containers/HomePage'
 import Error404 from './components/errors/Error404'
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <div className="app">
-        <Route path="/" component={App}/>
+        <Route path="/" component={HomePage}/>
         <Route path="*" component={Error404}/>
       </div>
     </Router>
