@@ -18,6 +18,7 @@ import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Hands;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
 import org.luxons.sevenwonders.game.moves.Move;
+import org.luxons.sevenwonders.game.scoring.ScoreBoard;
 
 public class Game {
 
@@ -212,6 +213,12 @@ public class Game {
     private int getHandRotationOffset() {
         // clockwise at age 1, and alternating
         return currentAge % 2 == 0 ? -1 : 1;
+    }
+
+    public ScoreBoard computeScore() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        table.getBoards().stream().map(b -> b.computePoints(table)).forEach(scoreBoard::add);
+        return scoreBoard;
     }
 
     private static class MissingPreparedMoveException extends IllegalStateException {

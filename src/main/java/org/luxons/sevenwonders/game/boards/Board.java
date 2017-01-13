@@ -7,11 +7,14 @@ import java.util.Set;
 
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.TradingRules;
+import org.luxons.sevenwonders.game.scoring.PlayerScore;
+import org.luxons.sevenwonders.game.scoring.ScoreCategory;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class Board {
@@ -31,6 +34,8 @@ public class Board {
     private final Military military;
 
     private final Set<SpecialAbility> specialAbilities = EnumSet.noneOf(SpecialAbility.class);
+
+
 
     private int gold;
 
@@ -108,6 +113,25 @@ public class Board {
 
     public boolean hasSpecial(SpecialAbility specialAbility) {
         return specialAbilities.contains(specialAbility);
+    }
+
+    public PlayerScore computePoints(Table table) {
+        PlayerScore score = new PlayerScore(player, gold);
+        score.put(ScoreCategory.CIVIL, computePointsForCards(table, Color.BLUE));
+        score.put(ScoreCategory.MILITARY, military.getTotalPoints());
+        score.put(ScoreCategory.SCIENCE, science.computePoints());
+        score.put(ScoreCategory.TRADE, computePointsForCards(table, Color.YELLOW));
+        score.put(ScoreCategory.GUILD, computePointsForCards(table, Color.PURPLE));
+        score.put(ScoreCategory.WONDER, wonder.computePoints(table, player.getIndex()));
+        return score;
+    }
+
+    private int computePointsForCards(Table table, Color color) {
+        return playedCards.stream()
+                .filter(c -> c.getColor() == color)
+                .flatMap(c -> c.getEffects().stream())
+                .mapToInt(e -> e.computePoints(table, player.getIndex()))
+                .sum();
     }
 
     static class InsufficientFundsException extends RuntimeException {

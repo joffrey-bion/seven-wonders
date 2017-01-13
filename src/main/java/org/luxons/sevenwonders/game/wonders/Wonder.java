@@ -91,4 +91,12 @@ public class Wonder {
         int lastLevel = getNbBuiltStages() - 1;
         return stages.get(lastLevel);
     }
+
+    public int computePoints(Table table, int playerIndex) {
+        return stages.stream()
+                .filter(WonderStage::isBuilt)
+                .flatMap(c -> c.getEffects().stream())
+                .mapToInt(e -> e.computePoints(table, playerIndex))
+                .sum();
+    }
 }
