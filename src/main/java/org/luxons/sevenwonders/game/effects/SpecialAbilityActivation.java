@@ -2,11 +2,11 @@ package org.luxons.sevenwonders.game.effects;
 
 import org.luxons.sevenwonders.game.api.Table;
 
-public class SpecialAbilityTrigger implements Effect {
+public class SpecialAbilityActivation implements Effect {
 
     private final SpecialAbility specialAbility;
 
-    public SpecialAbilityTrigger(SpecialAbility specialAbility) {
+    public SpecialAbilityActivation(SpecialAbility specialAbility) {
         this.specialAbility = specialAbility;
     }
 
@@ -16,7 +16,7 @@ public class SpecialAbilityTrigger implements Effect {
 
     @Override
     public void apply(Table table, int playerIndex) {
-        // TODO do something to activate the special action
+        specialAbility.apply(table.getBoard(playerIndex));
     }
 
     @Override

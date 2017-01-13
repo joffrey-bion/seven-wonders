@@ -13,7 +13,7 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
-import org.luxons.sevenwonders.game.effects.SpecialAbilityTrigger;
+import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation;
 
 @SuppressWarnings("unused") // the fields are injected by Gson
 public class EffectsDefinition implements Definition<List<Effect>> {
@@ -59,7 +59,7 @@ public class EffectsDefinition implements Definition<List<Effect>> {
             effects.add(points);
         }
         if (action != null) {
-            effects.add(new SpecialAbilityTrigger(action));
+            effects.add(new SpecialAbilityActivation(action));
         }
         return effects;
     }
