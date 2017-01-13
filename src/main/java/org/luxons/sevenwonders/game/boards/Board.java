@@ -35,7 +35,7 @@ public class Board {
 
     private final Set<SpecialAbility> specialAbilities = EnumSet.noneOf(SpecialAbility.class);
 
-
+    private Card copiedGuild;
 
     private int gold;
 
@@ -113,6 +113,13 @@ public class Board {
 
     public boolean hasSpecial(SpecialAbility specialAbility) {
         return specialAbilities.contains(specialAbility);
+    }
+
+    public void setCopiedGuild(Card copiedGuild) {
+        if (copiedGuild.getColor() != Color.PURPLE) {
+            throw new IllegalArgumentException("The given card '" + copiedGuild + "' is not a Guild card");
+        }
+        this.copiedGuild = copiedGuild;
     }
 
     public PlayerScore computePoints(Table table) {

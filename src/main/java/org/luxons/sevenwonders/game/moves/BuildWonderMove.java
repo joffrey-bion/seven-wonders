@@ -8,14 +8,17 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 
-public class BuildWonderMove extends Move {
+public class BuildWonderMove extends CardFromHandMove {
 
     BuildWonderMove(int playerIndex, Card card, PlayerMove move) {
         super(playerIndex, card, move);
     }
 
     @Override
-    public boolean isValid(Table table) {
+    public boolean isValid(Table table, List<Card> playerHand) {
+        if (!super.isValid(table, playerHand)) {
+            return false;
+        }
         Board board = table.getBoard(getPlayerIndex());
         return board.getWonder().isNextStageBuildable(table, getPlayerIndex(), getBoughtResources());
     }

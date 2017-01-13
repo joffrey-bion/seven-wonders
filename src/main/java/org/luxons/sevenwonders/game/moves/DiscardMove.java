@@ -8,15 +8,10 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 
-public class DiscardMove extends Move {
+public class DiscardMove extends CardFromHandMove {
 
     DiscardMove(int playerIndex, Card card, PlayerMove move) {
         super(playerIndex, card, move);
-    }
-
-    @Override
-    public boolean isValid(Table table) {
-        return true;
     }
 
     @Override

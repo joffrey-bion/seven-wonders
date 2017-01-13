@@ -8,14 +8,17 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 
-public class PlayCardMove extends Move {
+public class PlayCardMove extends CardFromHandMove {
 
     PlayCardMove(int playerIndex, Card card, PlayerMove move) {
         super(playerIndex, card, move);
     }
 
     @Override
-    public boolean isValid(Table table) {
+    public boolean isValid(Table table, List<Card> playerHand) {
+        if (!super.isValid(table, playerHand)) {
+            return false;
+        }
         return getCard().getRequirements().isAffordedBy(table, getPlayerIndex(), getBoughtResources());
     }
 

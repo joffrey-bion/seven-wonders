@@ -22,6 +22,8 @@ import org.luxons.sevenwonders.game.scoring.ScoreBoard;
 
 public class Game {
 
+    private static final int LAST_AGE = 3;
+
     private final long id;
 
     private final Settings settings;
@@ -84,12 +86,14 @@ public class Game {
     }
 
     private Action determineAction(List<HandCard> hand, Board board) {
-        if (hand.isEmpty()) {
-            return Action.WAIT;
+        if (endOfGameReached() && board.hasSpecial(SpecialAbility.COPY_GUILD)) {
+            return Action.PICK_NEIGHBOR_GUILD;
         } else if (hand.size() == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
             return Action.PLAY_LAST;
         } else if (hand.size() == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
             return Action.PLAY_2;
+        } else if (hand.isEmpty()) {
+            return Action.WAIT;
         } else {
             return Action.PLAY;
         }
@@ -113,15 +117,7 @@ public class Game {
 
     private void validate(Move move) throws InvalidMoveException {
         List<Card> hand = hands.get(move.getPlayerIndex());
-        if (hand == null) {
-            throw new InvalidMoveException("Invalid player index " + move.getPlayerIndex());
-        }
-        Card card = move.getCard();
-        if (!hand.contains(card)) {
-            throw new InvalidMoveException(
-                    "Player " + move.getPlayerIndex() + " does not have the card " + move.getCard().getName());
-        }
-        if (!move.isValid(table)) {
+        if (!move.isValid(table, hand)) {
             throw new InvalidMoveException(
                     "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCard().getName());
         }
@@ -135,7 +131,9 @@ public class Game {
         makeMoves();
         if (endOfAgeReached()) {
             executeEndOfAgeEvents();
-            startNewAge();
+            if (!endOfGameReached()) {
+                startNewAge();
+            }
         } else if (!hands.maxOneCardRemains()) {
             // we don't rotate hands if some player can play his last card (with the special ability)
             hands.rotate(getHandRotationOffset());
@@ -213,6 +211,10 @@ public class Game {
     private int getHandRotationOffset() {
         // clockwise at age 1, and alternating
         return currentAge % 2 == 0 ? -1 : 1;
+    }
+
+    private boolean endOfGameReached() {
+        return endOfAgeReached() && currentAge == LAST_AGE;
     }
 
     public ScoreBoard computeScore() {
