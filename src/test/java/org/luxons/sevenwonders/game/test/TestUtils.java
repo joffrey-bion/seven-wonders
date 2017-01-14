@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.Player;
@@ -13,6 +14,7 @@ import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.cards.Requirements;
+import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Production;
@@ -120,6 +122,11 @@ public class TestUtils {
 
     private static Card createCard(int num, Color color) {
         return new Card("Test Card " + num, color, new Requirements(), null, null, null, null);
+    }
+
+    public static Card createGuildCard(int num, Effect effect) {
+        List<Effect> effects = Collections.singletonList(effect);
+        return new Card("Test Guild " + num, Color.PURPLE, new Requirements(), effects, null, null, null);
     }
 
     public static void addCards(Board board, int nbCardsOfColor, int nbOtherCards, Color color) {

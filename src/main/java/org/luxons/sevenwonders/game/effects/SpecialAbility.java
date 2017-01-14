@@ -32,7 +32,7 @@ public enum SpecialAbility {
             if (copiedGuild == null) {
                 throw new IllegalStateException("The copied Guild has not been chosen, cannot compute points");
             }
-            return copiedGuild.getEffects().stream().mapToInt(e -> computePoints(table, playerIndex)).sum();
+            return copiedGuild.getEffects().stream().mapToInt(e -> e.computePoints(table, playerIndex)).sum();
         }
     };
 
