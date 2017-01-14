@@ -27,9 +27,9 @@ public class GoldIncreaseTest {
     @Theory
     public void apply_increaseGoldWithRightAmount(int initialAmount, int goldIncreaseAmount, ResourceType type) {
         Board board = TestUtils.createBoard(type, initialAmount);
-        GoldIncrease GoldIncrease = new GoldIncrease(goldIncreaseAmount);
+        GoldIncrease goldIncrease = new GoldIncrease(goldIncreaseAmount);
 
-        GoldIncrease.apply(board);
+        goldIncrease.apply(board);
 
         assertEquals(initialAmount + goldIncreaseAmount, board.getGold());
     }

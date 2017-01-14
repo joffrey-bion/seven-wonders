@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
-import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.Science;
