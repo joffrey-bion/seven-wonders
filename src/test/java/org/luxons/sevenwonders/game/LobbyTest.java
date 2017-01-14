@@ -78,15 +78,15 @@ public class LobbyTest {
     }
 
     @Test
-    public void isOwner_trueWhenOwnerUserName() {
-        assertTrue(lobby.isOwner(gameOwner.getUserName()));
+    public void isOwner_trueWhenOwnerUsername() {
+        assertTrue(lobby.isOwner(gameOwner.getUsername()));
     }
 
     @Test
     public void isOwner_falseWhenOtherPlayerName() {
         Player player = new Player("testuser", "Test User");
         lobby.addPlayer(player);
-        assertFalse(lobby.isOwner(player.getUserName()));
+        assertFalse(lobby.isOwner(player.getUsername()));
     }
 
     @Test
@@ -134,9 +134,9 @@ public class LobbyTest {
         lobby.addPlayer(player2);
         lobby.addPlayer(player3);
         lobby.reorderPlayers(Arrays.asList("testuser3", "testuser1", "testuser2"));
-        assertEquals("testuser3", lobby.getPlayers().get(0).getUserName());
-        assertEquals("testuser1", lobby.getPlayers().get(1).getUserName());
-        assertEquals("testuser2", lobby.getPlayers().get(2).getUserName());
+        assertEquals("testuser3", lobby.getPlayers().get(0).getUsername());
+        assertEquals("testuser1", lobby.getPlayers().get(1).getUsername());
+        assertEquals("testuser2", lobby.getPlayers().get(2).getUsername());
     }
 
     @Test(expected = UnknownPlayerException.class)

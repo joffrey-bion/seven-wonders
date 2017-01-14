@@ -27,46 +27,46 @@ public class DestinationAccessValidator {
         this.gameRepository = gameRepository;
     }
 
-    public boolean hasAccess(String userName, String destination) {
-        if (userName == null) {
+    public boolean hasAccess(String username, String destination) {
+        if (username == null) {
             // unnamed user cannot belong to anything
             return false;
         }
-        if (hasForbiddenGameReference(userName, destination)) {
+        if (hasForbiddenGameReference(username, destination)) {
             return false;
         }
-        if (hasForbiddenLobbyReference(userName, destination)) {
+        if (hasForbiddenLobbyReference(username, destination)) {
             return false;
         }
         return true;
     }
 
-    private boolean hasForbiddenGameReference(String userName, String destination) {
+    private boolean hasForbiddenGameReference(String username, String destination) {
         Matcher gameMatcher = gameDestination.matcher(destination);
         if (!gameMatcher.matches()) {
             return false; // no game reference is always OK
         }
         int gameId = extractId(gameMatcher);
-        return !isUserInGame(userName, gameId);
+        return !isUserInGame(username, gameId);
     }
 
-    private boolean hasForbiddenLobbyReference(String userName, String destination) {
+    private boolean hasForbiddenLobbyReference(String username, String destination) {
         Matcher lobbyMatcher = lobbyDestination.matcher(destination);
         if (!lobbyMatcher.matches()) {
             return false; // no lobby reference is always OK
         }
         int lobbyId = extractId(lobbyMatcher);
-        return !isUserInLobby(userName, lobbyId);
+        return !isUserInLobby(username, lobbyId);
     }
 
-    private boolean isUserInGame(String userName, int gameId) {
+    private boolean isUserInGame(String username, int gameId) {
         Game game = gameRepository.find(gameId);
-        return game.containsUser(userName);
+        return game.containsUser(username);
     }
 
-    private boolean isUserInLobby(String userName, int lobbyId) {
+    private boolean isUserInLobby(String username, int lobbyId) {
         Lobby lobby = lobbyRepository.find(lobbyId);
-        return lobby.containsUser(userName);
+        return lobby.containsUser(username);
     }
 
     private static int extractId(Matcher matcher) {

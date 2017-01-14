@@ -90,29 +90,29 @@ public class Lobby {
         return players.size() >= gameDefinition.getMinPlayers();
     }
 
-    public void reorderPlayers(List<String> orderedUserNames) {
+    public void reorderPlayers(List<String> orderedUsernames) {
         List<Player> formerList = new ArrayList<>(players);
         players.clear();
-        for (int i = 0; i < orderedUserNames.size(); i++) {
-            Player player = getPlayer(formerList, orderedUserNames.get(i));
+        for (int i = 0; i < orderedUsernames.size(); i++) {
+            Player player = getPlayer(formerList, orderedUsernames.get(i));
             players.add(player);
             player.setIndex(i);
         }
     }
 
-    private static Player getPlayer(List<Player> players, String userName) {
+    private static Player getPlayer(List<Player> players, String username) {
         return players.stream()
-                      .filter(p -> p.getUserName().equals(userName))
+                      .filter(p -> p.getUsername().equals(username))
                       .findAny()
-                      .orElseThrow(() -> new UnknownPlayerException(userName));
+                      .orElseThrow(() -> new UnknownPlayerException(username));
     }
 
-    public boolean isOwner(String userName) {
-        return owner.getUserName().equals(userName);
+    public boolean isOwner(String username) {
+        return owner.getUsername().equals(username);
     }
 
-    public boolean containsUser(String userName) {
-        return players.stream().anyMatch(p -> p.getUserName().equals(userName));
+    public boolean containsUser(String username) {
+        return players.stream().anyMatch(p -> p.getUsername().equals(username));
     }
 
     static class GameAlreadyStartedException extends IllegalStateException {
@@ -131,8 +131,8 @@ public class Lobby {
     }
 
     static class UnknownPlayerException extends IllegalArgumentException {
-        UnknownPlayerException(String userName) {
-            super(userName);
+        UnknownPlayerException(String username) {
+            super(username);
         }
     }
 }

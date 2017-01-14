@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Player {
 
-    private final String userName;
+    private final String username;
 
     private String displayName;
 
@@ -14,13 +14,13 @@ public class Player {
 
     private transient Game game;
 
-    public Player(String userName, String displayName) {
-        this.userName = userName;
+    public Player(String username, String displayName) {
+        this.username = username;
         this.displayName = displayName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
     public String getDisplayName() {

@@ -28,8 +28,8 @@ public class DestinationAccessValidatorTest {
         destinationAccessValidator = new DestinationAccessValidator(lobbyRepository, gameRepository);
     }
 
-    private Lobby createLobby(String gameName, String ownerUserName, String... otherPlayers) {
-        Player owner = new Player(ownerUserName, ownerUserName);
+    private Lobby createLobby(String gameName, String ownerUsername, String... otherPlayers) {
+        Player owner = new Player(ownerUsername, ownerUsername);
         Lobby lobby = lobbyRepository.create(gameName, owner);
         for (String playerName : otherPlayers) {
             Player player = new Player(playerName, playerName);
@@ -38,8 +38,8 @@ public class DestinationAccessValidatorTest {
         return lobby;
     }
 
-    private void createGame(String gameName, String ownerUserName, String... otherPlayers) {
-        Lobby lobby = createLobby(gameName, ownerUserName, otherPlayers);
+    private void createGame(String gameName, String ownerUsername, String... otherPlayers) {
+        Lobby lobby = createLobby(gameName, ownerUsername, otherPlayers);
         Game game = lobby.startGame();
         gameRepository.add(game);
     }

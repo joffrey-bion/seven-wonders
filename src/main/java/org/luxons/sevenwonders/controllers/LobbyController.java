@@ -52,10 +52,10 @@ public class LobbyController {
     @MessageMapping("/chooseName")
     @SendToUser("/queue/nameChoice")
     public Player chooseName(@Validated ChooseNameAction action, Principal principal) {
-        String userName = principal.getName();
-        Player player = playerRepository.updateOrCreatePlayer(userName, action.getPlayerName());
+        String username = principal.getName();
+        Player player = playerRepository.updateOrCreatePlayer(username, action.getPlayerName());
 
-        logger.info("Player '{}' chose the name '{}'", userName, player.getDisplayName());
+        logger.info("Player '{}' chose the name '{}'", username, player.getDisplayName());
         return player;
     }
 
@@ -75,7 +75,7 @@ public class LobbyController {
         gameOwner.setLobby(lobby);
 
         logger.info("Game '{}' ({}) created by {} ({})", lobby.getName(), lobby.getId(), gameOwner.getDisplayName(),
-                gameOwner.getUserName());
+                gameOwner.getUsername());
         return Collections.singletonList(lobby);
     }
 
@@ -89,7 +89,7 @@ public class LobbyController {
         lobby.addPlayer(newPlayer);
         newPlayer.setLobby(lobby);
 
-        logger.info("Player '{}' ({}) joined game {}", newPlayer.getDisplayName(), newPlayer.getUserName(),
+        logger.info("Player '{}' ({}) joined game {}", newPlayer.getDisplayName(), newPlayer.getUsername(),
                 lobby.getName());
         sendLobbyUpdateToPlayers(lobby);
         return lobby;
@@ -151,14 +151,14 @@ public class LobbyController {
     }
 
     private static class UserNotInLobbyException extends ApiMisuseException {
-        UserNotInLobbyException(String userName) {
-            super("User " + userName + " is not in a lobby, create or join a game first");
+        UserNotInLobbyException(String username) {
+            super("User " + username + " is not in a lobby, create or join a game first");
         }
     }
 
     private static class UserIsNotOwnerException extends ApiMisuseException {
-        UserIsNotOwnerException(String userName) {
-            super("User " + userName + " does not own the lobby he's in");
+        UserIsNotOwnerException(String username) {
+            super("User " + username + " does not own the lobby he's in");
         }
     }
 

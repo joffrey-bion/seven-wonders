@@ -48,16 +48,16 @@ public class GameController {
 
     private void sendPreparedCard(PreparedCard preparedCard, Game game) {
         for (Player player : game.getPlayers()) {
-            String userName = player.getUserName();
-            template.convertAndSendToUser(userName, "/topic/game/" + game.getId() + "/prepared", preparedCard);
+            String username = player.getUsername();
+            template.convertAndSendToUser(username, "/topic/game/" + game.getId() + "/prepared", preparedCard);
         }
     }
 
     private void sendTurnInfo(Game game) {
         List<PlayerTurnInfo> turnInfos = game.getTurnInfo();
         for (PlayerTurnInfo turnInfo : turnInfos) {
-            String userName = turnInfo.getPlayer().getUserName();
-            template.convertAndSendToUser(userName, "/topic/game/" + game.getId() + "/turn", turnInfo);
+            String username = turnInfo.getPlayer().getUsername();
+            template.convertAndSendToUser(username, "/topic/game/" + game.getId() + "/turn", turnInfo);
         }
     }
 }

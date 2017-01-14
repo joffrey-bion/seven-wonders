@@ -41,9 +41,9 @@ public class TestUtils {
     public static List<Player> createPlayers(int count) {
         List<Player> players = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            String userName = "testUser" + i;
+            String username = "testUser" + i;
             String displayName = "Test User " + i;
-            Player player = new Player(userName, displayName);
+            Player player = new Player(username, displayName);
             players.add(player);
         }
         return players;
@@ -53,9 +53,9 @@ public class TestUtils {
         Settings settings = new Settings(5);
         Wonder wonder = createWonder(initialResource);
 
-        String userName = "testUser" + initialResource.getSymbol();
+        String username = "testUser" + initialResource.getSymbol();
         String displayName = "Test User " + initialResource.getSymbol();
-        Player player = new Player(userName, displayName);
+        Player player = new Player(username, displayName);
 
         return new Board(wonder, player, settings);
     }

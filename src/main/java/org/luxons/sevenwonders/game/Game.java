@@ -55,8 +55,8 @@ public class Game {
         return id;
     }
 
-    public boolean containsUser(String userName) {
-        return players.stream().anyMatch(p -> p.getUserName().equals(userName));
+    public boolean containsUser(String username) {
+        return players.stream().anyMatch(p -> p.getUsername().equals(username));
     }
 
     public List<Player> getPlayers() {
@@ -96,8 +96,8 @@ public class Game {
         }
     }
 
-    public PreparedCard prepareCard(String userName, PlayerMove playerMove) throws InvalidMoveException {
-        Player player = getPlayer(userName);
+    public PreparedCard prepareCard(String username, PlayerMove playerMove) throws InvalidMoveException {
+        Player player = getPlayer(username);
         Card card = decks.getCard(playerMove.getCardName());
         Move move = playerMove.getType().resolve(player.getIndex(), card, playerMove);
         validate(move);
@@ -105,11 +105,11 @@ public class Game {
         return new PreparedCard(player, card.getBack());
     }
 
-    private Player getPlayer(String userName) {
+    private Player getPlayer(String username) {
         return players.stream()
-                      .filter(p -> p.getUserName().equals(userName))
+                      .filter(p -> p.getUsername().equals(username))
                       .findAny()
-                      .orElseThrow(() -> new UnknownPlayerException(userName));
+                      .orElseThrow(() -> new UnknownPlayerException(username));
     }
 
     private void validate(Move move) throws InvalidMoveException {
@@ -222,8 +222,8 @@ public class Game {
     }
 
     private static class UnknownPlayerException extends IllegalArgumentException {
-        UnknownPlayerException(String userName) {
-            super(userName);
+        UnknownPlayerException(String username) {
+            super(username);
         }
     }
 
