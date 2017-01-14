@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
+import org.luxons.sevenwonders.game.cards.HandRotationDirection;
 import org.luxons.sevenwonders.game.moves.Move;
 
 /**
@@ -15,6 +16,8 @@ public class Table {
     private final int nbPlayers;
 
     private final List<Board> boards;
+
+    private int currentAge = 0;
 
     private List<Move> lastPlayedMoves;
 
@@ -47,11 +50,23 @@ public class Table {
         this.lastPlayedMoves = lastPlayedMoves;
     }
 
-    public void resolveMilitaryConflicts(int age) {
+    public int getCurrentAge() {
+        return currentAge;
+    }
+
+    public void increaseCurrentAge() {
+        this.currentAge++;
+    }
+
+    public HandRotationDirection getHandRotationDirection() {
+        return HandRotationDirection.forAge(currentAge);
+    }
+
+    public void resolveMilitaryConflicts() {
         for (int i = 0; i < nbPlayers; i++) {
             Board board1 = getBoard(i);
             Board board2 = getBoard((i + 1) % nbPlayers);
-            resolveConflict(board1, board2, age);
+            resolveConflict(board1, board2, currentAge);
         }
     }
 

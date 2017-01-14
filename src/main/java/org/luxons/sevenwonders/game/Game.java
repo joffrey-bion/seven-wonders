@@ -15,7 +15,6 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Decks;
-import org.luxons.sevenwonders.game.cards.HandRotationDirection;
 import org.luxons.sevenwonders.game.cards.Hands;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
 import org.luxons.sevenwonders.game.moves.Move;
@@ -41,8 +40,6 @@ public class Game {
 
     private Hands hands;
 
-    private int currentAge = 0;
-
     public Game(long id, Settings settings, List<Player> players, List<Board> boards, Decks decks) {
         this.id = id;
         this.settings = settings;
@@ -67,8 +64,8 @@ public class Game {
     }
 
     private void startNewAge() {
-        currentAge++;
-        hands = decks.deal(currentAge, table.getNbPlayers());
+        table.increaseCurrentAge();
+        hands = decks.deal(table.getCurrentAge(), table.getNbPlayers());
     }
 
     public List<PlayerTurnInfo> getTurnInfo() {
@@ -79,8 +76,6 @@ public class Game {
         PlayerTurnInfo pti = new PlayerTurnInfo(player, table);
         List<HandCard> hand = hands.createHand(table, player.getIndex());
         pti.setHand(hand);
-        pti.setCurrentAge(currentAge);
-        pti.setHandRotationDirection(getHandRotationDirection());
         Action action = determineAction(hand, table.getBoard(player.getIndex()));
         pti.setAction(action);
         pti.setMessage(action.getMessage());
@@ -138,7 +133,7 @@ public class Game {
             }
         } else if (!hands.maxOneCardRemains()) {
             // we don't rotate hands if some player can play his last card (with the special ability)
-            hands.rotate(getHandRotationDirection());
+            hands.rotate(table.getHandRotationDirection());
         }
     }
 
@@ -207,16 +202,11 @@ public class Game {
     }
 
     private void executeEndOfAgeEvents() {
-        table.resolveMilitaryConflicts(currentAge);
-    }
-
-    private HandRotationDirection getHandRotationDirection() {
-        // clockwise at age 1, and alternating
-        return currentAge % 2 == 0 ? HandRotationDirection.LEFT : HandRotationDirection.RIGHT;
+        table.resolveMilitaryConflicts();
     }
 
     private boolean endOfGameReached() {
-        return endOfAgeReached() && currentAge == LAST_AGE;
+        return endOfAgeReached() && table.getCurrentAge() == LAST_AGE;
     }
 
     public ScoreBoard computeScore() {

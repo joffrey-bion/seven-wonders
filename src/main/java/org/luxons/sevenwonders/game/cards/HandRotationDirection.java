@@ -12,4 +12,9 @@ public enum HandRotationDirection {
     public int getIndexOffset() {
         return indexOffset;
     }
+
+    public static HandRotationDirection forAge(int age) {
+        // clockwise at age 1, and alternating
+        return age % 2 == 0 ? HandRotationDirection.LEFT : HandRotationDirection.RIGHT;
+    }
 }

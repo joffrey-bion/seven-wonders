@@ -10,6 +10,12 @@ public enum MoveType {
             return new PlayCardMove(playerIndex, card, move);
         }
     },
+    PLAY_FREE {
+        @Override
+        public Move resolve(int playerIndex, Card card, PlayerMove move) {
+            return new PlayFreeCardMove(playerIndex, card, move);
+        }
+    },
     UPGRADE_WONDER {
         @Override
         public Move resolve(int playerIndex, Card card, PlayerMove move) {

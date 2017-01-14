@@ -2,7 +2,9 @@ package org.luxons.sevenwonders.game.boards;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.luxons.sevenwonders.game.Player;
@@ -34,6 +36,8 @@ public class Board {
     private final Military military;
 
     private final Set<SpecialAbility> specialAbilities = EnumSet.noneOf(SpecialAbility.class);
+
+    private Map<Integer, Boolean> consumedFreeCards = new HashMap<>();
 
     private Card copiedGuild;
 
@@ -116,6 +120,14 @@ public class Board {
 
     public boolean hasSpecial(SpecialAbility specialAbility) {
         return specialAbilities.contains(specialAbility);
+    }
+
+    public boolean canPlayFreeCard(int age) {
+        return hasSpecial(SpecialAbility.ONE_FREE_PER_AGE) && !consumedFreeCards.getOrDefault(age, false);
+    }
+
+    public void consumeFreeCard(int age) {
+        consumedFreeCards.put(age, true);
     }
 
     public void setCopiedGuild(Card copiedGuild) {

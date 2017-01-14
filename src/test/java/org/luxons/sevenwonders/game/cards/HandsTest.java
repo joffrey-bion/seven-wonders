@@ -105,39 +105,21 @@ public class HandsTest {
     }
 
     @Test
-    public void rotate_doesNotMoveWhenOffsetIsZero() {
+    public void rotate_movesOfCorrectOffset_right() {
         Hands hands = createHands(3, 7);
-        Hands rotated = hands.rotate(0);
-        assertEquals(rotated.get(0), hands.get(0));
-        assertEquals(rotated.get(1), hands.get(1));
-        assertEquals(rotated.get(2), hands.get(2));
-    }
-
-    @Test
-    public void rotate_movesOfCorrectOffset_positive() {
-        Hands hands = createHands(3, 7);
-        Hands rotated = hands.rotate(1);
+        Hands rotated = hands.rotate(HandRotationDirection.RIGHT);
         assertEquals(rotated.get(1), hands.get(0));
         assertEquals(rotated.get(2), hands.get(1));
         assertEquals(rotated.get(0), hands.get(2));
     }
 
     @Test
-    public void rotate_movesOfCorrectOffset_negative() {
+    public void rotate_movesOfCorrectOffset_left() {
         Hands hands = createHands(3, 7);
-        Hands rotated = hands.rotate(-1);
+        Hands rotated = hands.rotate(HandRotationDirection.LEFT);
         assertEquals(rotated.get(2), hands.get(0));
         assertEquals(rotated.get(0), hands.get(1));
         assertEquals(rotated.get(1), hands.get(2));
-    }
-
-    @Test
-    public void rotate_movesOfCorrectOffset_negative2() {
-        Hands hands = createHands(3, 7);
-        Hands rotated = hands.rotate(-2);
-        assertEquals(rotated.get(1), hands.get(0));
-        assertEquals(rotated.get(2), hands.get(1));
-        assertEquals(rotated.get(0), hands.get(2));
     }
 
     @Test
