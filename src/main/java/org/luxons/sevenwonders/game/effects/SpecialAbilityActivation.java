@@ -21,6 +21,6 @@ public class SpecialAbilityActivation implements Effect {
 
     @Override
     public int computePoints(Table table, int playerIndex) {
-        return 0;
+        return specialAbility.computePoints(table, playerIndex);
     }
 }

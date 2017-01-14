@@ -125,6 +125,10 @@ public class Board {
         this.copiedGuild = copiedGuild;
     }
 
+    public Card getCopiedGuild() {
+        return copiedGuild;
+    }
+
     public PlayerScore computePoints(Table table) {
         PlayerScore score = new PlayerScore(player, gold);
         score.put(ScoreCategory.CIVIL, computePointsForCards(table, Color.BLUE));

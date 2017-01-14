@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.game.effects;
 
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
+import org.luxons.sevenwonders.game.cards.Card;
 
 public enum SpecialAbility {
     /**
@@ -23,9 +25,22 @@ public enum SpecialAbility {
      * The player can, at the end of the game, “copy” a Guild of his or her choice (purple card), built by one of his or
      * her two neighboring cities.
      */
-    COPY_GUILD;
+    COPY_GUILD {
+        @Override
+        public int computePoints(Table table, int playerIndex) {
+            Card copiedGuild = table.getBoard(playerIndex).getCopiedGuild();
+            if (copiedGuild == null) {
+                throw new IllegalStateException("The copied Guild has not been chosen, cannot compute points");
+            }
+            return copiedGuild.getEffects().stream().mapToInt(e -> computePoints(table, playerIndex)).sum();
+        }
+    };
 
     protected void apply(Board board) {
         board.addSpecial(this);
+    }
+
+    public int computePoints(Table table, int playerIndex) {
+        return 0;
     }
 }
