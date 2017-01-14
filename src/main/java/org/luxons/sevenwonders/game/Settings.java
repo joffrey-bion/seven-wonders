@@ -19,6 +19,8 @@ public class Settings {
 
     private final int defaultTradingCost;
 
+    private final int pointsPer3Gold;
+
     private final WonderSidePickMethod wonderSidePickMethod;
 
     private WonderSide lastPickedSide = null;
@@ -38,6 +40,7 @@ public class Settings {
         this.initialGold = customSettings.getInitialGold();
         this.discardedCardGold = customSettings.getDiscardedCardGold();
         this.defaultTradingCost = customSettings.getDefaultTradingCost();
+        this.pointsPer3Gold = customSettings.getPointsPer3Gold();
         this.wonderSidePickMethod = customSettings.getWonderSidePickMethod();
         this.lostPointsPerDefeat = customSettings.getLostPointsPerDefeat();
         this.wonPointsPerVictoryPerAge = customSettings.getWonPointsPerVictoryPerAge();
@@ -61,6 +64,10 @@ public class Settings {
 
     public int getDefaultTradingCost() {
         return defaultTradingCost;
+    }
+
+    public int getPointsPer3Gold() {
+        return pointsPer3Gold;
     }
 
     public WonderSide pickWonderSide() {

@@ -39,13 +39,16 @@ public class Board {
 
     private int gold;
 
+    private int pointsPer3Gold;
+
     public Board(Wonder wonder, Player player, Settings settings) {
         this.wonder = wonder;
         this.player = player;
         this.gold = settings.getInitialGold();
         this.tradingRules = new TradingRules(settings.getDefaultTradingCost());
         this.military = new Military(settings);
-        production.addFixedResource(wonder.getInitialResource(), 1);
+        this.pointsPer3Gold = settings.getPointsPer3Gold();
+        this.production.addFixedResource(wonder.getInitialResource(), 1);
     }
 
     public Wonder getWonder() {
@@ -130,6 +133,7 @@ public class Board {
         score.put(ScoreCategory.TRADE, computePointsForCards(table, Color.YELLOW));
         score.put(ScoreCategory.GUILD, computePointsForCards(table, Color.PURPLE));
         score.put(ScoreCategory.WONDER, wonder.computePoints(table, player.getIndex()));
+        score.put(ScoreCategory.GOLD, computeGoldPoints());
         return score;
     }
 
@@ -139,6 +143,10 @@ public class Board {
                 .flatMap(c -> c.getEffects().stream())
                 .mapToInt(e -> e.computePoints(table, player.getIndex()))
                 .sum();
+    }
+
+    private int computeGoldPoints() {
+        return gold / 3 * pointsPer3Gold;
     }
 
     static class InsufficientFundsException extends RuntimeException {

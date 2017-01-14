@@ -17,6 +17,8 @@ public class CustomizableSettings {
 
     private int defaultTradingCost = 2;
 
+    private int pointsPer3Gold = 1;
+
     private int lostPointsPerDefeat = 1;
 
     private Map<Integer, Integer> wonPointsPerVictoryPerAge = new HashMap<>();
@@ -57,6 +59,14 @@ public class CustomizableSettings {
 
     public void setDefaultTradingCost(int defaultTradingCost) {
         this.defaultTradingCost = defaultTradingCost;
+    }
+
+    public int getPointsPer3Gold() {
+        return pointsPer3Gold;
+    }
+
+    public void setPointsPer3Gold(int pointsPer3Gold) {
+        this.pointsPer3Gold = pointsPer3Gold;
     }
 
     public WonderSidePickMethod getWonderSidePickMethod() {
