@@ -14,7 +14,7 @@ public enum HandRotationDirection {
     }
 
     public static HandRotationDirection forAge(int age) {
-        // clockwise at age 1, and alternating
-        return age % 2 == 0 ? HandRotationDirection.LEFT : HandRotationDirection.RIGHT;
+        // clockwise (pass to the left) at age 1, and alternating
+        return age % 2 == 0 ? HandRotationDirection.RIGHT : HandRotationDirection.LEFT;
     }
 }
