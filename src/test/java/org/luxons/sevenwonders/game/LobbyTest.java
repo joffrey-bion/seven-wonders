@@ -51,6 +51,18 @@ public class LobbyTest {
     }
 
     @Test
+    public void testId() {
+        Lobby l = new Lobby(5, "Test Game", gameOwner, gameDefinition);
+        assertEquals(5, l.getId());
+    }
+
+    @Test
+    public void testName() {
+        Lobby l = new Lobby(5, "Test Game", gameOwner, gameDefinition);
+        assertEquals("Test Game", l.getName());
+    }
+
+    @Test
     public void isOwner_falseWhenNull() {
         assertFalse(lobby.isOwner(null));
     }
