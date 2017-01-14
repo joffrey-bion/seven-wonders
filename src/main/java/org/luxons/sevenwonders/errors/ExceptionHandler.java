@@ -11,6 +11,7 @@ import org.springframework.messaging.converter.MessageConversionException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
@@ -19,9 +20,9 @@ public class ExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandler.class);
 
-    private static final String ERROR_CODE_VALIDATION = "VALIDATION_ERROR";
+    private static final String ERROR_CODE_VALIDATION = "INVALID_DATA";
 
-    private static final String ERROR_CODE_CONVERSION = "MESSAGE_FORMAT_ERROR";
+    private static final String ERROR_CODE_CONVERSION = "INVALID_MESSAGE_FORMAT";
 
     private static final String ERROR_MSG_VALIDATION = "Invalid input data";
 
@@ -36,24 +37,28 @@ public class ExceptionHandler {
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    private UIError handleValidationError(MethodArgumentNotValidException exception) {
+    public UIError handleValidationError(MethodArgumentNotValidException exception) {
         logger.error("Invalid input", exception);
-        List<ObjectError> errors = exception.getBindingResult().getAllErrors();
         UIError uiError = new UIError(ERROR_CODE_VALIDATION, ERROR_MSG_VALIDATION, ErrorType.VALIDATION);
-        uiError.setValidationErrors(errors);
+
+        BindingResult result = exception.getBindingResult();
+        if (result != null) {
+            List<ObjectError> errors = exception.getBindingResult().getAllErrors();
+            uiError.addDetails(errors);
+        }
         return uiError;
     }
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    private UIError handleConversionError(MessageConversionException exception) {
+    public UIError handleConversionError(MessageConversionException exception) {
         logger.error("Error interpreting the message", exception);
         return new UIError(ERROR_CODE_CONVERSION, ERROR_MSG_CONVERSION, ErrorType.VALIDATION);
     }
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    private UIError handleGenericUserError(UserInputException exception) {
+    public UIError handleGenericUserError(UserInputException exception) {
         logger.error("Incorrect user input: " + exception.getMessage());
         String messageKey = exception.getMessageResourceKey();
         String message = messageSource.getMessage(messageKey, exception.getParams(), messageKey, Locale.US);
@@ -62,14 +67,14 @@ public class ExceptionHandler {
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    private UIError handleApiError(ApiMisuseException exception) {
+    public UIError handleApiError(ApiMisuseException exception) {
         logger.error("Invalid API input", exception);
         return new UIError(exception.getClass().getSimpleName(), exception.getMessage(), ErrorType.INTERNAL);
     }
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    private UIError handleUnexpectedInternalError(Throwable exception) {
+    public UIError handleUnexpectedInternalError(Throwable exception) {
         logger.error("Uncaught exception thrown during message handling", exception);
         return new UIError(exception.getClass().getSimpleName(), exception.getMessage(), ErrorType.INTERNAL);
     }

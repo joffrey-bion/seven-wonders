@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.errors;
 
-public enum ErrorType {
+enum ErrorType {
     USER,
     VALIDATION,
     INTERNAL

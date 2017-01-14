@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.errors;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 
 public class UIError {
@@ -12,9 +14,9 @@ public class UIError {
 
     private final ErrorType type;
 
-    private List<ObjectError> validationErrors;
+    private List<UIErrorDetail> details = new ArrayList<>();
 
-    public UIError(String code, String message, ErrorType type) {
+    UIError(String code, String message, ErrorType type) {
         this.code = code;
         this.message = message;
         this.type = type;
@@ -32,11 +34,21 @@ public class UIError {
         return type;
     }
 
-    public List<ObjectError> getValidationErrors() {
-        return validationErrors;
+    public List<UIErrorDetail> getDetails() {
+        return details;
     }
 
-    public void setValidationErrors(List<ObjectError> validationErrors) {
-        this.validationErrors = validationErrors;
+    void addDetails(List<ObjectError> objectErrors) {
+        for (ObjectError objectError : objectErrors) {
+            this.details.add(convertError(objectError));
+        }
+    }
+
+    private UIErrorDetail convertError(ObjectError objectError) {
+        if (objectError instanceof FieldError) {
+            return new UIErrorDetail((FieldError)objectError);
+        } else {
+            return new UIErrorDetail(objectError);
+        }
     }
 }
