@@ -33,10 +33,10 @@ public class Hands {
                     .collect(Collectors.toList());
     }
 
-    public Hands rotate(int offset) {
+    public Hands rotate(HandRotationDirection direction) {
         Map<Integer, List<Card>> newHands = new HashMap<>(hands.size());
         for (int i = 0; i < nbPlayers; i++) {
-            int newIndex = Math.floorMod(i + offset, nbPlayers);
+            int newIndex = Math.floorMod(i + direction.getIndexOffset(), nbPlayers);
             newHands.put(newIndex, hands.get(i));
         }
         return new Hands(newHands, nbPlayers);

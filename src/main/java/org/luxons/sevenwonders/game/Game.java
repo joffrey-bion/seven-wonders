@@ -15,6 +15,7 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Decks;
+import org.luxons.sevenwonders.game.cards.HandRotationDirection;
 import org.luxons.sevenwonders.game.cards.Hands;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
 import org.luxons.sevenwonders.game.moves.Move;
@@ -79,6 +80,7 @@ public class Game {
         List<HandCard> hand = hands.createHand(table, player.getIndex());
         pti.setHand(hand);
         pti.setCurrentAge(currentAge);
+        pti.setHandRotationDirection(getHandRotationDirection());
         Action action = determineAction(hand, table.getBoard(player.getIndex()));
         pti.setAction(action);
         pti.setMessage(action.getMessage());
@@ -136,7 +138,7 @@ public class Game {
             }
         } else if (!hands.maxOneCardRemains()) {
             // we don't rotate hands if some player can play his last card (with the special ability)
-            hands.rotate(getHandRotationOffset());
+            hands.rotate(getHandRotationDirection());
         }
     }
 
@@ -208,9 +210,9 @@ public class Game {
         table.resolveMilitaryConflicts(currentAge);
     }
 
-    private int getHandRotationOffset() {
+    private HandRotationDirection getHandRotationDirection() {
         // clockwise at age 1, and alternating
-        return currentAge % 2 == 0 ? -1 : 1;
+        return currentAge % 2 == 0 ? HandRotationDirection.LEFT : HandRotationDirection.RIGHT;
     }
 
     private boolean endOfGameReached() {
