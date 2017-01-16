@@ -68,7 +68,7 @@ public class LobbyRepositoryTest {
         assertNotNull(repository.find(lobby1.getId()));
         repository.remove(lobby1.getId());
         try {
-            assertNotNull(repository.find(lobby1.getId()));
+            repository.find(lobby1.getId());
             fail(); // the call to find() should have failed
         } catch (LobbyNotFoundException e) {
             // the lobby has been properly removed

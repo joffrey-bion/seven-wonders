@@ -3,16 +3,21 @@ package org.luxons.sevenwonders.game.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
+import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.Science;
 import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
+import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
@@ -25,6 +30,16 @@ import org.luxons.sevenwonders.game.wonders.Wonder;
 import org.luxons.sevenwonders.game.wonders.WonderStage;
 
 public class TestUtils {
+
+    public static Game createGame(int id, int nbPlayers) {
+        Settings settings = new Settings(nbPlayers, new CustomizableSettings());
+        List<Player> players = TestUtils.createPlayers(nbPlayers);
+        List<Board> boards = TestUtils.createBoards(nbPlayers);
+        List<Card> cards = TestUtils.createSampleCards(0, nbPlayers * 7);
+        Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
+        cardsPerAge.put(1, cards);
+        return new Game(id, settings, players, boards, new Decks(cardsPerAge));
+    }
 
     public static Table createTable(int nbPlayers) {
         return new Table(createBoards(nbPlayers));
