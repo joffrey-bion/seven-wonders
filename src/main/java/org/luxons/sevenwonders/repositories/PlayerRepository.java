@@ -12,28 +12,28 @@ public class PlayerRepository {
 
     private Map<String, Player> players = new HashMap<>();
 
-    public Player updateOrCreatePlayer(String username, String displayName) {
+    public boolean contains(String username) {
+        return players.containsKey(username);
+    }
+
+    public Player createOrUpdate(String username, String displayName) {
         if (players.containsKey(username)) {
-            return updatePlayerName(username, displayName);
+            return update(username, displayName);
         } else {
-            return createPlayer(username, displayName);
+            return create(username, displayName);
         }
     }
 
-    private Player createPlayer(String username, String displayName) throws PlayerAlreadyExistsException {
+    private Player create(String username, String displayName) throws PlayerAlreadyExistsException {
+        if (players.containsKey(username)) {
+            throw new PlayerAlreadyExistsException(username);
+        }
         Player player = new Player(username, displayName);
-        add(player);
+        players.put(username, player);
         return player;
     }
 
-    private void add(Player player) throws PlayerAlreadyExistsException {
-        if (players.containsKey(player.getUsername())) {
-            throw new PlayerAlreadyExistsException(player.getUsername());
-        }
-        players.put(player.getUsername(), player);
-    }
-
-    private Player updatePlayerName(String username, String displayName) throws PlayerNotFoundException {
+    private Player update(String username, String displayName) throws PlayerNotFoundException {
         Player player = find(username);
         player.setDisplayName(displayName);
         return player;
@@ -41,6 +41,14 @@ public class PlayerRepository {
 
     public Player find(String username) throws PlayerNotFoundException {
         Player player = players.get(username);
+        if (player == null) {
+            throw new PlayerNotFoundException(username);
+        }
+        return player;
+    }
+
+    public Player remove(String username) {
+        Player player = players.remove(username);
         if (player == null) {
             throw new PlayerNotFoundException(username);
         }

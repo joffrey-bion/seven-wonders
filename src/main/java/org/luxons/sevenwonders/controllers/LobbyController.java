@@ -53,7 +53,7 @@ public class LobbyController {
     @SendToUser("/queue/nameChoice")
     public Player chooseName(@Validated ChooseNameAction action, Principal principal) {
         String username = principal.getName();
-        Player player = playerRepository.updateOrCreatePlayer(username, action.getPlayerName());
+        Player player = playerRepository.createOrUpdate(username, action.getPlayerName());
 
         logger.info("Player '{}' chose the name '{}'", username, player.getDisplayName());
         return player;
