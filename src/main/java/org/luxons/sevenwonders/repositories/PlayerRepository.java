@@ -24,10 +24,7 @@ public class PlayerRepository {
         }
     }
 
-    private Player create(String username, String displayName) throws PlayerAlreadyExistsException {
-        if (players.containsKey(username)) {
-            throw new PlayerAlreadyExistsException(username);
-        }
+    private Player create(String username, String displayName) {
         Player player = new Player(username, displayName);
         players.put(username, player);
         return player;
@@ -55,15 +52,9 @@ public class PlayerRepository {
         return player;
     }
 
-    public static class PlayerNotFoundException extends ApiMisuseException {
+    static class PlayerNotFoundException extends ApiMisuseException {
         PlayerNotFoundException(String username) {
             super("Player '" + username + "' doesn't exist");
-        }
-    }
-
-    private static class PlayerAlreadyExistsException extends ApiMisuseException {
-        PlayerAlreadyExistsException(String username) {
-            super("Player '" + username + "' already exists");
         }
     }
 }
