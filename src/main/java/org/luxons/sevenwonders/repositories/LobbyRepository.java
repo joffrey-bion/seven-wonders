@@ -35,17 +35,25 @@ public class LobbyRepository {
         return lobby;
     }
 
-    public Lobby find(long lobbyId) {
+    public Lobby find(long lobbyId) throws LobbyNotFoundException {
         Lobby lobby = lobbies.get(lobbyId);
         if (lobby == null) {
-            throw new LobbyNotFoundException(String.valueOf(lobbyId));
+            throw new LobbyNotFoundException(lobbyId);
+        }
+        return lobby;
+    }
+
+    public Lobby remove(long lobbyId) throws LobbyNotFoundException {
+        Lobby lobby = lobbies.remove(lobbyId);
+        if (lobby == null) {
+            throw new LobbyNotFoundException(lobbyId);
         }
         return lobby;
     }
 
     public static class LobbyNotFoundException extends RuntimeException {
-        LobbyNotFoundException(String name) {
-            super("Lobby not found for game '" + name + "'");
+        LobbyNotFoundException(long id) {
+            super("Lobby not found for id '" + id + "'");
         }
     }
 }
