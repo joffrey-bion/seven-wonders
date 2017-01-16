@@ -37,13 +37,22 @@ public class ExceptionHandler {
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
+    public UIError handleUserInputError(UserInputException exception) {
+        logger.error("Incorrect user input: " + exception.getMessage());
+        String messageKey = exception.getMessageResourceKey();
+        String message = messageSource.getMessage(messageKey, exception.getParams(), messageKey, Locale.US);
+        return new UIError(messageKey, message, ErrorType.USER_INPUT);
+    }
+
+    @MessageExceptionHandler
+    @SendToUser("/queue/errors")
     public UIError handleValidationError(MethodArgumentNotValidException exception) {
         logger.error("Invalid input", exception);
         UIError uiError = new UIError(ERROR_CODE_VALIDATION, ERROR_MSG_VALIDATION, ErrorType.VALIDATION);
 
         BindingResult result = exception.getBindingResult();
         if (result != null) {
-            List<ObjectError> errors = exception.getBindingResult().getAllErrors();
+            List<ObjectError> errors = result.getAllErrors();
             uiError.addDetails(errors);
         }
         return uiError;
@@ -58,24 +67,15 @@ public class ExceptionHandler {
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
-    public UIError handleGenericUserError(UserInputException exception) {
-        logger.error("Incorrect user input: " + exception.getMessage());
-        String messageKey = exception.getMessageResourceKey();
-        String message = messageSource.getMessage(messageKey, exception.getParams(), messageKey, Locale.US);
-        return new UIError(messageKey, message, ErrorType.USER);
-    }
-
-    @MessageExceptionHandler
-    @SendToUser("/queue/errors")
     public UIError handleApiError(ApiMisuseException exception) {
         logger.error("Invalid API input", exception);
-        return new UIError(exception.getClass().getSimpleName(), exception.getMessage(), ErrorType.INTERNAL);
+        return new UIError(exception.getClass().getSimpleName(), exception.getMessage(), ErrorType.CLIENT);
     }
 
     @MessageExceptionHandler
     @SendToUser("/queue/errors")
     public UIError handleUnexpectedInternalError(Throwable exception) {
         logger.error("Uncaught exception thrown during message handling", exception);
-        return new UIError(exception.getClass().getSimpleName(), exception.getMessage(), ErrorType.INTERNAL);
+        return new UIError(exception.getClass().getSimpleName(), exception.getMessage(), ErrorType.SERVER);
     }
 }
