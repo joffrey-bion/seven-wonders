@@ -1,6 +1,7 @@
 import { call, put, take } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import { fromJS } from 'immutable'
+import { push } from 'react-router-redux'
 
 import { NEW_GAME, JOIN_GAME, CREATE_GAME } from './constants'
 import { newGame, joinGame } from './actions'
@@ -63,6 +64,8 @@ export function* createGame(socketConnection) {
 }
 
 export function* gameBrowserSaga(socketConnection) {
+  yield put(push('/lobby'))
+
   yield [
     call(watchGames, socketConnection),
     call(createGame, socketConnection)
