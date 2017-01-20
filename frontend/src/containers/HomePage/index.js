@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Heading, InlineForm } from 'rebass'
-
+import { Link } from 'react-router'
 class HomePage extends Component {
 
   play = (e) => {
@@ -22,6 +22,7 @@ class HomePage extends Component {
           onChange={(e) => this._username = e.target.value}
           onClick={this.play}
         />
+        <Link to="/somewhere">Take me somewhere</Link>
       </div>
     )
   }

@@ -31,10 +31,12 @@ export default function configureStore(initialState = {}) {
     composeEnhancers(...enhancers)
   )
 
-  sagaMiddleware.run(rootSaga)
+  const syncedHistory = syncHistoryWithStore(history, store)
+
+  sagaMiddleware.run(rootSaga, syncedHistory)
 
   return {
     store,
-    history: syncHistoryWithStore(history, store)
+    history: syncedHistory
   }
 }

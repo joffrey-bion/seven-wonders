@@ -39,11 +39,11 @@ function* validateUsername(socketConnection) {
   }
 
   yield put(setUsername(response.userName, response.displayName, response.index))
-  yield call(gameBrowserSaga, socketConnection)
   return true
 }
 
 function* homeSaga(socketConnection) {
+  console.log('here')
   let validated = false
   do {
     const [, usernameValid] = yield [
