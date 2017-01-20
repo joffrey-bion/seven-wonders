@@ -29,5 +29,5 @@ task test(type: YarnTask) {
 }
 
 check.dependsOn(test)
-bundle.dependsOn(npm_install)
+bundle.dependsOn(yarn_install)
 assemble.dependsOn(bundle)
