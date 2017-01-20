@@ -28,6 +28,12 @@ task test(type: YarnTask) {
     args = ['test']
 }
 
+task printEnv {
+    doLast {
+        println System.getenv()
+    }
+}
+
 check.dependsOn(test)
 bundle.dependsOn(npm_install)
 assemble.dependsOn(bundle)
