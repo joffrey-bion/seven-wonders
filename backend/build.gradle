@@ -35,10 +35,12 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
+// packages the frontend app within the jar
 jar {
-    from('../frontend/dist') {
+    from('../frontend/build') {
         into 'static'
     }
 }
 
+// make sure we build the frontend before creating the jar
 jar.dependsOn(':frontend:assemble')
