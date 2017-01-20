@@ -3,10 +3,12 @@ plugins {
 }
 
 apply plugin: 'base'
+apply plugin: 'idea'
+
+buildDir = 'build'
 
 node {
     version = '6.9.4'
-    npmVersion = '4.1.1'
     yarnVersion = '0.19.1'
     download = true
 }
@@ -14,15 +16,15 @@ node {
 task bundle(type: YarnTask) {
     inputs.dir(new File('public'))
     inputs.dir(new File('src'))
-    outputs.dir(new File('build'))
+    outputs.dir(new File("$buildDir"))
     args = ['run', 'build']
 }
 
-task start(type: NpmTask) {
+task start(type: YarnTask) {
     args = ['start']
 }
 
-task test(type: NpmTask) {
+task test(type: YarnTask) {
     args = ['test']
 }
 
