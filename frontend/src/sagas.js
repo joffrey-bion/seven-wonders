@@ -3,19 +3,16 @@ import { call } from 'redux-saga/effects'
 
 import createWsConnection from './utils/createWebSocketConnection'
 
-
-// import errorSaga from './containers/App/saga'
 import homeSaga from './containers/HomePage/saga'
 
 let wsConnection
 const routes = {
   *'/'() {
-    yield console.info('home saga running')
     yield homeSaga(wsConnection)
   }
 }
 
-function* wsAwareSagas(history) {
+export default function *rootSaga(history) {
   try {
     wsConnection = yield call(createWsConnection)
   } catch (error) {
@@ -24,10 +21,4 @@ function* wsAwareSagas(history) {
   }
 
   yield* router(history, routes)
-}
-
-export default function* rootSaga(history) {
-  yield [
-    call(wsAwareSagas, history)
-  ]
 }
