@@ -32,9 +32,9 @@ const mapStateToProps = (state) => ({
 
 })
 
-import { enterGame } from './actions'
+import { actions } from '../redux/game'
 const mapDispatchToProps = {
-  enterGame
+  enterGame: actions.enterGame
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage)

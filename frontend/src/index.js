@@ -10,7 +10,7 @@ const initialState = {}
 const { store, history } = configureStore(initialState)
 
 import './global-styles.css'
-import HomePage from './containers/HomePage'
+import HomePage from './containers/home'
 import Error404 from './components/errors/Error404'
 
 ReactDOM.render(

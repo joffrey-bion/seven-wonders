@@ -10,7 +10,7 @@ import {
 } from 'rebass'
 import { Flex } from 'reflexbox'
 import Modal from '../../components/modals/username'
-import GameBrowser from '../GameBrowser'
+import GameBrowser from './gameBrowser'
 
 class App extends Component {
   state = {

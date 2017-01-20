@@ -1,5 +1,16 @@
-import { SET_USERNAME } from './actions'
 import { fromJS } from 'immutable'
+
+export const types = {
+  SET_USERNAME: 'USER/SET_USERNAME',
+}
+
+export const setUsername = (userName, displayName, index) => ({
+  type: types.SET_USERNAME,
+  userName,
+  index,
+  displayName
+})
+
 const initialState = fromJS({
   username: '',
   displayName: '',
@@ -8,7 +19,7 @@ const initialState = fromJS({
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_USERNAME:
+    case types.SET_USERNAME:
       return state.set('username', action.userName)
         .set('displayName', action.displayName)
         .set('id', action.index)

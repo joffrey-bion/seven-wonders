@@ -3,8 +3,7 @@ import { eventChannel } from 'redux-saga'
 import { fromJS } from 'immutable'
 import { push } from 'react-router-redux'
 
-import { NEW_GAME, JOIN_GAME, CREATE_GAME } from './constants'
-import { newGame, joinGame } from './actions'
+import { actions, types } from '../../redux/game'
 
 function createSocketChannel(socket) {
   return eventChannel(emit => {
@@ -17,8 +16,8 @@ function createSocketChannel(socket) {
       })
     }
 
-    const newGameHandler = makeHandler(NEW_GAME)
-    const joinGameHandler = makeHandler(JOIN_GAME)
+    const newGameHandler = makeHandler(types.NEW_GAME)
+    const joinGameHandler = makeHandler(types.JOIN_GAME)
 
     const newGame = socket.subscribe('/topic/games', newGameHandler)
     const joinGame = socket.subscribe('/user/queue/join-game', joinGameHandler)
@@ -41,11 +40,11 @@ export function* watchGames(socketConnection) {
     const { type, response } = yield take(socketChannel)
 
     switch (type) {
-      case NEW_GAME:
-        yield put(newGame(response))
+      case types.NEW_GAME:
+        yield put(actions.newGame(response))
         break;
-      case JOIN_GAME:
-        yield put(joinGame(response))
+      case types.JOIN_GAME:
+        yield put(actions.joinGame(response))
         break;
       default:
         console.error('Unknown type')
@@ -54,7 +53,7 @@ export function* watchGames(socketConnection) {
 }
 
 export function* createGame(socketConnection) {
-  const { name } = yield take(CREATE_GAME)
+  const { name } = yield take(types.CREATE_GAME)
   const { socket } = socketConnection
 
   socket.send("/app/lobby/create-game", JSON.stringify({

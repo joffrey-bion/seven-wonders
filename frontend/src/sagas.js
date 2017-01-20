@@ -3,7 +3,7 @@ import { call } from 'redux-saga/effects'
 
 import createWsConnection from './utils/createWebSocketConnection'
 
-import homeSaga from './containers/HomePage/saga'
+import homeSaga from './sagas/home'
 
 let wsConnection
 const routes = {
