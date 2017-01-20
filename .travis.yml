@@ -1,11 +1,7 @@
 language: java
 
-matrix:
-  include:
-    - os: linux
-      jdk: oraclejdk8 # The default JDK is 7 if unspecified, and we need 8
-    - os: osx
-      osx_image: xcode8 # other OSX images can't switch to JDK8, this one has it built-in
+jdk:
+  - oraclejdk8
 
 # These files change at every build, and should not be cached
 # https://docs.travis-ci.com/user/languages/java/#Caching
