@@ -1,10 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
+import { fromJS } from 'immutable'
 
 import createReducer from './reducers'
 import createSagaMiddleware from 'redux-saga'
 import rootSaga from './sagas'
+import { makeSelectLocationState } from './redux/app'
 
 export default function configureStore(initialState = {}) {
   const sagaMiddleware = createSagaMiddleware()
@@ -26,7 +28,7 @@ export default function configureStore(initialState = {}) {
 
   const store = createStore(
     createReducer(),
-    initialState,
+    fromJS(initialState),
     composeEnhancers(...enhancers)
   )
 
@@ -34,6 +36,8 @@ export default function configureStore(initialState = {}) {
 
   return {
     store,
-    history: syncHistoryWithStore(browserHistory, store)
+    history: syncHistoryWithStore(browserHistory, store, {
+      selectLocationState: makeSelectLocationState()
+    })
   }
 }

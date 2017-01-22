@@ -16,9 +16,11 @@
     "react-router-redux": "^4.0.7",
     "rebass": "^0.3.3",
     "redux": "^3.6.0",
+    "redux-immutable": "^3.0.10",
     "redux-saga": "^0.14.3",
     "redux-saga-router": "^1.1.0",
     "reflexbox": "^2.2.3",
+    "reselect": "^2.5.4",
     "sockjs-client": "latest",
     "webstomp-client": "^1.0.3"
   },
