@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable'
+import { fromJS, Map } from 'immutable'
 
 export const types = {
   SET_USERNAME: 'USER/SET_USERNAME',
@@ -20,7 +20,7 @@ export const actions = {
 
 const initialState = fromJS({
   all: {},
-  current: null
+  current: ''
 })
 
 export default (state = initialState, action) => {
@@ -38,3 +38,7 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export const getCurrentPlayerUserName = state => state.get('players').get('current')
+export const getAllPlayers = state => state.get('players').get('all')
+export const getCurrentPlayer = (state) => getAllPlayers(state).get(getCurrentPlayerUserName(state), Map())

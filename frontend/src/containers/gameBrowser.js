@@ -30,7 +30,7 @@ class App extends Component {
           >
           </InlineForm>
           <Space auto />
-          <Text><b>Username:</b> {this.props.username}</Text>
+          <Text><b>Username:</b> {this.props.currentPlayer.get('displayName')}</Text>
           <Space x={1} />
         </Flex>
         <GamesList games={this.props.games} />
@@ -39,13 +39,14 @@ class App extends Component {
   }
 }
 
+import { getCurrentPlayer } from '../redux/players'
+import { getAllGames, actions } from '../redux/games'
 const mapStateToProps = (state) => ({
-  username: state.get('players').get('all').get(state.get('players').get('current')).get('displayName'),
-  games: state.get('games')
+  currentPlayer: getCurrentPlayer(state),
+  games: getAllGames(state)
 })
 
 
-import { actions } from '../redux/games'
 const mapDispatchToProps = {
   createGame: actions.createGame
 }

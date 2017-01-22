@@ -25,3 +25,5 @@ export default (state = initialState, action) => {
       return state
   }
 }
+
+export const getAllGames = state => state.get('games')
