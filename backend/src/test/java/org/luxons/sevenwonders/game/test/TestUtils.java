@@ -59,6 +59,7 @@ public class TestUtils {
             String username = "testUser" + i;
             String displayName = "Test User " + i;
             Player player = new Player(username, displayName);
+            player.setIndex(i);
             players.add(player);
         }
         return players;
