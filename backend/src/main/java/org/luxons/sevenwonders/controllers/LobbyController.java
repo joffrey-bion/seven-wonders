@@ -124,6 +124,7 @@ public class LobbyController {
 
     private void sendLobbyUpdateToPlayers(Lobby lobby) {
         template.convertAndSend("/topic/lobby/" + lobby.getId() + "/updated", lobby);
+        template.convertAndSend("/topic/games", Collections.singletonList(lobby));
     }
 
     @MessageMapping("/lobby/start")
