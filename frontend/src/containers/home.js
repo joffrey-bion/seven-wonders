@@ -13,8 +13,9 @@ class HomePage extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{maxWidth: '500px', margin: '0 auto'}}>
         <Heading>Enter your username to start playing!</Heading>
+        <br />
         <InlineForm
           buttonLabel="Play now!"
           label="Username"
