@@ -2,7 +2,7 @@ import { call, take, put } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import { push } from 'react-router-redux'
 
-import { actions, types } from '../redux/user'
+import { actions, types } from '../redux/players'
 
 function usernameValidationChannel(socket) {
   return eventChannel(emitter => {

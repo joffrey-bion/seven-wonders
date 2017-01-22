@@ -17,17 +17,19 @@ export const actions = {
 
 
 const initialState = fromJS({
-  username: '',
-  displayName: '',
-  id: null
+  all: {},
+  current: null
 })
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.SET_USERNAME:
-      return state.set('username', action.username)
-        .set('displayName', action.displayName)
-        .set('index', action.index)
+      const user = fromJS({
+        username: action.username,
+        displayName: action.displayName,
+        index: action.index,
+      })
+      return state.setIn(['all', user.get('username')], user).set('current', user.get('username'))
     default:
       return state
   }

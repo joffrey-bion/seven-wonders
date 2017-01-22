@@ -25,7 +25,7 @@ function gameBrowserChannel(socket) {
   })
 }
 
-export function* watchGames({ socket }) {
+export function *watchGames({ socket }) {
   const socketChannel = gameBrowserChannel(socket)
 
   try {
@@ -50,13 +50,13 @@ export function* watchGames({ socket }) {
   }
 }
 
-export function* createGame({ socket }) {
+export function *createGame({ socket }) {
   const { name } = yield take(types.CREATE_GAME)
 
   socket.send("/app/lobby/create", JSON.stringify({ gameName: name }), {})
 }
 
-export function* gameBrowserSaga(socketConnection) {
+export function *gameBrowserSaga(socketConnection) {
   yield [
     call(watchGames, socketConnection),
     call(createGame, socketConnection)

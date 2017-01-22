@@ -22,6 +22,8 @@ class HomePage extends Component {
           onChange={(e) => this._username = e.target.value}
           onClick={this.play}
         />
+        <Link to="/games">/games</Link>
+        <br />
         <Link to="/somewhere">Take me somewhere</Link>
       </div>
     )
@@ -32,7 +34,7 @@ const mapStateToProps = (state) => ({
 
 })
 
-import { actions } from '../redux/user'
+import { actions } from '../redux/players'
 const mapDispatchToProps = {
   chooseUsername: actions.chooseUsername
 }

@@ -49,7 +49,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  username: state.user.get('displayName')
+  username: state.players.get('all').get(state.players.get('current')).get('username')
 })
 
 
