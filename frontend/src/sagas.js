@@ -1,22 +1,11 @@
 import { router } from 'redux-saga-router'
 import { call } from 'redux-saga/effects'
 
+import { makeSagaRoutes } from './routes'
 import createWsConnection from './utils/createWebSocketConnection'
 
-import usernameChoiceSaga from './sagas/usernameChoice'
-import gameBrowserSaga from './sagas/gameBrowser'
-
-let wsConnection
-const routes = {
-  *'/'() {
-    yield usernameChoiceSaga(wsConnection)
-  },
-  *'/games'() {
-    yield gameBrowserSaga(wsConnection)
-  }
-}
-
 export default function *rootSaga(history) {
+  let wsConnection
   try {
     wsConnection = yield call(createWsConnection)
   } catch (error) {
@@ -24,5 +13,5 @@ export default function *rootSaga(history) {
     return
   }
 
-  yield* router(history, routes)
+  yield* router(history, makeSagaRoutes(wsConnection))
 }
