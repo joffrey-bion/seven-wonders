@@ -14,7 +14,7 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    - $HOME/frontend/node-modules/
+    - frontend/node_modules/
 
 deploy:
   provider: heroku
