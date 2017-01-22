@@ -19,8 +19,6 @@ const initialState = Map({})
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.NEW_GAME:
-      return state.set(action.game.get('id'), action.game)
     case types.CREATE_OR_UPDATE_GAMES:
       return state.mergeDeep(action.games)
     default:

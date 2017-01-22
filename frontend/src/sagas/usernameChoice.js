@@ -1,13 +1,14 @@
 import { call, take, put } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import { push } from 'react-router-redux'
+import { fromJS } from 'immutable'
 
 import { actions, types } from '../redux/players'
 
 function usernameValidationChannel(socket) {
   return eventChannel(emitter => {
     const receiveUsernameHandler = socket.subscribe('/user/queue/nameChoice', event => {
-      emitter(JSON.parse(event.body))
+      emitter(fromJS(JSON.parse(event.body)))
     })
 
     const unsubscribe = () => receiveUsernameHandler.unsubscribe()
@@ -20,7 +21,7 @@ function *usernameValidation({ socket }) {
   const usernameChannel = usernameValidationChannel(socket)
 
   const user = yield take(usernameChannel)
-  yield put(actions.setUsername(user.username, user.displayName, user.index))
+  yield put(actions.setUsername(user.get('username'), user.get('displayName'), user.get('index')))
   usernameChannel.close()
   yield put(push('/games'))
 }
