@@ -3,7 +3,11 @@ import { eventChannel } from 'redux-saga'
 import { fromJS } from 'immutable'
 import { push } from 'react-router-redux'
 
-import { actions, types } from '../redux/game'
+import { normalize } from 'normalizr'
+import gameSchema from '../schemas/games'
+
+import { actions as gameActions, types } from '../redux/games'
+import { actions as playerActions } from '../redux/players'
 
 function gameBrowserChannel(socket) {
   return eventChannel(emit => {
@@ -34,13 +38,15 @@ export function *watchGames({ socket }) {
 
       switch (type) {
         case types.CREATE_OR_UPDATE_GAMES:
-          yield put(actions.createOrUpdateGame(response))
-          break;
+          const normalizedResponse = normalize(response.toJS(), gameSchema)
+          yield put(playerActions.setPlayers(fromJS(normalizedResponse.entities.players)))
+          yield put(gameActions.createOrUpdateGame(fromJS(normalizedResponse.entities.games)))
+          break
         case types.JOIN_GAME:
-          yield put(actions.joinGame(response))
-          socketChannel.close();
+          yield put(gameActions.joinGame(response))
+          socketChannel.close()
           yield put(push(`/lobby/${response.id}`))
-          break;
+          break
         default:
           console.error('Unknown type')
       }

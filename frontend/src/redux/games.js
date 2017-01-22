@@ -8,7 +8,7 @@ export const types = {
 }
 
 export const actions = {
-  createOrUpdateGame: (game) => ({ type: types.CREATE_OR_UPDATE_GAMES, game }),
+  createOrUpdateGame: (games) => ({ type: types.CREATE_OR_UPDATE_GAMES, games }),
   enterGame: (username) => ({ type: types.ENTER_GAME, username }),
   joinGame: (id) => ({ type: types.JOIN_GAME, id }),
   createGame: (name) => ({ type: types.CREATE_GAME, name }),
@@ -21,6 +21,8 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case types.NEW_GAME:
       return state.set(action.game.get('id'), action.game)
+    case types.CREATE_OR_UPDATE_GAMES:
+      return state.mergeDeep(action.games)
     default:
       return state
   }

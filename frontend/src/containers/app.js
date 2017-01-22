@@ -53,7 +53,7 @@ const mapStateToProps = (state) => ({
 })
 
 
-import { actions } from '../redux/game'
+import { actions } from '../redux/games'
 const mapDispatchToProps = {
   createGame: actions.createGame
 }
