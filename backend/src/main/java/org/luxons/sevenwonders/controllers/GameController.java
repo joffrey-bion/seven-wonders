@@ -4,7 +4,6 @@ import java.security.Principal;
 
 import org.luxons.sevenwonders.actions.PrepareCardAction;
 import org.luxons.sevenwonders.game.Game;
-import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.api.PreparedCard;
 import org.luxons.sevenwonders.repositories.GameRepository;
@@ -46,16 +45,13 @@ public class GameController {
     }
 
     private void sendPreparedCard(PreparedCard preparedCard, Game game) {
-        for (Player player : game.getPlayers()) {
-            String username = player.getUsername();
-            template.convertAndSendToUser(username, "/topic/game/" + game.getId() + "/prepared", preparedCard);
-        }
+        template.convertAndSend("/topic/game/" + game.getId() + "/prepared", preparedCard);
     }
 
     private void sendTurnInfo(Game game) {
         for (PlayerTurnInfo turnInfo : game.getCurrentTurnInfo()) {
             String username = turnInfo.getPlayer().getUsername();
-            template.convertAndSendToUser(username, "/topic/game/" + game.getId() + "/turn", turnInfo);
+            template.convertAndSendToUser(username, "/queue/game/" + game.getId() + "/turn", turnInfo);
         }
     }
 }
