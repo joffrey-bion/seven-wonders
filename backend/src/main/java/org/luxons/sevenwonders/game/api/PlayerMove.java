@@ -3,24 +3,20 @@ package org.luxons.sevenwonders.game.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.luxons.sevenwonders.game.moves.MoveType;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 
 public class PlayerMove {
 
-    private String cardName;
-
+    @NotNull
     private MoveType type;
 
+    @NotNull
+    private String cardName;
+
     private List<BoughtResources> boughtResources = new ArrayList<>();
-
-    public String getCardName() {
-        return cardName;
-    }
-
-    public void setCardName(String cardName) {
-        this.cardName = cardName;
-    }
 
     public MoveType getType() {
         return type;
@@ -28,6 +24,14 @@ public class PlayerMove {
 
     public void setType(MoveType type) {
         this.type = type;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
     }
 
     public List<BoughtResources> getBoughtResources() {
