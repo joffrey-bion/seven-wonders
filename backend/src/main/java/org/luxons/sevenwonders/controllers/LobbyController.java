@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -66,8 +65,8 @@ public class LobbyController {
     }
 
     @MessageMapping("/lobby/create")
-    @SendTo("/topic/games")
-    public Collection<Lobby> createGame(@Validated CreateGameAction action, Principal principal) {
+    @SendToUser("/queue/lobby/joined")
+    public Lobby createGame(@Validated CreateGameAction action, Principal principal) {
         checkThatUserIsNotInAGame(principal, "cannot create another game");
 
         Player gameOwner = playerRepository.find(principal.getName());
@@ -76,7 +75,10 @@ public class LobbyController {
 
         logger.info("Game '{}' ({}) created by {} ({})", lobby.getName(), lobby.getId(), gameOwner.getDisplayName(),
                 gameOwner.getUsername());
-        return Collections.singletonList(lobby);
+
+        // notify everyone that a new game exists
+        template.convertAndSend("/topic/games", Collections.singletonList(lobby));
+        return lobby;
     }
 
     @MessageMapping("/lobby/join")
