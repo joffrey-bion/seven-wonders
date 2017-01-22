@@ -52,6 +52,10 @@ public class Lobby {
         this.settings = settings;
     }
 
+    public State getState() {
+        return state;
+    }
+
     public synchronized void addPlayer(Player player) throws GameAlreadyStartedException, PlayerOverflowException {
         if (hasStarted()) {
             throw new GameAlreadyStartedException();

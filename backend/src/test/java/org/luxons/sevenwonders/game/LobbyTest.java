@@ -167,4 +167,13 @@ public class LobbyTest {
         addPlayers(nbPlayers - 1);
         lobby.startGame();
     }
+
+    @Test
+    public void startGame_switchesState() {
+        assertTrue(lobby.getState() == State.LOBBY);
+        // there is already the owner
+        addPlayers(gameDefinition.getMinPlayers() - 1);
+        lobby.startGame();
+        assertTrue(lobby.getState() == State.PLAYING);
+    }
 }
