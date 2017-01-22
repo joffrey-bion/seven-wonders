@@ -4,11 +4,15 @@ import { call } from 'redux-saga/effects'
 import createWsConnection from './utils/createWebSocketConnection'
 
 import usernameChoiceSaga from './sagas/usernameChoice'
+import gameBrowserSaga from './sagas/gameBrowser'
 
 let wsConnection
 const routes = {
   *'/'() {
     yield usernameChoiceSaga(wsConnection)
+  },
+  *'/games'() {
+    yield gameBrowserSaga(wsConnection)
   }
 }
 

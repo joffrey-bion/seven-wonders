@@ -1,5 +1,6 @@
 import { call, take, put } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
+import { push } from 'react-router-redux'
 
 import { actions, types } from '../redux/user'
 
@@ -21,6 +22,7 @@ function *usernameValidation({ socket }) {
   const user = yield take(usernameChannel)
   yield put(actions.setUsername(user.username, user.displayName, user.index))
   usernameChannel.close()
+  yield put(push('/games'))
 }
 
 function *sendUsername({ socket }) {

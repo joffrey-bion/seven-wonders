@@ -1,14 +1,14 @@
 import { Map } from 'immutable'
 
 export const types = {
-  NEW_GAME: 'GAME/NEW_GAME',
+  CREATE_OR_UPDATE_GAMES: 'GAME/CREATE_OR_UPDATE_GAMES',
   ENTER_GAME: 'GAME/ENTER_GAME',
   JOIN_GAME: 'GAME/JOIN_GAME',
   CREATE_GAME: 'GAME/CREATE_GAME',
 }
 
 export const actions = {
-  newGame: (game) => ({ type: types.NEW_GAME, game }),
+  createOrUpdateGame: (game) => ({ type: types.CREATE_OR_UPDATE_GAMES, game }),
   enterGame: (username) => ({ type: types.ENTER_GAME, username }),
   joinGame: (id) => ({ type: types.JOIN_GAME, id }),
   createGame: (name) => ({ type: types.CREATE_GAME, name }),

@@ -4,29 +4,13 @@ import {
   Banner,
   Heading,
   Space,
-  Button,
   InlineForm,
   Text
 } from 'rebass'
 import { Flex } from 'reflexbox'
-import Modal from '../../components/modals/username'
 import GameBrowser from './gameBrowser'
 
 class App extends Component {
-  state = {
-    usernameModal: false,
-  }
-
-  componentDidMount() {
-
-  }
-
-  toggleModal = (key) => {
-    return (e) => {
-      const val = !this.state[key]
-      this.setState({ [key]: val })
-    }
-  }
 
   createGame = (e) => {
     e.preventDefault()
@@ -53,31 +37,25 @@ class App extends Component {
             onChange={(e) => this._gameName = e.target.value}
             onClick={this.createGame}
           >
-
           </InlineForm>
           <Space auto />
-          <Text><b>Username:</b> Cesar92</Text>
+          <Text><b>Username:</b> {this.props.username}</Text>
           <Space x={1} />
-          <Button
-            onClick={this.toggleModal('usernameModal')}
-            children="Change"/>
         </Flex>
         <GameBrowser />
-        <Modal toggleModal={this.toggleModal} modalOpen={this.state.usernameModal} />
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-
+  username: state.user.get('displayName')
 })
 
-import { initializeWs } from "./actions";
-import { createGame } from '../GameBrowser/actions'
+
+import { actions } from '../redux/game'
 const mapDispatchToProps = {
-  initializeWs,
-  createGame
+  createGame: actions.createGame
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

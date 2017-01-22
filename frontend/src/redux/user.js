@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
     case types.SET_USERNAME:
       return state.set('username', action.username)
         .set('displayName', action.displayName)
-        .set('id', action.index)
+        .set('index', action.index)
     default:
       return state
   }
