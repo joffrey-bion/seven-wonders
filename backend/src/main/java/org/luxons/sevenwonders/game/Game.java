@@ -1,9 +1,11 @@
 package org.luxons.sevenwonders.game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.api.Action;
@@ -38,6 +40,8 @@ public class Game {
 
     private final Map<Integer, Move> preparedMoves;
 
+    private Map<Integer, PlayerTurnInfo> currentTurnInfo;
+
     private Hands hands;
 
     public Game(long id, Settings settings, List<Player> players, List<Board> boards, Decks decks) {
@@ -47,6 +51,7 @@ public class Game {
         this.table = new Table(boards);
         this.decks = decks;
         this.discardedCards = new ArrayList<>();
+        this.currentTurnInfo = new HashMap<>();
         this.preparedMoves = new HashMap<>();
         startNewAge();
     }
@@ -66,10 +71,14 @@ public class Game {
     private void startNewAge() {
         table.increaseCurrentAge();
         hands = decks.deal(table.getCurrentAge(), table.getNbPlayers());
+        startNewTurn();
     }
 
-    public List<PlayerTurnInfo> getTurnInfo() {
-        return players.stream().map(this::createPlayerTurnInfo).collect(Collectors.toList());
+    private void startNewTurn() {
+        Function<PlayerTurnInfo, Integer> extractPlayerIndex = pti -> pti.getPlayer().getIndex();
+        currentTurnInfo = players.stream()
+                                 .map(this::createPlayerTurnInfo)
+                                 .collect(Collectors.toMap(extractPlayerIndex, pti -> pti));
     }
 
     private PlayerTurnInfo createPlayerTurnInfo(Player player) {
@@ -80,6 +89,10 @@ public class Game {
         pti.setAction(action);
         pti.setMessage(action.getMessage());
         return pti;
+    }
+
+    public Collection<PlayerTurnInfo> getCurrentTurnInfo() {
+        return currentTurnInfo.values();
     }
 
     private Action determineAction(List<HandCard> hand, Board board) {
@@ -121,7 +134,8 @@ public class Game {
     }
 
     public boolean areAllPlayersReady() {
-        return preparedMoves.size() == players.size();
+        long nbExpectedMoves = currentTurnInfo.values().stream().filter(pti -> pti.getAction() != Action.WAIT).count();
+        return preparedMoves.size() == nbExpectedMoves;
     }
 
     public void playTurn() {
@@ -131,7 +145,14 @@ public class Game {
             if (!endOfGameReached()) {
                 startNewAge();
             }
-        } else if (!hands.maxOneCardRemains()) {
+        } else {
+            rotateHandsIfRelevant();
+            startNewTurn();
+        }
+    }
+
+    private void rotateHandsIfRelevant() {
+        if (!hands.maxOneCardRemains()) {
             // we don't rotate hands if some player can play his last card (with the special ability)
             hands.rotate(table.getHandRotationDirection());
         }

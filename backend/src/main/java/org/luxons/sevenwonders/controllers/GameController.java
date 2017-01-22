@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
-import java.util.List;
 
 import org.luxons.sevenwonders.actions.PrepareCardAction;
 import org.luxons.sevenwonders.game.Game;
@@ -54,8 +53,7 @@ public class GameController {
     }
 
     private void sendTurnInfo(Game game) {
-        List<PlayerTurnInfo> turnInfos = game.getTurnInfo();
-        for (PlayerTurnInfo turnInfo : turnInfos) {
+        for (PlayerTurnInfo turnInfo : game.getCurrentTurnInfo()) {
             String username = turnInfo.getPlayer().getUsername();
             template.convertAndSendToUser(username, "/topic/game/" + game.getId() + "/turn", turnInfo);
         }
