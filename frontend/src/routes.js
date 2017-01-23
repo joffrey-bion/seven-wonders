@@ -1,15 +1,20 @@
-import { spawn } from 'redux-saga/effects'
+import { fork, take, cancel } from 'redux-saga/effects'
 import usernameChoiceSaga from './sagas/usernameChoice'
 import gameBrowserSaga from './sagas/gameBrowser'
+import { LOCATION_CHANGE } from 'react-router-redux'
 
-// TODO: Remove spawn saga when redux-saga-router has cancelable saga on route change
 export const makeSagaRoutes = wsConnection => ({
   *'/'() {
-    // FIXME: spawn is a memory whore because the saga lives forever
-    yield spawn(usernameChoiceSaga, wsConnection)
+    const saga = yield fork(usernameChoiceSaga, wsConnection)
+    yield take(LOCATION_CHANGE)
+    yield cancel(saga)
+    yield console.log('canceled home')
   },
   *'/games'() {
-    yield spawn(gameBrowserSaga, wsConnection)
+    const saga = yield fork(gameBrowserSaga, wsConnection)
+    yield take(LOCATION_CHANGE)
+    yield cancel(saga)
+    yield console.log('canceled games')
   }
 })
 
