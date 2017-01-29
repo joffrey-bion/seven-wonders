@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.game.data.definitions.DecksDefinition;
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition;
 import org.luxons.sevenwonders.game.data.serializers.NumericEffectSerializer;
 import org.luxons.sevenwonders.game.data.serializers.ProductionIncreaseSerializer;
+import org.luxons.sevenwonders.game.data.serializers.ProductionSerializer;
 import org.luxons.sevenwonders.game.data.serializers.ResourceTypeSerializer;
 import org.luxons.sevenwonders.game.data.serializers.ResourceTypesSerializer;
 import org.luxons.sevenwonders.game.data.serializers.ResourcesSerializer;
@@ -20,6 +21,7 @@ import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
+import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.springframework.stereotype.Component;
@@ -74,6 +76,7 @@ public class GameDefinitionLoader {
                                 .registerTypeAdapter(Resources.class, new ResourcesSerializer())
                                 .registerTypeAdapter(ResourceType.class, new ResourceTypeSerializer())
                                 .registerTypeAdapter(resourceTypeList, new ResourceTypesSerializer())
+                                .registerTypeAdapter(Production.class, new ProductionSerializer())
                                 .registerTypeAdapter(ProductionIncrease.class, new ProductionIncreaseSerializer())
                                 .registerTypeAdapter(MilitaryReinforcements.class, new NumericEffectSerializer())
                                 .registerTypeAdapter(RawPointsIncrease.class, new NumericEffectSerializer())

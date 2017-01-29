@@ -1,84 +1,55 @@
 package org.luxons.sevenwonders.game.data.serializers;
 
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.resources.Production;
-import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.resources.Resources;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIncrease>,
-        JsonDeserializer<ProductionIncrease> {
+public class ProductionIncreaseSerializer
+        implements JsonSerializer<ProductionIncrease>, JsonDeserializer<ProductionIncrease> {
 
     @Override
     public JsonElement serialize(ProductionIncrease productionIncrease, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+            JsonSerializationContext context) {
         Production production = productionIncrease.getProduction();
-        Resources fixedResources = production.getFixedResources();
-        List<Set<ResourceType>> choices = production.getAlternativeResources();
-        if (fixedResources.isEmpty()) {
-            return serializeAsChoice(choices, context);
-        } else if (choices.isEmpty()) {
-            return serializeAsResources(fixedResources, context);
-        } else {
-            throw new IllegalArgumentException("Cannot serialize a production with mixed fixed resources and choices");
+        JsonElement json = context.serialize(production);
+        if (!json.isJsonNull() && !productionIncrease.isSellable()) {
+            return new JsonPrimitive(wrapInBrackets(json.getAsString()));
         }
+        return json;
     }
 
-    private JsonElement serializeAsResources(Resources fixedResources, JsonSerializationContext context) {
-        return context.serialize(fixedResources);
-    }
-
-    private JsonElement serializeAsChoice(List<Set<ResourceType>> choices, JsonSerializationContext context) {
-        if (choices.isEmpty()) {
-            return JsonNull.INSTANCE;
-        }
-        if (choices.size() > 1) {
-            throw new IllegalArgumentException("Cannot serialize a production with more than one choice");
-        }
-        String str = choices.get(0).stream()
-                            .map(ResourceType::getSymbol)
-                            .map(Object::toString)
-                            .collect(Collectors.joining("/"));
-        return context.serialize(str);
+    private String wrapInBrackets(String str) {
+        return '(' + str + ')';
     }
 
     @Override
-    public ProductionIncrease deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
-            JsonParseException {
-        String s = json.getAsString();
+    public ProductionIncrease deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         ProductionIncrease productionIncrease = new ProductionIncrease();
-        Production production = new Production();
-        if (s.contains("/")) {
-            production.addChoice(createChoice(s));
-        } else {
-            Resources fixedResources = context.deserialize(json, Resources.class);
-            production.addAll(fixedResources);
+
+        String resourcesStr = json.getAsString();
+        boolean isSellable = !resourcesStr.startsWith("(");
+        if (!isSellable) {
+            resourcesStr = unwrapBrackets(resourcesStr);
+            json = new JsonPrimitive(resourcesStr);
         }
+        productionIncrease.setSellable(isSellable);
+
+        Production production = context.deserialize(json, Production.class);
         productionIncrease.setProduction(production);
         return productionIncrease;
     }
 
-    private ResourceType[] createChoice(String choiceStr) {
-        String[] symbols = choiceStr.split("/");
-        ResourceType[] choice = new ResourceType[symbols.length];
-        for (int i = 0; i < symbols.length; i++) {
-            if (symbols[i].length() != 1) {
-                throw new IllegalArgumentException("Choice elements must be resource types, got " + symbols[i]);
-            }
-            choice[i] = ResourceType.fromSymbol(symbols[i].charAt(0));
-        }
-        return choice;
+    private static String unwrapBrackets(String str) {
+        return str.substring(1, str.length() - 1);
     }
 }

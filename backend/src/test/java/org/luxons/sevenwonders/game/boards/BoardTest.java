@@ -62,6 +62,7 @@ public class BoardTest {
         Board board = new Board(TestUtils.createWonder(type), null, new Settings(5));
         Resources resources = TestUtils.createResources(type);
         assertTrue(board.getProduction().contains(resources));
+        assertTrue(board.getPublicProduction().contains(resources));
     }
 
     @Theory

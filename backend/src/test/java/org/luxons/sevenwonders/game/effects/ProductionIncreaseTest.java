@@ -28,17 +28,39 @@ public class ProductionIncreaseTest {
     }
 
     @Theory
-    public void apply_boardContainsAddedResourceType(ResourceType initialType, ResourceType addedType, ResourceType extraType) {
+    public void apply_boardContainsAddedResourceType(ResourceType initialType, ResourceType addedType,
+            ResourceType extraType) {
         Board board = TestUtils.createBoard(initialType);
         ProductionIncrease effect = createProductionIncrease(addedType);
+        effect.setSellable(false);
 
         effect.apply(board);
 
         Resources resources = TestUtils.createResources(initialType, addedType);
         assertTrue(board.getProduction().contains(resources));
+        assertFalse(board.getPublicProduction().contains(resources));
 
         Resources moreResources = TestUtils.createResources(initialType, addedType, extraType);
         assertFalse(board.getProduction().contains(moreResources));
+        assertFalse(board.getPublicProduction().contains(moreResources));
+    }
+
+    @Theory
+    public void apply_boardContainsAddedResourceType_sellable(ResourceType initialType, ResourceType addedType,
+            ResourceType extraType) {
+        Board board = TestUtils.createBoard(initialType);
+        ProductionIncrease effect = createProductionIncrease(addedType);
+        effect.setSellable(true);
+
+        effect.apply(board);
+
+        Resources resources = TestUtils.createResources(initialType, addedType);
+        assertTrue(board.getProduction().contains(resources));
+        assertTrue(board.getPublicProduction().contains(resources));
+
+        Resources moreResources = TestUtils.createResources(initialType, addedType, extraType);
+        assertFalse(board.getProduction().contains(moreResources));
+        assertFalse(board.getPublicProduction().contains(moreResources));
     }
 
     @Theory

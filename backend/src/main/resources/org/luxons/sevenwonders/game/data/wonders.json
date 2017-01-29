@@ -20,7 +20,7 @@
               "resources": "OO"
             },
             "effects": {
-              "production": "W/S/O/C"
+              "production": "(W/S/O/C)"
             }
           },
           {
@@ -44,7 +44,7 @@
               "resources": "CC"
             },
             "effects": {
-              "production": "W/S/O/C"
+              "production": "(W/S/O/C)"
             }
           },
           {
@@ -53,7 +53,7 @@
               "resources": "WW"
             },
             "effects": {
-              "production": "G/P/L"
+              "production": "(G/P/L)"
             }
           },
           {

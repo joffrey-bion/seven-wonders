@@ -29,6 +29,8 @@ public class Board {
 
     private final Production production = new Production();
 
+    private final Production publicProduction = new Production();
+
     private final Science science = new Science();
 
     private final TradingRules tradingRules;
@@ -53,6 +55,7 @@ public class Board {
         this.military = new Military(settings);
         this.pointsPer3Gold = settings.getPointsPer3Gold();
         this.production.addFixedResource(wonder.getInitialResource(), 1);
+        this.publicProduction.addFixedResource(wonder.getInitialResource(), 1);
     }
 
     public Wonder getWonder() {
@@ -71,7 +74,7 @@ public class Board {
         playedCards.add(card);
     }
 
-    public int getNbCardsOfColor(List<Color> colorFilter) {
+    int getNbCardsOfColor(List<Color> colorFilter) {
         return (int) playedCards.stream().filter(c -> colorFilter.contains(c.getColor())).count();
     }
 
@@ -81,6 +84,10 @@ public class Board {
 
     public Production getProduction() {
         return production;
+    }
+
+    public Production getPublicProduction() {
+        return publicProduction;
     }
 
     public TradingRules getTradingRules() {

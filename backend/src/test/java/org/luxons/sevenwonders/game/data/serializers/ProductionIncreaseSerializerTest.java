@@ -26,11 +26,12 @@ public class ProductionIncreaseSerializerTest {
         gson = new GsonBuilder().registerTypeAdapter(Resources.class, new ResourcesSerializer())
                                 .registerTypeAdapter(ResourceType.class, new ResourceTypeSerializer())
                                 .registerTypeAdapter(resourceTypeList, new ResourceTypesSerializer())
+                                .registerTypeAdapter(Production.class, new ProductionSerializer())
                                 .registerTypeAdapter(ProductionIncrease.class, new ProductionIncreaseSerializer())
                                 .create();
     }
 
-    private static ProductionIncrease create(int wood, int stone, int clay) {
+    private static ProductionIncrease create(boolean sellable, int wood, int stone, int clay) {
         Production production = new Production();
         if (wood > 0) {
             production.addFixedResource(ResourceType.WOOD, wood);
@@ -43,14 +44,16 @@ public class ProductionIncreaseSerializerTest {
         }
         ProductionIncrease prodIncrease = new ProductionIncrease();
         prodIncrease.setProduction(production);
+        prodIncrease.setSellable(sellable);
         return prodIncrease;
     }
 
-    private static ProductionIncrease createChoice(ResourceType... types) {
+    private static ProductionIncrease createChoice(boolean sellable, ResourceType... types) {
         Production production = new Production();
         production.addChoice(types);
         ProductionIncrease prodIncrease = new ProductionIncrease();
         prodIncrease.setProduction(production);
+        prodIncrease.setSellable(sellable);
         return prodIncrease;
     }
 
@@ -67,62 +70,62 @@ public class ProductionIncreaseSerializerTest {
 
     @Test
     public void serialize_singleType() {
-        ProductionIncrease prodIncrease = create(1, 0, 0);
+        ProductionIncrease prodIncrease = create(true, 1, 0, 0);
         assertEquals("\"W\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test
-    public void serialize_multipleTimesSameType() {
-        ProductionIncrease prodIncrease = create(3, 0, 0);
-        assertEquals("\"WWW\"", gson.toJson(prodIncrease, ProductionIncrease.class));
-    }
-
-    @Test
     public void serialize_mixedTypes() {
-        ProductionIncrease prodIncrease = create(1, 1, 1);
+        ProductionIncrease prodIncrease = create(true, 1, 1, 1);
         assertEquals("\"WSC\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test
-    public void serialize_mixedTypesMultiple() {
-        ProductionIncrease prodIncrease = create(2, 1, 2);
-        assertEquals("\"WWSCC\"", gson.toJson(prodIncrease, ProductionIncrease.class));
+    public void serialize_mixedTypes_notSellable() {
+        ProductionIncrease prodIncrease = create(false, 1, 1, 1);
+        assertEquals("\"(WSC)\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test
     public void serialize_choice2() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.CLAY);
+        ProductionIncrease prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY);
         assertEquals("\"W/C\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test
     public void serialize_choice3() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY);
+        ProductionIncrease prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY);
         assertEquals("\"W/O/C\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test
+    public void serialize_choice3_notSellable() {
+        ProductionIncrease prodIncrease = createChoice(false, ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY);
+        assertEquals("\"(W/O/C)\"", gson.toJson(prodIncrease, ProductionIncrease.class));
+    }
+
+    @Test
     public void serialize_choice2_unordered() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.CLAY, ResourceType.WOOD);
+        ProductionIncrease prodIncrease = createChoice(true, ResourceType.CLAY, ResourceType.WOOD);
         assertEquals("\"W/C\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test
     public void serialize_choice3_unordered() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.CLAY, ResourceType.ORE);
+        ProductionIncrease prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY, ResourceType.ORE);
         assertEquals("\"W/O/C\"", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void serialize_failIfMultipleChoices() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.CLAY);
+        ProductionIncrease prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY);
         prodIncrease.getProduction().addChoice(ResourceType.ORE, ResourceType.GLASS);
         gson.toJson(prodIncrease, ProductionIncrease.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void serialize_failIfMixedFixedAndChoices() {
-        ProductionIncrease prodIncrease = create(1, 0, 0);
+        ProductionIncrease prodIncrease = create(true, 1, 0, 0);
         prodIncrease.getProduction().addChoice(ResourceType.WOOD, ResourceType.CLAY);
         gson.toJson(prodIncrease, ProductionIncrease.class);
     }
@@ -150,50 +153,32 @@ public class ProductionIncreaseSerializerTest {
 
     @Test
     public void deserialize_singleType() {
-        ProductionIncrease prodIncrease = create(1, 0, 0);
+        ProductionIncrease prodIncrease = create(true, 1, 0, 0);
         assertEquals(prodIncrease, gson.fromJson("\"W\"", ProductionIncrease.class));
     }
 
     @Test
-    public void deserialize_multipleTimesSameType() {
-        ProductionIncrease prodIncrease = create(3, 0, 0);
-        assertEquals(prodIncrease, gson.fromJson("\"WWW\"", ProductionIncrease.class));
+    public void deserialize_multipleTimesSameType_notSellable() {
+        ProductionIncrease prodIncrease = create(false, 3, 0, 0);
+        assertEquals(prodIncrease, gson.fromJson("\"(WWW)\"", ProductionIncrease.class));
     }
 
     @Test
     public void deserialize_mixedTypes() {
-        ProductionIncrease prodIncrease = create(1, 1, 1);
+        ProductionIncrease prodIncrease = create(true, 1, 1, 1);
         assertEquals(prodIncrease, gson.fromJson("\"WCS\"", ProductionIncrease.class));
     }
 
     @Test
-    public void deserialize_mixedTypes_unordered() {
-        ProductionIncrease prodIncrease = create(1, 3, 2);
-        assertEquals(prodIncrease, gson.fromJson("\"SCWCSS\"", ProductionIncrease.class));
-    }
-
-    @Test
     public void deserialize_choice2() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.CLAY);
+        ProductionIncrease prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY);
         assertEquals(prodIncrease, gson.fromJson("\"W/C\"", ProductionIncrease.class));
     }
 
     @Test
-    public void deserialize_choice3() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY);
-        assertEquals(prodIncrease, gson.fromJson("\"W/O/C\"", ProductionIncrease.class));
-    }
-
-    @Test
-    public void deserialize_choice2_unordered() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.CLAY, ResourceType.WOOD);
-        assertEquals(prodIncrease, gson.fromJson("\"W/C\"", ProductionIncrease.class));
-    }
-
-    @Test
-    public void deserialize_choice3_unordered() {
-        ProductionIncrease prodIncrease = createChoice(ResourceType.WOOD, ResourceType.CLAY, ResourceType.ORE);
-        assertEquals(prodIncrease, gson.fromJson("\"W/O/C\"", ProductionIncrease.class));
+    public void deserialize_choice3_notSellable() {
+        ProductionIncrease prodIncrease = createChoice(false, ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY);
+        assertEquals(prodIncrease, gson.fromJson("\"(W/O/C)\"", ProductionIncrease.class));
     }
 
     @Test(expected = IllegalArgumentException.class)

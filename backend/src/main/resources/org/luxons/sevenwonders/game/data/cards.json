@@ -733,7 +733,7 @@
       "name": "Caravansery",
       "color": "YELLOW",
       "effect": {
-        "production": "W/S/O/C"
+        "production": "(W/S/O/C)"
       },
       "requirements": {
         "gold": 0,
@@ -756,7 +756,7 @@
       "name": "Forum",
       "color": "YELLOW",
       "effect": {
-        "production": "G/P/L"
+        "production": "(G/P/L)"
       },
       "requirements": {
         "gold": 0,

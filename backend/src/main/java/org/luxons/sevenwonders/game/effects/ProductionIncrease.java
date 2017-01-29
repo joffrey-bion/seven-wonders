@@ -9,6 +9,8 @@ public class ProductionIncrease extends InstantOwnBoardEffect {
 
     private Production production = new Production();
 
+    private boolean sellable = true;
+
     public Production getProduction() {
         return production;
     }
@@ -17,9 +19,20 @@ public class ProductionIncrease extends InstantOwnBoardEffect {
         this.production = production;
     }
 
+    public boolean isSellable() {
+        return sellable;
+    }
+
+    public void setSellable(boolean sellable) {
+        this.sellable = sellable;
+    }
+
     @Override
     public void apply(Board board) {
         board.getProduction().addAll(production);
+        if (sellable) {
+            board.getPublicProduction().addAll(production);
+        }
     }
 
     @Override
