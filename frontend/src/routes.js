@@ -1,20 +1,13 @@
-import { fork, take, cancel } from 'redux-saga/effects'
+import { fork } from 'redux-saga/effects'
 import usernameChoiceSaga from './sagas/usernameChoice'
 import gameBrowserSaga from './sagas/gameBrowser'
-import { LOCATION_CHANGE } from 'react-router-redux'
 
 export const makeSagaRoutes = wsConnection => ({
   *'/'() {
-    const saga = yield fork(usernameChoiceSaga, wsConnection)
-    yield take(LOCATION_CHANGE)
-    yield cancel(saga)
-    yield console.log('canceled home')
+    yield fork(usernameChoiceSaga, wsConnection)
   },
   *'/games'() {
-    const saga = yield fork(gameBrowserSaga, wsConnection)
-    yield take(LOCATION_CHANGE)
-    yield cancel(saga)
-    yield console.log('canceled games')
+    yield fork(gameBrowserSaga, wsConnection)
   }
 })
 
