@@ -31,8 +31,20 @@ import org.luxons.sevenwonders.game.wonders.WonderStage;
 
 public class TestUtils {
 
+    private static final long SEED = 42;
+
+    public static CustomizableSettings createCustomizableSettings() {
+        CustomizableSettings customizableSettings = new CustomizableSettings();
+        customizableSettings.setRandomSeedForTests(SEED);
+        return customizableSettings;
+    }
+
+    private static Settings createSettings(int nbPlayers) {
+        return new Settings(nbPlayers, createCustomizableSettings());
+    }
+
     public static Game createGame(int id, int nbPlayers) {
-        Settings settings = new Settings(nbPlayers, new CustomizableSettings());
+        Settings settings = createSettings(nbPlayers);
         List<Player> players = TestUtils.createPlayers(nbPlayers);
         List<Board> boards = TestUtils.createBoards(nbPlayers);
         List<Card> cards = TestUtils.createSampleCards(0, nbPlayers * 7);
@@ -45,10 +57,11 @@ public class TestUtils {
         return new Table(createBoards(nbPlayers));
     }
 
-    public static List<Board> createBoards(int count) {
+    private static List<Board> createBoards(int count) {
+        Settings settings = createSettings(count);
         List<Board> boards = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            boards.add(createBoard(ResourceType.WOOD));
+            boards.add(createBoard(settings, ResourceType.WOOD));
         }
         return boards;
     }
@@ -65,8 +78,7 @@ public class TestUtils {
         return players;
     }
 
-    public static Board createBoard(ResourceType initialResource) {
-        Settings settings = new Settings(5);
+    private static Board createBoard(Settings settings, ResourceType initialResource) {
         Wonder wonder = createWonder(initialResource);
 
         String username = "testUser" + initialResource.getSymbol();
@@ -76,7 +88,11 @@ public class TestUtils {
         return new Board(wonder, player, settings);
     }
 
-    public static Board createBoard(ResourceType initialResource, ResourceType... production) {
+    public static Board createBoard(ResourceType initialResource) {
+        return createBoard(createSettings(5), initialResource);
+    }
+
+    private static Board createBoard(ResourceType initialResource, ResourceType... production) {
         Board board = createBoard(initialResource);
         board.getProduction().addAll(createFixedProduction(production));
         return board;

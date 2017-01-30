@@ -50,7 +50,7 @@ public class BoardTest {
 
     @Theory
     public void initialGold_respectsSettings(@FromDataPoints("gold") int goldAmountInSettings) {
-        CustomizableSettings customSettings = new CustomizableSettings();
+        CustomizableSettings customSettings = TestUtils.createCustomizableSettings();
         customSettings.setInitialGold(goldAmountInSettings);
         Settings settings = new Settings(5, customSettings);
         Board board = new Board(TestUtils.createWonder(), null, settings);
