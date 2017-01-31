@@ -31,15 +31,15 @@ public class Requirements {
     }
 
     boolean isAffordedBy(Board board) {
-        return board.getGold() >= gold && board.getProduction().contains(resources);
+        return hasRequiredGold(board) && producesRequiredResources(board);
     }
 
-    public boolean couldBeAffordedBy(Table table, int playerIndex) {
+    boolean couldBeAffordedBy(Table table, int playerIndex) {
         Board board = table.getBoard(playerIndex);
-        if (board.getGold() < gold) {
+        if (!hasRequiredGold(board)) {
             return false;
         }
-        if (board.getProduction().contains(resources)) {
+        if (producesRequiredResources(board)) {
             return true;
         }
         Resources leftToPay = resources.minus(board.getProduction().getFixedResources());
@@ -49,19 +49,38 @@ public class Requirements {
 
     public boolean isAffordedBy(Table table, int playerIndex, List<BoughtResources> boughtResources) {
         Board board = table.getBoard(playerIndex);
-        if (isAffordedBy(board)) {
-            return true;
-        }
-        int totalPrice = board.getTradingRules().computeCost(boughtResources);
-        if (board.getGold() < totalPrice) {
+        if (!hasRequiredGold(board)) {
             return false;
         }
+        if (producesRequiredResources(board)) {
+            return true;
+        }
+        if (!canAffordBoughtResources(board, boughtResources)) {
+            return false;
+        }
+        return producesRequiredResourcesWithHelp(board, boughtResources);
+    }
+
+    private boolean hasRequiredGold(Board board) {
+        return board.getGold() >= gold;
+    }
+
+    private boolean producesRequiredResources(Board board) {
+        return board.getProduction().contains(resources);
+    }
+
+    private boolean canAffordBoughtResources(Board board, List<BoughtResources> boughtResources) {
+        int resourcesPrice = board.getTradingRules().computeCost(boughtResources);
+        return board.getGold() - gold >= resourcesPrice;
+    }
+
+    private boolean producesRequiredResourcesWithHelp(Board board, List<BoughtResources> boughtResources) {
         Resources totalBoughtResources = getTotalResources(boughtResources);
         Resources remainingResources = this.resources.minus(totalBoughtResources);
         return board.getProduction().contains(remainingResources);
     }
 
-    private Resources getTotalResources(List<BoughtResources> boughtResources) {
+    private static Resources getTotalResources(List<BoughtResources> boughtResources) {
         return boughtResources.stream().map(BoughtResources::getResources).reduce(new Resources(), (r1, r2) -> {
             r1.addAll(r2);
             return r1;
