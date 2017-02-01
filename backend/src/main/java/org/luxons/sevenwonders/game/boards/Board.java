@@ -52,7 +52,7 @@ public class Board {
         this.player = player;
         this.gold = settings.getInitialGold();
         this.tradingRules = new TradingRules(settings.getDefaultTradingCost());
-        this.military = new Military(settings);
+        this.military = new Military(settings.getLostPointsPerDefeat(), settings.getWonPointsPerVictoryPerAge());
         this.pointsPer3Gold = settings.getPointsPer3Gold();
         this.production.addFixedResource(wonder.getInitialResource(), 1);
         this.publicProduction.addFixedResource(wonder.getInitialResource(), 1);

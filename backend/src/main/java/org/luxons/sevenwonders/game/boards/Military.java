@@ -1,10 +1,12 @@
 package org.luxons.sevenwonders.game.boards;
 
-import org.luxons.sevenwonders.game.Settings;
+import java.util.Map;
 
 public class Military {
 
-    private final Settings settings;
+    private final int lostPointsPerDefeat;
+
+    private final Map<Integer, Integer> wonPointsPerVictoryPerAge;
 
     private int nbShields = 0;
 
@@ -12,8 +14,9 @@ public class Military {
 
     private int nbDefeatTokens = 0;
 
-    Military(Settings settings) {
-        this.settings = settings;
+    Military(int lostPointsPerDefeat, Map<Integer, Integer> wonPointsPerVictoryPerAge) {
+        this.lostPointsPerDefeat = lostPointsPerDefeat;
+        this.wonPointsPerVictoryPerAge = wonPointsPerVictoryPerAge;
     }
 
     public int getNbShields() {
@@ -33,7 +36,7 @@ public class Military {
     }
 
     public void victory(int age) {
-        Integer wonPoints = settings.getWonPointsPerVictoryPerAge().get(age);
+        Integer wonPoints = wonPointsPerVictoryPerAge.get(age);
         if (wonPoints == null) {
             throw new UnknownAgeException(age);
         }
@@ -41,8 +44,7 @@ public class Military {
     }
 
     public void defeat() {
-        int lostPoints = settings.getLostPointsPerDefeat();
-        totalPoints -= lostPoints;
+        totalPoints -= lostPointsPerDefeat;
         nbDefeatTokens++;
     }
 

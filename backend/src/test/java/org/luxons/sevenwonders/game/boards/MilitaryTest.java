@@ -10,11 +10,9 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.luxons.sevenwonders.game.Settings;
-import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.boards.Military.UnknownAgeException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Theories.class)
 public class MilitaryTest {
@@ -35,13 +33,7 @@ public class MilitaryTest {
     private static Military createMilitary(int age, int nbPointsPerVictory, int nbPointsPerDefeat) {
         Map<Integer, Integer> wonPointsPerAge = new HashMap<>();
         wonPointsPerAge.put(age, nbPointsPerVictory);
-
-        CustomizableSettings customSettings = new CustomizableSettings();
-        customSettings.setWonPointsPerVictoryPerAge(wonPointsPerAge);
-        customSettings.setLostPointsPerDefeat(nbPointsPerDefeat);
-
-        Settings settings = new Settings(5, customSettings);
-        return new Military(settings);
+        return new Military(nbPointsPerDefeat, wonPointsPerAge);
     }
 
     @Theory
