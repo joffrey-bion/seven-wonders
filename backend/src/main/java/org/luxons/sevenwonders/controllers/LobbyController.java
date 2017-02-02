@@ -11,9 +11,8 @@ import org.luxons.sevenwonders.actions.ReorderPlayersAction;
 import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
 import org.luxons.sevenwonders.game.Game;
-import org.luxons.sevenwonders.game.Lobby;
-import org.luxons.sevenwonders.game.Player;
-import org.luxons.sevenwonders.repositories.GameRepository;
+import org.luxons.sevenwonders.lobby.Lobby;
+import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.luxons.sevenwonders.repositories.PlayerRepository;
 import org.slf4j.Logger;
@@ -33,17 +32,14 @@ public class LobbyController {
 
     private final LobbyRepository lobbyRepository;
 
-    private final GameRepository gameRepository;
-
     private final PlayerRepository playerRepository;
 
     private final SimpMessagingTemplate template;
 
     @Autowired
-    public LobbyController(LobbyRepository lobbyRepository, GameRepository gameRepository,
-            PlayerRepository playerRepository, SimpMessagingTemplate template) {
+    public LobbyController(LobbyRepository lobbyRepository, PlayerRepository playerRepository,
+                           SimpMessagingTemplate template) {
         this.lobbyRepository = lobbyRepository;
-        this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.template = template;
     }
@@ -131,10 +127,9 @@ public class LobbyController {
     public void startGame(Principal principal) {
         Lobby lobby = getOwnedLobby(principal);
         Game game = lobby.startGame();
-        gameRepository.add(game);
 
         logger.info("Game {} successfully started", game.getId());
-        template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", (Object)null);
+        template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", (Object) null);
     }
 
     private Lobby getOwnedLobby(Principal principal) {

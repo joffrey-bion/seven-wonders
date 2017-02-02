@@ -25,12 +25,12 @@ public class CardTest {
 
     @Before
     public void initBoard() {
-        Settings settings = new Settings(5);
+        Settings settings = new Settings(3);
 
         List<Board> boards = new ArrayList<>(3);
-        boards.add(new Board(new Wonder("TestWonder", ResourceType.WOOD), null, settings));
-        boards.add(new Board(new Wonder("TestWonder", ResourceType.STONE), null, settings));
-        boards.add(new Board(new Wonder("TestWonder", ResourceType.PAPYRUS), null, settings));
+        boards.add(new Board(new Wonder("TestWonder", ResourceType.WOOD), 0, settings));
+        boards.add(new Board(new Wonder("TestWonder", ResourceType.STONE), 1, settings));
+        boards.add(new Board(new Wonder("TestWonder", ResourceType.PAPYRUS), 2, settings));
         table = new Table(boards);
 
         Requirements treeFarmRequirements = new Requirements();

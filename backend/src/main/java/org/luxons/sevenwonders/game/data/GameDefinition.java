@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.Game;
-import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.boards.Board;
@@ -44,23 +43,22 @@ public class GameDefinition {
         return MAX_PLAYERS;
     }
 
-    public Game initGame(long id, CustomizableSettings customSettings, List<Player> orderedPlayers) {
-        Settings settings = new Settings(orderedPlayers.size(), customSettings);
-        List<Board> boards = assignBoards(settings, orderedPlayers);
+    public Game initGame(long id, CustomizableSettings customSettings, int nbPlayers) {
+        Settings settings = new Settings(nbPlayers, customSettings);
+        List<Board> boards = assignBoards(settings, nbPlayers);
         Decks decks = decksDefinition.create(settings);
-        return new Game(id, settings, orderedPlayers, boards, decks);
+        return new Game(id, settings, nbPlayers, boards, decks);
     }
 
-    private List<Board> assignBoards(Settings settings, List<Player> orderedPlayers) {
+    private List<Board> assignBoards(Settings settings, int nbPlayers) {
         List<WonderDefinition> randomizedWonders = Arrays.asList(wonders);
         Collections.shuffle(randomizedWonders, settings.getRandom());
 
-        List<Board> boards = new ArrayList<>(orderedPlayers.size());
-        for (int i = 0; i < orderedPlayers.size(); i++) {
-            Player player = orderedPlayers.get(i);
+        List<Board> boards = new ArrayList<>(nbPlayers);
+        for (int i = 0; i < nbPlayers; i++) {
             WonderDefinition def = randomizedWonders.get(i);
             Wonder w = def.create(settings);
-            Board b = new Board(w, player, settings);
+            Board b = new Board(w, i, settings);
             boards.add(b);
         }
         return boards;

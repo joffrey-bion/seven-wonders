@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.repositories;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.luxons.sevenwonders.game.Player;
+import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.PlayerRepository.PlayerNotFoundException;
 
 import static org.junit.Assert.assertEquals;

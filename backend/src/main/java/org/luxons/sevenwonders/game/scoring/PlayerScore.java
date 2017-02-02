@@ -2,18 +2,13 @@ package org.luxons.sevenwonders.game.scoring;
 
 import java.util.HashMap;
 
-import org.luxons.sevenwonders.game.Player;
-
 public class PlayerScore extends HashMap<ScoreCategory, Integer> {
-
-    private final Player player;
 
     private final int boardGold;
 
     private int totalPoints = 0;
 
-    public PlayerScore(Player player, int boardGold) {
-        this.player = player;
+    public PlayerScore(int boardGold) {
         this.boardGold = boardGold;
     }
 

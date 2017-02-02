@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
@@ -23,7 +22,7 @@ public class Board {
 
     private final Wonder wonder;
 
-    private final Player player;
+    private final int playerIndex;
 
     private final List<Card> playedCards = new ArrayList<>();
 
@@ -47,9 +46,9 @@ public class Board {
 
     private int pointsPer3Gold;
 
-    public Board(Wonder wonder, Player player, Settings settings) {
+    public Board(Wonder wonder, int playerIndex, Settings settings) {
         this.wonder = wonder;
-        this.player = player;
+        this.playerIndex = playerIndex;
         this.gold = settings.getInitialGold();
         this.tradingRules = new TradingRules(settings.getDefaultTradingCost());
         this.military = new Military(settings.getLostPointsPerDefeat(), settings.getWonPointsPerVictoryPerAge());
@@ -60,10 +59,6 @@ public class Board {
 
     public Wonder getWonder() {
         return wonder;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     public List<Card> getPlayedCards() {
@@ -149,13 +144,13 @@ public class Board {
     }
 
     public PlayerScore computePoints(Table table) {
-        PlayerScore score = new PlayerScore(player, gold);
+        PlayerScore score = new PlayerScore(gold);
         score.put(ScoreCategory.CIVIL, computePointsForCards(table, Color.BLUE));
         score.put(ScoreCategory.MILITARY, military.getTotalPoints());
         score.put(ScoreCategory.SCIENCE, science.computePoints());
         score.put(ScoreCategory.TRADE, computePointsForCards(table, Color.YELLOW));
         score.put(ScoreCategory.GUILD, computePointsForCards(table, Color.PURPLE));
-        score.put(ScoreCategory.WONDER, wonder.computePoints(table, player.getIndex()));
+        score.put(ScoreCategory.WONDER, wonder.computePoints(table, playerIndex));
         score.put(ScoreCategory.GOLD, computeGoldPoints());
         return score;
     }
@@ -164,7 +159,7 @@ public class Board {
         return playedCards.stream()
                 .filter(c -> c.getColor() == color)
                 .flatMap(c -> c.getEffects().stream())
-                .mapToInt(e -> e.computePoints(table, player.getIndex()))
+                .mapToInt(e -> e.computePoints(table, playerIndex))
                 .sum();
     }
 

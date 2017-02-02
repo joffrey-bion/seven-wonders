@@ -5,17 +5,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.api.Action;
 import org.luxons.sevenwonders.game.api.HandCard;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
-import org.luxons.sevenwonders.game.api.PreparedCard;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Hands;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
@@ -30,7 +28,7 @@ public class Game {
 
     private final Settings settings;
 
-    private final List<Player> players;
+    private final int nbPlayers;
 
     private final Table table;
 
@@ -44,10 +42,10 @@ public class Game {
 
     private Hands hands;
 
-    public Game(long id, Settings settings, List<Player> players, List<Board> boards, Decks decks) {
+    public Game(long id, Settings settings, int nbPlayers, List<Board> boards, Decks decks) {
         this.id = id;
         this.settings = settings;
-        this.players = players;
+        this.nbPlayers = nbPlayers;
         this.table = new Table(boards);
         this.decks = decks;
         this.discardedCards = new ArrayList<>();
@@ -60,14 +58,6 @@ public class Game {
         return id;
     }
 
-    public boolean containsUser(String username) {
-        return players.stream().anyMatch(p -> p.getUsername().equals(username));
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
     private void startNewAge() {
         table.increaseCurrentAge();
         hands = decks.deal(table.getCurrentAge(), table.getNbPlayers());
@@ -75,17 +65,17 @@ public class Game {
     }
 
     private void startNewTurn() {
-        Function<PlayerTurnInfo, Integer> extractPlayerIndex = pti -> pti.getPlayer().getIndex();
-        currentTurnInfo = players.stream()
-                                 .map(this::createPlayerTurnInfo)
-                                 .collect(Collectors.toMap(extractPlayerIndex, pti -> pti));
+        currentTurnInfo.clear();
+        for (int i = 0; i < nbPlayers; i++) {
+            currentTurnInfo.put(i, createPlayerTurnInfo(i));
+        }
     }
 
-    private PlayerTurnInfo createPlayerTurnInfo(Player player) {
-        PlayerTurnInfo pti = new PlayerTurnInfo(player, table);
-        List<HandCard> hand = hands.createHand(table, player.getIndex());
+    private PlayerTurnInfo createPlayerTurnInfo(int playerIndex) {
+        PlayerTurnInfo pti = new PlayerTurnInfo(playerIndex, table);
+        List<HandCard> hand = hands.createHand(table, playerIndex);
         pti.setHand(hand);
-        Action action = determineAction(hand, table.getBoard(player.getIndex()));
+        Action action = determineAction(hand, table.getBoard(playerIndex));
         pti.setAction(action);
         pti.setMessage(action.getMessage());
         return pti;
@@ -109,20 +99,12 @@ public class Game {
         }
     }
 
-    public PreparedCard prepareCard(String username, PlayerMove playerMove) throws InvalidMoveException {
-        Player player = getPlayer(username);
+    public CardBack prepareCard(int playerIndex, PlayerMove playerMove) throws InvalidMoveException {
         Card card = decks.getCard(playerMove.getCardName());
-        Move move = playerMove.getType().resolve(player.getIndex(), card, playerMove);
+        Move move = playerMove.getType().resolve(playerIndex, card, playerMove);
         validate(move);
-        preparedMoves.put(player.getIndex(), move);
-        return new PreparedCard(player, card.getBack());
-    }
-
-    private Player getPlayer(String username) {
-        return players.stream()
-                      .filter(p -> p.getUsername().equals(username))
-                      .findAny()
-                      .orElseThrow(() -> new UnknownPlayerException(username));
+        preparedMoves.put(playerIndex, move);
+        return card.getBack();
     }
 
     private void validate(Move move) throws InvalidMoveException {
@@ -196,10 +178,10 @@ public class Game {
     }
 
     private void discardLastCardsOfHands() {
-        for (Player p : players) {
-            Board board = table.getBoard(p.getIndex());
+        for (int i = 0; i < nbPlayers; i++) {
+            Board board = table.getBoard(i);
             if (!board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
-                discardHand(p.getIndex());
+                discardHand(i);
             }
         }
     }
@@ -239,12 +221,6 @@ public class Game {
     private static class MissingPreparedMoveException extends IllegalStateException {
         MissingPreparedMoveException(int playerIndex) {
             super("Player " + playerIndex + " is not ready to play");
-        }
-    }
-
-    private static class UnknownPlayerException extends IllegalArgumentException {
-        UnknownPlayerException(String username) {
-            super(username);
         }
     }
 

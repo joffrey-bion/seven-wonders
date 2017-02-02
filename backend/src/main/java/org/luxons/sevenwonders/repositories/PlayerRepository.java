@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.luxons.sevenwonders.errors.ApiMisuseException;
-import org.luxons.sevenwonders.game.Player;
+import org.luxons.sevenwonders.lobby.Player;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,8 +1,9 @@
-package org.luxons.sevenwonders.game;
+package org.luxons.sevenwonders.lobby;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 
@@ -87,7 +88,7 @@ public class Lobby {
             throw new PlayerUnderflowException();
         }
         state = State.PLAYING;
-        return gameDefinition.initGame(id, settings, players);
+        return gameDefinition.initGame(id, settings, players.size());
     }
 
     private boolean hasEnoughPlayers() {

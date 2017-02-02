@@ -3,9 +3,7 @@ package org.luxons.sevenwonders.validation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.luxons.sevenwonders.game.Game;
-import org.luxons.sevenwonders.game.Lobby;
-import org.luxons.sevenwonders.repositories.GameRepository;
+import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,12 +17,9 @@ public class DestinationAccessValidator {
 
     private final LobbyRepository lobbyRepository;
 
-    private final GameRepository gameRepository;
-
     @Autowired
-    public DestinationAccessValidator(LobbyRepository lobbyRepository, GameRepository gameRepository) {
+    public DestinationAccessValidator(LobbyRepository lobbyRepository) {
         this.lobbyRepository = lobbyRepository;
-        this.gameRepository = gameRepository;
     }
 
     public boolean hasAccess(String username, String destination) {
@@ -47,7 +42,7 @@ public class DestinationAccessValidator {
             return false; // no game reference is always OK
         }
         int gameId = extractId(gameMatcher);
-        return !isUserInGame(username, gameId);
+        return !isUserInLobby(username, gameId);
     }
 
     private boolean hasForbiddenLobbyReference(String username, String destination) {
@@ -57,11 +52,6 @@ public class DestinationAccessValidator {
         }
         int lobbyId = extractId(lobbyMatcher);
         return !isUserInLobby(username, lobbyId);
-    }
-
-    private boolean isUserInGame(String username, int gameId) {
-        Game game = gameRepository.find(gameId);
-        return game.containsUser(username);
     }
 
     private boolean isUserInLobby(String username, int lobbyId) {

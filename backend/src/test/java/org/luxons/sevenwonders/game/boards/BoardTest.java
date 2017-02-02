@@ -53,13 +53,13 @@ public class BoardTest {
         CustomizableSettings customSettings = TestUtils.createCustomizableSettings();
         customSettings.setInitialGold(goldAmountInSettings);
         Settings settings = new Settings(5, customSettings);
-        Board board = new Board(TestUtils.createWonder(), null, settings);
+        Board board = new Board(TestUtils.createWonder(), 0, settings);
         assertEquals(goldAmountInSettings, board.getGold());
     }
 
     @Theory
     public void initialProduction_containsInitialResource(ResourceType type) {
-        Board board = new Board(TestUtils.createWonder(type), null, new Settings(5));
+        Board board = new Board(TestUtils.createWonder(type), 0, new Settings(5));
         Resources resources = TestUtils.createResources(type);
         assertTrue(board.getProduction().contains(resources));
         assertTrue(board.getPublicProduction().contains(resources));
@@ -70,7 +70,7 @@ public class BoardTest {
             @FromDataPoints("gold") int goldRemoved) {
         assumeTrue(goldRemoved >= 0);
         assumeTrue(initialGold >= goldRemoved);
-        Board board = new Board(TestUtils.createWonder(), null, new Settings(5));
+        Board board = new Board(TestUtils.createWonder(), 0, new Settings(5));
         board.setGold(initialGold);
         board.removeGold(goldRemoved);
         assertEquals(initialGold - goldRemoved, board.getGold());
@@ -82,7 +82,7 @@ public class BoardTest {
         assumeTrue(goldRemoved >= 0);
         assumeTrue(initialGold < goldRemoved);
         thrown.expect(InsufficientFundsException.class);
-        Board board = new Board(TestUtils.createWonder(), null, new Settings(5));
+        Board board = new Board(TestUtils.createWonder(), 0, new Settings(5));
         board.setGold(initialGold);
         board.removeGold(goldRemoved);
     }
@@ -90,7 +90,7 @@ public class BoardTest {
     @Theory
     public void getNbCardsOfColor_properCount_singleColor(ResourceType type, @FromDataPoints("nbCards") int nbCards,
             @FromDataPoints("nbCards") int nbOtherCards, Color color) {
-        Board board = new Board(TestUtils.createWonder(type), null, new Settings(5));
+        Board board = new Board(TestUtils.createWonder(type), 0, new Settings(5));
         TestUtils.addCards(board, nbCards, nbOtherCards, color);
         assertEquals(nbCards, board.getNbCardsOfColor(Collections.singletonList(color)));
     }
@@ -99,7 +99,7 @@ public class BoardTest {
     public void getNbCardsOfColor_properCount_multiColors(ResourceType type, @FromDataPoints("nbCards") int nbCards1,
             @FromDataPoints("nbCards") int nbCards2, @FromDataPoints("nbCards") int nbOtherCards, Color color1,
             Color color2) {
-        Board board = new Board(TestUtils.createWonder(type), null, new Settings(5));
+        Board board = new Board(TestUtils.createWonder(type), 0, new Settings(5));
         TestUtils.addCards(board, nbCards1, color1);
         TestUtils.addCards(board, nbCards2, color2);
         TestUtils.addCards(board, nbOtherCards, TestUtils.getDifferentColorFrom(color1, color2));

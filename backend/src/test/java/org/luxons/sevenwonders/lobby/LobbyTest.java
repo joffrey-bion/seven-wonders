@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game;
+package org.luxons.sevenwonders.lobby;
 
 import java.util.Arrays;
 
@@ -11,16 +11,18 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.luxons.sevenwonders.game.Lobby.GameAlreadyStartedException;
-import org.luxons.sevenwonders.game.Lobby.PlayerNameAlreadyUsedException;
-import org.luxons.sevenwonders.game.Lobby.PlayerOverflowException;
-import org.luxons.sevenwonders.game.Lobby.PlayerUnderflowException;
-import org.luxons.sevenwonders.game.Lobby.UnknownPlayerException;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
+import org.luxons.sevenwonders.lobby.Lobby.GameAlreadyStartedException;
+import org.luxons.sevenwonders.lobby.Lobby.PlayerNameAlreadyUsedException;
+import org.luxons.sevenwonders.lobby.Lobby.PlayerOverflowException;
+import org.luxons.sevenwonders.lobby.Lobby.PlayerUnderflowException;
+import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(Theories.class)
 public class LobbyTest {

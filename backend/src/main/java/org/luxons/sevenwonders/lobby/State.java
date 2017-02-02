@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game;
+package org.luxons.sevenwonders.lobby;
 
 public enum State {
     LOBBY,

@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.luxons.sevenwonders.game.Lobby;
-import org.luxons.sevenwonders.game.Player;
+import org.luxons.sevenwonders.lobby.Lobby;
+import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

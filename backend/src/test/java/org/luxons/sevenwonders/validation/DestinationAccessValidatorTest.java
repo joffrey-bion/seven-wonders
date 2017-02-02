@@ -2,30 +2,25 @@ package org.luxons.sevenwonders.validation;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.luxons.sevenwonders.game.Game;
-import org.luxons.sevenwonders.game.Lobby;
-import org.luxons.sevenwonders.game.Player;
+import org.luxons.sevenwonders.lobby.Lobby;
+import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
-import org.luxons.sevenwonders.repositories.GameRepository;
-import org.luxons.sevenwonders.repositories.GameRepository.GameNotFoundException;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.luxons.sevenwonders.repositories.LobbyRepository.LobbyNotFoundException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DestinationAccessValidatorTest {
 
     private LobbyRepository lobbyRepository;
 
-    private GameRepository gameRepository;
-
     private DestinationAccessValidator destinationAccessValidator;
 
     @Before
     public void setup() {
-        gameRepository = new GameRepository();
         lobbyRepository = new LobbyRepository(new GameDefinitionLoader());
-        destinationAccessValidator = new DestinationAccessValidator(lobbyRepository, gameRepository);
+        destinationAccessValidator = new DestinationAccessValidator(lobbyRepository);
     }
 
     private Lobby createLobby(String gameName, String ownerUsername, String... otherPlayers) {
@@ -40,8 +35,7 @@ public class DestinationAccessValidatorTest {
 
     private void createGame(String gameName, String ownerUsername, String... otherPlayers) {
         Lobby lobby = createLobby(gameName, ownerUsername, otherPlayers);
-        Game game = lobby.startGame();
-        gameRepository.add(game);
+        lobby.startGame();
     }
 
     @Test
@@ -81,7 +75,7 @@ public class DestinationAccessValidatorTest {
         destinationAccessValidator.hasAccess("", "/lobby/0");
     }
 
-    @Test(expected = GameNotFoundException.class)
+    @Test(expected = LobbyNotFoundException.class)
     public void validate_failWhenNoGameExist() {
         destinationAccessValidator.hasAccess("", "/game/0");
     }
@@ -93,7 +87,7 @@ public class DestinationAccessValidatorTest {
         destinationAccessValidator.hasAccess("doesNotMatter", "/lobby/3");
     }
 
-    @Test(expected = GameNotFoundException.class)
+    @Test(expected = LobbyNotFoundException.class)
     public void validate_failWhenReferencedGameDoesNotExist() {
         createGame("Test Game 1", "user1", "user2", "user3");
         createGame("Test Game 2", "user4", "user5", "user6");

@@ -3,12 +3,8 @@ package org.luxons.sevenwonders.game.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.luxons.sevenwonders.game.Game;
-import org.luxons.sevenwonders.game.Player;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.api.Table;
@@ -17,7 +13,6 @@ import org.luxons.sevenwonders.game.boards.Science;
 import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
-import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
@@ -43,16 +38,6 @@ public class TestUtils {
         return new Settings(nbPlayers, createCustomizableSettings());
     }
 
-    public static Game createGame(int id, int nbPlayers) {
-        Settings settings = createSettings(nbPlayers);
-        List<Player> players = TestUtils.createPlayers(nbPlayers);
-        List<Board> boards = TestUtils.createBoards(nbPlayers);
-        List<Card> cards = TestUtils.createSampleCards(0, nbPlayers * 7);
-        Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
-        cardsPerAge.put(1, cards);
-        return new Game(id, settings, players, boards, new Decks(cardsPerAge));
-    }
-
     public static Table createTable(int nbPlayers) {
         return new Table(createBoards(nbPlayers));
     }
@@ -66,26 +51,9 @@ public class TestUtils {
         return boards;
     }
 
-    public static List<Player> createPlayers(int count) {
-        List<Player> players = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            String username = "testUser" + i;
-            String displayName = "Test User " + i;
-            Player player = new Player(username, displayName);
-            player.setIndex(i);
-            players.add(player);
-        }
-        return players;
-    }
-
     private static Board createBoard(Settings settings, ResourceType initialResource) {
         Wonder wonder = createWonder(initialResource);
-
-        String username = "testUser" + initialResource.getSymbol();
-        String displayName = "Test User " + initialResource.getSymbol();
-        Player player = new Player(username, displayName);
-
-        return new Board(wonder, player, settings);
+        return new Board(wonder, 0, settings);
     }
 
     public static Board createBoard(ResourceType initialResource) {
