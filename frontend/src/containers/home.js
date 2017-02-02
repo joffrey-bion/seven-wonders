@@ -23,9 +23,6 @@ class HomePage extends Component {
           onChange={(e) => this._username = e.target.value}
           onClick={this.play}
         />
-        <Link to="/games">/games</Link>
-        <br />
-        <Link to="/somewhere">Take me somewhere</Link>
       </div>
     )
   }
