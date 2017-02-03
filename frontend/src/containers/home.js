@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Heading, InlineForm } from 'rebass'
-import { Link } from 'react-router'
+import { Button, Container, Input } from 'rebass'
+import { actions } from '../redux/players'
+
 class HomePage extends Component {
 
   play = (e) => {
@@ -13,26 +14,28 @@ class HomePage extends Component {
 
   render() {
     return (
-      <div style={{maxWidth: '500px', margin: '0 auto'}}>
-        <Heading>Enter your username to start playing!</Heading>
-        <br />
-        <InlineForm
-          buttonLabel="Play now!"
-          label="Username"
+      <Container>
+        <Input
           name="username"
+          label="Username"
+          placeholder="Username"
+          hideLabel
           onChange={(e) => this._username = e.target.value}
-          onClick={this.play}
         />
-      </div>
+        <Button
+          backgroundColor="primary"
+          color="white"
+          big
+          onClick={this.play}>
+          PLAY NOW!
+        </Button>
+      </Container>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => ({})
 
-})
-
-import { actions } from '../redux/players'
 const mapDispatchToProps = {
   chooseUsername: actions.chooseUsername
 }
