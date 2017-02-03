@@ -1,7 +1,6 @@
 import React from 'react'
 import {
-  Banner,
-  Container
+  Banner
 } from 'rebass'
 import logo from './logo-7-wonders.png'
 import background from './background-zeus-temple.jpg'
