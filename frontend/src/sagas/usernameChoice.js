@@ -10,16 +10,12 @@ function usernameValidationChannel(socket) {
     const receiveUsernameHandler = socket.subscribe('/user/queue/nameChoice', event => {
       emitter(fromJS(JSON.parse(event.body)))
     })
-
-    const unsubscribe = () => receiveUsernameHandler.unsubscribe()
-
-    return unsubscribe
+    return () => receiveUsernameHandler.unsubscribe()
   })
 }
 
 function *usernameValidation({ socket }) {
-  const usernameChannel = usernameValidationChannel(socket)
-
+  const usernameChannel = yield call(usernameValidationChannel, socket)
   const user = yield take(usernameChannel)
   yield put(actions.setUsername(user.get('username'), user.get('displayName'), user.get('index')))
   usernameChannel.close()

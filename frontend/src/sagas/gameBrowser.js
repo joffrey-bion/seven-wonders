@@ -20,12 +20,10 @@ function gameBrowserChannel(socket) {
     const newGame = socket.subscribe('/topic/games', makeHandler(types.CREATE_OR_UPDATE_GAMES))
     const joinGame = socket.subscribe('/user/queue/lobby/joined', makeHandler(types.JOIN_GAME))
 
-    const unsubscribe = () => {
+    return () => {
       newGame.unsubscribe()
       joinGame.unsubscribe()
     }
-
-    return unsubscribe
   })
 }
 
