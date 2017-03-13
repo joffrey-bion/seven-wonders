@@ -1,7 +1,8 @@
 package org.luxons.sevenwonders.lobby;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.luxons.sevenwonders.game.Game;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Player {
 

@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 public class ScoreBoard {
 
     private static final Comparator<PlayerScore> comparator = Comparator.comparing(PlayerScore::getTotalPoints)
-            .thenComparing(PlayerScore::getBoardGold);
+                                                                        .thenComparing(PlayerScore::getBoardGold);
 
     private PriorityQueue<PlayerScore> scores;
 

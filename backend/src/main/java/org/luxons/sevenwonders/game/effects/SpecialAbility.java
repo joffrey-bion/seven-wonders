@@ -5,6 +5,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.Card;
 
 public enum SpecialAbility {
+
     /**
      * The player can play the last card of each age instead of discarding it. This card can be played by paying its
      * cost, discarded to gain 3 coins or used in the construction of his or her Wonder.
@@ -22,7 +23,7 @@ public enum SpecialAbility {
     PLAY_DISCARDED,
 
     /**
-     * The player can, at the end of the game, “copy” a Guild of his or her choice (purple card), built by one of his or
+     * The player can, at the end of the game, "copy" a Guild of his or her choice (purple card), built by one of his or
      * her two neighboring cities.
      */
     COPY_GUILD {

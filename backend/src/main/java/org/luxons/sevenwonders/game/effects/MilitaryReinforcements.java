@@ -29,7 +29,7 @@ public class MilitaryReinforcements extends InstantOwnBoardEffect {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        MilitaryReinforcements that = (MilitaryReinforcements)o;
+        MilitaryReinforcements that = (MilitaryReinforcements) o;
         return count == that.count;
     }
 

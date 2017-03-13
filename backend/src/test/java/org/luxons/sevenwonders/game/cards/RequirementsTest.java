@@ -60,7 +60,8 @@ public class RequirementsTest {
     }
 
     @Theory
-    public void resourceRequirement_ownProduction(ResourceType initialResource, ResourceType producedResource, ResourceType requiredResource) {
+    public void resourceRequirement_ownProduction(ResourceType initialResource, ResourceType producedResource,
+            ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
         Resources resources = TestUtils.createResources(requiredResource);
@@ -72,7 +73,8 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(producedResource == requiredResource, requirements.isAffordedBy(board));
-        assertEquals(producedResource == requiredResource, requirements.isAffordedBy(table, 0, Collections.emptyList()));
+        assertEquals(producedResource == requiredResource,
+                requirements.isAffordedBy(table, 0, Collections.emptyList()));
 
         if (producedResource == requiredResource) {
             assertTrue(requirements.couldBeAffordedBy(table, 0));

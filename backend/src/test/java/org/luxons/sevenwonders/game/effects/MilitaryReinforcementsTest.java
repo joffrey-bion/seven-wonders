@@ -9,14 +9,16 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Theories.class)
 public class MilitaryReinforcementsTest {
 
     @DataPoints
     public static int[] shieldCounts() {
-        return new int[]{0, 1, 2, 3, 5};
+        return new int[] {0, 1, 2, 3, 5};
     }
 
     @DataPoints

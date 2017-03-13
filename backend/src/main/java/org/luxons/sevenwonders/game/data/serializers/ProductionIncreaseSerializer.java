@@ -13,8 +13,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class ProductionIncreaseSerializer
-        implements JsonSerializer<ProductionIncrease>, JsonDeserializer<ProductionIncrease> {
+public class ProductionIncreaseSerializer implements JsonSerializer<ProductionIncrease>,
+        JsonDeserializer<ProductionIncrease> {
 
     @Override
     public JsonElement serialize(ProductionIncrease productionIncrease, Type typeOfSrc,

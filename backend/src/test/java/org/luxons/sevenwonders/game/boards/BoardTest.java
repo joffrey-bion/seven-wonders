@@ -20,14 +20,14 @@ import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.*;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(Theories.class)
 public class BoardTest {
 
     @DataPoints("gold")
     public static int[] goldAmounts() {
-        return new int[]{-3, -1, 0, 1, 2, 3};
+        return new int[] {-3, -1, 0, 1, 2, 3};
     }
 
     @DataPoints("nbCards")

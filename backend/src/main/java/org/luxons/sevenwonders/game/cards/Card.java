@@ -105,7 +105,7 @@ public class Card {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Card card = (Card)o;
+        Card card = (Card) o;
         return Objects.equals(name, card.name);
     }
 

@@ -12,7 +12,8 @@ import org.luxons.sevenwonders.game.resources.Resources;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ProductionSerializerTest {
 
@@ -20,12 +21,13 @@ public class ProductionSerializerTest {
 
     @Before
     public void setUp() {
-        Type resourceTypeList = new TypeToken<List<ResourceType>>() {}.getType();
+        Type resourceTypeList = new TypeToken<List<ResourceType>>() {
+        }.getType();
         gson = new GsonBuilder().registerTypeAdapter(Resources.class, new ResourcesSerializer())
-                .registerTypeAdapter(ResourceType.class, new ResourceTypeSerializer())
-                .registerTypeAdapter(resourceTypeList, new ResourceTypesSerializer())
-                .registerTypeAdapter(Production.class, new ProductionSerializer())
-                .create();
+                                .registerTypeAdapter(ResourceType.class, new ResourceTypeSerializer())
+                                .registerTypeAdapter(resourceTypeList, new ResourceTypesSerializer())
+                                .registerTypeAdapter(Production.class, new ProductionSerializer())
+                                .create();
     }
 
     private static Production create(int wood, int stone, int clay) {

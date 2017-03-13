@@ -6,7 +6,8 @@ import org.luxons.sevenwonders.game.resources.ResourceType;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ResourceTypeSerializerTest {
 
@@ -20,7 +21,7 @@ public class ResourceTypeSerializerTest {
     @Test
     public void serialize_useSymbolForEachType() {
         for (ResourceType type : ResourceType.values()) {
-            String expectedJson = "\""  + type.getSymbol() + "\"";
+            String expectedJson = "\"" + type.getSymbol() + "\"";
             assertEquals(expectedJson, gson.toJson(type));
         }
     }
@@ -28,7 +29,7 @@ public class ResourceTypeSerializerTest {
     @Test
     public void deserialize_useSymbolForEachType() {
         for (ResourceType type : ResourceType.values()) {
-            String typeInJson = "\""  + type.getSymbol() + "\"";
+            String typeInJson = "\"" + type.getSymbol() + "\"";
             assertEquals(type, gson.fromJson(typeInJson, ResourceType.class));
         }
     }

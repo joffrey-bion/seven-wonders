@@ -10,7 +10,7 @@ import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Theories.class)
 public class ScienceProgressTest {

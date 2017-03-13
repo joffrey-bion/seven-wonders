@@ -157,10 +157,10 @@ public class Board {
 
     private int computePointsForCards(Table table, Color color) {
         return playedCards.stream()
-                .filter(c -> c.getColor() == color)
-                .flatMap(c -> c.getEffects().stream())
-                .mapToInt(e -> e.computePoints(table, playerIndex))
-                .sum();
+                          .filter(c -> c.getColor() == color)
+                          .flatMap(c -> c.getEffects().stream())
+                          .mapToInt(e -> e.computePoints(table, playerIndex))
+                          .sum();
     }
 
     private int computeGoldPoints() {

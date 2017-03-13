@@ -2,9 +2,9 @@ package org.luxons.sevenwonders.validation;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.luxons.sevenwonders.repositories.LobbyRepository.LobbyNotFoundException;
 

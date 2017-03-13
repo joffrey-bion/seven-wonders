@@ -39,10 +39,11 @@ public class ProductionSerializer implements JsonSerializer<Production>, JsonDes
         if (choices.size() > 1) {
             throw new IllegalArgumentException("Cannot serialize a production with more than one choice");
         }
-        String str = choices.get(0).stream()
-                .map(ResourceType::getSymbol)
-                .map(Object::toString)
-                .collect(Collectors.joining("/"));
+        String str = choices.get(0)
+                            .stream()
+                            .map(ResourceType::getSymbol)
+                            .map(Object::toString)
+                            .collect(Collectors.joining("/"));
         return context.serialize(str);
     }
 
@@ -51,8 +52,8 @@ public class ProductionSerializer implements JsonSerializer<Production>, JsonDes
     }
 
     @Override
-    public Production deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
-            JsonParseException {
+    public Production deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         String resourcesStr = json.getAsString();
         Production production = new Production();
         if (resourcesStr.contains("/")) {

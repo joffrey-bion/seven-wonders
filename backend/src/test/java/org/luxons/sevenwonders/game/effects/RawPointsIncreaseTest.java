@@ -7,7 +7,9 @@ import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Theories.class)
 public class RawPointsIncreaseTest {

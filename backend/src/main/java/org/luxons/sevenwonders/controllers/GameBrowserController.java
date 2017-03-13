@@ -35,8 +35,8 @@ public class GameBrowserController {
     private final SimpMessagingTemplate template;
 
     @Autowired
-    public GameBrowserController(LobbyController lobbyController, LobbyRepository lobbyRepository, PlayerRepository playerRepository,
-                                 SimpMessagingTemplate template) {
+    public GameBrowserController(LobbyController lobbyController, LobbyRepository lobbyRepository,
+            PlayerRepository playerRepository, SimpMessagingTemplate template) {
         this.lobbyController = lobbyController;
         this.lobbyRepository = lobbyRepository;
         this.playerRepository = playerRepository;

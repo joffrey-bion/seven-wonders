@@ -21,11 +21,11 @@ public class NumericEffectSerializer implements JsonSerializer<Effect>, JsonDese
     public JsonElement serialize(Effect effect, Type typeOfSrc, JsonSerializationContext context) {
         int value;
         if (MilitaryReinforcements.class.equals(typeOfSrc)) {
-            value =  ((MilitaryReinforcements)effect).getCount();
+            value = ((MilitaryReinforcements) effect).getCount();
         } else if (GoldIncrease.class.equals(typeOfSrc)) {
-            value =  ((GoldIncrease)effect).getAmount();
+            value = ((GoldIncrease) effect).getAmount();
         } else if (RawPointsIncrease.class.equals(typeOfSrc)) {
-            value =  ((RawPointsIncrease)effect).getPoints();
+            value = ((RawPointsIncrease) effect).getPoints();
         } else {
             throw new IllegalArgumentException("Unknown numeric effect " + typeOfSrc.getTypeName());
         }
@@ -33,8 +33,8 @@ public class NumericEffectSerializer implements JsonSerializer<Effect>, JsonDese
     }
 
     @Override
-    public Effect deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
-            JsonParseException {
+    public Effect deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         int value = json.getAsInt();
         if (MilitaryReinforcements.class.equals(typeOfT)) {
             return new MilitaryReinforcements(value);

@@ -40,8 +40,8 @@ public class ScienceProgressSerializer implements JsonSerializer<ScienceProgress
     }
 
     @Override
-    public ScienceProgress deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws
-            JsonParseException {
+    public ScienceProgress deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         String s = json.getAsString();
         ScienceProgress scienceProgress = new ScienceProgress();
         Science science = new Science();

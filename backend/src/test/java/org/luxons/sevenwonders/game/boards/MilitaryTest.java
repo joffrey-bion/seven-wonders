@@ -37,8 +37,8 @@ public class MilitaryTest {
     }
 
     @Theory
-    public void victory_addsCorrectPoints(@FromDataPoints("ages") int age, @FromDataPoints("points") int
-            nbPointsPerVictory) {
+    public void victory_addsCorrectPoints(@FromDataPoints("ages") int age,
+            @FromDataPoints("points") int nbPointsPerVictory) {
         Military military = createMilitary(age, nbPointsPerVictory, 0);
         int initialPoints = military.getTotalPoints();
 

@@ -7,7 +7,8 @@ import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.wonders.WonderStage;
 
-@SuppressWarnings("unused,MismatchedQueryAndUpdateOfCollection") // the fields are injected by Gson
+// the fields are injected by Gson
+@SuppressWarnings("unused,MismatchedQueryAndUpdateOfCollection")
 class WonderSideDefinition {
 
     private ResourceType initialResource;

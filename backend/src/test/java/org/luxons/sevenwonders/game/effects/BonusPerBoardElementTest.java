@@ -16,7 +16,7 @@ import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Theories.class)
 public class BonusPerBoardElementTest {
@@ -65,7 +65,8 @@ public class BonusPerBoardElementTest {
     }
 
     @Theory
-    public void computePoints_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points, int gold) {
+    public void computePoints_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points,
+            int gold) {
         Board board = table.getBoard(0, boardPosition);
         for (int i = 0; i < nbDefeatTokens; i++) {
             board.getMilitary().defeat();
@@ -78,7 +79,8 @@ public class BonusPerBoardElementTest {
     }
 
     @Theory
-    public void computePoints_countsWonderStages(RelativeBoardPosition boardPosition, int nbStages, int points, int gold) {
+    public void computePoints_countsWonderStages(RelativeBoardPosition boardPosition, int nbStages, int points,
+            int gold) {
         Board board = table.getBoard(0, boardPosition);
         for (int i = 0; i < nbStages; i++) {
             board.getWonder().buildLevel(new CardBack(""));
@@ -91,8 +93,8 @@ public class BonusPerBoardElementTest {
     }
 
     @Theory
-    public void apply_countsCards(RelativeBoardPosition boardPosition, int nbCards, int nbOtherCards,
-            int points, int gold, Color color) {
+    public void apply_countsCards(RelativeBoardPosition boardPosition, int nbCards, int nbOtherCards, int points,
+            int gold, Color color) {
         Board board = table.getBoard(0, boardPosition);
         TestUtils.addCards(board, nbCards, nbOtherCards, color);
 
@@ -106,7 +108,8 @@ public class BonusPerBoardElementTest {
     }
 
     @Theory
-    public void apply_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points, int gold) {
+    public void apply_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points,
+            int gold) {
         Board board = table.getBoard(0, boardPosition);
         for (int i = 0; i < nbDefeatTokens; i++) {
             board.getMilitary().defeat();

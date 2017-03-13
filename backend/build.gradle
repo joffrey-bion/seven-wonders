@@ -9,6 +9,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'checkstyle'
 apply plugin: 'org.springframework.boot'
 
 group 'org.luxons'
@@ -33,6 +34,11 @@ dependencies {
     compile 'org.webjars:jquery:3.1.0'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+checkstyle {
+    maxWarnings = 0
+    toolVersion = '7.6'
 }
 
 // packages the frontend app within the jar

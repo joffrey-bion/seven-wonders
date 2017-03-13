@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.game.api;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import org.luxons.sevenwonders.game.moves.MoveType;
@@ -44,6 +43,6 @@ public class PlayerMove {
 
     @Override
     public String toString() {
-        return type +  " '" + cardName + '\'';
+        return type + " '" + cardName + '\'';
     }
 }

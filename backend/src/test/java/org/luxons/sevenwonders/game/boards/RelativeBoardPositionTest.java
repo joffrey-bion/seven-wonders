@@ -5,8 +5,8 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(Theories.class)
 public class RelativeBoardPositionTest {

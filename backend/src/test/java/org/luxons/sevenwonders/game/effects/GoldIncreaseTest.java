@@ -9,14 +9,16 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Theories.class)
 public class GoldIncreaseTest {
 
     @DataPoints
     public static int[] goldAmounts() {
-        return new int[]{-5, -1, 0, 1, 2, 5, 10};
+        return new int[] {-5, -1, 0, 1, 2, 5, 10};
     }
 
     @DataPoints

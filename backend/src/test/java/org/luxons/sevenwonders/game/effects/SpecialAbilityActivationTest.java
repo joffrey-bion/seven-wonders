@@ -29,7 +29,7 @@ public class SpecialAbilityActivationTest {
 
     @DataPoints
     public static RelativeBoardPosition[] neighbours() {
-        return new RelativeBoardPosition[]{RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT};
+        return new RelativeBoardPosition[] {RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT};
     }
 
     @DataPoints
@@ -46,7 +46,7 @@ public class SpecialAbilityActivationTest {
                 Arrays.asList(RelativeBoardPosition.LEFT, RelativeBoardPosition.SELF, RelativeBoardPosition.RIGHT));
         bonus2.setPoints(1);
 
-        return new Card[]{TestUtils.createGuildCard(1, bonus), TestUtils.createGuildCard(2, bonus2)};
+        return new Card[] {TestUtils.createGuildCard(1, bonus), TestUtils.createGuildCard(2, bonus2)};
     }
 
     @Theory

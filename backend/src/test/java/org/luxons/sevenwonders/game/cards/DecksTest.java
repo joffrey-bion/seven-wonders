@@ -14,8 +14,10 @@ import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.cards.Decks.CardNotFoundException;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(Theories.class)
 public class DecksTest {

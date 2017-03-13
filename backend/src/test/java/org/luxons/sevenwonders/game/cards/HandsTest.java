@@ -15,8 +15,10 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Hands.PlayerIndexOutOfBoundsException;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(Theories.class)
 public class HandsTest {

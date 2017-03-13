@@ -8,7 +8,8 @@ import org.luxons.sevenwonders.game.test.TestUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ScienceProgressSerializerTest {
 

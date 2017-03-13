@@ -46,7 +46,7 @@ public class UIError {
 
     private UIErrorDetail convertError(ObjectError objectError) {
         if (objectError instanceof FieldError) {
-            return new UIErrorDetail((FieldError)objectError);
+            return new UIErrorDetail((FieldError) objectError);
         } else {
             return new UIErrorDetail(objectError);
         }

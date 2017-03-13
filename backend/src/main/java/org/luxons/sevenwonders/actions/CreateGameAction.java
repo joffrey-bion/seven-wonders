@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 public class CreateGameAction {
 
     @NotNull
-    @Size(min=2, max=30)
+    @Size(min = 2, max = 30)
     private String gameName;
 
     public String getGameName() {

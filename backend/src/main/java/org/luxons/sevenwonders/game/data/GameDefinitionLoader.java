@@ -71,7 +71,8 @@ public class GameDefinitionLoader {
     }
 
     private static Gson createGson() {
-        Type resourceTypeList = new TypeToken<List<ResourceType>>() {}.getType();
+        Type resourceTypeList = new TypeToken<List<ResourceType>>() {
+        }.getType();
         return new GsonBuilder().disableHtmlEscaping()
                                 .registerTypeAdapter(Resources.class, new ResourcesSerializer())
                                 .registerTypeAdapter(ResourceType.class, new ResourceTypeSerializer())

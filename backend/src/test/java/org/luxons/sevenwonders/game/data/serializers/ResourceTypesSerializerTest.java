@@ -11,7 +11,8 @@ import org.luxons.sevenwonders.game.resources.ResourceType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ResourceTypesSerializerTest {
 
@@ -23,7 +24,8 @@ public class ResourceTypesSerializerTest {
     }
 
     private static Type createListTypeToken() {
-        return new TypeToken<List<ResourceType>>() {}.getType();
+        return new TypeToken<List<ResourceType>>() {
+        }.getType();
     }
 
     @Test

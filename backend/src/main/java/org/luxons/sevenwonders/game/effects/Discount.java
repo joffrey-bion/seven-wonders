@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Provider;
-import org.luxons.sevenwonders.game.resources.TradingRules;
 import org.luxons.sevenwonders.game.resources.ResourceType;
+import org.luxons.sevenwonders.game.resources.TradingRules;
 
 public class Discount extends InstantOwnBoardEffect {
 

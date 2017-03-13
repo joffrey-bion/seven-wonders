@@ -54,7 +54,7 @@ public class Resources {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Resources resources = (Resources)o;
+        Resources resources = (Resources) o;
         return Objects.equals(quantities, resources.quantities);
     }
 

@@ -29,7 +29,7 @@ public class RawPointsIncrease extends EndGameEffect {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RawPointsIncrease that = (RawPointsIncrease)o;
+        RawPointsIncrease that = (RawPointsIncrease) o;
         return points == that.points;
     }
 

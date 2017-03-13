@@ -13,6 +13,7 @@ public enum ResourceType {
     LOOM('L');
 
     private static final Map<Character, ResourceType> typesPerSymbol = new HashMap<>(7);
+
     static {
         for (ResourceType type : values()) {
             typesPerSymbol.put(type.symbol, type);

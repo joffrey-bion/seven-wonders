@@ -52,7 +52,7 @@ public class Wonder {
     }
 
     public int getNbBuiltStages() {
-        return (int)stages.stream().filter(WonderStage::isBuilt).count();
+        return (int) stages.stream().filter(WonderStage::isBuilt).count();
     }
 
     public String getImage() {
@@ -94,9 +94,9 @@ public class Wonder {
 
     public int computePoints(Table table, int playerIndex) {
         return stages.stream()
-                .filter(WonderStage::isBuilt)
-                .flatMap(c -> c.getEffects().stream())
-                .mapToInt(e -> e.computePoints(table, playerIndex))
-                .sum();
+                     .filter(WonderStage::isBuilt)
+                     .flatMap(c -> c.getEffects().stream())
+                     .mapToInt(e -> e.computePoints(table, playerIndex))
+                     .sum();
     }
 }

@@ -79,7 +79,8 @@ public class Production {
         return false;
     }
 
-    private static Set<ResourceType> findFirstAlternativeContaining(List<Set<ResourceType>> alternatives, ResourceType type) {
+    private static Set<ResourceType> findFirstAlternativeContaining(List<Set<ResourceType>> alternatives,
+            ResourceType type) {
         return alternatives.stream().filter(a -> a.contains(type)).findAny().orElse(null);
     }
 
@@ -91,7 +92,7 @@ public class Production {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Production that = (Production)o;
+        Production that = (Production) o;
         return Objects.equals(fixedResources, that.fixedResources) && Objects.equals(alternativeResources,
                 that.alternativeResources);
     }

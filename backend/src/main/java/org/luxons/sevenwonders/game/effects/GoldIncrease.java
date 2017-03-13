@@ -29,7 +29,7 @@ public class GoldIncrease extends InstantOwnBoardEffect {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        GoldIncrease that = (GoldIncrease)o;
+        GoldIncrease that = (GoldIncrease) o;
         return amount == that.amount;
     }
 

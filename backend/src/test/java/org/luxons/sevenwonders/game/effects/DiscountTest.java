@@ -18,7 +18,7 @@ public class DiscountTest {
 
     @DataPoints
     public static int[] discountedPrices() {
-        return new int[]{0, 1, 2};
+        return new int[] {0, 1, 2};
     }
 
     @DataPoints
@@ -46,7 +46,7 @@ public class DiscountTest {
 
     @Theory
     public void apply_doesNotAffectOtherResources(int discountedPrice, ResourceType discountedType, Provider provider,
-                                           ResourceType otherType, Provider otherProvider) {
+            ResourceType otherType, Provider otherProvider) {
         Assume.assumeTrue(otherProvider != provider);
         Assume.assumeTrue(otherType != discountedType);
 

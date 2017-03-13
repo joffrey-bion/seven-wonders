@@ -43,7 +43,7 @@ public class ProductionIncrease extends InstantOwnBoardEffect {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ProductionIncrease that = (ProductionIncrease)o;
+        ProductionIncrease that = (ProductionIncrease) o;
         return Objects.equals(production, that.production);
     }
 

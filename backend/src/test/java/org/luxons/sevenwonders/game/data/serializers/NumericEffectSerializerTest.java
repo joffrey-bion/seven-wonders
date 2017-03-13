@@ -13,7 +13,7 @@ import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Theories.class)
 public class NumericEffectSerializerTest {
