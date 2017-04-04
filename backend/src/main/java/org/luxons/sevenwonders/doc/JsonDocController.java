@@ -42,8 +42,8 @@ public class JsonDocController {
 
     @ApiMethod(description = "Get the Websocket API documentation for this game")
     @RequestMapping(value = "/doc", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    JSONDoc getApi() {
+    @ResponseBody
+    public JSONDoc getApi() {
         return jsondocScanner.getJSONDoc(version, basePath, packages, playgroundEnabled, displayMethodAs);
     }
 }
