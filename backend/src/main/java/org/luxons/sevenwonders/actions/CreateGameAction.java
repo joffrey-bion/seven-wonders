@@ -3,6 +3,11 @@ package org.luxons.sevenwonders.actions;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.jsondoc.core.annotation.ApiObject;
+
+@ApiObject(name = "Create Game Action",
+           description = "The action to create a game.",
+           group = "Actions")
 public class CreateGameAction {
 
     @NotNull
