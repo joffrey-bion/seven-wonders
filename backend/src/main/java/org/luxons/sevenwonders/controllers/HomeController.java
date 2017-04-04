@@ -2,6 +2,8 @@ package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.ChooseNameAction;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.PlayerRepository;
@@ -13,6 +15,7 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
+@Api(name = "Home", description = "The home page of the game")
 @Controller
 public class HomeController {
 
@@ -25,6 +28,7 @@ public class HomeController {
         this.playerRepository = playerRepository;
     }
 
+    @ApiMethod(description = "Creates/updates the player's name (for the user's session)")
     @MessageMapping("/chooseName")
     @SendToUser("/queue/nameChoice")
     public Player chooseName(@Validated ChooseNameAction action, Principal principal) {

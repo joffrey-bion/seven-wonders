@@ -3,6 +3,8 @@ package org.luxons.sevenwonders.controllers;
 import java.security.Principal;
 import java.util.Collections;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.ReorderPlayersAction;
 import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
@@ -17,6 +19,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
+@Api(name = "Lobby", description = "The place where players gather before a game")
 @Controller
 public class LobbyController {
 
@@ -32,6 +35,7 @@ public class LobbyController {
         this.template = template;
     }
 
+    @ApiMethod
     @MessageMapping("/lobby/reorderPlayers")
     public void reorderPlayers(@Validated ReorderPlayersAction action, Principal principal) {
         Lobby lobby = getLobby(principal);
@@ -41,6 +45,7 @@ public class LobbyController {
         sendLobbyUpdateToPlayers(lobby);
     }
 
+    @ApiMethod
     @MessageMapping("/lobby/updateSettings")
     public void updateSettings(@Validated UpdateSettingsAction action, Principal principal) {
         Lobby lobby = getLobby(principal);
@@ -55,6 +60,7 @@ public class LobbyController {
         template.convertAndSend("/topic/games", Collections.singletonList(lobby));
     }
 
+    @ApiMethod
     @MessageMapping("/lobby/start")
     public void startGame(Principal principal) {
         Lobby lobby = getOwnedLobby(principal);

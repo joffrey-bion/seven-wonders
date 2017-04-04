@@ -2,6 +2,8 @@ package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.PrepareCardAction;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
@@ -18,6 +20,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+@Api(name = "Game", description = "In-game events management")
 @Controller
 public class GameController {
 
@@ -33,6 +36,7 @@ public class GameController {
         this.playerRepository = playerRepository;
     }
 
+    @ApiMethod(description = "Prepares the user's card")
     @MessageMapping("/game/{gameId}/prepare")
     public void prepareCard(@DestinationVariable long gameId, PrepareCardAction action, Principal principal) {
         Player player = playerRepository.find(principal.getName());

@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.jsondoc.core.annotation.Api;
+import org.jsondoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
@@ -21,6 +23,7 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
+@Api(name = "Game Browser", description = "This is the place where the player looks for a game")
 @Controller
 public class GameBrowserController {
 
@@ -43,12 +46,14 @@ public class GameBrowserController {
         this.template = template;
     }
 
+    @ApiMethod(description = "Created or updated games. List of existing games received here on subscribe.")
     @SubscribeMapping("/games") // prefix /topic not shown
     public Collection<Lobby> listGames(Principal principal) {
         logger.info("Player '{}' subscribed to /topic/games", principal.getName());
         return lobbyRepository.list();
     }
 
+    @ApiMethod(description = "Create a new lobby.")
     @MessageMapping("/lobby/create")
     @SendToUser("/queue/lobby/joined")
     public Lobby createGame(@Validated CreateGameAction action, Principal principal) {
@@ -66,6 +71,7 @@ public class GameBrowserController {
         return lobby;
     }
 
+    @ApiMethod(description = "Join an existing lobby.")
     @MessageMapping("/lobby/join")
     @SendToUser("/queue/lobby/joined")
     public Lobby joinGame(@Validated JoinGameAction action, Principal principal) {
