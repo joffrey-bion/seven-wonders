@@ -36,7 +36,7 @@ public class JsonDocController {
         this.version = "1.0.0";
         this.basePath = "http://localhost:8080";
         this.packages = Arrays.asList("org.luxons.sevenwonders.controllers", "org.luxons.sevenwonders.doc",
-                "org.luxons.sevenwonders.actions", "org.luxons.sevenwonders.game");
+                "org.luxons.sevenwonders.actions", "org.luxons.sevenwonders.game", "org.luxons.sevenwonders.lobby");
         this.jsondocScanner = new JsonDocWebSocketScanner();
     }
 

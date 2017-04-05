@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiMethod;
 import org.jsondoc.core.pojo.ApiMethodDoc;
 import org.jsondoc.core.pojo.JSONDoc;
+import org.jsondoc.core.pojo.JSONDoc.MethodDisplay;
 import org.jsondoc.core.pojo.JSONDocTemplate;
 import org.jsondoc.core.scanner.builder.JSONDocApiMethodDocBuilder;
 import org.jsondoc.core.util.JSONDocUtils;
@@ -28,8 +30,14 @@ import org.jsondoc.springmvc.scanner.builder.SpringQueryParamBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringResponseBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringResponseStatusBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringVerbBuilder;
+import org.luxons.sevenwonders.doc.builders.JSONDocTemplateBuilder;
 import org.luxons.sevenwonders.doc.builders.SpringPathBuilder;
 import org.luxons.sevenwonders.doc.builders.SpringRequestBodyBuilder;
+import org.reflections.Reflections;
+import org.reflections.scanners.MethodAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -37,6 +45,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 public class JsonDocWebSocketScanner extends Spring4JSONDocScanner {
+
+    /**
+     * Returns the main <code>ApiDoc</code>, containing <code>ApiMethodDoc</code> and <code>ApiObjectDoc</code> objects
+     * @return An <code>ApiDoc</code> object
+     */
+    public JSONDoc getJSONDoc(String version, String basePath, List<String> packages, boolean playgroundEnabled, MethodDisplay displayMethodAs) {
+        Set<URL> urls = new HashSet<URL>();
+        FilterBuilder filter = new FilterBuilder();
+
+        log.debug("Found " + packages.size() + " package(s) to scan...");
+        for (String pkg : packages) {
+            log.debug("Adding package to JSONDoc recursive scan: " + pkg);
+            urls.addAll(ClasspathHelper.forPackage(pkg));
+            filter.includePackage(pkg);
+        }
+
+        reflections = new Reflections(new ConfigurationBuilder().filterInputsBy(filter).setUrls(urls).addScanners(new MethodAnnotationsScanner()));
+
+        JSONDoc jsondocDoc = new JSONDoc(version, basePath);
+        jsondocDoc.setPlaygroundEnabled(playgroundEnabled);
+        jsondocDoc.setDisplayMethodAs(displayMethodAs);
+
+        jsondocControllers = jsondocControllers();
+        jsondocObjects = jsondocObjects(packages);
+        jsondocFlows = jsondocFlows();
+        jsondocGlobal = jsondocGlobal();
+        jsondocChangelogs = jsondocChangelogs();
+        jsondocMigrations = jsondocMigrations();
+
+        for (Class<?> clazz : jsondocObjects) {
+            jsondocTemplates.put(clazz, JSONDocTemplateBuilder.build(clazz, jsondocObjects));
+        }
+
+        jsondocDoc.setApis(getApiDocsMap(jsondocControllers, displayMethodAs));
+        jsondocDoc.setObjects(getApiObjectsMap(jsondocObjects));
+        jsondocDoc.setFlows(getApiFlowDocsMap(jsondocFlows, allApiMethodDocs));
+        jsondocDoc.setGlobal(getApiGlobalDoc(jsondocGlobal, jsondocChangelogs, jsondocMigrations));
+
+        return jsondocDoc;
+    }
 
     @Override
     public Set<Method> jsondocMethods(Class<?> controller) {
@@ -167,7 +215,7 @@ public class JsonDocWebSocketScanner extends Spring4JSONDocScanner {
         }
     }
 
-    private boolean isValidForRecursion(Field field) {
+    private static boolean isValidForRecursion(Field field) {
         return !field.isSynthetic() && !field.getType().isPrimitive() && !Modifier.isTransient(field.getModifiers());
     }
 }
