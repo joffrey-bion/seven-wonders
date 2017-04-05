@@ -15,7 +15,7 @@ public class Lobby {
 
     private final Player owner;
 
-    private final GameDefinition gameDefinition;
+    private final transient GameDefinition gameDefinition;
 
     private final List<Player> players;
 
