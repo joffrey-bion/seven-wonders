@@ -12,8 +12,7 @@ import org.jsondoc.core.annotation.ApiObjectField;
 public class ChooseNameAction {
 
     @ApiObjectField(description = "The display name of the player. May contain spaces and special characters.",
-                    required = true,
-                    format = ".{2,20}")
+                    required = true)
     @NotNull
     @Size(min = 2, max = 20)
     private String playerName;

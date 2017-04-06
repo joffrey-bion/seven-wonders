@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.actions;
 import javax.validation.constraints.NotNull;
 
 import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
 
 @ApiObject(name = "Update Settings Action",
@@ -11,6 +12,7 @@ import org.luxons.sevenwonders.game.api.CustomizableSettings;
            group = "Actions")
 public class UpdateSettingsAction {
 
+    @ApiObjectField
     @NotNull
     private CustomizableSettings settings;
 

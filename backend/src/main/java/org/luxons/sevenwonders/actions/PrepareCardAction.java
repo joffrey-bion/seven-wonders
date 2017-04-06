@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.actions;
 import javax.validation.constraints.NotNull;
 
 import org.jsondoc.core.annotation.ApiObject;
+import org.jsondoc.core.annotation.ApiObjectField;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 
 @ApiObject(name = "Prepare Card Action",
@@ -10,6 +11,7 @@ import org.luxons.sevenwonders.game.api.PlayerMove;
            group = "Actions")
 public class PrepareCardAction {
 
+    @ApiObjectField
     @NotNull
     private PlayerMove move;
 
