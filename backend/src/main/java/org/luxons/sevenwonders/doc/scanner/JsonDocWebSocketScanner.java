@@ -1,21 +1,18 @@
 package org.luxons.sevenwonders.doc.scanner;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.google.common.collect.Sets;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiMethod;
+import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.pojo.ApiMethodDoc;
+import org.jsondoc.core.pojo.ApiObjectDoc;
 import org.jsondoc.core.pojo.JSONDoc;
 import org.jsondoc.core.pojo.JSONDoc.MethodDisplay;
 import org.jsondoc.core.pojo.JSONDocTemplate;
@@ -27,12 +24,14 @@ import org.jsondoc.springmvc.scanner.builder.SpringHeaderBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringPathVariableBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringProducesBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringQueryParamBuilder;
-import org.jsondoc.springmvc.scanner.builder.SpringResponseBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringResponseStatusBuilder;
 import org.jsondoc.springmvc.scanner.builder.SpringVerbBuilder;
+import org.luxons.sevenwonders.doc.builders.JSONDocApiObjectDocBuilder;
 import org.luxons.sevenwonders.doc.builders.JSONDocTemplateBuilder;
+import org.luxons.sevenwonders.doc.builders.SpringObjectBuilder;
 import org.luxons.sevenwonders.doc.builders.SpringPathBuilder;
 import org.luxons.sevenwonders.doc.builders.SpringRequestBodyBuilder;
+import org.luxons.sevenwonders.doc.builders.SpringResponseBuilder;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
@@ -46,11 +45,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 public class JsonDocWebSocketScanner extends Spring4JSONDocScanner {
 
-    /**
-     * Returns the main <code>ApiDoc</code>, containing <code>ApiMethodDoc</code> and <code>ApiObjectDoc</code> objects
-     * @return An <code>ApiDoc</code> object
-     */
-    public JSONDoc getJSONDoc(String version, String basePath, List<String> packages, boolean playgroundEnabled, MethodDisplay displayMethodAs) {
+    @Override
+    public JSONDoc getJSONDoc(String version, String basePath, List<String> packages, boolean playgroundEnabled,
+                              MethodDisplay displayMethodAs) {
         Set<URL> urls = new HashSet<URL>();
         FilterBuilder filter = new FilterBuilder();
 
@@ -61,7 +58,9 @@ public class JsonDocWebSocketScanner extends Spring4JSONDocScanner {
             filter.includePackage(pkg);
         }
 
-        reflections = new Reflections(new ConfigurationBuilder().filterInputsBy(filter).setUrls(urls).addScanners(new MethodAnnotationsScanner()));
+        reflections = new Reflections(new ConfigurationBuilder().filterInputsBy(filter)
+                                                                .setUrls(urls)
+                                                                .addScanners(new MethodAnnotationsScanner()));
 
         JSONDoc jsondocDoc = new JSONDoc(version, basePath);
         jsondocDoc.setPlaygroundEnabled(playgroundEnabled);
@@ -138,84 +137,20 @@ public class JsonDocWebSocketScanner extends Spring4JSONDocScanner {
 
     @Override
     public Set<Class<?>> jsondocObjects(List<String> packages) {
-        Set<Class<?>> candidates = getRootApiObjects();
-        Set<Class<?>> subCandidates = Sets.newHashSet();
+        return new ObjectsScanner(reflections).findJsondocObjects(packages);
+    }
 
-        // This is to get objects' fields that are not returned nor part of the body request of a method, but that
-        // are a field of an object returned or a body  of a request of a method
-        for (Class<?> clazz : candidates) {
-            appendSubCandidates(clazz, subCandidates);
+    @Override
+    public ApiObjectDoc initApiObjectDoc(Class<?> clazz) {
+        return SpringObjectBuilder.buildObject(clazz);
+    }
+
+    @Override
+    public ApiObjectDoc mergeApiObjectDoc(Class<?> clazz, ApiObjectDoc apiObjectDoc) {
+        if (clazz.isAnnotationPresent(ApiObject.class)) {
+            ApiObjectDoc jsondocApiObjectDoc = JSONDocApiObjectDocBuilder.build(clazz);
+            BeanUtils.copyProperties(jsondocApiObjectDoc, apiObjectDoc);
         }
-        candidates.addAll(subCandidates);
-
-        return candidates.stream().filter(clazz -> inWhiteListedPackages(packages, clazz)).collect(Collectors.toSet());
-    }
-
-    private Set<Class<?>> getRootApiObjects() {
-        Set<Class<?>> candidates = Sets.newHashSet();
-        Set<Method> methodsToDocument = getMethodsToDocument();
-        for (Method method : methodsToDocument) {
-            addReturnType(candidates, method);
-            addBodyParam(candidates, method);
-        }
-        return candidates;
-    }
-
-    private void addReturnType(Set<Class<?>> candidates, Method method) {
-        Class<?> returnValueClass = method.getReturnType();
-        if (returnValueClass.isPrimitive() || returnValueClass.equals(JSONDoc.class)) {
-            return;
-        }
-        buildJSONDocObjectsCandidates(candidates, returnValueClass, method.getGenericReturnType(),
-                reflections);
-    }
-
-    private void addBodyParam(Set<Class<?>> candidates, Method method) {
-        int bodyParamIndex = SpringRequestBodyBuilder.getIndexOfBodyParam(method);
-        if (bodyParamIndex >= 0) {
-            Class<?> bodyParamClass = method.getParameterTypes()[bodyParamIndex];
-            Type bodyParamType = method.getGenericParameterTypes()[bodyParamIndex];
-            buildJSONDocObjectsCandidates(candidates, bodyParamClass, bodyParamType, reflections);
-        }
-    }
-
-    private Set<Method> getMethodsToDocument() {
-        Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(RequestMapping.class);
-        methodsAnnotatedWith.addAll(reflections.getMethodsAnnotatedWith(SubscribeMapping.class));
-        methodsAnnotatedWith.addAll(reflections.getMethodsAnnotatedWith(MessageMapping.class));
-        return methodsAnnotatedWith;
-    }
-
-    private boolean inWhiteListedPackages(List<String> packages, Class<?> clazz) {
-        Package p = clazz.getPackage();
-        return p != null && packages.stream().anyMatch(whiteListedPkg -> p.getName().startsWith(whiteListedPkg));
-    }
-
-    private void appendSubCandidates(Class<?> clazz, Set<Class<?>> subCandidates) {
-        if (clazz.isPrimitive() || clazz.equals(Class.class)) {
-            return;
-        }
-
-        for (Field field : clazz.getDeclaredFields()) {
-            if (!isValidForRecursion(field)) {
-                continue;
-            }
-
-            Class<?> fieldClass = field.getType();
-            Set<Class<?>> fieldCandidates = new HashSet<>();
-            buildJSONDocObjectsCandidates(fieldCandidates, fieldClass, field.getGenericType(), reflections);
-
-            for (Class<?> candidate : fieldCandidates) {
-                if (!subCandidates.contains(candidate)) {
-                    subCandidates.add(candidate);
-
-                    appendSubCandidates(candidate, subCandidates);
-                }
-            }
-        }
-    }
-
-    private static boolean isValidForRecursion(Field field) {
-        return !field.isSynthetic() && !field.getType().isPrimitive() && !Modifier.isTransient(field.getModifiers());
+        return apiObjectDoc;
     }
 }
