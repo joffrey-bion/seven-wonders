@@ -26,6 +26,9 @@ Missing steps:
 - End of game event
 - Access scoring
 
+A [live API documentation using JsonDoc](https://seven-wonders-online.herokuapp.com/jsondoc-ui.html?url=https://seven-wonders-online.herokuapp.com/doc)
+is available. It is in construction as well because I'm adding wesocket support to the existing REST-API support. 
+
 ### Client
 
 The client is just at the start of the development. It handles:
