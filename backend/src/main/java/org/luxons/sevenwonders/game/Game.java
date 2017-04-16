@@ -111,7 +111,8 @@ public class Game {
         List<Card> hand = hands.get(move.getPlayerIndex());
         if (!move.isValid(table, hand)) {
             throw new InvalidMoveException(
-                    "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCard().getName());
+                    "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCard().getName()
+                            + " with the given resources");
         }
     }
 
