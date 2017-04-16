@@ -8,7 +8,7 @@ public class PlayerTurnInfo {
 
     private final Table table;
 
-    private int currentAge;
+    private final int currentAge;
 
     private Action action;
 
@@ -19,6 +19,7 @@ public class PlayerTurnInfo {
     public PlayerTurnInfo(int playerIndex, Table table) {
         this.playerIndex = playerIndex;
         this.table = table;
+        this.currentAge = table.getCurrentAge();
     }
 
     public int getPlayerIndex() {
@@ -31,10 +32,6 @@ public class PlayerTurnInfo {
 
     public int getCurrentAge() {
         return currentAge;
-    }
-
-    public void setCurrentAge(int currentAge) {
-        this.currentAge = currentAge;
     }
 
     public List<HandCard> getHand() {
@@ -59,5 +56,10 @@ public class PlayerTurnInfo {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerTurnInfo{" + "playerIndex=" + playerIndex + ", action=" + action + ", hand=" + hand + '}';
     }
 }
