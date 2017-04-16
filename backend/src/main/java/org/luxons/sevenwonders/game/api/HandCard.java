@@ -41,4 +41,9 @@ public class HandCard {
         return playable;
     }
 
+    @Override
+    public String toString() {
+        return "HandCard{" + "card=" + card + ", chainable=" + chainable + ", free=" + free + ", playable=" + playable
+                + '}';
+    }
 }

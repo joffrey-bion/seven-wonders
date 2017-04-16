@@ -113,4 +113,9 @@ public class Card {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    @Override
+    public String toString() {
+        return "Card{" + name + '}';
+    }
 }
