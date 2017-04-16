@@ -19,7 +19,8 @@ public class PlayCardMove extends CardFromHandMove {
         if (!super.isValid(table, playerHand)) {
             return false;
         }
-        return getCard().getRequirements().isAffordedBy(table, getPlayerIndex(), getBoughtResources());
+        Board board = table.getBoard(getPlayerIndex());
+        return getCard().getRequirements().isAffordedBy(board, getBoughtResources());
     }
 
     @Override

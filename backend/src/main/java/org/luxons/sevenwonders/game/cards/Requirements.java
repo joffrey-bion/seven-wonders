@@ -30,6 +30,14 @@ public class Requirements {
         this.resources = resources;
     }
 
+    /**
+     * Returns whether the given board can pay for these requirements on its own.
+     *
+     * @param board
+     *         the board to check
+     *
+     * @return true if the given board fulfills these requirements without any transaction with its neighbours
+     */
     boolean isAffordedBy(Board board) {
         return hasRequiredGold(board) && producesRequiredResources(board);
     }
@@ -44,11 +52,20 @@ public class Requirements {
         }
         Resources leftToPay = resources.minus(board.getProduction().getFixedResources());
         // TODO take into account resources buyable from neighbours
-        return true;
+        return false;
     }
 
-    public boolean isAffordedBy(Table table, int playerIndex, List<BoughtResources> boughtResources) {
-        Board board = table.getBoard(playerIndex);
+    /**
+     * Returns whether the given player can pay for these requirements, if he buys the specified resources.
+     *
+     * @param board
+     *         the board to check
+     * @param boughtResources
+     *         the resources the player intends to buy
+     *
+     * @return true if the given board fulfills these requirements
+     */
+    public boolean isAffordedBy(Board board, List<BoughtResources> boughtResources) {
         if (!hasRequiredGold(board)) {
             return false;
         }

@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.wonders;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.api.Table;
+import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
@@ -37,7 +38,8 @@ public class WonderStage {
     }
 
     public boolean isBuildable(Table table, int playerIndex, List<BoughtResources> boughtResources) {
-        return requirements.isAffordedBy(table, playerIndex, boughtResources);
+        Board board = table.getBoard(playerIndex);
+        return requirements.isAffordedBy(board, boughtResources);
     }
 
     void build(CardBack cardBack) {

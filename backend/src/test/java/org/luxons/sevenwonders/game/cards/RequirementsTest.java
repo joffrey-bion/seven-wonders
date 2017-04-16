@@ -38,7 +38,7 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(boardGold >= requiredGold, requirements.isAffordedBy(board));
-        assertEquals(boardGold >= requiredGold, requirements.isAffordedBy(table, 0, Collections.emptyList()));
+        assertEquals(boardGold >= requiredGold, requirements.isAffordedBy(board, Collections.emptyList()));
         assertEquals(boardGold >= requiredGold, requirements.couldBeAffordedBy(table, 0));
     }
 
@@ -52,7 +52,7 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(initialResource == requiredResource, requirements.isAffordedBy(board));
-        assertEquals(initialResource == requiredResource, requirements.isAffordedBy(table, 0, Collections.emptyList()));
+        assertEquals(initialResource == requiredResource, requirements.isAffordedBy(board, Collections.emptyList()));
 
         if (initialResource == requiredResource) {
             assertTrue(requirements.couldBeAffordedBy(table, 0));
@@ -73,8 +73,7 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(producedResource == requiredResource, requirements.isAffordedBy(board));
-        assertEquals(producedResource == requiredResource,
-                requirements.isAffordedBy(table, 0, Collections.emptyList()));
+        assertEquals(producedResource == requiredResource, requirements.isAffordedBy(board, Collections.emptyList()));
 
         if (producedResource == requiredResource) {
             assertTrue(requirements.couldBeAffordedBy(table, 0));
