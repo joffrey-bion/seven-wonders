@@ -1,12 +1,19 @@
 package org.luxons.sevenwonders.game.resources;
 
+import java.util.NoSuchElementException;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ResourcesTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void init_shouldBeEmpty() {
@@ -46,6 +53,31 @@ public class ResourcesTest {
         resources.add(ResourceType.WOOD, 4);
         resources.add(ResourceType.GLASS, 2);
         assertEquals(5, resources.getQuantity(ResourceType.GLASS));
+    }
+
+    @Test
+    public void remove_some() {
+        Resources resources = new Resources();
+        resources.add(ResourceType.WOOD, 3);
+        resources.remove(ResourceType.WOOD, 2);
+        assertEquals(1, resources.getQuantity(ResourceType.WOOD));
+    }
+
+    @Test
+    public void remove_all() {
+        Resources resources = new Resources();
+        resources.add(ResourceType.WOOD, 3);
+        resources.remove(ResourceType.WOOD, 3);
+        assertEquals(0, resources.getQuantity(ResourceType.WOOD));
+    }
+
+    @Test
+    public void remove_tooMany() {
+        Resources resources = new Resources();
+        resources.add(ResourceType.WOOD, 2);
+
+        thrown.expect(NoSuchElementException.class);
+        resources.remove(ResourceType.WOOD, 3);
     }
 
     @Test

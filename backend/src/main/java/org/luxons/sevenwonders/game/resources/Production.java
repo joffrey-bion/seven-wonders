@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,8 +18,7 @@ public class Production {
     }
 
     public void addChoice(ResourceType... options) {
-        EnumSet<ResourceType> optionSet = EnumSet.noneOf(ResourceType.class);
-        optionSet.addAll(Arrays.asList(options));
+        EnumSet<ResourceType> optionSet = EnumSet.copyOf(Arrays.asList(options));
         alternativeResources.add(optionSet);
     }
 
@@ -57,20 +55,18 @@ public class Production {
         if (resources.isEmpty()) {
             return true;
         }
-        for (Entry<ResourceType, Integer> entry : resources.getQuantities().entrySet()) {
-            ResourceType type = entry.getKey();
-            int count = entry.getValue();
-            if (count <= 0) {
+        for (ResourceType type : ResourceType.values()) {
+            if (resources.getQuantity(type) <= 0) {
                 continue;
             }
             Set<ResourceType> candidate = findFirstAlternativeContaining(alternatives, type);
             if (candidate == null) {
                 return false; // no alternative produces the resource of this entry
             }
-            entry.setValue(count - 1);
+            resources.remove(type, 1);
             alternatives.remove(candidate);
             boolean remainingAreContainedToo = containedInAlternatives(resources, alternatives);
-            entry.setValue(count);
+            resources.add(type, 1);
             alternatives.add(candidate);
             if (remainingAreContainedToo) {
                 return true;

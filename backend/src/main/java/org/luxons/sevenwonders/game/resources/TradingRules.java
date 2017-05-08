@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.game.resources;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class TradingRules {
 
@@ -29,11 +28,11 @@ public class TradingRules {
 
     public int computeCost(BoughtResources boughtResources) {
         Resources resources = boughtResources.getResources();
+        Provider provider = boughtResources.getProvider();
         int total = 0;
-        for (Entry<ResourceType, Integer> entry : resources.getQuantities().entrySet()) {
-            ResourceType type = entry.getKey();
-            int count = entry.getValue();
-            total += getCost(type, boughtResources.getProvider()) * count;
+        for (ResourceType type : ResourceType.values()) {
+            int count = resources.getQuantity(type);
+            total += getCost(type, provider) * count;
         }
         return total;
     }
