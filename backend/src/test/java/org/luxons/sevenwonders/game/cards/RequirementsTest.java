@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
@@ -44,9 +43,7 @@ public class RequirementsTest {
 
     @Theory
     public void resourceRequirement_initialResource(ResourceType initialResource, ResourceType requiredResource) {
-        Resources resources = TestUtils.createResources(requiredResource);
-        Requirements requirements = new Requirements();
-        requirements.setResources(resources);
+        Requirements requirements = TestUtils.createRequirements(requiredResource);
 
         Board board = TestUtils.createBoard(initialResource, 0);
         Table table = new Table(Collections.singletonList(board));
@@ -64,9 +61,7 @@ public class RequirementsTest {
             ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
-        Resources resources = TestUtils.createResources(requiredResource);
-        Requirements requirements = new Requirements();
-        requirements.setResources(resources);
+        Requirements requirements = TestUtils.createRequirements(requiredResource);
 
         Board board = TestUtils.createBoard(initialResource, 0);
         board.getProduction().addFixedResource(producedResource, 1);

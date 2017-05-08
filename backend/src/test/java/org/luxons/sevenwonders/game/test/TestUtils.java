@@ -108,6 +108,13 @@ public class TestUtils {
         return boughtResources;
     }
 
+    public static Requirements createRequirements(ResourceType... types) {
+        Resources resources = createResources(types);
+        Requirements requirements = new Requirements();
+        requirements.setResources(resources);
+        return requirements;
+    }
+
     public static List<Card> createSampleCards(int fromIndex, int nbCards) {
         List<Card> sampleCards = new ArrayList<>();
         for (int i = fromIndex; i < fromIndex + nbCards; i++) {
