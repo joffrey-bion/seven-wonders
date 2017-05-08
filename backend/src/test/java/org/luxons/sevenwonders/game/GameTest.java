@@ -30,7 +30,7 @@ public class GameTest {
             assertEquals(1, turnInfo.getCurrentAge());
             assertEquals(7, turnInfo.getHand().size());
             PlayerMove move = getFirstAvailableMove(turnInfo);
-            game.prepareCard(turnInfo.getPlayerIndex(), move);
+            game.prepareMove(turnInfo.getPlayerIndex(), move);
         }
     }
 

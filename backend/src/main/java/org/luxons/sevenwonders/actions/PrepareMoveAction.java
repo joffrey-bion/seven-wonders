@@ -6,10 +6,10 @@ import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 
-@ApiObject(name = "Prepare Card Action",
-           description = "The action to prepare a card during a game.",
+@ApiObject(name = "Prepare Move Action",
+           description = "The action to prepare the next move during a game.",
            group = "Actions")
-public class PrepareCardAction {
+public class PrepareMoveAction {
 
     @ApiObjectField
     @NotNull

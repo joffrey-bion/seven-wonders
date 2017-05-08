@@ -4,7 +4,7 @@ import java.security.Principal;
 
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiMethod;
-import org.luxons.sevenwonders.actions.PrepareCardAction;
+import org.luxons.sevenwonders.actions.PrepareMoveAction;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
 import org.luxons.sevenwonders.game.cards.CardBack;
@@ -36,12 +36,13 @@ public class GameController {
         this.playerRepository = playerRepository;
     }
 
-    @ApiMethod(description = "Prepares the user's card")
+    @ApiMethod(description = "Prepares the user's next move. When all players have prepared their moves, all moves "
+            + "are executed.")
     @MessageMapping("/game/{gameId}/prepare")
-    public void prepareCard(@DestinationVariable long gameId, PrepareCardAction action, Principal principal) {
+    public void prepareMove(@DestinationVariable long gameId, PrepareMoveAction action, Principal principal) {
         Player player = playerRepository.find(principal.getName());
         Game game = player.getGame();
-        CardBack preparedCardBack = game.prepareCard(player.getIndex(), action.getMove());
+        CardBack preparedCardBack = game.prepareMove(player.getIndex(), action.getMove());
         PreparedCard preparedCard = new PreparedCard(player, preparedCardBack);
         logger.info("Game '{}': player {} prepared move {}", gameId, principal.getName(), action.getMove());
 

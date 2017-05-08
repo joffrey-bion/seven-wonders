@@ -99,7 +99,7 @@ public class Game {
         }
     }
 
-    public CardBack prepareCard(int playerIndex, PlayerMove playerMove) throws InvalidMoveException {
+    public CardBack prepareMove(int playerIndex, PlayerMove playerMove) throws InvalidMoveException {
         Card card = decks.getCard(playerMove.getCardName());
         Move move = playerMove.getType().resolve(playerIndex, card, playerMove);
         validate(move);
@@ -135,8 +135,8 @@ public class Game {
     }
 
     private void rotateHandsIfRelevant() {
+        // we don't rotate hands if some player can play his last card (with the special ability)
         if (!hands.maxOneCardRemains()) {
-            // we don't rotate hands if some player can play his last card (with the special ability)
             hands.rotate(table.getHandRotationDirection());
         }
     }
