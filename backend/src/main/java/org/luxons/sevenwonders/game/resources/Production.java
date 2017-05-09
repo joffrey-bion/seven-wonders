@@ -1,9 +1,8 @@
 package org.luxons.sevenwonders.game.resources;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,7 +10,7 @@ public class Production {
 
     private final Resources fixedResources = new Resources();
 
-    private final List<Set<ResourceType>> alternativeResources = new ArrayList<>();
+    private final Set<Set<ResourceType>> alternativeResources = new HashSet<>();
 
     public void addFixedResource(ResourceType type, int quantity) {
         fixedResources.add(type, quantity);
@@ -35,8 +34,15 @@ public class Production {
         return fixedResources;
     }
 
-    public List<Set<ResourceType>> getAlternativeResources() {
+    public Set<Set<ResourceType>> getAlternativeResources() {
         return alternativeResources;
+    }
+
+    Set<Set<ResourceType>> asChoices() {
+        Set<Set<ResourceType>> result = new HashSet<>(fixedResources.size() + alternativeResources.size());
+        fixedResources.asList().stream().map(EnumSet::of).forEach(result::add);
+        result.addAll(alternativeResources);
+        return result;
     }
 
     public boolean contains(Resources resources) {
@@ -51,7 +57,7 @@ public class Production {
         return containedInAlternatives(resources, alternativeResources);
     }
 
-    private static boolean containedInAlternatives(Resources resources, List<Set<ResourceType>> alternatives) {
+    private static boolean containedInAlternatives(Resources resources, Set<Set<ResourceType>> alternatives) {
         if (resources.isEmpty()) {
             return true;
         }
@@ -75,8 +81,8 @@ public class Production {
         return false;
     }
 
-    private static Set<ResourceType> findFirstAlternativeContaining(List<Set<ResourceType>> alternatives,
-            ResourceType type) {
+    private static Set<ResourceType> findFirstAlternativeContaining(Set<Set<ResourceType>> alternatives,
+                                                                    ResourceType type) {
         return alternatives.stream().filter(a -> a.contains(type)).findAny().orElse(null);
     }
 

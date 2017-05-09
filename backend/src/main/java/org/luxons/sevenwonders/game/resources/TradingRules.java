@@ -14,7 +14,7 @@ public class TradingRules {
         this.defaultCost = defaultCost;
     }
 
-    private int getCost(ResourceType type, Provider provider) {
+    int getCost(ResourceType type, Provider provider) {
         return costs.computeIfAbsent(type, t -> new EnumMap<>(Provider.class)).getOrDefault(provider, defaultCost);
     }
 

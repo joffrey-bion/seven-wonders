@@ -65,7 +65,11 @@ public class Resources {
     }
 
     public boolean isEmpty() {
-        return quantities.values().stream().reduce(0, Integer::sum) == 0;
+        return size() == 0;
+    }
+
+    public int size() {
+        return quantities.values().stream().reduce(0, Integer::sum);
     }
 
     @Override

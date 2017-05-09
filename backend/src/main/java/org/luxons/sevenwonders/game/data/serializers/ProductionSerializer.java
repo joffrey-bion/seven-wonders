@@ -1,13 +1,8 @@
 package org.luxons.sevenwonders.game.data.serializers;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.luxons.sevenwonders.game.resources.Production;
-import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.resources.Resources;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -16,13 +11,16 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import org.luxons.sevenwonders.game.resources.Production;
+import org.luxons.sevenwonders.game.resources.ResourceType;
+import org.luxons.sevenwonders.game.resources.Resources;
 
 public class ProductionSerializer implements JsonSerializer<Production>, JsonDeserializer<Production> {
 
     @Override
     public JsonElement serialize(Production production, Type typeOfSrc, JsonSerializationContext context) {
         Resources fixedResources = production.getFixedResources();
-        List<Set<ResourceType>> choices = production.getAlternativeResources();
+        Set<Set<ResourceType>> choices = production.getAlternativeResources();
         if (fixedResources.isEmpty()) {
             return serializeAsChoice(choices, context);
         } else if (choices.isEmpty()) {
@@ -32,15 +30,15 @@ public class ProductionSerializer implements JsonSerializer<Production>, JsonDes
         }
     }
 
-    private static JsonElement serializeAsChoice(List<Set<ResourceType>> choices, JsonSerializationContext context) {
+    private static JsonElement serializeAsChoice(Set<Set<ResourceType>> choices, JsonSerializationContext context) {
         if (choices.isEmpty()) {
             return JsonNull.INSTANCE;
         }
         if (choices.size() > 1) {
             throw new IllegalArgumentException("Cannot serialize a production with more than one choice");
         }
-        String str = choices.get(0)
-                            .stream()
+        String str = choices.stream()
+                            .flatMap(Set::stream)
                             .map(ResourceType::getSymbol)
                             .map(Object::toString)
                             .collect(Collectors.joining("/"));

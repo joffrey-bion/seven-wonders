@@ -5,6 +5,7 @@ import java.util.List;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
+import org.luxons.sevenwonders.game.resources.BestPriceCalculator;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Resources;
 
@@ -50,9 +51,7 @@ public class Requirements {
         if (producesRequiredResources(board)) {
             return true;
         }
-        Resources leftToPay = resources.minus(board.getProduction().getFixedResources());
-        // TODO take into account resources buyable from neighbours
-        return false;
+        return BestPriceCalculator.bestPrice(resources, table, playerIndex) <= board.getGold();
     }
 
     /**

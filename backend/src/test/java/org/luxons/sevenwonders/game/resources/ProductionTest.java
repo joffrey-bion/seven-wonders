@@ -1,5 +1,9 @@
 package org.luxons.sevenwonders.game.resources;
 
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -218,6 +222,53 @@ public class ProductionTest {
         production2.addAll(production);
 
         assertTrue(production.contains(resources1Stone1Wood));
+    }
+
+    @Test
+    public void asChoices_empty() {
+        Production production = new Production();
+        assertTrue(production.asChoices().isEmpty());
+    }
+
+    @Test
+    public void asChoices_onlyChoices() {
+        Production production = new Production();
+        production.addChoice(ResourceType.STONE, ResourceType.WOOD);
+        production.addChoice(ResourceType.STONE, ResourceType.ORE);
+        production.addChoice(ResourceType.CLAY, ResourceType.LOOM, ResourceType.GLASS);
+        assertEquals(production.getAlternativeResources(), production.asChoices());
+    }
+
+    @Test
+    public void asChoices_onlyFixed() {
+        Production production = new Production();
+        production.addFixedResource(ResourceType.WOOD, 1);
+        production.addFixedResource(ResourceType.CLAY, 2);
+
+        Set<Set<ResourceType>> expected = new HashSet<>();
+        expected.add(EnumSet.of(ResourceType.WOOD));
+        expected.add(EnumSet.of(ResourceType.CLAY));
+        expected.add(EnumSet.of(ResourceType.CLAY));
+
+        assertEquals(expected, production.asChoices());
+    }
+
+    @Test
+    public void asChoices_mixed() {
+        Production production = new Production();
+        production.addChoice(ResourceType.STONE, ResourceType.ORE);
+        production.addChoice(ResourceType.CLAY, ResourceType.LOOM, ResourceType.GLASS);
+        production.addFixedResource(ResourceType.WOOD, 1);
+        production.addFixedResource(ResourceType.CLAY, 2);
+
+        Set<Set<ResourceType>> expected = new HashSet<>();
+        expected.add(EnumSet.of(ResourceType.STONE, ResourceType.ORE));
+        expected.add(EnumSet.of(ResourceType.CLAY, ResourceType.LOOM, ResourceType.GLASS));
+        expected.add(EnumSet.of(ResourceType.WOOD));
+        expected.add(EnumSet.of(ResourceType.CLAY));
+        expected.add(EnumSet.of(ResourceType.CLAY));
+
+        assertEquals(expected, production.asChoices());
     }
 
     @Test

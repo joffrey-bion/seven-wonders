@@ -21,6 +21,8 @@ public class ResourcesTest {
         for (ResourceType resourceType : ResourceType.values()) {
             assertEquals(0, resources.getQuantity(resourceType));
         }
+        assertEquals(0, resources.size());
+        assertTrue(resources.isEmpty());
     }
 
     @Test
@@ -28,6 +30,8 @@ public class ResourcesTest {
         Resources resources = new Resources();
         resources.add(ResourceType.CLAY, 0);
         assertEquals(0, resources.getQuantity(ResourceType.CLAY));
+        assertEquals(0, resources.size());
+        assertTrue(resources.isEmpty());
     }
 
     @Test
@@ -35,6 +39,8 @@ public class ResourcesTest {
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 3);
         assertEquals(3, resources.getQuantity(ResourceType.WOOD));
+        assertEquals(3, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -43,6 +49,8 @@ public class ResourcesTest {
         resources.add(ResourceType.ORE, 3);
         resources.add(ResourceType.ORE, 2);
         assertEquals(5, resources.getQuantity(ResourceType.ORE));
+        assertEquals(5, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -53,6 +61,8 @@ public class ResourcesTest {
         resources.add(ResourceType.WOOD, 4);
         resources.add(ResourceType.GLASS, 2);
         assertEquals(5, resources.getQuantity(ResourceType.GLASS));
+        assertEquals(10, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -61,6 +71,8 @@ public class ResourcesTest {
         resources.add(ResourceType.WOOD, 3);
         resources.remove(ResourceType.WOOD, 2);
         assertEquals(1, resources.getQuantity(ResourceType.WOOD));
+        assertEquals(1, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -69,6 +81,8 @@ public class ResourcesTest {
         resources.add(ResourceType.WOOD, 3);
         resources.remove(ResourceType.WOOD, 3);
         assertEquals(0, resources.getQuantity(ResourceType.WOOD));
+        assertEquals(0, resources.size());
+        assertTrue(resources.isEmpty());
     }
 
     @Test
@@ -94,6 +108,8 @@ public class ResourcesTest {
         assertEquals(0, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
         assertEquals(0, resources.getQuantity(ResourceType.LOOM));
+        assertEquals(4, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -112,6 +128,8 @@ public class ResourcesTest {
         assertEquals(0, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
         assertEquals(0, resources.getQuantity(ResourceType.LOOM));
+        assertEquals(4, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -130,6 +148,8 @@ public class ResourcesTest {
         assertEquals(0, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
         assertEquals(0, resources.getQuantity(ResourceType.LOOM));
+        assertEquals(12, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test
@@ -148,6 +168,8 @@ public class ResourcesTest {
         assertEquals(4, resources.getQuantity(ResourceType.ORE));
         assertEquals(0, resources.getQuantity(ResourceType.GLASS));
         assertEquals(0, resources.getQuantity(ResourceType.LOOM));
+        assertEquals(14, resources.size());
+        assertFalse(resources.isEmpty());
     }
 
     @Test

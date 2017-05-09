@@ -18,7 +18,7 @@ public class TradingRulesTest {
 
     @DataPoints
     public static int[] costs() {
-        return new int[] {0, 1, 2};
+        return new int[]{0, 1, 2};
     }
 
     @DataPoints
@@ -29,6 +29,19 @@ public class TradingRulesTest {
     @DataPoints
     public static ResourceType[] resourceTypes() {
         return ResourceType.values();
+    }
+
+    @Theory
+    public void setCost_overridesCost(int defaultCost, int overriddenCost, Provider overriddenProvider,
+                                      Provider provider, ResourceType type) {
+        assumeTrue(defaultCost != overriddenCost);
+        assumeTrue(overriddenProvider != provider);
+
+        TradingRules rules = new TradingRules(defaultCost);
+        rules.setCost(type, overriddenProvider, overriddenCost);
+
+        assertEquals(overriddenCost, rules.getCost(type, overriddenProvider));
+        assertEquals(defaultCost, rules.getCost(type, provider));
     }
 
     @Theory
@@ -61,7 +74,9 @@ public class TradingRulesTest {
 
     @Theory
     public void computeCost_defaultCostWhenOverrideOnOtherProviderOrType(int defaultCost, int overriddenCost,
-            Provider overriddenProvider, ResourceType overriddenType, Provider provider, ResourceType type) {
+                                                                         Provider overriddenProvider,
+                                                                         ResourceType overriddenType, Provider provider,
+                                                                         ResourceType type) {
         assumeTrue(overriddenProvider != provider || overriddenType != type);
         TradingRules rules = new TradingRules(defaultCost);
         rules.setCost(overriddenType, overriddenProvider, overriddenCost);
@@ -71,7 +86,8 @@ public class TradingRulesTest {
 
     @Theory
     public void computeCost_oneDefaultAndOneOverriddenType(int defaultCost, int overriddenCost,
-            ResourceType overriddenType, Provider provider, ResourceType type) {
+                                                           ResourceType overriddenType, Provider provider,
+                                                           ResourceType type) {
         assumeTrue(overriddenType != type);
         TradingRules rules = new TradingRules(defaultCost);
         rules.setCost(overriddenType, provider, overriddenCost);
@@ -81,7 +97,8 @@ public class TradingRulesTest {
 
     @Theory
     public void computeCost_oneDefaultAndOneOverriddenProvider(int defaultCost, int overriddenCost,
-            Provider overriddenProvider, Provider provider, ResourceType type) {
+                                                               Provider overriddenProvider, Provider provider,
+                                                               ResourceType type) {
         assumeTrue(overriddenProvider != provider);
         TradingRules rules = new TradingRules(defaultCost);
         rules.setCost(type, overriddenProvider, overriddenCost);
@@ -92,5 +109,4 @@ public class TradingRulesTest {
 
         assertEquals(defaultCost + overriddenCost, rules.computeCost(boughtResources));
     }
-
 }
