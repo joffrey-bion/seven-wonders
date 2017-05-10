@@ -29,7 +29,7 @@ public class BestPriceCalculator {
 
         for (Provider provider : providers) {
             Board providerBoard = table.getBoard(playerIndex, provider.getBoardPosition());
-            ResourcePool pool = new ResourcePool(providerBoard.getProduction(), provider, rules);
+            ResourcePool pool = new ResourcePool(providerBoard.getPublicProduction(), provider, rules);
             pools.add(pool);
         }
         return pools;

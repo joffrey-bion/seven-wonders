@@ -42,7 +42,6 @@ public class BestPriceCalculatorTest {
         Board opposite = TestUtils.createBoard(ResourceType.GLASS);
         Table table = new Table(Arrays.asList(main, right, opposite, left));
 
-
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 1);
         assertEquals(1, BestPriceCalculator.bestPrice(resources, table, 0));
@@ -60,9 +59,9 @@ public class BestPriceCalculatorTest {
 
         Board right = TestUtils.createBoard(ResourceType.ORE);
         right.getProduction().addChoice(ResourceType.WOOD, ResourceType.CLAY);
+        right.getPublicProduction().addChoice(ResourceType.WOOD, ResourceType.CLAY);
 
         Table table = new Table(Arrays.asList(main, right, left));
-
 
         Resources resources = new Resources();
         resources.add(ResourceType.WOOD, 1);
@@ -82,6 +81,8 @@ public class BestPriceCalculatorTest {
         Board right = TestUtils.createBoard(ResourceType.WOOD);
         right.getProduction().addFixedResource(ResourceType.ORE, 1);
         right.getProduction().addFixedResource(ResourceType.CLAY, 1);
+        right.getPublicProduction().addFixedResource(ResourceType.ORE, 1);
+        right.getPublicProduction().addFixedResource(ResourceType.CLAY, 1);
 
         Table table = new Table(Arrays.asList(main, right, left));
 
