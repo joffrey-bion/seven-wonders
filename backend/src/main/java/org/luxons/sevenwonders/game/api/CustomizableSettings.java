@@ -9,6 +9,8 @@ public class CustomizableSettings {
 
     private long randomSeedForTests = -1;
 
+    private int timeLimitInSeconds = 45;
+
     private WonderSidePickMethod wonderSidePickMethod = WonderSidePickMethod.EACH_RANDOM;
 
     private int initialGold = 3;
@@ -35,6 +37,14 @@ public class CustomizableSettings {
 
     public void setRandomSeedForTests(long randomSeedForTests) {
         this.randomSeedForTests = randomSeedForTests;
+    }
+
+    public int getTimeLimitInSeconds() {
+        return timeLimitInSeconds;
+    }
+
+    public void setTimeLimitInSeconds(int timeLimitInSeconds) {
+        this.timeLimitInSeconds = timeLimitInSeconds;
     }
 
     public int getInitialGold() {

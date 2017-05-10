@@ -59,6 +59,10 @@ public class Game {
         return id;
     }
 
+    public Settings getSettings() {
+        return settings;
+    }
+
     private void startNewAge() {
         table.increaseCurrentAge();
         hands = decks.deal(table.getCurrentAge(), table.getNbPlayers());

@@ -11,6 +11,8 @@ public class Settings {
 
     private final Random random;
 
+    private final int timeLimitInSeconds;
+
     private final int nbPlayers;
 
     private final int initialGold;
@@ -36,6 +38,7 @@ public class Settings {
     public Settings(int nbPlayers, CustomizableSettings customSettings) {
         long seed = customSettings.getRandomSeedForTests();
         this.random = seed > 0 ? new Random(seed) : new Random();
+        this.timeLimitInSeconds = customSettings.getTimeLimitInSeconds();
         this.nbPlayers = nbPlayers;
         this.initialGold = customSettings.getInitialGold();
         this.discardedCardGold = customSettings.getDiscardedCardGold();
@@ -48,6 +51,10 @@ public class Settings {
 
     public Random getRandom() {
         return random;
+    }
+
+    public int getTimeLimitInSeconds() {
+        return timeLimitInSeconds;
     }
 
     public int getNbPlayers() {
