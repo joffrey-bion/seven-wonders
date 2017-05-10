@@ -77,8 +77,8 @@ public class Card {
         return board.isPlayed(chainParent);
     }
 
-    public boolean isAffordedBy(Board board) {
-        return requirements.isAffordedBy(board);
+    public boolean isFreeFor(Board board) {
+        return requirements.areMetWithoutNeighboursBy(board) && requirements.getGold() == 0;
     }
 
     public boolean isPlayable(Table table, int playerIndex) {
@@ -86,7 +86,7 @@ public class Card {
         if (board.isPlayed(name)) {
             return false; // cannot play twice the same card
         }
-        return isChainableOn(board) || requirements.couldBeAffordedBy(table, playerIndex);
+        return isChainableOn(board) || requirements.couldBeMetBy(table, playerIndex);
     }
 
     public void applyTo(Table table, int playerIndex, List<BoughtResources> boughtResources) {

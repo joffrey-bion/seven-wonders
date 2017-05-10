@@ -20,7 +20,7 @@ public class PlayCardMove extends CardFromHandMove {
             return false;
         }
         Board board = table.getBoard(getPlayerIndex());
-        return getCard().getRequirements().isAffordedBy(board, getBoughtResources());
+        return getCard().getRequirements().areMetWithHelpBy(board, getBoughtResources());
     }
 
     @Override

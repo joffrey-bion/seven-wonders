@@ -36,9 +36,9 @@ public class RequirementsTest {
         Board board = TestUtils.createBoard(ResourceType.CLAY, boardGold);
         Table table = new Table(Collections.singletonList(board));
 
-        assertEquals(boardGold >= requiredGold, requirements.isAffordedBy(board));
-        assertEquals(boardGold >= requiredGold, requirements.isAffordedBy(board, Collections.emptyList()));
-        assertEquals(boardGold >= requiredGold, requirements.couldBeAffordedBy(table, 0));
+        assertEquals(boardGold >= requiredGold, requirements.areMetWithoutNeighboursBy(board));
+        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, Collections.emptyList()));
+        assertEquals(boardGold >= requiredGold, requirements.couldBeMetBy(table, 0));
     }
 
     @Theory
@@ -48,11 +48,11 @@ public class RequirementsTest {
         Board board = TestUtils.createBoard(initialResource, 0);
         Table table = new Table(Collections.singletonList(board));
 
-        assertEquals(initialResource == requiredResource, requirements.isAffordedBy(board));
-        assertEquals(initialResource == requiredResource, requirements.isAffordedBy(board, Collections.emptyList()));
+        assertEquals(initialResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
+        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board, Collections.emptyList()));
 
         if (initialResource == requiredResource) {
-            assertTrue(requirements.couldBeAffordedBy(table, 0));
+            assertTrue(requirements.couldBeMetBy(table, 0));
         }
     }
 
@@ -67,11 +67,11 @@ public class RequirementsTest {
         board.getProduction().addFixedResource(producedResource, 1);
         Table table = new Table(Collections.singletonList(board));
 
-        assertEquals(producedResource == requiredResource, requirements.isAffordedBy(board));
-        assertEquals(producedResource == requiredResource, requirements.isAffordedBy(board, Collections.emptyList()));
+        assertEquals(producedResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
+        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board, Collections.emptyList()));
 
         if (producedResource == requiredResource) {
-            assertTrue(requirements.couldBeAffordedBy(table, 0));
+            assertTrue(requirements.couldBeMetBy(table, 0));
         }
     }
 

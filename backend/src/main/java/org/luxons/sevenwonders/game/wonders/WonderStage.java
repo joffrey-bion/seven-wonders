@@ -39,7 +39,7 @@ public class WonderStage {
 
     public boolean isBuildable(Table table, int playerIndex, List<BoughtResources> boughtResources) {
         Board board = table.getBoard(playerIndex);
-        return requirements.isAffordedBy(board, boughtResources);
+        return requirements.areMetWithHelpBy(board, boughtResources);
     }
 
     void build(CardBack cardBack) {

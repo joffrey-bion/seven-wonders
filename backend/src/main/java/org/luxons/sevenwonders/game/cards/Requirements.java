@@ -32,18 +32,49 @@ public class Requirements {
     }
 
     /**
-     * Returns whether the given board can pay for these requirements on its own.
+     * Returns whether the given board meets these requirements on its own.
      *
      * @param board
      *         the board to check
      *
-     * @return true if the given board fulfills these requirements without any transaction with its neighbours
+     * @return true if the given board meets these requirements without any transaction with its neighbours
      */
-    boolean isAffordedBy(Board board) {
+    boolean areMetWithoutNeighboursBy(Board board) {
         return hasRequiredGold(board) && producesRequiredResources(board);
     }
 
-    boolean couldBeAffordedBy(Table table, int playerIndex) {
+    /**
+     * Returns whether the given board meets these requirements, if the specified resources are bought from neighbours.
+     *
+     * @param board
+     *         the board to check
+     * @param boughtResources
+     *         the resources the player intends to buy
+     *
+     * @return true if the given board meets these requirements
+     */
+    public boolean areMetWithHelpBy(Board board, List<BoughtResources> boughtResources) {
+        if (!hasRequiredGold(board, boughtResources)) {
+            return false;
+        }
+        if (producesRequiredResources(board)) {
+            return true;
+        }
+        return producesRequiredResourcesWithHelp(board, boughtResources);
+    }
+
+    /**
+     * Returns whether the given player's board could meet these requirements, on its own or by buying resources to
+     * neighbours.
+     *
+     * @param table
+     *         the current game table
+     * @param playerIndex
+     *         the index of the player to check
+     *
+     * @return true if the given player's board could meet these requirements
+     */
+    boolean couldBeMetBy(Table table, int playerIndex) {
         Board board = table.getBoard(playerIndex);
         if (!hasRequiredGold(board)) {
             return false;
@@ -51,43 +82,20 @@ public class Requirements {
         if (producesRequiredResources(board)) {
             return true;
         }
-        return BestPriceCalculator.bestPrice(resources, table, playerIndex) <= board.getGold();
-    }
-
-    /**
-     * Returns whether the given player can pay for these requirements, if he buys the specified resources.
-     *
-     * @param board
-     *         the board to check
-     * @param boughtResources
-     *         the resources the player intends to buy
-     *
-     * @return true if the given board fulfills these requirements
-     */
-    public boolean isAffordedBy(Board board, List<BoughtResources> boughtResources) {
-        if (!hasRequiredGold(board)) {
-            return false;
-        }
-        if (producesRequiredResources(board)) {
-            return true;
-        }
-        if (!canAffordBoughtResources(board, boughtResources)) {
-            return false;
-        }
-        return producesRequiredResourcesWithHelp(board, boughtResources);
+        return BestPriceCalculator.bestPrice(resources, table, playerIndex) <= board.getGold() - gold;
     }
 
     private boolean hasRequiredGold(Board board) {
         return board.getGold() >= gold;
     }
 
-    private boolean producesRequiredResources(Board board) {
-        return board.getProduction().contains(resources);
+    private boolean hasRequiredGold(Board board, List<BoughtResources> boughtResources) {
+        int resourcesPrice = board.getTradingRules().computeCost(boughtResources);
+        return board.getGold() >= gold + resourcesPrice;
     }
 
-    private boolean canAffordBoughtResources(Board board, List<BoughtResources> boughtResources) {
-        int resourcesPrice = board.getTradingRules().computeCost(boughtResources);
-        return board.getGold() - gold >= resourcesPrice;
+    private boolean producesRequiredResources(Board board) {
+        return board.getProduction().contains(resources);
     }
 
     private boolean producesRequiredResourcesWithHelp(Board board, List<BoughtResources> boughtResources) {

@@ -21,7 +21,7 @@ public class HandCard {
         Board board = table.getBoard(playerIndex);
         this.card = card;
         this.chainable = card.isChainableOn(board);
-        this.free = card.isAffordedBy(board) && card.getRequirements().getGold() == 0;
+        this.free = card.isFreeFor(board);
         this.playable = card.isPlayable(table, playerIndex);
     }
 
