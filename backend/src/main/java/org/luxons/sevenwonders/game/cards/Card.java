@@ -73,18 +73,25 @@ public class Card {
         this.back = back;
     }
 
+    private boolean isAllowedOnBoard(Board board) {
+        return !board.isPlayed(name); // cannot play twice the same card
+    }
+
     public boolean isChainableOn(Board board) {
-        return board.isPlayed(chainParent);
+        return isAllowedOnBoard(board) && board.isPlayed(chainParent);
     }
 
     public boolean isFreeFor(Board board) {
-        return requirements.areMetWithoutNeighboursBy(board) && requirements.getGold() == 0;
+        if (!isAllowedOnBoard(board)) {
+            return false;
+        }
+        return isChainableOn(board) || (requirements.areMetWithoutNeighboursBy(board) && requirements.getGold() == 0);
     }
 
     public boolean isPlayable(Table table, int playerIndex) {
         Board board = table.getBoard(playerIndex);
-        if (board.isPlayed(name)) {
-            return false; // cannot play twice the same card
+        if (!isAllowedOnBoard(board)) {
+            return false;
         }
         return isChainableOn(board) || requirements.couldBeMetBy(table, playerIndex);
     }

@@ -18,17 +18,24 @@ public class CopyGuildMove extends Move {
     }
 
     @Override
-    public boolean isValid(Table table, List<Card> playerHand) {
+    public void validate(Table table, List<Card> playerHand) throws InvalidMoveException {
         Board board = table.getBoard(getPlayerIndex());
         if (!board.hasSpecial(SpecialAbility.COPY_GUILD)) {
-            return false;
+            throw new InvalidMoveException(
+                    String.format("Player %d does not have the ability to copy guild cards", getPlayerIndex()));
         }
         if (getCard().getColor() != Color.PURPLE) {
-            return false;
+            throw new InvalidMoveException(
+                    String.format("Player %d cannot copy card %s because it is not a guild card", getPlayerIndex(),
+                            getCard().getName()));
         }
         boolean leftNeighbourHasIt = neighbourHasTheCard(table, RelativeBoardPosition.LEFT);
         boolean rightNeighbourHasIt = neighbourHasTheCard(table, RelativeBoardPosition.RIGHT);
-        return leftNeighbourHasIt || rightNeighbourHasIt;
+        if (!leftNeighbourHasIt && !rightNeighbourHasIt) {
+            throw new InvalidMoveException(
+                    String.format("Player %d cannot copy card %s because none of his neighbour has it",
+                            getPlayerIndex(), getCard().getName()));
+        }
     }
 
     private boolean neighbourHasTheCard(Table table, RelativeBoardPosition position) {

@@ -42,7 +42,7 @@ public abstract class Move {
         return boughtResources;
     }
 
-    public abstract boolean isValid(Table table, List<Card> playerHand);
+    public abstract void validate(Table table, List<Card> playerHand) throws InvalidMoveException;
 
     public abstract void place(Table table, List<Card> discardedCards, Settings settings);
 

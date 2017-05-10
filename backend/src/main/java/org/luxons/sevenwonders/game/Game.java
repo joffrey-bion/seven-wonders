@@ -17,6 +17,7 @@ import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Decks;
 import org.luxons.sevenwonders.game.cards.Hands;
 import org.luxons.sevenwonders.game.effects.SpecialAbility;
+import org.luxons.sevenwonders.game.moves.InvalidMoveException;
 import org.luxons.sevenwonders.game.moves.Move;
 import org.luxons.sevenwonders.game.scoring.ScoreBoard;
 
@@ -112,11 +113,7 @@ public class Game {
 
     private void validate(Move move) throws InvalidMoveException {
         List<Card> hand = hands.get(move.getPlayerIndex());
-        if (!move.isValid(table, hand)) {
-            throw new InvalidMoveException(
-                    "Player " + move.getPlayerIndex() + " cannot play the card " + move.getCard().getName()
-                            + " with the given resources");
-        }
+        move.validate(table, hand);
     }
 
     public boolean areAllPlayersReady() {
@@ -225,12 +222,6 @@ public class Game {
     private static class MissingPreparedMoveException extends IllegalStateException {
         MissingPreparedMoveException(int playerIndex) {
             super("Player " + playerIndex + " is not ready to play");
-        }
-    }
-
-    private static class InvalidMoveException extends IllegalArgumentException {
-        InvalidMoveException(String message) {
-            super(message);
         }
     }
 }

@@ -15,12 +15,14 @@ public class PlayFreeCardMove extends CardFromHandMove {
     }
 
     @Override
-    public boolean isValid(Table table, List<Card> playerHand) {
-        if (!super.isValid(table, playerHand)) {
-            return false;
-        }
+    public void validate(Table table, List<Card> playerHand) throws InvalidMoveException {
+        super.validate(table, playerHand);
         Board board = table.getBoard(getPlayerIndex());
-        return board.canPlayFreeCard(table.getCurrentAge());
+        if (!board.canPlayFreeCard(table.getCurrentAge())) {
+            throw new InvalidMoveException(
+                    String.format("Player %d cannot play the card %s for free", getPlayerIndex(),
+                            getCard().getName()));
+        }
     }
 
     @Override

@@ -15,12 +15,13 @@ public class BuildWonderMove extends CardFromHandMove {
     }
 
     @Override
-    public boolean isValid(Table table, List<Card> playerHand) {
-        if (!super.isValid(table, playerHand)) {
-            return false;
-        }
+    public void validate(Table table, List<Card> playerHand) throws InvalidMoveException {
+        super.validate(table, playerHand);
         Board board = table.getBoard(getPlayerIndex());
-        return board.getWonder().isNextStageBuildable(table, getPlayerIndex(), getBoughtResources());
+        if (!board.getWonder().isNextStageBuildable(table, getPlayerIndex(), getBoughtResources())) {
+            throw new InvalidMoveException(
+                    String.format("Player %d cannot upgrade his wonder with the given resources", getPlayerIndex()));
+        }
     }
 
     @Override

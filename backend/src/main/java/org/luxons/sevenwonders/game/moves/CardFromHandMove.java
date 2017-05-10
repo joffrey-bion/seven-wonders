@@ -13,8 +13,11 @@ public abstract class CardFromHandMove extends Move {
     }
 
     @Override
-    public boolean isValid(Table table, List<Card> playerHand) {
-        return playerHand.contains(getCard());
+    public void validate(Table table, List<Card> playerHand) throws InvalidMoveException {
+        if (!playerHand.contains(getCard())) {
+            throw new InvalidMoveException(
+                    String.format("Player %d does not have the card '%s' in his hand", getPlayerIndex(),
+                            getCard().getName()));
+        }
     }
-
 }

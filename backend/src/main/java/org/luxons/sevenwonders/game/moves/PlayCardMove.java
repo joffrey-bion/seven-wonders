@@ -15,12 +15,15 @@ public class PlayCardMove extends CardFromHandMove {
     }
 
     @Override
-    public boolean isValid(Table table, List<Card> playerHand) {
-        if (!super.isValid(table, playerHand)) {
-            return false;
-        }
+    public void validate(Table table, List<Card> playerHand) throws InvalidMoveException {
+        super.validate(table, playerHand);
         Board board = table.getBoard(getPlayerIndex());
-        return getCard().getRequirements().areMetWithHelpBy(board, getBoughtResources());
+        if (!getCard().isChainableOn(board) && !getCard().getRequirements()
+                                                         .areMetWithHelpBy(board, getBoughtResources())) {
+            throw new InvalidMoveException(
+                    String.format("Player %d cannot play the card %s with the given resources", getPlayerIndex(),
+                            getCard().getName()));
+        }
     }
 
     @Override
