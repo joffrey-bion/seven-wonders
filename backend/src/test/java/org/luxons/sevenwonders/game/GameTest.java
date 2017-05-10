@@ -57,15 +57,15 @@ public class GameTest {
 
     private static PlayerMove getFirstAvailableMove(PlayerTurnInfo turnInfo) {
         switch (turnInfo.getAction()) {
-            case PLAY:
-            case PLAY_2:
-            case PLAY_LAST:
-                return createPlayCardMove(turnInfo);
-            case PICK_NEIGHBOR_GUILD:
-                return createPickGuildMove(turnInfo);
-            case WAIT:
-            default:
-                return null;
+        case PLAY:
+        case PLAY_2:
+        case PLAY_LAST:
+            return createPlayCardMove(turnInfo);
+        case PICK_NEIGHBOR_GUILD:
+            return createPickGuildMove(turnInfo);
+        case WAIT:
+        default:
+            return null;
         }
     }
 

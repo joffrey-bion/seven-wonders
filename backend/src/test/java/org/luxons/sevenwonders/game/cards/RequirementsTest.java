@@ -20,7 +20,7 @@ public class RequirementsTest {
 
     @DataPoints
     public static int[] goldAmounts() {
-        return new int[] {0, 1, 2, 5};
+        return new int[]{0, 1, 2, 5};
     }
 
     @DataPoints
@@ -49,7 +49,8 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(initialResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
-        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board, Collections.emptyList()));
+        assertEquals(initialResource == requiredResource,
+                requirements.areMetWithHelpBy(board, Collections.emptyList()));
 
         if (initialResource == requiredResource) {
             assertTrue(requirements.couldBeMetBy(table, 0));
@@ -58,7 +59,7 @@ public class RequirementsTest {
 
     @Theory
     public void resourceRequirement_ownProduction(ResourceType initialResource, ResourceType producedResource,
-            ResourceType requiredResource) {
+                                                  ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
         Requirements requirements = TestUtils.createRequirements(requiredResource);
@@ -68,11 +69,11 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(producedResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
-        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board, Collections.emptyList()));
+        assertEquals(producedResource == requiredResource,
+                requirements.areMetWithHelpBy(board, Collections.emptyList()));
 
         if (producedResource == requiredResource) {
             assertTrue(requirements.couldBeMetBy(table, 0));
         }
     }
-
 }
