@@ -78,6 +78,9 @@ public class Game {
         Action action = determineAction(hand, table.getBoard(playerIndex));
         pti.setAction(action);
         pti.setMessage(action.getMessage());
+        if (action == Action.PICK_NEIGHBOR_GUILD) {
+            pti.setNeighbourGuildCards(table.getNeighbourGuildCards(playerIndex));
+        }
         return pti;
     }
 

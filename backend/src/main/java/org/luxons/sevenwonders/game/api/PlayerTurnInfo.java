@@ -2,6 +2,8 @@ package org.luxons.sevenwonders.game.api;
 
 import java.util.List;
 
+import org.luxons.sevenwonders.game.cards.Card;
+
 public class PlayerTurnInfo {
 
     private final int playerIndex;
@@ -13,6 +15,8 @@ public class PlayerTurnInfo {
     private Action action;
 
     private List<HandCard> hand;
+
+    private List<Card> neighbourGuildCards;
 
     private String message;
 
@@ -40,6 +44,14 @@ public class PlayerTurnInfo {
 
     public void setHand(List<HandCard> hand) {
         this.hand = hand;
+    }
+
+    public List<Card> getNeighbourGuildCards() {
+        return neighbourGuildCards;
+    }
+
+    public void setNeighbourGuildCards(List<Card> neighbourGuildCards) {
+        this.neighbourGuildCards = neighbourGuildCards;
     }
 
     public Action getAction() {

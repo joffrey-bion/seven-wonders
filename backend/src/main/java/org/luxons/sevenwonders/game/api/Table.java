@@ -1,11 +1,16 @@
 package org.luxons.sevenwonders.game.api;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
+import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.cards.HandRotationDirection;
 import org.luxons.sevenwonders.game.moves.Move;
+import org.luxons.sevenwonders.game.resources.Provider;
 
 /**
  * The table contains what is visible by all the players in the game: the boards and their played cards, and the
@@ -80,5 +85,22 @@ public class Table {
             board1.getMilitary().victory(age);
             board2.getMilitary().defeat();
         }
+    }
+
+    public List<Card> getNeighbourGuildCards(int playerIndex) {
+        return getNeighbourBoards(playerIndex).stream()
+                                              .map(Board::getPlayedCards)
+                                              .flatMap(List::stream)
+                                              .filter(c -> c.getColor() == Color.PURPLE)
+                                              .collect(Collectors.toList());
+    }
+
+    private List<Board> getNeighbourBoards(int playerIndex) {
+        Provider[] providers = Provider.values();
+        List<Board> boards = new ArrayList<>(providers.length);
+        for (Provider provider : providers) {
+            boards.add(getBoard(playerIndex, provider.getBoardPosition()));
+        }
+        return boards;
     }
 }
