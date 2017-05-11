@@ -6,9 +6,9 @@ import {
   Text
 } from 'rebass'
 import { Flex } from 'reflexbox'
-import GamesList from '../components/gamesList'
+import GameList from '../components/gameList'
 
-class App extends Component {
+class GameBrowser extends Component {
 
   createGame = (e) => {
     e.preventDefault()
@@ -33,7 +33,7 @@ class App extends Component {
           <Text><b>Username:</b> {this.props.currentPlayer.get('displayName')}</Text>
           <Space x={1} />
         </Flex>
-        <GamesList games={this.props.games} />
+        <GameList games={this.props.games} joinGame={this.props.joinGame}/>
       </div>
     )
   }
@@ -41,14 +41,15 @@ class App extends Component {
 
 import { getCurrentPlayer } from '../redux/players'
 import { getAllGames, actions } from '../redux/games'
+
 const mapStateToProps = (state) => ({
   currentPlayer: getCurrentPlayer(state),
   games: getAllGames(state)
 })
 
-
 const mapDispatchToProps = {
-  createGame: actions.createGame
+  createGame: actions.requestCreateGame,
+  joinGame: actions.requestJoinGame
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(GameBrowser)

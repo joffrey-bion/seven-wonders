@@ -1,22 +1,25 @@
-import { fromJS, Map } from 'immutable'
+import {fromJS, Map, Set} from 'immutable'
 
 export const types = {
-  SET_USERNAME: 'USER/SET_USERNAME',
-  SET_USERNAMES: 'USER/SET_USERNAMES',
-  CHOOSE_USERNAME: 'USER/CHOOSE_USERNAME'
+  REQUEST_CHOOSE_USERNAME: 'USER/REQUEST_CHOOSE_USERNAME',
+  SET_CURRENT_PLAYER: 'USER/SET_CURRENT_PLAYER',
+  UPDATE_PLAYERS: 'USER/UPDATE_PLAYERS'
 }
 
 export const actions = {
-  setUsername: (username, displayName, index) => ({
-    type: types.SET_USERNAME,
-    username,
-    index,
-    displayName
+  chooseUsername: (username) => ({
+    type: types.REQUEST_CHOOSE_USERNAME,
+    username
   }),
-  setPlayers: (players) => ({ type: types.SET_USERNAMES, players }),
-  chooseUsername: (username) => ({ type: types.CHOOSE_USERNAME, username }),
+  setCurrentPlayer: (player) => ({
+    type: types.SET_CURRENT_PLAYER,
+    player
+  }),
+  updatePlayers: (players) => ({
+    type: types.UPDATE_PLAYERS,
+    players
+  }),
 }
-
 
 const initialState = fromJS({
   all: {},
@@ -25,20 +28,28 @@ const initialState = fromJS({
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.SET_USERNAME:
-      const user = fromJS({
-        username: action.username,
-        displayName: action.displayName,
-        index: action.index,
-      })
-      return state.setIn(['all', user.get('username')], user).set('current', user.get('username'))
-    case types.SET_USERNAMES:
+    case types.SET_CURRENT_PLAYER:
+      const player = action.player
+      const username = player.get('username')
+      return state.setIn(['all', username], player).set('current', username)
+    case types.UPDATE_PLAYERS:
       return state.setIn(['all'], state.get('all').mergeDeep(action.players))
     default:
       return state
   }
 }
 
-export const getCurrentPlayerUserName = state => state.get('players').get('current')
-export const getAllPlayers = state => state.get('players').get('all')
-export const getCurrentPlayer = (state) => getAllPlayers(state).get(getCurrentPlayerUserName(state), Map())
+const getState = globalState => globalState.get('players')
+
+function keyIn(...keys) {
+  return (v, k) => Set(keys).has(k)
+}
+
+export const getAllPlayersByUsername = globalState => getState(globalState).get('all')
+export const getAllPlayers = globalState => getAllPlayersByUsername(globalState).toList()
+export const getPlayers = (globalState, usernames) => getAllPlayersByUsername(globalState)
+  .filter(keyIn(usernames))
+  .toList()
+export const getCurrentPlayerUsername = globalState => getState(globalState).get('current')
+export const getCurrentPlayer = globalState => getAllPlayersByUsername(globalState)
+  .get(getCurrentPlayerUsername(globalState), Map())

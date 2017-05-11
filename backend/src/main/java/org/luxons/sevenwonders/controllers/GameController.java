@@ -15,7 +15,6 @@ import org.luxons.sevenwonders.repositories.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -38,15 +37,16 @@ public class GameController {
 
     @ApiMethod(description = "Prepares the user's next move. When all players have prepared their moves, all moves "
             + "are executed.")
-    @MessageMapping("/game/{gameId}/prepare")
-    public void prepareMove(@DestinationVariable long gameId, PrepareMoveAction action, Principal principal) {
+    @MessageMapping("/game/prepareMove")
+    public void prepareMove(PrepareMoveAction action, Principal principal) {
         Player player = playerRepository.find(principal.getName());
         Game game = player.getGame();
         CardBack preparedCardBack = game.prepareMove(player.getIndex(), action.getMove());
         PreparedCard preparedCard = new PreparedCard(player, preparedCardBack);
-        logger.info("Game '{}': player {} prepared move {}", gameId, principal.getName(), action.getMove());
+        logger.info("Game '{}': player {} prepared move {}", game.getId(), principal.getName(), action.getMove());
 
         if (game.areAllPlayersReady()) {
+            logger.info("Game '{}': all players have prepared their move, executing turn...", game.getId());
             game.playTurn();
             sendTurnInfo(player.getLobby(), game);
         } else {

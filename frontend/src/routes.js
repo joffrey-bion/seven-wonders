@@ -14,6 +14,7 @@ export const makeSagaRoutes = wsConnection => ({
 import { HomeLayout, LobbyLayout } from './layouts'
 import HomePage from './containers/home'
 import GameBrowser from './containers/gameBrowser'
+import Lobby from './containers/lobby'
 import Error404 from './components/errors/Error404'
 
 export const routes = [
@@ -26,7 +27,8 @@ export const routes = [
     path: '/',
     component: LobbyLayout,
     childRoutes: [
-      { path: '/games', component: GameBrowser }
+      { path: '/games', component: GameBrowser },
+      { path: '/lobby', component: Lobby }
     ]
   },
   {

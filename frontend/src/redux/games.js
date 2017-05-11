@@ -1,29 +1,39 @@
-import { Map } from 'immutable'
+import {fromJS} from 'immutable'
 
 export const types = {
-  CREATE_OR_UPDATE_GAMES: 'GAME/CREATE_OR_UPDATE_GAMES',
-  ENTER_GAME: 'GAME/ENTER_GAME',
-  JOIN_GAME: 'GAME/JOIN_GAME',
-  CREATE_GAME: 'GAME/CREATE_GAME',
+  UPDATE_GAMES: 'GAME/UPDATE_GAMES',
+  REQUEST_CREATE_GAME: 'GAME/REQUEST_CREATE_GAME',
+  REQUEST_JOIN_GAME: 'GAME/REQUEST_JOIN_GAME',
+  ENTER_LOBBY: 'GAME/ENTER_LOBBY',
 }
 
 export const actions = {
-  createOrUpdateGame: (games) => ({ type: types.CREATE_OR_UPDATE_GAMES, games }),
-  enterGame: (username) => ({ type: types.ENTER_GAME, username }),
-  joinGame: (id) => ({ type: types.JOIN_GAME, id }),
-  createGame: (name) => ({ type: types.CREATE_GAME, name }),
+  updateGames: (games) => ({ type: types.UPDATE_GAMES, games }),
+  requestJoinGame: (id) => ({ type: types.REQUEST_JOIN_GAME, id }),
+  requestCreateGame: (name) => ({ type: types.REQUEST_CREATE_GAME, name }),
+  enterLobby: (lobby) => ({ type: types.ENTER_LOBBY, lobby }),
 }
 
-
-const initialState = Map({})
+const initialState = fromJS({
+  all: {},
+  current: ''
+})
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.CREATE_OR_UPDATE_GAMES:
-      return state.mergeDeep(action.games)
+    case types.UPDATE_GAMES:
+      return state.setIn(['all'], state.get('all').mergeDeep(action.games))
+    case types.ENTER_LOBBY:
+      return state.set('current', action.lobby.get('id'))
     default:
       return state
   }
 }
 
-export const getAllGames = state => state.get('games')
+const getState = globalState => globalState.get('games')
+
+export const getAllGamesById = globalState => getState(globalState).get('all')
+export const getAllGames = globalState => getAllGamesById(globalState).toList()
+export const getGame = (globalState, id) => getAllGamesById(globalState).get(id)
+export const getCurrentGameId = globalState => getState(globalState).get('current')
+export const getCurrentGame = globalState => getGame(globalState, getCurrentGameId(globalState))

@@ -4,8 +4,8 @@ const player = new schema.Entity('players', {}, {
   idAttribute: 'username'
 })
 
-const game = new schema.Entity('games', {
+export const game = new schema.Entity('games', {
   players: [ player ]
 })
 
-export default [ game ]
+export const gameList = [ game ]

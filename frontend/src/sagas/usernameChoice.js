@@ -17,13 +17,13 @@ function usernameValidationChannel(socket) {
 function *usernameValidation({ socket }) {
   const usernameChannel = yield call(usernameValidationChannel, socket)
   const user = yield take(usernameChannel)
-  yield put(actions.setUsername(user.get('username'), user.get('displayName'), user.get('index')))
+  yield put(actions.setCurrentPlayer(user))
   usernameChannel.close()
   yield put(push('/games'))
 }
 
 function *sendUsername({ socket }) {
-  const { username } = yield take(types.CHOOSE_USERNAME)
+  const { username } = yield take(types.REQUEST_CHOOSE_USERNAME)
 
   yield socket.send('/app/chooseName', JSON.stringify({
     playerName: username
