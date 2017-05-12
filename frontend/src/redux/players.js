@@ -1,4 +1,4 @@
-import {fromJS, Map, Set} from 'immutable'
+import { fromJS, Map } from 'immutable'
 
 export const types = {
   REQUEST_CHOOSE_USERNAME: 'USER/REQUEST_CHOOSE_USERNAME',
@@ -41,14 +41,10 @@ export default (state = initialState, action) => {
 
 const getState = globalState => globalState.get('players')
 
-function keyIn(...keys) {
-  return (v, k) => Set(keys).has(k)
-}
-
 export const getAllPlayersByUsername = globalState => getState(globalState).get('all')
 export const getAllPlayers = globalState => getAllPlayersByUsername(globalState).toList()
 export const getPlayers = (globalState, usernames) => getAllPlayersByUsername(globalState)
-  .filter(keyIn(usernames))
+  .filter((v, k) => usernames.contains(k))
   .toList()
 export const getCurrentPlayerUsername = globalState => getState(globalState).get('current')
 export const getCurrentPlayer = globalState => getAllPlayersByUsername(globalState)
