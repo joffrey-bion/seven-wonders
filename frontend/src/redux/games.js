@@ -34,6 +34,6 @@ const getState = globalState => globalState.get('games')
 
 export const getAllGamesById = globalState => getState(globalState).get('all')
 export const getAllGames = globalState => getAllGamesById(globalState).toList()
-export const getGame = (globalState, id) => getAllGamesById(globalState).get(id)
+export const getGame = (globalState, id) => getAllGamesById(globalState).get(String(id))
 export const getCurrentGameId = globalState => getState(globalState).get('current')
 export const getCurrentGame = globalState => getGame(globalState, getCurrentGameId(globalState))
