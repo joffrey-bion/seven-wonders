@@ -1,7 +1,25 @@
 # Technical decisions and issues log
 
+## 2017-05-13 Migration to seamless-immutable
+*Joffrey* — :key: *Frontend*
+
+Using Immutable JS has proved to be a pain, especially because the cumbersome API is not contained in the reducers but 
+leaks out in the React components. As far as accessing the data is concerned, I dislike not being able to do it the 
+native way, well supported by IDEs. What's more, using strings in such accesses is not refactoring-friendly and it 
+obscures the errors when we make typos.
+Using `.toJS()` in each selector seemed to be a solution to avoid such accesses in React components, but it in fact 
+destroys performance as the new props are never considered the same as the old ones, and therefore the DOM is always 
+completely re-rendered.
+
+After reading [Alex Faunt's experience](https://medium.com/@AlexFaunt/immutablejs-worth-the-price-66391b8742d4) and 
+[Richard Feldman's article](http://tech.noredink.com/post/107617838018/switching-from-immutablejs-to-seamless-immutable), 
+I decided to move to [Seamless Immutable](https://github.com/rtfeldman/seamless-immutable), which was our life savior: 
+it provides immutability with an equivalent mutation API, while keeping native read accesses. Of course migrating to 
+Seamless Immutable required using [redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable) for 
+seamless-immutable-compatible `combineReducers()` and `routerReducer()` functions.
+
 ## 2017-04-06 Live API documentation
-:key: : Backend, API, Documentation 
+*Joffrey* — :key: *Backend, API, Documentation*
 
 As frontend development was starting, we felt the need for a better API doc than a plain shared Google Sheet.
 The best doc is an up-to-date doc that stays so. The easiest way I found to keep it up-to-date is to generate it.
@@ -19,9 +37,9 @@ That being said, Fabio Mafioletti does not seem to have a lot of time available 
 this support, so I might have to release from my own fork of the project, or create a new project based on JsonDoc.
 
 ## 2017-01-20 Frontend architecture refactoring
-:key: : Frontend
+*Victor — :key: Frontend*
 
-I based the frontend architecture on [mxstbr's](https://twitter.com/mxstbr) 
+I based the frontend architecture on [mxstbr](https://twitter.com/mxstbr)'s
 [react-boilerplate](https://github.com/mxstbr/react-boilerplate) (thanks Max!). The recommended structure for his 
 boilerplate is to group files by features. As such, in a feature folder, you would find reducers, actions types and 
 creators, selectors, sagas as well as containers.
@@ -35,18 +53,17 @@ I refactored our code to use the `Ducks` principle (the word comes from re*DUX*)
 import all redux specific files. I will update this section with more info after using it more extensively.
 
 ## 2017-01-20 Unified build Spring Boot + React
-:key: : Frontend, Backend
+*Joffrey* — :key: *Build, CI, Deployment*
 
-I wanted to make use of the local `package.json` scripts to be consistent with the frontend development workflow. 
-That way, the global build would not bring any surprise compared to the standalone frontend build. Some other nice 
-plugins allowed for bundling, minification etc. directly from Gradle, but that's not exactly what I wanted for the 
-reason I just described.
+Some nice plugins allowed for bundling, minification etc. directly from Gradle, but I wanted to make use of the local 
+`package.json` scripts to be consistent with the frontend development workflow. 
+That way, the global build would not bring any surprise compared to the standalone frontend build.
 
 In order to take advantage of Create React App's genericity, I could not temper with the webpack config in order to 
 customize the source path to `src/main/js`, like in the example of 
 [Spring React Boilerplate](https://github.com/pugnascotia/spring-react-boilerplate). It eventually made more sense to
- separate the react app sources in a subproject, following the example of 
- [Geowarin Boot React](https://github.com/geowarin/boot-react/).
+separate the react app sources in a subproject, following the example of 
+[Geowarin Boot React](https://github.com/geowarin/boot-react/).
 
 Using the [Gradle Node Plugin](https://github.com/srs/gradle-node-plugin) and its Yarn tasks allowed for an easy setup
 of the react frontend build. It already solved most of the frontend build problems: download node/npm/yarn, install
@@ -60,7 +77,7 @@ in the root folder. I had to manually override the Gradle command in the app set
 
 Second issue, the `gradle build` command actually runs the tests, which in the frontend subproject starts in watch mode,
 because not on a CI server (checking the environment variable `CI=true`). Also, the tests were already run by Travis CI,
-so we did't in fact need them there. The final command for Heroku was `gradle assemble`, which does the job.
+so we didn't in fact need them there. The final command for Heroku was `gradle assemble`, which does the job.
 
 Third problem, the default web process for Heroku's dyno looked for jars in the `{projectRoot}/build/lib` folder. I had
 to add a Procfile to manually specify the `backend` subproject in the process command:
@@ -68,10 +85,12 @@ to add a Procfile to manually specify the `backend` subproject in the process co
     web: java -Dserver.port=$PORT $JAVA_OPTS -jar backend/build/libs/*.jar
 
 ## 2016-12-08 React frontend
-:key: : Frontend
+*Joffrey* — :key: *Frontend*
 
 We decided to put the react stuff into `src/main/js` as it matches maven/gradle project structure conventions. As 
 `src/main/java` contains the Java sources, why not put the JavaScript sources in `src/main/js`?
+
+The technical choices were mostly guided by Victor, as I had little experience with React.
 
 Technical decisions:
 
@@ -87,13 +106,15 @@ So far, no special build including the produced static inside the webapp's Jar. 
 independently and both the frontend dev server and the spring boot server can run locally and communicate.
 
 ## 2016-12-04 Spring Boot backend
-:key: : Backend
+*Joffrey* — :key: *Backend*
 
 Technical decisions:
 
-- [Websockets](https://en.wikipedia.org/wiki/WebSocket): as we want server pushes to reach all clients when a player
-plays a card, we chose Websockets as main transport. HTTP/2 didn't seem to have proper browser support at the moment,
- and long polling is not a very clean solution to this problem.
+- [Websockets](https://en.wikipedia.org/wiki/WebSocket): as we needed server pushes to reach all clients when a player
+plays a card, we chose WebSockets as main transport. HTTP/2 didn't seem to have sufficient browser support at the moment,
+and long polling is not a very clean solution to this problem.
+Now, since we have a permanent TCP connection because of the WebSocket, we may as well use it for all actions (even those 
+who would naturally follow a request/response mechanism) for simplicity and to avoid HTTP's overhead.
 
 - [Spring Boot Websocket](https://spring.io/guides/gs/messaging-stomp-websocket/): because of my personal preference for
 (and ease with) the Java language, and because it is really quick to setup, Spring Boot was our choice as backend. It 
@@ -101,5 +122,5 @@ has the advantage to run without a container, with a simple `main()` method whic
 quickest start as far as the backend was concerned.
 
 - [STOMP](https://en.wikipedia.org/wiki/Streaming_Text_Oriented_Messaging_Protocol): coming with Spring official
-support, it was quite natural to use STOMP over Websockets as a subprotocol. It allows for an easier management of the
-payload and provide some sort of standard for the Publish/Subscribe mechanism.
+support, it was quite natural to use STOMP over WebSockets as a subprotocol when setting up Spring Boot WebSocket. It 
+allows for an easy management of the payload and provides some sort of standard for the publish/subscribe mechanism.
