@@ -1,7 +1,7 @@
 # Technical decisions and issues log
 
 ## 2017-05-13 Migration to seamless-immutable
-*Joffrey* — :key: *Frontend*
+*Joffrey* — :key: *Frontend, Immutable*
 
 Using Immutable JS has proved to be a pain, especially because the cumbersome API is not contained in the reducers but 
 leaks out in the React components. As far as accessing the data is concerned, I dislike not being able to do it the 
@@ -30,14 +30,14 @@ specialized in REST APIs. A very popular one is [Swagger](http://swagger.io/), b
 [yet for Websocket](https://github.com/OAI/OpenAPI-Specification/issues/523) communications.
 
 My attention then went to [JsonDoc](http://jsondoc.org/), which looked promising but with the same drawbacks: no 
-support for publich/subscribe mechanisms like websockets. Contributing to the project seems easier than contributing 
+support for publish/subscribe mechanisms like websockets. Contributing to the project seems easier than contributing 
 to Swagger, and I already could tweak a little bit the source code of JsonDoc to support `@MessageMapping` methods.
 
 That being said, Fabio Mafioletti does not seem to have a lot of time available for collaboration in implementing 
 this support, so I might have to release from my own fork of the project, or create a new project based on JsonDoc.
 
 ## 2017-01-20 Frontend architecture refactoring
-*Victor — :key: Frontend*
+*Victor — :key: Frontend, Redux*
 
 I based the frontend architecture on [mxstbr](https://twitter.com/mxstbr)'s
 [react-boilerplate](https://github.com/mxstbr/react-boilerplate) (thanks Max!). The recommended structure for his 
