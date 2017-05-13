@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux'
-import { fromJS } from 'immutable'
+import Immutable from 'seamless-immutable'
 
 import createReducer from './reducers'
 import createSagaMiddleware from 'redux-saga'
@@ -28,7 +28,7 @@ export default function configureStore(initialState = {}) {
 
   const store = createStore(
     createReducer(),
-    fromJS(initialState),
+    Immutable.from(initialState),
     composeEnhancers(...enhancers)
   )
 

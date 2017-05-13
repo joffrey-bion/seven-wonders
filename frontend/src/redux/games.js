@@ -1,4 +1,4 @@
-import {fromJS} from 'immutable'
+import Immutable from 'seamless-immutable'
 
 export const types = {
   UPDATE_GAMES: 'GAME/UPDATE_GAMES',
@@ -8,13 +8,13 @@ export const types = {
 }
 
 export const actions = {
-  updateGames: (games) => ({ type: types.UPDATE_GAMES, games }),
-  requestJoinGame: (id) => ({ type: types.REQUEST_JOIN_GAME, id }),
-  requestCreateGame: (name) => ({ type: types.REQUEST_CREATE_GAME, name }),
-  enterLobby: (lobby) => ({ type: types.ENTER_LOBBY, lobby }),
+  updateGames: (games) => ({ type: types.UPDATE_GAMES, games: Immutable(games) }),
+  requestJoinGame: (gameId) => ({ type: types.REQUEST_JOIN_GAME, gameId }),
+  requestCreateGame: (gameName) => ({ type: types.REQUEST_CREATE_GAME, gameName }),
+  enterLobby: (lobby) => ({ type: types.ENTER_LOBBY, lobby: Immutable(lobby) }),
 }
 
-const initialState = fromJS({
+const initialState = Immutable.from({
   all: {},
   current: ''
 })
@@ -22,18 +22,18 @@ const initialState = fromJS({
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.UPDATE_GAMES:
-      return state.setIn(['all'], state.get('all').mergeDeep(action.games))
+      return Immutable.merge(state, {all: action.games}, {deep: true})
     case types.ENTER_LOBBY:
-      return state.set('current', action.lobby.get('id'))
+      return state.set('current', action.lobby.id)
     default:
       return state
   }
 }
 
-const getState = globalState => globalState.get('games')
-
-export const getAllGamesById = globalState => getState(globalState).get('all')
-export const getAllGames = globalState => getAllGamesById(globalState).toList()
-export const getGame = (globalState, id) => getAllGamesById(globalState).get(String(id))
-export const getCurrentGameId = globalState => getState(globalState).get('current')
-export const getCurrentGame = globalState => getGame(globalState, getCurrentGameId(globalState))
+export const getAllGamesById = state => state.games.all
+export const getAllGames = state => {
+  let gamesById = getAllGamesById(state)
+  return Object.keys(gamesById).map(k => gamesById[k]);
+}
+export const getGame = (state, id) => getAllGamesById(state)[id]
+export const getCurrentGame = state => getGame(state, state.games.current)

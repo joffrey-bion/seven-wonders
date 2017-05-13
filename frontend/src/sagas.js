@@ -1,8 +1,9 @@
 import { router } from 'redux-saga-router'
-import { call } from 'redux-saga/effects'
+import { call, fork } from 'redux-saga/effects'
 
 import { makeSagaRoutes } from './routes'
-import createWsConnection from './utils/createWebSocketConnection'
+import { createWsConnection } from './utils/websocket'
+import errorHandlingSaga from './sagas/errors'
 
 export default function *rootSaga(history) {
   let wsConnection
@@ -12,6 +13,6 @@ export default function *rootSaga(history) {
     console.error('Could not connect to socket')
     return
   }
-
+  yield fork(errorHandlingSaga, wsConnection)
   yield* router(history, makeSagaRoutes(wsConnection))
 }

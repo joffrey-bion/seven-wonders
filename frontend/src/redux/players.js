@@ -1,4 +1,4 @@
-import { fromJS, Map } from 'immutable'
+import Immutable from 'seamless-immutable'
 
 export const types = {
   REQUEST_CHOOSE_USERNAME: 'USER/REQUEST_CHOOSE_USERNAME',
@@ -21,7 +21,7 @@ export const actions = {
   }),
 }
 
-const initialState = fromJS({
+const initialState = Immutable.from({
   all: {},
   current: ''
 })
@@ -30,22 +30,15 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case types.SET_CURRENT_PLAYER:
       const player = action.player
-      const username = player.get('username')
-      return state.setIn(['all', username], player).set('current', username)
+      const withNewPlayer = state.setIn(['all', player.username], player)
+      return Immutable.set(withNewPlayer, 'current', player.username)
     case types.UPDATE_PLAYERS:
-      return state.setIn(['all'], state.get('all').mergeDeep(action.players))
+      return Immutable.merge(state, {all: action.players}, {deep: true})
     default:
       return state
   }
 }
 
-const getState = globalState => globalState.get('players')
-
-export const getAllPlayersByUsername = globalState => getState(globalState).get('all')
-export const getAllPlayers = globalState => getAllPlayersByUsername(globalState).toList()
-export const getPlayers = (globalState, usernames) => getAllPlayersByUsername(globalState)
-  .filter((v, k) => usernames.contains(k))
-  .toList()
-export const getCurrentPlayerUsername = globalState => getState(globalState).get('current')
-export const getCurrentPlayer = globalState => getAllPlayersByUsername(globalState)
-  .get(getCurrentPlayerUsername(globalState), Map())
+export const getCurrentPlayer = state => state.players.all && state.players.all[state.players.current]
+export const getPlayers = (state, usernames) => Object.values(state.players.all)
+                                                      .filter(p => usernames.indexOf(p.username) !== -1)

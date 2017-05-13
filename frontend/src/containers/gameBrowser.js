@@ -30,7 +30,7 @@ class GameBrowser extends Component {
           >
           </InlineForm>
           <Space auto />
-          <Text><b>Username:</b> {this.props.currentPlayer.get('displayName')}</Text>
+          <Text><b>Username:</b> {this.props.currentPlayer && this.props.currentPlayer.displayName}</Text>
           <Space x={1} />
         </Flex>
         <GameList games={this.props.games} joinGame={this.props.joinGame}/>
@@ -43,7 +43,7 @@ import { getCurrentPlayer } from '../redux/players'
 import { getAllGames, actions } from '../redux/games'
 
 const mapStateToProps = (state) => ({
-  currentPlayer: getCurrentPlayer(state),
+  currentPlayer: getCurrentPlayer(state) || {displayName: '[ERROR]'},
   games: getAllGames(state)
 })
 

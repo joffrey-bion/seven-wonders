@@ -1,10 +1,10 @@
 import { fork } from 'redux-saga/effects'
-import usernameChoiceSaga from './sagas/usernameChoice'
+import homeSaga from './sagas/home'
 import gameBrowserSaga from './sagas/gameBrowser'
 
 export const makeSagaRoutes = wsConnection => ({
   *'/'() {
-    yield fork(usernameChoiceSaga, wsConnection)
+    yield fork(homeSaga, wsConnection)
   },
   *'/games'() {
     yield fork(gameBrowserSaga, wsConnection)

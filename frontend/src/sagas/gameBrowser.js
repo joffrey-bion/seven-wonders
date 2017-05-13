@@ -1,6 +1,5 @@
 import { call, put, take, apply } from 'redux-saga/effects'
-import { eventChannel} from 'redux-saga'
-import { fromJS } from 'immutable'
+import { eventChannel } from 'redux-saga'
 import { push } from 'react-router-redux'
 
 import { normalize } from 'normalizr'
@@ -14,7 +13,7 @@ function gameBrowserChannel(socket) {
 
     const makeHandler = type => event => {
       const response = JSON.parse(event.body)
-      emit({ type, response })
+      emit({type, response})
     }
 
     const newGame = socket.subscribe('/topic/games', makeHandler(types.UPDATE_GAMES))
@@ -27,22 +26,22 @@ function gameBrowserChannel(socket) {
   })
 }
 
-export function *watchGames({ socket }) {
+export function *watchGames({socket}) {
   const socketChannel = gameBrowserChannel(socket)
 
   try {
     while (true) {
-      const { type, response } = yield take(socketChannel)
+      const {type, response} = yield take(socketChannel)
 
       switch (type) {
         case types.UPDATE_GAMES:
           const normGameList = normalize(response, gameList)
-          yield put(playerActions.updatePlayers(fromJS(normGameList.entities.players)))
-          yield put(gameActions.updateGames(fromJS(normGameList.entities.games)))
+          yield put(playerActions.updatePlayers(normGameList.entities.players || {}))
+          yield put(gameActions.updateGames(normGameList.entities.games || {}))
           break
         case types.ENTER_LOBBY:
           const normGame = normalize(response, game)
-          yield put(gameActions.enterLobby(fromJS(normGame.entities.games[normGame.result])))
+          yield put(gameActions.enterLobby(normGame.entities.games[normGame.result]))
           socketChannel.close()
           yield put(push('/lobby'))
           break
@@ -55,24 +54,20 @@ export function *watchGames({ socket }) {
   }
 }
 
-export function *createGame({ socket }) {
-  const { name } = yield take(types.REQUEST_CREATE_GAME)
+export function *createGame({socket}) {
+  const {gameName} = yield take(types.REQUEST_CREATE_GAME)
 
-  yield apply(socket, socket.send, ["/app/lobby/create", JSON.stringify({ gameName: name }), {}])
+  yield apply(socket, socket.send, ['/app/lobby/create', JSON.stringify({gameName}), {}])
 }
 
-export function *joinGame({ socket }) {
-  const { id } = yield take(types.REQUEST_JOIN_GAME)
+export function *joinGame({socket}) {
+  const {gameId} = yield take(types.REQUEST_JOIN_GAME)
 
-  yield apply(socket, socket.send, ["/app/lobby/join", JSON.stringify({ gameId: id }), {}])
+  yield apply(socket, socket.send, ['/app/lobby/join', JSON.stringify({gameId}), {}])
 }
 
 export function *gameBrowserSaga(socketConnection) {
-  yield [
-    call(watchGames, socketConnection),
-    call(createGame, socketConnection),
-    call(joinGame, socketConnection)
-  ]
+  yield [call(watchGames, socketConnection), call(createGame, socketConnection), call(joinGame, socketConnection)]
 }
 
 export default gameBrowserSaga
