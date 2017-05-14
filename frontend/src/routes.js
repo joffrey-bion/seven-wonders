@@ -1,6 +1,7 @@
 import { fork } from 'redux-saga/effects'
 import homeSaga from './sagas/home'
 import gameBrowserSaga from './sagas/gameBrowser'
+import lobbySaga from './sagas/lobby'
 
 export const makeSagaRoutes = wsConnection => ({
   *'/'() {
@@ -8,6 +9,9 @@ export const makeSagaRoutes = wsConnection => ({
   },
   *'/games'() {
     yield fork(gameBrowserSaga, wsConnection)
+  },
+  *'/lobby/*'() {
+    yield fork(lobbySaga, wsConnection)
   }
 })
 
@@ -28,7 +32,7 @@ export const routes = [
     component: LobbyLayout,
     childRoutes: [
       { path: '/games', component: GameBrowser },
-      { path: '/lobby', component: Lobby }
+      { path: '/lobby/*', component: Lobby }
     ]
   },
   {

@@ -5,8 +5,8 @@ import Immutable from 'seamless-immutable'
 
 const PlayerList = (props) => (
   <div>
-    {Immutable.asMutable(props.players).map((player, index) => {
-      return (<Flex key={index}>
+    {Immutable.asMutable(props.players).map(player => {
+      return (<Flex key={player.index}>
         <Text>{player.displayName}</Text>
         <Text>({player.username})</Text>
       </Flex>)

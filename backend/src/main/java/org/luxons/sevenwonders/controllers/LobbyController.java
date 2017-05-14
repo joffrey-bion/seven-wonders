@@ -61,7 +61,7 @@ public class LobbyController {
     }
 
     @ApiMethod
-    @MessageMapping("/lobby/start")
+    @MessageMapping("/lobby/startGame")
     public void startGame(Principal principal) {
         Lobby lobby = getOwnedLobby(principal);
         Game game = lobby.startGame();

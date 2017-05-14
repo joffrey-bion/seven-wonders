@@ -4,14 +4,18 @@ export const types = {
   UPDATE_GAMES: 'GAME/UPDATE_GAMES',
   REQUEST_CREATE_GAME: 'GAME/REQUEST_CREATE_GAME',
   REQUEST_JOIN_GAME: 'GAME/REQUEST_JOIN_GAME',
+  REQUEST_START_GAME: 'GAME/REQUEST_JOIN_GAME',
   ENTER_LOBBY: 'GAME/ENTER_LOBBY',
+  ENTER_GAME: 'GAME/ENTER_GAME',
 }
 
 export const actions = {
   updateGames: (games) => ({ type: types.UPDATE_GAMES, games: Immutable(games) }),
   requestJoinGame: (gameId) => ({ type: types.REQUEST_JOIN_GAME, gameId }),
   requestCreateGame: (gameName) => ({ type: types.REQUEST_CREATE_GAME, gameName }),
+  requestStartGame: () => ({ type: types.REQUEST_START_GAME }),
   enterLobby: (lobby) => ({ type: types.ENTER_LOBBY, lobby: Immutable(lobby) }),
+  enterGame: () => ({ type: types.ENTER_GAME }),
 }
 
 const initialState = Immutable.from({

@@ -40,5 +40,5 @@ export default (state = initialState, action) => {
 }
 
 export const getCurrentPlayer = state => state.players.all && state.players.all[state.players.current]
-export const getPlayers = (state, usernames) => Object.values(state.players.all)
-                                                      .filter(p => usernames.indexOf(p.username) !== -1)
+export const getPlayer = (state, username) => state.players.all[username]
+export const getPlayers = (state, usernames) => usernames.map(u => getPlayer(state, u))

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Immutable from 'seamless-immutable'
-import { Text } from 'rebass'
+import { Button } from 'rebass'
 import PlayerList from '../components/playerList'
 
 class Lobby extends Component {
 
   getTitle() {
     if (this.props.currentGame) {
-      return this.props.currentGame.name
+      return this.props.currentGame.name + ' — Lobby'
     } else {
       return 'What are you doing here? You haven\'t joined a game yet!'
     }
@@ -17,15 +17,16 @@ class Lobby extends Component {
   render() {
     return (
       <div>
-        <Text>{this.getTitle()}</Text>
+        <h2>{this.getTitle()}</h2>
         <PlayerList players={this.props.players}/>
+        <Button onClick={this.props.startGame}>Start Game</Button>
       </div>
     )
   }
 }
 
 import { getPlayers } from '../redux/players'
-import { getCurrentGame } from '../redux/games'
+import { getCurrentGame, actions } from '../redux/games'
 
 const mapStateToProps = (state) => {
   const game = getCurrentGame(state)
@@ -35,6 +36,8 @@ const mapStateToProps = (state) => {
   })
 }
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  startGame: actions.requestStartGame
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby)

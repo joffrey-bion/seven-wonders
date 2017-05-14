@@ -1,73 +1,62 @@
 import { call, put, take, apply } from 'redux-saga/effects'
-import { eventChannel } from 'redux-saga'
+import { createSubscriptionChannel } from '../utils/websocket'
 import { push } from 'react-router-redux'
 
 import { normalize } from 'normalizr'
-import { game, gameList } from '../schemas/games'
+import { game as gameSchema, gameList as gameListSchema} from '../schemas/games'
 
 import { actions as gameActions, types } from '../redux/games'
 import { actions as playerActions } from '../redux/players'
 
-function gameBrowserChannel(socket) {
-  return eventChannel(emit => {
-
-    const makeHandler = type => event => {
-      const response = JSON.parse(event.body)
-      emit({type, response})
-    }
-
-    const newGame = socket.subscribe('/topic/games', makeHandler(types.UPDATE_GAMES))
-    const joinGame = socket.subscribe('/user/queue/lobby/joined', makeHandler(types.ENTER_LOBBY))
-
-    return () => {
-      newGame.unsubscribe()
-      joinGame.unsubscribe()
-    }
-  })
-}
-
-export function *watchGames({socket}) {
-  const socketChannel = gameBrowserChannel(socket)
-
+function *watchGames({socket}) {
+  const gamesChannel = yield call(createSubscriptionChannel, socket, '/topic/games')
   try {
     while (true) {
-      const {type, response} = yield take(socketChannel)
-
-      switch (type) {
-        case types.UPDATE_GAMES:
-          const normGameList = normalize(response, gameList)
-          yield put(playerActions.updatePlayers(normGameList.entities.players || {}))
-          yield put(gameActions.updateGames(normGameList.entities.games || {}))
-          break
-        case types.ENTER_LOBBY:
-          const normGame = normalize(response, game)
-          yield put(gameActions.enterLobby(normGame.entities.games[normGame.result]))
-          socketChannel.close()
-          yield put(push('/lobby'))
-          break
-        default:
-          console.error('Unknown type')
-      }
+      const gameList = yield take(gamesChannel)
+      const normGameList = normalize(gameList, gameListSchema)
+      // for an empty game array, there is no players/games entity maps
+      yield put(playerActions.updatePlayers(normGameList.entities.players || {}))
+      yield put(gameActions.updateGames(normGameList.entities.games || {}))
     }
   } finally {
-    console.info('gameBrowserChannel closed')
+    yield apply(gamesChannel, gamesChannel.close)
   }
 }
 
-export function *createGame({socket}) {
+function *watchLobbyJoined({socket}) {
+  const joinedLobbyChannel = yield call(createSubscriptionChannel, socket, '/user/queue/lobby/joined')
+  try {
+    const joinedLobby = yield take(joinedLobbyChannel)
+    const normalized = normalize(joinedLobby, gameSchema)
+    const gameId = normalized.result
+    yield put(playerActions.updatePlayers(normalized.entities.players))
+    yield put(gameActions.updateGames(normalized.entities.games))
+    yield put(gameActions.enterLobby(normalized.entities.games[gameId]))
+    yield put(push(`/lobby/${gameId}`))
+  } finally {
+    yield apply(joinedLobbyChannel, joinedLobbyChannel.close)
+  }
+}
+
+function *createGame({socket}) {
   const {gameName} = yield take(types.REQUEST_CREATE_GAME)
 
   yield apply(socket, socket.send, ['/app/lobby/create', JSON.stringify({gameName}), {}])
 }
 
-export function *joinGame({socket}) {
+function *joinGame({socket}) {
   const {gameId} = yield take(types.REQUEST_JOIN_GAME)
 
   yield apply(socket, socket.send, ['/app/lobby/join', JSON.stringify({gameId}), {}])
 }
 
-export function *gameBrowserSaga(socketConnection) {
-  yield [call(watchGames, socketConnection), call(createGame, socketConnection), call(joinGame, socketConnection)]
+function *gameBrowserSaga(socketConnection) {
+  yield [
+    call(watchGames, socketConnection),
+    call(watchLobbyJoined, socketConnection),
+    call(createGame, socketConnection),
+    call(joinGame, socketConnection)
+  ]
 }
 
 export default gameBrowserSaga
