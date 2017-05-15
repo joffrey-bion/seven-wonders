@@ -25,7 +25,7 @@ task start(type: YarnTask) {
 }
 
 task test(type: YarnTask) {
-    args = ['test']
+    args = ['test:oneshot']
 }
 
 check.dependsOn(test)
