@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.Rule;
+import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
@@ -12,13 +13,19 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board.InsufficientFundsException;
+import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
+import org.luxons.sevenwonders.game.effects.SpecialAbility;
+import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -43,6 +50,11 @@ public class BoardTest {
     @DataPoints
     public static Color[] colors() {
         return Color.values();
+    }
+
+    @DataPoints
+    public static SpecialAbility[] specialAbilities() {
+        return SpecialAbility.values();
     }
 
     @Rule
@@ -90,7 +102,7 @@ public class BoardTest {
     @Theory
     public void getNbCardsOfColor_properCount_singleColor(ResourceType type, @FromDataPoints("nbCards") int nbCards,
             @FromDataPoints("nbCards") int nbOtherCards, Color color) {
-        Board board = new Board(TestUtils.createWonder(type), 0, new Settings(5));
+        Board board = TestUtils.createBoard(type);
         TestUtils.addCards(board, nbCards, nbOtherCards, color);
         assertEquals(nbCards, board.getNbCardsOfColor(Collections.singletonList(color)));
     }
@@ -99,10 +111,71 @@ public class BoardTest {
     public void getNbCardsOfColor_properCount_multiColors(ResourceType type, @FromDataPoints("nbCards") int nbCards1,
             @FromDataPoints("nbCards") int nbCards2, @FromDataPoints("nbCards") int nbOtherCards, Color color1,
             Color color2) {
-        Board board = new Board(TestUtils.createWonder(type), 0, new Settings(5));
+        Board board = TestUtils.createBoard(type);
         TestUtils.addCards(board, nbCards1, color1);
         TestUtils.addCards(board, nbCards2, color2);
         TestUtils.addCards(board, nbOtherCards, TestUtils.getDifferentColorFrom(color1, color2));
         assertEquals(nbCards1 + nbCards2, board.getNbCardsOfColor(Arrays.asList(color1, color2)));
+    }
+
+    @Test
+    public void setCopiedGuild_succeedsOnPurpleCard() {
+        Board board = TestUtils.createBoard(ResourceType.CLAY);
+        Card card = TestUtils.createCard(Color.PURPLE);
+
+        board.setCopiedGuild(card);
+        assertSame(card, board.getCopiedGuild());
+    }
+
+    @Theory
+    public void setCopiedGuild_failsOnNonPurpleCard(Color color) {
+        assumeTrue(color != Color.PURPLE);
+        Board board = TestUtils.createBoard(ResourceType.CLAY);
+        Card card = TestUtils.createCard(color);
+
+        thrown.expect(IllegalArgumentException.class);
+        board.setCopiedGuild(card);
+    }
+
+    @Theory
+    public void hasSpecial(SpecialAbility applied, SpecialAbility tested) {
+        Board board = TestUtils.createBoard(ResourceType.CLAY);
+        Table table = new Table(Collections.singletonList(board));
+        SpecialAbilityActivation special = new SpecialAbilityActivation(applied);
+
+        special.apply(table, 0);
+
+        assertEquals(applied == tested, board.hasSpecial(tested));
+    }
+
+    @Test
+    public void canPlayFreeCard() {
+        Board board = TestUtils.createBoard(ResourceType.CLAY);
+        Table table = new Table(Collections.singletonList(board));
+        SpecialAbilityActivation special = new SpecialAbilityActivation(SpecialAbility.ONE_FREE_PER_AGE);
+
+        special.apply(table, 0);
+
+        assertTrue(board.canPlayFreeCard(0));
+        assertTrue(board.canPlayFreeCard(1));
+        assertTrue(board.canPlayFreeCard(2));
+
+        board.consumeFreeCard(0);
+
+        assertFalse(board.canPlayFreeCard(0));
+        assertTrue(board.canPlayFreeCard(1));
+        assertTrue(board.canPlayFreeCard(2));
+
+        board.consumeFreeCard(1);
+
+        assertFalse(board.canPlayFreeCard(0));
+        assertFalse(board.canPlayFreeCard(1));
+        assertTrue(board.canPlayFreeCard(2));
+
+        board.consumeFreeCard(2);
+
+        assertFalse(board.canPlayFreeCard(0));
+        assertFalse(board.canPlayFreeCard(1));
+        assertFalse(board.canPlayFreeCard(2));
     }
 }
