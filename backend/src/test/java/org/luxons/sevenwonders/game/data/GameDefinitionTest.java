@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 public class GameDefinitionTest {
 
     @Test
-    public void successfulGameInit() throws Exception {
+    public void successfulGameInit() {
         GameDefinition gameDefinition = new GameDefinitionLoader().getGameDefinition();
         assertNotNull(gameDefinition);
 

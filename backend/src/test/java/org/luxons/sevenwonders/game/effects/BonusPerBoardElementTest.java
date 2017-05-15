@@ -39,7 +39,7 @@ public class BonusPerBoardElementTest {
     private Table table;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         table = TestUtils.createTable(4);
     }
 

@@ -217,7 +217,7 @@ public class LobbyTest {
     }
 
     @Test
-    public void setSettings() throws Exception {
+    public void setSettings() {
         CustomizableSettings settings = new CustomizableSettings();
         lobby.setSettings(settings);
         assertSame(settings, lobby.getSettings());

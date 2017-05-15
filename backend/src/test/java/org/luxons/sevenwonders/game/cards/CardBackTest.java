@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class CardBackTest {
 
     @Test
-    public void initializedWithImage() throws Exception {
+    public void initializedWithImage() {
         String imagePath = "whateverimage.png";
         CardBack back = new CardBack(imagePath);
         assertEquals(imagePath, back.getImage());
