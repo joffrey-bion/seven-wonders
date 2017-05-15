@@ -93,7 +93,7 @@ public class GameBrowserController {
         }
     }
 
-    private static class UserAlreadyInGameException extends ApiMisuseException {
+    static class UserAlreadyInGameException extends ApiMisuseException {
         UserAlreadyInGameException(String gameName, String impossibleActionDescription) {
             super("Client already in game '" + gameName + "', " + impossibleActionDescription);
         }

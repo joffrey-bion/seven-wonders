@@ -52,7 +52,7 @@ public class PlayerRepository {
         return player;
     }
 
-    static class PlayerNotFoundException extends ApiMisuseException {
+    public static class PlayerNotFoundException extends ApiMisuseException {
         PlayerNotFoundException(String username) {
             super("Player '" + username + "' doesn't exist");
         }
