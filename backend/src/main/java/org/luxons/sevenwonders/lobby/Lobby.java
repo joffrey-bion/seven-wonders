@@ -30,7 +30,7 @@ public class Lobby {
         this.gameDefinition = gameDefinition;
         this.players = new ArrayList<>(gameDefinition.getMinPlayers());
         this.settings = new CustomizableSettings();
-        players.add(owner);
+        addPlayer(owner);
     }
 
     public long getId() {

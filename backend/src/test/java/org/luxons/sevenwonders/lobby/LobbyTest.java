@@ -21,6 +21,7 @@ import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -62,6 +63,14 @@ public class LobbyTest {
     public void testName() {
         Lobby l = new Lobby(5, "Test Game", gameOwner, gameDefinition);
         assertEquals("Test Game", l.getName());
+    }
+
+    @Test
+    public void testOwner() {
+        gameOwner.setIndex(42);
+        Lobby l = new Lobby(5, "Test Game", gameOwner, gameDefinition);
+        assertSame(gameOwner, l.getPlayers().get(0));
+        assertEquals(0, gameOwner.getIndex());
     }
 
     @Test
