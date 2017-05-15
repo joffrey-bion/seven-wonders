@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.lobby.Lobby;
+import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +37,22 @@ public class LobbyController {
     }
 
     @ApiMethod
+    @MessageMapping("/lobby/leave")
+    public void leave(Principal principal) {
+        Lobby lobby = getLobby(principal);
+        lobby.removePlayer(principal.getName());
+
+        logger.info("Player '{}' left game '{}'", principal.getName(), lobby.getName());
+        sendLobbyUpdateToPlayers(lobby);
+    }
+
+    @ApiMethod
     @MessageMapping("/lobby/reorderPlayers")
     public void reorderPlayers(@Validated ReorderPlayersAction action, Principal principal) {
         Lobby lobby = getLobby(principal);
         lobby.reorderPlayers(action.getOrderedPlayers());
 
-        logger.info("Players in game {} reordered to {}", lobby.getName(), action.getOrderedPlayers());
+        logger.info("Players in game '{}' reordered to {}", lobby.getName(), action.getOrderedPlayers());
         sendLobbyUpdateToPlayers(lobby);
     }
 
@@ -51,7 +62,7 @@ public class LobbyController {
         Lobby lobby = getLobby(principal);
         lobby.setSettings(action.getSettings());
 
-        logger.info("Updated settings of game {}", lobby.getName());
+        logger.info("Updated settings of game '{}'", lobby.getName());
         sendLobbyUpdateToPlayers(lobby);
     }
 
@@ -66,7 +77,7 @@ public class LobbyController {
         Lobby lobby = getOwnedLobby(principal);
         Game game = lobby.startGame();
 
-        logger.info("Game {} successfully started", game.getId());
+        logger.info("Game '{}' successfully started", game.getId());
         template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", (Object) null);
     }
 
@@ -79,11 +90,15 @@ public class LobbyController {
     }
 
     private Lobby getLobby(Principal principal) {
-        Lobby lobby = playerRepository.find(principal.getName()).getLobby();
+        Lobby lobby = getPlayer(principal).getLobby();
         if (lobby == null) {
             throw new UserNotInLobbyException(principal.getName());
         }
         return lobby;
+    }
+
+    private Player getPlayer(Principal principal) {
+        return playerRepository.find(principal.getName());
     }
 
     private static class UserNotInLobbyException extends ApiMisuseException {

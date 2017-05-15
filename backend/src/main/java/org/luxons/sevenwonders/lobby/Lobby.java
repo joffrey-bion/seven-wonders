@@ -120,6 +120,10 @@ public class Lobby {
         return players.stream().anyMatch(p -> p.getUsername().equals(username));
     }
 
+    public void removePlayer(String username) {
+        players.removeIf(p -> p.getUsername().equals(username));
+    }
+
     static class GameAlreadyStartedException extends IllegalStateException {
     }
 
