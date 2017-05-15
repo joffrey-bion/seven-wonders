@@ -11,6 +11,8 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.luxons.sevenwonders.game.Game;
+import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.data.GameDefinition;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.lobby.Lobby.GameAlreadyStartedException;
@@ -21,6 +23,8 @@ import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
@@ -70,6 +74,7 @@ public class LobbyTest {
         gameOwner.setIndex(42);
         Lobby l = new Lobby(5, "Test Game", gameOwner, gameDefinition);
         assertSame(gameOwner, l.getPlayers().get(0));
+        assertSame(l, gameOwner.getLobby());
         assertEquals(0, gameOwner.getIndex());
     }
 
@@ -105,6 +110,8 @@ public class LobbyTest {
         Player player = new Player("testuser", "Test User");
         lobby.addPlayer(player);
         assertTrue(lobby.containsUser("testuser"));
+        assertSame(lobby, player.getLobby());
+        assertSame(1, player.getIndex()); // the owner is 0
     }
 
     @Test(expected = PlayerNameAlreadyUsedException.class)
@@ -136,9 +143,8 @@ public class LobbyTest {
         }
     }
 
-    @Test
+    @Test(expected = UnknownPlayerException.class)
     public void removePlayer_failsWhenNotPresent() {
-        thrown.expect(UnknownPlayerException.class);
         lobby.removePlayer("anyname");
     }
 
@@ -148,6 +154,9 @@ public class LobbyTest {
         lobby.addPlayer(player);
         lobby.removePlayer("testuser");
         assertFalse(lobby.containsUser("testuser"));
+        assertNull(player.getLobby());
+        assertNull(player.getGame());
+        assertEquals(-1, player.getIndex());
     }
 
     @Test
@@ -175,7 +184,7 @@ public class LobbyTest {
         lobby.addPlayer(player1);
         lobby.addPlayer(player2);
         lobby.addPlayer(player3);
-        lobby.reorderPlayers(Arrays.asList("testuser4", "testuser1", "testuser2"));
+        lobby.reorderPlayers(Arrays.asList("unknown", "testuser1", "testuser2"));
     }
 
     @Theory
@@ -193,7 +202,9 @@ public class LobbyTest {
         assumeTrue(nbPlayers <= gameDefinition.getMaxPlayers());
         // there is already the owner
         addPlayers(nbPlayers - 1);
-        lobby.startGame();
+        Game game = lobby.startGame();
+        assertNotNull(game);
+        lobby.getPlayers().forEach(p -> assertSame(game, p.getGame()));
     }
 
     @Test
@@ -203,5 +214,12 @@ public class LobbyTest {
         addPlayers(gameDefinition.getMinPlayers() - 1);
         lobby.startGame();
         assertTrue(lobby.getState() == State.PLAYING);
+    }
+
+    @Test
+    public void setSettings() throws Exception {
+        CustomizableSettings settings = new CustomizableSettings();
+        lobby.setSettings(settings);
+        assertSame(settings, lobby.getSettings());
     }
 }

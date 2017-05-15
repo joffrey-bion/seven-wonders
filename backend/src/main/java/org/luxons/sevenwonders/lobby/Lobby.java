@@ -68,6 +68,7 @@ public class Lobby {
             throw new PlayerNameAlreadyUsedException(player.getDisplayName());
         }
         player.setIndex(players.size());
+        player.setLobby(this);
         players.add(player);
     }
 
@@ -88,7 +89,9 @@ public class Lobby {
             throw new PlayerUnderflowException(gameDefinition.getMinPlayers());
         }
         state = State.PLAYING;
-        return gameDefinition.initGame(id, settings, players.size());
+        Game game = gameDefinition.initGame(id, settings, players.size());
+        players.forEach(p -> p.setGame(game));
+        return game;
     }
 
     private boolean hasEnoughPlayers() {
@@ -123,6 +126,9 @@ public class Lobby {
     public void removePlayer(String username) throws UnknownPlayerException {
         Player player = getPlayer(players, username);
         players.remove(player);
+        player.setIndex(-1);
+        player.setLobby(null);
+        player.setGame(null);
     }
 
     static class GameAlreadyStartedException extends IllegalStateException {

@@ -61,7 +61,6 @@ public class GameBrowserController {
 
         Player gameOwner = playerRepository.find(principal.getName());
         Lobby lobby = lobbyRepository.create(action.getGameName(), gameOwner);
-        gameOwner.setLobby(lobby);
 
         logger.info("Game '{}' ({}) created by {} ({})", lobby.getName(), lobby.getId(), gameOwner.getDisplayName(),
                 gameOwner.getUsername());
@@ -80,7 +79,6 @@ public class GameBrowserController {
         Lobby lobby = lobbyRepository.find(action.getGameId());
         Player newPlayer = playerRepository.find(principal.getName());
         lobby.addPlayer(newPlayer);
-        newPlayer.setLobby(lobby);
 
         logger.info("Player '{}' ({}) joined game {}", newPlayer.getDisplayName(), newPlayer.getUsername(),
                 lobby.getName());
