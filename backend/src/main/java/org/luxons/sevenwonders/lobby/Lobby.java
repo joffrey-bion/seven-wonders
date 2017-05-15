@@ -62,7 +62,7 @@ public class Lobby {
             throw new GameAlreadyStartedException();
         }
         if (maxPlayersReached()) {
-            throw new PlayerOverflowException();
+            throw new PlayerOverflowException(gameDefinition.getMaxPlayers());
         }
         if (playerNameAlreadyUsed(player.getDisplayName())) {
             throw new PlayerNameAlreadyUsedException(player.getDisplayName());
@@ -85,7 +85,7 @@ public class Lobby {
 
     public synchronized Game startGame() throws PlayerUnderflowException {
         if (!hasEnoughPlayers()) {
-            throw new PlayerUnderflowException();
+            throw new PlayerUnderflowException(gameDefinition.getMinPlayers());
         }
         state = State.PLAYING;
         return gameDefinition.initGame(id, settings, players.size());
@@ -95,7 +95,7 @@ public class Lobby {
         return players.size() >= gameDefinition.getMinPlayers();
     }
 
-    public void reorderPlayers(List<String> orderedUsernames) {
+    public void reorderPlayers(List<String> orderedUsernames) throws UnknownPlayerException {
         List<Player> formerList = new ArrayList<>(players);
         players.clear();
         for (int i = 0; i < orderedUsernames.size(); i++) {
@@ -105,7 +105,7 @@ public class Lobby {
         }
     }
 
-    private static Player getPlayer(List<Player> players, String username) {
+    private static Player getPlayer(List<Player> players, String username) throws UnknownPlayerException {
         return players.stream()
                       .filter(p -> p.getUsername().equals(username))
                       .findAny()
@@ -120,26 +120,33 @@ public class Lobby {
         return players.stream().anyMatch(p -> p.getUsername().equals(username));
     }
 
-    public void removePlayer(String username) {
-        players.removeIf(p -> p.getUsername().equals(username));
+    public void removePlayer(String username) throws UnknownPlayerException {
+        Player player = getPlayer(players, username);
+        players.remove(player);
     }
 
     static class GameAlreadyStartedException extends IllegalStateException {
     }
 
     static class PlayerOverflowException extends IllegalStateException {
+        PlayerOverflowException(int max) {
+            super(String.format("maximum %d players allowed", max));
+        }
     }
 
     static class PlayerUnderflowException extends IllegalStateException {
+        PlayerUnderflowException(int min) {
+            super(String.format("minimum %d players required to start a game", min));
+        }
     }
 
-    static class PlayerNameAlreadyUsedException extends RuntimeException {
+    static class PlayerNameAlreadyUsedException extends IllegalStateException {
         PlayerNameAlreadyUsedException(String name) {
             super(name);
         }
     }
 
-    static class UnknownPlayerException extends IllegalArgumentException {
+    static class UnknownPlayerException extends IllegalStateException {
         UnknownPlayerException(String username) {
             super(username);
         }

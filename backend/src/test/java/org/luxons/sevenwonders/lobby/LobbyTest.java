@@ -128,7 +128,21 @@ public class LobbyTest {
     }
 
     @Test
-    public void reorderPlayers_failsOnSameName() {
+    public void removePlayer_failsWhenNotPresent() {
+        thrown.expect(UnknownPlayerException.class);
+        lobby.removePlayer("anyname");
+    }
+
+    @Test
+    public void removePlayer_success() {
+        Player player = new Player("testuser", "Test User");
+        lobby.addPlayer(player);
+        lobby.removePlayer("testuser");
+        assertFalse(lobby.containsUser("testuser"));
+    }
+
+    @Test
+    public void reorderPlayers_success() {
         Player player1 = new Player("testuser1", "Test User 1");
         Player player2 = new Player("testuser2", "Test User 2");
         Player player3 = new Player("testuser3", "Test User 3");
@@ -139,6 +153,9 @@ public class LobbyTest {
         assertEquals("testuser3", lobby.getPlayers().get(0).getUsername());
         assertEquals("testuser1", lobby.getPlayers().get(1).getUsername());
         assertEquals("testuser2", lobby.getPlayers().get(2).getUsername());
+        assertEquals(0, lobby.getPlayers().get(0).getIndex());
+        assertEquals(1, lobby.getPlayers().get(1).getIndex());
+        assertEquals(2, lobby.getPlayers().get(2).getIndex());
     }
 
     @Test(expected = UnknownPlayerException.class)
@@ -164,7 +181,7 @@ public class LobbyTest {
     @Theory
     public void startGame_succeedsAboveMinPlayers(int nbPlayers) {
         assumeTrue(nbPlayers >= gameDefinition.getMinPlayers());
-        assumeTrue(nbPlayers < gameDefinition.getMaxPlayers());
+        assumeTrue(nbPlayers <= gameDefinition.getMaxPlayers());
         // there is already the owner
         addPlayers(nbPlayers - 1);
         lobby.startGame();
