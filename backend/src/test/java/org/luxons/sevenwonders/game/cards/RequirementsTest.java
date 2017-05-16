@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.cards;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
@@ -12,10 +13,12 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceType;
+import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
@@ -30,6 +33,20 @@ public class RequirementsTest {
     @DataPoints
     public static ResourceType[] resourceTypes() {
         return ResourceType.values();
+    }
+
+    @Test
+    public void getResources_emptyAfterInit() throws Exception {
+        Requirements requirements = new Requirements();
+        assertTrue(requirements.getResources().isEmpty());
+    }
+
+    @Test
+    public void setResources_success() throws Exception {
+        Requirements requirements = new Requirements();
+        Resources resources = new Resources();
+        requirements.setResources(resources);
+        assertSame(resources, requirements.getResources());
     }
 
     @Theory
