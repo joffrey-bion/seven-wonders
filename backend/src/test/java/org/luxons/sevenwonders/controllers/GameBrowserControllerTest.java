@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.controllers.GameBrowserController.UserAlreadyInGameException;
-import org.luxons.sevenwonders.controllers.test.TestUtils;
+import org.luxons.sevenwonders.test.TestUtils;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;

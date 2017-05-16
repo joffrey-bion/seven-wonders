@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.controllers.test;
+package org.luxons.sevenwonders.test;
 
 import java.security.Principal;
 
@@ -9,12 +9,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 public class TestUtils {
 
     public static Principal createPrincipal(String username) {
-        return new Principal() {
-            @Override
-            public String getName() {
-                return username;
-            }
-        };
+        // the Principal interface just contains a getName() method
+        return () -> username;
     }
 
     public static SimpMessagingTemplate createSimpMessagingTemplate() {
