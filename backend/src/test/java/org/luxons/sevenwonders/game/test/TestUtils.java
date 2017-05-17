@@ -131,6 +131,11 @@ public class TestUtils {
         return new Card("Test Card", color, new Requirements(), null, null, null, null);
     }
 
+    public static Card createCard(Color color, Effect effect) {
+        List<Effect> effects = Collections.singletonList(effect);
+        return new Card("Test Card", color, new Requirements(), effects, null, null, null);
+    }
+
     private static Card createCard(int num, Color color) {
         return new Card("Test Card " + num, color, new Requirements(), null, null, null, null);
     }
@@ -183,5 +188,12 @@ public class TestUtils {
             science.addJoker(jokers);
         }
         return science;
+    }
+
+    public static void playCardWithEffect(Table table, int playerIndex, Color color, Effect effect) {
+        Card card = createCard(color, effect);
+        Board board = table.getBoard(playerIndex);
+        board.addCard(card);
+        card.applyTo(table, playerIndex, Collections.emptyList());
     }
 }

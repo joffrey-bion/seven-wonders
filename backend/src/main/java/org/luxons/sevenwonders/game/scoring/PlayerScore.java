@@ -1,10 +1,13 @@
 package org.luxons.sevenwonders.game.scoring;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class PlayerScore extends HashMap<ScoreCategory, Integer> {
+public class PlayerScore {
 
     private final int boardGold;
+
+    private final Map<ScoreCategory, Integer> scoresByCategory = new HashMap<>();
 
     private int totalPoints = 0;
 
@@ -12,10 +15,17 @@ public class PlayerScore extends HashMap<ScoreCategory, Integer> {
         this.boardGold = boardGold;
     }
 
-    @Override
     public Integer put(ScoreCategory category, Integer points) {
         totalPoints += points;
-        return super.put(category, points);
+        return scoresByCategory.put(category, points);
+    }
+
+    public int getPoints(ScoreCategory category) {
+        return scoresByCategory.get(category);
+    }
+
+    public Map<ScoreCategory, Integer> getPointsPerCategory() {
+        return scoresByCategory;
     }
 
     public int getTotalPoints() {
