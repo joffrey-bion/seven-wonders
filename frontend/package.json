@@ -3,26 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "babel-polyfill": "^6.20.0",
-    "react-scripts": "0.8.5"
+    "babel-polyfill": "latest",
+    "react-scripts": "latest"
   },
   "dependencies": {
-    "normalizr": "^3.1.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-redux": "^5.0.2",
+    "normalizr": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-redux": "latest",
     "react-router": "^3.0.2",
-    "react-router-redux": "^4.0.7",
-    "rebass": "^0.3.3",
-    "redux": "^3.6.0",
-    "redux-saga": "^0.14.3",
-    "redux-saga-router": "^2.0.0",
-    "redux-seamless-immutable": "^0.3.0",
-    "reflexbox": "^2.2.3",
-    "reselect": "^2.5.4",
-    "seamless-immutable": "^7.1.2",
+    "react-router-redux": "latest",
+    "react-toastify": "latest",
+    "rebass": "latest",
+    "redux": "latest",
+    "redux-saga": "latest",
+    "redux-saga-router": "latest",
+    "redux-seamless-immutable": "latest",
+    "reflexbox": "latest",
+    "reselect": "latest",
+    "seamless-immutable": "latest",
     "sockjs-client": "latest",
-    "webstomp-client": "^1.0.3"
+    "webstomp-client": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
