@@ -1,4 +1,5 @@
 import { combineReducers, routerReducer } from 'redux-seamless-immutable'
+import { reducer as toastrReducer } from 'react-redux-toastr'
 
 import errorsReducer from './redux/errors'
 import gamesReducer from './redux/games'
@@ -10,5 +11,6 @@ export default function createReducer() {
     games: gamesReducer,
     players: playersReducer,
     routing: routerReducer,
+    toastr: toastrReducer
   })
 }

@@ -6,7 +6,6 @@ import Immutable from 'seamless-immutable'
 const GameList = (props) => (
   <div>
     {Immutable.asMutable(props.games).map((game, index) => {
-
       const joinGame = () => props.joinGame(game.id)
 
       return (<Flex key={index}>

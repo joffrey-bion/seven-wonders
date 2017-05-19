@@ -1,0 +1,9 @@
+import React from 'react'
+
+const MyToastContent = (props) => (
+  <div>
+    <span>{props.myContent.message}</span>
+  </div>
+)
+
+export default MyToastContent

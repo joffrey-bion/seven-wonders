@@ -1,8 +1,7 @@
 import React from 'react'
-import {
-  Banner,
-} from 'rebass'
+import { Banner } from 'rebass'
 import logo from './logo-7-wonders.png'
+import ReduxToastr from 'react-redux-toastr'
 
 export default (props) => (
   <div>
@@ -14,5 +13,10 @@ export default (props) => (
       <img src={logo} alt="Seven Wonders Logo"/>
     </Banner>
     {props.children}
+    <ReduxToastr
+      timeOut={4000}
+      preventDuplicates
+      position="bottom-left"
+      progressBar/>
   </div>
 )

@@ -3,7 +3,7 @@ import { createSubscriptionChannel } from '../utils/websocket'
 import { push } from 'react-router-redux'
 
 import { normalize } from 'normalizr'
-import { game as gameSchema, gameList as gameListSchema} from '../schemas/games'
+import { game as gameSchema, gameList as gameListSchema } from '../schemas/games'
 
 import { actions as gameActions, types } from '../redux/games'
 import { actions as playerActions } from '../redux/players'
@@ -39,15 +39,17 @@ function *watchLobbyJoined({socket}) {
 }
 
 function *createGame({socket}) {
-  const {gameName} = yield take(types.REQUEST_CREATE_GAME)
-
-  yield apply(socket, socket.send, ['/app/lobby/create', JSON.stringify({gameName}), {}])
+  while (true) {
+    const {gameName} = yield take(types.REQUEST_CREATE_GAME)
+    yield apply(socket, socket.send, ['/app/lobby/create', JSON.stringify({gameName}), {}])
+  }
 }
 
 function *joinGame({socket}) {
-  const {gameId} = yield take(types.REQUEST_JOIN_GAME)
-
-  yield apply(socket, socket.send, ['/app/lobby/join', JSON.stringify({gameId}), {}])
+  while (true) {
+    const {gameId} = yield take(types.REQUEST_JOIN_GAME)
+    yield apply(socket, socket.send, ['/app/lobby/join', JSON.stringify({gameId}), {}])
+  }
 }
 
 function *gameBrowserSaga(socketConnection) {
