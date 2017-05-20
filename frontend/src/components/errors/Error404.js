@@ -1,8 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router'
+import React from "react";
+import { Link } from "react-router";
 
-const Error404 = () => <div>
-  <h1>No Match</h1>
-  <Link to="/">Take me back home ! 🏠</Link>
-</div>
-export default Error404
+const Error404 = () => (
+  <div>
+    <h1>No Match</h1>
+    <Link to="/">
+      Take me back home ! <span role="img" aria-label="home">🏠</span>
+    </Link>
+  </div>
+);
+export default Error404;
