@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class GameTest {
 
     @Test
-    public void test() {
+    public void testFullGame() {
         int nbPlayers = 5;
         Game game = createGame(nbPlayers);
 
@@ -51,7 +51,7 @@ public class GameTest {
                 game.prepareMove(turnInfo.getPlayerIndex(), move);
             }
         }
-        assertTrue(game.areAllPlayersReady());
+        assertTrue(game.allPlayersPreparedTheirMove());
         game.playTurn();
     }
 

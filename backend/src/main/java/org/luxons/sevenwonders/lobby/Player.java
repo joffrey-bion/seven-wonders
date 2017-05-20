@@ -11,6 +11,8 @@ public class Player {
 
     private int index;
 
+    private boolean ready;
+
     private transient Lobby lobby;
 
     private transient Game game;
@@ -40,6 +42,14 @@ public class Player {
         this.index = index;
     }
 
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
     @JsonIgnore
     public Lobby getLobby() {
         return lobby;
@@ -56,5 +66,10 @@ public class Player {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    @Override
+    public String toString() {
+        return "'" + displayName + "' (" + username + ")";
     }
 }

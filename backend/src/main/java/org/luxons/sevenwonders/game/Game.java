@@ -120,12 +120,12 @@ public class Game {
         move.validate(table, hand);
     }
 
-    public boolean areAllPlayersReady() {
+    public boolean allPlayersPreparedTheirMove() {
         long nbExpectedMoves = currentTurnInfo.values().stream().filter(pti -> pti.getAction() != Action.WAIT).count();
         return preparedMoves.size() == nbExpectedMoves;
     }
 
-    public void playTurn() {
+    public Table playTurn() {
         makeMoves();
         if (endOfAgeReached()) {
             executeEndOfAgeEvents();
@@ -136,6 +136,7 @@ public class Game {
             rotateHandsIfRelevant();
             startNewTurn();
         }
+        return table;
     }
 
     private void rotateHandsIfRelevant() {

@@ -1,12 +1,14 @@
 package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.PrepareMoveAction;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;
@@ -35,7 +37,39 @@ public class GameController {
         this.playerRepository = playerRepository;
     }
 
-    @ApiMethod(description = "Prepares the user's next move. When all players have prepared their moves, all moves "
+    @ApiMethod(description = "Notifies the game that the player is ready to receive his hand.")
+    @MessageMapping("/game/sayReady")
+    public void ready(Principal principal) {
+        Player player = playerRepository.find(principal.getName());
+        player.setReady(true);
+        Game game = player.getGame();
+        logger.info("Game '{}': player '{}' is ready for the next turn", game.getId(), player);
+
+        Lobby lobby = player.getLobby();
+        List<Player> players = lobby.getPlayers();
+
+        boolean allReady = players.stream().allMatch(Player::isReady);
+        if (allReady) {
+            logger.info("Game '{}': all players ready, sending turn info", game.getId());
+            players.forEach(p -> p.setReady(false));
+            sendTurnInfo(players, game);
+        } else {
+            sendPlayerReady(game.getId(), player);
+        }
+    }
+
+    private void sendTurnInfo(List<Player> players, Game game) {
+        for (PlayerTurnInfo turnInfo : game.getCurrentTurnInfo()) {
+            Player player = players.get(turnInfo.getPlayerIndex());
+            template.convertAndSendToUser(player.getUsername(), "/queue/game/turn", turnInfo);
+        }
+    }
+
+    private void sendPlayerReady(long gameId, Player player) {
+        template.convertAndSend("/topic/game/" + gameId + "/playerReady", player.getUsername());
+    }
+
+    @ApiMethod(description = "Prepares the player's next move. When all players have prepared their moves, all moves "
             + "are executed.")
     @MessageMapping("/game/prepareMove")
     public void prepareMove(PrepareMoveAction action, Principal principal) {
@@ -45,23 +79,20 @@ public class GameController {
         PreparedCard preparedCard = new PreparedCard(player, preparedCardBack);
         logger.info("Game '{}': player {} prepared move {}", game.getId(), principal.getName(), action.getMove());
 
-        if (game.areAllPlayersReady()) {
+        if (game.allPlayersPreparedTheirMove()) {
             logger.info("Game '{}': all players have prepared their move, executing turn...", game.getId());
-            game.playTurn();
-            sendTurnInfo(player.getLobby(), game);
+            Table table = game.playTurn();
+            sendPlayedMoves(game.getId(), table);
         } else {
-            sendPreparedCard(preparedCard, game);
+            sendPreparedCard(game.getId(), preparedCard);
         }
     }
 
-    private void sendPreparedCard(PreparedCard preparedCard, Game game) {
-        template.convertAndSend("/topic/game/" + game.getId() + "/prepared", preparedCard);
+    private void sendPlayedMoves(long gameId, Table table) {
+        template.convertAndSend("/topic/game/" + gameId + "/tableUpdates", table);
     }
 
-    private void sendTurnInfo(Lobby lobby, Game game) {
-        for (PlayerTurnInfo turnInfo : game.getCurrentTurnInfo()) {
-            Player player = lobby.getPlayers().get(turnInfo.getPlayerIndex());
-            template.convertAndSendToUser(player.getUsername(), "/queue/game/turn", turnInfo);
-        }
+    private void sendPreparedCard(long gameId, PreparedCard preparedCard) {
+        template.convertAndSend("/topic/game/" + gameId + "/prepared", preparedCard);
     }
 }
