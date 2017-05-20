@@ -1,4 +1,3 @@
-import React from 'react'
 import { apply, call, cancelled, put, take } from 'redux-saga/effects'
 
 import { createSubscriptionChannel } from '../utils/websocket'
