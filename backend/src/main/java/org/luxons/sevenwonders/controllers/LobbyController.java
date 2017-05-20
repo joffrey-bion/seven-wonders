@@ -49,7 +49,7 @@ public class LobbyController {
     @ApiMethod
     @MessageMapping("/lobby/reorderPlayers")
     public void reorderPlayers(@Validated ReorderPlayersAction action, Principal principal) {
-        Lobby lobby = getLobby(principal);
+        Lobby lobby = getOwnedLobby(principal);
         lobby.reorderPlayers(action.getOrderedPlayers());
 
         logger.info("Players in game '{}' reordered to {}", lobby.getName(), action.getOrderedPlayers());
@@ -59,7 +59,7 @@ public class LobbyController {
     @ApiMethod
     @MessageMapping("/lobby/updateSettings")
     public void updateSettings(@Validated UpdateSettingsAction action, Principal principal) {
-        Lobby lobby = getLobby(principal);
+        Lobby lobby = getOwnedLobby(principal);
         lobby.setSettings(action.getSettings());
 
         logger.info("Updated settings of game '{}'", lobby.getName());
@@ -78,13 +78,13 @@ public class LobbyController {
         Game game = lobby.startGame();
 
         logger.info("Game '{}' successfully started", game.getId());
-        template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", (Object) null);
+        template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", "");
     }
 
     private Lobby getOwnedLobby(Principal principal) {
         Lobby lobby = getLobby(principal);
         if (!lobby.isOwner(principal.getName())) {
-            throw new UserIsNotOwnerException(principal.getName());
+            throw new PlayerIsNotOwnerException(principal.getName());
         }
         return lobby;
     }
@@ -92,7 +92,7 @@ public class LobbyController {
     private Lobby getLobby(Principal principal) {
         Lobby lobby = getPlayer(principal).getLobby();
         if (lobby == null) {
-            throw new UserNotInLobbyException(principal.getName());
+            throw new PlayerNotInLobbyException(principal.getName());
         }
         return lobby;
     }
@@ -101,14 +101,14 @@ public class LobbyController {
         return playerRepository.find(principal.getName());
     }
 
-    private static class UserNotInLobbyException extends ApiMisuseException {
-        UserNotInLobbyException(String username) {
+    static class PlayerNotInLobbyException extends ApiMisuseException {
+        PlayerNotInLobbyException(String username) {
             super("User " + username + " is not in a lobby, create or join a game first");
         }
     }
 
-    private static class UserIsNotOwnerException extends ApiMisuseException {
-        UserIsNotOwnerException(String username) {
+    static class PlayerIsNotOwnerException extends ApiMisuseException {
+        PlayerIsNotOwnerException(String username) {
             super("User " + username + " does not own the lobby he's in");
         }
     }

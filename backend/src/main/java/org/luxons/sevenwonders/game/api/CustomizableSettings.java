@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game.api;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod;
 
@@ -101,5 +102,27 @@ public class CustomizableSettings {
 
     public void setWonPointsPerVictoryPerAge(Map<Integer, Integer> wonPointsPerVictoryPerAge) {
         this.wonPointsPerVictoryPerAge = wonPointsPerVictoryPerAge;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CustomizableSettings that = (CustomizableSettings) o;
+        return randomSeedForTests == that.randomSeedForTests && timeLimitInSeconds == that.timeLimitInSeconds
+                && initialGold == that.initialGold && discardedCardGold == that.discardedCardGold
+                && defaultTradingCost == that.defaultTradingCost && pointsPer3Gold == that.pointsPer3Gold
+                && lostPointsPerDefeat == that.lostPointsPerDefeat && wonderSidePickMethod == that.wonderSidePickMethod
+                && Objects.equals(wonPointsPerVictoryPerAge, that.wonPointsPerVictoryPerAge);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(randomSeedForTests, timeLimitInSeconds, wonderSidePickMethod, initialGold,
+                discardedCardGold, defaultTradingCost, pointsPer3Gold, lostPointsPerDefeat, wonPointsPerVictoryPerAge);
     }
 }
