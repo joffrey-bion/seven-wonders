@@ -1,20 +1,25 @@
 package org.luxons.sevenwonders.game;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
 import org.luxons.sevenwonders.game.api.HandCard;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
+import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
+import org.luxons.sevenwonders.game.moves.Move;
 import org.luxons.sevenwonders.game.moves.MoveType;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class GameTest {
@@ -43,16 +48,30 @@ public class GameTest {
     private static void playTurn(int nbPlayers, Game game, int ageToCheck, int handSize) {
         Collection<PlayerTurnInfo> turnInfos = game.getCurrentTurnInfo();
         assertEquals(nbPlayers, turnInfos.size());
+
+        Map<Integer, PlayerMove> sentMoves = new HashMap<>(turnInfos.size());
         for (PlayerTurnInfo turnInfo : turnInfos) {
             assertEquals(ageToCheck, turnInfo.getCurrentAge());
             assertEquals(handSize, turnInfo.getHand().size());
             PlayerMove move = getFirstAvailableMove(turnInfo);
             if (move != null) {
                 game.prepareMove(turnInfo.getPlayerIndex(), move);
+                sentMoves.put(turnInfo.getPlayerIndex(), move);
             }
         }
         assertTrue(game.allPlayersPreparedTheirMove());
-        game.playTurn();
+        Table table = game.playTurn();
+        checkLastPlayedMoves(sentMoves, table);
+    }
+
+    private static void checkLastPlayedMoves(Map<Integer, PlayerMove> sentMoves, Table table) {
+        for (Move move : table.getLastPlayedMoves()) {
+            PlayerMove sentMove = sentMoves.get(move.getPlayerIndex());
+            assertNotNull(sentMove);
+            assertNotNull(move.getCard());
+            assertEquals(sentMove.getCardName(), move.getCard().getName());
+            assertSame(sentMove.getType(), move.getType());
+        }
     }
 
     private static PlayerMove getFirstAvailableMove(PlayerTurnInfo turnInfo) {
