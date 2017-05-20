@@ -1,5 +1,5 @@
 export const makeSelectLocationState = () => {
-  return (state) => {
-    return state.routing
-  }
-}
+  return state => {
+    return state.routing;
+  };
+};

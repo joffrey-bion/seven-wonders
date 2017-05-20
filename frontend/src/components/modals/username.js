@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Overlay,
   Panel,
@@ -8,15 +8,15 @@ import {
   Input,
   Close,
   Space
-} from 'rebass'
+} from "rebass";
 
 const Modal = ({ modalOpen, toggleModal }) => (
-  <Overlay open={modalOpen} onDismiss={toggleModal('usernameModal')}>
+  <Overlay open={modalOpen} onDismiss={toggleModal("usernameModal")}>
     <Panel theme="info">
       <PanelHeader>
         What's your username ?
         <Space auto />
-        <Close onClick={toggleModal('usernameModal')} />
+        <Close onClick={toggleModal("usernameModal")} />
       </PanelHeader>
       <Input
         label="Username"
@@ -29,12 +29,12 @@ const Modal = ({ modalOpen, toggleModal }) => (
         <Space auto />
         <Button
           theme="success"
-          onClick={toggleModal('usernameModal')}
+          onClick={toggleModal("usernameModal")}
           children="Ok"
         />
       </PanelFooter>
     </Panel>
   </Overlay>
-)
+);
 
-export default Modal
+export default Modal;

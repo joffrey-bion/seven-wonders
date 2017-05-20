@@ -1,16 +1,15 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Button, Container, Input } from 'rebass'
-import { actions } from '../redux/players'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Button, Container, Input } from "rebass";
+import { actions } from "../redux/players";
 
 class HomePage extends Component {
-
-  play = (e) => {
-    e.preventDefault()
+  play = e => {
+    e.preventDefault();
     if (this._username !== undefined) {
-      this.props.chooseUsername(this._username)
+      this.props.chooseUsername(this._username);
     }
-  }
+  };
 
   render() {
     return (
@@ -20,24 +19,20 @@ class HomePage extends Component {
           label="Username"
           placeholder="Username"
           hideLabel
-          onChange={(e) => this._username = e.target.value}
+          onChange={e => (this._username = e.target.value)}
         />
-        <Button
-          backgroundColor="primary"
-          color="white"
-          big
-          onClick={this.play}>
+        <Button backgroundColor="primary" color="white" big onClick={this.play}>
           PLAY NOW!
         </Button>
       </Container>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
   chooseUsername: actions.chooseUsername
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
