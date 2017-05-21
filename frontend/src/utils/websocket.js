@@ -9,20 +9,14 @@ export const createWsConnection = (headers = {}) =>
     let socket = Stomp.over(new SockJS(wsURL), {
       debug: process.env.NODE_ENV !== "production"
     });
-    socket.connect(
-      headers,
-      frame => {
-        return resolve({ frame, socket });
-      },
-      reject
-    );
+    socket.connect(headers, frame => resolve({ frame, socket }), reject);
   });
 
 export const createSubscriptionChannel = (socket, path) => {
   return eventChannel(emitter => {
-    const receiveUsernameHandler = socket.subscribe(path, event => {
+    const socketSubscription = socket.subscribe(path, event => {
       emitter(JSON.parse(event.body));
     });
-    return () => receiveUsernameHandler.unsubscribe();
+    return () => socketSubscription.unsubscribe();
   });
 };
