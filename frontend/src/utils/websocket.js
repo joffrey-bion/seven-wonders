@@ -1,13 +1,13 @@
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-import { eventChannel } from "redux-saga";
+import SockJS from 'sockjs-client';
+import Stomp from 'webstomp-client';
+import { eventChannel } from 'redux-saga';
 
-const wsURL = "/seven-wonders-websocket";
+const wsURL = '/seven-wonders-websocket';
 
 export const createWsConnection = (headers = {}) =>
   new Promise((resolve, reject) => {
     let socket = Stomp.over(new SockJS(wsURL), {
-      debug: process.env.NODE_ENV !== "production"
+      debug: process.env.NODE_ENV !== 'production',
     });
     socket.connect(headers, frame => resolve({ frame, socket }), reject);
   });

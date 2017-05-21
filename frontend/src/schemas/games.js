@@ -1,15 +1,15 @@
-import { schema } from "normalizr";
+import { schema } from 'normalizr';
 
 const player = new schema.Entity(
-  "players",
+  'players',
   {},
   {
-    idAttribute: "username"
+    idAttribute: 'username',
   }
 );
 
-export const game = new schema.Entity("games", {
-  players: [player]
+export const game = new schema.Entity('games', {
+  players: [player],
 });
 
 export const gameList = [game];

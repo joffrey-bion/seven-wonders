@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Button, Container, Input } from "rebass";
-import { actions } from "../redux/players";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Button, Container, Input } from 'rebass';
+import { actions } from '../redux/players';
 
 class HomePage extends Component {
   play = e => {
@@ -32,7 +32,7 @@ class HomePage extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = {
-  chooseUsername: actions.chooseUsername
+  chooseUsername: actions.chooseUsername,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

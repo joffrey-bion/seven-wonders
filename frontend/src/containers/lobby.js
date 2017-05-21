@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Immutable from "seamless-immutable";
-import { Button } from "rebass";
-import PlayerList from "../components/playerList";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Immutable from 'seamless-immutable';
+import { Button } from 'rebass';
+import PlayerList from '../components/playerList';
 
-import { getPlayers } from "../redux/players";
-import { getCurrentGame, actions } from "../redux/games";
+import { getPlayers } from '../redux/players';
+import { getCurrentGame, actions } from '../redux/games';
 
 class Lobby extends Component {
   getTitle() {
     if (this.props.currentGame) {
-      return this.props.currentGame.name + " — Lobby";
+      return this.props.currentGame.name + ' — Lobby';
     } else {
       return "What are you doing here? You haven't joined a game yet!";
     }
@@ -31,12 +31,12 @@ const mapStateToProps = state => {
   const game = getCurrentGame(state);
   return {
     currentGame: game,
-    players: game ? getPlayers(state, game.players) : Immutable([])
+    players: game ? getPlayers(state, game.players) : Immutable([]),
   };
 };
 
 const mapDispatchToProps = {
-  startGame: actions.requestStartGame
+  startGame: actions.requestStartGame,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Lobby);

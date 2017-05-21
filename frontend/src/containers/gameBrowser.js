@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Space, InlineForm, Text } from "rebass";
-import { Flex } from "reflexbox";
-import GameList from "../components/gameList";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Space, InlineForm, Text } from 'rebass';
+import { Flex } from 'reflexbox';
+import GameList from '../components/gameList';
 
-import { getCurrentPlayer } from "../redux/players";
-import { getAllGames, actions } from "../redux/games";
+import { getCurrentPlayer } from '../redux/players';
+import { getAllGames, actions } from '../redux/games';
 
 class GameBrowser extends Component {
   createGame = e => {
@@ -29,7 +29,7 @@ class GameBrowser extends Component {
           <Space auto />
           <Text>
             <b>Username:</b>
-            {" "}
+            {' '}
             {this.props.currentPlayer && this.props.currentPlayer.displayName}
           </Text>
           <Space x={1} />
@@ -41,13 +41,13 @@ class GameBrowser extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentPlayer: getCurrentPlayer(state) || { displayName: "[ERROR]" },
-  games: getAllGames(state)
+  currentPlayer: getCurrentPlayer(state) || { displayName: '[ERROR]' },
+  games: getAllGames(state),
 });
 
 const mapDispatchToProps = {
   createGame: actions.requestCreateGame,
-  joinGame: actions.requestJoinGame
+  joinGame: actions.requestJoinGame,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameBrowser);

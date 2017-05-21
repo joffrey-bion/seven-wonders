@@ -1,7 +1,7 @@
-import React from "react";
-import { Flex } from "reflexbox";
-import { Text } from "rebass";
-import Immutable from "seamless-immutable";
+import React from 'react';
+import { Flex } from 'reflexbox';
+import { Text } from 'rebass';
+import Immutable from 'seamless-immutable';
 
 const PlayerList = props => (
   <div>
