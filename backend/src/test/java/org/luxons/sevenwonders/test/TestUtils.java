@@ -73,7 +73,8 @@ public class TestUtils {
 
     public static StompSession connect(WebSocketStompClient stompClient, String url) throws InterruptedException,
             ExecutionException, TimeoutException {
-        StompSession session = stompClient.connect(url, new TestStompSessionHandler()).get(5, TimeUnit.SECONDS);        session.setAutoReceipt(true);
+        StompSession session = stompClient.connect(url, new TestStompSessionHandler()).get(5, TimeUnit.SECONDS);
+        session.setAutoReceipt(true);
         return session;
     }
 
@@ -95,8 +96,8 @@ public class TestUtils {
         }
 
         @Override
-        public void handleException(StompSession session, StompCommand command, StompHeaders headers,
-                                    byte[] payload, Throwable exception) {
+        public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload,
+                                    Throwable exception) {
             logger.error("Exception thrown", exception);
         }
 
