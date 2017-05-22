@@ -4,8 +4,8 @@
   "private": true,
   "devDependencies": {
     "babel-polyfill": "latest",
-    "prettier": "^1.3.1",
-    "react-scripts": "^1.0.1"
+    "prettier-eslint-cli": "^4.0.1",
+    "react-scripts": "1.0.5"
   },
   "dependencies": {
     "normalizr": "^3.2.3",
@@ -32,10 +32,7 @@
     "test": "react-scripts test --env=jsdom",
     "test:oneshot": "set CI=true && react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prettier": "prettier --single-quote --trailing-comma es5 --print-width 120 --write '{src,__{tests,mocks}__}/**/*.js'"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "prettier": "prettier-eslint --write '{src,__{tests,mocks}__}/**/*.js'",
   },
   "proxy": "http://localhost:8080"
 }

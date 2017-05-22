@@ -19,7 +19,10 @@ const initialState = Immutable.from({
 export default (state = initialState, action) => {
   switch (action.type) {
     case types.ERROR_RECEIVED_ON_WS:
-      let error = Object.assign({ id: state.nextId, timestamp: new Date() }, action.error);
+      let error = Object.assign(
+        { id: state.nextId, timestamp: new Date() },
+        action.error
+      );
       let newState = state.set('nextId', state.nextId + 1);
       newState = addErrorToHistory(newState, error);
       return newState;

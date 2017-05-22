@@ -1,5 +1,14 @@
 import React from 'react';
-import { Overlay, Panel, PanelHeader, PanelFooter, Button, Input, Close, Space } from 'rebass';
+import {
+  Overlay,
+  Panel,
+  PanelHeader,
+  PanelFooter,
+  Button,
+  Input,
+  Close,
+  Space,
+} from 'rebass';
 
 const Modal = ({ modalOpen, toggleModal }) => (
   <Overlay open={modalOpen} onDismiss={toggleModal('usernameModal')}>
@@ -9,10 +18,20 @@ const Modal = ({ modalOpen, toggleModal }) => (
         <Space auto />
         <Close onClick={toggleModal('usernameModal')} />
       </PanelHeader>
-      <Input label="Username" name="username" placeholder="Cesar92" rounded type="text" />
+      <Input
+        label="Username"
+        name="username"
+        placeholder="Cesar92"
+        rounded
+        type="text"
+      />
       <PanelFooter>
         <Space auto />
-        <Button theme="success" onClick={toggleModal('usernameModal')} children="Ok" />
+        <Button
+          theme="success"
+          onClick={toggleModal('usernameModal')}
+          children="Ok"
+        />
       </PanelFooter>
     </Panel>
   </Overlay>

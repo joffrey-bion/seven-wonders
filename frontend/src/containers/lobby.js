@@ -12,7 +12,7 @@ class Lobby extends Component {
     if (this.props.currentGame) {
       return this.props.currentGame.name + ' — Lobby';
     } else {
-      return "What are you doing here? You haven't joined a game yet!";
+      return 'What are you doing here? You haven\'t joined a game yet!';
     }
   }
 

@@ -30,7 +30,10 @@ export const routes = [
   {
     path: '/',
     component: LobbyLayout,
-    childRoutes: [{ path: '/games', component: GameBrowser }, { path: '/lobby/*', component: Lobby }],
+    childRoutes: [
+      { path: '/games', component: GameBrowser },
+      { path: '/lobby/*', component: Lobby },
+    ],
   },
   {
     path: '*',

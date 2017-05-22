@@ -39,6 +39,8 @@ export default (state = initialState, action) => {
   }
 };
 
-export const getCurrentPlayer = state => state.players.all && state.players.all[state.players.current];
+export const getCurrentPlayer = state =>
+  state.players.all && state.players.all[state.players.current];
 export const getPlayer = (state, username) => state.players.all[username];
-export const getPlayers = (state, usernames) => usernames.map(u => getPlayer(state, u));
+export const getPlayers = (state, usernames) =>
+  usernames.map(u => getPlayer(state, u));

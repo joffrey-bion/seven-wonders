@@ -15,7 +15,11 @@ function getCurrentGameId() {
 
 function* watchLobbyUpdates({ socket }) {
   const currentGameId = getCurrentGameId();
-  const lobbyUpdatesChannel = yield call(createSubscriptionChannel, socket, `/topic/lobby/${currentGameId}/updated`);
+  const lobbyUpdatesChannel = yield call(
+    createSubscriptionChannel,
+    socket,
+    `/topic/lobby/${currentGameId}/updated`
+  );
   try {
     while (true) {
       const lobby = yield take(lobbyUpdatesChannel);
@@ -30,7 +34,11 @@ function* watchLobbyUpdates({ socket }) {
 
 function* watchGameStart({ socket }) {
   const currentGameId = getCurrentGameId();
-  const gameStartedChannel = yield call(createSubscriptionChannel, socket, `/topic/lobby/${currentGameId}/started`);
+  const gameStartedChannel = yield call(
+    createSubscriptionChannel,
+    socket,
+    `/topic/lobby/${currentGameId}/started`
+  );
   try {
     yield take(gameStartedChannel);
     yield put(gameActions.enterGame());
