@@ -4,6 +4,8 @@
   "private": true,
   "devDependencies": {
     "babel-polyfill": "latest",
+    "flow-bin": "^0.46.0",
+    "flow-typed": "^2.1.2",
     "prettier-eslint-cli": "^4.0.1",
     "react-scripts": "1.0.5"
   },
@@ -33,6 +35,8 @@
     "test:oneshot": "set CI=true && react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "prettier": "prettier-eslint --write '{src,__{tests,mocks}__}/**/*.js'",
+    "flow": "flow",
+    "postinstall": "flow-typed install"
   },
   "proxy": "http://localhost:8080"
 }
