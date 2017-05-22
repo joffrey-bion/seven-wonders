@@ -2249,7 +2249,7 @@ events@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
 
-eventsource@0.1.6, eventsource@~0.1.6:
+eventsource@0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-0.1.6.tgz#0acede849ed7dd1ccc32c811bb11b944d4f29232"
   dependencies:
@@ -4088,7 +4088,7 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
-normalizr@latest:
+normalizr@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-3.2.3.tgz#88755c64de418b040fa6ad1329b2de5c3250ac49"
 
@@ -4123,11 +4123,11 @@ oauth-sign@~0.8.1:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
-object-assign@4.1.1, object-assign@^4.1.1:
+object-assign@4.1.1, object-assign@^4.0.1, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
-object-assign@^4.0.1, object-assign@^4.1.0:
+object-assign@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.0.tgz#7a3b3d0e98063d43f4c03f2e8ae6cd51a86883a0"
 
@@ -4880,7 +4880,7 @@ react-dev-utils@^1.0.1:
     sockjs-client "1.1.4"
     strip-ansi "3.0.1"
 
-react-dom@latest:
+react-dom@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
   dependencies:
@@ -4900,7 +4900,15 @@ react-error-overlay@^1.0.1:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
-react-redux:
+react-redux-toastr@^6.2.6:
+  version "6.2.6"
+  resolved "https://registry.yarnpkg.com/react-redux-toastr/-/react-redux-toastr-6.2.6.tgz#d02166bb9f172fa383bc9d59cf6c25308fe5735b"
+  dependencies:
+    classnames "^2.2.3"
+    eventemitter3 "^2.0.3"
+    prop-types "^15.5.7"
+
+react-redux@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.1.tgz#84a41bd4cdd180452bb6922bc79ad25bd5abb7c4"
   dependencies:
@@ -4910,15 +4918,7 @@ react-redux:
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
 
-react-redux-toastr@latest:
-  version "6.2.6"
-  resolved "https://registry.yarnpkg.com/react-redux-toastr/-/react-redux-toastr-6.2.6.tgz#d02166bb9f172fa383bc9d59cf6c25308fe5735b"
-  dependencies:
-    classnames "^2.2.3"
-    eventemitter3 "^2.0.3"
-    prop-types "^15.5.7"
-
-react-router-redux@^4.0.0, react-router-redux@latest:
+react-router-redux@^4.0.0, react-router-redux@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/react-router-redux/-/react-router-redux-4.0.8.tgz#227403596b5151e182377dab835b5d45f0f8054e"
 
@@ -4980,7 +4980,7 @@ react-scripts@^1.0.1:
   optionalDependencies:
     fsevents "1.0.17"
 
-react@latest:
+react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
@@ -5061,7 +5061,7 @@ readline2@^1.0.1:
     is-fullwidth-code-point "^1.0.0"
     mute-stream "0.0.5"
 
-rebass:
+rebass@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/rebass/-/rebass-0.3.3.tgz#bfffddf219107b07be2133173bab9b9887098173"
   dependencies:
@@ -5102,7 +5102,26 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux:
+redux-saga-router@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/redux-saga-router/-/redux-saga-router-2.1.0.tgz#d049962ad6a44d227f0308aedb75e39c13f58413"
+  dependencies:
+    fsm-iterator "^1.0.0"
+    history "^4.3.0"
+    ruta3 "^2.0.1"
+
+redux-saga@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.13.0.tgz#9294386550deb0d56bc9a1b3c90a613e7ddb6593"
+
+redux-seamless-immutable@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/redux-seamless-immutable/-/redux-seamless-immutable-0.3.0.tgz#587a25f688d9337e848bc2b89b34f52020199174"
+  dependencies:
+    react-router-redux "^4.0.0"
+    seamless-immutable "^6.1.0"
+
+redux@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/redux/-/redux-3.6.0.tgz#887c2b3d0b9bd86eca2be70571c27654c19e188d"
   dependencies:
@@ -5111,26 +5130,7 @@ redux:
     loose-envify "^1.1.0"
     symbol-observable "^1.0.2"
 
-redux-saga:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.13.0.tgz#9294386550deb0d56bc9a1b3c90a613e7ddb6593"
-
-redux-saga-router@latest:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/redux-saga-router/-/redux-saga-router-2.1.0.tgz#d049962ad6a44d227f0308aedb75e39c13f58413"
-  dependencies:
-    fsm-iterator "^1.0.0"
-    history "^4.3.0"
-    ruta3 "^2.0.1"
-
-redux-seamless-immutable@latest:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/redux-seamless-immutable/-/redux-seamless-immutable-0.3.0.tgz#587a25f688d9337e848bc2b89b34f52020199174"
-  dependencies:
-    react-router-redux "^4.0.0"
-    seamless-immutable "^6.1.0"
-
-reflexbox:
+reflexbox@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/reflexbox/-/reflexbox-2.2.3.tgz#9b9ce983dbe677cebf3a94cf2c50b8157f50c0d1"
   dependencies:
@@ -5275,7 +5275,7 @@ requires-port@1.0.x, requires-port@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
 
-reselect@latest:
+reselect@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.1.tgz#efdaa98ea7451324d092b2b2163a6a1d7a9a2147"
 
@@ -5400,7 +5400,7 @@ seamless-immutable@^6.1.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/seamless-immutable/-/seamless-immutable-6.3.0.tgz#218fd851bc5b989505998325f8c7713d35fafeb8"
 
-seamless-immutable@latest:
+seamless-immutable@^7.1.2:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/seamless-immutable/-/seamless-immutable-7.1.2.tgz#c87a1eba6767a32455311d76600ac5eddeafbb69"
 
@@ -5541,7 +5541,7 @@ sockjs-client@1.1.2:
     json3 "^3.3.2"
     url-parse "^1.1.1"
 
-sockjs-client@1.1.4:
+sockjs-client@1.1.4, sockjs-client@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/sockjs-client/-/sockjs-client-1.1.4.tgz#5babe386b775e4cf14e7520911452654016c8b12"
   dependencies:
@@ -5551,17 +5551,6 @@ sockjs-client@1.1.4:
     inherits "^2.0.1"
     json3 "^3.3.2"
     url-parse "^1.1.8"
-
-sockjs-client@latest:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/sockjs-client/-/sockjs-client-1.1.1.tgz#284843e9a9784d7c474b1571b3240fca9dda4bb0"
-  dependencies:
-    debug "^2.2.0"
-    eventsource "~0.1.6"
-    faye-websocket "~0.11.0"
-    inherits "^2.0.1"
-    json3 "^3.3.2"
-    url-parse "^1.1.1"
 
 sockjs@0.3.18:
   version "0.3.18"
@@ -6061,14 +6050,7 @@ url-parse@1.0.x:
     querystringify "0.0.x"
     requires-port "1.0.x"
 
-url-parse@^1.1.1:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.1.7.tgz#025cff999653a459ab34232147d89514cc87d74a"
-  dependencies:
-    querystringify "0.0.x"
-    requires-port "1.0.x"
-
-url-parse@^1.1.8:
+url-parse@^1.1.1, url-parse@^1.1.8:
   version "1.1.9"
   resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.1.9.tgz#c67f1d775d51f0a18911dd7b3ffad27bb9e5bd19"
   dependencies:
@@ -6275,7 +6257,7 @@ websocket-extensions@>=0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.1.tgz#76899499c184b6ef754377c2dbb0cd6cb55d29e7"
 
-webstomp-client@latest:
+webstomp-client@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/webstomp-client/-/webstomp-client-1.0.6.tgz#9fe1627dd48823cda5f4ade9d34672ac33c837e0"
 
