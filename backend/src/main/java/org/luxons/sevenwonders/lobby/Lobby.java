@@ -123,12 +123,13 @@ public class Lobby {
         return players.stream().anyMatch(p -> p.getUsername().equals(username));
     }
 
-    public void removePlayer(String username) throws UnknownPlayerException {
+    public Player removePlayer(String username) throws UnknownPlayerException {
         Player player = getPlayer(players, username);
         players.remove(player);
         player.setIndex(-1);
         player.setLobby(null);
         player.setGame(null);
+        return player;
     }
 
     static class GameAlreadyStartedException extends IllegalStateException {

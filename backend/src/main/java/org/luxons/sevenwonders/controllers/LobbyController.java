@@ -40,9 +40,9 @@ public class LobbyController {
     @MessageMapping("/lobby/leave")
     public void leave(Principal principal) {
         Lobby lobby = getLobby(principal);
-        lobby.removePlayer(principal.getName());
+        Player player = lobby.removePlayer(principal.getName());
 
-        logger.info("Player '{}' left game '{}'", principal.getName(), lobby.getName());
+        logger.info("Player {} left game '{}'", player, lobby.getName());
         sendLobbyUpdateToPlayers(lobby);
     }
 
@@ -77,7 +77,7 @@ public class LobbyController {
         Lobby lobby = getOwnedLobby(principal);
         Game game = lobby.startGame();
 
-        logger.info("Game '{}' successfully started", game.getId());
+        logger.info("Game {} successfully started", game.getId());
         template.convertAndSend("/topic/lobby/" + lobby.getId() + "/started", "");
     }
 

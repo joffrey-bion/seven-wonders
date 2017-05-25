@@ -43,14 +43,14 @@ public class GameController {
         Player player = playerRepository.find(principal.getName());
         player.setReady(true);
         Game game = player.getGame();
-        logger.info("Game '{}': player '{}' is ready for the next turn", game.getId(), player);
+        logger.info("Game {}: player {} is ready for the next turn", game.getId(), player);
 
         Lobby lobby = player.getLobby();
         List<Player> players = lobby.getPlayers();
 
         boolean allReady = players.stream().allMatch(Player::isReady);
         if (allReady) {
-            logger.info("Game '{}': all players ready, sending turn info", game.getId());
+            logger.info("Game {}: all players ready, sending turn info", game.getId());
             players.forEach(p -> p.setReady(false));
             sendTurnInfo(players, game);
         } else {
@@ -77,10 +77,10 @@ public class GameController {
         Game game = player.getGame();
         CardBack preparedCardBack = game.prepareMove(player.getIndex(), action.getMove());
         PreparedCard preparedCard = new PreparedCard(player, preparedCardBack);
-        logger.info("Game '{}': player {} prepared move {}", game.getId(), principal.getName(), action.getMove());
+        logger.info("Game {}: player {} prepared move {}", game.getId(), principal.getName(), action.getMove());
 
         if (game.allPlayersPreparedTheirMove()) {
-            logger.info("Game '{}': all players have prepared their move, executing turn...", game.getId());
+            logger.info("Game {}: all players have prepared their move, executing turn...", game.getId());
             Table table = game.playTurn();
             sendPlayedMoves(game.getId(), table);
         } else {
