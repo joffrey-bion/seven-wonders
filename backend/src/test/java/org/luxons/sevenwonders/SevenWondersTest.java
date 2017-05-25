@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.test.api.ApiLobby;
 import org.luxons.sevenwonders.test.api.SevenWondersSession;
-import org.luxons.sevenwonders.test.client.JsonStompClient;
-import org.luxons.sevenwonders.test.client.JsonStompSession;
+import org.luxons.sevenwonders.test.client.JackstompClient;
+import org.luxons.sevenwonders.test.client.JackstompSession;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -19,18 +19,18 @@ public class SevenWondersTest {
 
     private static final String WEBSOCKET_URI = "ws://localhost:%d/seven-wonders-websocket";
 
-    private static JsonStompClient client;
+    private static JackstompClient client;
 
     @LocalServerPort
     private int randomServerPort;
 
     @BeforeClass
     public static void setUp() {
-        client = new JsonStompClient();
+        client = new JackstompClient();
     }
 
     private SevenWondersSession connectNewUser() throws Exception {
-        JsonStompSession session = client.connect(String.format(WEBSOCKET_URI, randomServerPort));
+        JackstompSession session = client.connect(String.format(WEBSOCKET_URI, randomServerPort));
         return new SevenWondersSession(session);
     }
 

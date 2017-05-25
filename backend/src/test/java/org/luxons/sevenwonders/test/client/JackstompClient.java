@@ -16,17 +16,17 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-public class JsonStompClient {
+public class JackstompClient {
 
     private static final long DEFAULT_CONNECTION_TIMEOUT_IN_SECONDS = 15;
 
     private final WebSocketStompClient client;
 
-    public JsonStompClient() {
+    public JackstompClient() {
         this(createDefaultStompClient());
     }
 
-    public JsonStompClient(WebSocketStompClient client) {
+    public JackstompClient(WebSocketStompClient client) {
         this.client = client;
     }
 
@@ -51,15 +51,15 @@ public class JsonStompClient {
         return taskScheduler;
     }
 
-    public JsonStompSession connect(String url) throws InterruptedException, ExecutionException, TimeoutException {
+    public JackstompSession connect(String url) throws InterruptedException, ExecutionException, TimeoutException {
         return connect(url, DEFAULT_CONNECTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
     }
 
-    public JsonStompSession connect(String url, long timeout, TimeUnit unit)
+    public JackstompSession connect(String url, long timeout, TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException {
         StompSession session = client.connect(url, new LoggingStompSessionHandler()).get(timeout, unit);
         session.setAutoReceipt(true);
-        return new JsonStompSession(session);
+        return new JackstompSession(session);
     }
 
     public void stop() {

@@ -7,11 +7,11 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 
-public class JsonStompSession implements StompSession {
+public class JackstompSession implements StompSession {
 
     private final StompSession stompSession;
 
-    public JsonStompSession(StompSession stompSession) {
+    public JackstompSession(StompSession stompSession) {
         this.stompSession = stompSession;
     }
 
@@ -73,7 +73,7 @@ public class JsonStompSession implements StompSession {
         stompSession.disconnect();
     }
 
-    public <T> T request(String requestDestination, Object payload, String responseDestination, Class<T> responseType)
+    public <T> T request(Object payload, Class<T> responseType, String requestDestination, String responseDestination)
             throws InterruptedException {
         Channel<T> channel = subscribe(responseDestination, responseType);
         send(requestDestination, payload);
