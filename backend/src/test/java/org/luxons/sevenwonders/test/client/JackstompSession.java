@@ -48,6 +48,7 @@ public class JackstompSession implements StompSession {
         Subscription sub = stompSession.subscribe(destination, frameHandler);
         return new Channel<>(sub, blockingQueue);
     }
+
     @Override
     public Receiptable acknowledge(String messageId, boolean consumed) {
         return stompSession.acknowledge(messageId, consumed);
@@ -82,7 +83,7 @@ public class JackstompSession implements StompSession {
         return msg;
     }
 
-    public boolean request(String requestDestination, Object payload, String responseDestination)
+    public boolean request(Object payload, String requestDestination, String responseDestination)
             throws InterruptedException {
         Channel<Object> channel = subscribeEmptyMsgs(responseDestination);
         send(requestDestination, payload);
