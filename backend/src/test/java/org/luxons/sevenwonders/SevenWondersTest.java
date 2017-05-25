@@ -1,17 +1,26 @@
 package org.luxons.sevenwonders;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.test.api.ApiLobby;
+import org.luxons.sevenwonders.test.api.ApiPlayer;
+import org.luxons.sevenwonders.test.api.ApiPlayerTurnInfo;
 import org.luxons.sevenwonders.test.api.SevenWondersClient;
 import org.luxons.sevenwonders.test.api.SevenWondersSession;
+import org.luxons.sevenwonders.test.client.Channel;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -43,27 +52,83 @@ public class SevenWondersTest {
     }
 
     @Test
-    public void testConnection() throws Exception {
+    public void chooseName() throws InterruptedException, ExecutionException, TimeoutException {
         SevenWondersSession session = client.connect(serverUrl);
-        session.chooseName("Test User");
+        String playerName = "Test User";
+        ApiPlayer player = session.chooseName(playerName);
+        assertNotNull(player);
+        assertEquals(playerName, player.getDisplayName());
         session.disconnect();
     }
 
     @Test
-    public void testConnection_2users() throws Exception {
-        SevenWondersSession session1 = client.connect(serverUrl);
-        SevenWondersSession session2 = client.connect(serverUrl);
-        session1.chooseName("Player1");
-        session2.chooseName( "Player2");
+    public void createGame_success() throws InterruptedException, ExecutionException, TimeoutException {
+        SevenWondersSession ownerSession = client.connect(serverUrl);
+        ownerSession.chooseName("GameOwner");
+
+        String gameName = "Test Game";
+        ApiLobby lobby = ownerSession.createGame(gameName);
+        assertNotNull(lobby);
+        assertEquals(gameName, lobby.getName());
+
+        disconnect(ownerSession);
+    }
+
+    private SevenWondersSession newPlayer(String name) throws InterruptedException, TimeoutException,
+            ExecutionException {
+        SevenWondersSession otherSession = client.connect(serverUrl);
+        otherSession.chooseName(name);
+        return otherSession;
+    }
+
+    @Test
+    public void createGame_seenByConnectedPlayers() throws InterruptedException, ExecutionException, TimeoutException {
+        SevenWondersSession otherSession = newPlayer("OtherPlayer");
+        Channel<ApiLobby[]> games = otherSession.watchGames();
+
+        ApiLobby[] receivedLobbies = games.next();
+        assertNotNull(receivedLobbies);
+        assertEquals(0, receivedLobbies.length);
+
+        SevenWondersSession ownerSession = newPlayer("GameOwner");
+        String gameName = "Test Game";
+        ApiLobby createdLobby = ownerSession.createGame(gameName);
+
+        receivedLobbies = games.next();
+        assertNotNull(receivedLobbies);
+        assertEquals(1, receivedLobbies.length);
+        ApiLobby receivedLobby = receivedLobbies[0];
+        assertEquals(createdLobby.getId(), receivedLobby.getId());
+        assertEquals(createdLobby.getName(), receivedLobby.getName());
+
+        disconnect(ownerSession, otherSession);
+    }
+
+    @Test
+    public void startGame_3players() throws Exception {
+        SevenWondersSession session1 = newPlayer("Player1");
+        SevenWondersSession session2 = newPlayer( "Player2");
 
         ApiLobby lobby = session1.createGame("Test Game");
         session2.joinGame(lobby.getId());
 
-        SevenWondersSession session3 = client.connect(serverUrl);
-        session3.chooseName("Player3");
+        SevenWondersSession session3 = newPlayer("Player3");
         session3.joinGame(lobby.getId());
 
         session1.startGame(lobby.getId());
+
+        Channel<ApiPlayerTurnInfo> turns1 = session1.watchTurns();
+        Channel<ApiPlayerTurnInfo> turns2 = session2.watchTurns();
+        Channel<ApiPlayerTurnInfo> turns3 = session3.watchTurns();
+        session1.sayReady();
+        session2.sayReady();
+        session3.sayReady();
+        ApiPlayerTurnInfo turn1 = turns1.next();
+        ApiPlayerTurnInfo turn2 = turns2.next();
+        ApiPlayerTurnInfo turn3 = turns3.next();
+        assertNotNull(turn1);
+        assertNotNull(turn2);
+        assertNotNull(turn3);
 
         disconnect(session1, session2, session3);
     }
