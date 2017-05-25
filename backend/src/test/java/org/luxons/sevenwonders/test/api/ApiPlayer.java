@@ -1,6 +1,6 @@
-package org.luxons.sevenwonders.test;
+package org.luxons.sevenwonders.test.api;
 
-public class ClientPlayer {
+public class ApiPlayer {
 
     private String username;
 
