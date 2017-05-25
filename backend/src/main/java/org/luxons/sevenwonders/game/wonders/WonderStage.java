@@ -33,6 +33,10 @@ public class WonderStage {
         this.effects = effects;
     }
 
+    public CardBack getCardBack() {
+        return cardBack;
+    }
+
     public boolean isBuilt() {
         return cardBack != null;
     }
