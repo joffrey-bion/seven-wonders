@@ -8,8 +8,8 @@ apply plugin: 'idea'
 buildDir = 'build'
 
 node {
-    version = '6.9.4'
-    yarnVersion = '0.19.1'
+    version = '6.10.3'
+    yarnVersion = '0.24.5'
     download = true
 }
 
