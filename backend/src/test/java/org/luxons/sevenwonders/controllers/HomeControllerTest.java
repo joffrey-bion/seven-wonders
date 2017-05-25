@@ -4,7 +4,6 @@ import java.security.Principal;
 
 import org.junit.Test;
 import org.luxons.sevenwonders.actions.ChooseNameAction;
-import org.luxons.sevenwonders.test.TestUtils;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.PlayerRepository;
 
@@ -21,7 +20,8 @@ public class HomeControllerTest {
         ChooseNameAction action = new ChooseNameAction();
         action.setPlayerName("Test User");
 
-        Principal principal = TestUtils.createPrincipal("testuser");
+        // the Principal interface just contains a getName() method
+        Principal principal = new TestPrincipal("testuser");
 
         Player player = homeController.chooseName(action, principal);
 

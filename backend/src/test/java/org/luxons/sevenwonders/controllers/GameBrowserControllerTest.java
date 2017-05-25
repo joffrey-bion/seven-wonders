@@ -39,7 +39,8 @@ public class GameBrowserControllerTest {
 
     @Test
     public void listGames_initiallyEmpty() {
-        Principal principal = TestUtils.createPrincipal("testuser");
+        // the Principal interface just contains a getName() method
+        Principal principal = new TestPrincipal("testuser");
         Collection<Lobby> games = gameBrowserController.listGames(principal);
         assertTrue(games.isEmpty());
     }
@@ -47,7 +48,8 @@ public class GameBrowserControllerTest {
     @Test
     public void createGame_success() {
         Player player = playerRepository.createOrUpdate("testuser", "Test User");
-        Principal principal = TestUtils.createPrincipal("testuser");
+        // the Principal interface just contains a getName() method
+        Principal principal = new TestPrincipal("testuser");
 
         CreateGameAction action = new CreateGameAction();
         action.setGameName("Test Game");
@@ -65,7 +67,8 @@ public class GameBrowserControllerTest {
 
     @Test(expected = PlayerNotFoundException.class)
     public void createGame_failsForUnknownPlayer() {
-        Principal principal = TestUtils.createPrincipal("unknown");
+        // the Principal interface just contains a getName() method
+        Principal principal = new TestPrincipal("unknown");
 
         CreateGameAction action = new CreateGameAction();
         action.setGameName("Test Game");
@@ -76,7 +79,8 @@ public class GameBrowserControllerTest {
     @Test(expected = UserAlreadyInGameException.class)
     public void createGame_failsWhenAlreadyInGame() {
         playerRepository.createOrUpdate("testuser", "Test User");
-        Principal principal = TestUtils.createPrincipal("testuser");
+        // the Principal interface just contains a getName() method
+        Principal principal = new TestPrincipal("testuser");
 
         CreateGameAction createGameAction1 = new CreateGameAction();
         createGameAction1.setGameName("Test Game 1");
@@ -94,14 +98,16 @@ public class GameBrowserControllerTest {
     @Test
     public void joinGame_success() {
         Player owner = playerRepository.createOrUpdate("testowner", "Test User Owner");
-        Principal ownerPrincipal = TestUtils.createPrincipal("testowner");
+        // the Principal interface just contains a getName() method
+        Principal ownerPrincipal = new TestPrincipal("testowner");
         CreateGameAction createGameAction = new CreateGameAction();
         createGameAction.setGameName("Test Game");
 
         Lobby createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal);
 
         Player joiner = playerRepository.createOrUpdate("testjoiner", "Test User Joiner");
-        Principal joinerPrincipal = TestUtils.createPrincipal("testjoiner");
+        // the Principal interface just contains a getName() method
+        Principal joinerPrincipal = new TestPrincipal("testjoiner");
         JoinGameAction joinGameAction = new JoinGameAction();
         joinGameAction.setGameId(createdLobby.getId());
 
@@ -115,14 +121,16 @@ public class GameBrowserControllerTest {
     @Test(expected = UserAlreadyInGameException.class)
     public void joinGame_failsWhenAlreadyInGame() {
         playerRepository.createOrUpdate("testowner", "Test User Owner");
-        Principal ownerPrincipal = TestUtils.createPrincipal("testowner");
+        // the Principal interface just contains a getName() method
+        Principal ownerPrincipal = new TestPrincipal("testowner");
         CreateGameAction createGameAction = new CreateGameAction();
         createGameAction.setGameName("Test Game");
 
         Lobby createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal);
 
         playerRepository.createOrUpdate("testjoiner", "Test User Joiner");
-        Principal joinerPrincipal = TestUtils.createPrincipal("testjoiner");
+        // the Principal interface just contains a getName() method
+        Principal joinerPrincipal = new TestPrincipal("testjoiner");
         JoinGameAction joinGameAction = new JoinGameAction();
         joinGameAction.setGameId(createdLobby.getId());
 
