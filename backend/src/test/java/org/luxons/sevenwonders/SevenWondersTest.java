@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.After;
@@ -14,6 +15,7 @@ import org.luxons.sevenwonders.test.api.ApiPlayerTurnInfo;
 import org.luxons.sevenwonders.test.api.SevenWondersClient;
 import org.luxons.sevenwonders.test.api.SevenWondersSession;
 import org.luxons.sevenwonders.test.client.Channel;
+import org.luxons.sevenwonders.test.client.JackstompSession;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -21,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -61,10 +64,37 @@ public class SevenWondersTest {
         session.disconnect();
     }
 
+    private SevenWondersSession newPlayer(String name) throws InterruptedException, TimeoutException,
+            ExecutionException {
+        SevenWondersSession otherSession = client.connect(serverUrl);
+        otherSession.chooseName(name);
+        return otherSession;
+    }
+
+    @Test
+    public void lobbySubscription_ignoredForOutsiders() throws InterruptedException, ExecutionException,
+            TimeoutException {
+        SevenWondersSession ownerSession = newPlayer("GameOwner");
+        SevenWondersSession session1 = newPlayer("Player1");
+        SevenWondersSession session2 = newPlayer( "Player2");
+        String gameName = "Test Game";
+        ApiLobby lobby = ownerSession.createGame(gameName);
+        session1.joinGame(lobby.getId());
+        session2.joinGame(lobby.getId());
+
+        SevenWondersSession outsiderSession = newPlayer("Outsider");
+        JackstompSession session = outsiderSession.getJackstompSession();
+        Channel<Object> started = session.subscribeEmptyMsgs("/topic/lobby/" + lobby.getId() + "/started");
+
+        ownerSession.startGame(lobby.getId());
+        Object nothing = started.next(1, TimeUnit.SECONDS);
+        assertNull(nothing);
+        disconnect(ownerSession, session1, session2, outsiderSession);
+    }
+
     @Test
     public void createGame_success() throws InterruptedException, ExecutionException, TimeoutException {
-        SevenWondersSession ownerSession = client.connect(serverUrl);
-        ownerSession.chooseName("GameOwner");
+        SevenWondersSession ownerSession = newPlayer("GameOwner");
 
         String gameName = "Test Game";
         ApiLobby lobby = ownerSession.createGame(gameName);
@@ -72,13 +102,6 @@ public class SevenWondersTest {
         assertEquals(gameName, lobby.getName());
 
         disconnect(ownerSession);
-    }
-
-    private SevenWondersSession newPlayer(String name) throws InterruptedException, TimeoutException,
-            ExecutionException {
-        SevenWondersSession otherSession = client.connect(serverUrl);
-        otherSession.chooseName(name);
-        return otherSession;
     }
 
     @Test

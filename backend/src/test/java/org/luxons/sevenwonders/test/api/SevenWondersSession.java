@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.test.api;
 import org.luxons.sevenwonders.actions.ChooseNameAction;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
+import org.luxons.sevenwonders.errors.UIError;
 import org.luxons.sevenwonders.test.client.Channel;
 import org.luxons.sevenwonders.test.client.JackstompSession;
 
@@ -18,8 +19,16 @@ public class SevenWondersSession {
         this.session = session;
     }
 
+    public JackstompSession getJackstompSession() {
+        return session;
+    }
+
     public void disconnect() {
         session.disconnect();
+    }
+
+    public Channel<UIError> watchErrors() {
+        return session.subscribe("/user/queue/errors", UIError.class);
     }
 
     public ApiPlayer chooseName(String displayName) throws InterruptedException {
