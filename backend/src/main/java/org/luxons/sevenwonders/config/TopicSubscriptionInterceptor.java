@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.config;
 
-import java.security.Principal;
-
+import org.luxons.sevenwonders.errors.ApiMisuseException;
 import org.luxons.sevenwonders.validation.DestinationAccessValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -25,14 +24,19 @@ public class TopicSubscriptionInterceptor extends ChannelInterceptorAdapter {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
         if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
-            Principal userPrincipal = headerAccessor.getUser();
-            if (!destinationAccessValidator.hasAccess(userPrincipal.getName(), headerAccessor.getDestination())) {
-                throw new ForbiddenSubscriptionException();
+            String username = headerAccessor.getUser().getName();
+            String destination = headerAccessor.getDestination();
+            if (!destinationAccessValidator.hasAccess(username, destination)) {
+                throw new ForbiddenSubscriptionException(username, destination);
             }
         }
         return message;
     }
 
-    private static class ForbiddenSubscriptionException extends RuntimeException {
+    private static class ForbiddenSubscriptionException extends ApiMisuseException {
+
+        ForbiddenSubscriptionException(String username, String destination) {
+            super(String.format("Player '%s' is not allowed to access %s", username, destination));
+        }
     }
 }
