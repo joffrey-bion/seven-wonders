@@ -30,11 +30,6 @@ dependencies {
 
     compile 'org.springframework.boot:spring-boot-starter-websocket'
     compile 'org.springframework.security:spring-security-core:4.2.0.RELEASE'
-    compile 'org.webjars:webjars-locator'
-    compile 'org.webjars:sockjs-client:1.0.2'
-    compile 'org.webjars:stomp-websocket:2.3.3'
-    compile 'org.webjars:bootstrap:3.3.7'
-    compile 'org.webjars:jquery:3.1.0'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.hildan.jackstomp:jackstomp:1.0.0'
