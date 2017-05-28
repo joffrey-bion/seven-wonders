@@ -1,10 +1,11 @@
+// @flow
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { eventChannel } from 'redux-saga';
 
 const wsURL = '/seven-wonders-websocket';
 
-export const createWsConnection = (headers = {}) =>
+export const createWsConnection = (headers: Object = {}) =>
   new Promise((resolve, reject) => {
     let socket = Stomp.over(new SockJS(wsURL), {
       debug: process.env.NODE_ENV !== 'production',
@@ -12,7 +13,7 @@ export const createWsConnection = (headers = {}) =>
     socket.connect(headers, frame => resolve({ frame, socket }), reject);
   });
 
-export const createSubscriptionChannel = (socket, path) => {
+export const createSubscriptionChannel = (socket: any, path: string) => {
   return eventChannel(emitter => {
     const socketSubscription = socket.subscribe(path, event => {
       emitter(JSON.parse(event.body));

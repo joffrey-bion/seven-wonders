@@ -1,26 +1,43 @@
+// @flow
 import { Record, Map } from 'immutable';
 
-const PlayerRecord = Record({
+export type PlayerShape = {
+  username: string,
+  displayName: string,
+  index: number,
+  ready: boolean
+};
+export type PlayerType = Record<PlayerShape>;
+
+const PlayerRecord: PlayerType = Record({
   username: null,
   displayName: null,
   index: 0,
   ready: false,
 });
+// $FlowFixMe
 export class Player extends PlayerRecord {}
 
-const PlayersRecord = Record({
+export type PlayersShape = {
+  all: Map<string, PlayerType>,
+  current: string
+};
+export type PlayersType = Record<PlayersShape>;
+
+const PlayersRecord: PlayersType = Record({
   all: new Map(),
   current: '',
 });
+// $FlowFixMe
 export default class PlayerState extends PlayersRecord {
-  addPlayer(p) {
-    const player = new Player(p);
-    const playerMap = new Map({ [player.username]: player });
+  addPlayer(p: PlayerShape) {
+    const player: Player = new Player(p);
+    const playerMap = new Map(({ [player.username]: player }: { [key: string]: Player }));
     return this.addPlayers(playerMap).set('current', player.username);
   }
 
-  addPlayers(p) {
-    const players = new Map(p);
-    return this.mergeIn(['all'], players.map(player => new Player(player)));
+  addPlayers(p: Map<string, PlayerShape>) {
+    const players: Map<string, PlayerShape> = new Map(p);
+    return this.mergeIn(['all'], players.map((player: PlayerShape): Player => new Player(player)));
   }
 }

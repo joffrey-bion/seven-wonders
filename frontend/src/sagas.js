@@ -1,3 +1,4 @@
+// @flow
 import { router } from 'redux-saga-router';
 import { call, fork } from 'redux-saga/effects';
 

@@ -1,6 +1,23 @@
 import { Record, Map, List } from 'immutable';
 
-const SettingsRecord = Record({
+export type SettingsShape = {
+  initialGold: number,
+  lostPointsPerDefeat: number,
+  timeLimitInSeconds: number,
+  randomSeedForTests: number,
+  discardedCardGold: number,
+  defaultTradingCost: number,
+  wonPointsPerVictoryPerAge: {
+    '1': number,
+    '2': number,
+    '3': number
+  },
+  wonderSidePickMethod: 'EACH_RANDOM' | 'TODO',
+  pointsPer3Gold: number
+};
+export type SettingsType = Record<SettingsShape>;
+
+const SettingsRecord: SettingsType = Record({
   initialGold: 3,
   lostPointsPerDefeat: 1,
   timeLimitInSeconds: 45,
@@ -17,7 +34,18 @@ const SettingsRecord = Record({
 });
 export class Settings extends SettingsRecord {}
 
-const GameRecord = Record({
+export type GameShape = {
+  id: number,
+  name: string | void,
+  players: List<string>,
+  settings: SettingsType,
+  state: 'LOBBY' | 'TODO'
+};
+export type GameType = Record<GameShape>;
+export type GameMapType = Map<string, GameShape>;
+export type GameNormalMapType = { [string]: GameShape };
+
+const GameRecord: GameType = Record({
   id: -1,
   name: null,
   players: new List(),
@@ -26,16 +54,22 @@ const GameRecord = Record({
 });
 export class Game extends GameRecord {}
 
-const GamesRecord = Record({
+export type GamesShape = {
+  all: Map<Games>,
+  current: string
+};
+export type GamesType = Record<GamesShape>;
+
+const GamesRecord: GamesType = Record({
   all: new Map(),
-  current: '',
+  current: null,
 });
 export default class GamesState extends GamesRecord {
-  addGame(g) {
-    const game = new Game(g);
+  addGame(g: GameShape) {
+    const game: Game = new Game(g);
     return this.mergeDeepIn(['all', game.id], game);
   }
-  addGames(games) {
-    return this.mergeIn(['all'], games.map(game => new Game(game)));
+  addGames(games: GameNormalMapType) {
+    return this.mergeIn(['all'], games.map((game: GameShape): Game => new Game(game)));
   }
 }

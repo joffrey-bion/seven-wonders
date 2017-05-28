@@ -1,5 +1,6 @@
+// @flow
 import { fromJS } from 'immutable';
-import GamesState from '../models/games';
+import GamesState, { type GameMapType, type GameNormalMapType, type GameShape } from '../models/games';
 
 export const types = {
   UPDATE_GAMES: 'GAME/UPDATE_GAMES',
@@ -10,19 +11,21 @@ export const types = {
   ENTER_GAME: 'GAME/ENTER_GAME',
 };
 
+type Actions = { type: 'GAME/UPDATE_GAMES', games: GameMapType } | { type: 'GAME/REQUEST_CREATE_GAME', gameId: string };
+
 export const actions = {
-  updateGames: games => ({ type: types.UPDATE_GAMES, games: fromJS(games) }),
-  requestJoinGame: gameId => ({ type: types.REQUEST_JOIN_GAME, gameId }),
-  requestCreateGame: gameName => ({
+  updateGames: (games: GameNormalMapType) => ({ type: types.UPDATE_GAMES, games: fromJS(games) }),
+  requestJoinGame: (gameId: string) => ({ type: types.REQUEST_JOIN_GAME, gameId }),
+  requestCreateGame: (gameName: string) => ({
     type: types.REQUEST_CREATE_GAME,
     gameName,
   }),
   requestStartGame: () => ({ type: types.REQUEST_START_GAME }),
-  enterLobby: lobby => ({ type: types.ENTER_LOBBY, lobby: fromJS(lobby) }),
+  enterLobby: (lobby: GameShape) => ({ type: types.ENTER_LOBBY, lobby: fromJS(lobby) }),
   enterGame: () => ({ type: types.ENTER_GAME }),
 };
 
-export default (state = new GamesState(), action) => {
+export default (state: GamesState = new GamesState(), action: Actions) => {
   switch (action.type) {
     case types.UPDATE_GAMES:
       return state.addGames(action.games);

@@ -1,4 +1,10 @@
+// @flow
 import React, { Component } from 'react';
+
+import type { List } from 'immutable';
+import type { GamesType } from '../models/games';
+import type { PlayerType } from '../models/players';
+
 import { connect } from 'react-redux';
 import { Space, InlineForm, Text } from 'rebass';
 import { Flex } from 'reflexbox';
@@ -8,7 +14,14 @@ import { getCurrentPlayer } from '../redux/players';
 import { getAllGames, actions } from '../redux/games';
 
 class GameBrowser extends Component {
-  createGame = e => {
+  props: {
+    currentPlayer: PlayerType,
+    games: List<GamesType>
+  };
+
+  _gameName: string | void = undefined;
+
+  createGame = (e: SyntheticEvent): void => {
     e.preventDefault();
     if (this._gameName !== undefined) {
       this.props.createGame(this._gameName);
@@ -23,7 +36,7 @@ class GameBrowser extends Component {
             buttonLabel="Create Game"
             label="Game name"
             name="game_name"
-            onChange={e => (this._gameName = e.target.value)}
+            onChange={(e: SyntheticInputEvent) => (this._gameName = e.target.value)}
             onClick={this.createGame}
           />
           <Space auto />

@@ -1,3 +1,4 @@
+// @flow
 import { createStore, applyMiddleware, compose } from 'redux';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
@@ -8,7 +9,7 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 import { makeSelectLocationState } from './redux/app';
 
-export default function configureStore(initialState = {}) {
+export default function configureStore(initialState: Object = {}) {
   const sagaMiddleware = createSagaMiddleware();
 
   const middlewares = [sagaMiddleware, routerMiddleware(browserHistory)];

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { type Children } from 'react';
 import { Banner } from 'rebass';
 import logo from './logo-7-wonders.png';
 import ErrorToastContainer from '../components/errors/errorToastContainer';
 
-export default props => (
+export default ({ children }: { children: Children }) => (
   <div>
     <Banner
       align="center"
@@ -12,7 +12,7 @@ export default props => (
     >
       <img src={logo} alt="Seven Wonders Logo" />
     </Banner>
-    {props.children}
+    {children}
     <ErrorToastContainer />
   </div>
 );

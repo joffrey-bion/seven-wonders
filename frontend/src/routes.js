@@ -1,3 +1,4 @@
+// @flow
 import { fork } from 'redux-saga/effects';
 import homeSaga from './sagas/home';
 import gameBrowserSaga from './sagas/gameBrowser';
