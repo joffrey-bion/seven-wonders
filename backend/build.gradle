@@ -19,7 +19,6 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
@@ -32,7 +31,7 @@ dependencies {
     compile 'org.springframework.security:spring-security-core:4.2.0.RELEASE'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'org.hildan.jackstomp:jackstomp:1.0.0'
+    testCompile 'org.hildan.jackstomp:jackstomp:1.0.1'
 }
 
 checkstyle {
