@@ -1,18 +1,15 @@
 import React from 'react';
 import { Flex } from 'reflexbox';
 import { Text, Space, Button } from 'rebass';
-import Immutable from 'seamless-immutable';
 
-const GameList = props => (
+const GameList = ({ games, joinGame }) => (
   <div>
-    {Immutable.asMutable(props.games).map((game, index) => {
-      const joinGame = () => props.joinGame(game.id);
-
+    {games.map((game, index) => {
       return (
         <Flex key={index}>
           <Text>{game.name}</Text>
           <Space auto />
-          <Button onClick={joinGame}>Join</Button>
+          <Button onClick={() => joinGame(game.id)}>Join</Button>
         </Flex>
       );
     })}

@@ -1,4 +1,4 @@
-import Immutable from 'seamless-immutable';
+import PlayerState, { Player } from '../models/players';
 
 export const types = {
   REQUEST_CHOOSE_USERNAME: 'USER/REQUEST_CHOOSE_USERNAME',
@@ -21,24 +21,17 @@ export const actions = {
   }),
 };
 
-const initialState = Immutable.from({
-  all: {},
-  current: '',
-});
-
-export default (state = initialState, action) => {
+export default (state = new PlayerState(), action) => {
   switch (action.type) {
     case types.SET_CURRENT_PLAYER:
-      const player = action.player;
-      const withNewPlayer = state.setIn(['all', player.username], player);
-      return Immutable.set(withNewPlayer, 'current', player.username);
+      return state.addPlayer(action.player);
     case types.UPDATE_PLAYERS:
-      return Immutable.merge(state, { all: action.players }, { deep: true });
+      return state.addPlayers(action.players);
     default:
       return state;
   }
 };
 
-export const getCurrentPlayer = state => state.players.all && state.players.all[state.players.current];
-export const getPlayer = (state, username) => state.players.all[username];
-export const getPlayers = (state, usernames) => usernames.map(u => getPlayer(state, u));
+export const getCurrentPlayer = players => players.all.get(players.current, new Player({ displayName: '[ERROR]' }));
+export const getPlayer = (players, username) => players.all.get(username);
+export const getPlayers = (players, usernames) => usernames.map(u => getPlayer(players, u));

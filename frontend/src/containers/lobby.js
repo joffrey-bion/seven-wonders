@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { List } from 'immutable';
 import { connect } from 'react-redux';
-import Immutable from 'seamless-immutable';
 import { Button } from 'rebass';
 import PlayerList from '../components/playerList';
 
@@ -28,10 +28,11 @@ class Lobby extends Component {
 }
 
 const mapStateToProps = state => {
-  const game = getCurrentGame(state);
+  const game = getCurrentGame(state.get('games'));
+  console.info(game);
   return {
     currentGame: game,
-    players: game ? getPlayers(state, game.players) : Immutable([]),
+    players: game ? getPlayers(state.get('players'), game.players) : new List(),
   };
 };
 

@@ -10,6 +10,7 @@
     "react-scripts": "1.0.5"
   },
   "dependencies": {
+    "immutable": "^3.8.1",
     "normalizr": "^3.2.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -19,12 +20,11 @@
     "react-router-redux": "^4.0.8",
     "rebass": "^0.3.3",
     "redux": "^3.6.0",
+    "redux-immutable": "^4.0.0",
     "redux-saga": "^0.13.0",
     "redux-saga-router": "^2.1.0",
-    "redux-seamless-immutable": "^0.3.0",
     "reflexbox": "^2.2.3",
     "reselect": "^3.0.1",
-    "seamless-immutable": "^7.1.2",
     "sockjs-client": "^1.1.4",
     "webstomp-client": "^1.0.6"
   },
