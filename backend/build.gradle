@@ -19,6 +19,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -36,6 +37,7 @@ dependencies {
     compile 'org.webjars:jquery:3.1.0'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.hildan.jackstomp:jackstomp:1.0.0'
 }
 
 checkstyle {

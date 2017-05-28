@@ -3,8 +3,8 @@ package org.luxons.sevenwonders.test.api;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import org.luxons.sevenwonders.test.client.JackstompClient;
-import org.luxons.sevenwonders.test.client.JackstompSession;
+import org.hildan.jackstomp.JackstompClient;
+import org.hildan.jackstomp.JackstompSession;
 
 public class SevenWondersClient {
 

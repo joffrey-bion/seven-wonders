@@ -4,6 +4,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.hildan.jackstomp.Channel;
+import org.hildan.jackstomp.JackstompSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,8 +16,6 @@ import org.luxons.sevenwonders.test.api.ApiPlayer;
 import org.luxons.sevenwonders.test.api.ApiPlayerTurnInfo;
 import org.luxons.sevenwonders.test.api.SevenWondersClient;
 import org.luxons.sevenwonders.test.api.SevenWondersSession;
-import org.luxons.sevenwonders.test.client.Channel;
-import org.luxons.sevenwonders.test.client.JackstompSession;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;

@@ -1,11 +1,11 @@
 package org.luxons.sevenwonders.test.api;
 
+import org.hildan.jackstomp.Channel;
+import org.hildan.jackstomp.JackstompSession;
 import org.luxons.sevenwonders.actions.ChooseNameAction;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.errors.UIError;
-import org.luxons.sevenwonders.test.client.Channel;
-import org.luxons.sevenwonders.test.client.JackstompSession;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
