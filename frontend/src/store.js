@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
-import Immutable from 'seamless-immutable';
+import { fromJS } from 'immutable';
 
 import createReducer from './reducers';
 import createSagaMiddleware from 'redux-saga';
@@ -21,7 +21,7 @@ export default function configureStore(initialState = {}) {
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-  const store = createStore(createReducer(), Immutable.from(initialState), composeEnhancers(...enhancers));
+  const store = createStore(createReducer(), fromJS(initialState), composeEnhancers(...enhancers));
 
   sagaMiddleware.run(rootSaga, browserHistory);
 

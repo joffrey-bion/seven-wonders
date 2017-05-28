@@ -41,8 +41,8 @@ class GameBrowser extends Component {
 }
 
 const mapStateToProps = state => ({
-  currentPlayer: getCurrentPlayer(state) || { displayName: '[ERROR]' },
-  games: getAllGames(state),
+  currentPlayer: getCurrentPlayer(state.get('players')),
+  games: getAllGames(state.get('games')),
 });
 
 const mapDispatchToProps = {

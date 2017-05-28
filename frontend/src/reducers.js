@@ -1,4 +1,5 @@
-import { combineReducers, routerReducer } from 'redux-seamless-immutable';
+import { combineReducers } from 'redux-immutable';
+import { routerReducer } from 'react-router-redux';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
 import errorsReducer from './redux/errors';

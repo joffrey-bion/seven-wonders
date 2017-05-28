@@ -1,11 +1,10 @@
 import React from 'react';
 import { Flex } from 'reflexbox';
 import { Text } from 'rebass';
-import Immutable from 'seamless-immutable';
 
-const PlayerList = props => (
+const PlayerList = ({ players }) => (
   <div>
-    {Immutable.asMutable(props.players).map(player => {
+    {players.map(player => {
       return (
         <Flex key={player.index}>
           <Text>{player.displayName}</Text>
