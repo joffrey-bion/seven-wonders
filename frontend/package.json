@@ -7,7 +7,7 @@
     "flow-bin": "^0.46.0",
     "flow-typed": "^2.1.2",
     "prettier-eslint-cli": "^4.0.1",
-    "react-scripts": "1.0.5"
+    "react-scripts": "^1.0.7"
   },
   "dependencies": {
     "immutable": "^3.8.1",

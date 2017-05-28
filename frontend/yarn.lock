@@ -2116,9 +2116,9 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-react-app@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-1.0.3.tgz#e91be5b2610352944218ba2e10a179dfdd1679ff"
+eslint-config-react-app@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-1.0.4.tgz#c0178f535a922236c53daafea4f397203db7d9af"
 
 eslint-import-resolver-node@^0.2.0:
   version "0.2.3"
@@ -2167,9 +2167,9 @@ eslint-plugin-import@2.2.0:
     minimatch "^3.0.3"
     pkg-up "^1.0.0"
 
-eslint-plugin-jsx-a11y@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-5.0.1.tgz#48e678891fec9fe1e53ef53adc2f7d05fee6640c"
+eslint-plugin-jsx-a11y@5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-5.0.3.tgz#4a939f76ec125010528823331bf948cc573380b6"
   dependencies:
     aria-query "^0.5.0"
     array-includes "^3.0.3"
@@ -3905,11 +3905,11 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "~3.0.0"
 
-"lodash@>=3.5 <5", lodash@^4.14.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.3.0:
+"lodash@>=3.5 <5", lodash@^4.14.0, lodash@^4.17.2, lodash@^4.17.3:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-lodash@^4.0.0, lodash@^4.15.0, lodash@^4.2.0, lodash@^4.2.1:
+lodash@^4.0.0, lodash@^4.15.0, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
@@ -5090,9 +5090,9 @@ react-addons-pure-render-mixin@^15.3.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-15.4.1.tgz#8a1f48f9fd3f24ed12af63c4d2dc0c7529fa7e02"
 
-react-dev-utils@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-2.0.0.tgz#2d0400f01fa0ba9a3fba9c33130b9e1a3e4143f5"
+react-dev-utils@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-3.0.0.tgz#3677f37718ba0cae892ba9c01fe54d1622e6ef7c"
   dependencies:
     "@timer/detect-port" "1.1.3"
     address "1.0.1"
@@ -5121,14 +5121,14 @@ react-dom@^15.5.4:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
-react-error-overlay@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-1.0.5.tgz#d18d745a96b8f073868c9759ccfd17fedef04e60"
+react-error-overlay@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-1.0.7.tgz#8712fe40cfc194ce992a4136c091c03bfada9148"
   dependencies:
     anser "1.2.5"
     babel-code-frame "6.22.0"
     babel-runtime "6.23.0"
-    react-dev-utils "^2.0.0"
+    react-dev-utils "^3.0.0"
     settle-promise "1.0.0"
     source-map "0.5.6"
 
@@ -5150,7 +5150,7 @@ react-redux@^5.0.1:
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
 
-react-router-redux@^4.0.0, react-router-redux@^4.0.8:
+react-router-redux@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/react-router-redux/-/react-router-redux-4.0.8.tgz#227403596b5151e182377dab835b5d45f0f8054e"
 
@@ -5166,9 +5166,9 @@ react-router@^3.0.2:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react-scripts@1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-1.0.5.tgz#36e7302f4be16c6511f3b50a7a7bad4b2da5cb02"
+react-scripts@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-1.0.7.tgz#fe1436dda03bb45465c76d097cfea4f32eb7cbbb"
   dependencies:
     autoprefixer "7.1.0"
     babel-core "6.24.1"
@@ -5182,11 +5182,11 @@ react-scripts@1.0.5:
     css-loader "0.28.1"
     dotenv "4.0.0"
     eslint "3.19.0"
-    eslint-config-react-app "^1.0.3"
+    eslint-config-react-app "^1.0.4"
     eslint-loader "1.7.1"
     eslint-plugin-flowtype "2.33.0"
     eslint-plugin-import "2.2.0"
-    eslint-plugin-jsx-a11y "5.0.1"
+    eslint-plugin-jsx-a11y "5.0.3"
     eslint-plugin-react "7.0.1"
     extract-text-webpack-plugin "2.1.0"
     file-loader "0.11.1"
@@ -5197,12 +5197,12 @@ react-scripts@1.0.5:
     postcss-flexbugs-fixes "3.0.0"
     postcss-loader "2.0.5"
     promise "7.1.1"
-    react-dev-utils "^2.0.0"
-    react-error-overlay "^1.0.5"
+    react-dev-utils "^3.0.0"
+    react-error-overlay "^1.0.7"
     style-loader "0.17.0"
     sw-precache-webpack-plugin "0.9.1"
     url-loader "0.5.8"
-    webpack "2.5.1"
+    webpack "2.6.1"
     webpack-dev-server "2.4.5"
     webpack-manifest-plugin "1.1.0"
     whatwg-fetch "2.0.3"
@@ -5346,13 +5346,6 @@ redux-saga-router@^2.1.0:
 redux-saga@^0.13.0:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.13.0.tgz#9294386550deb0d56bc9a1b3c90a613e7ddb6593"
-
-redux-seamless-immutable@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/redux-seamless-immutable/-/redux-seamless-immutable-0.3.0.tgz#587a25f688d9337e848bc2b89b34f52020199174"
-  dependencies:
-    react-router-redux "^4.0.0"
-    seamless-immutable "^6.1.0"
 
 redux@^3.6.0:
   version "3.6.0"
@@ -5642,14 +5635,6 @@ schema-utils@^0.x:
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.3.0.tgz#f5877222ce3e931edae039f17eb3716e7137f8cf"
   dependencies:
     ajv "^5.0.0"
-
-seamless-immutable@^6.1.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/seamless-immutable/-/seamless-immutable-6.3.0.tgz#218fd851bc5b989505998325f8c7713d35fafeb8"
-
-seamless-immutable@^7.1.2:
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/seamless-immutable/-/seamless-immutable-7.1.2.tgz#c87a1eba6767a32455311d76600ac5eddeafbb69"
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -6217,7 +6202,7 @@ uglify-js@3.0.x:
     commander "~2.9.0"
     source-map "~0.5.1"
 
-uglify-js@^2.6, uglify-js@^2.8.5:
+uglify-js@^2.6, uglify-js@^2.8.27, uglify-js@^2.8.5:
   version "2.8.27"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.27.tgz#47787f912b0f242e5b984343be8e35e95f694c9c"
   dependencies:
@@ -6489,9 +6474,9 @@ webpack-sources@^0.2.3:
     source-list-map "^1.1.1"
     source-map "~0.5.3"
 
-webpack@2.5.1:
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.5.1.tgz#61742f0cf8af555b87460a9cd8bba2f1e3ee2fce"
+webpack@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.6.1.tgz#2e0457f0abb1ac5df3ab106c69c672f236785f07"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"
@@ -6510,7 +6495,7 @@ webpack@2.5.1:
     source-map "^0.5.3"
     supports-color "^3.1.0"
     tapable "~0.2.5"
-    uglify-js "^2.8.5"
+    uglify-js "^2.8.27"
     watchpack "^1.3.1"
     webpack-sources "^0.2.3"
     yargs "^6.0.0"
