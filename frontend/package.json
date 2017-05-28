@@ -38,5 +38,10 @@
     "flow": "flow",
     "postinstall": "flow-typed install"
   },
-  "proxy": "http://localhost:8080"
+  "proxy": {
+    "/*": {
+      "target": "http://localhost:8080",
+      "ws": true
+    }
+  }
 }
