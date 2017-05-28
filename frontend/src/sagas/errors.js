@@ -1,8 +1,5 @@
-import { apply, call, cancelled, put, take } from 'redux-saga/effects';
-
+import { apply, call, cancelled, take } from 'redux-saga/effects';
 import { createSubscriptionChannel } from '../utils/websocket';
-import { actions } from '../redux/errors';
-
 import { toastr } from 'react-redux-toastr';
 
 export default function* errorHandlingSaga({ socket }) {
@@ -24,7 +21,6 @@ function* handleOneError(err) {
   console.error('Error received on web socket channel', err);
   const msg = buildMsg(err);
   yield apply(toastr, toastr.error, [msg, { icon: 'error' }]);
-  yield put(actions.errorReceived(err));
 }
 
 function buildMsg(err) {
