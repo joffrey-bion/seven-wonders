@@ -21,11 +21,7 @@ export default function configureStore(initialState = {}) {
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-  const store = createStore(
-    createReducer(),
-    Immutable.from(initialState),
-    composeEnhancers(...enhancers)
-  );
+  const store = createStore(createReducer(), Immutable.from(initialState), composeEnhancers(...enhancers));
 
   sagaMiddleware.run(rootSaga, browserHistory);
 

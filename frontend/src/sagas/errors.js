@@ -6,11 +6,7 @@ import { actions } from '../redux/errors';
 import { toastr } from 'react-redux-toastr';
 
 export default function* errorHandlingSaga({ socket }) {
-  const errorChannel = yield call(
-    createSubscriptionChannel,
-    socket,
-    '/user/queue/errors'
-  );
+  const errorChannel = yield call(createSubscriptionChannel, socket, '/user/queue/errors');
   try {
     while (true) {
       const error = yield take(errorChannel);
