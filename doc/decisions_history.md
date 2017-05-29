@@ -1,7 +1,42 @@
 # Technical decisions and issues log
 
-## 2017-05-13 Migration to seamless-immutable
-*Joffrey* — :key: *Frontend, Immutable*
+## 2017.05.25-28 Flow type-checking + ImmutableJS
+[@joffrey-bion][1] — :key: *Frontend*
+
+Javascript can easily become a mess when the code base grows, and static typing helps wrapping one's head around 
+what's going on, especially when multiple people are involved in writing code in the same project.
+
+That's why we considered [TypeScript](https://www.typescriptlang.org/) and [Flow](https://flow.org/) for Seven 
+wonders. Since I use TypeScript at work already, I had a preference for Flow in order to learn something new, and 
+[@victorchabbert][2] had actually this in mind already.
+ 
+Victor introduced Flow in the project and started adding some types already, but this didn't work well with 
+seamless-immutable. After reconsideration, it seems that I had missed the `Record` type of ImmutableJS, which allows 
+for direct property access like `player.displayName` instead of the `player.get('displayName')` I hated so much. This
+removes one of the biggest downsides I felt about ImmutableJS.
+
+Of course, there is still the problem of debugging immutable structures in the console, but I guess we can deal with 
+that for now. Here we are, back to Immutable JS.   
+
+## 2017.05.25-27 Web socket integration tests
+[@joffrey-bion][1] — :key: *Backend, Tests*
+
+Unit tests are great, but only check individual components. To build a more robust test suite, we needed to add 
+tests that validate:
+- the Spring configuration
+- STOMP destinations, subscriptions and exchanges
+- the serialized data in the messages
+- all of the above in the context of a real-life scenario
+
+Using `@SpringBootTest` made it fairly easy to have a server running during unit tests. On top of that, I had to 
+configure a web socket client to properly exchange Jackson-serialized objects over STOMP.
+
+Since the configuration of such a client was not as smooth as I expected, I created 
+[Jackstomp client](https://github.com/joffrey-bion/jackstomp), which makes it quite straightforward to get a client 
+running with sensible defaults. 
+
+## 2017.05.13 Migration to seamless-immutable
+[@joffrey-bion][1] — :key: *Frontend, Immutable*
 
 Using Immutable JS has proved to be a pain, especially because the cumbersome API is not contained in the reducers but 
 leaks out in the React components. As far as accessing the data is concerned, I dislike not being able to do it the 
@@ -18,8 +53,8 @@ it provides immutability with an equivalent mutation API, while keeping native r
 Seamless Immutable required using [redux-seamless-immutable](https://github.com/eadmundo/redux-seamless-immutable) for 
 seamless-immutable-compatible `combineReducers()` and `routerReducer()` functions.
 
-## 2017-04-06 Live API documentation
-*Joffrey* — :key: *Backend, API, Documentation*
+## 2017.04.06 Live API documentation
+[@joffrey-bion][1] — :key: *Backend, API, Documentation*
 
 As frontend development was starting, we felt the need for a better API doc than a plain shared Google Sheet.
 The best doc is an up-to-date doc that stays so. The easiest way I found to keep it up-to-date is to generate it.
@@ -36,8 +71,8 @@ to Swagger, and I already could tweak a little bit the source code of JsonDoc to
 That being said, Fabio Mafioletti does not seem to have a lot of time available for collaboration in implementing 
 this support, so I might have to release from my own fork of the project, or create a new project based on JsonDoc.
 
-## 2017-01-20 Frontend architecture refactoring
-*Victor — :key: Frontend, Redux*
+## 2017.01.20 Frontend architecture refactoring
+[@victorchabbert][2] — :key: Frontend, Redux*
 
 I based the frontend architecture on [mxstbr](https://twitter.com/mxstbr)'s
 [react-boilerplate](https://github.com/mxstbr/react-boilerplate) (thanks Max!). The recommended structure for his 
@@ -52,8 +87,8 @@ because of the amount of shared data and logic we have between containers and pa
 I refactored our code to use the `Ducks` principle (the word comes from re*DUX*) and I can already see the ease to 
 import all redux specific files. I will update this section with more info after using it more extensively.
 
-## 2017-01-20 Unified build Spring Boot + React
-*Joffrey* — :key: *Build, CI, Deployment*
+## 2017.01.20 Unified build Spring Boot + React
+[@joffrey-bion][1] — :key: *Build, CI, Deployment*
 
 Some nice plugins allowed for bundling, minification etc. directly from Gradle, but I wanted to make use of the local 
 `package.json` scripts to be consistent with the frontend development workflow. 
@@ -84,13 +119,14 @@ to add a Procfile to manually specify the `backend` subproject in the process co
 
     web: java -Dserver.port=$PORT $JAVA_OPTS -jar backend/build/libs/*.jar
 
-## 2016-12-08 React frontend
-*Joffrey* — :key: *Frontend*
+## 2016.12.08 React frontend
+[@joffrey-bion][1] — :key: *Frontend*
 
 We decided to put the react stuff into `src/main/js` as it matches maven/gradle project structure conventions. As 
 `src/main/java` contains the Java sources, why not put the JavaScript sources in `src/main/js`?
 
-The technical choices were mostly guided by Victor, as I had little experience with React.
+The technical choices were mostly guided by [@victorchabbert][1], as I had little experience with React, and the 
+frontend stuff in general.
 
 Technical decisions:
 
@@ -105,8 +141,8 @@ great job at enforcing it
 So far, no special build including the produced static inside the webapp's Jar. Frontend and backend can be developed
 independently and both the frontend dev server and the spring boot server can run locally and communicate.
 
-## 2016-12-04 Spring Boot backend
-*Joffrey* — :key: *Backend*
+## 2016.12.04 Spring Boot backend
+[@joffrey-bion][1] — :key: *Backend*
 
 Technical decisions:
 
@@ -124,3 +160,6 @@ quickest start as far as the backend was concerned.
 - [STOMP](https://en.wikipedia.org/wiki/Streaming_Text_Oriented_Messaging_Protocol): coming with Spring official
 support, it was quite natural to use STOMP over WebSockets as a subprotocol when setting up Spring Boot WebSocket. It 
 allows for an easy management of the payload and provides some sort of standard for the publish/subscribe mechanism.
+
+[1]: https://github.com/joffrey-bion
+[2]: https://github.com/victorchabbert
