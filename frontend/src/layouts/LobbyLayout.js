@@ -1,4 +1,5 @@
-import React, { type Children } from 'react';
+import React from 'react';
+import type { Children } from 'react';
 import { Banner } from 'rebass';
 import logo from './logo-7-wonders.png';
 import ErrorToastContainer from '../components/errors/errorToastContainer';

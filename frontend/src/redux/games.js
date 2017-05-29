@@ -1,7 +1,7 @@
 // @flow
 import { fromJS } from 'immutable';
-import GamesState, { type GameMapType, type GameNormalMapType, type GameShape } from '../models/games';
-
+import GamesState from '../models/games';
+import type { GameMapType, GameNormalMapType, GameShape } from "../models/games";
 export const types = {
   UPDATE_GAMES: 'GAME/UPDATE_GAMES',
   REQUEST_CREATE_GAME: 'GAME/REQUEST_CREATE_GAME',
