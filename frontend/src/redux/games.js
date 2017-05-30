@@ -1,7 +1,9 @@
 // @flow
 import { fromJS } from 'immutable';
 import GamesState from '../models/games';
-import type { GameMapType, GameNormalMapType, GameShape } from "../models/games";
+import type { GameMapType, GameNormalMapType, GameShape, Game } from '../models/games';
+import type { Map, List } from 'immutable';
+
 export const types = {
   UPDATE_GAMES: 'GAME/UPDATE_GAMES',
   REQUEST_CREATE_GAME: 'GAME/REQUEST_CREATE_GAME',
@@ -36,7 +38,7 @@ export default (state: GamesState = new GamesState(), action: Actions) => {
   }
 };
 
-export const getAllGamesById = games => games.all;
-export const getAllGames = games => getAllGamesById(games).toList();
-export const getGame = (games, id) => getAllGamesById(games).get(`${id}`);
-export const getCurrentGame = games => getGame(games, games.current);
+export const getAllGamesById = (games: GamesState): Map<string, Game> => games.all;
+export const getAllGames = (games: GamesState): List<Game> => getAllGamesById(games).toList();
+export const getGame = (games: GamesState, id: string | number): Game => getAllGamesById(games).get(`${id}`);
+export const getCurrentGame = (games: GamesState) => getGame(games, games.current);

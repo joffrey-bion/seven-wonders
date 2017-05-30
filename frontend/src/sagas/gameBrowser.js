@@ -1,3 +1,4 @@
+// @flow
 import { call, put, take, apply } from 'redux-saga/effects';
 import { createSubscriptionChannel } from '../utils/websocket';
 import { push } from 'react-router-redux';
@@ -8,7 +9,9 @@ import { game as gameSchema, gameList as gameListSchema } from '../schemas/games
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
 
-function* watchGames({ socket }) {
+import type { SocketObjectType, SocketType } from '../utils/websocket';
+
+function* watchGames({ socket }: { socket: SocketType }): * {
   const gamesChannel = yield call(createSubscriptionChannel, socket, '/topic/games');
   try {
     while (true) {
@@ -23,7 +26,7 @@ function* watchGames({ socket }) {
   }
 }
 
-function* watchLobbyJoined({ socket }) {
+function* watchLobbyJoined({ socket }: { socket: SocketType }): * {
   const joinedLobbyChannel = yield call(createSubscriptionChannel, socket, '/user/queue/lobby/joined');
   try {
     const joinedLobby = yield take(joinedLobbyChannel);
@@ -38,21 +41,21 @@ function* watchLobbyJoined({ socket }) {
   }
 }
 
-function* createGame({ socket }) {
+function* createGame({ socket }: { socket: SocketType }): * {
   while (true) {
     const { gameName } = yield take(types.REQUEST_CREATE_GAME);
     yield apply(socket, socket.send, ['/app/lobby/create', JSON.stringify({ gameName }), {}]);
   }
 }
 
-function* joinGame({ socket }) {
+function* joinGame({ socket }: { socket: SocketType }): * {
   while (true) {
     const { gameId } = yield take(types.REQUEST_JOIN_GAME);
     yield apply(socket, socket.send, ['/app/lobby/join', JSON.stringify({ gameId }), {}]);
   }
 }
 
-function* gameBrowserSaga(socketConnection) {
+function* gameBrowserSaga(socketConnection: SocketObjectType): * {
   yield [
     call(watchGames, socketConnection),
     call(watchLobbyJoined, socketConnection),

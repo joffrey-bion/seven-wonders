@@ -5,17 +5,42 @@ import { eventChannel } from 'redux-saga';
 
 const wsURL = '/seven-wonders-websocket';
 
-export const createWsConnection = (headers: Object = {}) =>
+export type FrameType = {
+  body: string,
+  command: string,
+  header: {
+    'heart-beat': number,
+    'user-name': string,
+    version: string
+  }
+};
+export type SocketType = {
+  connect: (headers: Object, onSucces: (frame: FrameType) => void, onReject: (error: any) => void) => void,
+  subscribe: (path: string, callback: (event: any) => void) => Object
+};
+export type SocketSubscriptionType = {
+  id: string,
+  unsubscribe: () => void
+};
+export type SocketEventType = {
+  body: string
+};
+export type SocketObjectType = {
+  frame: FrameType,
+  socket: SocketType
+};
+
+export const createWsConnection = (headers: Object = {}): Promise<SocketObjectType> =>
   new Promise((resolve, reject) => {
-    let socket = Stomp.over(new SockJS(wsURL), {
+    let socket: SocketType = Stomp.over(new SockJS(wsURL), {
       debug: process.env.NODE_ENV !== 'production',
     });
-    socket.connect(headers, frame => resolve({ frame, socket }), reject);
+    socket.connect(headers, (frame: FrameType) => resolve({ frame, socket }), reject);
   });
 
-export const createSubscriptionChannel = (socket: any, path: string) => {
-  return eventChannel(emitter => {
-    const socketSubscription = socket.subscribe(path, event => {
+export const createSubscriptionChannel = (socket: SocketType, path: string) => {
+  return eventChannel((emitter: (data: any) => void) => {
+    const socketSubscription: SocketSubscriptionType = socket.subscribe(path, (event: SocketEventType) => {
       emitter(JSON.parse(event.body));
     });
     return () => socketSubscription.unsubscribe();

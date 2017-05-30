@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 
 import type { List } from 'immutable';
-import type { GamesType } from '../models/games';
-import type { PlayerType } from '../models/players';
+import type { Games } from '../models/games';
+import type { Player } from '../models/players';
 
 import { connect } from 'react-redux';
 import { Space, InlineForm, Text } from 'rebass';
@@ -15,8 +15,10 @@ import { getAllGames, actions } from '../redux/games';
 
 class GameBrowser extends Component {
   props: {
-    currentPlayer: PlayerType,
-    games: List<GamesType>
+    currentPlayer: Player,
+    games: List<Games>,
+    createGame: (gameName: string) => void,
+    joinGame: (gameId: string) => void
   };
 
   _gameName: string | void = undefined;

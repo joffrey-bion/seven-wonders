@@ -55,7 +55,7 @@ const GameRecord: GameType = Record({
 export class Game extends GameRecord {}
 
 export type GamesShape = {
-  all: Map<Games>,
+  all: Map<Game>,
   current: string
 };
 export type GamesType = Record<GamesShape>;
