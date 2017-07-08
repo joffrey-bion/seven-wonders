@@ -48,7 +48,6 @@ public class LobbyControllerTest {
 
     @Test(expected = PlayerNotFoundException.class)
     public void leave_failsWhenPlayerDoesNotExist() {
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         lobbyController.leave(principal);
     }
@@ -56,7 +55,6 @@ public class LobbyControllerTest {
     @Test(expected = PlayerNotInLobbyException.class)
     public void leave_failsWhenNotInLobby() {
         playerRepository.createOrUpdate("testuser", "Test User");
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         lobbyController.leave(principal);
     }
@@ -69,7 +67,6 @@ public class LobbyControllerTest {
         assertTrue(lobby.getPlayers().contains(player));
         assertSame(lobby, player.getLobby());
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         lobbyController.leave(principal);
 
@@ -86,7 +83,6 @@ public class LobbyControllerTest {
         assertTrue(lobby.getPlayers().contains(player2));
         assertSame(lobby, player2.getLobby());
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser2");
         lobbyController.leave(principal);
 
@@ -111,7 +107,6 @@ public class LobbyControllerTest {
         List<String> playerNames = reorderedPlayers.stream().map(Player::getUsername).collect(Collectors.toList());
         reorderPlayersAction.setOrderedPlayers(playerNames);
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         lobbyController.reorderPlayers(reorderPlayersAction, principal);
 
@@ -131,7 +126,6 @@ public class LobbyControllerTest {
         List<String> playerNames = reorderedPlayers.stream().map(Player::getUsername).collect(Collectors.toList());
         reorderPlayersAction.setOrderedPlayers(playerNames);
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser2");
         lobbyController.reorderPlayers(reorderPlayersAction, principal);
     }
@@ -159,7 +153,6 @@ public class LobbyControllerTest {
         newSettings.setWonPointsPerVictoryPerAge(new HashMap<>());
         updateSettingsAction.setSettings(newSettings);
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         lobbyController.updateSettings(updateSettingsAction, principal);
 
@@ -177,7 +170,6 @@ public class LobbyControllerTest {
         UpdateSettingsAction updateSettingsAction = new UpdateSettingsAction();
         updateSettingsAction.setSettings(new CustomizableSettings());
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser2");
         lobbyController.updateSettings(updateSettingsAction, principal);
     }
@@ -191,7 +183,6 @@ public class LobbyControllerTest {
         addPlayer(lobby, "testuser3");
         addPlayer(lobby, "testuser4");
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         lobbyController.startGame(principal);
 
@@ -206,7 +197,6 @@ public class LobbyControllerTest {
         addPlayer(lobby, "testuser2");
         addPlayer(lobby, "testuser3");
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser2");
         lobbyController.startGame(principal);
     }
