@@ -59,13 +59,13 @@ public class Lobby {
 
     public synchronized void addPlayer(Player player) throws GameAlreadyStartedException, PlayerOverflowException {
         if (hasStarted()) {
-            throw new GameAlreadyStartedException();
+            throw new GameAlreadyStartedException(name);
         }
         if (maxPlayersReached()) {
             throw new PlayerOverflowException(gameDefinition.getMaxPlayers());
         }
         if (playerNameAlreadyUsed(player.getDisplayName())) {
-            throw new PlayerNameAlreadyUsedException(player.getDisplayName());
+            throw new PlayerNameAlreadyUsedException(player.getDisplayName(), name);
         }
         player.setIndex(players.size());
         player.setLobby(this);
@@ -133,29 +133,32 @@ public class Lobby {
     }
 
     static class GameAlreadyStartedException extends IllegalStateException {
+        GameAlreadyStartedException(String name) {
+            super(String.format("Game '%s' has already started", name));
+        }
     }
 
     static class PlayerOverflowException extends IllegalStateException {
         PlayerOverflowException(int max) {
-            super(String.format("maximum %d players allowed", max));
+            super(String.format("Maximum %d players allowed", max));
         }
     }
 
     static class PlayerUnderflowException extends IllegalStateException {
         PlayerUnderflowException(int min) {
-            super(String.format("minimum %d players required to start a game", min));
+            super(String.format("Minimum %d players required to start a game", min));
         }
     }
 
     static class PlayerNameAlreadyUsedException extends IllegalStateException {
-        PlayerNameAlreadyUsedException(String name) {
-            super(name);
+        PlayerNameAlreadyUsedException(String displayName, String gameName) {
+            super(String.format("Name '%s' is already used by a player in game '%s'", displayName, gameName));
         }
     }
 
     static class UnknownPlayerException extends IllegalStateException {
         UnknownPlayerException(String username) {
-            super(username);
+            super(String.format("Unknown player '%s'", username));
         }
     }
 }
