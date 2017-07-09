@@ -20,7 +20,6 @@ public class HomeControllerTest {
         ChooseNameAction action = new ChooseNameAction();
         action.setPlayerName("Test User");
 
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
 
         Player player = homeController.chooseName(action, principal);

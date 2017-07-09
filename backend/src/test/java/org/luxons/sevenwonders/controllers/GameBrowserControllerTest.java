@@ -39,7 +39,6 @@ public class GameBrowserControllerTest {
 
     @Test
     public void listGames_initiallyEmpty() {
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
         Collection<Lobby> games = gameBrowserController.listGames(principal);
         assertTrue(games.isEmpty());
@@ -48,7 +47,6 @@ public class GameBrowserControllerTest {
     @Test
     public void createGame_success() {
         Player player = playerRepository.createOrUpdate("testuser", "Test User");
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
 
         CreateGameAction action = new CreateGameAction();
@@ -67,7 +65,6 @@ public class GameBrowserControllerTest {
 
     @Test(expected = PlayerNotFoundException.class)
     public void createGame_failsForUnknownPlayer() {
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("unknown");
 
         CreateGameAction action = new CreateGameAction();
@@ -79,7 +76,6 @@ public class GameBrowserControllerTest {
     @Test(expected = UserAlreadyInGameException.class)
     public void createGame_failsWhenAlreadyInGame() {
         playerRepository.createOrUpdate("testuser", "Test User");
-        // the Principal interface just contains a getName() method
         Principal principal = new TestPrincipal("testuser");
 
         CreateGameAction createGameAction1 = new CreateGameAction();
@@ -98,7 +94,6 @@ public class GameBrowserControllerTest {
     @Test
     public void joinGame_success() {
         Player owner = playerRepository.createOrUpdate("testowner", "Test User Owner");
-        // the Principal interface just contains a getName() method
         Principal ownerPrincipal = new TestPrincipal("testowner");
         CreateGameAction createGameAction = new CreateGameAction();
         createGameAction.setGameName("Test Game");
@@ -106,7 +101,6 @@ public class GameBrowserControllerTest {
         Lobby createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal);
 
         Player joiner = playerRepository.createOrUpdate("testjoiner", "Test User Joiner");
-        // the Principal interface just contains a getName() method
         Principal joinerPrincipal = new TestPrincipal("testjoiner");
         JoinGameAction joinGameAction = new JoinGameAction();
         joinGameAction.setGameId(createdLobby.getId());
@@ -121,7 +115,6 @@ public class GameBrowserControllerTest {
     @Test(expected = UserAlreadyInGameException.class)
     public void joinGame_failsWhenAlreadyInGame() {
         playerRepository.createOrUpdate("testowner", "Test User Owner");
-        // the Principal interface just contains a getName() method
         Principal ownerPrincipal = new TestPrincipal("testowner");
         CreateGameAction createGameAction = new CreateGameAction();
         createGameAction.setGameName("Test Game");
@@ -129,7 +122,6 @@ public class GameBrowserControllerTest {
         Lobby createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal);
 
         playerRepository.createOrUpdate("testjoiner", "Test User Joiner");
-        // the Principal interface just contains a getName() method
         Principal joinerPrincipal = new TestPrincipal("testjoiner");
         JoinGameAction joinGameAction = new JoinGameAction();
         joinGameAction.setGameId(createdLobby.getId());
