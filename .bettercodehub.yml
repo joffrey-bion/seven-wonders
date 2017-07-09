@@ -1,0 +1,8 @@
+languages:
+- java
+- javascript
+
+component_depth: 1
+
+exclude:
+- /frontend/flow-typed/npm/.*
