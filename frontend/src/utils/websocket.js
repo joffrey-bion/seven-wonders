@@ -41,7 +41,9 @@ export const createWsConnection = (headers: Object = {}): Promise<SocketObjectTy
 export const createSubscriptionChannel = (socket: SocketType, path: string) => {
   return eventChannel((emitter: (data: any) => void) => {
     const socketSubscription: SocketSubscriptionType = socket.subscribe(path, (event: SocketEventType) => {
-      emitter(JSON.parse(event.body));
+      // not all events have a body
+      const value = event.body && JSON.parse(event.body);
+      emitter(value);
     });
     return () => socketSubscription.unsubscribe();
   });
