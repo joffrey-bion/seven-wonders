@@ -5,15 +5,17 @@ import type { GameMapType, GameNormalMapType, GameShape, Game } from '../models/
 import type { Map, List } from 'immutable';
 
 export const types = {
-  UPDATE_GAMES: 'GAME/UPDATE_GAMES',
-  REQUEST_CREATE_GAME: 'GAME/REQUEST_CREATE_GAME',
-  REQUEST_JOIN_GAME: 'GAME/REQUEST_JOIN_GAME',
-  REQUEST_START_GAME: 'GAME/REQUEST_JOIN_GAME',
-  ENTER_LOBBY: 'GAME/ENTER_LOBBY',
-  ENTER_GAME: 'GAME/ENTER_GAME',
+  UPDATE_GAMES: 'GAMES/UPDATE_GAMES',
+  REQUEST_CREATE_GAME: 'GAMES/REQUEST_CREATE_GAME',
+  REQUEST_JOIN_GAME: 'GAMES/REQUEST_JOIN_GAME',
+  REQUEST_START_GAME: 'GAMES/REQUEST_JOIN_GAME',
+  ENTER_LOBBY: 'GAMES/ENTER_LOBBY',
+  ENTER_GAME: 'GAMES/ENTER_GAME',
 };
 
-type Actions = { type: 'GAME/UPDATE_GAMES', games: GameMapType } | { type: 'GAME/REQUEST_CREATE_GAME', gameId: string };
+type Actions =
+  | { type: "GAMES/UPDATE_GAMES", games: GameMapType }
+  | { type: "GAMES/REQUEST_CREATE_GAME", gameId: string };
 
 export const actions = {
   updateGames: (games: GameNormalMapType) => ({ type: types.UPDATE_GAMES, games: fromJS(games) }),
