@@ -1,5 +1,5 @@
-// flow-typed signature: 53c54fb34d5442d41873325ad8005b73
-// flow-typed version: fabec5868e/redux-saga_v0.13.x/flow_>=v0.38.x
+// flow-typed signature: b4ebba1ec37948337add98158cf5c16f
+// flow-typed version: 04b2138446/redux-saga_v0.13.x/flow_>=v0.38.x
 
 /* eslint-disable */
 
@@ -178,10 +178,15 @@ declare module 'redux-saga/effects' {
   declare type Buffer = $npm$ReduxSaga$Buffer;
   declare type Task = $npm$ReduxSaga$Task;
 
-  declare type TakeEffect<P> = $npm$ReduxSaga$IOEffect & {
+  declare type TakePatternEffect<P> = $npm$ReduxSaga$IOEffect & {
     TAKE: {
-      channel: ?Channel,
       pattern: P,
+    },
+  };
+
+  declare type TakeChannelEffect<C> = $npm$ReduxSaga$IOEffect & {
+    TAKE: {
+      channel: C,
     },
   };
 
@@ -464,8 +469,8 @@ declare module 'redux-saga/effects' {
     & (<T, Fn: SelectFnSpread<T>>(selector: Fn, t1: T, t2: T, t3: T, t4: T, t5: T, t6: T, ...rest: Array<T>) => SelectEffectSpread<Fn, T>)
 
   declare type TakeFn = {
-    <P: Pattern>(                  pattern: P): TakeEffect<P>;
-    <P: Pattern>(channel: Channel, pattern: P): TakeEffect<P>;
+    <P: Pattern>(pattern: P): TakePatternEffect<P>;
+    <C: Channel>(channel: C): TakeChannelEffect<C>;
   }
 
   declare type PutFn = {
