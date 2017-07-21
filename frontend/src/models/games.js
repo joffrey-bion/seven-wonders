@@ -8,11 +8,11 @@ export type SettingsShape = {
   discardedCardGold: number,
   defaultTradingCost: number,
   wonPointsPerVictoryPerAge: {
-    '1': number,
-    '2': number,
-    '3': number
+    "1": number,
+    "2": number,
+    "3": number
   },
-  wonderSidePickMethod: 'EACH_RANDOM' | 'TODO',
+  wonderSidePickMethod: "EACH_RANDOM" | "TODO",
   pointsPer3Gold: number
 };
 export type SettingsType = Record<SettingsShape>;
@@ -39,7 +39,7 @@ export type GameShape = {
   name: string | void,
   players: List<string>,
   settings: SettingsType,
-  state: 'LOBBY' | 'TODO'
+  state: "LOBBY" | "TODO"
 };
 export type GameType = Record<GameShape>;
 export type GameMapType = Map<string, GameShape>;

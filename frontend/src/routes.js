@@ -9,16 +9,17 @@ import HomePage from './containers/home';
 import GameBrowser from './containers/gameBrowser';
 import Lobby from './containers/lobby';
 import Error404 from './components/errors/Error404';
+import { SevenWondersSession } from './api/sevenWondersApi';
 
-export const makeSagaRoutes = wsConnection => ({
+export const makeSagaRoutes = (sevenWondersSession: SevenWondersSession) => ({
   *'/'() {
-    yield fork(homeSaga, wsConnection);
+    yield fork(homeSaga, sevenWondersSession);
   },
   *'/games'() {
-    yield fork(gameBrowserSaga, wsConnection);
+    yield fork(gameBrowserSaga, sevenWondersSession);
   },
   *'/lobby/*'() {
-    yield fork(lobbySaga, wsConnection);
+    yield fork(lobbySaga, sevenWondersSession);
   },
 });
 

@@ -1,18 +1,18 @@
 import { apply, call, put, take } from 'redux-saga/effects';
-import { createSubscriptionChannel } from '../utils/websocket';
 import { push } from 'react-router-redux';
 
 import { actions, types } from '../redux/players';
+import type { SevenWondersSession } from '../api/sevenWondersApi';
 
-function* sendUsername({ socket }) {
+function* sendUsername(session: SevenWondersSession) {
   while (true) {
     const { username } = yield take(types.REQUEST_CHOOSE_USERNAME);
-    yield apply(socket, socket.send, ['/app/chooseName', JSON.stringify({ playerName: username })]);
+    yield apply(session, session.chooseName, [username]);
   }
 }
 
-function* validateUsername({ socket }) {
-  const usernameChannel = yield call(createSubscriptionChannel, socket, '/user/queue/nameChoice');
+function* validateUsername(session: SevenWondersSession) {
+  const usernameChannel = yield apply(session, session.watchNameChoice, []);
   while (true) {
     const user = yield take(usernameChannel);
     yield put(actions.setCurrentPlayer(user));
@@ -21,9 +21,8 @@ function* validateUsername({ socket }) {
   }
 }
 
-function* usernameChoiceSaga(wsConnection) {
-  // TODO: Run sendUsername in loop when we have the ability to cancel saga on route change
-  yield [call(sendUsername, wsConnection), call(validateUsername, wsConnection)];
+function* homeSaga(session: SevenWondersSession) {
+  yield [call(sendUsername, session), call(validateUsername, session)];
 }
 
-export default usernameChoiceSaga;
+export default homeSaga;

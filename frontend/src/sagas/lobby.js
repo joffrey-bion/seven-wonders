@@ -1,5 +1,6 @@
 import { call, put, take, apply } from 'redux-saga/effects';
-import { createSubscriptionChannel } from '../utils/websocket';
+import type { Channel } from 'redux-saga';
+
 import { push } from 'react-router-redux';
 
 import { normalize } from 'normalizr';
@@ -7,15 +8,16 @@ import { game as gameSchema } from '../schemas/games';
 
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
+import { SevenWondersSession } from '../api/sevenWondersApi';
 
-function getCurrentGameId() {
+function getCurrentGameId(): number {
   const path = window.location.pathname;
   return path.split('lobby/')[1];
 }
 
-function* watchLobbyUpdates({ socket }) {
-  const currentGameId = getCurrentGameId();
-  const lobbyUpdatesChannel = yield call(createSubscriptionChannel, socket, `/topic/lobby/${currentGameId}/updated`);
+function* watchLobbyUpdates(session: SevenWondersSession) {
+  const currentGameId: number = getCurrentGameId();
+  const lobbyUpdatesChannel: Channel = yield apply(session, session.watchLobbyUpdated, [currentGameId]);
   try {
     while (true) {
       const lobby = yield take(lobbyUpdatesChannel);
@@ -28,9 +30,9 @@ function* watchLobbyUpdates({ socket }) {
   }
 }
 
-function* watchGameStart({ socket }) {
+function* watchGameStart(session: SevenWondersSession) {
   const currentGameId = getCurrentGameId();
-  const gameStartedChannel = yield call(createSubscriptionChannel, socket, `/topic/lobby/${currentGameId}/started`);
+  const gameStartedChannel = yield apply(session, session.watchGameStarted, [currentGameId]);
   try {
     yield take(gameStartedChannel);
     yield put(gameActions.enterGame());
@@ -40,19 +42,15 @@ function* watchGameStart({ socket }) {
   }
 }
 
-function* startGame({ socket }) {
+function* startGame(session: SevenWondersSession) {
   while (true) {
     yield take(types.REQUEST_START_GAME);
-    yield apply(socket, socket.send, ['/app/lobby/startGame', {}]);
+    yield apply(session, session.startGame, []);
   }
 }
 
-function* lobbySaga(socketConnection) {
-  yield [
-    call(watchLobbyUpdates, socketConnection),
-    call(watchGameStart, socketConnection),
-    call(startGame, socketConnection),
-  ];
+function* lobbySaga(session: SevenWondersSession) {
+  yield [call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)];
 }
 
 export default lobbySaga;

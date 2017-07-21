@@ -1,6 +1,5 @@
 // @flow
 import { call, put, take, apply } from 'redux-saga/effects';
-import { createSubscriptionChannel } from '../utils/websocket';
 import { push } from 'react-router-redux';
 
 import { normalize } from 'normalizr';
@@ -8,11 +7,10 @@ import { game as gameSchema, gameList as gameListSchema } from '../schemas/games
 
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
+import type { SevenWondersSession } from '../api/sevenWondersApi';
 
-import type { SocketObjectType, SocketType } from '../utils/websocket';
-
-function* watchGames({ socket }: { socket: SocketType }): * {
-  const gamesChannel = yield call(createSubscriptionChannel, socket, '/topic/games');
+function* watchGames(session: SevenWondersSession): * {
+  const gamesChannel = yield apply(session, session.watchGames, []);
   try {
     while (true) {
       const gameList = yield take(gamesChannel);
@@ -26,8 +24,8 @@ function* watchGames({ socket }: { socket: SocketType }): * {
   }
 }
 
-function* watchLobbyJoined({ socket }: { socket: SocketType }): * {
-  const joinedLobbyChannel = yield call(createSubscriptionChannel, socket, '/user/queue/lobby/joined');
+function* watchLobbyJoined(session: SevenWondersSession): * {
+  const joinedLobbyChannel = yield apply(session, session.watchLobbyJoined, []);
   try {
     const joinedLobby = yield take(joinedLobbyChannel);
     const normalized = normalize(joinedLobby, gameSchema);
@@ -41,27 +39,22 @@ function* watchLobbyJoined({ socket }: { socket: SocketType }): * {
   }
 }
 
-function* createGame({ socket }: { socket: SocketType }): * {
+function* createGame(session: SevenWondersSession): * {
   while (true) {
     const { gameName } = yield take(types.REQUEST_CREATE_GAME);
-    yield apply(socket, socket.send, ['/app/lobby/create', JSON.stringify({ gameName }), {}]);
+    yield apply(session, session.createGame, [gameName]);
   }
 }
 
-function* joinGame({ socket }: { socket: SocketType }): * {
+function* joinGame(session: SevenWondersSession): * {
   while (true) {
     const { gameId } = yield take(types.REQUEST_JOIN_GAME);
-    yield apply(socket, socket.send, ['/app/lobby/join', JSON.stringify({ gameId }), {}]);
+    yield apply(session, session.joinGame, [gameId]);
   }
 }
 
-function* gameBrowserSaga(socketConnection: SocketObjectType): * {
-  yield [
-    call(watchGames, socketConnection),
-    call(watchLobbyJoined, socketConnection),
-    call(createGame, socketConnection),
-    call(joinGame, socketConnection),
-  ];
+function* gameBrowserSaga(session: SevenWondersSession): * {
+  yield [call(watchGames, session), call(watchLobbyJoined, session), call(createGame, session), call(joinGame, session)];
 }
 
 export default gameBrowserSaga;

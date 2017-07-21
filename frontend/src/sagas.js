@@ -3,20 +3,19 @@ import { router } from 'redux-saga-router';
 import { call, fork } from 'redux-saga/effects';
 
 import { makeSagaRoutes } from './routes';
-import { createWsConnection } from './utils/websocket';
 import errorHandlingSaga from './sagas/errors';
 
-import type { SocketObjectType } from './utils/websocket';
 import type { History } from 'react-router';
+import { SevenWondersSession, createSession } from './api/sevenWondersApi';
 
 export default function* rootSaga(history: History): * {
-  let wsConnection: SocketObjectType | void;
+  let sevenWondersSession: SevenWondersSession | void;
   try {
-    wsConnection = yield call(createWsConnection);
+    sevenWondersSession = yield call(createSession);
   } catch (error) {
-    console.error('Could not connect to socket');
+    console.error('Could not connect to socket', error);
     return;
   }
-  yield fork(errorHandlingSaga, wsConnection);
-  yield* router(history, makeSagaRoutes(wsConnection));
+  yield fork(errorHandlingSaga, sevenWondersSession);
+  yield* router(history, makeSagaRoutes(sevenWondersSession));
 }
