@@ -2,19 +2,23 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ConnectedRouter } from 'react-router-redux';
+import { Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
 import './global-styles.css';
-import { routes } from './routes';
 
 import configureStore from './store';
-
+import HomePage from './containers/home';
 const initialState = {};
 const { store, history } = configureStore(initialState);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} routes={routes} />
+    <ConnectedRouter history={history}>
+      <Switch>
+        <Route path="/" component={HomePage} />
+      </Switch>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 );
