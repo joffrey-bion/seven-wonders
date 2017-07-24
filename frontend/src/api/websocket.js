@@ -1,7 +1,7 @@
 // @flow
 import SockJS from 'sockjs-client';
-import Stomp from 'webstomp-client';
 import type { Client, Frame, Options, Subscription } from 'webstomp-client';
+import Stomp from 'webstomp-client';
 
 const DEFAULT_DEBUG_OPTIONS = {
   debug: process.env.NODE_ENV !== 'production',

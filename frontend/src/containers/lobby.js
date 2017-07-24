@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
 import { List } from 'immutable';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'rebass';
 import PlayerList from '../components/playerList';
-
+import { actions, getCurrentGame } from '../redux/games';
 import { getPlayers } from '../redux/players';
-import { getCurrentGame, actions } from '../redux/games';
 
 class Lobby extends Component {
   getTitle() {

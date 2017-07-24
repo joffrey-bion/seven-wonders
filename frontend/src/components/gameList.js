@@ -1,9 +1,8 @@
 // @flow
-import React from 'react';
-import { Flex } from 'reflexbox';
-import { Text, Space, Button } from 'rebass';
-
 import type { List } from 'immutable';
+import React from 'react';
+import { Button, Space, Text } from 'rebass';
+import { Flex } from 'reflexbox';
 import type { Game } from '../models/games';
 
 const GameList = ({ games, joinGame }: { games: List<Game>, joinGame: (gameId: string) => void }) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Overlay, Panel, PanelHeader, PanelFooter, Button, Input, Close, Space } from 'rebass';
+import { Button, Close, Input, Overlay, Panel, PanelFooter, PanelHeader, Space } from 'rebass';
 
 const Modal = ({ modalOpen, toggleModal }) => (
   <Overlay open={modalOpen} onDismiss={toggleModal('usernameModal')}>

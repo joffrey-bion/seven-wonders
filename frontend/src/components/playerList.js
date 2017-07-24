@@ -1,6 +1,6 @@
 import React from 'react';
-import { Flex } from 'reflexbox';
 import { Text } from 'rebass';
+import { Flex } from 'reflexbox';
 
 const PlayerList = ({ players }) => (
   <div>

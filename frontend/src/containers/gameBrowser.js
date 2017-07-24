@@ -1,17 +1,14 @@
 // @flow
-import React, { Component } from 'react';
-
 import type { List } from 'immutable';
-import type { Games } from '../models/games';
-import type { Player } from '../models/players';
-
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Space, InlineForm, Text } from 'rebass';
+import { InlineForm, Space, Text } from 'rebass';
 import { Flex } from 'reflexbox';
 import GameList from '../components/gameList';
-
+import type { Games } from '../models/games';
+import type { Player } from '../models/players';
+import { actions, getAllGames } from '../redux/games';
 import { getCurrentPlayer } from '../redux/players';
-import { getAllGames, actions } from '../redux/games';
 
 class GameBrowser extends Component {
   props: {

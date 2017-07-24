@@ -1,15 +1,14 @@
 // @flow
 import { fork } from 'redux-saga/effects';
-import homeSaga from './sagas/home';
-import gameBrowserSaga from './sagas/gameBrowser';
-import lobbySaga from './sagas/lobby';
-
-import { HomeLayout, LobbyLayout } from './layouts';
-import HomePage from './containers/home';
-import GameBrowser from './containers/gameBrowser';
-import Lobby from './containers/lobby';
-import Error404 from './components/errors/Error404';
 import { SevenWondersSession } from './api/sevenWondersApi';
+import Error404 from './components/errors/Error404';
+import GameBrowser from './containers/gameBrowser';
+import HomePage from './containers/home';
+import Lobby from './containers/lobby';
+import { HomeLayout, LobbyLayout } from './layouts';
+import gameBrowserSaga from './sagas/gameBrowser';
+import homeSaga from './sagas/home';
+import lobbySaga from './sagas/lobby';
 
 export const makeSagaRoutes = (sevenWondersSession: SevenWondersSession) => ({
   *'/'() {

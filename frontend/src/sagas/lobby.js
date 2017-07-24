@@ -1,14 +1,13 @@
 // @flow
-import { normalize } from 'normalizr'
-import { push } from 'react-router-redux'
-import type { Channel } from 'redux-saga'
-import { eventChannel } from 'redux-saga'
-import { apply, call, put, take } from 'redux-saga/effects'
-import { SevenWondersSession } from '../api/sevenWondersApi'
-import { actions as gameActions, types } from '../redux/games'
-import { actions as playerActions } from '../redux/players'
-
-import { game as gameSchema } from '../schemas/games'
+import { normalize } from 'normalizr';
+import { push } from 'react-router-redux';
+import type { Channel } from 'redux-saga';
+import { eventChannel } from 'redux-saga';
+import { apply, call, put, take } from 'redux-saga/effects';
+import { SevenWondersSession } from '../api/sevenWondersApi';
+import { actions as gameActions, types } from '../redux/games';
+import { actions as playerActions } from '../redux/players';
+import { game as gameSchema } from '../schemas/games';
 
 function getCurrentGameId(): number {
   const path = window.location.pathname;

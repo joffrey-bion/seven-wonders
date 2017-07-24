@@ -1,8 +1,7 @@
 // @flow
-import { combineReducers } from 'redux-immutable';
-import { routerReducer } from 'react-router-redux';
 import { reducer as toastrReducer } from 'react-redux-toastr';
-
+import { routerReducer } from 'react-router-redux';
+import { combineReducers } from 'redux-immutable';
 import gamesReducer from './redux/games';
 import playersReducer from './redux/players';
 

@@ -1,13 +1,12 @@
 // @flow
-import { createStore, applyMiddleware, compose } from 'redux';
-import { browserHistory } from 'react-router';
-import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
 import { fromJS } from 'immutable';
-
-import createReducer from './reducers';
+import { browserHistory } from 'react-router';
+import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import rootSaga from './sagas';
+import createReducer from './reducers';
 import { makeSelectLocationState } from './redux/app';
+import rootSaga from './sagas';
 
 export default function configureStore(initialState: Object = {}) {
   const sagaMiddleware = createSagaMiddleware();

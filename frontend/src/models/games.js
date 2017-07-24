@@ -1,4 +1,4 @@
-import { Record, Map, List } from 'immutable';
+import { List, Map, Record } from 'immutable';
 
 export type SettingsShape = {
   initialGold: number,

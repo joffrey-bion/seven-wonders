@@ -1,5 +1,5 @@
 // @flow
-import { Record, Map } from 'immutable';
+import { Map, Record } from 'immutable';
 
 export type PlayerShape = {
   username: string,
