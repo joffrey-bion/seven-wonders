@@ -35,7 +35,7 @@ export class JsonStompClient {
 
   static parseBody<T>(message: Message): T | void {
     try {
-      return message.body && JSON.parse(message.body);
+      return message.body ? JSON.parse(message.body) : undefined;
     } catch (jsonParseError) {
       throw new Error('Cannot parse websocket message as JSON: ' + jsonParseError.message);
     }
