@@ -1,6 +1,6 @@
 // @flow
 import SockJS from 'sockjs-client';
-import type { Client, Frame, Options, Subscription } from 'webstomp-client';
+import type { Client, Frame, Message, Options, Subscription } from 'webstomp-client';
 import Stomp from 'webstomp-client';
 
 const DEFAULT_DEBUG_OPTIONS = {
@@ -18,24 +18,24 @@ export class JsonStompClient {
     this.client = client;
   }
 
-  connect(headers: Object = {}): Promise<Frame> {
+  connect(headers: Object = {}): Promise<Frame | void> {
     return new Promise((resolve, reject) => {
       this.client.connect(headers, resolve, reject);
     });
   }
 
   subscribe<T>(path: string, callback: Callback<T>): UnsubscribeFn {
-    const socketSubscription: Subscription = this.client.subscribe(path, (frame: Frame) => {
+    const socketSubscription: Subscription = this.client.subscribe(path, (message: Message) => {
       // not all frames have a JSON body
-      const value: T = frame && JsonStompClient.parseBody(frame);
+      const value: T | void = message && JsonStompClient.parseBody(message);
       callback(value);
     });
     return () => socketSubscription.unsubscribe();
   }
 
-  static parseBody<T>(frame: Frame): T | void {
+  static parseBody<T>(message: Message): T | void {
     try {
-      return frame.body && JSON.parse(frame.body);
+      return message.body && JSON.parse(message.body);
     } catch (jsonParseError) {
       throw new Error('Cannot parse websocket message as JSON: ' + jsonParseError.message);
     }
