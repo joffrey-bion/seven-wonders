@@ -25,19 +25,19 @@ export type PlayersShape = {
 export type PlayersType = Record<PlayersShape>;
 
 const PlayersRecord: PlayersType = Record({
-  all: new Map(),
+  all: Map(),
   current: '',
 });
 // $FlowFixMe
 export default class PlayerState extends PlayersRecord {
   addPlayer(p: PlayerShape) {
     const player: Player = new Player(p);
-    const playerMap = new Map(({ [player.username]: player }: { [key: string]: Player }));
+    const playerMap = Map({ [player.username]: player });
     return this.addPlayers(playerMap).set('current', player.username);
   }
 
   addPlayers(p: Map<string, PlayerShape>) {
-    const players: Map<string, PlayerShape> = new Map(p);
+    const players: Map<string, PlayerShape> = Map(p);
     return this.mergeIn(['all'], players.map((player: PlayerShape): Player => new Player(player)));
   }
 }
