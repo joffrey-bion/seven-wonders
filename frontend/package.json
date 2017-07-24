@@ -22,7 +22,6 @@
     "redux": "^3.6.0",
     "redux-immutable": "^4.0.0",
     "redux-saga": "^0.13.0",
-    "redux-saga-router": "^2.1.0",
     "reflexbox": "^2.2.3",
     "reselect": "^3.0.1",
     "sockjs-client": "^1.1.4",

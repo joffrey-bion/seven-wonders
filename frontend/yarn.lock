@@ -2629,10 +2629,6 @@ fsevents@1.0.17, fsevents@^1.0.0:
     nan "^2.3.0"
     node-pre-gyp "^0.6.29"
 
-fsm-iterator@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/fsm-iterator/-/fsm-iterator-1.0.0.tgz#b82821315d6d5d0f44c9f3228f41851b59dc45c6"
-
 fstream-ignore@~1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/fstream-ignore/-/fstream-ignore-1.0.5.tgz#9c31dae34767018fe1d249b24dada67d092da105"
@@ -2880,16 +2876,6 @@ history@^3.0.0:
     invariant "^2.2.1"
     loose-envify "^1.2.0"
     query-string "^4.2.2"
-    warning "^3.0.0"
-
-history@^4.3.0:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/history/-/history-4.6.1.tgz#911cf8eb65728555a94f2b12780a0c531a14d2fd"
-  dependencies:
-    invariant "^2.2.1"
-    loose-envify "^1.2.0"
-    resolve-pathname "^2.0.0"
-    value-equal "^0.2.0"
     warning "^3.0.0"
 
 hmac-drbg@^1.0.0:
@@ -5335,14 +5321,6 @@ redux-immutable@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-4.0.0.tgz#3a1a32df66366462b63691f0e1dc35e472bbc9f3"
 
-redux-saga-router@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/redux-saga-router/-/redux-saga-router-2.1.0.tgz#d049962ad6a44d227f0308aedb75e39c13f58413"
-  dependencies:
-    fsm-iterator "^1.0.0"
-    history "^4.3.0"
-    ruta3 "^2.0.1"
-
 redux-saga@^0.13.0:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.13.0.tgz#9294386550deb0d56bc9a1b3c90a613e7ddb6593"
@@ -5517,10 +5495,6 @@ resolve-from@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-1.0.1.tgz#26cbfe935d1aeeeabb29bc3fe5aeb01e93d44226"
 
-resolve-pathname@^2.0.0:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/resolve-pathname/-/resolve-pathname-2.0.2.tgz#e55c016eb2e9df1de98e85002282bfb38c630436"
-
 resolve@1.1.7, resolve@^1.1.6:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
@@ -5591,10 +5565,6 @@ run-async@^2.2.0:
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.3.0.tgz#0371ab4ae0bdd720d4166d7dfda64ff7a445a6c0"
   dependencies:
     is-promise "^2.1.0"
-
-ruta3@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ruta3/-/ruta3-2.0.1.tgz#b40efa789e6cfce0abf3a5a38bf64cb45abdc18e"
 
 rx-lite@^3.1.2:
   version "3.1.2"
@@ -6359,10 +6329,6 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
-
-value-equal@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-0.2.0.tgz#4f41c60a3fc011139a2ec3d3340a8998ae8b69c0"
 
 vary@~1.1.0:
   version "1.1.0"
