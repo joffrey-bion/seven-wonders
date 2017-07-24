@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "babel-polyfill": "latest",
-    "flow-bin": "^0.46.0",
+    "flow-bin": "^0.51.0",
     "flow-typed": "^2.1.2",
     "prettier-eslint-cli": "^4.0.1",
     "react-scripts": "^1.0.7"
