@@ -1,66 +1,82 @@
-import { createJsonSubscriptionChannel, createStompSession } from './websocket';
-import type { Client } from 'webstomp-client';
-import type { Channel } from 'redux-saga';
+import { createJsonStompClient, JsonStompClient, Callback } from './websocket';
+import { ApiError, ApiLobby, ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo, ApiPreparedCard, ApiTable } from './model';
 
 const wsURL = '/seven-wonders-websocket';
 
 export class SevenWondersSession {
-  client: Client;
+  client: JsonStompClient;
 
-  constructor(client: Client) {
+  constructor(client: JsonStompClient) {
     this.client = client;
   }
 
-  watchErrors(): Channel<ApiError> {
-    return createJsonSubscriptionChannel(this.client, '/user/queue/errors');
+  watchErrors(callback: Callback<ApiError>): void {
+    return this.client.subscribe('/user/queue/errors', callback);
   }
 
   chooseName(displayName: string): void {
-    this.client.send('/app/chooseName', JSON.stringify({ playerName: displayName }));
+    this.client.send('/app/chooseName', { playerName: displayName });
   }
 
-  watchNameChoice(): Channel<Object> {
-    return createJsonSubscriptionChannel(this.client, '/user/queue/nameChoice');
+  watchNameChoice(callback: Callback<ApiPlayer>): void {
+    return this.client.subscribe('/user/queue/nameChoice', callback);
   }
 
-  watchGames(): Channel<Object> {
-    return createJsonSubscriptionChannel(this.client, '/topic/games');
+  watchGames(callback: Callback<ApiLobby[]>): void {
+    return this.client.subscribe('/topic/games', callback);
   }
 
-  watchLobbyJoined(): Channel<Object> {
-    return createJsonSubscriptionChannel(this.client, '/user/queue/lobby/joined');
+  watchLobbyJoined(callback: Callback<Object>): void {
+    return this.client.subscribe('/user/queue/lobby/joined', callback);
   }
 
-  watchLobbyUpdated(currentGameId: number): Channel<Object> {
-    return createJsonSubscriptionChannel(this.client, `/topic/lobby/${currentGameId}/updated`);
+  watchLobbyUpdated(currentGameId: number, callback: Callback<Object>): void {
+    return this.client.subscribe(`/topic/lobby/${currentGameId}/updated`, callback);
   }
 
-  watchGameStarted(currentGameId: number): Channel<Object> {
-    return createJsonSubscriptionChannel(this.client, `/topic/lobby/${currentGameId}/started`);
+  watchGameStarted(currentGameId: number, callback: Callback<Object>): void {
+    return this.client.subscribe(`/topic/lobby/${currentGameId}/started`, callback);
   }
 
   createGame(gameName: string): void {
-    this.client.send('/app/lobby/create', JSON.stringify({ gameName }));
+    this.client.send('/app/lobby/create', { gameName });
   }
 
   joinGame(gameId: number): void {
-    this.client.send('/app/lobby/join', JSON.stringify({ gameId }));
+    this.client.send('/app/lobby/join', { gameId });
   }
 
   startGame(): void {
-    this.client.send('/app/lobby/startGame', {});
+    this.client.send('/app/lobby/startGame');
+  }
+
+  watchPlayerReady(currentGameId: number, callback: Callback<string>): void {
+    return this.client.subscribe(`/topic/game/${currentGameId}/playerReady`, callback);
+  }
+
+  watchTableUpdates(currentGameId: number, callback: Callback<ApiTable>): void {
+    return this.client.subscribe(`/topic/game/${currentGameId}/tableUpdates`, callback);
+  }
+
+  watchPreparedMove(currentGameId: number, callback: Callback<ApiPreparedCard>): void {
+    return this.client.subscribe(`/topic/game/${currentGameId}/prepared`, callback);
+  }
+
+  watchTurnInfo(callback: Callback<ApiPlayerTurnInfo>): void {
+    return this.client.subscribe('/user/queue/game/turnInfo', callback);
+  }
+
+  sayReady(): void {
+    this.client.send('/app/game/sayReady');
+  }
+
+  prepareMove(move: ApiPlayerMove): void {
+    this.client.send('/app/game/sayReady', { move });
   }
 }
 
-export function createSession(): Promise<SevenWondersSession> {
-  return createStompSession(wsURL).then(client => new SevenWondersSession(client));
-}
-
-export class ApiError {
-  message: string;
-  details: ApiErrorDetail[];
-}
-
-export class ApiErrorDetail {
-  message: string;
+export async function connectToGame(): Promise<SevenWondersSession> {
+  const jsonStompClient: JsonStompClient = createJsonStompClient(wsURL);
+  await jsonStompClient.connect();
+  return new SevenWondersSession(jsonStompClient);
 }

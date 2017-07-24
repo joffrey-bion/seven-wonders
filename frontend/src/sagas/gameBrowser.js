@@ -8,9 +8,10 @@ import { game as gameSchema, gameList as gameListSchema } from '../schemas/games
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
+import { createChannel } from './utils';
 
 function* watchGames(session: SevenWondersSession): * {
-  const gamesChannel = yield apply(session, session.watchGames, []);
+  const gamesChannel = yield createChannel(session, session.watchGames);
   try {
     while (true) {
       const gameList = yield take(gamesChannel);
@@ -25,7 +26,7 @@ function* watchGames(session: SevenWondersSession): * {
 }
 
 function* watchLobbyJoined(session: SevenWondersSession): * {
-  const joinedLobbyChannel = yield apply(session, session.watchLobbyJoined, []);
+  const joinedLobbyChannel = yield createChannel(session, session.watchLobbyJoined);
   try {
     const joinedLobby = yield take(joinedLobbyChannel);
     const normalized = normalize(joinedLobby, gameSchema);
@@ -54,7 +55,12 @@ function* joinGame(session: SevenWondersSession): * {
 }
 
 function* gameBrowserSaga(session: SevenWondersSession): * {
-  yield [call(watchGames, session), call(watchLobbyJoined, session), call(createGame, session), call(joinGame, session)];
+  yield [
+    call(watchGames, session),
+    call(watchLobbyJoined, session),
+    call(createGame, session),
+    call(joinGame, session),
+  ];
 }
 
 export default gameBrowserSaga;

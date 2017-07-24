@@ -1,32 +1,49 @@
 // @flow
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
-import type { Client, Frame, Subscription } from 'webstomp-client';
+import type { Client, Frame, Options, Subscription } from 'webstomp-client';
 
-import { eventChannel } from 'redux-saga';
-import type { Channel } from 'redux-saga';
+const DEFAULT_DEBUG_OPTIONS = {
+  debug: process.env.NODE_ENV !== 'production',
+};
 
-function createStompClient(url: string): Client {
-  return Stomp.over(new SockJS(url), {
-    debug: process.env.NODE_ENV !== 'production',
-  });
-}
+export type Callback<T> = (value: T) => void;
 
-export function createStompSession(url: string, headers: Object = {}): Promise<Client> {
-  return new Promise((resolve, reject) => {
-    const client: Client = createStompClient(url);
-    const onSuccess = (frame: Frame) => resolve(client);
-    client.connect(headers, onSuccess, reject);
-  });
-}
+export type Callable = () => void;
 
-export function createJsonSubscriptionChannel(client: Client, path: string): Channel {
-  return eventChannel((emitter: (data: any) => void) => {
-    const socketSubscription: Subscription = client.subscribe(path, (frame: Frame) => {
+export class JsonStompClient {
+  client: Client;
+
+  constructor(client: Client) {
+    this.client = client;
+  }
+
+  connect(headers: Object = {}): Promise<Frame> {
+    return new Promise((resolve, reject) => {
+      this.client.connect(headers, resolve, reject);
+    });
+  }
+
+  subscribe<T>(path: string, callback: Callback<T>): Callable {
+    const socketSubscription: Subscription = this.client.subscribe(path, (frame: Frame) => {
       // not all frames have a JSON body
       const value = frame && frame.body && JSON.parse(frame.body);
-      emitter(value);
+      callback(value);
     });
     return () => socketSubscription.unsubscribe();
-  });
+  }
+
+  send(url: string, body: Object) {
+    const strBody = body ? JSON.stringify(body) : '';
+    this.client.send(url, strBody);
+  }
+}
+
+function createStompClient(url: string, options: Options = {}): Client {
+  const optionsWithDebug = Object.assign({}, DEFAULT_DEBUG_OPTIONS, options);
+  return Stomp.over(new SockJS(url), optionsWithDebug);
+}
+
+export function createJsonStompClient(url: string, options: Options = {}): JsonStompClient {
+  return new JsonStompClient(createStompClient(url, options));
 }

@@ -9,6 +9,7 @@ import { game as gameSchema } from '../schemas/games';
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
 import { SevenWondersSession } from '../api/sevenWondersApi';
+import { createChannel } from './utils';
 
 function getCurrentGameId(): number {
   const path = window.location.pathname;
@@ -17,7 +18,7 @@ function getCurrentGameId(): number {
 
 function* watchLobbyUpdates(session: SevenWondersSession) {
   const currentGameId: number = getCurrentGameId();
-  const lobbyUpdatesChannel: Channel = yield apply(session, session.watchLobbyUpdated, [currentGameId]);
+  const lobbyUpdatesChannel: Channel = yield createChannel(session, session.watchLobbyUpdated, currentGameId);
   try {
     while (true) {
       const lobby = yield take(lobbyUpdatesChannel);
@@ -32,7 +33,7 @@ function* watchLobbyUpdates(session: SevenWondersSession) {
 
 function* watchGameStart(session: SevenWondersSession) {
   const currentGameId = getCurrentGameId();
-  const gameStartedChannel = yield apply(session, session.watchGameStarted, [currentGameId]);
+  const gameStartedChannel = yield createChannel(session, session.watchGameStarted, currentGameId);
   try {
     yield take(gameStartedChannel);
     yield put(gameActions.enterGame());

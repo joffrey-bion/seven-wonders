@@ -3,6 +3,7 @@ import { push } from 'react-router-redux';
 
 import { actions, types } from '../redux/players';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
+import { createChannel } from './utils';
 
 function* sendUsername(session: SevenWondersSession) {
   while (true) {
@@ -12,7 +13,7 @@ function* sendUsername(session: SevenWondersSession) {
 }
 
 function* validateUsername(session: SevenWondersSession) {
-  const usernameChannel = yield apply(session, session.watchNameChoice, []);
+  const usernameChannel = yield createChannel(session, session.watchNameChoice);
   while (true) {
     const user = yield take(usernameChannel);
     yield put(actions.setCurrentPlayer(user));
