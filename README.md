@@ -34,10 +34,11 @@ is available. It is in construction as well because I'm adding wesocket support 
 The client is just at the start of the development. It handles:
 - Username choice
 - Create / Join a game
-
-Missing steps:
 - View joined lobby
 - Start game
+
+Missing steps:
+- View game elements
 - Whole game process
 - Scoring
 
