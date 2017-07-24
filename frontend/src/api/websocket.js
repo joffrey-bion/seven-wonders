@@ -7,9 +7,9 @@ const DEFAULT_DEBUG_OPTIONS = {
   debug: process.env.NODE_ENV !== 'production',
 };
 
-export type Callback<T> = (value: T) => void;
-
-export type Callable = () => void;
+export type Callback<T> = (value?: T) => void;
+export type UnsubscribeFn = () => void;
+export type SubscribeFn<T> = (callback: Callback<T>) => UnsubscribeFn;
 
 export class JsonStompClient {
   client: Client;
@@ -24,16 +24,28 @@ export class JsonStompClient {
     });
   }
 
-  subscribe<T>(path: string, callback: Callback<T>): Callable {
+  subscribe<T>(path: string, callback: Callback<T>): UnsubscribeFn {
     const socketSubscription: Subscription = this.client.subscribe(path, (frame: Frame) => {
       // not all frames have a JSON body
-      const value = frame && frame.body && JSON.parse(frame.body);
+      const value: T = frame && JsonStompClient.parseBody(frame);
       callback(value);
     });
     return () => socketSubscription.unsubscribe();
   }
 
-  send(url: string, body: Object) {
+  static parseBody<T>(frame: Frame): T | void {
+    try {
+      return frame.body && JSON.parse(frame.body);
+    } catch (jsonParseError) {
+      throw new Error('Cannot parse websocket message as JSON: ' + jsonParseError.message);
+    }
+  }
+
+  subscriber<T>(path: string): SubscribeFn<T> {
+    return (callback: Callback<T>) => this.subscribe(path, callback);
+  }
+
+  send(url: string, body?: Object) {
     const strBody = body ? JSON.stringify(body) : '';
     this.client.send(url, strBody);
   }

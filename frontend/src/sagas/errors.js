@@ -1,10 +1,13 @@
-import {apply, cancelled, take} from 'redux-saga/effects';
-import {toastr} from 'react-redux-toastr';
-import {ApiError, SevenWondersSession} from '../api/sevenWondersApi';
-import type {Channel} from 'redux-saga';
+// @flow
+import { toastr } from 'react-redux-toastr'
+import type { Channel } from 'redux-saga'
+import { eventChannel } from 'redux-saga'
+import { apply, cancelled, take } from 'redux-saga/effects'
+import type { ApiError } from '../api/model'
+import type { SevenWondersSession } from '../api/sevenWondersApi'
 
-export default function* errorHandlingSaga(session: SevenWondersSession) {
-  const errorChannel: Channel<ApiError> = yield apply(session, session.watchErrors, []);
+export default function* errorHandlingSaga(session: SevenWondersSession): * {
+  const errorChannel: Channel<ApiError> = yield eventChannel(session.watchErrors());
   try {
     while (true) {
       const error: ApiError = yield take(errorChannel);
@@ -18,7 +21,7 @@ export default function* errorHandlingSaga(session: SevenWondersSession) {
   }
 }
 
-function* handleOneError(err: ApiError) {
+function* handleOneError(err: ApiError): * {
   console.error('Error received on web socket channel', err);
   const msg = buildMsg(err);
   yield apply(toastr, toastr.error, [msg, { icon: 'error' }]);

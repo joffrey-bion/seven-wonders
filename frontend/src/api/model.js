@@ -1,15 +1,16 @@
-export class ApiError {
+// @flow
+export type ApiError = {
   message: string;
   details: ApiErrorDetail[];
 }
 
-export class ApiErrorDetail {
+export type ApiErrorDetail = {
   message: string;
 }
 
 export type ApiGameState = "LOBBY" | "PLAYING";
 
-export class ApiLobby {
+export type ApiLobby = {
   id: number;
   name: string;
   owner: ApiPlayer;
@@ -20,7 +21,7 @@ export class ApiLobby {
 
 export type ApiWonderSidePickMethod = "EACH_RANDOM" | "ALL_A" | "ALL_B" | "SAME_RANDOM_FOR_ALL";
 
-export class ApiSettings {
+export type ApiSettings = {
   randomSeedForTests: number;
   timeLimitInSeconds: number;
   wonderSidePickMethod: ApiWonderSidePickMethod;
@@ -32,26 +33,28 @@ export class ApiSettings {
   wonPointsPerVictoryPerAge: Map<number, number>;
 }
 
-export class ApiPlayer {
+export type ApiPlayer = {
   username: string;
   displayName: string;
   index: number;
   ready: boolean;
 }
 
-export class ApiTable {}
+export type ApiTable = {}
 
-export class ApiHandCard {}
+export type ApiAction = {}
 
-export class ApiCard {}
+export type ApiHandCard = {}
 
-export class ApiPreparedCard {}
+export type ApiCard = {}
 
-export class ApiPlayerTurnInfo {
+export type ApiPreparedCard = {}
+
+export type ApiPlayerTurnInfo = {
   playerIndex: number;
   table: ApiTable;
   currentAge: number;
-  action: Action;
+  action: ApiAction;
   hand: ApiHandCard[];
   neighbourGuildCards: ApiCard[];
   message: string;
@@ -61,15 +64,15 @@ export type ApiMoveType = "PLAY" | "PLAY_FREE" | "UPGRADE_WONDER" | "DISCARD" | 
 export type ApiProvider = "LEFT_NEIGHBOUR" | "RIGHT_NEIGHBOUR";
 export type ApiResourceType = "WOOD" | "STONE" | "ORE" | "CLAY" | "GLASS" | "PAPYRUS" | "LOOM";
 
-export class ApiResources {
+export type ApiResources = {
   quantities: Map<ApiResourceType, number>;
 }
-export class ApiBoughtResources {
+export type ApiBoughtResources = {
   provider: ApiProvider;
   resources: ApiResources;
 }
 
-export class ApiPlayerMove {
+export type ApiPlayerMove = {
   type: ApiMoveType;
   cardName: string;
   boughtResources: ApiBoughtResources[];

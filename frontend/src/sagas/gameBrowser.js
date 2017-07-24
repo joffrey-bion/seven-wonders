@@ -1,17 +1,16 @@
 // @flow
-import { call, put, take, apply } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import { normalize } from 'normalizr'
+import { push } from 'react-router-redux'
+import { eventChannel } from 'redux-saga'
+import { apply, call, put, take } from 'redux-saga/effects'
+import type { SevenWondersSession } from '../api/sevenWondersApi'
 
-import { normalize } from 'normalizr';
-import { game as gameSchema, gameList as gameListSchema } from '../schemas/games';
-
-import { actions as gameActions, types } from '../redux/games';
-import { actions as playerActions } from '../redux/players';
-import type { SevenWondersSession } from '../api/sevenWondersApi';
-import { createChannel } from './utils';
+import { actions as gameActions, types } from '../redux/games'
+import { actions as playerActions } from '../redux/players'
+import { game as gameSchema, gameList as gameListSchema } from '../schemas/games'
 
 function* watchGames(session: SevenWondersSession): * {
-  const gamesChannel = yield createChannel(session, session.watchGames);
+  const gamesChannel = yield eventChannel(session.watchGames());
   try {
     while (true) {
       const gameList = yield take(gamesChannel);
@@ -26,7 +25,7 @@ function* watchGames(session: SevenWondersSession): * {
 }
 
 function* watchLobbyJoined(session: SevenWondersSession): * {
-  const joinedLobbyChannel = yield createChannel(session, session.watchLobbyJoined);
+  const joinedLobbyChannel = yield eventChannel(session.watchLobbyJoined());
   try {
     const joinedLobby = yield take(joinedLobbyChannel);
     const normalized = normalize(joinedLobby, gameSchema);

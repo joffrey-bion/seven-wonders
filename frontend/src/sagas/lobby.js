@@ -1,24 +1,23 @@
-import { call, put, take, apply } from 'redux-saga/effects';
-import type { Channel } from 'redux-saga';
+// @flow
+import { normalize } from 'normalizr'
+import { push } from 'react-router-redux'
+import type { Channel } from 'redux-saga'
+import { eventChannel } from 'redux-saga'
+import { apply, call, put, take } from 'redux-saga/effects'
+import { SevenWondersSession } from '../api/sevenWondersApi'
+import { actions as gameActions, types } from '../redux/games'
+import { actions as playerActions } from '../redux/players'
 
-import { push } from 'react-router-redux';
-
-import { normalize } from 'normalizr';
-import { game as gameSchema } from '../schemas/games';
-
-import { actions as gameActions, types } from '../redux/games';
-import { actions as playerActions } from '../redux/players';
-import { SevenWondersSession } from '../api/sevenWondersApi';
-import { createChannel } from './utils';
+import { game as gameSchema } from '../schemas/games'
 
 function getCurrentGameId(): number {
   const path = window.location.pathname;
   return path.split('lobby/')[1];
 }
 
-function* watchLobbyUpdates(session: SevenWondersSession) {
+function* watchLobbyUpdates(session: SevenWondersSession): * {
   const currentGameId: number = getCurrentGameId();
-  const lobbyUpdatesChannel: Channel = yield createChannel(session, session.watchLobbyUpdated, currentGameId);
+  const lobbyUpdatesChannel: Channel = yield eventChannel(session.watchLobbyUpdated(currentGameId));
   try {
     while (true) {
       const lobby = yield take(lobbyUpdatesChannel);
@@ -31,9 +30,9 @@ function* watchLobbyUpdates(session: SevenWondersSession) {
   }
 }
 
-function* watchGameStart(session: SevenWondersSession) {
+function* watchGameStart(session: SevenWondersSession): * {
   const currentGameId = getCurrentGameId();
-  const gameStartedChannel = yield createChannel(session, session.watchGameStarted, currentGameId);
+  const gameStartedChannel = yield eventChannel(session.watchGameStarted(currentGameId));
   try {
     yield take(gameStartedChannel);
     yield put(gameActions.enterGame());
@@ -43,14 +42,14 @@ function* watchGameStart(session: SevenWondersSession) {
   }
 }
 
-function* startGame(session: SevenWondersSession) {
+function* startGame(session: SevenWondersSession): * {
   while (true) {
     yield take(types.REQUEST_START_GAME);
     yield apply(session, session.startGame, []);
   }
 }
 
-function* lobbySaga(session: SevenWondersSession) {
+function* lobbySaga(session: SevenWondersSession): * {
   yield [call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)];
 }
 

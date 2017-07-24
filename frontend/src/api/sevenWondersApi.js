@@ -1,5 +1,7 @@
-import { createJsonStompClient, JsonStompClient, Callback } from './websocket';
-import { ApiError, ApiLobby, ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo, ApiPreparedCard, ApiTable } from './model';
+// @flow
+import { createJsonStompClient } from './websocket';
+import type { JsonStompClient, SubscribeFn } from './websocket'
+import type { ApiError, ApiLobby, ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo, ApiPreparedCard, ApiTable } from './model';
 
 const wsURL = '/seven-wonders-websocket';
 
@@ -10,32 +12,32 @@ export class SevenWondersSession {
     this.client = client;
   }
 
-  watchErrors(callback: Callback<ApiError>): void {
-    return this.client.subscribe('/user/queue/errors', callback);
+  watchErrors(): SubscribeFn<ApiError> {
+    return this.client.subscriber('/user/queue/errors');
   }
 
   chooseName(displayName: string): void {
     this.client.send('/app/chooseName', { playerName: displayName });
   }
 
-  watchNameChoice(callback: Callback<ApiPlayer>): void {
-    return this.client.subscribe('/user/queue/nameChoice', callback);
+  watchNameChoice(): SubscribeFn<ApiPlayer> {
+    return this.client.subscriber('/user/queue/nameChoice');
   }
 
-  watchGames(callback: Callback<ApiLobby[]>): void {
-    return this.client.subscribe('/topic/games', callback);
+  watchGames(): SubscribeFn<ApiLobby[]> {
+    return this.client.subscriber('/topic/games');
   }
 
-  watchLobbyJoined(callback: Callback<Object>): void {
-    return this.client.subscribe('/user/queue/lobby/joined', callback);
+  watchLobbyJoined(): SubscribeFn<Object> {
+    return this.client.subscriber('/user/queue/lobby/joined');
   }
 
-  watchLobbyUpdated(currentGameId: number, callback: Callback<Object>): void {
-    return this.client.subscribe(`/topic/lobby/${currentGameId}/updated`, callback);
+  watchLobbyUpdated(currentGameId: number): SubscribeFn<Object> {
+    return this.client.subscriber(`/topic/lobby/${currentGameId}/updated`);
   }
 
-  watchGameStarted(currentGameId: number, callback: Callback<Object>): void {
-    return this.client.subscribe(`/topic/lobby/${currentGameId}/started`, callback);
+  watchGameStarted(currentGameId: number): SubscribeFn<Object> {
+    return this.client.subscriber(`/topic/lobby/${currentGameId}/started`);
   }
 
   createGame(gameName: string): void {
@@ -50,20 +52,20 @@ export class SevenWondersSession {
     this.client.send('/app/lobby/startGame');
   }
 
-  watchPlayerReady(currentGameId: number, callback: Callback<string>): void {
-    return this.client.subscribe(`/topic/game/${currentGameId}/playerReady`, callback);
+  watchPlayerReady(currentGameId: number): SubscribeFn<string> {
+    return this.client.subscriber(`/topic/game/${currentGameId}/playerReady`);
   }
 
-  watchTableUpdates(currentGameId: number, callback: Callback<ApiTable>): void {
-    return this.client.subscribe(`/topic/game/${currentGameId}/tableUpdates`, callback);
+  watchTableUpdates(currentGameId: number): SubscribeFn<ApiTable> {
+    return this.client.subscriber(`/topic/game/${currentGameId}/tableUpdates`);
   }
 
-  watchPreparedMove(currentGameId: number, callback: Callback<ApiPreparedCard>): void {
-    return this.client.subscribe(`/topic/game/${currentGameId}/prepared`, callback);
+  watchPreparedMove(currentGameId: number): SubscribeFn<ApiPreparedCard> {
+    return this.client.subscriber(`/topic/game/${currentGameId}/prepared`);
   }
 
-  watchTurnInfo(callback: Callback<ApiPlayerTurnInfo>): void {
-    return this.client.subscribe('/user/queue/game/turnInfo', callback);
+  watchTurnInfo(): SubscribeFn<ApiPlayerTurnInfo> {
+    return this.client.subscriber('/user/queue/game/turnInfo');
   }
 
   sayReady(): void {
