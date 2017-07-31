@@ -1,6 +1,12 @@
 // @flow
 import type {
-  ApiError, ApiLobby, ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo, ApiPreparedCard, ApiTable,
+  ApiError,
+  ApiLobby,
+  ApiPlayer,
+  ApiPlayerMove,
+  ApiPlayerTurnInfo,
+  ApiPreparedCard,
+  ApiTable,
 } from './model';
 import type { JsonStompClient, SubscribeFn } from './websocket';
 import { createJsonStompClient } from './websocket';
