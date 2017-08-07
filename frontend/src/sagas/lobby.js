@@ -3,7 +3,7 @@ import { normalize } from 'normalizr';
 import { push } from 'react-router-redux';
 import type { Channel } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
-import { apply, call, put, take } from 'redux-saga/effects';
+import { apply, call, put, take, all } from 'redux-saga/effects';
 import { SevenWondersSession } from '../api/sevenWondersApi';
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
@@ -49,7 +49,7 @@ function* startGame(session: SevenWondersSession): * {
 }
 
 function* lobbySaga(session: SevenWondersSession): * {
-  yield [call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)];
+  yield all([call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)]);
 }
 
 export default lobbySaga;

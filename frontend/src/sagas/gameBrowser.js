@@ -2,7 +2,7 @@
 import { normalize } from 'normalizr';
 import { push } from 'react-router-redux';
 import { eventChannel } from 'redux-saga';
-import { apply, call, put, take } from 'redux-saga/effects';
+import { apply, call, put, take, all } from 'redux-saga/effects';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
 import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
@@ -41,6 +41,7 @@ function* watchLobbyJoined(session: SevenWondersSession): * {
 function* createGame(session: SevenWondersSession): * {
   while (true) {
     const { gameName } = yield take(types.REQUEST_CREATE_GAME);
+    // $FlowFixMe
     yield apply(session, session.createGame, [gameName]);
   }
 }
@@ -48,17 +49,18 @@ function* createGame(session: SevenWondersSession): * {
 function* joinGame(session: SevenWondersSession): * {
   while (true) {
     const { gameId } = yield take(types.REQUEST_JOIN_GAME);
+    // $FlowFixMe
     yield apply(session, session.joinGame, [gameId]);
   }
 }
 
 function* gameBrowserSaga(session: SevenWondersSession): * {
-  yield [
+  yield all([
     call(watchGames, session),
     call(watchLobbyJoined, session),
     call(createGame, session),
     call(joinGame, session),
-  ];
+  ]);
 }
 
 export default gameBrowserSaga;

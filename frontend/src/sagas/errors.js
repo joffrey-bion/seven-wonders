@@ -7,7 +7,7 @@ import type { ApiError } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
 
 export default function* errorHandlingSaga(session: SevenWondersSession): * {
-  const errorChannel: Channel<ApiError> = yield eventChannel(session.watchErrors());
+  const errorChannel: Channel = yield eventChannel(session.watchErrors());
   try {
     while (true) {
       const error: ApiError = yield take(errorChannel);

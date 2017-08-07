@@ -7,7 +7,6 @@ import HomeLayout from './components/HomeLayout';
 
 class SplashScreen extends Component {
   play = e => {
-    e.preventDefault();
     if (this._username !== undefined) {
       this.props.chooseUsername(this._username);
     }

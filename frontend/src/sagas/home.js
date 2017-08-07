@@ -1,7 +1,7 @@
 // @flow
 import { push } from 'react-router-redux';
 import { eventChannel } from 'redux-saga';
-import { apply, call, put, take } from 'redux-saga/effects';
+import { apply, call, put, take, all } from 'redux-saga/effects';
 import type { ApiPlayer } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
 
@@ -10,6 +10,7 @@ import { actions, types } from '../redux/players';
 function* sendUsername(session: SevenWondersSession): * {
   while (true) {
     const { username } = yield take(types.REQUEST_CHOOSE_USERNAME);
+    // $FlowFixMe
     yield apply(session, session.chooseName, [username]);
   }
 }
@@ -25,7 +26,7 @@ function* validateUsername(session: SevenWondersSession): * {
 }
 
 function* homeSaga(session: SevenWondersSession): * {
-  yield [call(sendUsername, session), call(validateUsername, session)];
+  yield all([call(sendUsername, session), call(validateUsername, session)]);
 }
 
 export default homeSaga;
