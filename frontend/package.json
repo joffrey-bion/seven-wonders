@@ -10,7 +10,6 @@
     "react-scripts": "^1.0.10"
   },
   "dependencies": {
-    "babel-polyfill": "^6.23.0",
     "history": "^4.6.3",
     "immutable": "^3.8.1",
     "normalizr": "^3.2.3",
