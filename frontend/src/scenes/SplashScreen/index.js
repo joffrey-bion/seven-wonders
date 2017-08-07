@@ -1,12 +1,17 @@
+// @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Container, Input } from 'rebass';
+import { Container } from 'rebass';
 import { actions } from '../../redux/players';
 
+import { InputGroup, Button, Classes, Intent } from '@blueprintjs/core';
 import HomeLayout from './components/HomeLayout';
 
 class SplashScreen extends Component {
+  _username = '';
+
   play = e => {
+    e.preventDefault();
     if (this._username !== undefined) {
       this.props.chooseUsername(this._username);
     }
@@ -16,26 +21,25 @@ class SplashScreen extends Component {
     return (
       <HomeLayout>
         <Container>
-          <Input
-            name="username"
-            label="Username"
-            placeholder="Username"
-            hideLabel
-            onChange={e => (this._username = e.target.value)}
-          />
-          <Button backgroundColor="primary" color="white" big onClick={this.play}>
-            PLAY NOW!
-          </Button>
+          <form onSubmit={this.play}>
+            <InputGroup
+              placeholder="Username"
+              onChange={e => (this._username = e.target.value)}
+              rightElement={this.renderSubmit()}
+            />
+          </form>
         </Container>
       </HomeLayout>
     );
   }
-}
 
-const mapStateToProps = state => ({});
+  renderSubmit = () => (
+    <Button className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} rightIconName="arrow-right" />
+  );
+}
 
 const mapDispatchToProps = {
   chooseUsername: actions.chooseUsername,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
+export default connect(null, mapDispatchToProps)(SplashScreen);
