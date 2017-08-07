@@ -10,10 +10,12 @@
     "react-scripts": "^1.0.10"
   },
   "dependencies": {
+    "@blueprintjs/core": "^1.24.0",
     "history": "^4.6.3",
     "immutable": "^3.8.1",
     "normalizr": "^3.2.3",
     "react": "^15.6.1",
+    "react-addons-css-transition-group": "^15.0.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
     "react-redux-toastr": "^6.2.6",

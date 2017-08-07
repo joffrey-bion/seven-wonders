@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import './global-styles.css';
+import '@blueprintjs/core/dist/blueprint.css';
 
 import configureStore from './store';
 import Routes from './scenes';
