@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders;
 
-import org.jsondoc.spring.boot.starter.EnableJSONDoc;
+import org.hildan.livedoc.spring.boot.starter.EnableJSONDoc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

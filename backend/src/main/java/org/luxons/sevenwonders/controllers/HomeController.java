@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.controllers;
 
 import java.security.Principal;
 
-import org.jsondoc.core.annotation.Api;
-import org.jsondoc.core.annotation.ApiMethod;
+import org.hildan.livedoc.core.annotation.Api;
+import org.hildan.livedoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.ChooseNameAction;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.PlayerRepository;

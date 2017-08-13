@@ -3,8 +3,8 @@ package org.luxons.sevenwonders.controllers;
 import java.security.Principal;
 import java.util.List;
 
-import org.jsondoc.core.annotation.Api;
-import org.jsondoc.core.annotation.ApiMethod;
+import org.hildan.livedoc.core.annotation.Api;
+import org.hildan.livedoc.core.annotation.ApiMethod;
 import org.luxons.sevenwonders.actions.PrepareMoveAction;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;

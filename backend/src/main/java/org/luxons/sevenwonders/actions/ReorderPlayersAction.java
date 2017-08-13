@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import org.jsondoc.core.annotation.ApiObject;
-import org.jsondoc.core.annotation.ApiObjectField;
+import org.hildan.livedoc.core.annotation.ApiObject;
+import org.hildan.livedoc.core.annotation.ApiObjectField;
 
 @ApiObject(name = "Reorder Players Action",
            description = "The action to update the order of the players around the table. Can only be called in the "

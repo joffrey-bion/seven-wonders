@@ -3,8 +3,8 @@ package org.luxons.sevenwonders.actions;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.jsondoc.core.annotation.ApiObject;
-import org.jsondoc.core.annotation.ApiObjectField;
+import org.hildan.livedoc.core.annotation.ApiObject;
+import org.hildan.livedoc.core.annotation.ApiObjectField;
 
 @ApiObject(name = "Create Game Action",
            description = "The action to create a game.",
