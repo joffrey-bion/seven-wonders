@@ -40,8 +40,9 @@ running with sensible defaults.
 
 Using Immutable JS has proved to be a pain, especially because the cumbersome API is not contained in the reducers but 
 leaks out in the React components. As far as accessing the data is concerned, I dislike not being able to do it the 
-native way, well supported by IDEs. What's more, using strings in such accesses is not refactoring-friendly and it 
-obscures the errors when we make typos.
+native way (`myObj.prop`), well supported by IDEs. What's more, using strings in such accesses (`myObj.get('prop')`) 
+is not refactoring-friendly and it obscures the errors when we make typos.
+
 Using `.toJS()` in each selector seemed to be a solution to avoid such accesses in React components, but it in fact 
 destroys performance as the new props are never considered the same as the old ones, and therefore the DOM is always 
 completely re-rendered.
