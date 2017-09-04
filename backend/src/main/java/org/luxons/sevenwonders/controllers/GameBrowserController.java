@@ -4,8 +4,8 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.hildan.livedoc.core.annotation.Api;
-import org.hildan.livedoc.core.annotation.ApiMethod;
+import org.hildan.livedoc.core.annotations.Api;
+import org.hildan.livedoc.core.annotations.ApiMethod;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;

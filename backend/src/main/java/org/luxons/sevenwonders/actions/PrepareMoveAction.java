@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.actions;
 
 import javax.validation.constraints.NotNull;
 
-import org.hildan.livedoc.core.annotation.ApiObject;
-import org.hildan.livedoc.core.annotation.ApiObjectField;
+import org.hildan.livedoc.core.annotations.ApiObject;
+import org.hildan.livedoc.core.annotations.ApiObjectField;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 
 @ApiObject(name = "Prepare Move Action",
