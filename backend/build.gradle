@@ -18,8 +18,8 @@ repositories {
 dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'ch.qos.logback:logback-classic:1.1.8'
-    compile 'org.hildan.livedoc:livedoc-springboot:1.0.2'
-    compile 'org.hildan.livedoc:livedoc-ui-webjar:1.0.2'
+    compile 'org.hildan.livedoc:livedoc-springboot:1.2.0'
+    compile 'org.hildan.livedoc:livedoc-ui-webjar:1.2.0'
 
     compile 'org.springframework.boot:spring-boot-starter-websocket'
     compile 'org.springframework.security:spring-security-core:4.2.0.RELEASE'
