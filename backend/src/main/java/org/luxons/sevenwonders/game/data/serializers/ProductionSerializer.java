@@ -4,6 +4,10 @@ import java.lang.reflect.Type;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.luxons.sevenwonders.game.resources.Production;
+import org.luxons.sevenwonders.game.resources.ResourceType;
+import org.luxons.sevenwonders.game.resources.Resources;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -11,9 +15,6 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import org.luxons.sevenwonders.game.resources.Production;
-import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.resources.Resources;
 
 public class ProductionSerializer implements JsonSerializer<Production>, JsonDeserializer<Production> {
 

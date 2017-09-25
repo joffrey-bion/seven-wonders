@@ -4,14 +4,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hildan.livedoc.core.annotations.ApiObject;
-import org.hildan.livedoc.core.annotations.ApiObjectField;
 
-@ApiObject(name = "Create Game Action",
-           description = "The action to create a game.",
-           group = "Actions")
+@ApiObject(name = "Create Game Action", description = "The action to create a game.", group = "Actions")
 public class CreateGameAction {
 
-    @ApiObjectField
     @NotNull
     @Size(min = 2, max = 30)
     private String gameName;

@@ -82,7 +82,7 @@ public class Production {
     }
 
     private static Set<ResourceType> findFirstAlternativeContaining(Set<Set<ResourceType>> alternatives,
-                                                                    ResourceType type) {
+            ResourceType type) {
         return alternatives.stream().filter(a -> a.contains(type)).findAny().orElse(null);
     }
 

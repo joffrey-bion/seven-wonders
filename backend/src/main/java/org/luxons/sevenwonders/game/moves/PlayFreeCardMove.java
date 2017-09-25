@@ -20,8 +20,7 @@ public class PlayFreeCardMove extends CardFromHandMove {
         Board board = table.getBoard(getPlayerIndex());
         if (!board.canPlayFreeCard(table.getCurrentAge())) {
             throw new InvalidMoveException(
-                    String.format("Player %d cannot play the card %s for free", getPlayerIndex(),
-                            getCard().getName()));
+                    String.format("Player %d cannot play the card %s for free", getPlayerIndex(), getCard().getName()));
         }
     }
 
