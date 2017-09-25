@@ -67,8 +67,9 @@
         </module>
 
         <module name="WhitespaceAround">
-            <property name="allowEmptyMethods" value="true"/>
             <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
         </module>
         <module name="NoWhitespaceBefore">
             <property name="tokens" value="COMMA, SEMI, POST_INC, POST_DEC"/>
