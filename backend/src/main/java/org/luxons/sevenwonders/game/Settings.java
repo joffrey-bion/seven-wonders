@@ -78,7 +78,9 @@ public class Settings {
     }
 
     public WonderSide pickWonderSide() {
-        return lastPickedSide = wonderSidePickMethod.pickSide(getRandom(), lastPickedSide);
+        WonderSide newSide = wonderSidePickMethod.pickSide(getRandom(), lastPickedSide);
+        lastPickedSide = newSide;
+        return newSide;
     }
 
     public int getLostPointsPerDefeat() {

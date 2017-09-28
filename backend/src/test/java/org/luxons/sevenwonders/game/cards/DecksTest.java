@@ -22,13 +22,13 @@ import static org.junit.Assume.assumeTrue;
 @RunWith(Theories.class)
 public class DecksTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @DataPoints
     public static int[] dataPoints() {
         return new int[] {1, 2, 3, 5, 10};
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private static Decks createDecks(int nbAges, int nbCardsPerAge) {
         Map<Integer, List<Card>> cardsPerAge = new HashMap<>();

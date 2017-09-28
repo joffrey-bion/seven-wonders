@@ -1,13 +1,13 @@
 package org.luxons.sevenwonders.game.data.serializers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -142,5 +142,4 @@ public class ScienceProgressSerializerTest {
         assertEquals(0, progress.getScience().getQuantity(ScienceType.TABLET));
         assertEquals(1, progress.getScience().getJokers());
     }
-
 }

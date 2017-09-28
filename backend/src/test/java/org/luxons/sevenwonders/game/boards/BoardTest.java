@@ -36,6 +36,9 @@ import static org.junit.Assume.assumeTrue;
 @RunWith(Theories.class)
 public class BoardTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @DataPoints("gold")
     public static int[] goldAmounts() {
         return new int[]{-3, -1, 0, 1, 2, 3};
@@ -60,9 +63,6 @@ public class BoardTest {
     public static SpecialAbility[] specialAbilities() {
         return SpecialAbility.values();
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Theory
     public void initialGold_respectsSettings(@FromDataPoints("gold") int goldAmountInSettings) {

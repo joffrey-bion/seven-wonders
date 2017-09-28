@@ -86,7 +86,6 @@ public class BestPriceCalculatorTest {
 
         Table table = new Table(Arrays.asList(main, right, left));
 
-
         Resources resources = new Resources();
         resources.add(ResourceType.ORE, 1);
         resources.add(ResourceType.CLAY, 1);

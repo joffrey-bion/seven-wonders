@@ -76,7 +76,7 @@ public class SevenWondersTest {
             TimeoutException {
         SevenWondersSession ownerSession = newPlayer("GameOwner");
         SevenWondersSession session1 = newPlayer("Player1");
-        SevenWondersSession session2 = newPlayer( "Player2");
+        SevenWondersSession session2 = newPlayer("Player2");
         String gameName = "Test Game";
         ApiLobby lobby = ownerSession.createGame(gameName);
         session1.joinGame(lobby.getId());
@@ -130,7 +130,7 @@ public class SevenWondersTest {
     @Test
     public void startGame_3players() throws Exception {
         SevenWondersSession session1 = newPlayer("Player1");
-        SevenWondersSession session2 = newPlayer( "Player2");
+        SevenWondersSession session2 = newPlayer("Player2");
 
         ApiLobby lobby = session1.createGame("Test Game");
         session2.joinGame(lobby.getId());

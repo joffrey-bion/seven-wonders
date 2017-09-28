@@ -14,14 +14,14 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Theories.class)
 public class WonderSidePickMethodTest {
 
+    private Random random;
+
+    private Random random2;
+
     @DataPoints
     public static WonderSide[] sides() {
         return WonderSide.values();
     }
-
-    private Random random;
-
-    private Random random2;
 
     @Before
     public void setUp() {

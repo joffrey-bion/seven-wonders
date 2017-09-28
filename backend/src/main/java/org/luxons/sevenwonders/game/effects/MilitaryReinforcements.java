@@ -8,12 +8,12 @@ public class MilitaryReinforcements extends InstantOwnBoardEffect {
 
     private final int count;
 
-    public int getCount() {
-        return count;
-    }
-
     public MilitaryReinforcements(int count) {
         this.count = count;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     @Override

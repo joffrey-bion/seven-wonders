@@ -8,12 +8,12 @@ public class GoldIncrease extends InstantOwnBoardEffect {
 
     private final int amount;
 
-    public int getAmount() {
-        return amount;
-    }
-
     public GoldIncrease(int amount) {
         this.amount = amount;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 
     @Override

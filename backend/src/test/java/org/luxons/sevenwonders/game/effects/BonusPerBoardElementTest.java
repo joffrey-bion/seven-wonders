@@ -21,9 +21,11 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Theories.class)
 public class BonusPerBoardElementTest {
 
+    private Table table;
+
     @DataPoints
     public static int[] values() {
-        return new int[] {0, 1, 2, 3};
+        return new int[]{0, 1, 2, 3};
     }
 
     @DataPoints
@@ -35,8 +37,6 @@ public class BonusPerBoardElementTest {
     public static RelativeBoardPosition[] positions() {
         return RelativeBoardPosition.values();
     }
-
-    private Table table;
 
     @Before
     public void setUp() {
@@ -54,7 +54,7 @@ public class BonusPerBoardElementTest {
 
     @Theory
     public void computePoints_countsCards(RelativeBoardPosition boardPosition, int nbCards, int nbOtherCards,
-            int points, int gold, Color color) {
+                                          int points, int gold, Color color) {
         Board board = table.getBoard(0, boardPosition);
         TestUtils.addCards(board, nbCards, nbOtherCards, color);
 
@@ -66,7 +66,7 @@ public class BonusPerBoardElementTest {
 
     @Theory
     public void computePoints_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points,
-            int gold) {
+                                                 int gold) {
         Board board = table.getBoard(0, boardPosition);
         for (int i = 0; i < nbDefeatTokens; i++) {
             board.getMilitary().defeat();
@@ -80,7 +80,7 @@ public class BonusPerBoardElementTest {
 
     @Theory
     public void computePoints_countsWonderStages(RelativeBoardPosition boardPosition, int nbStages, int points,
-            int gold) {
+                                                 int gold) {
         Board board = table.getBoard(0, boardPosition);
         for (int i = 0; i < nbStages; i++) {
             board.getWonder().buildLevel(new CardBack(""));
@@ -94,7 +94,7 @@ public class BonusPerBoardElementTest {
 
     @Theory
     public void apply_countsCards(RelativeBoardPosition boardPosition, int nbCards, int nbOtherCards, int points,
-            int gold, Color color) {
+                                  int gold, Color color) {
         Board board = table.getBoard(0, boardPosition);
         TestUtils.addCards(board, nbCards, nbOtherCards, color);
 
@@ -109,7 +109,7 @@ public class BonusPerBoardElementTest {
 
     @Theory
     public void apply_countsDefeatTokens(RelativeBoardPosition boardPosition, int nbDefeatTokens, int points,
-            int gold) {
+                                         int gold) {
         Board board = table.getBoard(0, boardPosition);
         for (int i = 0; i < nbDefeatTokens; i++) {
             board.getMilitary().defeat();

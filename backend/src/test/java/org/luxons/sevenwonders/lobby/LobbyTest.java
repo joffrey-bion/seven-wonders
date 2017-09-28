@@ -32,19 +32,19 @@ import static org.junit.Assume.assumeTrue;
 @RunWith(Theories.class)
 public class LobbyTest {
 
-    @DataPoints
-    public static int[] nbPlayers() {
-        return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    }
+    private static GameDefinition gameDefinition;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private static GameDefinition gameDefinition;
-
     private Player gameOwner;
 
     private Lobby lobby;
+
+    @DataPoints
+    public static int[] nbPlayers() {
+        return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    }
 
     @BeforeClass
     public static void loadDefinition() {

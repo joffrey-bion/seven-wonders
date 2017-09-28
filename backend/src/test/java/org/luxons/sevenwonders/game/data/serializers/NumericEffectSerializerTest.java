@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.game.data.serializers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
@@ -11,19 +13,17 @@ import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Theories.class)
 public class NumericEffectSerializerTest {
 
+    private Gson gson;
+
     @DataPoints
     public static int[] dataPoints() {
         return new int[] {-2, -1, 0, 1, 2, 5};
     }
-
-    private Gson gson;
 
     @Before
     public void setUp() {

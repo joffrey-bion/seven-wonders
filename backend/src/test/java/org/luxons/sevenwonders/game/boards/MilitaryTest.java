@@ -17,6 +17,9 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Theories.class)
 public class MilitaryTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @DataPoints("points")
     public static int[] points() {
         return new int[] {0, 1, 3, 5};
@@ -26,9 +29,6 @@ public class MilitaryTest {
     public static int[] ages() {
         return new int[] {1, 2, 3};
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private static Military createMilitary(int age, int nbPointsPerVictory, int nbPointsPerDefeat) {
         Map<Integer, Integer> wonPointsPerAge = new HashMap<>();

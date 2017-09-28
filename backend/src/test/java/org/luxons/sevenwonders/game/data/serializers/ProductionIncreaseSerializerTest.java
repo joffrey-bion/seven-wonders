@@ -3,6 +3,9 @@ package org.luxons.sevenwonders.game.data.serializers;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
@@ -10,9 +13,6 @@ import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
