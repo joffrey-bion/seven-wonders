@@ -20,15 +20,12 @@ configurations {
 }
 
 dependencies {
-}
-
-dependencies {
     compile 'org.springframework.boot:spring-boot-starter-websocket'
     compile 'org.springframework.security:spring-security-core:4.2.0.RELEASE'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'ch.qos.logback:logback-classic:1.1.8'
-    compile 'org.hildan.livedoc:livedoc-springboot:2.0.0'
-    compile 'org.hildan.livedoc:livedoc-ui-webjar:2.0.0'
+    compile 'org.hildan.livedoc:livedoc-springboot:3.0.0'
+    compile 'org.hildan.livedoc:livedoc-ui-webjar:3.0.0'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.hildan.jackstomp:jackstomp:1.1.0'
