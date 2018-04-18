@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 
 import org.hildan.livedoc.core.annotations.Api;
-import org.hildan.livedoc.core.annotations.ApiMethod;
 import org.luxons.sevenwonders.actions.PrepareMoveAction;
 import org.luxons.sevenwonders.game.Game;
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo;
@@ -21,7 +20,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-@Api(name = "Game", description = "In-game events management")
+/**
+ * This API is for in-game events management.
+ */
+@Api(name = "Game")
 @Controller
 public class GameController {
 
@@ -37,7 +39,12 @@ public class GameController {
         this.playerRepository = playerRepository;
     }
 
-    @ApiMethod(description = "Notifies the game that the player is ready to receive his hand.")
+    /**
+     * Notifies the game that the player is ready to receive his hand.
+     *
+     * @param principal
+     *         the connected user's information
+     */
     @MessageMapping("/game/sayReady")
     public void ready(Principal principal) {
         Player player = playerRepository.find(principal.getName());
@@ -69,8 +76,14 @@ public class GameController {
         template.convertAndSend("/topic/game/" + gameId + "/playerReady", player.getUsername());
     }
 
-    @ApiMethod(description = "Prepares the player's next move. When all players have prepared their moves, all moves "
-            + "are executed.")
+    /**
+     * Prepares the player's next move. When all players have prepared their moves, all moves are executed.
+     *
+     * @param action
+     *         the action to prepare the move
+     * @param principal
+     *         the connected user's information
+     */
     @MessageMapping("/game/prepareMove")
     public void prepareMove(PrepareMoveAction action, Principal principal) {
         Player player = playerRepository.find(principal.getName());

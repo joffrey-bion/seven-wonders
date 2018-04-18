@@ -2,16 +2,22 @@ package org.luxons.sevenwonders.actions;
 
 import javax.validation.constraints.NotNull;
 
-import org.hildan.livedoc.core.annotations.ApiObject;
+import org.hildan.livedoc.core.annotations.types.ApiType;
+import org.luxons.sevenwonders.doc.Documentation;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 
-@ApiObject(name = "Prepare Move Action", description = "The action to prepare the next move during a game.",
-        group = "Actions")
+/**
+ * The action to prepare the next move during a game.
+ */
+@ApiType(group = Documentation.GROUP_ACTIONS)
 public class PrepareMoveAction {
 
     @NotNull
     private PlayerMove move;
 
+    /**
+     * @return the move to prepare
+     */
     public PlayerMove getMove() {
         return move;
     }

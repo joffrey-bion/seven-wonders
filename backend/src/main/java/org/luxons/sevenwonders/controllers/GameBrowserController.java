@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.hildan.livedoc.core.annotations.Api;
-import org.hildan.livedoc.core.annotations.ApiMethod;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
@@ -23,7 +22,10 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
-@Api(name = "Game Browser", description = "This is the place where the player looks for a game")
+/**
+ * This is the place where the player looks for a game.
+ */
+@Api(name = "GameBrowser")
 @Controller
 public class GameBrowserController {
 
@@ -46,14 +48,31 @@ public class GameBrowserController {
         this.template = template;
     }
 
-    @ApiMethod(description = "Created or updated games. List of existing games received here on subscribe.")
+    /**
+     * Gets the created or updated games. The list of existing games is received on this topic at once upon
+     * subscription, and then each time the list changes.
+     *
+     * @param principal
+     *         the connected user's information
+     *
+     * @return the current list of {@link Lobby}s
+     */
     @SubscribeMapping("/games") // prefix /topic not shown
     public Collection<Lobby> listGames(Principal principal) {
         logger.info("Player '{}' subscribed to /topic/games", principal.getName());
         return lobbyRepository.list();
     }
 
-    @ApiMethod(description = "Create a new lobby.")
+    /**
+     * Creates a new {@link Lobby}.
+     *
+     * @param action
+     *         the action to create the game
+     * @param principal
+     *         the connected user's information
+     *
+     * @return the newly created {@link Lobby}
+     */
     @MessageMapping("/lobby/create")
     @SendToUser("/queue/lobby/joined")
     public Lobby createGame(@Validated CreateGameAction action, Principal principal) {
@@ -70,7 +89,16 @@ public class GameBrowserController {
         return lobby;
     }
 
-    @ApiMethod(description = "Join an existing lobby.")
+    /**
+     * Joins an existing {@link Lobby}.
+     *
+     * @param action
+     *         the action to join the game
+     * @param principal
+     *         the connected user's information
+     *
+     * @return the {@link Lobby} that has just been joined
+     */
     @MessageMapping("/lobby/join")
     @SendToUser("/queue/lobby/joined")
     public Lobby joinGame(@Validated JoinGameAction action, Principal principal) {

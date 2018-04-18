@@ -3,15 +3,21 @@ package org.luxons.sevenwonders.actions;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hildan.livedoc.core.annotations.ApiObject;
+import org.hildan.livedoc.core.annotations.types.ApiType;
 
-@ApiObject(name = "Create Game Action", description = "The action to create a game.", group = "Actions")
+/**
+ * The action to create a game.
+ */
+@ApiType(group = "Actions")
 public class CreateGameAction {
 
     @NotNull
     @Size(min = 2, max = 30)
     private String gameName;
 
+    /**
+     * @return The name of the game to create
+     */
     public String getGameName() {
         return gameName;
     }
@@ -20,3 +26,5 @@ public class CreateGameAction {
         this.gameName = gameName;
     }
 }
+
+

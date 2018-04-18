@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.controllers;
 import java.security.Principal;
 
 import org.hildan.livedoc.core.annotations.Api;
-import org.hildan.livedoc.core.annotations.ApiMethod;
 import org.luxons.sevenwonders.actions.ChooseNameAction;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.PlayerRepository;
@@ -15,7 +14,10 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
-@Api(name = "Home", description = "The home page of the game")
+/**
+ * Handles actions in the homepage of the game.
+ */
+@Api(name = "Home")
 @Controller
 public class HomeController {
 
@@ -28,7 +30,16 @@ public class HomeController {
         this.playerRepository = playerRepository;
     }
 
-    @ApiMethod(description = "Creates/updates the player's name (for the user's session)")
+    /**
+     * Creates/updates the player's name (for the user's session).
+     *
+     * @param action
+     *         the action to choose the name of the player
+     * @param principal
+     *         the connected user's information
+     *
+     * @return the created {@link Player} object
+     */
     @MessageMapping("/chooseName")
     @SendToUser("/queue/nameChoice")
     public Player chooseName(@Validated ChooseNameAction action, Principal principal) {

@@ -2,14 +2,21 @@ package org.luxons.sevenwonders.actions;
 
 import javax.validation.constraints.NotNull;
 
-import org.hildan.livedoc.core.annotations.ApiObject;
+import org.hildan.livedoc.core.annotations.types.ApiType;
+import org.luxons.sevenwonders.doc.Documentation;
 
-@ApiObject(name = "Join Game Action", description = "The action to join a game.", group = "Actions")
+/**
+ * The action to join a game.
+ */
+@ApiType(group = Documentation.GROUP_ACTIONS)
 public class JoinGameAction {
 
     @NotNull
     private Long gameId;
 
+    /**
+     * @return The ID of the game to join
+     */
     public Long getGameId() {
         return gameId;
     }

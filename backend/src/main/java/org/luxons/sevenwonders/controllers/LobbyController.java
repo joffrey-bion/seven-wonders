@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.Collections;
 
 import org.hildan.livedoc.core.annotations.Api;
-import org.hildan.livedoc.core.annotations.ApiMethod;
 import org.luxons.sevenwonders.actions.ReorderPlayersAction;
 import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.errors.ApiMisuseException;
@@ -20,7 +19,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 
-@Api(name = "Lobby", description = "The place where players gather before a game")
+/**
+ * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
+ */
+@Api(name = "Lobby")
 @Controller
 public class LobbyController {
 
@@ -36,7 +38,12 @@ public class LobbyController {
         this.template = template;
     }
 
-    @ApiMethod
+    /**
+     * Leaves the current lobby.
+     *
+     * @param principal
+     *         the connected user's information
+     */
     @MessageMapping("/lobby/leave")
     public void leave(Principal principal) {
         Lobby lobby = getLobby(principal);
@@ -46,7 +53,14 @@ public class LobbyController {
         sendLobbyUpdateToPlayers(lobby);
     }
 
-    @ApiMethod
+    /**
+     * Reorders the players in the current lobby. This can only be done by the lobby's owner.
+     *
+     * @param action
+     *         the action to reorder the players
+     * @param principal
+     *         the connected user's information
+     */
     @MessageMapping("/lobby/reorderPlayers")
     public void reorderPlayers(@Validated ReorderPlayersAction action, Principal principal) {
         Lobby lobby = getOwnedLobby(principal);
@@ -56,7 +70,14 @@ public class LobbyController {
         sendLobbyUpdateToPlayers(lobby);
     }
 
-    @ApiMethod
+    /**
+     * Updates the game settings. This can only be done by the lobby's owner.
+     *
+     * @param action
+     *         the action to update the settings
+     * @param principal
+     *         the connected user's information
+     */
     @MessageMapping("/lobby/updateSettings")
     public void updateSettings(@Validated UpdateSettingsAction action, Principal principal) {
         Lobby lobby = getOwnedLobby(principal);
@@ -71,7 +92,12 @@ public class LobbyController {
         template.convertAndSend("/topic/games", Collections.singletonList(lobby));
     }
 
-    @ApiMethod
+    /**
+     * Starts the game.
+     *
+     * @param principal
+     *         the connected user's information
+     */
     @MessageMapping("/lobby/startGame")
     public void startGame(Principal principal) {
         Lobby lobby = getOwnedLobby(principal);
