@@ -8,13 +8,12 @@ import org.junit.Test;
 import org.luxons.sevenwonders.actions.CreateGameAction;
 import org.luxons.sevenwonders.actions.JoinGameAction;
 import org.luxons.sevenwonders.controllers.GameBrowserController.UserAlreadyInGameException;
-import org.luxons.sevenwonders.test.TestUtils;
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
 import org.luxons.sevenwonders.repositories.PlayerRepository;
 import org.luxons.sevenwonders.repositories.PlayerRepository.PlayerNotFoundException;
+import org.luxons.sevenwonders.test.TestUtils;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +30,7 @@ public class GameBrowserControllerTest {
     @Before
     public void setUp() {
         playerRepository = new PlayerRepository();
-        LobbyRepository lobbyRepository = new LobbyRepository(new GameDefinitionLoader());
+        LobbyRepository lobbyRepository = new LobbyRepository();
         SimpMessagingTemplate template = TestUtils.createSimpMessagingTemplate();
         LobbyController lobbyController = new LobbyController(playerRepository, template);
         gameBrowserController = new GameBrowserController(lobbyController, lobbyRepository, playerRepository, template);

@@ -2,17 +2,14 @@ package org.luxons.sevenwonders.game.api;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 
 import org.luxons.sevenwonders.game.moves.MoveType;
 import org.luxons.sevenwonders.game.resources.BoughtResources;
 
 public class PlayerMove {
 
-    @NotNull
     private MoveType type;
 
-    @NotNull
     private String cardName;
 
     private List<BoughtResources> boughtResources = new ArrayList<>();

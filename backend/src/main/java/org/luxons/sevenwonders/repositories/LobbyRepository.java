@@ -20,8 +20,8 @@ public class LobbyRepository {
     private long lastGameId = 0;
 
     @Autowired
-    public LobbyRepository(GameDefinitionLoader gameDefinitionLoader) {
-        this.gameDefinitionLoader = gameDefinitionLoader;
+    public LobbyRepository() {
+        this.gameDefinitionLoader = new GameDefinitionLoader();
     }
 
     public Collection<Lobby> list() {

@@ -13,7 +13,6 @@ import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.controllers.LobbyController.PlayerIsNotOwnerException;
 import org.luxons.sevenwonders.controllers.LobbyController.PlayerNotInLobbyException;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;
@@ -41,7 +40,7 @@ public class LobbyControllerTest {
     @Before
     public void setUp() {
         playerRepository = new PlayerRepository();
-        lobbyRepository = new LobbyRepository(new GameDefinitionLoader());
+        lobbyRepository = new LobbyRepository();
         SimpMessagingTemplate template = TestUtils.createSimpMessagingTemplate();
         lobbyController = new LobbyController(playerRepository, template);
     }

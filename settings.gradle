@@ -1,2 +1,3 @@
 include 'frontend'
 include 'backend'
+include 'game-engine'

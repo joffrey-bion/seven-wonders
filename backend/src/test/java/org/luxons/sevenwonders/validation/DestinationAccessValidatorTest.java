@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.validation;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.repositories.LobbyRepository;
@@ -19,7 +18,7 @@ public class DestinationAccessValidatorTest {
 
     @Before
     public void setup() {
-        lobbyRepository = new LobbyRepository(new GameDefinitionLoader());
+        lobbyRepository = new LobbyRepository();
         destinationAccessValidator = new DestinationAccessValidator(lobbyRepository);
     }
 

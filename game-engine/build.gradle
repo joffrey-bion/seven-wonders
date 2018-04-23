@@ -1,0 +1,24 @@
+apply plugin: 'java-library'
+apply plugin: 'checkstyle'
+
+group 'org.luxons'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    checkstyleConfig
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.0'
+    testImplementation 'junit:junit:4.12'
+    checkstyleConfig "org.hildan.checkstyle:checkstyle-config:2.1.0"
+}
+
+checkstyle {
+    maxWarnings = 0
+    toolVersion = '8.2'
+    config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, "checkstyle.xml")
+}
