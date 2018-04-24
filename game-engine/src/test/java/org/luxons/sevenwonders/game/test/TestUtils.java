@@ -12,6 +12,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.Science;
 import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.cards.Card;
+import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Color;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
@@ -34,30 +35,33 @@ public class TestUtils {
         return customizableSettings;
     }
 
-    private static Settings createSettings(int nbPlayers) {
+    public static Settings createSettings(int nbPlayers) {
         return new Settings(nbPlayers, createCustomizableSettings());
     }
 
     public static Table createTable(int nbPlayers) {
-        return new Table(createBoards(nbPlayers));
+        return createTable(createSettings(nbPlayers));
     }
 
-    private static List<Board> createBoards(int count) {
-        Settings settings = createSettings(count);
+    public static Table createTable(Settings settings) {
+        return new Table(createBoards(settings.getNbPlayers(), settings));
+    }
+
+    private static List<Board> createBoards(int count, Settings settings) {
         List<Board> boards = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            boards.add(createBoard(settings, ResourceType.WOOD));
+            boards.add(createBoard(ResourceType.WOOD, settings));
         }
         return boards;
     }
 
-    private static Board createBoard(Settings settings, ResourceType initialResource) {
+    private static Board createBoard(ResourceType initialResource, Settings settings) {
         Wonder wonder = createWonder(initialResource);
         return new Board(wonder, 0, settings);
     }
 
     public static Board createBoard(ResourceType initialResource) {
-        return createBoard(createSettings(5), initialResource);
+        return createBoard(initialResource, createSettings(5));
     }
 
     private static Board createBoard(ResourceType initialResource, ResourceType... production) {
@@ -124,25 +128,35 @@ public class TestUtils {
     }
 
     public static Card createCard(String name) {
-        return new Card(name, Color.BLUE, new Requirements(), null, null, null, null);
+        return createCard(name, Color.BLUE, null);
     }
 
     public static Card createCard(Color color) {
-        return new Card("Test Card", color, new Requirements(), null, null, null, null);
+        return createCard("Test Card", color, null);
     }
 
     public static Card createCard(Color color, Effect effect) {
         List<Effect> effects = Collections.singletonList(effect);
-        return new Card("Test Card", color, new Requirements(), effects, null, null, null);
+        return createCard("Test Card", color, effects);
     }
 
     private static Card createCard(int num, Color color) {
-        return new Card("Test Card " + num, color, new Requirements(), null, null, null, null);
+        return createCard("Test Card " + num, color, null);
     }
 
     public static Card createGuildCard(int num, Effect effect) {
         List<Effect> effects = Collections.singletonList(effect);
-        return new Card("Test Guild " + num, Color.PURPLE, new Requirements(), effects, null, null, null);
+        return createCard("Test Guild " + num, Color.PURPLE, effects);
+    }
+
+    private static Card createCard(String name, Color color, List<Effect> effects) {
+        Card card = new Card(name, color, new Requirements(), effects, null, null, "path/to/card/image");
+        card.setBack(createCardBack());
+        return card;
+    }
+
+    private static CardBack createCardBack() {
+        return new CardBack("image-III");
     }
 
     public static void addCards(Board board, int nbCardsOfColor, int nbOtherCards, Color color) {

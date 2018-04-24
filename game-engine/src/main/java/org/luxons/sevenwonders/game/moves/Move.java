@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.game.moves;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.luxons.sevenwonders.game.Settings;
@@ -17,7 +16,7 @@ public abstract class Move {
 
     private MoveType type;
 
-    private List<BoughtResources> boughtResources = new ArrayList<>();
+    private List<BoughtResources> boughtResources;
 
     Move(int playerIndex, Card card, PlayerMove move) {
         this.playerIndex = playerIndex;
