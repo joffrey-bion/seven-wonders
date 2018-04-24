@@ -73,30 +73,5 @@ public class BestPriceCalculator {
         return currentMinPrice;
     }
 
-    private static class ResourcePool {
-
-        private final Set<Set<ResourceType>> choices;
-
-        private final Provider provider;
-
-        private final TradingRules rules;
-
-        private ResourcePool(Production production, Provider provider, TradingRules rules) {
-            this.choices = production.asChoices();
-            this.provider = provider;
-            this.rules = rules;
-        }
-
-        Set<Set<ResourceType>> getChoices() {
-            return choices;
-        }
-
-        int getCost(ResourceType type) {
-            if (provider == null) {
-                return 0;
-            }
-            return rules.getCost(type, provider);
-        }
-    }
 }
 
