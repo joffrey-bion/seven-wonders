@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
@@ -147,8 +149,12 @@ public class TestUtils {
         return createCard("Test Card " + num, color);
     }
 
-    public static Card createGuildCard(int num, Effect effect) {
-        return createCard("Test Guild " + num, Color.PURPLE, effect);
+    public static List<Card> createGuildCards(int count) {
+        return IntStream.range(0, count).mapToObj(i -> TestUtils.createGuildCard(i)).collect(Collectors.toList());
+    }
+
+    public static Card createGuildCard(int num, Effect... effects) {
+        return createCard("Test Guild " + num, Color.PURPLE, effects);
     }
 
     private static Card createCard(String name, Color color, Effect... effects) {
