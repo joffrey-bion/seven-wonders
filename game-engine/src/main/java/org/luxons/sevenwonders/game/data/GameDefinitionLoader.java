@@ -35,6 +35,8 @@ public class GameDefinitionLoader {
 
     private static final String BASE_PACKAGE_PATH = '/' + BASE_PACKAGE.replace('.', '/');
 
+    private static final String GLOBAL_RULES_FILE = "global_rules.json";
+
     private static final String CARDS_FILE = "cards.json";
 
     private static final String WONDERS_FILE = "wonders.json";
@@ -50,7 +52,11 @@ public class GameDefinitionLoader {
     }
 
     private static GameDefinition load() {
-        return new GameDefinition(loadWonders(), loadDecks());
+        return new GameDefinition(loadGlobalRules(), loadWonders(), loadDecks());
+    }
+
+    private static GlobalRules loadGlobalRules() {
+        return readJsonFile(GLOBAL_RULES_FILE, GlobalRules.class);
     }
 
     private static WonderDefinition[] loadWonders() {

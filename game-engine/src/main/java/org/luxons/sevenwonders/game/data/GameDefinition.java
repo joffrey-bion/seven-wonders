@@ -16,31 +16,24 @@ import org.luxons.sevenwonders.game.wonders.Wonder;
 
 public class GameDefinition {
 
-    /**
-     * This value is heavily dependent on the JSON data. Any change must be carefully thought through.
-     */
-    private static final int MIN_PLAYERS = 3;
+    private final GlobalRules rules;
 
-    /**
-     * This value is heavily dependent on the JSON data. Any change must be carefully thought through.
-     */
-    private static final int MAX_PLAYERS = 7;
+    private final WonderDefinition[] wonders;
 
-    private WonderDefinition[] wonders;
+    private final DecksDefinition decksDefinition;
 
-    private DecksDefinition decksDefinition;
-
-    GameDefinition(WonderDefinition[] wonders, DecksDefinition decksDefinition) {
+    GameDefinition(GlobalRules rules, WonderDefinition[] wonders, DecksDefinition decksDefinition) {
+        this.rules = rules;
         this.wonders = wonders;
         this.decksDefinition = decksDefinition;
     }
 
     public int getMinPlayers() {
-        return MIN_PLAYERS;
+        return rules.getMinPlayers();
     }
 
     public int getMaxPlayers() {
-        return MAX_PLAYERS;
+        return rules.getMaxPlayers();
     }
 
     public Game initGame(long id, CustomizableSettings customSettings, int nbPlayers) {
