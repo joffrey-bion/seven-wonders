@@ -11,26 +11,23 @@ import org.luxons.sevenwonders.game.resources.BoughtResources;
 
 public class WonderStage {
 
-    private Requirements requirements;
+    private final Requirements requirements;
 
-    private List<Effect> effects;
+    private final List<Effect> effects;
 
     private CardBack cardBack;
+
+    public WonderStage(Requirements requirements, List<Effect> effects) {
+        this.requirements = requirements;
+        this.effects = effects;
+    }
 
     public Requirements getRequirements() {
         return requirements;
     }
 
-    public void setRequirements(Requirements requirements) {
-        this.requirements = requirements;
-    }
-
     public List<Effect> getEffects() {
         return effects;
-    }
-
-    public void setEffects(List<Effect> effects) {
-        this.effects = effects;
     }
 
     public CardBack getCardBack() {

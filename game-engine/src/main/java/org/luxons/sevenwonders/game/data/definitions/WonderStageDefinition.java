@@ -13,9 +13,6 @@ public class WonderStageDefinition implements Definition<WonderStage> {
 
     @Override
     public WonderStage create(Settings settings) {
-        WonderStage stage = new WonderStage();
-        stage.setRequirements(requirements);
-        stage.setEffects(effects.create(settings));
-        return stage;
+        return new WonderStage(requirements, effects.create(settings));
     }
 }
