@@ -49,5 +49,6 @@ public class WonderStage {
 
     void activate(Table table, int playerIndex, List<BoughtResources> boughtResources) {
         effects.forEach(e -> e.apply(table, playerIndex));
+        requirements.pay(table, playerIndex, boughtResources);
     }
 }

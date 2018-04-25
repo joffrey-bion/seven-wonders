@@ -111,7 +111,7 @@ public class Requirements {
         });
     }
 
-    void pay(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+    public void pay(Table table, int playerIndex, List<BoughtResources> boughtResources) {
         table.getBoard(playerIndex).removeGold(gold);
         payBoughtResources(table, playerIndex, boughtResources);
     }
