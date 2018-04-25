@@ -1087,7 +1087,7 @@
           ],
           "gold": 3,
           "points": 1,
-          "type": "WONDER_LEVEL"
+          "type": "BUILT_WONDER_STAGES"
         }
       },
       "requirements": {
@@ -1502,7 +1502,7 @@
           ],
           "gold": 0,
           "points": 1,
-          "type": "WONDER_LEVEL"
+          "type": "BUILT_WONDER_STAGES"
         }
       },
       "requirements": {
