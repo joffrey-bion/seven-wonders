@@ -220,13 +220,13 @@ public class TestUtils {
     }
 
     public static Move createMove(int playerIndex, Card card, MoveType type, BoughtResources... boughtResources) {
-        PlayerMove playerMove = createPlayerMove(card, type, boughtResources);
+        PlayerMove playerMove = createPlayerMove(card.getName(), type, boughtResources);
         return type.resolve(playerIndex, card, playerMove);
     }
 
-    private static PlayerMove createPlayerMove(Card card, MoveType type, BoughtResources... boughtResources) {
+    public static PlayerMove createPlayerMove(String cardName, MoveType type, BoughtResources... boughtResources) {
         PlayerMove playerMove = new PlayerMove();
-        playerMove.setCardName(card.getName());
+        playerMove.setCardName(cardName);
         playerMove.setType(type);
         playerMove.setBoughtResources(Arrays.asList(boughtResources));
         return playerMove;

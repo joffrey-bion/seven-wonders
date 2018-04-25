@@ -91,26 +91,17 @@ public class GameTest {
     private static PlayerMove createPlayCardMove(PlayerTurnInfo turnInfo) {
         for (HandCard handCard : turnInfo.getHand()) {
             if (handCard.isFree()) {
-                return createMove(handCard, MoveType.PLAY);
+                return TestUtils.createPlayerMove(handCard.getCard().getName(), MoveType.PLAY);
             }
         }
-        return createMove(turnInfo.getHand().get(0), MoveType.DISCARD);
+        HandCard firstCardInHand = turnInfo.getHand().get(0);
+        return TestUtils.createPlayerMove(firstCardInHand.getCard().getName(), MoveType.DISCARD);
     }
 
     private static PlayerMove createPickGuildMove(PlayerTurnInfo turnInfo) {
         List<Card> neighbourGuilds = turnInfo.getNeighbourGuildCards();
         assertNotNull(neighbourGuilds);
         String cardName = neighbourGuilds.isEmpty() ? null : neighbourGuilds.get(0).getName();
-        PlayerMove move = new PlayerMove();
-        move.setCardName(cardName);
-        move.setType(MoveType.COPY_GUILD);
-        return move;
-    }
-
-    private static PlayerMove createMove(HandCard handCard, MoveType type) {
-        PlayerMove move = new PlayerMove();
-        move.setCardName(handCard.getCard().getName());
-        move.setType(type);
-        return move;
+        return TestUtils.createPlayerMove(cardName, MoveType.COPY_GUILD);
     }
 }
