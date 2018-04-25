@@ -10,14 +10,18 @@ class ResourcePool {
 
     private final TradingRules rules;
 
-    ResourcePool(Production production, Provider provider, TradingRules rules) {
-        this.choices = production.asChoices();
+    ResourcePool(Provider provider, TradingRules rules, Set<Set<ResourceType>> choices) {
+        this.choices = choices;
         this.provider = provider;
         this.rules = rules;
     }
 
     Set<Set<ResourceType>> getChoices() {
         return choices;
+    }
+
+    Provider getProvider() {
+        return provider;
     }
 
     int getCost(ResourceType type) {

@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.resources;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 import org.luxons.sevenwonders.game.api.Table;
@@ -16,6 +17,7 @@ public class BestPriceCalculatorTest {
         Table table = TestUtils.createTable(3);
         Resources resources = new Resources();
         assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 0));
+        assertEquals(Collections.emptyList(), BestPriceCalculator.bestSolution(resources, table, 0));
     }
 
     @Test
@@ -26,10 +28,16 @@ public class BestPriceCalculatorTest {
         Table table = new Table(Arrays.asList(main, right, left));
 
         Resources resources = new Resources();
-        resources.add(ResourceType.STONE, 1);
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 0));
-        assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 1));
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 2));
+        resources.add(ResourceType.STONE, 2);
+        assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 0));
+        assertEquals(4, BestPriceCalculator.bestPrice(resources, table, 1));
+        assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 2));
+
+        BoughtResources stoneLeft = new BoughtResources(Provider.LEFT_PLAYER, Resources.of(ResourceType.STONE));
+        BoughtResources stoneRight = new BoughtResources(Provider.RIGHT_PLAYER, Resources.of(ResourceType.STONE));
+        assertEquals(Collections.singletonList(stoneLeft), BestPriceCalculator.bestSolution(resources, table, 0));
+        assertEquals(Arrays.asList(stoneLeft, stoneRight), BestPriceCalculator.bestSolution(resources, table, 1));
+        assertEquals(Collections.singletonList(stoneRight), BestPriceCalculator.bestSolution(resources, table, 2));
     }
 
     @Test
@@ -48,6 +56,13 @@ public class BestPriceCalculatorTest {
         assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 1));
         assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 2));
         assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 3));
+
+        BoughtResources woodLeft = new BoughtResources(Provider.LEFT_PLAYER, Resources.of(ResourceType.WOOD));
+        BoughtResources woodRight = new BoughtResources(Provider.RIGHT_PLAYER, Resources.of(ResourceType.WOOD));
+        assertEquals(Collections.singletonList(woodRight), BestPriceCalculator.bestSolution(resources, table, 0));
+        assertEquals(Collections.emptyList(), BestPriceCalculator.bestSolution(resources, table, 1));
+        assertEquals(Collections.singletonList(woodLeft), BestPriceCalculator.bestSolution(resources, table, 2));
+        assertEquals(Collections.emptyList(), BestPriceCalculator.bestSolution(resources, table, 3));
     }
 
     @Test
@@ -68,6 +83,11 @@ public class BestPriceCalculatorTest {
         assertEquals(1, BestPriceCalculator.bestPrice(resources, table, 0));
         assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 1));
         assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 2));
+
+        BoughtResources woodRight = new BoughtResources(Provider.RIGHT_PLAYER, Resources.of(ResourceType.WOOD));
+        assertEquals(Collections.singletonList(woodRight), BestPriceCalculator.bestSolution(resources, table, 0));
+        assertEquals(Collections.emptyList(), BestPriceCalculator.bestSolution(resources, table, 1));
+        assertEquals(Collections.emptyList(), BestPriceCalculator.bestSolution(resources, table, 2));
     }
 
     @Test
@@ -75,7 +95,7 @@ public class BestPriceCalculatorTest {
         Board left = TestUtils.createBoard(ResourceType.WOOD);
 
         Board main = TestUtils.createBoard(ResourceType.WOOD);
-        main.getProduction().addChoice(ResourceType.ORE, ResourceType.CLAY);
+        main.getProduction().addChoice(ResourceType.CLAY, ResourceType.ORE);
         main.getTradingRules().setCost(ResourceType.CLAY, Provider.RIGHT_PLAYER, 1);
 
         Board right = TestUtils.createBoard(ResourceType.WOOD);
@@ -92,5 +112,12 @@ public class BestPriceCalculatorTest {
         assertEquals(1, BestPriceCalculator.bestPrice(resources, table, 0));
         assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 1));
         assertEquals(4, BestPriceCalculator.bestPrice(resources, table, 2));
+
+        BoughtResources oreLeft = new BoughtResources(Provider.LEFT_PLAYER, Resources.of(ResourceType.ORE));
+        BoughtResources clayLeft = new BoughtResources(Provider.LEFT_PLAYER, Resources.of(ResourceType.CLAY));
+        BoughtResources clayRight = new BoughtResources(Provider.RIGHT_PLAYER, Resources.of(ResourceType.CLAY));
+        assertEquals(Collections.singletonList(clayRight), BestPriceCalculator.bestSolution(resources, table, 0));
+        assertEquals(Collections.emptyList(), BestPriceCalculator.bestSolution(resources, table, 1));
+        assertEquals(Arrays.asList(oreLeft, clayLeft), BestPriceCalculator.bestSolution(resources, table, 2));
     }
 }

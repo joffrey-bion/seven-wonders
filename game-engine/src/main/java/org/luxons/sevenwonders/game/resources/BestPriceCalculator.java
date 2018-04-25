@@ -10,13 +10,26 @@ import org.luxons.sevenwonders.game.boards.Board;
 
 public class BestPriceCalculator {
 
-    private final Resources resources;
+    private final Resources resourcesLeftToPay;
 
     private final List<ResourcePool> pools;
 
-    private BestPriceCalculator(Resources resources, Table table, int playerIndex) {
-        this.resources = resources;
+    private final List<BoughtResources> boughtResources;
+
+    private int pricePaid;
+
+    private List<BoughtResources> bestSolution;
+
+    private int bestPrice;
+
+    private BestPriceCalculator(Resources resourcesToPay, Table table, int playerIndex) {
+        Board board = table.getBoard(playerIndex);
+        this.resourcesLeftToPay = resourcesToPay.minus(board.getProduction().getFixedResources());
         this.pools = createResourcePools(table, playerIndex);
+        this.boughtResources = new ArrayList<>();
+        this.pricePaid = 0;
+        this.bestSolution = null;
+        this.bestPrice = Integer.MAX_VALUE;
     }
 
     private static List<ResourcePool> createResourcePools(Table table, int playerIndex) {
@@ -25,53 +38,76 @@ public class BestPriceCalculator {
 
         Board board = table.getBoard(playerIndex);
         TradingRules rules = board.getTradingRules();
-        pools.add(new ResourcePool(board.getProduction(), null, rules));
+        // we only take alternative resources here, because fixed resources were already removed for optimization
+        Set<Set<ResourceType>> ownBoardChoices = board.getProduction().getAlternativeResources();
+        pools.add(new ResourcePool(null, rules, ownBoardChoices));
 
         for (Provider provider : providers) {
             Board providerBoard = table.getBoard(playerIndex, provider.getBoardPosition());
-            ResourcePool pool = new ResourcePool(providerBoard.getPublicProduction(), provider, rules);
+            ResourcePool pool = new ResourcePool(provider, rules, providerBoard.getPublicProduction().asChoices());
             pools.add(pool);
         }
         return pools;
     }
 
     public static int bestPrice(Resources resources, Table table, int playerIndex) {
-        Board board = table.getBoard(playerIndex);
-        Resources leftToPay = resources.minus(board.getProduction().getFixedResources());
-        return new BestPriceCalculator(leftToPay, table, playerIndex).bestPrice();
+        BestPriceCalculator bestPriceCalculator = new BestPriceCalculator(resources, table, playerIndex);
+        bestPriceCalculator.computePossibilities();
+        return bestPriceCalculator.bestPrice;
     }
 
-    private int bestPrice() {
-        if (resources.isEmpty()) {
-            return 0;
+    public static List<BoughtResources> bestSolution(Resources resources, Table table, int playerIndex) {
+        BestPriceCalculator bestPriceCalculator = new BestPriceCalculator(resources, table, playerIndex);
+        bestPriceCalculator.computePossibilities();
+        return bestPriceCalculator.bestSolution;
+    }
+
+    private void computePossibilities() {
+        if (resourcesLeftToPay.isEmpty()) {
+            updateBestSolutionIfNeeded();
+            return;
         }
-        int currentMinPrice = Integer.MAX_VALUE;
         for (ResourceType type : ResourceType.values()) {
-            if (resources.getQuantity(type) > 0) {
-                int minPriceUsingOwnResource = bestPriceWithout(type);
-                currentMinPrice = Math.min(currentMinPrice, minPriceUsingOwnResource);
-            }
-        }
-        return currentMinPrice;
-    }
+            if (resourcesLeftToPay.getQuantity(type) > 0) {
+                for (ResourcePool pool : pools) {
+                    boolean ownResource = pool.getProvider() == null;
+                    if (ownResource) {
+                        resourcesLeftToPay.remove(type, 1);
+                        computePossibilitiesWhenUsing(type, pool);
+                        resourcesLeftToPay.add(type, 1);
+                        continue;
+                    }
+                    BoughtResources boughtRes = new BoughtResources(pool.getProvider(), Resources.of(type));
+                    int cost = pool.getCost(type);
 
-    private int bestPriceWithout(ResourceType type) {
-        resources.remove(type, 1);
-        int currentMinPrice = Integer.MAX_VALUE;
-        for (ResourcePool pool : pools) {
-            int resCostInPool = pool.getCost(type);
-            for (Set<ResourceType> choice : pool.getChoices()) {
-                if (choice.contains(type)) {
-                    Set<ResourceType> temp = EnumSet.copyOf(choice);
-                    choice.clear();
-                    currentMinPrice = Math.min(currentMinPrice, bestPrice() + resCostInPool);
-                    choice.addAll(temp);
+                    resourcesLeftToPay.remove(type, 1);
+                    boughtResources.add(boughtRes);
+                    pricePaid += cost;
+                    computePossibilitiesWhenUsing(type, pool);
+                    pricePaid -= cost;
+                    boughtResources.remove(boughtRes);
+                    resourcesLeftToPay.add(type, 1);
                 }
             }
         }
-        resources.add(type, 1);
-        return currentMinPrice;
     }
 
+    private void computePossibilitiesWhenUsing(ResourceType type, ResourcePool pool) {
+        for (Set<ResourceType> choice : pool.getChoices()) {
+            if (choice.contains(type)) {
+                Set<ResourceType> temp = EnumSet.copyOf(choice);
+                choice.clear();
+                computePossibilities();
+                choice.addAll(temp);
+            }
+        }
+    }
+
+    private void updateBestSolutionIfNeeded() {
+        if (pricePaid < bestPrice) {
+            bestPrice = pricePaid;
+            bestSolution = new ArrayList<>(boughtResources);
+        }
+    }
 }
 

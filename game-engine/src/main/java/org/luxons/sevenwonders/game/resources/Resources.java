@@ -13,6 +13,14 @@ public class Resources {
 
     private final Map<ResourceType, Integer> quantities = new EnumMap<>(ResourceType.class);
 
+    public static Resources of(ResourceType... types) {
+        Resources resources = new Resources();
+        for (ResourceType type : types) {
+            resources.add(type, 1);
+        }
+        return resources;
+    }
+
     public void add(ResourceType type, int quantity) {
         quantities.merge(type, quantity, (x, y) -> x + y);
     }
@@ -87,5 +95,10 @@ public class Resources {
     @Override
     public int hashCode() {
         return Objects.hash(quantities);
+    }
+
+    @Override
+    public String toString() {
+        return "Resources{" + "quantities=" + quantities + '}';
     }
 }
