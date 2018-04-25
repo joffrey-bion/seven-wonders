@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,9 @@ import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.game.moves.Move;
 import org.luxons.sevenwonders.game.moves.MoveType;
+import org.luxons.sevenwonders.game.resources.BestPriceCalculator;
+import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
@@ -90,12 +94,21 @@ public class GameTest {
 
     private static PlayerMove createPlayCardMove(PlayerTurnInfo turnInfo) {
         for (HandCard handCard : turnInfo.getHand()) {
-            if (handCard.isFree()) {
-                return TestUtils.createPlayerMove(handCard.getCard().getName(), MoveType.PLAY);
+            if (handCard.isPlayable()) {
+                List<BoughtResources> resourcesToBuy = findResourcesToBuyFor(handCard, turnInfo);
+                return TestUtils.createPlayerMove(handCard.getCard().getName(), MoveType.PLAY, resourcesToBuy);
             }
         }
         HandCard firstCardInHand = turnInfo.getHand().get(0);
         return TestUtils.createPlayerMove(firstCardInHand.getCard().getName(), MoveType.DISCARD);
+    }
+
+    private static List<BoughtResources> findResourcesToBuyFor(HandCard handCard, PlayerTurnInfo turnInfo) {
+        if (handCard.isFree()) {
+            return Collections.emptyList();
+        }
+        Resources requiredResources = handCard.getCard().getRequirements().getResources();
+        return BestPriceCalculator.bestSolution(requiredResources, turnInfo.getTable(), turnInfo.getPlayerIndex());
     }
 
     private static PlayerMove createPickGuildMove(PlayerTurnInfo turnInfo) {
