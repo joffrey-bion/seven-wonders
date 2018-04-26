@@ -8,7 +8,6 @@ import org.hildan.jackstomp.Channel;
 import org.hildan.jackstomp.JackstompSession;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.test.api.ApiLobby;
@@ -31,20 +30,16 @@ public class SevenWondersTest {
 
     private static final String WEBSOCKET_URI = "ws://localhost:%d";
 
-    private static SevenWondersClient client;
+    private SevenWondersClient client;
 
     @LocalServerPort
     private int randomServerPort;
 
     private String serverUrl;
 
-    @BeforeClass
-    public static void createClient() {
-        client = new SevenWondersClient();
-    }
-
     @Before
-    public void setServerUrl() {
+    public void setUpClientAndUrl() {
+        client = new SevenWondersClient();
         serverUrl = String.format(WEBSOCKET_URI, randomServerPort);
     }
 
