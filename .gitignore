@@ -52,7 +52,7 @@ Temporary Items
 # ======================
 
 .gradle
-build
+build/
 
 # ======================
 # IDEs
