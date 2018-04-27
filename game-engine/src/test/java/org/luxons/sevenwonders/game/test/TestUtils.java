@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,9 +23,10 @@ import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
 import org.luxons.sevenwonders.game.moves.Move;
 import org.luxons.sevenwonders.game.moves.MoveType;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.Provider;
+import org.luxons.sevenwonders.game.resources.ResourceTransaction;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.wonders.Wonder;
@@ -111,11 +113,17 @@ public class TestUtils {
         return resources;
     }
 
-    public static BoughtResources createBoughtResources(Provider provider, ResourceType... resources) {
-        BoughtResources boughtResources = new BoughtResources();
-        boughtResources.setProvider(provider);
-        boughtResources.setResources(TestUtils.createResources(resources));
-        return boughtResources;
+    public static ResourceTransactions createTransactions(Provider provider, ResourceType... resources) {
+        ResourceTransaction transaction = createTransaction(provider, resources);
+        return new ResourceTransactions(Collections.singletonList(transaction));
+    }
+
+    public static ResourceTransactions createTransactions(ResourceTransaction... transactions) {
+        return new ResourceTransactions(Arrays.asList(transactions));
+    }
+
+    public static ResourceTransaction createTransaction(Provider provider, ResourceType... resources) {
+        return new ResourceTransaction(provider, TestUtils.createResources(resources));
     }
 
     public static Requirements createRequirements(ResourceType... types) {
@@ -216,23 +224,24 @@ public class TestUtils {
         Card card = createCard(color, effect);
         Board board = table.getBoard(playerIndex);
         board.addCard(card);
-        card.applyTo(table, playerIndex, Collections.emptyList());
+        card.applyTo(table, playerIndex, new ResourceTransactions());
     }
 
-    public static Move createMove(int playerIndex, Card card, MoveType type, BoughtResources... boughtResources) {
-        PlayerMove playerMove = createPlayerMove(card.getName(), type, Arrays.asList(boughtResources));
+    public static Move createMove(int playerIndex, Card card, MoveType type, ResourceTransaction... transactions) {
+        PlayerMove playerMove = createPlayerMove(card.getName(), type, Arrays.asList(transactions));
         return type.resolve(playerIndex, card, playerMove);
     }
 
     public static PlayerMove createPlayerMove(String cardName, MoveType type) {
-        return createPlayerMove(cardName, type, Collections.emptyList());
+        return createPlayerMove(cardName, type, Collections.emptySet());
     }
 
-    public static PlayerMove createPlayerMove(String cardName, MoveType type, List<BoughtResources> boughtResources) {
+    public static PlayerMove createPlayerMove(String cardName, MoveType type,
+            Collection<ResourceTransaction> transactions) {
         PlayerMove playerMove = new PlayerMove();
         playerMove.setCardName(cardName);
         playerMove.setType(type);
-        playerMove.setBoughtResources(boughtResources);
+        playerMove.setTransactions(transactions);
         return playerMove;
     }
 }

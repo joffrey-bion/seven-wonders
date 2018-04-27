@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
@@ -17,7 +18,8 @@ import org.luxons.sevenwonders.game.data.GameDefinitionLoader;
 import org.luxons.sevenwonders.game.moves.Move;
 import org.luxons.sevenwonders.game.moves.MoveType;
 import org.luxons.sevenwonders.game.resources.BestPriceCalculator;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.ResourceTransaction;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
@@ -95,7 +97,7 @@ public class GameTest {
     private static PlayerMove createPlayCardMove(PlayerTurnInfo turnInfo) {
         for (HandCard handCard : turnInfo.getHand()) {
             if (handCard.isPlayable()) {
-                List<BoughtResources> resourcesToBuy = findResourcesToBuyFor(handCard, turnInfo);
+                Set<ResourceTransaction> resourcesToBuy = findResourcesToBuyFor(handCard, turnInfo);
                 return TestUtils.createPlayerMove(handCard.getCard().getName(), MoveType.PLAY, resourcesToBuy);
             }
         }
@@ -103,12 +105,15 @@ public class GameTest {
         return TestUtils.createPlayerMove(firstCardInHand.getCard().getName(), MoveType.DISCARD);
     }
 
-    private static List<BoughtResources> findResourcesToBuyFor(HandCard handCard, PlayerTurnInfo turnInfo) {
+    private static Set<ResourceTransaction> findResourcesToBuyFor(HandCard handCard, PlayerTurnInfo turnInfo) {
         if (handCard.isFree()) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
         Resources requiredResources = handCard.getCard().getRequirements().getResources();
-        return BestPriceCalculator.bestSolution(requiredResources, turnInfo.getTable(), turnInfo.getPlayerIndex());
+        Table table = turnInfo.getTable();
+        int playerIndex = turnInfo.getPlayerIndex();
+        ResourceTransactions transactions = BestPriceCalculator.bestSolution(requiredResources, table, playerIndex);
+        return transactions.toTransactions();
     }
 
     private static PlayerMove createPickGuildMove(PlayerTurnInfo turnInfo) {

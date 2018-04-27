@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.effects.Effect;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.wonders.Wonder;
 
@@ -52,7 +53,7 @@ public class CardTest {
         table.getBoard(0).setGold(3);
         table.getBoard(1).setGold(3);
         table.getBoard(2).setGold(3);
-        treeFarmCard.applyTo(table, 0, new ArrayList<>());
+        treeFarmCard.applyTo(table, 0, new ResourceTransactions());
         assertEquals(2, table.getBoard(0).getGold());
         assertEquals(3, table.getBoard(1).getGold());
         assertEquals(3, table.getBoard(2).getGold());

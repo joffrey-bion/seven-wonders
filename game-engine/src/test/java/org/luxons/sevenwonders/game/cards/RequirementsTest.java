@@ -10,8 +10,8 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Provider;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
@@ -27,7 +27,7 @@ public class RequirementsTest {
 
     @DataPoints
     public static int[] goldAmounts() {
-        return new int[]{0, 1, 2, 5};
+        return new int[] {0, 1, 2, 5};
     }
 
     @DataPoints
@@ -36,13 +36,13 @@ public class RequirementsTest {
     }
 
     @Test
-    public void getResources_emptyAfterInit() throws Exception {
+    public void getResources_emptyAfterInit() {
         Requirements requirements = new Requirements();
         assertTrue(requirements.getResources().isEmpty());
     }
 
     @Test
-    public void setResources_success() throws Exception {
+    public void setResources_success() {
         Requirements requirements = new Requirements();
         Resources resources = new Resources();
         requirements.setResources(resources);
@@ -58,8 +58,8 @@ public class RequirementsTest {
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(boardGold >= requiredGold, requirements.areMetWithoutNeighboursBy(board));
-        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, Collections.emptyList()));
-        assertEquals(boardGold >= requiredGold, requirements.couldBeMetBy(table, 0));
+        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, new ResourceTransactions()));
+        assertEquals(boardGold >= requiredGold, requirements.areMetBy(table, 0));
     }
 
     @Theory
@@ -71,16 +71,16 @@ public class RequirementsTest {
 
         assertEquals(initialResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
         assertEquals(initialResource == requiredResource,
-                requirements.areMetWithHelpBy(board, Collections.emptyList()));
+                requirements.areMetWithHelpBy(board, new ResourceTransactions()));
 
         if (initialResource == requiredResource) {
-            assertTrue(requirements.couldBeMetBy(table, 0));
+            assertTrue(requirements.areMetBy(table, 0));
         }
     }
 
     @Theory
     public void resourceRequirement_ownProduction(ResourceType initialResource, ResourceType producedResource,
-                                                  ResourceType requiredResource) {
+            ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
         Requirements requirements = TestUtils.createRequirements(requiredResource);
@@ -91,16 +91,16 @@ public class RequirementsTest {
 
         assertEquals(producedResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
         assertEquals(producedResource == requiredResource,
-                requirements.areMetWithHelpBy(board, Collections.emptyList()));
+                requirements.areMetWithHelpBy(board, new ResourceTransactions()));
 
         if (producedResource == requiredResource) {
-            assertTrue(requirements.couldBeMetBy(table, 0));
+            assertTrue(requirements.areMetBy(table, 0));
         }
     }
 
     @Theory
     public void resourceRequirement_boughtResource(ResourceType initialResource, ResourceType boughtResource,
-                                                  ResourceType requiredResource) {
+            ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
         Requirements requirements = TestUtils.createRequirements(requiredResource);
@@ -110,16 +110,13 @@ public class RequirementsTest {
         neighbourBoard.getPublicProduction().addFixedResource(boughtResource, 1);
         Table table = new Table(Arrays.asList(board, neighbourBoard));
 
-        BoughtResources resources = new BoughtResources();
-        resources.setProvider(Provider.RIGHT_PLAYER);
-        resources.setResources(TestUtils.createResources(boughtResource));
+        ResourceTransactions resources = TestUtils.createTransactions(Provider.RIGHT_PLAYER, boughtResource);
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board));
-        assertEquals(boughtResource == requiredResource,
-                requirements.areMetWithHelpBy(board, Collections.singletonList(resources)));
+        assertEquals(boughtResource == requiredResource, requirements.areMetWithHelpBy(board, resources));
 
         if (boughtResource == requiredResource) {
-            assertTrue(requirements.couldBeMetBy(table, 0));
+            assertTrue(requirements.areMetBy(table, 0));
         }
     }
 
@@ -133,15 +130,14 @@ public class RequirementsTest {
         Board neighbourBoard = TestUtils.createBoard(requiredResource, 0);
         Table table = new Table(Arrays.asList(board, neighbourBoard));
 
-        BoughtResources boughtResources = new BoughtResources();
-        boughtResources.setProvider(Provider.RIGHT_PLAYER);
-        boughtResources.setResources(TestUtils.createResources(requiredResource));
+        ResourceTransactions transactions = TestUtils.createTransactions(Provider.RIGHT_PLAYER,
+                requiredResource);
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board));
-        assertTrue(requirements.areMetWithHelpBy(board, Collections.singletonList(boughtResources)));
-        assertTrue(requirements.couldBeMetBy(table, 0));
+        assertTrue(requirements.areMetWithHelpBy(board, transactions));
+        assertTrue(requirements.areMetBy(table, 0));
 
-        requirements.pay(table, 0, Collections.singletonList(boughtResources));
+        requirements.pay(table, 0, transactions);
 
         assertEquals(0, board.getGold());
         assertEquals(2, neighbourBoard.getGold());

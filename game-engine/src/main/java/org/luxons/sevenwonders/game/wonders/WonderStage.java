@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Requirements;
 import org.luxons.sevenwonders.game.effects.Effect;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 
 public class WonderStage {
 
@@ -38,7 +38,7 @@ public class WonderStage {
         return cardBack != null;
     }
 
-    public boolean isBuildable(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+    public boolean isBuildable(Table table, int playerIndex, ResourceTransactions boughtResources) {
         Board board = table.getBoard(playerIndex);
         return requirements.areMetWithHelpBy(board, boughtResources);
     }
@@ -47,7 +47,7 @@ public class WonderStage {
         this.cardBack = cardBack;
     }
 
-    void activate(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+    void activate(Table table, int playerIndex, ResourceTransactions boughtResources) {
         effects.forEach(e -> e.apply(table, playerIndex));
         requirements.pay(table, playerIndex, boughtResources);
     }

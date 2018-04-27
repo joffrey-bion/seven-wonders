@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.game.resources;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 public class TradingRules {
@@ -26,13 +25,17 @@ public class TradingRules {
         costs.computeIfAbsent(type, t -> new EnumMap<>(Provider.class)).put(provider, cost);
     }
 
-    public int computeCost(List<BoughtResources> boughtResources) {
-        return boughtResources.stream().mapToInt(this::computeCost).sum();
+    public int computeCost(ResourceTransactions transactions) {
+        return transactions.toTransactions().stream().mapToInt(this::computeCost).sum();
     }
 
-    public int computeCost(BoughtResources boughtResources) {
-        Resources resources = boughtResources.getResources();
-        Provider provider = boughtResources.getProvider();
+    int computeCost(ResourceTransaction transaction) {
+        Resources resources = transaction.getResources();
+        Provider provider = transaction.getProvider();
+        return computeCost(resources, provider);
+    }
+
+    private int computeCost(Resources resources, Provider provider) {
         int total = 0;
         for (ResourceType type : ResourceType.values()) {
             int count = resources.getQuantity(type);

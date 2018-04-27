@@ -32,8 +32,9 @@ public class Resources {
         quantities.computeIfPresent(type, (t, oldQty) -> oldQty - quantity);
     }
 
-    public void addAll(Resources resources) {
+    public Resources addAll(Resources resources) {
         resources.quantities.forEach(this::add);
+        return this;
     }
 
     public int getQuantity(ResourceType type) {
@@ -53,6 +54,13 @@ public class Resources {
 
     private boolean hasAtLeast(Entry<ResourceType, Integer> quantity) {
         return quantity.getValue() <= getQuantity(quantity.getKey());
+    }
+
+    public Resources plus(Resources resources) {
+        Resources merged = new Resources();
+        merged.addAll(this);
+        merged.addAll(resources);
+        return merged;
     }
 
     /**

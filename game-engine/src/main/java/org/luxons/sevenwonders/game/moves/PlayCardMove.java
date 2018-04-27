@@ -19,7 +19,7 @@ public class PlayCardMove extends CardFromHandMove {
         super.validate(table, playerHand);
         Board board = table.getBoard(getPlayerIndex());
         if (!getCard().isChainableOn(board) && !getCard().getRequirements()
-                                                         .areMetWithHelpBy(board, getBoughtResources())) {
+                                                         .areMetWithHelpBy(board, getTransactions())) {
             throw new InvalidMoveException(
                     String.format("Player %d cannot play the card %s with the given resources", getPlayerIndex(),
                             getCard().getName()));
@@ -34,6 +34,6 @@ public class PlayCardMove extends CardFromHandMove {
 
     @Override
     public void activate(Table table, List<Card> discardedCards, Settings settings) {
-        getCard().applyTo(table, getPlayerIndex(), getBoughtResources());
+        getCard().applyTo(table, getPlayerIndex(), getTransactions());
     }
 }

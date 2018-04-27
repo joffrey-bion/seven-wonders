@@ -18,7 +18,7 @@ public class BuildWonderMove extends CardFromHandMove {
     public void validate(Table table, List<Card> playerHand) throws InvalidMoveException {
         super.validate(table, playerHand);
         Board board = table.getBoard(getPlayerIndex());
-        if (!board.getWonder().isNextStageBuildable(table, getPlayerIndex(), getBoughtResources())) {
+        if (!board.getWonder().isNextStageBuildable(table, getPlayerIndex(), getTransactions())) {
             throw new InvalidMoveException(
                     String.format("Player %d cannot upgrade his wonder with the given resources", getPlayerIndex()));
         }
@@ -34,6 +34,6 @@ public class BuildWonderMove extends CardFromHandMove {
     public void activate(Table table, List<Card> discardedCards, Settings settings) {
         int playerIndex = getPlayerIndex();
         Board board = table.getBoard(playerIndex);
-        board.getWonder().activateLastBuiltStage(table, playerIndex, getBoughtResources());
+        board.getWonder().activateLastBuiltStage(table, playerIndex, getTransactions());
     }
 }

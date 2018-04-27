@@ -1,12 +1,9 @@
 package org.luxons.sevenwonders.game.cards;
 
-import java.util.List;
-
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.resources.BestPriceCalculator;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.Resources;
 
 public class Requirements {
@@ -53,7 +50,7 @@ public class Requirements {
      *
      * @return true if the given board meets these requirements
      */
-    public boolean areMetWithHelpBy(Board board, List<BoughtResources> boughtResources) {
+    public boolean areMetWithHelpBy(Board board, ResourceTransactions boughtResources) {
         if (!hasRequiredGold(board, boughtResources)) {
             return false;
         }
@@ -64,7 +61,7 @@ public class Requirements {
     }
 
     /**
-     * Returns whether the given player's board could meet these requirements, on its own or by buying resources to
+     * Returns whether the given player's board meets these requirements, either on its own or by buying resources to
      * neighbours.
      *
      * @param table
@@ -74,7 +71,7 @@ public class Requirements {
      *
      * @return true if the given player's board could meet these requirements
      */
-    boolean couldBeMetBy(Table table, int playerIndex) {
+    boolean areMetBy(Table table, int playerIndex) {
         Board board = table.getBoard(playerIndex);
         if (!hasRequiredGold(board)) {
             return false;
@@ -89,8 +86,8 @@ public class Requirements {
         return board.getGold() >= gold;
     }
 
-    private boolean hasRequiredGold(Board board, List<BoughtResources> boughtResources) {
-        int resourcesPrice = board.getTradingRules().computeCost(boughtResources);
+    private boolean hasRequiredGold(Board board, ResourceTransactions resourceTransactions) {
+        int resourcesPrice = board.getTradingRules().computeCost(resourceTransactions);
         return board.getGold() >= gold + resourcesPrice;
     }
 
@@ -98,34 +95,14 @@ public class Requirements {
         return board.getProduction().contains(resources);
     }
 
-    private boolean producesRequiredResourcesWithHelp(Board board, List<BoughtResources> boughtResources) {
-        Resources totalBoughtResources = getTotalResources(boughtResources);
+    private boolean producesRequiredResourcesWithHelp(Board board, ResourceTransactions transactions) {
+        Resources totalBoughtResources = transactions.asResources();
         Resources remainingResources = this.resources.minus(totalBoughtResources);
         return board.getProduction().contains(remainingResources);
     }
 
-    private static Resources getTotalResources(List<BoughtResources> boughtResources) {
-        return boughtResources.stream().map(BoughtResources::getResources).reduce(new Resources(), (r1, r2) -> {
-            r1.addAll(r2);
-            return r1;
-        });
-    }
-
-    public void pay(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+    public void pay(Table table, int playerIndex, ResourceTransactions transactions) {
         table.getBoard(playerIndex).removeGold(gold);
-        payBoughtResources(table, playerIndex, boughtResources);
-    }
-
-    private void payBoughtResources(Table table, int playerIndex, List<BoughtResources> boughtResourcesList) {
-        boughtResourcesList.forEach(res -> payBoughtResources(table, playerIndex, res));
-    }
-
-    private void payBoughtResources(Table table, int playerIndex, BoughtResources boughtResources) {
-        Board board = table.getBoard(playerIndex);
-        int price = board.getTradingRules().computeCost(boughtResources);
-        board.removeGold(price);
-        RelativeBoardPosition providerPosition = boughtResources.getProvider().getBoardPosition();
-        Board providerBoard = table.getBoard(playerIndex, providerPosition);
-        providerBoard.addGold(price);
+        transactions.execute(table, playerIndex);
     }
 }

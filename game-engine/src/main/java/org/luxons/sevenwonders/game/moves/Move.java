@@ -6,7 +6,7 @@ import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.PlayerMove;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 
 public abstract class Move {
 
@@ -16,13 +16,13 @@ public abstract class Move {
 
     private MoveType type;
 
-    private List<BoughtResources> boughtResources;
+    private ResourceTransactions transactions;
 
     Move(int playerIndex, Card card, PlayerMove move) {
         this.playerIndex = playerIndex;
         this.card = card;
         this.type = move.getType();
-        this.boughtResources = move.getBoughtResources();
+        this.transactions = new ResourceTransactions(move.getTransactions());
     }
 
     public int getPlayerIndex() {
@@ -37,8 +37,8 @@ public abstract class Move {
         return type;
     }
 
-    public List<BoughtResources> getBoughtResources() {
-        return boughtResources;
+    public ResourceTransactions getTransactions() {
+        return transactions;
     }
 
     public abstract void validate(Table table, List<Card> playerHand) throws InvalidMoveException;

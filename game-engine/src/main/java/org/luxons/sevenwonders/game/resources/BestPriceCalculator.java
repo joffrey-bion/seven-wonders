@@ -14,11 +14,11 @@ public class BestPriceCalculator {
 
     private final List<ResourcePool> pools;
 
-    private final List<BoughtResources> boughtResources;
+    private final ResourceTransactions boughtResources;
 
     private int pricePaid;
 
-    private List<BoughtResources> bestSolution;
+    private ResourceTransactions bestSolution;
 
     private int bestPrice;
 
@@ -26,7 +26,7 @@ public class BestPriceCalculator {
         Board board = table.getBoard(playerIndex);
         this.resourcesLeftToPay = resourcesToPay.minus(board.getProduction().getFixedResources());
         this.pools = createResourcePools(table, playerIndex);
-        this.boughtResources = new ArrayList<>();
+        this.boughtResources = new ResourceTransactions();
         this.pricePaid = 0;
         this.bestSolution = null;
         this.bestPrice = Integer.MAX_VALUE;
@@ -56,10 +56,10 @@ public class BestPriceCalculator {
         return bestPriceCalculator.bestPrice;
     }
 
-    public static List<BoughtResources> bestSolution(Resources resources, Table table, int playerIndex) {
-        BestPriceCalculator bestPriceCalculator = new BestPriceCalculator(resources, table, playerIndex);
-        bestPriceCalculator.computePossibilities();
-        return bestPriceCalculator.bestSolution;
+    public static ResourceTransactions bestSolution(Resources resources, Table table, int playerIndex) {
+        BestPriceCalculator calculator = new BestPriceCalculator(resources, table, playerIndex);
+        calculator.computePossibilities();
+        return calculator.bestSolution;
     }
 
     private void computePossibilities() {
@@ -77,15 +77,14 @@ public class BestPriceCalculator {
                         resourcesLeftToPay.add(type, 1);
                         continue;
                     }
-                    BoughtResources boughtRes = new BoughtResources(pool.getProvider(), Resources.of(type));
                     int cost = pool.getCost(type);
 
                     resourcesLeftToPay.remove(type, 1);
-                    boughtResources.add(boughtRes);
+                    boughtResources.add(pool.getProvider(), Resources.of(type));
                     pricePaid += cost;
                     computePossibilitiesWhenUsing(type, pool);
                     pricePaid -= cost;
-                    boughtResources.remove(boughtRes);
+                    boughtResources.remove(pool.getProvider(), Resources.of(type));
                     resourcesLeftToPay.add(type, 1);
                 }
             }
@@ -106,7 +105,7 @@ public class BestPriceCalculator {
     private void updateBestSolutionIfNeeded() {
         if (pricePaid < bestPrice) {
             bestPrice = pricePaid;
-            bestSolution = new ArrayList<>(boughtResources);
+            bestSolution = new ResourceTransactions(boughtResources.toTransactions());
         }
     }
 }

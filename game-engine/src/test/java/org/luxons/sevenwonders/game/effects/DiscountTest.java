@@ -6,8 +6,8 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.boards.Board;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
 import org.luxons.sevenwonders.game.resources.Provider;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
@@ -40,8 +40,8 @@ public class DiscountTest {
         discount.getResourceTypes().add(discountedType);
         discount.apply(board);
 
-        BoughtResources boughtResources = TestUtils.createBoughtResources(provider, discountedType);
-        assertEquals(discountedPrice, board.getTradingRules().computeCost(boughtResources));
+        ResourceTransactions transactions = TestUtils.createTransactions(provider, discountedType);
+        assertEquals(discountedPrice, board.getTradingRules().computeCost(transactions));
     }
 
     @Theory
@@ -60,13 +60,13 @@ public class DiscountTest {
         // this is the default in the settings used by TestUtils.createBoard()
         int normalPrice = 2;
 
-        BoughtResources fromOtherType = TestUtils.createBoughtResources(provider, otherType);
+        ResourceTransactions fromOtherType = TestUtils.createTransactions(provider, otherType);
         assertEquals(normalPrice, board.getTradingRules().computeCost(fromOtherType));
 
-        BoughtResources fromOtherProvider = TestUtils.createBoughtResources(otherProvider, discountedType);
+        ResourceTransactions fromOtherProvider = TestUtils.createTransactions(otherProvider, discountedType);
         assertEquals(normalPrice, board.getTradingRules().computeCost(fromOtherProvider));
 
-        BoughtResources fromOtherProviderAndType = TestUtils.createBoughtResources(otherProvider, otherType);
+        ResourceTransactions fromOtherProviderAndType = TestUtils.createTransactions(otherProvider, otherType);
         assertEquals(normalPrice, board.getTradingRules().computeCost(fromOtherProviderAndType));
     }
 }

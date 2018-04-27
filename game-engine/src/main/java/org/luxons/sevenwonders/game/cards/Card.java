@@ -6,7 +6,7 @@ import java.util.Objects;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.effects.Effect;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 
 public class Card {
 
@@ -93,13 +93,13 @@ public class Card {
         if (!isAllowedOnBoard(board)) {
             return false;
         }
-        return isChainableOn(board) || requirements.couldBeMetBy(table, playerIndex);
+        return isChainableOn(board) || requirements.areMetBy(table, playerIndex);
     }
 
-    public void applyTo(Table table, int playerIndex, List<BoughtResources> boughtResources) {
+    public void applyTo(Table table, int playerIndex, ResourceTransactions transactions) {
         Board playerBoard = table.getBoard(playerIndex);
         if (!isChainableOn(playerBoard)) {
-            requirements.pay(table, playerIndex, boughtResources);
+            requirements.pay(table, playerIndex, transactions);
         }
         effects.forEach(e -> e.apply(table, playerIndex));
     }

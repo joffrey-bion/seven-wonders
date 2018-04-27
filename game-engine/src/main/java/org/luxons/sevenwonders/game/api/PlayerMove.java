@@ -1,10 +1,10 @@
 package org.luxons.sevenwonders.game.api;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.luxons.sevenwonders.game.moves.MoveType;
-import org.luxons.sevenwonders.game.resources.BoughtResources;
+import org.luxons.sevenwonders.game.resources.ResourceTransaction;
 
 public class PlayerMove {
 
@@ -12,7 +12,7 @@ public class PlayerMove {
 
     private String cardName;
 
-    private List<BoughtResources> boughtResources = new ArrayList<>();
+    private Collection<ResourceTransaction> transactions = new ArrayList<>();
 
     public MoveType getType() {
         return type;
@@ -30,12 +30,12 @@ public class PlayerMove {
         this.cardName = cardName;
     }
 
-    public List<BoughtResources> getBoughtResources() {
-        return boughtResources;
+    public Collection<ResourceTransaction> getTransactions() {
+        return transactions;
     }
 
-    public void setBoughtResources(List<BoughtResources> boughtResources) {
-        this.boughtResources = boughtResources;
+    public void setTransactions(Collection<ResourceTransaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
