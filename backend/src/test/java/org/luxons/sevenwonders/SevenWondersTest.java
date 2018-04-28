@@ -15,7 +15,7 @@ import org.luxons.sevenwonders.test.api.ApiPlayer;
 import org.luxons.sevenwonders.test.api.ApiPlayerTurnInfo;
 import org.luxons.sevenwonders.test.api.SevenWondersClient;
 import org.luxons.sevenwonders.test.api.SevenWondersSession;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
