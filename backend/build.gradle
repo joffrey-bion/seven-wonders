@@ -23,8 +23,12 @@ configurations {
 
 dependencies {
     compile project(':game-engine')
+
     compile 'org.springframework.boot:spring-boot-starter-websocket'
-    compile 'org.springframework.security:spring-security-core:5.0.4.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    // required by spring security with websockets
+    compile 'org.springframework.security:spring-security-messaging'
+
     compile 'ch.qos.logback:logback-classic:1.1.8'
     compile 'org.hildan.livedoc:livedoc-springboot:4.3.2'
     compile 'org.hildan.livedoc:livedoc-ui-webjar:4.3.2'
