@@ -6,12 +6,13 @@ import type {
   ApiPlayerMove,
   ApiPlayerTurnInfo,
   ApiPreparedCard,
+  ApiSettings,
   ApiTable,
 } from './model';
 import type { JsonStompClient, SubscribeFn } from './websocket';
 import { createJsonStompClient } from './websocket';
 
-const wsURL = '/seven-wonders-websocket';
+const WS_URL = '/seven-wonders-websocket';
 
 export class SevenWondersSession {
   client: JsonStompClient;
@@ -24,12 +25,12 @@ export class SevenWondersSession {
     return this.client.subscriber('/user/queue/errors');
   }
 
-  chooseName(displayName: string): void {
-    this.client.send('/app/chooseName', { playerName: displayName });
-  }
-
   watchNameChoice(): SubscribeFn<ApiPlayer> {
     return this.client.subscriber('/user/queue/nameChoice');
+  }
+
+  chooseName(displayName: string): void {
+    this.client.send('/app/chooseName', { playerName: displayName });
   }
 
   watchGames(): SubscribeFn<ApiLobby[]> {
@@ -40,6 +41,14 @@ export class SevenWondersSession {
     return this.client.subscriber('/user/queue/lobby/joined');
   }
 
+  createGame(gameName: string): void {
+    this.client.send('/app/lobby/create', { gameName });
+  }
+
+  joinGame(gameId: number): void {
+    this.client.send('/app/lobby/join', { gameId });
+  }
+
   watchLobbyUpdated(currentGameId: number): SubscribeFn<Object> {
     return this.client.subscriber(`/topic/lobby/${currentGameId}/updated`);
   }
@@ -48,12 +57,16 @@ export class SevenWondersSession {
     return this.client.subscriber(`/topic/lobby/${currentGameId}/started`);
   }
 
-  createGame(gameName: string): void {
-    this.client.send('/app/lobby/create', { gameName });
+  leave(): void {
+    this.client.send('/app/lobby/leave');
   }
 
-  joinGame(gameId: number): void {
-    this.client.send('/app/lobby/join', { gameId });
+  reorderPlayers(orderedPlayers: Array<string>): void {
+    this.client.send('/app/lobby/reorderPlayers', { orderedPlayers });
+  }
+
+  updateSettings(settings: ApiSettings): void {
+    this.client.send('/app/lobby/updateSettings', { settings });
   }
 
   startGame(): void {
@@ -73,7 +86,7 @@ export class SevenWondersSession {
   }
 
   watchTurnInfo(): SubscribeFn<ApiPlayerTurnInfo> {
-    return this.client.subscriber('/user/queue/game/turnInfo');
+    return this.client.subscriber('/user/queue/game/turn');
   }
 
   sayReady(): void {
@@ -81,12 +94,12 @@ export class SevenWondersSession {
   }
 
   prepareMove(move: ApiPlayerMove): void {
-    this.client.send('/app/game/sayReady', { move });
+    this.client.send('/app/game/prepareMove', { move });
   }
 }
 
 export async function connectToGame(): Promise<SevenWondersSession> {
-  const jsonStompClient: JsonStompClient = createJsonStompClient(wsURL);
+  const jsonStompClient: JsonStompClient = createJsonStompClient(WS_URL);
   await jsonStompClient.connect();
   return new SevenWondersSession(jsonStompClient);
 }
