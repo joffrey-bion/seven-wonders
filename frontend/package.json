@@ -26,7 +26,7 @@
     "redux": "^4.0.0",
     "redux-immutable": "^4.0.0",
     "redux-saga": "^0.16.0",
-    "reflexbox": "^2.2.3",
+    "reflexbox": "^3.0.1",
     "reselect": "^3.0.1",
     "sockjs-client": "^1.1.4",
     "webstomp-client": "^1.0.6"
