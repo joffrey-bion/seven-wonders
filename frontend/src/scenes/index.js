@@ -1,9 +1,8 @@
 import React from 'react';
-import { Route, Redirect, Switch } from 'react-router-dom';
-
-import { SplashScreen } from './SplashScreen';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { GameBrowser } from './GameBrowser';
 import { Lobby } from './Lobby';
+import { SplashScreen } from './SplashScreen';
 
 export const Application = () => (
   <Switch>

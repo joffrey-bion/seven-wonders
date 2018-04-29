@@ -1,14 +1,13 @@
 // @flow
+import '@blueprintjs/core/dist/blueprint.css';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import './global-styles.css';
-import '@blueprintjs/core/dist/blueprint.css';
-
-import { configureStore } from './store';
 import { Application } from './scenes';
+import { configureStore } from './store';
 
 const initialState = {};
 const { store, history } = configureStore(initialState);

@@ -3,8 +3,8 @@ import type { History } from 'react-router';
 import { call, fork } from 'redux-saga/effects';
 import { connectToGame, SevenWondersSession } from './api/sevenWondersApi';
 import { errorHandlingSaga } from './sagas/errors';
-import { homeSaga } from './sagas/home';
 import { gameBrowserSaga } from './sagas/gameBrowser';
+import { homeSaga } from './sagas/home';
 import { lobbySaga } from './sagas/lobby';
 
 export function* rootSaga(history: History): * {

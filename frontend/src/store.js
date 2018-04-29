@@ -1,8 +1,8 @@
 // @flow
-import { createStore, applyMiddleware, compose } from 'redux';
 import createHistory from 'history/createBrowserHistory';
-import { routerMiddleware } from 'react-router-redux';
 import { fromJS } from 'immutable';
+import { routerMiddleware } from 'react-router-redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createReducer } from './reducers';
 import { rootSaga } from './sagas';

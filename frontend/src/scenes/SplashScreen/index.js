@@ -1,10 +1,9 @@
 // @flow
+import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'rebass';
 import { actions } from '../../redux/players';
-
-import { InputGroup, Button, Classes, Intent } from '@blueprintjs/core';
 import { HomeLayout } from './components/HomeLayout';
 
 class SplashScreenPresenter extends Component {
