@@ -1,6 +1,7 @@
 // @flow
 import { normalize } from 'normalizr';
 import { push } from 'react-router-redux';
+import type { SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
@@ -8,7 +9,7 @@ import { actions as gameActions, types } from '../redux/games';
 import { actions as playerActions } from '../redux/players';
 import { game as gameSchema, gameList as gameListSchema } from '../schemas/games';
 
-function* watchGames(session: SevenWondersSession): * {
+function* watchGames(session: SevenWondersSession): SagaIterator {
   const gamesChannel = yield eventChannel(session.watchGames());
   try {
     while (true) {
@@ -23,7 +24,7 @@ function* watchGames(session: SevenWondersSession): * {
   }
 }
 
-function* watchLobbyJoined(session: SevenWondersSession): * {
+function* watchLobbyJoined(session: SevenWondersSession): SagaIterator {
   const joinedLobbyChannel = yield eventChannel(session.watchLobbyJoined());
   try {
     const joinedLobby = yield take(joinedLobbyChannel);
@@ -38,7 +39,7 @@ function* watchLobbyJoined(session: SevenWondersSession): * {
   }
 }
 
-function* createGame(session: SevenWondersSession): * {
+function* createGame(session: SevenWondersSession): SagaIterator {
   while (true) {
     const { gameName } = yield take(types.REQUEST_CREATE_GAME);
     // $FlowFixMe
@@ -46,7 +47,7 @@ function* createGame(session: SevenWondersSession): * {
   }
 }
 
-function* joinGame(session: SevenWondersSession): * {
+function* joinGame(session: SevenWondersSession): SagaIterator {
   while (true) {
     const { gameId } = yield take(types.REQUEST_JOIN_GAME);
     // $FlowFixMe
@@ -54,7 +55,7 @@ function* joinGame(session: SevenWondersSession): * {
   }
 }
 
-export function* gameBrowserSaga(session: SevenWondersSession): * {
+export function* gameBrowserSaga(session: SevenWondersSession): SagaIterator {
   yield all([
     call(watchGames, session),
     call(watchLobbyJoined, session),

@@ -1,12 +1,12 @@
 // @flow
 import { toastr } from 'react-redux-toastr';
-import type { Channel } from 'redux-saga';
+import type { Channel, SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { apply, cancelled, take } from 'redux-saga/effects';
 import type { ApiError } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
 
-export function* errorHandlingSaga(session: SevenWondersSession): * {
+export function* errorHandlingSaga(session: SevenWondersSession): SagaIterator {
   const errorChannel: Channel = yield eventChannel(session.watchErrors());
   try {
     while (true) {

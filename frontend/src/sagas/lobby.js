@@ -1,7 +1,7 @@
 // @flow
 import { normalize } from 'normalizr';
 import { push } from 'react-router-redux';
-import type { Channel } from 'redux-saga';
+import type { Channel, SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import { SevenWondersSession } from '../api/sevenWondersApi';
@@ -14,7 +14,7 @@ function getCurrentGameId(): number {
   return path.split('lobby/')[1];
 }
 
-function* watchLobbyUpdates(session: SevenWondersSession): * {
+function* watchLobbyUpdates(session: SevenWondersSession): SagaIterator {
   const currentGameId: number = getCurrentGameId();
   const lobbyUpdatesChannel: Channel = yield eventChannel(session.watchLobbyUpdated(currentGameId));
   try {
@@ -29,7 +29,7 @@ function* watchLobbyUpdates(session: SevenWondersSession): * {
   }
 }
 
-function* watchGameStart(session: SevenWondersSession): * {
+function* watchGameStart(session: SevenWondersSession): SagaIterator {
   const currentGameId = getCurrentGameId();
   const gameStartedChannel = yield eventChannel(session.watchGameStarted(currentGameId));
   try {
@@ -41,13 +41,13 @@ function* watchGameStart(session: SevenWondersSession): * {
   }
 }
 
-function* startGame(session: SevenWondersSession): * {
+function* startGame(session: SevenWondersSession): SagaIterator {
   while (true) {
     yield take(types.REQUEST_START_GAME);
     yield apply(session, session.startGame, []);
   }
 }
 
-export function* lobbySaga(session: SevenWondersSession): * {
+export function* lobbySaga(session: SevenWondersSession): SagaIterator {
   yield all([call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)]);
 }
