@@ -24,7 +24,7 @@ export function configureStore(initialState: Object = {}) {
 
   const store = createStore(createReducer(), fromJS(initialState), composeEnhancers(...enhancers));
 
-  sagaMiddleware.run(rootSaga, history);
+  sagaMiddleware.run(rootSaga);
 
   return {
     store,
