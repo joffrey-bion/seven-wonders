@@ -2,21 +2,23 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
 import './global-styles.css';
 import '@blueprintjs/core/dist/blueprint.css';
 
 import configureStore from './store';
-import Routes from './scenes';
+import { Application } from './scenes';
 const initialState = {};
 const { store, history } = configureStore(initialState);
 
-ReactDOM.render(
-  <Provider store={store}>
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  ReactDOM.render(<Provider store={store}>
     <ConnectedRouter history={history}>
-      <Routes />
+      <Application/>
     </ConnectedRouter>
-  </Provider>,
-  document.getElementById('root')
-);
+  </Provider>, rootElement);
+} else {
+  console.error('Element with ID "root" was not found, cannot bootstrap react app');
+}

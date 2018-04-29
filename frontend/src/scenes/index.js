@@ -5,7 +5,7 @@ import SplashScreen from './SplashScreen';
 import Games from './Games';
 import Lobby from './Lobby';
 
-const Application = () => (
+export const Application = () => (
   <Switch>
     <Route path="/splash-screen" component={SplashScreen} />
     <Route path="/games" component={Games} />
@@ -13,5 +13,3 @@ const Application = () => (
     <Redirect from="*" to="/splash-screen" />
   </Switch>
 );
-
-export default Application;
