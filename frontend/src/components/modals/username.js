@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Close, Input, Overlay, Panel, PanelFooter, PanelHeader, Space } from 'rebass';
 
-const Modal = ({ modalOpen, toggleModal }) => (
+export const Modal = ({ modalOpen, toggleModal }) => (
   <Overlay open={modalOpen} onDismiss={toggleModal('usernameModal')}>
     <Panel theme="info">
       <PanelHeader>
@@ -17,5 +17,3 @@ const Modal = ({ modalOpen, toggleModal }) => (
     </Panel>
   </Overlay>
 );
-
-export default Modal;

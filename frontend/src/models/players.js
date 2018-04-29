@@ -29,7 +29,7 @@ const PlayersRecord: PlayersType = Record({
   current: '',
 });
 // $FlowFixMe
-export default class PlayerState extends PlayersRecord {
+export class PlayerState extends PlayersRecord {
   addPlayer(p: PlayerShape) {
     const player: Player = new Player(p);
     const playerMap = Map({ [player.username]: player });

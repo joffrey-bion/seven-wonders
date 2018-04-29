@@ -2,7 +2,7 @@
 import type { List, Map } from 'immutable';
 import { fromJS } from 'immutable';
 import type { Game, GameMapType, GameNormalMapType, GameShape } from '../models/games';
-import GamesState from '../models/games';
+import { GamesState } from '../models/games';
 
 export const types = {
   UPDATE_GAMES: 'GAMES/UPDATE_GAMES',
@@ -29,7 +29,7 @@ export const actions = {
   enterGame: () => ({ type: types.ENTER_GAME }),
 };
 
-export default (state: GamesState = new GamesState(), action: Actions) => {
+export const gamesReducer = (state: GamesState = new GamesState(), action: Actions) => {
   switch (action.type) {
     case types.UPDATE_GAMES:
       return state.addGames(action.games);

@@ -5,9 +5,9 @@ import { Container } from 'rebass';
 import { actions } from '../../redux/players';
 
 import { InputGroup, Button, Classes, Intent } from '@blueprintjs/core';
-import HomeLayout from './components/HomeLayout';
+import { HomeLayout } from './components/HomeLayout';
 
-class SplashScreen extends Component {
+class SplashScreenPresenter extends Component {
   _username = '';
 
   play = e => {
@@ -42,4 +42,4 @@ const mapDispatchToProps = {
   chooseUsername: actions.chooseUsername,
 };
 
-export default connect(null, mapDispatchToProps)(SplashScreen);
+export const SplashScreen = connect(null, mapDispatchToProps)(SplashScreenPresenter);

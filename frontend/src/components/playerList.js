@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'rebass';
 import { Flex } from 'reflexbox';
 
-const PlayerList = ({ players }) => (
+export const PlayerList = ({ players }) => (
   <div>
     {players.map(player => {
       return (
@@ -14,5 +14,3 @@ const PlayerList = ({ players }) => (
     })}
   </div>
 );
-
-export default PlayerList;

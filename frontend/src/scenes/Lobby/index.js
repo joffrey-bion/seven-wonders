@@ -2,11 +2,11 @@ import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'rebass';
-import PlayerList from '../../components/playerList';
+import { PlayerList } from '../../components/playerList';
 import { actions, getCurrentGame } from '../../redux/games';
 import { getPlayers } from '../../redux/players';
 
-class Lobby extends Component {
+class LobbyPresenter extends Component {
   getTitle() {
     if (this.props.currentGame) {
       return this.props.currentGame.name + ' — Lobby';
@@ -39,4 +39,4 @@ const mapDispatchToProps = {
   startGame: actions.requestStartGame,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Lobby);
+export const Lobby = connect(mapStateToProps, mapDispatchToProps)(LobbyPresenter);

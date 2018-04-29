@@ -64,7 +64,7 @@ const GamesRecord: GamesType = Record({
   all: new Map(),
   current: null,
 });
-export default class GamesState extends GamesRecord {
+export class GamesState extends GamesRecord {
   addGame(g: GameShape) {
     const game: Game = new Game(g);
     return this.mergeDeepIn(['all', game.id], game);

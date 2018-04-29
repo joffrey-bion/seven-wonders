@@ -6,7 +6,7 @@ import { apply, cancelled, take } from 'redux-saga/effects';
 import type { ApiError } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
 
-export default function* errorHandlingSaga(session: SevenWondersSession): * {
+export function* errorHandlingSaga(session: SevenWondersSession): * {
   const errorChannel: Channel = yield eventChannel(session.watchErrors());
   try {
     while (true) {

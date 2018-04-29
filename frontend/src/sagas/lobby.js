@@ -48,8 +48,6 @@ function* startGame(session: SevenWondersSession): * {
   }
 }
 
-function* lobbySaga(session: SevenWondersSession): * {
+export function* lobbySaga(session: SevenWondersSession): * {
   yield all([call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)]);
 }
-
-export default lobbySaga;

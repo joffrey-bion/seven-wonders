@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Error404 = () => (
+export const Error404 = () => (
   <div>
     <h1>No Match</h1>
     <Link to="/">
@@ -9,4 +9,3 @@ const Error404 = () => (
     </Link>
   </div>
 );
-export default Error404;

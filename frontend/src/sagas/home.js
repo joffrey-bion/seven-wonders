@@ -25,8 +25,6 @@ function* validateUsername(session: SevenWondersSession): * {
   }
 }
 
-function* homeSaga(session: SevenWondersSession): * {
+export function* homeSaga(session: SevenWondersSession): * {
   yield all([call(sendUsername, session), call(validateUsername, session)]);
 }
-
-export default homeSaga;

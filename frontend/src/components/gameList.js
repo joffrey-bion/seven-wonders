@@ -5,7 +5,7 @@ import { Button, Space, Text } from 'rebass';
 import { Flex } from 'reflexbox';
 import type { Game } from '../models/games';
 
-const GameList = ({ games, joinGame }: { games: List<Game>, joinGame: (gameId: string) => void }) => (
+export const GameList = ({ games, joinGame }: { games: List<Game>, joinGame: (gameId: string) => void }) => (
   <div>
     {games.map((game: Game, index: number) => {
       return (
@@ -18,5 +18,3 @@ const GameList = ({ games, joinGame }: { games: List<Game>, joinGame: (gameId: s
     })}
   </div>
 );
-
-export default GameList;

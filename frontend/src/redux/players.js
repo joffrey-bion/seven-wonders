@@ -1,4 +1,4 @@
-import PlayerState, { Player } from '../models/players';
+import { Player, PlayerState } from '../models/players';
 
 export const types = {
   REQUEST_CHOOSE_USERNAME: 'USER/REQUEST_CHOOSE_USERNAME',
@@ -21,7 +21,7 @@ export const actions = {
   }),
 };
 
-export default (state = new PlayerState(), action) => {
+export const playersReducer = (state = new PlayerState(), action) => {
   switch (action.type) {
     case types.SET_CURRENT_PLAYER:
       return state.addPlayer(action.player);

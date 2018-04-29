@@ -54,7 +54,7 @@ function* joinGame(session: SevenWondersSession): * {
   }
 }
 
-function* gameBrowserSaga(session: SevenWondersSession): * {
+export function* gameBrowserSaga(session: SevenWondersSession): * {
   yield all([
     call(watchGames, session),
     call(watchLobbyJoined, session),
@@ -62,5 +62,3 @@ function* gameBrowserSaga(session: SevenWondersSession): * {
     call(joinGame, session),
   ]);
 }
-
-export default gameBrowserSaga;

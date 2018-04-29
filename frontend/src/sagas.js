@@ -2,12 +2,12 @@
 import type { History } from 'react-router';
 import { call, fork } from 'redux-saga/effects';
 import { connectToGame, SevenWondersSession } from './api/sevenWondersApi';
-import errorHandlingSaga from './sagas/errors';
-import homeSaga from './sagas/home';
-import gameBrowserSaga from './sagas/gameBrowser';
-import lobbySaga from './sagas/lobby';
+import { errorHandlingSaga } from './sagas/errors';
+import { homeSaga } from './sagas/home';
+import { gameBrowserSaga } from './sagas/gameBrowser';
+import { lobbySaga } from './sagas/lobby';
 
-export default function* rootSaga(history: History): * {
+export function* rootSaga(history: History): * {
   let sevenWondersSession: SevenWondersSession | void;
   try {
     sevenWondersSession = yield call(connectToGame);

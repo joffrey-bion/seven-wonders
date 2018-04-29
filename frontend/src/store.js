@@ -4,10 +4,10 @@ import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware } from 'react-router-redux';
 import { fromJS } from 'immutable';
 import createSagaMiddleware from 'redux-saga';
-import createReducer from './reducers';
-import rootSaga from './sagas';
+import { createReducer } from './reducers';
+import { rootSaga } from './sagas';
 
-export default function configureStore(initialState: Object = {}) {
+export function configureStore(initialState: Object = {}) {
   const sagaMiddleware = createSagaMiddleware();
 
   const history = createHistory();
