@@ -3,10 +3,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'rebass';
 import { PlayerList } from '../../components/playerList';
+import type { Game } from '../../models/games';
+import type { Player } from '../../models/players';
 import { actions, getCurrentGame } from '../../redux/games';
 import { getPlayers } from '../../redux/players';
 
-class LobbyPresenter extends Component {
+export type LobbyProps = {
+  currentGame: Game,
+  players: List<Player>,
+}
+
+class LobbyPresenter extends Component<LobbyProps> {
   getTitle() {
     if (this.props.currentGame) {
       return this.props.currentGame.name + ' — Lobby';

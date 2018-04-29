@@ -10,7 +10,14 @@ import type { Player } from '../../models/players';
 import { actions, getAllGames } from '../../redux/games';
 import { getCurrentPlayer } from '../../redux/players';
 
-class GameBrowserPresenter extends Component {
+export type GameBrowserProps = {
+  currentPlayer: Player,
+  games: List<Game>,
+  createGame: (gameName: string) => void,
+  joinGame: (gameId: string) => void
+}
+
+class GameBrowserPresenter extends Component<GameBrowserProps> {
   props: {
     currentPlayer: Player,
     games: List<Game>,
@@ -20,7 +27,7 @@ class GameBrowserPresenter extends Component {
 
   _gameName: string | void = undefined;
 
-  createGame = (e: SyntheticEvent): void => {
+  createGame = (e: SyntheticEvent<*>): void => {
     e.preventDefault();
     if (this._gameName !== undefined) {
       this.props.createGame(this._gameName);
@@ -35,7 +42,7 @@ class GameBrowserPresenter extends Component {
             buttonLabel="Create Game"
             label="Game name"
             name="game_name"
-            onChange={(e: SyntheticInputEvent) => (this._gameName = e.target.value)}
+            onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
             onClick={this.createGame}
           />
           <Space auto />

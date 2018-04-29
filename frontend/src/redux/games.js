@@ -51,4 +51,4 @@ export const gamesReducer = (state: GamesState = new GamesState(), action: Games
 export const getAllGamesById = (games: GamesState): Map<string, Game> => games.all;
 export const getAllGames = (games: GamesState): List<Game> => getAllGamesById(games).toList();
 export const getGame = (games: GamesState, id: string | number): Game => getAllGamesById(games).get(`${id}`);
-export const getCurrentGame = (games: GamesState) => getGame(games, games.current);
+export const getCurrentGame = (games: GamesState): Game => getGame(games, games.current);

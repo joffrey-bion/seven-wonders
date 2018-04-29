@@ -6,7 +6,11 @@ import { Container } from 'rebass';
 import { actions } from '../../redux/players';
 import { HomeLayout } from './components/HomeLayout';
 
-class SplashScreenPresenter extends Component {
+export type SplashScreenProps = {
+  chooseUsername: (username: string) => void,
+}
+
+class SplashScreenPresenter extends Component<SplashScreenProps> {
   _username = '';
 
   play = e => {
