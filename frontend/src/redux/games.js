@@ -8,28 +8,36 @@ export const types = {
   UPDATE_GAMES: 'GAMES/UPDATE_GAMES',
   REQUEST_CREATE_GAME: 'GAMES/REQUEST_CREATE_GAME',
   REQUEST_JOIN_GAME: 'GAMES/REQUEST_JOIN_GAME',
-  REQUEST_START_GAME: 'GAMES/REQUEST_JOIN_GAME',
+  REQUEST_START_GAME: 'GAMES/REQUEST_START_GAME',
   ENTER_LOBBY: 'GAMES/ENTER_LOBBY',
   ENTER_GAME: 'GAMES/ENTER_GAME',
 };
 
-type Actions =
-  | { type: "GAMES/UPDATE_GAMES", games: GameMapType }
-  | { type: "GAMES/REQUEST_CREATE_GAME", gameId: string };
+export type UpdateGamesAction = { type: 'GAMES/UPDATE_GAMES', games: GameMapType };
+export type RequestCreateGameAction = { type: 'GAMES/REQUEST_CREATE_GAME', gameName: string };
+export type RequestJoinGameAction = { type: 'GAMES/REQUEST_JOIN_GAME', gameId: string };
+export type RequestStartGameAction = { type: 'GAMES/REQUEST_START_GAME' };
+export type EnterLobbyAction = { type: 'GAMES/ENTER_LOBBY', lobby: GameShape };
+export type EnterGameAction = { type: 'GAMES/ENTER_GAME' };
+
+export type GamesAction =
+        | UpdateGamesAction
+        | RequestCreateGameAction
+        | RequestJoinGameAction
+        | RequestStartGameAction
+        | EnterLobbyAction
+        | EnterGameAction;
 
 export const actions = {
-  updateGames: (games: GameNormalMapType) => ({ type: types.UPDATE_GAMES, games: fromJS(games) }),
-  requestJoinGame: (gameId: string) => ({ type: types.REQUEST_JOIN_GAME, gameId }),
-  requestCreateGame: (gameName: string) => ({
-    type: types.REQUEST_CREATE_GAME,
-    gameName,
-  }),
-  requestStartGame: () => ({ type: types.REQUEST_START_GAME }),
-  enterLobby: (lobby: GameShape) => ({ type: types.ENTER_LOBBY, lobby: fromJS(lobby) }),
-  enterGame: () => ({ type: types.ENTER_GAME }),
+  updateGames: (games: GameNormalMapType): UpdateGamesAction => ({ type: types.UPDATE_GAMES, games: fromJS(games) }),
+  requestJoinGame: (gameId: string): RequestJoinGameAction => ({ type: types.REQUEST_JOIN_GAME, gameId }),
+  requestCreateGame: (gameName: string): RequestCreateGameAction => ({ type: types.REQUEST_CREATE_GAME, gameName }),
+  requestStartGame: (): RequestStartGameAction => ({ type: types.REQUEST_START_GAME }),
+  enterLobby: (lobby: GameShape): EnterLobbyAction => ({ type: types.ENTER_LOBBY, lobby: fromJS(lobby) }),
+  enterGame: (): EnterGameAction => ({ type: types.ENTER_GAME }),
 };
 
-export const gamesReducer = (state: GamesState = new GamesState(), action: Actions) => {
+export const gamesReducer = (state: GamesState = new GamesState(), action: GamesAction) => {
   switch (action.type) {
     case types.UPDATE_GAMES:
       return state.addGames(action.games);
