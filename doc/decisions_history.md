@@ -1,5 +1,18 @@
 # Technical decisions and issues log
 
+## 2017.08-2018.04 Livedoc development
+[@joffrey-bion][1] — :key: *API, Documentation*
+
+Not much has been done on the Seven Wonders project for a while, because I stopped to build 
+[Livedoc](https://joffrey-bion.github.io/livedoc/).
+I now have a decent and usable documentation generation tool, which requires almost no configuration at all.
+
+It still lacks a couple features:
+- Specialized STOMP endpoints presentation (they currently are presented as HTTP endpoints)
+- Client generation (especially Flow/TS type defs, bonus for the WebSocket client)
+
+I feel like we're not far from having something very useful now.
+
 ## 2017.05.25-28 Flow type-checking + ImmutableJS
 [@joffrey-bion][1] — :key: *Frontend*
 
@@ -18,7 +31,7 @@ removes one of the biggest downsides I felt about ImmutableJS.
 Of course, there is still the problem of debugging immutable structures in the console, but I guess we can deal with 
 that for now. Here we are, back to Immutable JS.   
 
-## 2017.05.25-27 Web socket integration tests
+## 2017.05.25-27 Web socket integration tests - Jackstomp
 [@joffrey-bion][1] — :key: *Backend, Tests*
 
 Unit tests are great, but only check individual components. To build a more robust test suite, we needed to add 
