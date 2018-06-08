@@ -11,6 +11,7 @@ import { getPlayers } from '../../redux/players';
 export type LobbyProps = {
   currentGame: Game,
   players: List<Player>,
+  startGame: () => void,
 }
 
 class LobbyPresenter extends Component<LobbyProps> {
