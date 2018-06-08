@@ -1,8 +1,8 @@
 // @flow
+import { Button, Classes, InputGroup, Intent, Text } from '@blueprintjs/core';
 import type { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { InlineForm, Space, Text } from 'rebass';
 import { Flex } from 'reflexbox';
 import { GameList } from '../../components/gameList';
 import type { Game } from '../../models/games';
@@ -38,26 +38,27 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
     return (
       <div>
         <Flex align="center" p={1}>
-          <InlineForm
-            buttonLabel="Create Game"
-            label="Game name"
-            name="game_name"
-            onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
-            onClick={this.createGame}
+          <InputGroup
+                  placeholder="Game name"
+                  name="game_name"
+                  onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
+                  rightElement={<CreateGameButton onClick={this.createGame}/>}
           />
-          <Space auto />
           <Text>
             <b>Username:</b>
             {' '}
             {this.props.currentPlayer && this.props.currentPlayer.displayName}
           </Text>
-          <Space x={1} />
         </Flex>
         <GameList games={this.props.games} joinGame={this.props.joinGame} />
       </div>
     );
   }
 }
+
+const CreateGameButton = ({onClick}) => (
+  <Button className={Classes.MINIMAL} onClick={onClick} intent={Intent.PRIMARY}>Create Game</Button>
+);
 
 const mapStateToProps = state => ({
   currentPlayer: getCurrentPlayer(state.get('players')),

@@ -2,7 +2,6 @@
 import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Container } from 'rebass';
 import { actions } from '../../redux/players';
 import { HomeLayout } from './components/HomeLayout';
 
@@ -23,15 +22,13 @@ class SplashScreenPresenter extends Component<SplashScreenProps> {
   render() {
     return (
       <HomeLayout>
-        <Container>
-          <form onSubmit={this.play}>
-            <InputGroup
-              placeholder="Username"
-              onChange={e => (this._username = e.target.value)}
-              rightElement={this.renderSubmit()}
-            />
-          </form>
-        </Container>
+        <form onSubmit={this.play}>
+          <InputGroup
+            placeholder="Username"
+            onChange={e => (this._username = e.target.value)}
+            rightElement={this.renderSubmit()}
+          />
+        </form>
       </HomeLayout>
     );
   }

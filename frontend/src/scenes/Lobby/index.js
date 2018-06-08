@@ -1,7 +1,8 @@
+//@flow
+import { Button } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'rebass';
 import { PlayerList } from '../../components/playerList';
 import type { Game } from '../../models/games';
 import type { Player } from '../../models/players';

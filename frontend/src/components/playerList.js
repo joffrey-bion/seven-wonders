@@ -1,8 +1,15 @@
+//@flow
+import { Text } from '@blueprintjs/core';
+import { List } from 'immutable';
 import React from 'react';
-import { Text } from 'rebass';
 import { Flex } from 'reflexbox';
+import { Player } from '../models/players';
 
-export const PlayerList = ({ players }) => (
+export type PlayerListProps = {
+  players: List<Player>;
+};
+
+export const PlayerList = ({ players }: PlayerListProps) => (
   <div>
     {players.map(player => {
       return (
