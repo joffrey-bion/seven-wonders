@@ -3,13 +3,12 @@ import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/players';
-import { HomeLayout } from './components/HomeLayout';
 
-export type SplashScreenProps = {
+export type ChooseNameFormPresenterProps = {
   chooseUsername: (username: string) => void,
 }
 
-class SplashScreenPresenter extends Component<SplashScreenProps> {
+class ChooseNameFormPresenter extends Component<ChooseNameFormPresenterProps> {
   _username = '';
 
   play = e => {
@@ -21,7 +20,6 @@ class SplashScreenPresenter extends Component<SplashScreenProps> {
 
   render() {
     return (
-      <HomeLayout>
         <form onSubmit={this.play}>
           <InputGroup
             placeholder="Username"
@@ -29,7 +27,6 @@ class SplashScreenPresenter extends Component<SplashScreenProps> {
             rightElement={this.renderSubmit()}
           />
         </form>
-      </HomeLayout>
     );
   }
 
@@ -42,4 +39,4 @@ const mapDispatchToProps = {
   chooseUsername: actions.chooseUsername,
 };
 
-export const SplashScreen = connect(null, mapDispatchToProps)(SplashScreenPresenter);
+export const ChooseNameForm = connect(null, mapDispatchToProps)(ChooseNameFormPresenter);
