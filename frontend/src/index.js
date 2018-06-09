@@ -1,5 +1,5 @@
 // @flow
-import '@blueprintjs/core/dist/blueprint.css';
+import '@blueprintjs/core/lib/css/blueprint.css';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';

@@ -34,7 +34,7 @@ class SplashScreenPresenter extends Component<SplashScreenProps> {
   }
 
   renderSubmit = () => (
-    <Button className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} rightIconName="arrow-right" />
+    <Button className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} rightIcon="arrow-right" />
   );
 }
 
