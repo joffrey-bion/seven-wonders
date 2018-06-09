@@ -1,10 +1,12 @@
 // @flow
-import { toastr } from 'react-redux-toastr';
+import { Toaster } from '@blueprintjs/core';
 import type { Channel, SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { apply, cancelled, take } from 'redux-saga/effects';
 import type { ApiError } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
+
+const ErrorToaster = Toaster.create();
 
 export function* errorHandlingSaga(session: SevenWondersSession): SagaIterator {
   const errorChannel: Channel = yield eventChannel(session.watchErrors());
@@ -24,7 +26,7 @@ export function* errorHandlingSaga(session: SevenWondersSession): SagaIterator {
 function* handleOneError(err: ApiError): * {
   console.error('Error received on web socket channel', err);
   const msg = buildMsg(err);
-  yield apply(toastr, toastr.error, [msg, { icon: 'error' }]);
+  yield apply(ErrorToaster, ErrorToaster.show, [{ intent: 'danger', icon: 'error', message: msg }]);
 }
 
 function buildMsg(err: ApiError): string {

@@ -1,5 +1,4 @@
 // @flow
-import { reducer as toastrReducer } from 'react-redux-toastr';
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux-immutable';
 import { gamesReducer } from './redux/games';
@@ -10,6 +9,5 @@ export function createReducer() {
     games: gamesReducer,
     players: playersReducer,
     routing: routerReducer,
-    toastr: toastrReducer,
   });
 }
