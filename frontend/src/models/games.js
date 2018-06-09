@@ -34,12 +34,13 @@ const SettingsRecord: SettingsType = Record({
 });
 export class Settings extends SettingsRecord {}
 
+export type GameState = 'LOBBY' | 'PLAYING';
 export type GameShape = {
   id: number,
   name: string | void,
   players: List<string>,
   settings: SettingsType,
-  state: "LOBBY" | "TODO"
+  state: GameState,
 };
 export type GameType = Record<GameShape>;
 export type GameMapType = Map<string, GameShape>;

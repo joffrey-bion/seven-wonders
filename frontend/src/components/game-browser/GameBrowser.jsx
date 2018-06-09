@@ -41,14 +41,11 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
 }
 
 const CreateGameButton = ({onClick}) => (
-  <Button className={Classes.MINIMAL} onClick={onClick} intent={Intent.PRIMARY}>Create Game</Button>
+  <Button className={Classes.MINIMAL} intent={Intent.PRIMARY} icon='add' onClick={onClick} />
 );
-
-const mapStateToProps = () => ({
-});
 
 const mapDispatchToProps = {
   createGame: actions.requestCreateGame,
 };
 
-export const GameBrowser = connect(mapStateToProps, mapDispatchToProps)(GameBrowserPresenter);
+export const GameBrowser = connect(null, mapDispatchToProps)(GameBrowserPresenter);
