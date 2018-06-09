@@ -1,7 +1,5 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
 # dependencies
-../src/main/js/node_modules
+node_modules
 
 # testing
 coverage
