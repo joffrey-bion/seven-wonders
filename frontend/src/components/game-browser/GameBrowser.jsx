@@ -1,29 +1,17 @@
 // @flow
-import { Button, Classes, InputGroup, Intent, Text } from '@blueprintjs/core';
-import type { List } from 'immutable';
+import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Flex } from 'reflexbox';
-import { GameList } from '../../components/gameList';
-import type { Game } from '../../models/games';
-import type { Player } from '../../models/players';
-import { actions, getAllGames } from '../../redux/games';
-import { getCurrentPlayer } from '../../redux/players';
+import { GameList } from './GameList';
+import { PlayerInfo } from '../PlayerInfo';
+import { actions } from '../../redux/games';
 
 export type GameBrowserProps = {
-  currentPlayer: Player,
-  games: List<Game>,
   createGame: (gameName: string) => void,
-  joinGame: (gameId: string) => void
 }
 
 class GameBrowserPresenter extends Component<GameBrowserProps> {
-  props: {
-    currentPlayer: Player,
-    games: List<Game>,
-    createGame: (gameName: string) => void,
-    joinGame: (gameId: string) => void
-  };
 
   _gameName: string | void = undefined;
 
@@ -37,20 +25,16 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
   render() {
     return (
       <div>
-        <Flex align="center" p={1}>
+        <Flex align="center" justify='space-between' p={1}>
           <InputGroup
                   placeholder="Game name"
                   name="game_name"
                   onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
                   rightElement={<CreateGameButton onClick={this.createGame}/>}
           />
-          <Text>
-            <b>Username:</b>
-            {' '}
-            {this.props.currentPlayer && this.props.currentPlayer.displayName}
-          </Text>
+          <PlayerInfo />
         </Flex>
-        <GameList games={this.props.games} joinGame={this.props.joinGame} />
+        <GameList />
       </div>
     );
   }
@@ -60,14 +44,11 @@ const CreateGameButton = ({onClick}) => (
   <Button className={Classes.MINIMAL} onClick={onClick} intent={Intent.PRIMARY}>Create Game</Button>
 );
 
-const mapStateToProps = state => ({
-  currentPlayer: getCurrentPlayer(state.get('players')),
-  games: getAllGames(state.get('games')),
+const mapStateToProps = () => ({
 });
 
 const mapDispatchToProps = {
   createGame: actions.requestCreateGame,
-  joinGame: actions.requestJoinGame,
 };
 
 export const GameBrowser = connect(mapStateToProps, mapDispatchToProps)(GameBrowserPresenter);

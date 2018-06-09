@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { GameBrowser } from './GameBrowser';
+import { GameBrowser } from '../components/game-browser/GameBrowser';
 import { Lobby } from './Lobby';
 import { SplashScreen } from './SplashScreen';
 

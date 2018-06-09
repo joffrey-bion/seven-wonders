@@ -39,6 +39,12 @@ export const playersReducer = (state = new PlayerState(), action: PlayerAction) 
   }
 };
 
-export const getCurrentPlayer = players => players.all.get(players.current, new Player({displayName: '[ERROR]'}));
-export const getPlayer = (players, username) => players.all.get(username);
-export const getPlayers = (players, usernames) => usernames.map(u => getPlayer(players, u));
+const ANONYMOUS = new Player({displayName: '[NOT LOGGED]'});
+
+export function getCurrentPlayer(state): Player {
+  const players = state.get('players');
+  return getPlayer(players, players.current, ANONYMOUS);
+}
+
+export const getPlayer = (players, username, defaultPlayer): ?Player => players.all.get(username, defaultPlayer);
+export const getPlayers = (players, usernames): List<Player> => usernames.map(u => getPlayer(players, u, undefined));
