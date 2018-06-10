@@ -2,8 +2,8 @@
 import { Text } from '@blueprintjs/core';
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Player } from '../models/players';
-import { getCurrentPlayer } from '../redux/players';
+import type { Player } from '../../models/players';
+import { getCurrentPlayer } from '../../redux/players';
 
 type PlayerInfoProps = {
   player: ?Player,

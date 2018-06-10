@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Flex } from 'reflexbox';
 import { GameList } from './GameList';
-import { PlayerInfo } from '../PlayerInfo';
+import { PlayerInfo } from './PlayerInfo';
 import { actions } from '../../redux/games';
 
 type GameBrowserProps = {

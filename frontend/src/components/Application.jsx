@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { GameBrowser } from '../components/game-browser/GameBrowser';
-import { Lobby } from './Lobby';
-import { Home } from '../components/home/Home';
+import { GameBrowser } from './game-browser/GameBrowser';
+import { Lobby } from './lobby/Lobby';
+import { Home } from './home/Home';
 
 export const Application = () => (
   <Switch>

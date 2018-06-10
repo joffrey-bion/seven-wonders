@@ -3,7 +3,7 @@ import { Text } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React from 'react';
 import { Flex } from 'reflexbox';
-import { Player } from '../models/players';
+import { Player } from '../../models/players';
 
 type PlayerListProps = {
   players: List<Player>;

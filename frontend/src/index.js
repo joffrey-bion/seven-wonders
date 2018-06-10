@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import { Application } from './scenes';
+import { Application } from './components/Application';
 import { configureStore } from './store';
 
 const initialState = {};

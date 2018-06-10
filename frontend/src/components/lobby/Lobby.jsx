@@ -3,7 +3,7 @@ import { Button } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PlayerList } from '../../components/PlayerList';
+import { PlayerList } from '../../components/lobby/PlayerList';
 import type { Game } from '../../models/games';
 import type { Player } from '../../models/players';
 import { actions, getCurrentGame } from '../../redux/games';
