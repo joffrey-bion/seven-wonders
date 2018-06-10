@@ -1,10 +1,10 @@
 // @flow
-import { Button, Icon } from '@blueprintjs/core';
 import type { List } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
 import type { Game } from '../../models/games';
 import { actions, getAllGames } from '../../redux/games';
+import { IconButton } from '../shared/IconButton';
 import './GameList.css';
 import { GameStatus } from './GameStatus';
 import { PlayerCount } from './PlayerCount';
@@ -51,8 +51,8 @@ const GameListItemRow = ({game, joinGame}) => (
 
 const JoinButton = ({game, joinGame}) => {
   const disabled = game.state !== 'LOBBY';
-  const icon = <Icon icon='arrow-right' title={false} />;
-  return <Button minimal disabled={disabled} icon={icon} title='Join Game' onClick={() => joinGame(game.id)}/>;
+  const onClick = () => joinGame(game.id);
+  return <IconButton minimal disabled={disabled} icon='arrow-right' title='Join Game' onClick={onClick}/>;
 };
 
 const mapStateToProps = state => ({

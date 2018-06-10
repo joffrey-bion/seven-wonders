@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
+    "@blueprintjs/icons": "^2.2.1",
     "history": "^4.7.2",
     "immutable": "^3.8.1",
     "normalizr": "^3.2.3",
