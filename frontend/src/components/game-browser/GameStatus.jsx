@@ -3,7 +3,7 @@ import { Tag } from '@blueprintjs/core';
 import * as React from 'react';
 import type { GameState } from '../../models/games';
 
-export type GameStatusProps = {
+type GameStatusProps = {
   state: GameState,
 }
 

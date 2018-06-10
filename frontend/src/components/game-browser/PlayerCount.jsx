@@ -3,7 +3,7 @@ import { Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import './PlayerCount.css';
 
-export type PlayerCountProps = {
+type PlayerCountProps = {
   nbPlayers: number,
 }
 

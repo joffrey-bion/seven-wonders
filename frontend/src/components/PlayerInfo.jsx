@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import type { Player } from '../models/players';
 import { getCurrentPlayer } from '../redux/players';
 
-export type PlayerInfoProps = {
+type PlayerInfoProps = {
   player: ?Player,
 }
 

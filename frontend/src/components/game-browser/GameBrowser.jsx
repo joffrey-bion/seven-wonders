@@ -7,7 +7,7 @@ import { GameList } from './GameList';
 import { PlayerInfo } from '../PlayerInfo';
 import { actions } from '../../redux/games';
 
-export type GameBrowserProps = {
+type GameBrowserProps = {
   createGame: (gameName: string) => void,
 }
 

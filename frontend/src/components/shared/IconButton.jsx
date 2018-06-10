@@ -3,7 +3,7 @@ import { Button, Icon } from '@blueprintjs/core';
 import type { IconName } from '@blueprintjs/icons';
 import * as React from 'react';
 
-export type IconButtonProps = {
+type IconButtonProps = {
   icon: IconName,
   title?: string | false | null,
   [string]: any,

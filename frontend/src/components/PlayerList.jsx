@@ -5,7 +5,7 @@ import React from 'react';
 import { Flex } from 'reflexbox';
 import { Player } from '../models/players';
 
-export type PlayerListProps = {
+type PlayerListProps = {
   players: List<Player>;
 };
 

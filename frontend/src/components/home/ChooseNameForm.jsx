@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { actions } from '../../redux/players';
 import { IconButton } from '../shared/IconButton';
 
-export type ChooseNameFormPresenterProps = {
+type ChooseNameFormPresenterProps = {
   chooseUsername: (username: string) => void,
 }
 
