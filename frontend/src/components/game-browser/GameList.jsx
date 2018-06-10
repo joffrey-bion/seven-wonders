@@ -15,7 +15,7 @@ type GameListProps = {
 };
 
 const GameListPresenter = ({ games, joinGame }: GameListProps) => (
-        <table className='pt-html-table pt-interactive'>
+        <table className='pt-html-table'>
           <thead>
           <GameListHeaderRow />
           </thead>

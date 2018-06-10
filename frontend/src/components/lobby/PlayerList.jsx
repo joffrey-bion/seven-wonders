@@ -1,23 +1,36 @@
 //@flow
-import { Text } from '@blueprintjs/core';
+import { Icon, Text } from '@blueprintjs/core'
 import { List } from 'immutable';
-import React from 'react';
+import * as React from 'react';
 import { Flex } from 'reflexbox';
 import { Player } from '../../models/players';
 
 type PlayerListProps = {
-  players: List<Player>;
+  players: List<Player>,
+  owner: string,
+  currentPlayer: Player,
 };
 
-const PlayerItem = ({player}) => (
-  <Flex>
-    <Text>{player.displayName}</Text>
-    <Text>({player.username})</Text>
-  </Flex>
+const PlayerListItem = ({player, isOwner, isUser}) => (
+  <tr>
+    <td>
+      <Flex align='center'>
+        {isOwner && <Icon icon='badge' title='Game owner'/>}
+        {isUser && <Icon icon='user' title='This is you'/>}
+      </Flex>
+    </td>
+    <td>{player.displayName}</td>
+    <td>{player.username}</td>
+  </tr>
 );
 
-export const PlayerList = ({players}: PlayerListProps) => (
-  <div>
-    {players.map(player => <PlayerItem key={player.username} player={player}/>)}
-  </div>
+export const PlayerList = ({players, owner, currentPlayer}: PlayerListProps) => (
+  <table className='pt-html-table'>
+    <tbody>
+      {players.map(player => <PlayerListItem key={player.username}
+                                             player={player}
+                                             isOwner={player.username === owner}
+                                             isUser={player.username === currentPlayer.username}/>)}
+    </tbody>
+  </table>
 );

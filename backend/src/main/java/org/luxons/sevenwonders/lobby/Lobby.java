@@ -41,6 +41,10 @@ public class Lobby {
         return name;
     }
 
+    public String getOwner() {
+        return owner.getUsername();
+    }
+
     public List<Player> getPlayers() {
         return players;
     }

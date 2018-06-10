@@ -3,33 +3,28 @@ import { Button } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { PlayerList } from '../../components/lobby/PlayerList';
 import type { Game } from '../../models/games';
 import type { Player } from '../../models/players';
 import { actions, getCurrentGame } from '../../redux/games';
-import { getPlayers } from '../../redux/players';
+import { getCurrentPlayer, getPlayers } from '../../redux/players';
+import { PlayerList } from './PlayerList';
 
 export type LobbyProps = {
   currentGame: Game,
+  currentPlayer: Player,
   players: List<Player>,
   startGame: () => void,
 }
 
 class LobbyPresenter extends Component<LobbyProps> {
-  getTitle() {
-    if (this.props.currentGame) {
-      return this.props.currentGame.name + ' — Lobby';
-    } else {
-      return 'What are you doing here? You haven\'t joined a game yet!';
-    }
-  }
 
   render() {
+    const {currentGame, currentPlayer, players, startGame} = this.props;
     return (
       <div>
-        <h2>{this.getTitle()}</h2>
-        <PlayerList players={this.props.players} />
-        <Button onClick={this.props.startGame}>Start Game</Button>
+        <h2>{currentGame.name + ' — Lobby'}</h2>
+        <PlayerList players={players} owner={currentGame.owner} currentPlayer={currentPlayer}/>
+        <Button onClick={startGame}>Start Game</Button>
       </div>
     );
   }
@@ -40,6 +35,7 @@ const mapStateToProps = state => {
   console.info(game);
   return {
     currentGame: game,
+    currentPlayer: getCurrentPlayer(state),
     players: game ? getPlayers(state.get('players'), game.players) : new List(),
   };
 };

@@ -38,6 +38,7 @@ export type GameState = 'LOBBY' | 'PLAYING';
 export type GameShape = {
   id: number,
   name: string | void,
+  owner: string,
   players: List<string>,
   settings: SettingsType,
   state: GameState,
@@ -49,6 +50,7 @@ export type GameNormalMapType = { [string]: GameShape };
 const GameRecord: GameType = Record({
   id: -1,
   name: null,
+  owner: 'anonymous',
   players: new List(),
   settings: new Settings(),
   state: 'LOBBY',
