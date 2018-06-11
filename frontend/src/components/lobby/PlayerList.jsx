@@ -1,5 +1,5 @@
 //@flow
-import { Icon, Text } from '@blueprintjs/core'
+import { Icon } from '@blueprintjs/core'
 import { List } from 'immutable';
 import * as React from 'react';
 import { Flex } from 'reflexbox';
