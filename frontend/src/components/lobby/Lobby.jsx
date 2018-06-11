@@ -7,7 +7,7 @@ import type { Game } from '../../models/games';
 import type { Player } from '../../models/players';
 import { actions, getCurrentGame } from '../../redux/games';
 import { getCurrentPlayer, getPlayers } from '../../redux/players';
-import { PlayerList } from './PlayerList';
+import { RadialPlayerList } from './RadialPlayerList';
 
 export type LobbyProps = {
   currentGame: Game,
@@ -23,7 +23,7 @@ class LobbyPresenter extends Component<LobbyProps> {
     return (
       <div>
         <h2>{currentGame.name + ' — Lobby'}</h2>
-        <PlayerList players={players} owner={currentGame.owner} currentPlayer={currentPlayer}/>
+        <RadialPlayerList players={players} owner={currentGame.owner} currentPlayer={currentPlayer}/>
         <Button onClick={startGame}>Start Game</Button>
       </div>
     );
