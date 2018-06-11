@@ -12,7 +12,7 @@ public class ApiLobby {
 
     private String name;
 
-    private ApiPlayer owner;
+    private String owner;
 
     private List<ApiPlayer> players;
 
@@ -36,11 +36,11 @@ public class ApiLobby {
         this.name = name;
     }
 
-    public ApiPlayer getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(ApiPlayer owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
