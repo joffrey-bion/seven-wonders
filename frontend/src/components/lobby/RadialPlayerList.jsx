@@ -15,21 +15,20 @@ type RadialPlayerListProps = {
 
 const PlayerItem = ({player, isOwner, isUser}) => (
   <Flex column align='center'>
-    <UserIcon isOwner={isOwner} isUser={isUser}/>
+    <UserIcon isOwner={isOwner} isUser={isUser} title={isOwner ? 'Game owner' : false}/>
     <h5 style={{margin: 0}}>{player.displayName}</h5>
   </Flex>
 );
 
 const PlayerPlaceholder = () => (
   <Flex column align='center' style={{opacity: 0.3}}>
-    <UserIcon isOwner={false} isUser={false}/>
+    <UserIcon isOwner={false} isUser={false} title='Waiting for player...'/>
     <h5 style={{margin: 0}}>?</h5>
   </Flex>
 );
 
-const UserIcon = ({isUser, isOwner}) => {
+const UserIcon = ({isUser, isOwner, title}) => {
   const icon = isOwner ? 'badge' : 'user';
-  const title = isOwner ? 'Game owner' : false;
   const intent = isUser ? 'warning' : 'none';
   return <Icon icon={icon} iconSize={50} intent={intent} title={title}/>;
 };
