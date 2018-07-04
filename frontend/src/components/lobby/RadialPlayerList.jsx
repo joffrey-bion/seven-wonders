@@ -43,7 +43,7 @@ export const RadialPlayerList = ({players, owner, currentPlayer}: RadialPlayerLi
   const tableImg = <img src={roundTable} alt='Round table' style={{width: 200, height: 200}}/>;
   return <RadialList items={completeWithPlaceholders(playerItems)}
                      centerElement={tableImg}
-                     diameter={350}
+                     radius={175}
                      offsetDegrees={180}
                      itemWidth={120}
                      itemHeight={100}/>;

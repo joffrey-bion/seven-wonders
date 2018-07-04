@@ -1,27 +1,27 @@
 //@flow
 import * as React from 'react';
 import type { CartesianCoords, RadialConfig } from './radial-math';
-import { cartesianOffsets, CLOCKWISE, COUNTERCLOCKWISE } from './radial-math';
+import { offsetsFromCenter, CLOCKWISE, COUNTERCLOCKWISE } from './radial-math';
 import './RadialList.css';
 import { RadialListItem } from './RadialListItem';
 
 type RadialListProps = {
   items: Array<React.Node>,
   centerElement?: React.Node,
-  diameter?: number, // 240px by default
+  radius?: number, // 120px by default
   offsetDegrees?: number, // defaults to 0 = 12 o'clock
   arc?: number, // defaults to 360 (full circle)
-  clockwise?: boolean, // defaults to 360 (full circle)
+  clockwise?: boolean, // defaults to true
   itemWidth?: number,
   itemHeight?: number,
 };
 
-export const RadialList = ({items, centerElement, diameter = 240, offsetDegrees = 0, arc = 360, clockwise = true, itemWidth = 20, itemHeight = 20}: RadialListProps) => {
+export const RadialList = ({items, centerElement, radius = 120, offsetDegrees = 0, arc = 360, clockwise = true, itemWidth = 20, itemHeight = 20}: RadialListProps) => {
+  const diameter = radius * 2;
   const containerStyle = {
     width: diameter + itemWidth,
     height: diameter + itemHeight,
   };
-  const radius = diameter / 2;
   const direction = clockwise ? CLOCKWISE : COUNTERCLOCKWISE;
   const radialConfig: RadialConfig = {radius, arc, offsetDegrees, direction};
 
@@ -42,7 +42,7 @@ const RadialListItems = ({items, radialConfig}: RadialListItemsProps) => {
     width: diameter,
     height: diameter,
   };
-  const itemOffsets: Array<CartesianCoords> = cartesianOffsets(items.length, radialConfig);
+  const itemOffsets: Array<CartesianCoords> = offsetsFromCenter(items.length, radialConfig);
 
   return <ul className='radial-list absolute-center' style={ulStyle}>
     {items.map((item, i) => (<RadialListItem

@@ -4,9 +4,9 @@ export type CartesianCoords = {
   x: number,
   y: number,
 }
-type CylindricalCoords = {
+type PolarCoords = {
   radius: number,
-  thetaDegrees: number,
+  angle: number,
 }
 
 const toRad = (deg) => deg * (Math.PI / 180);
@@ -14,9 +14,9 @@ const roundedProjection = (radius, theta, trigFn) => Math.round(radius * trigFn(
 const xProjection = (radius, theta) => roundedProjection(radius, theta, Math.cos);
 const yProjection = (radius, theta) => roundedProjection(radius, theta, Math.sin);
 
-const toCartesian = ({radius, thetaDegrees}: CylindricalCoords): CartesianCoords => ({
-  x: xProjection(radius, toRad(thetaDegrees)),
-  y: yProjection(radius, toRad(thetaDegrees)),
+const toCartesian = ({radius, angle}: PolarCoords): CartesianCoords => ({
+  x: xProjection(radius, toRad(angle)),
+  y: yProjection(radius, toRad(angle)),
 });
 
 export type Direction = -1 | 1;
@@ -38,7 +38,7 @@ const DEFAULT_CONFIG: RadialConfig = {
 
 const DEFAULT_START = 90; // Up
 
-export function cartesianOffsets(nbItems: number, radialConfig: RadialConfig = DEFAULT_CONFIG): Array<CartesianCoords> {
+export function offsetsFromCenter(nbItems: number, radialConfig: RadialConfig = DEFAULT_CONFIG): Array<CartesianCoords> {
   return Array.from({length: nbItems}, (v, i) => itemCartesianOffsets(i, nbItems, radialConfig));
 }
 
@@ -46,5 +46,5 @@ function itemCartesianOffsets(index: number, nbItems: number, {radius, arc, dire
   const startAngle = DEFAULT_START + direction * offsetDegrees;
   const angleStep = arc / nbItems;
   const itemAngle = startAngle + direction * angleStep * index;
-  return toCartesian({radius, thetaDegrees: itemAngle});
+  return toCartesian({radius, angle: itemAngle});
 }
