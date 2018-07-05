@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.game.resources.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -54,7 +54,7 @@ public class RequirementsTest {
         Requirements requirements = new Requirements();
         requirements.setGold(requiredGold);
 
-        Board board = TestUtils.createBoard(ResourceType.CLAY, boardGold);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY, boardGold);
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(boardGold >= requiredGold, requirements.areMetWithoutNeighboursBy(board));
@@ -64,9 +64,9 @@ public class RequirementsTest {
 
     @Theory
     public void resourceRequirement_initialResource(ResourceType initialResource, ResourceType requiredResource) {
-        Requirements requirements = TestUtils.createRequirements(requiredResource);
+        Requirements requirements = TestUtilsKt.createRequirements(requiredResource);
 
-        Board board = TestUtils.createBoard(initialResource, 0);
+        Board board = TestUtilsKt.testBoard(initialResource, 0);
         Table table = new Table(Collections.singletonList(board));
 
         assertEquals(initialResource == requiredResource, requirements.areMetWithoutNeighboursBy(board));
@@ -83,9 +83,9 @@ public class RequirementsTest {
             ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
-        Requirements requirements = TestUtils.createRequirements(requiredResource);
+        Requirements requirements = TestUtilsKt.createRequirements(requiredResource);
 
-        Board board = TestUtils.createBoard(initialResource, 0);
+        Board board = TestUtilsKt.testBoard(initialResource, 0);
         board.getProduction().addFixedResource(producedResource, 1);
         Table table = new Table(Collections.singletonList(board));
 
@@ -103,14 +103,14 @@ public class RequirementsTest {
             ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
-        Requirements requirements = TestUtils.createRequirements(requiredResource);
+        Requirements requirements = TestUtilsKt.createRequirements(requiredResource);
 
-        Board board = TestUtils.createBoard(initialResource, 2);
-        Board neighbourBoard = TestUtils.createBoard(initialResource, 0);
+        Board board = TestUtilsKt.testBoard(initialResource, 2);
+        Board neighbourBoard = TestUtilsKt.testBoard(initialResource, 0);
         neighbourBoard.getPublicProduction().addFixedResource(boughtResource, 1);
         Table table = new Table(Arrays.asList(board, neighbourBoard));
 
-        ResourceTransactions resources = TestUtils.createTransactions(Provider.RIGHT_PLAYER, boughtResource);
+        ResourceTransactions resources = TestUtilsKt.createTransactions(Provider.RIGHT_PLAYER, boughtResource);
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board));
         assertEquals(boughtResource == requiredResource, requirements.areMetWithHelpBy(board, resources));
@@ -124,13 +124,13 @@ public class RequirementsTest {
     public void pay_boughtResource(ResourceType initialResource, ResourceType requiredResource) {
         assumeTrue(initialResource != requiredResource);
 
-        Requirements requirements = TestUtils.createRequirements(requiredResource);
+        Requirements requirements = TestUtilsKt.createRequirements(requiredResource);
 
-        Board board = TestUtils.createBoard(initialResource, 2);
-        Board neighbourBoard = TestUtils.createBoard(requiredResource, 0);
+        Board board = TestUtilsKt.testBoard(initialResource, 2);
+        Board neighbourBoard = TestUtilsKt.testBoard(requiredResource, 0);
         Table table = new Table(Arrays.asList(board, neighbourBoard));
 
-        ResourceTransactions transactions = TestUtils.createTransactions(Provider.RIGHT_PLAYER,
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(Provider.RIGHT_PLAYER,
                 requiredResource);
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board));

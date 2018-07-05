@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +28,7 @@ public class GoldIncreaseTest {
 
     @Theory
     public void apply_increaseGoldWithRightAmount(int initialAmount, int goldIncreaseAmount, ResourceType type) {
-        Board board = TestUtils.createBoard(type, initialAmount);
+        Board board = TestUtilsKt.testBoard(type, initialAmount);
         GoldIncrease goldIncrease = new GoldIncrease(goldIncreaseAmount);
 
         goldIncrease.apply(board);
@@ -39,7 +39,7 @@ public class GoldIncreaseTest {
     @Theory
     public void computePoints_isAlwaysZero(int gold) {
         GoldIncrease goldIncrease = new GoldIncrease(gold);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
         assertEquals(0, goldIncrease.computePoints(table, 0));
     }
 

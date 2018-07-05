@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.HandCard;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Hands.PlayerIndexOutOfBoundsException;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,7 +37,7 @@ public class HandsTest {
         Map<Integer, List<Card>> hands = new HashMap<>();
         for (int p = 0; p < nbPlayers; p++) {
             int firstCardNumber = (p - 1) * nbCardsPerPlayer;
-            hands.put(p, TestUtils.createSampleCards(firstCardNumber, nbCardsPerPlayer));
+            hands.put(p, TestUtilsKt.createSampleCards(firstCardNumber, nbCardsPerPlayer));
         }
         return new Hands(hands, nbPlayers);
     }
@@ -50,8 +50,8 @@ public class HandsTest {
 
     @Test
     public void get_retrievesCorrectCards() {
-        List<Card> hand0 = TestUtils.createSampleCards(0, 5);
-        List<Card> hand1 = TestUtils.createSampleCards(5, 10);
+        List<Card> hand0 = TestUtilsKt.createSampleCards(0, 5);
+        List<Card> hand1 = TestUtilsKt.createSampleCards(5, 10);
         Map<Integer, List<Card>> handsMap = new HashMap<>();
         handsMap.put(0, hand0);
         handsMap.put(1, hand1);
@@ -126,14 +126,14 @@ public class HandsTest {
 
     @Test
     public void createHand_containsAllCards() {
-        List<Card> hand0 = TestUtils.createSampleCards(0, 5);
-        List<Card> hand1 = TestUtils.createSampleCards(5, 10);
+        List<Card> hand0 = TestUtilsKt.createSampleCards(0, 5);
+        List<Card> hand1 = TestUtilsKt.createSampleCards(5, 10);
         Map<Integer, List<Card>> handsMap = new HashMap<>();
         handsMap.put(0, hand0);
         handsMap.put(1, hand1);
         Hands hands = new Hands(handsMap, 2);
 
-        Table table = TestUtils.createTable(2);
+        Table table = TestUtilsKt.testTable(2);
         List<HandCard> hand = hands.createHand(table, 0);
 
         for (HandCard handCard : hand) {

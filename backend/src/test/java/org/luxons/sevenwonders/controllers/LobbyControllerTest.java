@@ -13,7 +13,6 @@ import org.luxons.sevenwonders.actions.UpdateSettingsAction;
 import org.luxons.sevenwonders.controllers.LobbyController.PlayerIsNotOwnerException;
 import org.luxons.sevenwonders.controllers.LobbyController.PlayerNotInLobbyException;
 import org.luxons.sevenwonders.game.api.CustomizableSettings;
-import org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod;
 import org.luxons.sevenwonders.lobby.Lobby;
 import org.luxons.sevenwonders.lobby.Player;
 import org.luxons.sevenwonders.lobby.State;
@@ -28,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod.ALL_A;
 
 public class LobbyControllerTest {
 
@@ -141,15 +141,7 @@ public class LobbyControllerTest {
         assertEquals(new CustomizableSettings(), lobby.getSettings());
 
         UpdateSettingsAction updateSettingsAction = new UpdateSettingsAction();
-        CustomizableSettings newSettings = new CustomizableSettings();
-        newSettings.setInitialGold(12);
-        newSettings.setDefaultTradingCost(5);
-        newSettings.setWonderSidePickMethod(WonderSidePickMethod.ALL_A);
-        newSettings.setTimeLimitInSeconds(5);
-        newSettings.setPointsPer3Gold(5);
-        newSettings.setDiscardedCardGold(4);
-        newSettings.setLostPointsPerDefeat(10);
-        newSettings.setWonPointsPerVictoryPerAge(new HashMap<>());
+        CustomizableSettings newSettings = new CustomizableSettings(12L, 5, ALL_A, 5, 5, 4, 10, 2, new HashMap<>());
         updateSettingsAction.setSettings(newSettings);
 
         Principal principal = new TestPrincipal("testuser");

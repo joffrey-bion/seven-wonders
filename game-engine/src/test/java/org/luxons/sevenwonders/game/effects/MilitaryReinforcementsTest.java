@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +28,7 @@ public class MilitaryReinforcementsTest {
 
     @Theory
     public void apply_increaseGoldWithRightAmount(int initialShields, int additionalShields, ResourceType type) {
-        Board board = TestUtils.createBoard(type);
+        Board board = TestUtilsKt.testBoard(type);
         board.getMilitary().addShields(initialShields);
 
         MilitaryReinforcements reinforcements = new MilitaryReinforcements(additionalShields);
@@ -40,7 +40,7 @@ public class MilitaryReinforcementsTest {
     @Theory
     public void computePoints_isAlwaysZero(int shields) {
         MilitaryReinforcements reinforcements = new MilitaryReinforcements(shields);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
         assertEquals(0, reinforcements.computePoints(table, 0));
     }
 

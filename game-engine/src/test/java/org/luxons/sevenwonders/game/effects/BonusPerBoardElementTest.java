@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.game.boards.BoardElementType;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.CardBack;
 import org.luxons.sevenwonders.game.cards.Color;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,7 +40,7 @@ public class BonusPerBoardElementTest {
 
     @Before
     public void setUp() {
-        table = TestUtils.createTable(4);
+        table = TestUtilsKt.testTable(4);
     }
 
     private static BonusPerBoardElement createBonus(BoardElementType type, int gold, int points, Color... colors) {
@@ -56,7 +56,7 @@ public class BonusPerBoardElementTest {
     public void computePoints_countsCards(RelativeBoardPosition boardPosition, int nbCards, int nbOtherCards,
                                           int points, int gold, Color color) {
         Board board = table.getBoard(0, boardPosition);
-        TestUtils.addCards(board, nbCards, nbOtherCards, color);
+        TestUtilsKt.addCards(board, nbCards, nbOtherCards, color);
 
         BonusPerBoardElement bonus = createBonus(BoardElementType.CARD, gold, points, color);
         bonus.setBoards(Collections.singletonList(boardPosition));
@@ -96,7 +96,7 @@ public class BonusPerBoardElementTest {
     public void apply_countsCards(RelativeBoardPosition boardPosition, int nbCards, int nbOtherCards, int points,
                                   int gold, Color color) {
         Board board = table.getBoard(0, boardPosition);
-        TestUtils.addCards(board, nbCards, nbOtherCards, color);
+        TestUtilsKt.addCards(board, nbCards, nbOtherCards, color);
 
         BonusPerBoardElement bonus = createBonus(BoardElementType.CARD, gold, points, color);
         bonus.setBoards(Collections.singletonList(boardPosition));

@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.luxons.sevenwonders.game.Settings;
 import org.luxons.sevenwonders.game.api.Table;
 import org.luxons.sevenwonders.game.cards.Card;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -16,19 +16,19 @@ public class BuildWonderMoveTest {
 
     @Test(expected = InvalidMoveException.class)
     public void validate_failsWhenCardNotInHand() {
-        Table table = TestUtils.createTable(3);
-        List<Card> hand = TestUtils.createSampleCards(0, 7);
-        Card anotherCard = TestUtils.createCard("Card that is not in the hand");
-        Move move = TestUtils.createMove(0, anotherCard, MoveType.UPGRADE_WONDER);
+        Table table = TestUtilsKt.testTable(3);
+        List<Card> hand = TestUtilsKt.createSampleCards(0, 7);
+        Card anotherCard = TestUtilsKt.testCard("Card that is not in the hand");
+        Move move = TestUtilsKt.createMove(0, anotherCard, MoveType.UPGRADE_WONDER);
 
         move.validate(table, hand);
     }
 
     @Test(expected = InvalidMoveException.class)
     public void validate_failsWhenWonderIsCompletelyBuilt() {
-        Settings settings = TestUtils.createSettings(3);
-        Table table = TestUtils.createTable(settings);
-        List<Card> hand = TestUtils.createSampleCards(0, 7);
+        Settings settings = TestUtilsKt.testSettings(3);
+        Table table = TestUtilsKt.testTable(settings);
+        List<Card> hand = TestUtilsKt.createSampleCards(0, 7);
 
         fillPlayerWonderLevels(settings, table, hand);
 
@@ -49,7 +49,7 @@ public class BuildWonderMoveTest {
 
     private static void buildOneWonderLevel(Settings settings, Table table, List<Card> hand, int cardIndex) {
         Card card = hand.get(cardIndex);
-        Move move = TestUtils.createMove(0, card, MoveType.UPGRADE_WONDER);
+        Move move = TestUtilsKt.createMove(0, card, MoveType.UPGRADE_WONDER);
         move.validate(table, hand);
         move.place(table, Collections.emptyList(), settings);
         move.activate(table, Collections.emptyList(), settings);
@@ -57,11 +57,11 @@ public class BuildWonderMoveTest {
 
     @Test
     public void place_increasesWonderLevel() {
-        Settings settings = TestUtils.createSettings(3);
-        Table table = TestUtils.createTable(settings);
-        List<Card> hand = TestUtils.createSampleCards(0, 7);
+        Settings settings = TestUtilsKt.testSettings(3);
+        Table table = TestUtilsKt.testTable(settings);
+        List<Card> hand = TestUtilsKt.createSampleCards(0, 7);
         Card cardToUse = hand.get(0);
-        Move move = TestUtils.createMove(0, cardToUse, MoveType.UPGRADE_WONDER);
+        Move move = TestUtilsKt.createMove(0, cardToUse, MoveType.UPGRADE_WONDER);
         move.validate(table, hand); // should not fail
 
         int initialStage = table.getBoard(0).getWonder().getNbBuiltStages();

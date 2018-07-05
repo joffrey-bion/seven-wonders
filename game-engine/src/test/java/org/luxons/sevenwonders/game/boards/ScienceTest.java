@@ -5,7 +5,7 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,7 +27,7 @@ public class ScienceTest {
 
     @Test
     public void addAll_empty() {
-        Science initial = TestUtils.createScience(3, 4, 5, 1);
+        Science initial = TestUtilsKt.createScience(3, 4, 5, 1);
         Science empty = new Science();
         initial.addAll(empty);
         assertEquals(3, initial.getQuantity(ScienceType.COMPASS));
@@ -38,8 +38,8 @@ public class ScienceTest {
 
     @Test
     public void addAll_noJoker() {
-        Science initial = TestUtils.createScience(3, 4, 5, 1);
-        Science other = TestUtils.createScience(1, 2, 3, 0);
+        Science initial = TestUtilsKt.createScience(3, 4, 5, 1);
+        Science other = TestUtilsKt.createScience(1, 2, 3, 0);
         initial.addAll(other);
         assertEquals(4, initial.getQuantity(ScienceType.COMPASS));
         assertEquals(6, initial.getQuantity(ScienceType.WHEEL));
@@ -49,8 +49,8 @@ public class ScienceTest {
 
     @Test
     public void addAll_withJokers() {
-        Science initial = TestUtils.createScience(3, 4, 5, 1);
-        Science other = TestUtils.createScience(0, 0, 0, 3);
+        Science initial = TestUtilsKt.createScience(3, 4, 5, 1);
+        Science other = TestUtilsKt.createScience(0, 0, 0, 3);
         initial.addAll(other);
         assertEquals(3, initial.getQuantity(ScienceType.COMPASS));
         assertEquals(4, initial.getQuantity(ScienceType.WHEEL));
@@ -60,8 +60,8 @@ public class ScienceTest {
 
     @Test
     public void addAll_mixed() {
-        Science initial = TestUtils.createScience(3, 4, 5, 1);
-        Science other = TestUtils.createScience(1, 2, 3, 4);
+        Science initial = TestUtilsKt.createScience(3, 4, 5, 1);
+        Science other = TestUtilsKt.createScience(1, 2, 3, 4);
         initial.addAll(other);
         assertEquals(4, initial.getQuantity(ScienceType.COMPASS));
         assertEquals(6, initial.getQuantity(ScienceType.WHEEL));
@@ -71,31 +71,31 @@ public class ScienceTest {
 
     @Theory
     public void computePoints_compassesOnly_noJoker(int compasses) {
-        Science science = TestUtils.createScience(compasses, 0, 0, 0);
+        Science science = TestUtilsKt.createScience(compasses, 0, 0, 0);
         assertEquals(compasses * compasses, science.computePoints());
     }
 
     @Theory
     public void computePoints_wheelsOnly_noJoker(int wheels) {
-        Science science = TestUtils.createScience(0, wheels, 0, 0);
+        Science science = TestUtilsKt.createScience(0, wheels, 0, 0);
         assertEquals(wheels * wheels, science.computePoints());
     }
 
     @Theory
     public void computePoints_tabletsOnly_noJoker(int tablets) {
-        Science science = TestUtils.createScience(0, 0, tablets, 0);
+        Science science = TestUtilsKt.createScience(0, 0, tablets, 0);
         assertEquals(tablets * tablets, science.computePoints());
     }
 
     @Theory
     public void computePoints_allSameNoJoker(int eachSymbol) {
-        Science science = TestUtils.createScience(eachSymbol, eachSymbol, eachSymbol, 0);
+        Science science = TestUtilsKt.createScience(eachSymbol, eachSymbol, eachSymbol, 0);
         assertEquals(3 * eachSymbol * eachSymbol + 7 * eachSymbol, science.computePoints());
     }
 
     @Theory
     public void computePoints_expectation(int[] expectation) {
-        Science science = TestUtils.createScience(expectation[0], expectation[1], expectation[2], expectation[3]);
+        Science science = TestUtilsKt.createScience(expectation[0], expectation[1], expectation[2], expectation[3]);
         assertEquals(expectation[4], science.computePoints());
     }
 }

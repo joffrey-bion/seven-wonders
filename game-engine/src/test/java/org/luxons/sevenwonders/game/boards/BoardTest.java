@@ -25,7 +25,7 @@ import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.scoring.PlayerScore;
 import org.luxons.sevenwonders.game.scoring.ScoreCategory;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -66,17 +66,16 @@ public class BoardTest {
 
     @Theory
     public void initialGold_respectsSettings(@FromDataPoints("gold") int goldAmountInSettings) {
-        CustomizableSettings customSettings = TestUtils.createCustomizableSettings();
-        customSettings.setInitialGold(goldAmountInSettings);
+        CustomizableSettings customSettings = TestUtilsKt.testCustomizableSettings(goldAmountInSettings);
         Settings settings = new Settings(5, customSettings);
-        Board board = new Board(TestUtils.createWonder(), 0, settings);
+        Board board = new Board(TestUtilsKt.testWonder(), 0, settings);
         assertEquals(goldAmountInSettings, board.getGold());
     }
 
     @Theory
     public void initialProduction_containsInitialResource(ResourceType type) {
-        Board board = new Board(TestUtils.createWonder(type), 0, new Settings(5));
-        Resources resources = TestUtils.createResources(type);
+        Board board = new Board(TestUtilsKt.testWonder(type), 0, new Settings(5));
+        Resources resources = TestUtilsKt.createResources(type);
         assertTrue(board.getProduction().contains(resources));
         assertTrue(board.getPublicProduction().contains(resources));
     }
@@ -86,7 +85,7 @@ public class BoardTest {
                                                     @FromDataPoints("gold") int goldRemoved) {
         assumeTrue(goldRemoved >= 0);
         assumeTrue(initialGold >= goldRemoved);
-        Board board = new Board(TestUtils.createWonder(), 0, new Settings(5));
+        Board board = new Board(TestUtilsKt.testWonder(), 0, new Settings(5));
         board.setGold(initialGold);
         board.removeGold(goldRemoved);
         assertEquals(initialGold - goldRemoved, board.getGold());
@@ -98,7 +97,7 @@ public class BoardTest {
         assumeTrue(goldRemoved >= 0);
         assumeTrue(initialGold < goldRemoved);
         thrown.expect(InsufficientFundsException.class);
-        Board board = new Board(TestUtils.createWonder(), 0, new Settings(5));
+        Board board = new Board(TestUtilsKt.testWonder(), 0, new Settings(5));
         board.setGold(initialGold);
         board.removeGold(goldRemoved);
     }
@@ -106,8 +105,8 @@ public class BoardTest {
     @Theory
     public void getNbCardsOfColor_properCount_singleColor(ResourceType type, @FromDataPoints("nbCards") int nbCards,
                                                           @FromDataPoints("nbCards") int nbOtherCards, Color color) {
-        Board board = TestUtils.createBoard(type);
-        TestUtils.addCards(board, nbCards, nbOtherCards, color);
+        Board board = TestUtilsKt.testBoard(type);
+        TestUtilsKt.addCards(board, nbCards, nbOtherCards, color);
         assertEquals(nbCards, board.getNbCardsOfColor(Collections.singletonList(color)));
     }
 
@@ -116,17 +115,17 @@ public class BoardTest {
                                                           @FromDataPoints("nbCards") int nbCards2,
                                                           @FromDataPoints("nbCards") int nbOtherCards, Color color1,
                                                           Color color2) {
-        Board board = TestUtils.createBoard(type);
-        TestUtils.addCards(board, nbCards1, color1);
-        TestUtils.addCards(board, nbCards2, color2);
-        TestUtils.addCards(board, nbOtherCards, TestUtils.getDifferentColorFrom(color1, color2));
+        Board board = TestUtilsKt.testBoard(type);
+        TestUtilsKt.addCards(board, nbCards1, color1);
+        TestUtilsKt.addCards(board, nbCards2, color2);
+        TestUtilsKt.addCards(board, nbOtherCards, TestUtilsKt.getDifferentColorFrom(color1, color2));
         assertEquals(nbCards1 + nbCards2, board.getNbCardsOfColor(Arrays.asList(color1, color2)));
     }
 
     @Test
     public void setCopiedGuild_succeedsOnPurpleCard() {
-        Board board = TestUtils.createBoard(ResourceType.CLAY);
-        Card card = TestUtils.createCard(Color.PURPLE);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY);
+        Card card = TestUtilsKt.testCard(Color.PURPLE);
 
         board.setCopiedGuild(card);
         assertSame(card, board.getCopiedGuild());
@@ -135,8 +134,8 @@ public class BoardTest {
     @Theory
     public void setCopiedGuild_failsOnNonPurpleCard(Color color) {
         assumeTrue(color != Color.PURPLE);
-        Board board = TestUtils.createBoard(ResourceType.CLAY);
-        Card card = TestUtils.createCard(color);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY);
+        Card card = TestUtilsKt.testCard(color);
 
         thrown.expect(IllegalArgumentException.class);
         board.setCopiedGuild(card);
@@ -144,7 +143,7 @@ public class BoardTest {
 
     @Theory
     public void hasSpecial(SpecialAbility applied, SpecialAbility tested) {
-        Board board = TestUtils.createBoard(ResourceType.CLAY);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY);
         Table table = new Table(Collections.singletonList(board));
         SpecialAbilityActivation special = new SpecialAbilityActivation(applied);
 
@@ -155,7 +154,7 @@ public class BoardTest {
 
     @Test
     public void canPlayFreeCard() {
-        Board board = TestUtils.createBoard(ResourceType.CLAY);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY);
         Table table = new Table(Collections.singletonList(board));
         SpecialAbilityActivation special = new SpecialAbilityActivation(SpecialAbility.ONE_FREE_PER_AGE);
 
@@ -187,7 +186,7 @@ public class BoardTest {
     @Theory
     public void computePoints_gold(@FromDataPoints("gold") int gold) {
         assumeTrue(gold >= 0);
-        Board board = TestUtils.createBoard(ResourceType.WOOD);
+        Board board = TestUtilsKt.testBoard(ResourceType.WOOD);
         Table table = new Table(Collections.singletonList(board));
         board.setGold(gold);
 
@@ -199,12 +198,12 @@ public class BoardTest {
     @Theory
     public void computePoints_(@FromDataPoints("gold") int gold) {
         assumeTrue(gold >= 0);
-        Board board = TestUtils.createBoard(ResourceType.WOOD);
+        Board board = TestUtilsKt.testBoard(ResourceType.WOOD);
         Table table = new Table(Collections.singletonList(board));
         board.setGold(gold);
 
         Effect effect = new RawPointsIncrease(5);
-        TestUtils.playCardWithEffect(table, 0, Color.BLUE, effect);
+        TestUtilsKt.playCardWithEffect(table, 0, Color.BLUE, effect);
 
         PlayerScore score = board.computePoints(table);
         assertEquals(gold / 3, (int) score.getPoints(ScoreCategory.GOLD));

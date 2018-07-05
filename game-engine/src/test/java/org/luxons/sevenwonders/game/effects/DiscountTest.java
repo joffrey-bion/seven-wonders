@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Provider;
 import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,14 +33,14 @@ public class DiscountTest {
 
     @Theory
     public void apply_givesDiscountedPrice(int discountedPrice, ResourceType discountedType, Provider provider) {
-        Board board = TestUtils.createBoard(ResourceType.CLAY, 3);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY, 3);
         Discount discount = new Discount();
         discount.setDiscountedPrice(discountedPrice);
         discount.getProviders().add(provider);
         discount.getResourceTypes().add(discountedType);
         discount.apply(board);
 
-        ResourceTransactions transactions = TestUtils.createTransactions(provider, discountedType);
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(provider, discountedType);
         assertEquals(discountedPrice, board.getTradingRules().computeCost(transactions));
     }
 
@@ -50,23 +50,23 @@ public class DiscountTest {
         Assume.assumeTrue(otherProvider != provider);
         Assume.assumeTrue(otherType != discountedType);
 
-        Board board = TestUtils.createBoard(ResourceType.CLAY, 3);
+        Board board = TestUtilsKt.testBoard(ResourceType.CLAY, 3);
         Discount discount = new Discount();
         discount.setDiscountedPrice(discountedPrice);
         discount.getProviders().add(provider);
         discount.getResourceTypes().add(discountedType);
         discount.apply(board);
 
-        // this is the default in the settings used by TestUtils.createBoard()
+        // this is the default in the settings used by TestUtilsKt.testBoard()
         int normalPrice = 2;
 
-        ResourceTransactions fromOtherType = TestUtils.createTransactions(provider, otherType);
+        ResourceTransactions fromOtherType = TestUtilsKt.createTransactions(provider, otherType);
         assertEquals(normalPrice, board.getTradingRules().computeCost(fromOtherType));
 
-        ResourceTransactions fromOtherProvider = TestUtils.createTransactions(otherProvider, discountedType);
+        ResourceTransactions fromOtherProvider = TestUtilsKt.createTransactions(otherProvider, discountedType);
         assertEquals(normalPrice, board.getTradingRules().computeCost(fromOtherProvider));
 
-        ResourceTransactions fromOtherProviderAndType = TestUtils.createTransactions(otherProvider, otherType);
+        ResourceTransactions fromOtherProviderAndType = TestUtilsKt.createTransactions(otherProvider, otherType);
         assertEquals(normalPrice, board.getTradingRules().computeCost(fromOtherProviderAndType));
     }
 }

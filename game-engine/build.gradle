@@ -1,4 +1,7 @@
-apply plugin: 'java-library'
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.51"
+}
+
 apply plugin: 'checkstyle'
 
 group 'org.luxons'
@@ -9,12 +12,15 @@ repositories {
 
 configurations {
     checkstyleConfig
+    ktlint
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation 'com.google.code.gson:gson:2.8.0'
     testImplementation 'junit:junit:4.12'
     checkstyleConfig "org.hildan.checkstyle:checkstyle-config:2.1.0"
+    ktlint "com.github.shyiko:ktlint:0.24.0"
 }
 
 checkstyle {

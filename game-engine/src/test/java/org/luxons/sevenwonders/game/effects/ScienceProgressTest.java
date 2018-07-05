@@ -8,7 +8,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.boards.Science;
 import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.resources.ResourceType;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,11 +23,11 @@ public class ScienceProgressTest {
     @Theory
     public void apply_initContainsAddedScience(int initCompasses, int initWheels, int initTablets, int initJokers,
             int compasses, int wheels, int tablets, int jokers) {
-        Board board = TestUtils.createBoard(ResourceType.ORE);
-        Science initialScience = TestUtils.createScience(initCompasses, initWheels, initTablets, initJokers);
+        Board board = TestUtilsKt.testBoard(ResourceType.ORE);
+        Science initialScience = TestUtilsKt.createScience(initCompasses, initWheels, initTablets, initJokers);
         board.getScience().addAll(initialScience);
 
-        ScienceProgress effect = TestUtils.createScienceProgress(compasses, wheels, tablets, jokers);
+        ScienceProgress effect = TestUtilsKt.createScienceProgress(compasses, wheels, tablets, jokers);
         effect.apply(board);
 
         assertEquals(initCompasses + compasses, board.getScience().getQuantity(ScienceType.COMPASS));

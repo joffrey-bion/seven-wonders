@@ -21,7 +21,7 @@ import org.luxons.sevenwonders.game.resources.BestPriceCalculator;
 import org.luxons.sevenwonders.game.resources.ResourceTransaction;
 import org.luxons.sevenwonders.game.resources.ResourceTransactions;
 import org.luxons.sevenwonders.game.resources.Resources;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -48,7 +48,7 @@ public class GameTest {
     }
 
     private static Game createGame(int nbPlayers) {
-        CustomizableSettings settings = TestUtils.createCustomizableSettings();
+        CustomizableSettings settings = TestUtilsKt.testCustomizableSettings();
         return new GameDefinitionLoader().getGameDefinition().initGame(0, settings, nbPlayers);
     }
 
@@ -99,11 +99,11 @@ public class GameTest {
         for (HandCard handCard : turnInfo.getHand()) {
             if (handCard.isPlayable()) {
                 Set<ResourceTransaction> resourcesToBuy = findResourcesToBuyFor(handCard, turnInfo);
-                return TestUtils.createPlayerMove(handCard.getCard().getName(), MoveType.PLAY, resourcesToBuy);
+                return TestUtilsKt.createPlayerMove(MoveType.PLAY, handCard.getCard().getName(), resourcesToBuy);
             }
         }
         HandCard firstCardInHand = turnInfo.getHand().get(0);
-        return TestUtils.createPlayerMove(firstCardInHand.getCard().getName(), MoveType.DISCARD);
+        return TestUtilsKt.createPlayerMove(MoveType.DISCARD, firstCardInHand.getCard().getName());
     }
 
     private static Set<ResourceTransaction> findResourcesToBuyFor(HandCard handCard, PlayerTurnInfo turnInfo) {
@@ -122,6 +122,6 @@ public class GameTest {
         assertNotNull(neighbourGuilds);
         assertFalse(neighbourGuilds.isEmpty());
         String cardName = neighbourGuilds.get(0).getName();
-        return TestUtils.createPlayerMove(cardName, MoveType.COPY_GUILD);
+        return TestUtilsKt.createPlayerMove(MoveType.COPY_GUILD, cardName);
     }
 }

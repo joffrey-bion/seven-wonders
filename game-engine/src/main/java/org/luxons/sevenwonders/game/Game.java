@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,16 +78,15 @@ public class Game {
     }
 
     private PlayerTurnInfo createPlayerTurnInfo(int playerIndex) {
-        PlayerTurnInfo pti = new PlayerTurnInfo(playerIndex, table);
         List<HandCard> hand = hands.createHand(table, playerIndex);
-        pti.setHand(hand);
         Action action = determineAction(hand, table.getBoard(playerIndex));
-        pti.setAction(action);
-        pti.setMessage(action.getMessage());
+
+        List<Card> neighbourGuildCards = Collections.emptyList();
         if (action == Action.PICK_NEIGHBOR_GUILD) {
-            pti.setNeighbourGuildCards(table.getNeighbourGuildCards(playerIndex));
+            neighbourGuildCards = table.getNeighbourGuildCards(playerIndex);
         }
-        return pti;
+
+        return new PlayerTurnInfo(playerIndex, table, action, hand, neighbourGuildCards);
     }
 
     public Collection<PlayerTurnInfo> getCurrentTurnInfo() {

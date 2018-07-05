@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.game.boards.Board;
 import org.luxons.sevenwonders.game.resources.Production;
 import org.luxons.sevenwonders.game.resources.ResourceType;
 import org.luxons.sevenwonders.game.resources.Resources;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -25,24 +25,24 @@ public class ProductionIncreaseTest {
 
     private static ProductionIncrease createProductionIncrease(ResourceType... types) {
         ProductionIncrease effect = new ProductionIncrease();
-        effect.getProduction().addAll(TestUtils.createFixedProduction(types));
+        effect.getProduction().addAll(TestUtilsKt.fixedProduction(types));
         return effect;
     }
 
     @Theory
     public void apply_boardContainsAddedResourceType(ResourceType initialType, ResourceType addedType,
             ResourceType extraType) {
-        Board board = TestUtils.createBoard(initialType);
+        Board board = TestUtilsKt.testBoard(initialType);
         ProductionIncrease effect = createProductionIncrease(addedType);
         effect.setSellable(false);
 
         effect.apply(board);
 
-        Resources resources = TestUtils.createResources(initialType, addedType);
+        Resources resources = TestUtilsKt.createResources(initialType, addedType);
         assertTrue(board.getProduction().contains(resources));
         assertFalse(board.getPublicProduction().contains(resources));
 
-        Resources moreResources = TestUtils.createResources(initialType, addedType, extraType);
+        Resources moreResources = TestUtilsKt.createResources(initialType, addedType, extraType);
         assertFalse(board.getProduction().contains(moreResources));
         assertFalse(board.getPublicProduction().contains(moreResources));
     }
@@ -50,17 +50,17 @@ public class ProductionIncreaseTest {
     @Theory
     public void apply_boardContainsAddedResourceType_sellable(ResourceType initialType, ResourceType addedType,
             ResourceType extraType) {
-        Board board = TestUtils.createBoard(initialType);
+        Board board = TestUtilsKt.testBoard(initialType);
         ProductionIncrease effect = createProductionIncrease(addedType);
         effect.setSellable(true);
 
         effect.apply(board);
 
-        Resources resources = TestUtils.createResources(initialType, addedType);
+        Resources resources = TestUtilsKt.createResources(initialType, addedType);
         assertTrue(board.getProduction().contains(resources));
         assertTrue(board.getPublicProduction().contains(resources));
 
-        Resources moreResources = TestUtils.createResources(initialType, addedType, extraType);
+        Resources moreResources = TestUtilsKt.createResources(initialType, addedType, extraType);
         assertFalse(board.getProduction().contains(moreResources));
         assertFalse(board.getPublicProduction().contains(moreResources));
     }
@@ -68,7 +68,7 @@ public class ProductionIncreaseTest {
     @Theory
     public void computePoints_isAlwaysZero(ResourceType addedType) {
         ProductionIncrease effect = createProductionIncrease(addedType);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
         assertEquals(0, effect.computePoints(table, 0));
     }
 
@@ -82,7 +82,7 @@ public class ProductionIncreaseTest {
     @Theory
     public void equals_falseWhenDifferentClass(ResourceType addedType) {
         ProductionIncrease effect = createProductionIncrease(addedType);
-        Production production = TestUtils.createFixedProduction(addedType);
+        Production production = TestUtilsKt.fixedProduction(addedType);
         //noinspection EqualsBetweenInconvertibleTypes
         assertFalse(effect.equals(production));
     }

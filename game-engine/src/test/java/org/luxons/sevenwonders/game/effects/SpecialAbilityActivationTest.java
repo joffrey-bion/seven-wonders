@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.game.boards.BoardElementType;
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition;
 import org.luxons.sevenwonders.game.cards.Card;
 import org.luxons.sevenwonders.game.cards.Color;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -46,13 +46,13 @@ public class SpecialAbilityActivationTest {
                 Arrays.asList(RelativeBoardPosition.LEFT, RelativeBoardPosition.SELF, RelativeBoardPosition.RIGHT));
         bonus2.setPoints(1);
 
-        return new Card[] {TestUtils.createGuildCard(1, bonus), TestUtils.createGuildCard(2, bonus2)};
+        return new Card[] {TestUtilsKt.createGuildCard(1, bonus), TestUtilsKt.createGuildCard(2, bonus2)};
     }
 
     @Theory
     public void apply_addsAbility(SpecialAbility ability) {
         SpecialAbilityActivation effect = new SpecialAbilityActivation(ability);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
 
         effect.apply(table, 0);
 
@@ -65,7 +65,7 @@ public class SpecialAbilityActivationTest {
         Assume.assumeTrue(ability != SpecialAbility.COPY_GUILD);
 
         SpecialAbilityActivation effect = new SpecialAbilityActivation(ability);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
 
         assertEquals(0, effect.computePoints(table, 0));
     }
@@ -73,7 +73,7 @@ public class SpecialAbilityActivationTest {
     @Theory
     public void computePoints_copiedGuild(Card guildCard, RelativeBoardPosition neighbour) {
         SpecialAbilityActivation effect = new SpecialAbilityActivation(SpecialAbility.COPY_GUILD);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
 
         Board neighbourBoard = table.getBoard(0, neighbour);
         neighbourBoard.addCard(guildCard);
@@ -88,7 +88,7 @@ public class SpecialAbilityActivationTest {
     @Test(expected = IllegalStateException.class)
     public void computePoints_copyGuild_failWhenNoChosenGuild() {
         SpecialAbilityActivation effect = new SpecialAbilityActivation(SpecialAbility.COPY_GUILD);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
         effect.computePoints(table, 0);
     }
 }

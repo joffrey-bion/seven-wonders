@@ -7,7 +7,7 @@ import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assume.assumeTrue;
@@ -52,14 +52,14 @@ public class TradingRulesTest {
     @Theory
     public void computeCost_defaultCostWhenNoOverride(int defaultCost, Provider provider, ResourceType type) {
         TradingRules rules = new TradingRules(defaultCost);
-        ResourceTransactions transactions = TestUtils.createTransactions(provider, type);
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(provider, type);
         assertEquals(defaultCost, rules.computeCost(transactions));
     }
 
     @Theory
     public void computeCost_twiceDefaultFor2Resources(int defaultCost, Provider provider, ResourceType type) {
         TradingRules rules = new TradingRules(defaultCost);
-        ResourceTransactions transactions = TestUtils.createTransactions(provider, type, type);
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(provider, type, type);
         assertEquals(2 * defaultCost, rules.computeCost(transactions));
     }
 
@@ -67,7 +67,7 @@ public class TradingRulesTest {
     public void computeCost_overriddenCost(int defaultCost, int overriddenCost, Provider provider, ResourceType type) {
         TradingRules rules = new TradingRules(defaultCost);
         rules.setCost(type, provider, overriddenCost);
-        ResourceTransactions transactions = TestUtils.createTransactions(provider, type);
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(provider, type);
         assertEquals(overriddenCost, rules.computeCost(transactions));
     }
 
@@ -79,7 +79,7 @@ public class TradingRulesTest {
         assumeTrue(overriddenProvider != provider || overriddenType != type);
         TradingRules rules = new TradingRules(defaultCost);
         rules.setCost(overriddenType, overriddenProvider, overriddenCost);
-        ResourceTransactions transactions = TestUtils.createTransactions(provider, type);
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(provider, type);
         assertEquals(defaultCost, rules.computeCost(transactions));
     }
 
@@ -90,7 +90,7 @@ public class TradingRulesTest {
         assumeTrue(overriddenType != type);
         TradingRules rules = new TradingRules(defaultCost);
         rules.setCost(overriddenType, provider, overriddenCost);
-        ResourceTransactions transactions = TestUtils.createTransactions(provider, overriddenType, type);
+        ResourceTransactions transactions = TestUtilsKt.createTransactions(provider, overriddenType, type);
         assertEquals(defaultCost + overriddenCost, rules.computeCost(transactions));
     }
 
@@ -103,8 +103,8 @@ public class TradingRulesTest {
         rules.setCost(type, overriddenProvider, overriddenCost);
 
         List<ResourceTransaction> boughtResources = new ArrayList<>(2);
-        boughtResources.add(TestUtils.createTransaction(provider, type));
-        boughtResources.add(TestUtils.createTransaction(overriddenProvider, type));
+        boughtResources.add(TestUtilsKt.createTransaction(provider, type));
+        boughtResources.add(TestUtilsKt.createTransaction(overriddenProvider, type));
 
         assertEquals(defaultCost + overriddenCost, rules.computeCost(new ResourceTransactions(boughtResources)));
     }

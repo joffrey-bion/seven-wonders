@@ -1,12 +1,13 @@
 package org.luxons.sevenwonders.game.data.serializers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.luxons.sevenwonders.game.boards.ScienceType;
 import org.luxons.sevenwonders.game.effects.ScienceProgress;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -30,66 +31,66 @@ public class ScienceProgressSerializerTest {
 
     @Test
     public void serialize_emptyToNull() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 0, 0, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 0, 0, 0);
         String json = gson.toJson(progress);
         assertEquals("null", json);
     }
 
     @Test
     public void serialize_oneCompass() {
-        ScienceProgress progress = TestUtils.createScienceProgress(1, 0, 0, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(1, 0, 0, 0);
         String json = gson.toJson(progress);
         assertEquals(COMPASS_STR, json);
     }
 
     @Test
     public void serialize_oneWheel() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 1, 0, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 1, 0, 0);
         String json = gson.toJson(progress);
         assertEquals(WHEEL_STR, json);
     }
 
     @Test
     public void serialize_oneTablet() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 0, 1, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 0, 1, 0);
         String json = gson.toJson(progress);
         assertEquals(TABLET_STR, json);
     }
 
     @Test
     public void serialize_oneJoker() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 0, 0, 1);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 0, 0, 1);
         String json = gson.toJson(progress);
         assertEquals(JOKER_STR, json);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void serialize_failOnMultipleCompasses() {
-        ScienceProgress progress = TestUtils.createScienceProgress(2, 0, 0, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(2, 0, 0, 0);
         gson.toJson(progress);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void serialize_failOnMultipleWheels() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 2, 0, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 2, 0, 0);
         gson.toJson(progress);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void serialize_failOnMultipleTablets() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 0, 2, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 0, 2, 0);
         gson.toJson(progress);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void serialize_failOnMultipleJokers() {
-        ScienceProgress progress = TestUtils.createScienceProgress(0, 0, 0, 2);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(0, 0, 0, 2);
         gson.toJson(progress);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void serialize_failOnMixedElements() {
-        ScienceProgress progress = TestUtils.createScienceProgress(1, 1, 0, 0);
+        ScienceProgress progress = TestUtilsKt.createScienceProgress(1, 1, 0, 0);
         gson.toJson(progress);
     }
 

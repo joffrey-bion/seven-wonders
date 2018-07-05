@@ -12,7 +12,7 @@ import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.cards.Decks.CardNotFoundException;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -34,7 +34,7 @@ public class DecksTest {
         Map<Integer, List<Card>> cardsPerAge = new HashMap<>();
         for (int age = 1; age <= nbAges; age++) {
             int firstCardNumber = (age - 1) * nbCardsPerAge;
-            cardsPerAge.put(age, TestUtils.createSampleCards(firstCardNumber, nbCardsPerAge));
+            cardsPerAge.put(age, TestUtilsKt.createSampleCards(firstCardNumber, nbCardsPerAge));
         }
         return new Decks(cardsPerAge);
     }

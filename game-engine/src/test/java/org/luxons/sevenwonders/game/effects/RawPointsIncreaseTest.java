@@ -5,7 +5,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.luxons.sevenwonders.game.api.Table;
-import org.luxons.sevenwonders.game.test.TestUtils;
+import org.luxons.sevenwonders.game.test.TestUtilsKt;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,7 +22,7 @@ public class RawPointsIncreaseTest {
     @Theory
     public void computePoints_equalsNbOfPoints(int points) {
         RawPointsIncrease rawPointsIncrease = new RawPointsIncrease(points);
-        Table table = TestUtils.createTable(5);
+        Table table = TestUtilsKt.testTable(5);
         assertEquals(points, rawPointsIncrease.computePoints(table, 0));
     }
 
