@@ -26,6 +26,14 @@ public enum ResourceType {
         this.symbol = symbol;
     }
 
+    public static ResourceType fromSymbol(String symbol) {
+        if (symbol.length() != 1) {
+            throw new IllegalArgumentException("The given symbol must be a valid single-char resource type, got "
+                    + symbol);
+        }
+        return fromSymbol(symbol.charAt(0));
+    }
+
     public static ResourceType fromSymbol(Character symbol) {
         ResourceType type = typesPerSymbol.get(symbol);
         if (type == null) {

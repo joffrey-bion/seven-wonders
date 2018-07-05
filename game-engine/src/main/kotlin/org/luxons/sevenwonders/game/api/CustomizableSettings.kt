@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.api
 
-import org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod
+import org.luxons.sevenwonders.game.data.WonderSidePickMethod
 
 data class CustomizableSettings(
     val randomSeedForTests: Long? = null,

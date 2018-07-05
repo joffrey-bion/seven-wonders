@@ -16,11 +16,11 @@ configurations {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
     testImplementation 'junit:junit:4.12'
-    checkstyleConfig "org.hildan.checkstyle:checkstyle-config:2.1.0"
-    ktlint "com.github.shyiko:ktlint:0.24.0"
+    checkstyleConfig 'org.hildan.checkstyle:checkstyle-config:2.1.0'
+    ktlint 'com.github.shyiko:ktlint:0.24.0'
 }
 
 checkstyle {

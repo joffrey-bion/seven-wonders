@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.game
 
 import org.luxons.sevenwonders.game.api.CustomizableSettings
-import org.luxons.sevenwonders.game.data.definitions.WonderSide
-import org.luxons.sevenwonders.game.data.definitions.WonderSidePickMethod
+import org.luxons.sevenwonders.game.data.WonderSide
+import org.luxons.sevenwonders.game.data.WonderSidePickMethod
 import java.util.Random
 
 class Settings @JvmOverloads constructor(
