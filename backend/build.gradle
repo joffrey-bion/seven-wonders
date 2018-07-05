@@ -1,10 +1,21 @@
-plugins {
-    id 'org.springframework.boot' version '2.0.1.RELEASE'
+buildscript {
+    ext {
+        kotlinVersion = '1.2.51'
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+    }
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
 apply plugin: 'checkstyle'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -12,6 +23,20 @@ group 'org.luxons'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
 
 repositories {
     mavenCentral()
@@ -23,11 +48,15 @@ configurations {
 
 dependencies {
     compile project(':game-engine')
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compile 'org.jetbrains.kotlin:kotlin-reflect' // required by Spring 5
 
     compile 'org.springframework.boot:spring-boot-starter-websocket'
     compile 'org.springframework.boot:spring-boot-starter-security'
-    // required by spring security with websockets
+    // required by spring security when using websockets
     compile 'org.springframework.security:spring-security-messaging'
+
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin"
 
     compile 'ch.qos.logback:logback-classic:1.1.8'
     compile 'org.hildan.livedoc:livedoc-springboot:4.3.2'
@@ -38,7 +67,7 @@ dependencies {
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.hildan.jackstomp:jackstomp:1.1.0'
 
-    checkstyleConfig "org.hildan.checkstyle:checkstyle-config:2.1.0"
+    checkstyleConfig 'org.hildan.checkstyle:checkstyle-config:2.1.0'
 }
 
 checkstyle {
