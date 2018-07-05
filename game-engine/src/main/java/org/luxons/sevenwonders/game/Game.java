@@ -109,7 +109,7 @@ public class Game {
     }
 
     public CardBack prepareMove(int playerIndex, PlayerMove playerMove) throws InvalidMoveException {
-        Card card = decks.getCard(playerMove.getCardName());
+        Card card = decks.getCard(table.getCurrentAge(), playerMove.getCardName());
         Move move = playerMove.getType().resolve(playerIndex, card, playerMove);
         validate(move);
         preparedMoves.put(playerIndex, move);
@@ -143,7 +143,7 @@ public class Game {
     private void rotateHandsIfRelevant() {
         // we don't rotate hands if some player can play his last card (with the special ability)
         if (!hands.maxOneCardRemains()) {
-            hands.rotate(table.getHandRotationDirection());
+            hands = hands.rotate(table.getHandRotationDirection());
         }
     }
 
@@ -196,7 +196,7 @@ public class Game {
     private void discardHand(int playerIndex) {
         List<Card> hand = hands.get(playerIndex);
         discardedCards.addAll(hand);
-        hand.clear();
+        hands = hands.discard(playerIndex);
     }
 
     private void removeFromHand(int playerIndex, Card card) {

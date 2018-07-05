@@ -71,16 +71,6 @@ public class GameTest {
         checkLastPlayedMoves(sentMoves, table);
     }
 
-    private static void checkLastPlayedMoves(Map<Integer, PlayerMove> sentMoves, Table table) {
-        for (Move move : table.getLastPlayedMoves()) {
-            PlayerMove sentMove = sentMoves.get(move.getPlayerIndex());
-            assertNotNull(sentMove);
-            assertNotNull(move.getCard());
-            assertEquals(sentMove.getCardName(), move.getCard().getName());
-            assertSame(sentMove.getType(), move.getType());
-        }
-    }
-
     private static PlayerMove getFirstAvailableMove(PlayerTurnInfo turnInfo) {
         switch (turnInfo.getAction()) {
         case PLAY:
@@ -99,11 +89,11 @@ public class GameTest {
         for (HandCard handCard : turnInfo.getHand()) {
             if (handCard.isPlayable()) {
                 Set<ResourceTransaction> resourcesToBuy = findResourcesToBuyFor(handCard, turnInfo);
-                return TestUtilsKt.createPlayerMove(MoveType.PLAY, handCard.getCard().getName(), resourcesToBuy);
+                return new PlayerMove(MoveType.PLAY, handCard.getCard().getName(), resourcesToBuy);
             }
         }
         HandCard firstCardInHand = turnInfo.getHand().get(0);
-        return TestUtilsKt.createPlayerMove(MoveType.DISCARD, firstCardInHand.getCard().getName());
+        return new PlayerMove(MoveType.DISCARD, firstCardInHand.getCard().getName());
     }
 
     private static Set<ResourceTransaction> findResourcesToBuyFor(HandCard handCard, PlayerTurnInfo turnInfo) {
@@ -122,6 +112,16 @@ public class GameTest {
         assertNotNull(neighbourGuilds);
         assertFalse(neighbourGuilds.isEmpty());
         String cardName = neighbourGuilds.get(0).getName();
-        return TestUtilsKt.createPlayerMove(MoveType.COPY_GUILD, cardName);
+        return new PlayerMove(MoveType.COPY_GUILD, cardName);
+    }
+
+    private static void checkLastPlayedMoves(Map<Integer, PlayerMove> sentMoves, Table table) {
+        for (Move move : table.getLastPlayedMoves()) {
+            PlayerMove sentMove = sentMoves.get(move.getPlayerIndex());
+            assertNotNull(sentMove);
+            assertNotNull(move.getCard());
+            assertEquals(sentMove.getCardName(), move.getCard().getName());
+            assertSame(sentMove.getType(), move.getType());
+        }
     }
 }

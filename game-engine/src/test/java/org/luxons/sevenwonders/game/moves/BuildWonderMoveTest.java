@@ -17,7 +17,7 @@ public class BuildWonderMoveTest {
     @Test(expected = InvalidMoveException.class)
     public void validate_failsWhenCardNotInHand() {
         Table table = TestUtilsKt.testTable(3);
-        List<Card> hand = TestUtilsKt.createSampleCards(0, 7);
+        List<Card> hand = TestUtilsKt.sampleCards(0, 7);
         Card anotherCard = TestUtilsKt.testCard("Card that is not in the hand");
         Move move = TestUtilsKt.createMove(0, anotherCard, MoveType.UPGRADE_WONDER);
 
@@ -28,7 +28,7 @@ public class BuildWonderMoveTest {
     public void validate_failsWhenWonderIsCompletelyBuilt() {
         Settings settings = TestUtilsKt.testSettings(3);
         Table table = TestUtilsKt.testTable(settings);
-        List<Card> hand = TestUtilsKt.createSampleCards(0, 7);
+        List<Card> hand = TestUtilsKt.sampleCards(0, 7);
 
         fillPlayerWonderLevels(settings, table, hand);
 
@@ -59,7 +59,7 @@ public class BuildWonderMoveTest {
     public void place_increasesWonderLevel() {
         Settings settings = TestUtilsKt.testSettings(3);
         Table table = TestUtilsKt.testTable(settings);
-        List<Card> hand = TestUtilsKt.createSampleCards(0, 7);
+        List<Card> hand = TestUtilsKt.sampleCards(0, 7);
         Card cardToUse = hand.get(0);
         Move move = TestUtilsKt.createMove(0, cardToUse, MoveType.UPGRADE_WONDER);
         move.validate(table, hand); // should not fail

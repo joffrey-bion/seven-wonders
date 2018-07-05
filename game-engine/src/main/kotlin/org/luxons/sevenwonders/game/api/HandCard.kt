@@ -12,12 +12,11 @@ class HandCard(val card: Card, table: Table, playerIndex: Int) {
 
     val isFree: Boolean
 
-    val isPlayable: Boolean
+    val isPlayable: Boolean = card.isPlayable(table, playerIndex)
 
     init {
         val board = table.getBoard(playerIndex)
         this.isChainable = card.isChainableOn(board)
         this.isFree = card.isFreeFor(board)
-        this.isPlayable = card.isPlayable(table, playerIndex)
     }
 }

@@ -40,18 +40,18 @@ class Table(val boards: List<Board>) {
         for (i in 0 until nbPlayers) {
             val board1 = getBoard(i)
             val board2 = getBoard((i + 1) % nbPlayers)
-            resolveConflict(board1, board2, currentAge)
+            resolveConflict(board1, board2)
         }
     }
 
-    private fun resolveConflict(board1: Board, board2: Board, age: Int) {
+    private fun resolveConflict(board1: Board, board2: Board) {
         val shields1 = board1.military.nbShields
         val shields2 = board2.military.nbShields
         if (shields1 < shields2) {
             board1.military.defeat()
-            board2.military.victory(age)
+            board2.military.victory(currentAge)
         } else if (shields1 > shields2) {
-            board1.military.victory(age)
+            board1.military.victory(currentAge)
             board2.military.defeat()
         }
     }

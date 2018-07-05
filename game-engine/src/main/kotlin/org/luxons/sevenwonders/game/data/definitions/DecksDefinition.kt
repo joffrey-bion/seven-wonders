@@ -39,14 +39,11 @@ internal class DecksDefinition(
     }
 
     private fun createDeck(defs: List<CardDefinition>, settings: Settings, back: CardBack): List<Card> {
-        return defs.flatMap { it.create(settings.nbPlayers) }.onEach { it.back = back }
+        return defs.flatMap { it.create(back, settings.nbPlayers) }
     }
 
     private fun createGuildCards(settings: Settings, back: CardBack): List<Card> {
-        val guild = guildCards
-            .map { it.create() }
-            .map { c -> c.back = back; c }
-            .toMutableList()
+        val guild = guildCards.map { it.create(back) }.toMutableList()
         guild.shuffle(settings.random)
         return guild.subList(0, settings.nbPlayers + 2)
     }

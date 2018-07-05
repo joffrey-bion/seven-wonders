@@ -115,17 +115,11 @@ fun createTransaction(provider: Provider, vararg resources: ResourceType): Resou
 
 fun createRequirements(vararg types: ResourceType): Requirements {
     val resources = createResources(*types)
-    val requirements = Requirements()
-    requirements.resources = resources
-    return requirements
+    return Requirements(resources = resources)
 }
 
-fun createSampleCards(fromIndex: Int, nbCards: Int): List<Card> {
-    val sampleCards = ArrayList<Card>()
-    for (i in fromIndex until fromIndex + nbCards) {
-        sampleCards.add(testCard(i, Color.BLUE))
-    }
-    return sampleCards
+fun sampleCards(fromIndex: Int, nbCards: Int): List<Card> {
+    return List(nbCards) { i -> testCard(i + fromIndex, Color.BLUE) }
 }
 
 fun testCard(name: String): Card {
@@ -148,14 +142,18 @@ fun createGuildCards(count: Int): List<Card> {
     return IntRange(0, count).map { createGuildCard(it) }
 }
 
-fun createGuildCard(num: Int, vararg effects: Effect): Card {
-    return testCard("Test Guild $num", Color.PURPLE, *effects)
+fun createGuildCard(num: Int, effect: Effect? = null): Card {
+    return testCard("Test Guild $num", Color.PURPLE, effect)
 }
 
-private fun testCard(name: String, color: Color, vararg effects: Effect): Card {
-    val card = Card(name, color, Requirements(), Arrays.asList(*effects), null, null, "path/to/card/image")
-    card.back = createCardBack()
-    return card
+fun testCard(
+    name: String = "Test Card",
+    color: Color = Color.BLUE,
+    effect: Effect? = null,
+    requirements: Requirements = Requirements()
+): Card {
+    val effects = if (effect == null) emptyList() else listOf(effect)
+    return Card(name, color, requirements, effects, null, emptyList(), "path/to/card/image", createCardBack())
 }
 
 private fun createCardBack(): CardBack {
@@ -217,13 +215,4 @@ fun playCardWithEffect(table: Table, playerIndex: Int, color: Color, effect: Eff
 fun createMove(playerIndex: Int, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {
     val playerMove = PlayerMove(type, card.name, Arrays.asList(*transactions))
     return type.resolve(playerIndex, card, playerMove)
-}
-
-@JvmOverloads
-fun createPlayerMove(
-    type: MoveType,
-    cardName: String?,
-    transactions: Collection<ResourceTransaction> = emptySet()
-): PlayerMove {
-    return PlayerMove(type, cardName, transactions)
 }
