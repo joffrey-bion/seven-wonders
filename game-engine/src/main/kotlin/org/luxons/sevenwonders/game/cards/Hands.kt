@@ -11,9 +11,16 @@ class Hands internal constructor(private val hands: List<List<Card>>) {
         return hands[playerIndex]
     }
 
-    fun discard(playerIndex: Int): Hands {
-        val newHands = hands.mapIndexed { index, hand -> if (index == playerIndex) emptyList() else hand }
-        return Hands(newHands)
+    fun discardHand(playerIndex: Int): Hands {
+        val mutatedHands = hands.toMutableList()
+        mutatedHands[playerIndex] = emptyList()
+        return Hands(mutatedHands)
+    }
+
+    fun remove(playerIndex: Int, card: Card): Hands {
+        val mutatedHands = hands.toMutableList()
+        mutatedHands[playerIndex] = hands[playerIndex] - card
+        return Hands(mutatedHands)
     }
 
     fun createHand(table: Table, playerIndex: Int): List<HandCard> {

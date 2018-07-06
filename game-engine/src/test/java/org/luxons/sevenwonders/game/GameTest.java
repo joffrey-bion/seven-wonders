@@ -39,6 +39,8 @@ public class GameTest {
         for (int age = 1; age <= 3; age++) {
             playAge(nbPlayers, game, age);
         }
+
+        game.computeScore();
     }
 
     private void playAge(int nbPlayers, Game game, int age) {
