@@ -24,6 +24,7 @@ import org.luxons.sevenwonders.game.resources.Resources;
 import org.luxons.sevenwonders.game.test.TestUtils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -119,7 +120,8 @@ public class GameTest {
     private static PlayerMove createPickGuildMove(PlayerTurnInfo turnInfo) {
         List<Card> neighbourGuilds = turnInfo.getNeighbourGuildCards();
         assertNotNull(neighbourGuilds);
-        String cardName = neighbourGuilds.isEmpty() ? null : neighbourGuilds.get(0).getName();
+        assertFalse(neighbourGuilds.isEmpty());
+        String cardName = neighbourGuilds.get(0).getName();
         return TestUtils.createPlayerMove(cardName, MoveType.COPY_GUILD);
     }
 }

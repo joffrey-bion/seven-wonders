@@ -57,6 +57,10 @@ public class Board {
         this.publicProduction.addFixedResource(wonder.getInitialResource(), 1);
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     public Wonder getWonder() {
         return wonder;
     }

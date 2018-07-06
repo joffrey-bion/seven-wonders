@@ -95,7 +95,8 @@ public class Game {
 
     private Action determineAction(List<HandCard> hand, Board board) {
         if (endOfGameReached() && board.hasSpecial(SpecialAbility.COPY_GUILD)) {
-            return Action.PICK_NEIGHBOR_GUILD;
+            List<Card> neighbourGuildCards = table.getNeighbourGuildCards(board.getPlayerIndex());
+            return neighbourGuildCards.isEmpty() ? Action.WAIT : Action.PICK_NEIGHBOR_GUILD;
         } else if (hand.size() == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
             return Action.PLAY_LAST;
         } else if (hand.size() == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
