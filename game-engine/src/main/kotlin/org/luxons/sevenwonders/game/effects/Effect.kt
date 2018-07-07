@@ -1,15 +1,15 @@
-package org.luxons.sevenwonders.game.effects;
+package org.luxons.sevenwonders.game.effects
 
-import org.luxons.sevenwonders.game.api.Table;
+import org.luxons.sevenwonders.game.api.Table
 
 /**
  * Represents an effect than can be applied to a player's board when playing a card or building his wonder. The effect
  * may affect (or depend on) the adjacent boards. It can have an instantaneous effect on the board, or be postponed to
  * the end of game where point calculations take place.
  */
-public interface Effect {
+interface Effect {
 
-    void apply(Table table, int playerIndex);
+    fun apply(table: Table, playerIndex: Int)
 
-    int computePoints(Table table, int playerIndex);
+    fun computePoints(table: Table, playerIndex: Int): Int
 }

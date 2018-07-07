@@ -15,7 +15,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 
-internal class ResourcesSerializer : JsonSerializer<Resources>, JsonDeserializer<Resources> {
+class ResourcesSerializer : JsonSerializer<Resources>, JsonDeserializer<Resources> {
 
     override fun serialize(resources: Resources, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val s = resources.asList().map { it.symbol }.joinToString("")

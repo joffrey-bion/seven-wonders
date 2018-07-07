@@ -12,7 +12,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 
-internal class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeserializer<ResourceType> {
+class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeserializer<ResourceType> {
 
     override fun serialize(type: ResourceType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(type.symbol!!)

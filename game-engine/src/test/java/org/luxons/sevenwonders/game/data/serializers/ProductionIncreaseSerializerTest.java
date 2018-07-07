@@ -43,19 +43,13 @@ public class ProductionIncreaseSerializerTest {
         if (clay > 0) {
             production.addFixedResource(ResourceType.CLAY, clay);
         }
-        ProductionIncrease prodIncrease = new ProductionIncrease();
-        prodIncrease.setProduction(production);
-        prodIncrease.setSellable(sellable);
-        return prodIncrease;
+        return new ProductionIncrease(production, sellable);
     }
 
     private static ProductionIncrease createChoice(boolean sellable, ResourceType... types) {
         Production production = new Production();
         production.addChoice(types);
-        ProductionIncrease prodIncrease = new ProductionIncrease();
-        prodIncrease.setProduction(production);
-        prodIncrease.setSellable(sellable);
-        return prodIncrease;
+        return new ProductionIncrease(production, sellable);
     }
 
     @Test
@@ -65,7 +59,7 @@ public class ProductionIncreaseSerializerTest {
 
     @Test
     public void serialize_emptyProdIncreaseAsNull() {
-        ProductionIncrease prodIncrease = new ProductionIncrease();
+        ProductionIncrease prodIncrease = new ProductionIncrease(new Production(), false);
         assertEquals("null", gson.toJson(prodIncrease, ProductionIncrease.class));
     }
 
@@ -138,7 +132,7 @@ public class ProductionIncreaseSerializerTest {
 
     @Test
     public void deserialize_emptyList() {
-        ProductionIncrease prodIncrease = new ProductionIncrease();
+        ProductionIncrease prodIncrease = new ProductionIncrease(new Production(), true);
         assertEquals(prodIncrease, gson.fromJson("\"\"", ProductionIncrease.class));
     }
 

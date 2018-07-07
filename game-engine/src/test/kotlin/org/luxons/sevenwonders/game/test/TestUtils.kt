@@ -183,9 +183,7 @@ fun getDifferentColorFrom(vararg colors: Color): Color {
 }
 
 fun createScienceProgress(compasses: Int, wheels: Int, tablets: Int, jokers: Int): ScienceProgress {
-    val progress = ScienceProgress()
-    progress.science = createScience(compasses, wheels, tablets, jokers)
-    return progress
+    return ScienceProgress(createScience(compasses, wheels, tablets, jokers))
 }
 
 fun createScience(compasses: Int, wheels: Int, tablets: Int, jokers: Int): Science {

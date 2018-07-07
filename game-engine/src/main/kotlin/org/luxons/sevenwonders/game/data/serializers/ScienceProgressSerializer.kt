@@ -39,15 +39,13 @@ internal class ScienceProgressSerializer : JsonSerializer<ScienceProgress>, Json
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ScienceProgress {
         val s = json.asString
-        val scienceProgress = ScienceProgress()
         val science = Science()
         if ("any" == s) {
             science.addJoker(1)
         } else {
             science.add(deserializeScienceType(json, context), 1)
         }
-        scienceProgress.science = science
-        return scienceProgress
+        return ScienceProgress(science)
     }
 
     private fun deserializeScienceType(json: JsonElement, context: JsonDeserializationContext): ScienceType {

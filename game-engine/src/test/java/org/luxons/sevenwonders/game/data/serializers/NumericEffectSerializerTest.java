@@ -12,6 +12,7 @@ import org.luxons.sevenwonders.game.effects.GoldIncrease;
 import org.luxons.sevenwonders.game.effects.MilitaryReinforcements;
 import org.luxons.sevenwonders.game.effects.ProductionIncrease;
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease;
+import org.luxons.sevenwonders.game.resources.Production;
 
 import static org.junit.Assert.assertEquals;
 
@@ -52,7 +53,7 @@ public class NumericEffectSerializerTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void serialize_failOnUnknownType() {
-        gson.toJson(new ProductionIncrease());
+        gson.toJson(new ProductionIncrease(new Production(), false));
     }
 
     @Theory

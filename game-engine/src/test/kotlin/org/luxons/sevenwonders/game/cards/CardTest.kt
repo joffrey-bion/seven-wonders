@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.effects.ProductionIncrease
+import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
@@ -31,8 +32,9 @@ class CardTest {
         table = Table(boards)
 
         val treeFarmRequirements = Requirements(1)
-        val treeFarmEffect = ProductionIncrease()
-        treeFarmEffect.production.addChoice(ResourceType.WOOD, ResourceType.CLAY)
+        val treeFarmProduction = Production()
+        treeFarmProduction.addChoice(ResourceType.WOOD, ResourceType.CLAY)
+        val treeFarmEffect = ProductionIncrease(treeFarmProduction, false)
 
         treeFarmCard = testCard("Tree Farm", Color.BROWN, treeFarmEffect, treeFarmRequirements)
     }

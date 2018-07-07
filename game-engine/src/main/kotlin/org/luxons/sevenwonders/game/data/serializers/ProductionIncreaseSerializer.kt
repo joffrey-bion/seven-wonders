@@ -29,20 +29,16 @@ class ProductionIncreaseSerializer : JsonSerializer<ProductionIncrease>, JsonDes
         typeOfT: Type,
         context: JsonDeserializationContext
     ): ProductionIncrease {
-        var json = json
-        val productionIncrease = ProductionIncrease()
+        var prodJson = json
 
-        var resourcesStr = json.asString
+        var resourcesStr = prodJson.asString
         val isSellable = !resourcesStr.startsWith("(")
         if (!isSellable) {
             resourcesStr = unwrapBrackets(resourcesStr)
-            json = JsonPrimitive(resourcesStr)
+            prodJson = JsonPrimitive(resourcesStr)
         }
-        productionIncrease.isSellable = isSellable
-
-        val production = context.deserialize<Production>(json, Production::class.java)
-        productionIncrease.production = production
-        return productionIncrease
+        val production = context.deserialize<Production>(prodJson, Production::class.java)
+        return ProductionIncrease(production, isSellable)
     }
 
     private fun unwrapBrackets(str: String): String {
