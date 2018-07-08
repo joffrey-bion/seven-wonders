@@ -78,7 +78,7 @@ fun testWonder(initialResource: ResourceType = ResourceType.WOOD): Wonder {
     val stage1 = createWonderStage()
     val stage2 = createWonderStage()
     val stage3 = createWonderStage()
-    return Wonder("Test Wonder " + initialResource.symbol!!, initialResource, stage1, stage2, stage3)
+    return Wonder("Test Wonder " + initialResource.symbol!!, initialResource, listOf(stage1, stage2, stage3), "")
 }
 
 private fun createWonderStage(vararg effects: Effect): WonderStage {

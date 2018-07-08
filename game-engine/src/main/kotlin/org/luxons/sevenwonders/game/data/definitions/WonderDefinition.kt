@@ -9,13 +9,8 @@ internal data class WonderDefinition(
     private val sides: Map<WonderSide, WonderSideDefinition>
 ) {
     fun create(settings: Settings): Wonder {
-        val wonder = Wonder()
-        wonder.name = name
-
         val wonderSideDef = sides[settings.pickWonderSide()]!!
-        wonder.initialResource = wonderSideDef.initialResource
-        wonder.stages = wonderSideDef.createStages()
-        wonder.image = wonderSideDef.image
-        return wonder
+        val stages = wonderSideDef.createStages()
+        return Wonder(name, wonderSideDef.initialResource, stages, wonderSideDef.image)
     }
 }

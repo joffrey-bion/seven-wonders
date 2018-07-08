@@ -10,7 +10,6 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.resources.Resources
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.wonders.Wonder
 
@@ -25,9 +24,9 @@ class CardTest {
         val settings = Settings(3)
 
         val boards = listOf(
-            Board(Wonder("TestWonder", ResourceType.WOOD), 0, settings),
-            Board(Wonder("TestWonder", ResourceType.STONE), 1, settings),
-            Board(Wonder("TestWonder", ResourceType.PAPYRUS), 2, settings)
+            Board(Wonder("TestWonder", ResourceType.WOOD, emptyList(), ""), 0, settings),
+            Board(Wonder("TestWonder", ResourceType.STONE, emptyList(), ""), 1, settings),
+            Board(Wonder("TestWonder", ResourceType.PAPYRUS, emptyList(), ""), 2, settings)
         )
         table = Table(boards)
 
