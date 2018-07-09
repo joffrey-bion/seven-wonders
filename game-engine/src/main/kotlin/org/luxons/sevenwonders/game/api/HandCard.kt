@@ -9,9 +9,7 @@ import org.luxons.sevenwonders.game.cards.Card
 class HandCard(val card: Card, table: Table, playerIndex: Int) {
 
     val isChainable: Boolean
-
     val isFree: Boolean
-
     val isPlayable: Boolean = card.isPlayable(table, playerIndex)
 
     init {
