@@ -5,6 +5,7 @@ import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.cards.HandRotationDirection
+import org.luxons.sevenwonders.game.data.Age
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.resources.Provider
 
@@ -16,7 +17,7 @@ class Table(val boards: List<Board>) {
 
     val nbPlayers: Int = boards.size
 
-    var currentAge = 0
+    var currentAge: Age = 0
         private set
 
     val handRotationDirection: HandRotationDirection
