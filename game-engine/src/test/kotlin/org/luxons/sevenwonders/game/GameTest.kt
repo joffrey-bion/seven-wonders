@@ -8,9 +8,10 @@ import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader
+import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
-import org.luxons.sevenwonders.game.resources.BestPriceCalculator
 import org.luxons.sevenwonders.game.resources.ResourceTransaction
+import org.luxons.sevenwonders.game.resources.bestTransaction
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
 import java.util.HashMap
 
@@ -21,10 +22,9 @@ class GameTest {
         val nbPlayers = 5
         val game = createGame(nbPlayers)
 
-        for (age in 1..3) {
+        for (age in 1..LAST_AGE) {
             playAge(nbPlayers, game, age)
         }
-
         game.computeScore()
     }
 
@@ -59,11 +59,11 @@ class GameTest {
     }
 
     private fun getFirstAvailableMove(turnInfo: PlayerTurnInfo): PlayerMove? {
-        when (turnInfo.action) {
-            Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> return createPlayCardMove(turnInfo)
-            Action.PICK_NEIGHBOR_GUILD -> return createPickGuildMove(turnInfo)
-            Action.WAIT -> return null
-            else -> return null
+        return when (turnInfo.action) {
+            Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> createPlayCardMove(turnInfo)
+            Action.PICK_NEIGHBOR_GUILD -> createPickGuildMove(turnInfo)
+            Action.WAIT -> null
+            else -> null
         }
     }
 
@@ -78,15 +78,16 @@ class GameTest {
         return PlayerMove(MoveType.DISCARD, firstCardInHand.card.name)
     }
 
-    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): Set<ResourceTransaction> {
+    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): List<ResourceTransaction> {
         if (handCard.isFree) {
-            return emptySet()
+            return emptyList()
         }
         val requiredResources = handCard.card.requirements.resources
         val table = turnInfo.table
         val playerIndex = turnInfo.playerIndex
-        val transactions = BestPriceCalculator.bestSolution(requiredResources, table, playerIndex)
-        return transactions.toTransactions()
+        val transactions = bestTransaction(requiredResources, table, playerIndex)
+        // we're supposed to have a best transaction plan because the card is playable
+        return transactions!!.asList()
     }
 
     private fun createPickGuildMove(turnInfo: PlayerTurnInfo): PlayerMove {

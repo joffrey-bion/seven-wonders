@@ -16,7 +16,7 @@ class ProductionSerializer : JsonSerializer<Production>, JsonDeserializer<Produc
 
     override fun serialize(production: Production, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val fixedResources = production.fixedResources
-        val choices = production.alternativeResources
+        val choices = production.getAlternativeResources()
         return when {
             fixedResources.isEmpty -> serializeAsChoice(choices, context)
             choices.isEmpty() -> serializeAsResources(fixedResources, context)

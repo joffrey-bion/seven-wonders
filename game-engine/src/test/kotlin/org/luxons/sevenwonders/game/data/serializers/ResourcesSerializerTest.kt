@@ -59,7 +59,7 @@ class ResourcesSerializerTest {
         resources.add(ResourceType.WOOD, 2)
         resources.add(ResourceType.CLAY, 1)
         resources.add(ResourceType.STONE, 1)
-        assertEquals("\"WWSCC\"", gson!!.toJson(resources))
+        assertEquals("\"CCWWS\"", gson!!.toJson(resources))
     }
 
     @Test

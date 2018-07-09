@@ -1,29 +1,26 @@
 package org.luxons.sevenwonders.game.resources
 
-import java.util.Arrays
-
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.luxons.sevenwonders.game.api.Table
-import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.test.*
-
-import org.junit.Assert.assertEquals
 import org.luxons.sevenwonders.game.resources.Provider.LEFT_PLAYER
 import org.luxons.sevenwonders.game.resources.Provider.RIGHT_PLAYER
-import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
-import org.luxons.sevenwonders.game.resources.ResourceType.GLASS
-import org.luxons.sevenwonders.game.resources.ResourceType.ORE
-import org.luxons.sevenwonders.game.resources.ResourceType.STONE
-import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
+import org.luxons.sevenwonders.game.resources.ResourceType.*
+import org.luxons.sevenwonders.game.test.createResources
+import org.luxons.sevenwonders.game.test.createTransaction
+import org.luxons.sevenwonders.game.test.createTransactions
+import org.luxons.sevenwonders.game.test.testBoard
+import org.luxons.sevenwonders.game.test.testTable
+import java.util.Arrays
 
 class BestPriceCalculatorTest {
 
     @Test
     fun bestPrice_0forEmptyResources() {
         val table = testTable(3)
-        val resources = Resources()
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 0).toLong())
-        assertEquals(ResourceTransactions(), BestPriceCalculator.bestSolution(resources, table, 0))
+        val emptyResources = Resources()
+        val emptyTransactions = ResourceTransactions()
+        assertEquals(TransactionPlan(0, emptyTransactions), bestSolution(emptyResources, table, 0))
     }
 
     @Test
@@ -34,9 +31,6 @@ class BestPriceCalculatorTest {
         val table = Table(Arrays.asList(main, right, left))
 
         val resources = createResources(STONE, STONE)
-        assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 0).toLong())
-        assertEquals(4, BestPriceCalculator.bestPrice(resources, table, 1).toLong())
-        assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 2).toLong())
 
         val stoneLeftSingle = createTransaction(LEFT_PLAYER, STONE)
         val stoneRightSingle = createTransaction(RIGHT_PLAYER, STONE)
@@ -45,9 +39,9 @@ class BestPriceCalculatorTest {
         val stoneRight = createTransactions(stoneRightSingle)
         val stoneLeftAndRight = createTransactions(stoneLeftSingle, stoneRightSingle)
 
-        assertEquals(stoneLeft, BestPriceCalculator.bestSolution(resources, table, 0))
-        assertEquals(stoneLeftAndRight, BestPriceCalculator.bestSolution(resources, table, 1))
-        assertEquals(stoneRight, BestPriceCalculator.bestSolution(resources, table, 2))
+        assertEquals(TransactionPlan(2, stoneLeft), bestSolution(resources, table, 0))
+        assertEquals(TransactionPlan(4, stoneLeftAndRight), bestSolution(resources, table, 1))
+        assertEquals(TransactionPlan(2, stoneRight), bestSolution(resources, table, 2))
     }
 
     @Test
@@ -61,17 +55,14 @@ class BestPriceCalculatorTest {
         val table = Table(Arrays.asList(main, right, opposite, left))
 
         val resources = createResources(WOOD)
-        assertEquals(1, BestPriceCalculator.bestPrice(resources, table, 0).toLong())
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 1).toLong())
-        assertEquals(2, BestPriceCalculator.bestPrice(resources, table, 2).toLong())
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 3).toLong())
 
         val woodLeft = createTransactions(LEFT_PLAYER, WOOD)
         val woodRight = createTransactions(RIGHT_PLAYER, WOOD)
-        assertEquals(woodRight, BestPriceCalculator.bestSolution(resources, table, 0))
-        assertEquals(ResourceTransactions(), BestPriceCalculator.bestSolution(resources, table, 1))
-        assertEquals(woodLeft, BestPriceCalculator.bestSolution(resources, table, 2))
-        assertEquals(ResourceTransactions(), BestPriceCalculator.bestSolution(resources, table, 3))
+
+        assertEquals(TransactionPlan(1, woodRight), bestSolution(resources, table, 0))
+        assertEquals(TransactionPlan(0, ResourceTransactions()), bestSolution(resources, table, 1))
+        assertEquals(TransactionPlan(2, woodLeft), bestSolution(resources, table, 2))
+        assertEquals(TransactionPlan(0, ResourceTransactions()), bestSolution(resources, table, 3))
     }
 
     @Test
@@ -88,15 +79,11 @@ class BestPriceCalculatorTest {
         val table = Table(Arrays.asList(main, right, left))
 
         val resources = createResources(WOOD)
-        assertEquals(1, BestPriceCalculator.bestPrice(resources, table, 0).toLong())
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 1).toLong())
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 2).toLong())
-
         val woodRight = createTransactions(RIGHT_PLAYER, WOOD)
 
-        assertEquals(woodRight, BestPriceCalculator.bestSolution(resources, table, 0))
-        assertEquals(ResourceTransactions(), BestPriceCalculator.bestSolution(resources, table, 1))
-        assertEquals(ResourceTransactions(), BestPriceCalculator.bestSolution(resources, table, 2))
+        assertEquals(TransactionPlan(1, woodRight), bestSolution(resources, table, 0))
+        assertEquals(TransactionPlan(0, ResourceTransactions()), bestSolution(resources, table, 1))
+        assertEquals(TransactionPlan(0, ResourceTransactions()), bestSolution(resources, table, 2))
     }
 
     @Test
@@ -116,14 +103,11 @@ class BestPriceCalculatorTest {
         val table = Table(Arrays.asList(main, right, left))
 
         val resources = createResources(ORE, CLAY)
-        assertEquals(1, BestPriceCalculator.bestPrice(resources, table, 0).toLong())
-        assertEquals(0, BestPriceCalculator.bestPrice(resources, table, 1).toLong())
-        assertEquals(4, BestPriceCalculator.bestPrice(resources, table, 2).toLong())
-
         val oreAndClayLeft = createTransactions(LEFT_PLAYER, ORE, CLAY)
         val clayRight = createTransactions(RIGHT_PLAYER, CLAY)
-        assertEquals(clayRight, BestPriceCalculator.bestSolution(resources, table, 0))
-        assertEquals(ResourceTransactions(), BestPriceCalculator.bestSolution(resources, table, 1))
-        assertEquals(oreAndClayLeft, BestPriceCalculator.bestSolution(resources, table, 2))
+
+        assertEquals(TransactionPlan(1, clayRight), bestSolution(resources, table, 0))
+        assertEquals(TransactionPlan(0, ResourceTransactions()), bestSolution(resources, table, 1))
+        assertEquals(TransactionPlan(4, oreAndClayLeft), bestSolution(resources, table, 2))
     }
 }

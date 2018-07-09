@@ -2,9 +2,9 @@ package org.luxons.sevenwonders.game.cards
 
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.resources.BestPriceCalculator
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.game.resources.bestPrice
 
 data class Requirements @JvmOverloads constructor(
     val gold: Int = 0,
@@ -55,7 +55,8 @@ data class Requirements @JvmOverloads constructor(
         if (producesRequiredResources(board)) {
             return true
         }
-        return BestPriceCalculator.bestPrice(resources, table, playerIndex) <= board.gold - gold
+        val bestPrice = bestPrice(resources, table, playerIndex)
+        return bestPrice != null && bestPrice <= board.gold - gold
     }
 
     private fun hasRequiredGold(board: Board): Boolean {

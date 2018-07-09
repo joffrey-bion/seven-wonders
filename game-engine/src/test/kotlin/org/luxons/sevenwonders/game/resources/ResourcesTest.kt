@@ -63,6 +63,50 @@ class ResourcesTest {
     }
 
     @Test
+    fun plus_zero() {
+        val resources = Resources(mapOf(ResourceType.CLAY to 2))
+        val resourcesPlusZero = resources + Resources()
+        val zeroPlusResources = Resources() + resources
+
+        assertEquals(2, resourcesPlusZero.getQuantity(ResourceType.CLAY))
+        assertEquals(2, resourcesPlusZero.size())
+        assertEquals(2, zeroPlusResources.getQuantity(ResourceType.CLAY))
+        assertEquals(2, zeroPlusResources.size())
+    }
+
+    @Test
+    fun plus_sameResource() {
+        val resources1 = Resources(mapOf(ResourceType.WOOD to 1))
+        val resources2 = Resources(mapOf(ResourceType.WOOD to 3))
+        val sum = resources1 + resources2
+
+        assertEquals(4, sum.getQuantity(ResourceType.WOOD).toLong())
+        assertEquals(4, sum.size())
+    }
+
+    @Test
+    fun plus_differentResources() {
+        val resources1 = Resources(mapOf(ResourceType.WOOD to 1))
+        val resources2 = Resources(mapOf(ResourceType.ORE to 3))
+        val sum = resources1 + resources2
+
+        assertEquals(1, sum.getQuantity(ResourceType.WOOD).toLong())
+        assertEquals(3, sum.getQuantity(ResourceType.ORE).toLong())
+        assertEquals(4, sum.size())
+    }
+
+    @Test
+    fun plus_overlappingResources() {
+        val resources1 = Resources(mapOf(ResourceType.WOOD to 1))
+        val resources2 = Resources(mapOf(ResourceType.WOOD to 2, ResourceType.ORE to 4))
+        val sum = resources1 + resources2
+
+        assertEquals(3, sum.getQuantity(ResourceType.WOOD).toLong())
+        assertEquals(4, sum.getQuantity(ResourceType.ORE).toLong())
+        assertEquals(7, sum.size())
+    }
+
+    @Test
     fun remove_some() {
         val resources = Resources()
         resources.add(ResourceType.WOOD, 3)
@@ -173,7 +217,7 @@ class ResourcesTest {
     fun contains_emptyContainsEmpty() {
         val emptyResources = Resources()
         val emptyResources2 = Resources()
-        assertTrue(emptyResources.contains(emptyResources2))
+        assertTrue(emptyResources.containsAll(emptyResources2))
     }
 
     @Test
@@ -183,7 +227,7 @@ class ResourcesTest {
 
         val emptyResources = Resources()
 
-        assertTrue(resources.contains(emptyResources))
+        assertTrue(resources.containsAll(emptyResources))
     }
 
     @Test
@@ -194,7 +238,7 @@ class ResourcesTest {
 
         val emptyResources = Resources()
 
-        assertTrue(resources.contains(emptyResources))
+        assertTrue(resources.containsAll(emptyResources))
     }
 
     @Test
@@ -203,7 +247,7 @@ class ResourcesTest {
         resources.add(ResourceType.STONE, 1)
         resources.add(ResourceType.CLAY, 3)
 
-        assertTrue(resources.contains(resources))
+        assertTrue(resources.containsAll(resources))
     }
 
     @Test
@@ -216,7 +260,7 @@ class ResourcesTest {
         resources2.add(ResourceType.STONE, 1)
         resources2.add(ResourceType.CLAY, 3)
 
-        assertTrue(resources.contains(resources2))
+        assertTrue(resources.containsAll(resources2))
     }
 
     @Test
@@ -229,7 +273,7 @@ class ResourcesTest {
         resources2.add(ResourceType.STONE, 1)
         resources2.add(ResourceType.CLAY, 3)
 
-        assertTrue(resources.contains(resources2))
+        assertTrue(resources.containsAll(resources2))
     }
 
     @Test
@@ -241,7 +285,7 @@ class ResourcesTest {
         val resources2 = Resources()
         resources2.add(ResourceType.CLAY, 3)
 
-        assertTrue(resources.contains(resources2))
+        assertTrue(resources.containsAll(resources2))
     }
 
     @Test
@@ -253,7 +297,7 @@ class ResourcesTest {
         val resources2 = Resources()
         resources2.add(ResourceType.CLAY, 4)
 
-        assertTrue(resources.contains(resources2))
+        assertTrue(resources.containsAll(resources2))
     }
 
     @Test
@@ -442,16 +486,6 @@ class ResourcesTest {
         resources.add(ResourceType.GLASS, 1)
 
         assertFalse(resources == null)
-    }
-
-    @Test
-    fun equals_falseWhenDifferentClass() {
-        val resources = Resources()
-        resources.add(ResourceType.GLASS, 1)
-        val production = Production()
-        production.addFixedResource(ResourceType.GLASS, 1)
-
-        assertFalse(resources == production)
     }
 
     @Test

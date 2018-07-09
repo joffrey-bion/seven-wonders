@@ -12,38 +12,33 @@ import org.junit.Assert.assertTrue
 
 class ProductionTest {
 
-    private var emptyResources: Resources? = null
-
-    private var resources1Wood: Resources? = null
-
-    private var resources1Stone: Resources? = null
-
-    private var resources1Stone1Wood: Resources? = null
-
-    private var resources2Stones: Resources? = null
-
-    private var resources2Stones3Clay: Resources? = null
+    private var emptyResources: Resources = Resources()
+    private var resources1Wood: Resources = Resources()
+    private var resources1Stone: Resources = Resources()
+    private var resources1Stone1Wood: Resources = Resources()
+    private var resources2Stones: Resources = Resources()
+    private var resources2Stones3Clay: Resources = Resources()
 
     @Before
     fun init() {
         emptyResources = Resources()
 
         resources1Wood = Resources()
-        resources1Wood!!.add(ResourceType.WOOD, 1)
+        resources1Wood.add(ResourceType.WOOD, 1)
 
         resources1Stone = Resources()
-        resources1Stone!!.add(ResourceType.STONE, 1)
+        resources1Stone.add(ResourceType.STONE, 1)
 
         resources1Stone1Wood = Resources()
-        resources1Stone1Wood!!.add(ResourceType.STONE, 1)
-        resources1Stone1Wood!!.add(ResourceType.WOOD, 1)
+        resources1Stone1Wood.add(ResourceType.STONE, 1)
+        resources1Stone1Wood.add(ResourceType.WOOD, 1)
 
         resources2Stones = Resources()
-        resources2Stones!!.add(ResourceType.STONE, 2)
+        resources2Stones.add(ResourceType.STONE, 2)
 
         resources2Stones3Clay = Resources()
-        resources2Stones3Clay!!.add(ResourceType.STONE, 2)
-        resources2Stones3Clay!!.add(ResourceType.CLAY, 3)
+        resources2Stones3Clay.add(ResourceType.STONE, 2)
+        resources2Stones3Clay.add(ResourceType.CLAY, 3)
     }
 
     @Test
@@ -235,7 +230,7 @@ class ProductionTest {
         production.addChoice(ResourceType.STONE, ResourceType.WOOD)
         production.addChoice(ResourceType.STONE, ResourceType.ORE)
         production.addChoice(ResourceType.CLAY, ResourceType.LOOM, ResourceType.GLASS)
-        assertEquals(production.alternativeResources, production.asChoices())
+        assertEquals(production.getAlternativeResources(), production.asChoices())
     }
 
     @Test
@@ -277,16 +272,6 @@ class ProductionTest {
         production.addChoice(ResourceType.ORE, ResourceType.WOOD)
 
         assertFalse(production == null)
-    }
-
-    @Test
-    fun equals_falseWhenDifferentClass() {
-        val production = Production()
-        production.addFixedResource(ResourceType.GLASS, 1)
-        val resources = Resources()
-        resources.add(ResourceType.GLASS, 1)
-
-        assertFalse(production == resources)
     }
 
     @Test
