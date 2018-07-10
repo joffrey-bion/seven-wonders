@@ -1,11 +1,8 @@
 package org.luxons.sevenwonders.game.data
 
-import com.github.salomonbrys.kotson.registerTypeAdapter
 import com.github.salomonbrys.kotson.typeToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonNull
-import com.google.gson.JsonPrimitive
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition
 import org.luxons.sevenwonders.game.data.definitions.WonderDefinition
 import org.luxons.sevenwonders.game.data.serializers.NumericEffectSerializer

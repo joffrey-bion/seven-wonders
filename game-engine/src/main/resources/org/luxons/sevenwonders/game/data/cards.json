@@ -12,7 +12,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -28,10 +27,6 @@
       "effect": {
         "production": "C"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -50,7 +45,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 1,
@@ -69,7 +63,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 0,
@@ -85,10 +78,6 @@
       "effect": {
         "production": "W"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -107,7 +96,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 0,
@@ -123,10 +111,6 @@
       "effect": {
         "production": "O"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -142,10 +126,6 @@
       "effect": {
         "production": "S"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -164,7 +144,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -183,7 +162,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 0,
@@ -199,10 +177,6 @@
       "effect": {
         "production": "G"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -218,10 +192,6 @@
       "effect": {
         "production": "L"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -237,10 +207,6 @@
       "effect": {
         "production": "P"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -261,9 +227,6 @@
           ],
           "discountedPrice": 1
         }
-      },
-      "requirements": {
-        "gold": 0
       },
       "chainChildren": [
         "Forum"
@@ -290,9 +253,6 @@
           "discountedPrice": 1
         }
       },
-      "requirements": {
-        "gold": 0
-      },
       "chainChildren": [
         "Caravansery"
       ],
@@ -311,10 +271,6 @@
       "effect": {
         "gold": 5
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 1,
@@ -336,9 +292,6 @@
           "discountedPrice": 1
         }
       },
-      "requirements": {
-        "gold": 0
-      },
       "chainChildren": [
         "Forum"
       ],
@@ -356,9 +309,6 @@
       "color": "BLUE",
       "effect": {
         "points": 2
-      },
-      "requirements": {
-        "gold": 0
       },
       "chainChildren": [
         "Temple"
@@ -379,7 +329,6 @@
         "points": 3
       },
       "requirements": {
-        "gold": 0,
         "resources": "S"
       },
       "chainChildren": [
@@ -400,10 +349,6 @@
       "effect": {
         "points": 3
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 1,
@@ -418,9 +363,6 @@
       "color": "BLUE",
       "effect": {
         "points": 2
-      },
-      "requirements": {
-        "gold": 0
       },
       "chainChildren": [
         "Statue"
@@ -441,7 +383,6 @@
         "science": "COMPASS"
       },
       "requirements": {
-        "gold": 0,
         "resources": "L"
       },
       "chainChildren": [
@@ -464,7 +405,6 @@
         "science": "TABLET"
       },
       "requirements": {
-        "gold": 0,
         "resources": "P"
       },
       "chainChildren": [
@@ -487,7 +427,6 @@
         "science": "WHEEL"
       },
       "requirements": {
-        "gold": 0,
         "resources": "G"
       },
       "chainChildren": [
@@ -510,10 +449,8 @@
         "military": 1
       },
       "requirements": {
-        "gold": 0,
         "resources": "O"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -530,10 +467,8 @@
         "military": 1
       },
       "requirements": {
-        "gold": 0,
         "resources": "C"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -550,10 +485,8 @@
         "military": 1
       },
       "requirements": {
-        "gold": 0,
         "resources": "W"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -574,7 +507,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -593,7 +525,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -612,7 +543,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -631,7 +561,6 @@
       "requirements": {
         "gold": 1
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -647,10 +576,6 @@
       "effect": {
         "production": "G"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -666,10 +591,6 @@
       "effect": {
         "production": "L"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -685,10 +606,6 @@
       "effect": {
         "production": "P"
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -716,10 +633,6 @@
           ]
         }
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 1,
@@ -736,7 +649,6 @@
         "production": "(W/S/O/C)"
       },
       "requirements": {
-        "gold": 0,
         "resources": "WW"
       },
       "chainParent": "Marketplace",
@@ -759,7 +671,6 @@
         "production": "(G/P/L)"
       },
       "requirements": {
-        "gold": 0,
         "resources": "CC"
       },
       "chainParent": "East Trading Post",
@@ -785,7 +696,6 @@
             "LEFT",
             "RIGHT"
           ],
-          "gold": 0,
           "points": 1,
           "type": "CARD",
           "colors": [
@@ -793,10 +703,6 @@
           ]
         }
       },
-      "requirements": {
-        "gold": 0
-      },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -813,11 +719,9 @@
         "points": 5
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSS"
       },
       "chainParent": "Baths",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -834,11 +738,9 @@
         "points": 4
       },
       "requirements": {
-        "gold": 0,
         "resources": "CCL"
       },
       "chainParent": "Scriptorium",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -855,7 +757,6 @@
         "points": 4
       },
       "requirements": {
-        "gold": 0,
         "resources": "WOO"
       },
       "chainParent": "Theater",
@@ -878,7 +779,6 @@
         "points": 3
       },
       "requirements": {
-        "gold": 0,
         "resources": "WCG"
       },
       "chainParent": "Altar",
@@ -901,7 +801,6 @@
         "science": "COMPASS"
       },
       "requirements": {
-        "gold": 0,
         "resources": "OOG"
       },
       "chainParent": "Apothecary",
@@ -925,7 +824,6 @@
         "science": "WHEEL"
       },
       "requirements": {
-        "gold": 0,
         "resources": "CCP"
       },
       "chainParent": "Workshop",
@@ -949,7 +847,6 @@
         "science": "TABLET"
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSL"
       },
       "chainParent": "Scriptorium",
@@ -973,7 +870,6 @@
         "science": "TABLET"
       },
       "requirements": {
-        "gold": 0,
         "resources": "WP"
       },
       "chainChildren": [
@@ -996,11 +892,9 @@
         "military": 2
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWO"
       },
       "chainParent": "Workshop",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1017,11 +911,9 @@
         "military": 2
       },
       "requirements": {
-        "gold": 0,
         "resources": "WOC"
       },
       "chainParent": "Apothecary",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1038,7 +930,6 @@
         "military": 2
       },
       "requirements": {
-        "gold": 0,
         "resources": "WOO"
       },
       "chainChildren": [
@@ -1060,7 +951,6 @@
         "military": 2
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSS"
       },
       "chainChildren": [
@@ -1091,11 +981,9 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSO"
       },
       "chainParent": "Dispensary",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1122,10 +1010,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "CCP"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 1,
@@ -1152,11 +1038,9 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "WOL"
       },
       "chainParent": "Forum",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -1183,11 +1067,9 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "SG"
       },
       "chainParent": "Caravansery",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1204,11 +1086,9 @@
         "points": 5
       },
       "requirements": {
-        "gold": 0,
         "resources": "WCC"
       },
       "chainParent": "Statue",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -1225,10 +1105,8 @@
         "points": 8
       },
       "requirements": {
-        "gold": 0,
         "resources": "WSOCGPL"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1245,11 +1123,9 @@
         "points": 7
       },
       "requirements": {
-        "gold": 0,
         "resources": "OCCGPL"
       },
       "chainParent": "Temple",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1266,11 +1142,9 @@
         "points": 6
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWSO"
       },
       "chainParent": "Library",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1287,10 +1161,8 @@
         "points": 6
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSOG"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1307,11 +1179,9 @@
         "science": "COMPASS"
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSSG"
       },
       "chainParent": "School",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1328,11 +1198,9 @@
         "science": "COMPASS"
       },
       "requirements": {
-        "gold": 0,
         "resources": "CCPL"
       },
       "chainParent": "Dispensary",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1349,11 +1217,9 @@
         "science": "WHEEL"
       },
       "requirements": {
-        "gold": 0,
         "resources": "OOGL"
       },
       "chainParent": "Laboratory",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1370,11 +1236,9 @@
         "science": "WHEEL"
       },
       "requirements": {
-        "gold": 0,
         "resources": "WPL"
       },
       "chainParent": "School",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1391,11 +1255,9 @@
         "science": "TABLET"
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWGP"
       },
       "chainParent": "Library",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -1412,10 +1274,8 @@
         "military": 3
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWOL"
       },
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 2,
@@ -1432,11 +1292,9 @@
         "military": 3
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSSO"
       },
       "chainParent": "Training Ground",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 0,
         "4": 1,
@@ -1453,11 +1311,9 @@
         "military": 3
       },
       "requirements": {
-        "gold": 0,
         "resources": "SOOO"
       },
       "chainParent": "Walls",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1474,11 +1330,9 @@
         "military": 3
       },
       "requirements": {
-        "gold": 0,
         "resources": "WCCC"
       },
       "chainParent": "Laboratory",
-      "chainChildren": [],
       "countPerNbPlayer": {
         "3": 1,
         "4": 1,
@@ -1506,10 +1360,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSCCG"
       },
-      "chainChildren": [],
       "image": "buildersguild.png"
     },
     {
@@ -1530,10 +1382,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "SSOO"
       },
-      "chainChildren": [],
       "image": "craftsmensguild.png"
     },
     {
@@ -1554,10 +1404,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWWSL"
       },
-      "chainChildren": [],
       "image": "magistratesguild.png"
     },
     {
@@ -1578,10 +1426,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "CCCPL"
       },
-      "chainChildren": [],
       "image": "philosophersguild.png"
     },
     {
@@ -1591,10 +1437,8 @@
         "science": "any"
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWOOP"
       },
-      "chainChildren": [],
       "image": "scientistsguild.png"
     },
     {
@@ -1616,10 +1460,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "WWWGP"
       },
-      "chainChildren": [],
       "image": "shipownersguild.png"
     },
     {
@@ -1640,10 +1482,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "CCCG"
       },
-      "chainChildren": [],
       "image": "spiesguild.png"
     },
     {
@@ -1661,10 +1501,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "SOOL"
       },
-      "chainChildren": [],
       "image": "strategistsguild.png"
     },
     {
@@ -1685,10 +1523,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "GPL"
       },
-      "chainChildren": [],
       "image": "tradersguild.png"
     },
     {
@@ -1709,10 +1545,8 @@
         }
       },
       "requirements": {
-        "gold": 0,
         "resources": "WSOOC"
       },
-      "chainChildren": [],
       "image": "workersguild.png"
     }
   ]
