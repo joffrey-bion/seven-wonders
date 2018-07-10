@@ -18,7 +18,7 @@ class GameDefinition internal constructor(
     fun initGame(id: Long, customSettings: CustomizableSettings, nbPlayers: Int): Game {
         val settings = Settings(nbPlayers, customSettings)
         val boards = assignBoards(settings, nbPlayers)
-        val decks = decksDefinition.prepareDecks(settings)
+        val decks = decksDefinition.prepareDecks(settings.nbPlayers, settings.random)
         return Game(id, settings, boards, decks)
     }
 
