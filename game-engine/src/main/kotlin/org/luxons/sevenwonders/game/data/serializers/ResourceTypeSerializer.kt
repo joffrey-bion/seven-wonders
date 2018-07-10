@@ -1,9 +1,5 @@
 package org.luxons.sevenwonders.game.data.serializers
 
-import java.lang.reflect.Type
-
-import org.luxons.sevenwonders.game.resources.ResourceType
-
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -11,8 +7,10 @@ import com.google.gson.JsonParseException
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
+import org.luxons.sevenwonders.game.resources.ResourceType
+import java.lang.reflect.Type
 
-class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeserializer<ResourceType> {
+internal class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeserializer<ResourceType> {
 
     override fun serialize(type: ResourceType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(type.symbol!!)

@@ -12,7 +12,7 @@ import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation
 import java.util.ArrayList
 
-internal data class EffectsDefinition(
+internal class EffectsDefinition(
     private val gold: GoldIncrease? = null,
     private val military: MilitaryReinforcements? = null,
     private val science: ScienceProgress? = null,

@@ -4,7 +4,7 @@ import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.data.WonderSide
 import org.luxons.sevenwonders.game.wonders.Wonder
 
-internal data class WonderDefinition(
+internal class WonderDefinition(
     private val name: String,
     private val sides: Map<WonderSide, WonderSideDefinition>
 ) {

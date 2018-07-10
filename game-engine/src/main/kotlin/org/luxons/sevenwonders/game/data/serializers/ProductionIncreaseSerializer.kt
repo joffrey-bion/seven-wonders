@@ -11,7 +11,7 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.resources.Production
 import java.lang.reflect.Type
 
-class ProductionIncreaseSerializer : JsonSerializer<ProductionIncrease>, JsonDeserializer<ProductionIncrease> {
+internal class ProductionIncreaseSerializer : JsonSerializer<ProductionIncrease>, JsonDeserializer<ProductionIncrease> {
 
     override fun serialize(
         productionIncrease: ProductionIncrease,

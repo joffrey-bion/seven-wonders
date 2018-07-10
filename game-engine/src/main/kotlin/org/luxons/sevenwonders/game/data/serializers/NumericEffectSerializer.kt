@@ -1,12 +1,5 @@
 package org.luxons.sevenwonders.game.data.serializers
 
-import java.lang.reflect.Type
-
-import org.luxons.sevenwonders.game.effects.Effect
-import org.luxons.sevenwonders.game.effects.GoldIncrease
-import org.luxons.sevenwonders.game.effects.MilitaryReinforcements
-import org.luxons.sevenwonders.game.effects.RawPointsIncrease
-
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -14,8 +7,13 @@ import com.google.gson.JsonParseException
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
+import org.luxons.sevenwonders.game.effects.Effect
+import org.luxons.sevenwonders.game.effects.GoldIncrease
+import org.luxons.sevenwonders.game.effects.MilitaryReinforcements
+import org.luxons.sevenwonders.game.effects.RawPointsIncrease
+import java.lang.reflect.Type
 
-class NumericEffectSerializer : JsonSerializer<Effect>, JsonDeserializer<Effect> {
+internal class NumericEffectSerializer : JsonSerializer<Effect>, JsonDeserializer<Effect> {
 
     override fun serialize(effect: Effect, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val value: Int = when (effect) {

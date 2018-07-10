@@ -12,7 +12,7 @@ import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
 import java.lang.reflect.Type
 
-class ProductionSerializer : JsonSerializer<Production>, JsonDeserializer<Production> {
+internal class ProductionSerializer : JsonSerializer<Production>, JsonDeserializer<Production> {
 
     override fun serialize(production: Production, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         val fixedResources = production.fixedResources
