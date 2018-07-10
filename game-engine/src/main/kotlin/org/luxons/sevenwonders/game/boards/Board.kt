@@ -8,8 +8,8 @@ import org.luxons.sevenwonders.game.data.Age
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.TradingRules
-import org.luxons.sevenwonders.game.scoring.PlayerScore
-import org.luxons.sevenwonders.game.scoring.ScoreCategory
+import org.luxons.sevenwonders.game.score.PlayerScore
+import org.luxons.sevenwonders.game.score.ScoreCategory
 import org.luxons.sevenwonders.game.wonders.Wonder
 
 class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
@@ -74,23 +74,23 @@ class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
         consumedFreeCards[age] = true
     }
 
-    fun computePoints(table: Table): PlayerScore {
-        val score = PlayerScore(gold)
-        score.put(ScoreCategory.CIVIL, computePointsForCards(table, Color.BLUE))
-        score.put(ScoreCategory.MILITARY, military.totalPoints)
-        score.put(ScoreCategory.SCIENCE, science.computePoints())
-        score.put(ScoreCategory.TRADE, computePointsForCards(table, Color.YELLOW))
-        score.put(ScoreCategory.GUILD, computePointsForCards(table, Color.PURPLE))
-        score.put(ScoreCategory.WONDER, wonder.computePoints(table, playerIndex))
-        score.put(ScoreCategory.GOLD, computeGoldPoints())
-        return score
-    }
+    fun computePoints(table: Table): PlayerScore = PlayerScore(
+        gold, mapOf(
+            ScoreCategory.CIVIL to computePointsForCards(table, Color.BLUE),
+            ScoreCategory.MILITARY to military.totalPoints,
+            ScoreCategory.SCIENCE to science.computePoints(),
+            ScoreCategory.TRADE to computePointsForCards(table, Color.YELLOW),
+            ScoreCategory.GUILD to computePointsForCards(table, Color.PURPLE),
+            ScoreCategory.WONDER to wonder.computePoints(table, playerIndex),
+            ScoreCategory.GOLD to computeGoldPoints()
+        )
+    )
 
-    private fun computePointsForCards(table: Table, color: Color): Int = playedCards
-        .filter { (_, color1) -> color1 === color }
-        .flatMap { (_, _, _, effects) -> effects }
-        .map { e -> e.computePoints(table, playerIndex) }
-        .sum()
+    private fun computePointsForCards(table: Table, color: Color): Int =
+        playedCards.filter { it.color === color }
+            .flatMap { it.effects }
+            .map { it.computePoints(table, playerIndex) }
+            .sum()
 
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
 

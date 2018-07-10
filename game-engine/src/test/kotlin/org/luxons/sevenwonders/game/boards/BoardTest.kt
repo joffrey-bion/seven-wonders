@@ -19,7 +19,7 @@ import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation
 import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.scoring.ScoreCategory
+import org.luxons.sevenwonders.game.score.ScoreCategory
 import org.luxons.sevenwonders.game.test.addCards
 import org.luxons.sevenwonders.game.test.createResources
 import org.luxons.sevenwonders.game.test.getDifferentColorFrom
@@ -171,7 +171,7 @@ class BoardTest {
         board.gold = gold
 
         val score = board.computePoints(table)
-        assertEquals(gold / 3, score.getPoints(ScoreCategory.GOLD))
+        assertEquals(gold / 3, score.pointsByCategory[ScoreCategory.GOLD])
         assertEquals(gold / 3, score.totalPoints)
     }
 
@@ -186,8 +186,8 @@ class BoardTest {
         playCardWithEffect(table, 0, Color.BLUE, effect)
 
         val score = board.computePoints(table)
-        assertEquals(gold / 3, score.getPoints(ScoreCategory.GOLD))
-        assertEquals(5, score.getPoints(ScoreCategory.CIVIL))
+        assertEquals(gold / 3, score.pointsByCategory[ScoreCategory.GOLD])
+        assertEquals(5, score.pointsByCategory[ScoreCategory.CIVIL])
         assertEquals(5 + gold / 3, score.totalPoints)
     }
 

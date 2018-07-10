@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.moves.InvalidMoveException
 import org.luxons.sevenwonders.game.moves.Move
-import org.luxons.sevenwonders.game.scoring.ScoreBoard
+import org.luxons.sevenwonders.game.score.ScoreBoard
 
 class Game(
     val id: Long,
@@ -167,11 +167,10 @@ class Game(
         hands = hands.discardHand(playerIndex)
     }
 
-    private fun activatePlayedCards(playedMoves: List<Move>) {
-        playedMoves.forEach { move -> move.activate(table, discardedCards, settings) }
-    }
+    private fun activatePlayedCards(playedMoves: List<Move>) =
+        playedMoves.forEach { it.activate(table, discardedCards, settings) }
 
-    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { b -> b.computePoints(table) })
+    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computePoints(table) })
 
     private class MissingPreparedMoveException internal constructor(playerIndex: Int) :
         IllegalStateException("Player $playerIndex has not prepared his move")
