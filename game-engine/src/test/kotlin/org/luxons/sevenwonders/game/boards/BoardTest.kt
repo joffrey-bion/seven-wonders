@@ -80,8 +80,10 @@ class BoardTest {
 
     @Theory
     fun getNbCardsOfColor_properCount_singleColor(
-        type: ResourceType, @FromDataPoints("nbCards") nbCards: Int,
-        @FromDataPoints("nbCards") nbOtherCards: Int, color: Color
+        type: ResourceType,
+        @FromDataPoints("nbCards") nbCards: Int,
+        @FromDataPoints("nbCards") nbOtherCards: Int,
+        color: Color
     ) {
         val board = testBoard(type)
         addCards(board, nbCards, nbOtherCards, color)
@@ -90,9 +92,11 @@ class BoardTest {
 
     @Theory
     fun getNbCardsOfColor_properCount_multiColors(
-        type: ResourceType, @FromDataPoints("nbCards") nbCards1: Int,
+        type: ResourceType,
+        @FromDataPoints("nbCards") nbCards1: Int,
         @FromDataPoints("nbCards") nbCards2: Int,
-        @FromDataPoints("nbCards") nbOtherCards: Int, color1: Color,
+        @FromDataPoints("nbCards") nbOtherCards: Int,
+        color1: Color,
         color2: Color
     ) {
         val board = testBoard(type)

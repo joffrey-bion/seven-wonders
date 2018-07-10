@@ -5,11 +5,7 @@ enum class HandRotationDirection {
     RIGHT;
 
     companion object {
-
-        fun forAge(age: Int): HandRotationDirection {
-            // clockwise (pass to the left) at age 1, and alternating
-            return if (age % 2 == 0) HandRotationDirection.RIGHT else HandRotationDirection.LEFT
-        }
+        // clockwise (pass to the left) at age 1, and alternating
+        fun forAge(age: Int): HandRotationDirection = if (age % 2 == 0) RIGHT else LEFT
     }
 }
-

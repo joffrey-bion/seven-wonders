@@ -2,12 +2,12 @@ package org.luxons.sevenwonders.game.api
 
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.boards.neighboursPositions
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.cards.HandRotationDirection
 import org.luxons.sevenwonders.game.data.Age
 import org.luxons.sevenwonders.game.moves.Move
-import org.luxons.sevenwonders.game.resources.Provider
 
 /**
  * The table contains what is visible by all the players in the game: the boards and their played cards, and the
@@ -25,13 +25,10 @@ class Table(val boards: List<Board>) {
 
     var lastPlayedMoves: List<Move> = emptyList()
 
-    fun getBoard(playerIndex: Int): Board {
-        return boards[playerIndex]
-    }
+    fun getBoard(playerIndex: Int): Board = boards[playerIndex]
 
-    fun getBoard(playerIndex: Int, position: RelativeBoardPosition): Board {
-        return boards[position.getIndexFrom(playerIndex, nbPlayers)]
-    }
+    fun getBoard(playerIndex: Int, position: RelativeBoardPosition): Board =
+        boards[position.getIndexFrom(playerIndex, nbPlayers)]
 
     fun increaseCurrentAge() {
         this.currentAge++
@@ -40,7 +37,7 @@ class Table(val boards: List<Board>) {
     fun resolveMilitaryConflicts() {
         for (i in 0 until nbPlayers) {
             val board1 = getBoard(i)
-            val board2 = getBoard((i + 1) % nbPlayers)
+            val board2 = getBoard(i, RelativeBoardPosition.RIGHT)
             resolveConflict(board1, board2)
         }
     }
@@ -57,11 +54,7 @@ class Table(val boards: List<Board>) {
         }
     }
 
-    fun getNeighbourGuildCards(playerIndex: Int): List<Card> {
-        return getNeighbourBoards(playerIndex).flatMap(Board::getPlayedCards).filter { c -> c.color == Color.PURPLE }
-    }
-
-    private fun getNeighbourBoards(playerIndex: Int): List<Board> {
-        return Provider.values().map { getBoard(playerIndex, it.boardPosition) }
-    }
+    fun getNeighbourGuildCards(playerIndex: Int): List<Card> = neighboursPositions()
+        .flatMap { getBoard(playerIndex, it).getPlayedCards() }
+        .filter { it.color == Color.PURPLE }
 }

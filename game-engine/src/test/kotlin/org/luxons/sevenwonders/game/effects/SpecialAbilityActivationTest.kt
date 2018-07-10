@@ -8,7 +8,6 @@ import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.boards.BoardElementType
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
