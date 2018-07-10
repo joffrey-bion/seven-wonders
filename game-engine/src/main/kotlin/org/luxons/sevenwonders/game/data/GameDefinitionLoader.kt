@@ -30,7 +30,7 @@ class GameDefinitionLoader {
         val rules = loadJson("global_rules.json", GlobalRules::class.java, gson)
         val wonders = loadJson("wonders.json", Array<WonderDefinition>::class.java, gson)
         val decksDefinition = loadJson("cards.json", DecksDefinition::class.java, gson)
-        return GameDefinition(rules, wonders, decksDefinition)
+        return GameDefinition(rules, wonders.toList(), decksDefinition)
     }
 
     private fun <T> loadJson(filename: String, clazz: Class<T>, gson: Gson): T {

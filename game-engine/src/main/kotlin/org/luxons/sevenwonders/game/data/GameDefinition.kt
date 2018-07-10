@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.game.data.definitions.WonderDefinition
 
 class GameDefinition internal constructor(
     rules: GlobalRules,
-    private val wonders: Array<WonderDefinition>,
+    private val wonders: List<WonderDefinition>,
     private val decksDefinition: DecksDefinition
 ) {
     val minPlayers: Int = rules.minPlayers
@@ -23,8 +23,8 @@ class GameDefinition internal constructor(
     }
 
     private fun assignBoards(settings: Settings, nbPlayers: Int): List<Board> {
-        val randomizedWonders = wonders.toMutableList()
-        randomizedWonders.shuffle(settings.random)
-        return randomizedWonders.take(nbPlayers).mapIndexed { i, wDef -> Board(wDef.create(settings), i, settings) }
+        return wonders.shuffled(settings.random)
+            .take(nbPlayers)
+            .mapIndexed { i, wDef -> Board(wDef.create(settings.pickWonderSide()), i, settings) }
     }
 }
