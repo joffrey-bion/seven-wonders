@@ -17,10 +17,7 @@ import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.score.ScoreBoard
 
 class Game(
-    val id: Long,
-    val settings: Settings,
-    boards: List<Board>,
-    private val decks: Decks
+    val id: Long, val settings: Settings, boards: List<Board>, private val decks: Decks
 ) {
     private val nbPlayers: Int = boards.size
     private val table: Table = Table(boards)
@@ -44,7 +41,7 @@ class Game(
     }
 
     private fun createPlayerTurnInfo(playerIndex: Int): PlayerTurnInfo {
-        val hand = hands.createHand(table, playerIndex)
+        val hand = hands.createHand(player(playerIndex))
         val action = determineAction(hand, table.getBoard(playerIndex))
 
         var neighbourGuildCards = emptyList<Card>()
@@ -81,15 +78,10 @@ class Game(
     @Throws(InvalidMoveException::class)
     fun prepareMove(playerIndex: Int, playerMove: PlayerMove): CardBack {
         val card = decks.getCard(table.currentAge, playerMove.cardName)
-        val move = playerMove.type.resolve(playerIndex, card, playerMove)
-        validate(move)
+        val context = PlayerContext(playerIndex, table, hands[playerIndex])
+        val move = playerMove.type.resolve(playerMove, card, context)
         preparedMoves[playerIndex] = move
         return card.back
-    }
-
-    @Throws(InvalidMoveException::class)
-    private fun validate(move: Move) {
-        move.validate(table, hands[move.playerIndex])
     }
 
     fun allPlayersPreparedTheirMove(): Boolean {
@@ -147,8 +139,8 @@ class Game(
 
     private fun placePreparedCards(playedMoves: List<Move>) {
         playedMoves.forEach { move ->
-            move.place(table, discardedCards, settings)
-            hands = hands.remove(move.playerIndex, move.card)
+            move.place(discardedCards, settings)
+            hands = hands.remove(move.playerContext.index, move.card)
         }
     }
 
@@ -168,9 +160,11 @@ class Game(
     }
 
     private fun activatePlayedCards(playedMoves: List<Move>) =
-        playedMoves.forEach { it.activate(table, discardedCards, settings) }
+        playedMoves.forEach { it.activate(discardedCards, settings) }
 
-    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computePoints(table) })
+    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computeScore(player(it.playerIndex)) })
+
+    private fun player(playerIndex: Int) = SimplePlayer(playerIndex, table)
 
     private class MissingPreparedMoveException internal constructor(playerIndex: Int) :
         IllegalStateException("Player $playerIndex has not prepared his move")

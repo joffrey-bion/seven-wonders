@@ -18,7 +18,7 @@ class DiscountTest {
     fun apply_givesDiscountedPrice(discountedPrice: Int, discountedType: ResourceType, provider: Provider) {
         val board = testBoard(ResourceType.CLAY, 3)
         val discount = Discount(listOf(discountedType), listOf(provider), discountedPrice)
-        discount.apply(board)
+        discount.applyTo(board)
 
         val transactions = createTransactions(provider, discountedType)
         assertEquals(discountedPrice.toLong(), board.tradingRules.computeCost(transactions).toLong())
@@ -34,7 +34,7 @@ class DiscountTest {
 
         val board = testBoard(ResourceType.CLAY, 3)
         val discount = Discount(listOf(discountedType), listOf(provider), discountedPrice)
-        discount.apply(board)
+        discount.applyTo(board)
 
         // this is the default in the settings used by TestUtilsKt.testBoard()
         val normalPrice = 2
@@ -53,20 +53,14 @@ class DiscountTest {
 
         @JvmStatic
         @DataPoints
-        fun discountedPrices(): IntArray {
-            return intArrayOf(0, 1, 2)
-        }
+        fun discountedPrices(): IntArray = intArrayOf(0, 1, 2)
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> {
-            return ResourceType.values()
-        }
+        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
 
         @JvmStatic
         @DataPoints
-        fun providers(): Array<Provider> {
-            return Provider.values()
-        }
+        fun providers(): Array<Provider> = Provider.values()
     }
 }

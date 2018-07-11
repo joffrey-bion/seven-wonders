@@ -85,7 +85,7 @@ class GameTest {
         val requiredResources = handCard.card.requirements.resources
         val table = turnInfo.table
         val playerIndex = turnInfo.playerIndex
-        val transactions = bestTransaction(requiredResources, table, playerIndex)
+        val transactions = bestTransaction(requiredResources, PlayerContext(playerIndex, table, listOf()))
         // we're supposed to have a best transaction plan because the card is playable
         return transactions!!.asList()
     }
@@ -100,11 +100,10 @@ class GameTest {
 
     private fun checkLastPlayedMoves(sentMoves: Map<Int, PlayerMove>, table: Table) {
         for (move in table.lastPlayedMoves) {
-            val sentMove = sentMoves[move.playerIndex]
+            val sentMove = sentMoves[move.playerContext.index]
             assertNotNull(sentMove)
             assertNotNull(move.card)
             assertEquals(sentMove!!.cardName, move.card.name)
-            assertSame(sentMove.type, move.type)
         }
     }
 }

@@ -5,5 +5,5 @@ import org.luxons.sevenwonders.game.boards.Science
 
 class ScienceProgress(val science: Science) : InstantOwnBoardEffect() {
 
-    public override fun apply(board: Board) = board.science.addAll(science)
+    public override fun applyTo(board: Board) = board.science.addAll(science)
 }

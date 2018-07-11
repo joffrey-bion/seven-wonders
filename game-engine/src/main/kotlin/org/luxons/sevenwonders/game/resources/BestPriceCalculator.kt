@@ -1,19 +1,19 @@
 package org.luxons.sevenwonders.game.resources
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 import java.util.ArrayList
 import java.util.EnumSet
 
-fun bestPrice(resources: Resources, table: Table, playerIndex: Int): Int? {
-    return bestSolution(resources, table, playerIndex)?.price
+fun bestPrice(resources: Resources, player: Player): Int? {
+    return bestSolution(resources, player)?.price
 }
 
-fun bestTransaction(resources: Resources, table: Table, playerIndex: Int): ResourceTransactions? {
-    return bestSolution(resources, table, playerIndex)?.transactions
+fun bestTransaction(resources: Resources, player: Player): ResourceTransactions? {
+    return bestSolution(resources, player)?.transactions
 }
 
-fun bestSolution(resources: Resources, table: Table, playerIndex: Int): TransactionPlan? {
-    val calculator = BestPriceCalculator(resources, table, playerIndex)
+fun bestSolution(resources: Resources, player: Player): TransactionPlan? {
+    val calculator = BestPriceCalculator(resources, player)
     return calculator.computeBestSolution()
 }
 
@@ -27,7 +27,7 @@ private class ResourcePool(
     fun getCost(type: ResourceType): Int = if (provider == null) 0 else rules.getCost(type, provider)
 }
 
-private class BestPriceCalculator(resourcesToPay: Resources, table: Table, playerIndex: Int) {
+private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
 
     private val pools: List<ResourcePool>
     private val resourcesLeftToPay: Resources
@@ -38,15 +38,15 @@ private class BestPriceCalculator(resourcesToPay: Resources, table: Table, playe
     var bestPrice: Int = Integer.MAX_VALUE
 
     init {
-        val board = table.getBoard(playerIndex)
+        val board = player.board
         this.resourcesLeftToPay = resourcesToPay.minus(board.production.fixedResources)
-        this.pools = createResourcePools(table, playerIndex)
+        this.pools = createResourcePools(player)
     }
 
-    private fun createResourcePools(table: Table, playerIndex: Int): List<ResourcePool> {
+    private fun createResourcePools(player: Player): List<ResourcePool> {
         val providers = Provider.values()
 
-        val board = table.getBoard(playerIndex)
+        val board = player.board
         val rules = board.tradingRules
 
         val pools = ArrayList<ResourcePool>(providers.size + 1)
@@ -55,7 +55,7 @@ private class BestPriceCalculator(resourcesToPay: Resources, table: Table, playe
         pools.add(ResourcePool(null, rules, ownBoardChoices.map { it.toMutableSet() }.toSet()))
 
         for (provider in providers) {
-            val providerBoard = table.getBoard(playerIndex, provider.boardPosition)
+            val providerBoard = player.getBoard(provider.boardPosition)
             val pool = ResourcePool(provider, rules, providerBoard.publicProduction.asChoices().map { it.toMutableSet() }.toSet())
             pools.add(pool)
         }

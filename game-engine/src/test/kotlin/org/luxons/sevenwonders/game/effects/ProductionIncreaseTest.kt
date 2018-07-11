@@ -1,15 +1,16 @@
 package org.luxons.sevenwonders.game.effects
 
+import org.junit.Assert.*
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
+import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.test.*
-
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.luxons.sevenwonders.game.test.createResources
+import org.luxons.sevenwonders.game.test.fixedProduction
+import org.luxons.sevenwonders.game.test.testBoard
+import org.luxons.sevenwonders.game.test.testTable
 
 @RunWith(Theories::class)
 class ProductionIncreaseTest {
@@ -23,7 +24,7 @@ class ProductionIncreaseTest {
         val board = testBoard(initialType)
         val effect = ProductionIncrease(fixedProduction(addedType), false)
 
-        effect.apply(board)
+        effect.applyTo(board)
 
         val resources = createResources(initialType, addedType)
         assertTrue(board.production.contains(resources))
@@ -43,7 +44,7 @@ class ProductionIncreaseTest {
         val board = testBoard(initialType)
         val effect = ProductionIncrease(fixedProduction(addedType), true)
 
-        effect.apply(board)
+        effect.applyTo(board)
 
         val resources = createResources(initialType, addedType)
         assertTrue(board.production.contains(resources))
@@ -57,8 +58,8 @@ class ProductionIncreaseTest {
     @Theory
     fun computePoints_isAlwaysZero(addedType: ResourceType) {
         val effect = ProductionIncrease(fixedProduction(addedType), false)
-        val table = testTable(5)
-        assertEquals(0, effect.computePoints(table, 0).toLong())
+        val player = SimplePlayer(0, testTable(5))
+        assertEquals(0, effect.computePoints(player).toLong())
     }
 
     companion object {

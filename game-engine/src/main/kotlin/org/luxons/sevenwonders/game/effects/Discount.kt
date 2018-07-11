@@ -10,7 +10,7 @@ data class Discount(
     val discountedPrice: Int = 1
 ) : InstantOwnBoardEffect() {
 
-    public override fun apply(board: Board) {
+    public override fun applyTo(board: Board) {
         val rules = board.tradingRules
         for (type in resourceTypes) {
             providers.forEach { rules.setCost(type, it, discountedPrice) }

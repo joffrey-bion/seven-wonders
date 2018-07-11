@@ -1,8 +1,7 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.cards.Card
 
 enum class SpecialAbility {
 
@@ -27,14 +26,14 @@ enum class SpecialAbility {
      * her two neighboring cities.
      */
     COPY_GUILD {
-        override fun computePoints(table: Table, playerIndex: Int): Int {
-            val copiedGuild = table.getBoard(playerIndex).copiedGuild
+        override fun computePoints(player: Player): Int {
+            val copiedGuild = player.board.copiedGuild
                     ?: throw IllegalStateException("The copied Guild has not been chosen, cannot compute points")
-            return copiedGuild.effects.stream().mapToInt { e -> e.computePoints(table, playerIndex) }.sum()
+            return copiedGuild.effects.stream().mapToInt { it.computePoints(player) }.sum()
         }
     };
 
     fun apply(board: Board) = board.addSpecial(this)
 
-    open fun computePoints(table: Table, playerIndex: Int): Int = 0
+    open fun computePoints(player: Player): Int = 0
 }

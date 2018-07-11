@@ -12,7 +12,6 @@ import org.junit.experimental.theories.Theory
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.Settings
-import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board.InsufficientFundsException
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease
@@ -24,6 +23,7 @@ import org.luxons.sevenwonders.game.test.addCards
 import org.luxons.sevenwonders.game.test.createResources
 import org.luxons.sevenwonders.game.test.getDifferentColorFrom
 import org.luxons.sevenwonders.game.test.playCardWithEffect
+import org.luxons.sevenwonders.game.test.singleBoardPlayer
 import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
@@ -128,10 +128,9 @@ class BoardTest {
     @Theory
     fun hasSpecial(applied: SpecialAbility, tested: SpecialAbility) {
         val board = testBoard(ResourceType.CLAY)
-        val table = Table(listOf(board))
         val special = SpecialAbilityActivation(applied)
 
-        special.apply(table, 0)
+        special.applyTo(singleBoardPlayer(board))
 
         assertEquals(applied === tested, board.hasSpecial(tested))
     }
@@ -139,10 +138,9 @@ class BoardTest {
     @Test
     fun canPlayFreeCard() {
         val board = testBoard(ResourceType.CLAY)
-        val table = Table(listOf(board))
         val special = SpecialAbilityActivation(SpecialAbility.ONE_FREE_PER_AGE)
 
-        special.apply(table, 0)
+        special.applyTo(singleBoardPlayer(board))
 
         assertTrue(board.canPlayFreeCard(0))
         assertTrue(board.canPlayFreeCard(1))
@@ -171,10 +169,9 @@ class BoardTest {
     fun computePoints_gold(@FromDataPoints("gold") gold: Int) {
         assumeTrue(gold >= 0)
         val board = testBoard(ResourceType.WOOD)
-        val table = Table(listOf(board))
         board.gold = gold
 
-        val score = board.computePoints(table)
+        val score = board.computeScore(singleBoardPlayer(board))
         assertEquals(gold / 3, score.pointsByCategory[ScoreCategory.GOLD])
         assertEquals(gold / 3, score.totalPoints)
     }
@@ -183,48 +180,38 @@ class BoardTest {
     fun computePoints_(@FromDataPoints("gold") gold: Int) {
         assumeTrue(gold >= 0)
         val board = testBoard(ResourceType.WOOD)
-        val table = Table(listOf(board))
         board.gold = gold
 
         val effect = RawPointsIncrease(5)
-        playCardWithEffect(table, 0, Color.BLUE, effect)
+        playCardWithEffect(singleBoardPlayer(board), Color.BLUE, effect)
 
-        val score = board.computePoints(table)
+        val score = board.computeScore(singleBoardPlayer(board))
         assertEquals(gold / 3, score.pointsByCategory[ScoreCategory.GOLD])
         assertEquals(5, score.pointsByCategory[ScoreCategory.CIVIL])
         assertEquals(5 + gold / 3, score.totalPoints)
     }
 
+
     companion object {
 
         @JvmStatic
         @DataPoints("gold")
-        fun goldAmounts(): IntArray {
-            return intArrayOf(-3, -1, 0, 1, 2, 3)
-        }
+        fun goldAmounts(): IntArray = intArrayOf(-3, -1, 0, 1, 2, 3)
 
         @JvmStatic
         @DataPoints("nbCards")
-        fun nbCards(): IntArray {
-            return intArrayOf(0, 1, 2)
-        }
+        fun nbCards(): IntArray = intArrayOf(0, 1, 2)
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> {
-            return ResourceType.values()
-        }
+        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
 
         @JvmStatic
         @DataPoints
-        fun colors(): Array<Color> {
-            return Color.values()
-        }
+        fun colors(): Array<Color> = Color.values()
 
         @JvmStatic
         @DataPoints
-        fun specialAbilities(): Array<SpecialAbility> {
-            return SpecialAbility.values()
-        }
+        fun specialAbilities(): Array<SpecialAbility> = SpecialAbility.values()
     }
 }

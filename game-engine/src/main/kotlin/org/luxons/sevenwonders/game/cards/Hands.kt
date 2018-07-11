@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game.cards
 
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.api.HandCard
-import org.luxons.sevenwonders.game.api.Table
 
 class Hands internal constructor(private val hands: List<List<Card>>) {
 
@@ -23,8 +23,8 @@ class Hands internal constructor(private val hands: List<List<Card>>) {
         return Hands(mutatedHands)
     }
 
-    fun createHand(table: Table, playerIndex: Int): List<HandCard> {
-        return hands[playerIndex].map { c -> HandCard(c, table, playerIndex) }
+    fun createHand(player: Player): List<HandCard> {
+        return hands[player.index].map { c -> HandCard(c, player) }
     }
 
     fun rotate(direction: HandRotationDirection): Hands {

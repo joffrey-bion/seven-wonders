@@ -1,14 +1,10 @@
 package org.luxons.sevenwonders.game.resources
 
-import java.util.EnumSet
-import java.util.HashSet
-
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import java.util.EnumSet
+import java.util.HashSet
 
 class ProductionTest {
 
@@ -263,15 +259,6 @@ class ProductionTest {
         expected.add(EnumSet.of(ResourceType.CLAY))
 
         assertEquals(expected, production.asChoices())
-    }
-
-    @Test
-    fun equals_falseWhenNull() {
-        val production = Production()
-        production.addFixedResource(ResourceType.GLASS, 1)
-        production.addChoice(ResourceType.ORE, ResourceType.WOOD)
-
-        assertFalse(production == null)
     }
 
     @Test

@@ -1,10 +1,13 @@
 package org.luxons.sevenwonders.game.test
 
+import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
+import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.boards.Science
 import org.luxons.sevenwonders.game.boards.ScienceType
 import org.luxons.sevenwonders.game.cards.Card
@@ -203,14 +206,21 @@ fun createScience(compasses: Int, wheels: Int, tablets: Int, jokers: Int): Scien
     return science
 }
 
-fun playCardWithEffect(table: Table, playerIndex: Int, color: Color, effect: Effect) {
+fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
     val card = testCard(color, effect)
-    val board = table.getBoard(playerIndex)
-    board.addCard(card)
-    card.applyTo(table, playerIndex, ResourceTransactions())
+    player.board.addCard(card)
+    card.applyTo(player, ResourceTransactions())
 }
 
-fun createMove(playerIndex: Int, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {
+fun createMove(context: PlayerContext, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {
     val playerMove = PlayerMove(type, card.name, Arrays.asList(*transactions))
-    return type.resolve(playerIndex, card, playerMove)
+    return type.create(playerMove, card, context)
+}
+
+fun singleBoardPlayer(board: Board): Player {
+    return object: Player {
+        override val index=0
+        override val board = board
+        override fun getBoard(relativePosition: RelativeBoardPosition): Board = board
+    }
 }

@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.Resources
@@ -33,9 +33,7 @@ data class Requirements @JvmOverloads constructor(
         if (!hasRequiredGold(board, boughtResources)) {
             return false
         }
-        return if (producesRequiredResources(board)) {
-            true
-        } else producesRequiredResourcesWithHelp(board, boughtResources)
+        return producesRequiredResources(board) || producesRequiredResourcesWithHelp(board, boughtResources)
     }
 
     /**
@@ -47,15 +45,15 @@ data class Requirements @JvmOverloads constructor(
      *
      * @return true if the given player's board could meet these requirements
      */
-    fun areMetBy(table: Table, playerIndex: Int): Boolean {
-        val board = table.getBoard(playerIndex)
+    fun areMetBy(player: Player): Boolean {
+        val board = player.board
         if (!hasRequiredGold(board)) {
             return false
         }
         if (producesRequiredResources(board)) {
             return true
         }
-        val bestPrice = bestPrice(resources, table, playerIndex)
+        val bestPrice = bestPrice(resources, player)
         return bestPrice != null && bestPrice <= board.gold - gold
     }
 
@@ -78,8 +76,8 @@ data class Requirements @JvmOverloads constructor(
         return board.production.contains(remainingResources)
     }
 
-    fun pay(table: Table, playerIndex: Int, transactions: ResourceTransactions) {
-        table.getBoard(playerIndex).removeGold(gold)
-        transactions.execute(table, playerIndex)
+    fun pay(player: Player, transactions: ResourceTransactions) {
+        player.board.removeGold(gold)
+        transactions.execute(player)
     }
 }

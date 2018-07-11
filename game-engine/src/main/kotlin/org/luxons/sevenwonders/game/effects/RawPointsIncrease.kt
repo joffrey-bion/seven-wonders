@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 
 data class RawPointsIncrease(val points: Int) : EndGameEffect() {
 
-    override fun computePoints(table: Table, playerIndex: Int): Int = points
+    override fun computePoints(player: Player): Int = points
 }

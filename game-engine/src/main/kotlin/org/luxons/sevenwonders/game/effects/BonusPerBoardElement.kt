@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.cards.Color
@@ -19,15 +19,12 @@ data class BonusPerBoardElement (
     val colors: List<Color>? = null // only relevant if type=CARD
 ) : Effect {
 
-    override fun apply(table: Table, playerIndex: Int) {
-        val goldGain = gold * nbMatchingElementsIn(table, playerIndex)
-        table.getBoard(playerIndex).addGold(goldGain)
-    }
+    override fun applyTo(player: Player) = player.board.addGold(gold * nbMatchingElementsFor(player))
 
-    override fun computePoints(table: Table, playerIndex: Int): Int = points * nbMatchingElementsIn(table, playerIndex)
+    override fun computePoints(player: Player): Int = points * nbMatchingElementsFor(player)
 
-    private fun nbMatchingElementsIn(table: Table, playerIndex: Int): Int = boards
-        .map { pos -> table.getBoard(playerIndex, pos) }
+    private fun nbMatchingElementsFor(player: Player): Int = boards
+        .map(player::getBoard)
         .map(::nbMatchingElementsIn)
         .sum()
 

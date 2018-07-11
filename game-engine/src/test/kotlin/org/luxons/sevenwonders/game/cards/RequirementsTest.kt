@@ -1,26 +1,23 @@
 package org.luxons.sevenwonders.game.cards
 
-import java.util.Arrays
-import java.util.Collections
-
+import org.junit.Assert.*
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
+import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.api.Table
-import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.resources.Provider
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
-import org.luxons.sevenwonders.game.test.*
-
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
-import org.junit.Assume.assumeTrue
+import org.luxons.sevenwonders.game.test.createRequirements
+import org.luxons.sevenwonders.game.test.createTransactions
+import org.luxons.sevenwonders.game.test.singleBoardPlayer
+import org.luxons.sevenwonders.game.test.testBoard
+import java.util.Arrays
 
 @RunWith(Theories::class)
 class RequirementsTest {
@@ -43,11 +40,11 @@ class RequirementsTest {
         val requirements = Requirements(requiredGold)
 
         val board = testBoard(ResourceType.CLAY, boardGold)
-        val table = Table(listOf(board))
+        val player = singleBoardPlayer(board)
 
         assertEquals(boardGold >= requiredGold, requirements.areMetWithoutNeighboursBy(board))
         assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, ResourceTransactions()))
-        assertEquals(boardGold >= requiredGold, requirements.areMetBy(table, 0))
+        assertEquals(boardGold >= requiredGold, requirements.areMetBy(player))
     }
 
     @Theory
@@ -55,7 +52,7 @@ class RequirementsTest {
         val requirements = createRequirements(requiredResource)
 
         val board = testBoard(initialResource, 0)
-        val table = Table(listOf(board))
+        val player = singleBoardPlayer(board)
 
         assertEquals(initialResource == requiredResource, requirements.areMetWithoutNeighboursBy(board))
         assertEquals(
@@ -64,7 +61,7 @@ class RequirementsTest {
         )
 
         if (initialResource == requiredResource) {
-            assertTrue(requirements.areMetBy(table, 0))
+            assertTrue(requirements.areMetBy(player))
         }
     }
 
@@ -79,7 +76,7 @@ class RequirementsTest {
 
         val board = testBoard(initialResource, 0)
         board.production.addFixedResource(producedResource, 1)
-        val table = Table(listOf(board))
+        val player = singleBoardPlayer(board)
 
         assertEquals(producedResource == requiredResource, requirements.areMetWithoutNeighboursBy(board))
         assertEquals(
@@ -88,7 +85,7 @@ class RequirementsTest {
         )
 
         if (producedResource == requiredResource) {
-            assertTrue(requirements.areMetBy(table, 0))
+            assertTrue(requirements.areMetBy(player))
         }
     }
 
@@ -105,6 +102,7 @@ class RequirementsTest {
         val neighbourBoard = testBoard(initialResource, 0)
         neighbourBoard.publicProduction.addFixedResource(boughtResource, 1)
         val table = Table(Arrays.asList(board, neighbourBoard))
+        val player = SimplePlayer(0, table)
 
         val resources = createTransactions(Provider.RIGHT_PLAYER, boughtResource)
 
@@ -112,7 +110,7 @@ class RequirementsTest {
         assertEquals(boughtResource == requiredResource, requirements.areMetWithHelpBy(board, resources))
 
         if (boughtResource == requiredResource) {
-            assertTrue(requirements.areMetBy(table, 0))
+            assertTrue(requirements.areMetBy(player))
         }
     }
 
@@ -125,6 +123,7 @@ class RequirementsTest {
         val board = testBoard(initialResource, 2)
         val neighbourBoard = testBoard(requiredResource, 0)
         val table = Table(Arrays.asList(board, neighbourBoard))
+        val player = SimplePlayer(0, table)
 
         val transactions = createTransactions(
             Provider.RIGHT_PLAYER,
@@ -133,9 +132,9 @@ class RequirementsTest {
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board))
         assertTrue(requirements.areMetWithHelpBy(board, transactions))
-        assertTrue(requirements.areMetBy(table, 0))
+        assertTrue(requirements.areMetBy(player))
 
-        requirements.pay(table, 0, transactions)
+        requirements.pay(player, transactions)
 
         assertEquals(0, board.gold.toLong())
         assertEquals(2, neighbourBoard.gold.toLong())

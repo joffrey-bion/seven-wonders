@@ -1,14 +1,14 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 
 abstract class InstantOwnBoardEffect : Effect {
 
-    override fun apply(table: Table, playerIndex: Int) = apply(table.getBoard(playerIndex))
+    override fun applyTo(player: Player) = applyTo(player.board)
 
-    protected abstract fun apply(board: Board)
+    protected abstract fun applyTo(board: Board)
 
     // InstantEffects are only important when applied to the board, they don't give extra points in the end
-    override fun computePoints(table: Table, playerIndex: Int): Int = 0
+    override fun computePoints(player: Player): Int = 0
 }

@@ -8,6 +8,7 @@ import org.junit.experimental.theories.FromDataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
+import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.test.sampleCards
 import org.luxons.sevenwonders.game.test.testTable
 
@@ -97,7 +98,7 @@ class HandsTest {
         val hands = Hands(listOf(hand0, hand1))
 
         val table = testTable(2)
-        val hand = hands.createHand(table, 0)
+        val hand = hands.createHand(SimplePlayer(0, table))
 
         for (handCard in hand) {
             assertTrue(hand0.contains(handCard.card))

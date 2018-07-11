@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.wonders
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.effects.Effect
@@ -14,17 +15,16 @@ class WonderStage(val requirements: Requirements, val effects: List<Effect>) {
     val isBuilt: Boolean
         get() = cardBack != null
 
-    fun isBuildable(table: Table, playerIndex: Int, boughtResources: ResourceTransactions): Boolean {
-        val board = table.getBoard(playerIndex)
+    fun isBuildable(board: Board, boughtResources: ResourceTransactions): Boolean {
         return requirements.areMetWithHelpBy(board, boughtResources)
     }
 
-    internal fun build(cardBack: CardBack) {
+    internal fun placeCard(cardBack: CardBack) {
         this.cardBack = cardBack
     }
 
-    internal fun activate(table: Table, playerIndex: Int, boughtResources: ResourceTransactions) {
-        effects.forEach { e -> e.apply(table, playerIndex) }
-        requirements.pay(table, playerIndex, boughtResources)
+    internal fun activate(player: Player, boughtResources: ResourceTransactions) {
+        effects.forEach { it.applyTo(player) }
+        requirements.pay(player, boughtResources)
     }
 }

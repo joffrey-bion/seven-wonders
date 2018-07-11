@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.moves
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
+import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.cards.Card
@@ -15,17 +16,16 @@ import org.luxons.sevenwonders.game.test.testTable
 class BuildWonderMoveTest {
 
     @Test(expected = InvalidMoveException::class)
-    fun validate_failsWhenCardNotInHand() {
+    fun init_failsWhenCardNotInHand() {
         val table = testTable(3)
         val hand = sampleCards(0, 7)
+        val playerContext = PlayerContext(0, table, hand)
         val anotherCard = testCard("Card that is not in the hand")
-        val move = createMove(0, anotherCard, MoveType.UPGRADE_WONDER)
-
-        move.validate(table, hand)
+        createMove(playerContext, anotherCard, MoveType.UPGRADE_WONDER)
     }
 
     @Test(expected = InvalidMoveException::class)
-    fun validate_failsWhenWonderIsCompletelyBuilt() {
+    fun init_failsWhenWonderIsCompletelyBuilt() {
         val settings = testSettings(3)
         val table = testTable(settings)
         val hand = sampleCards(0, 7)
@@ -49,10 +49,10 @@ class BuildWonderMoveTest {
 
     private fun buildOneWonderLevel(settings: Settings, table: Table, hand: List<Card>, cardIndex: Int) {
         val card = hand[cardIndex]
-        val move = createMove(0, card, MoveType.UPGRADE_WONDER)
-        move.validate(table, hand)
-        move.place(table, mutableListOf(), settings)
-        move.activate(table, emptyList(), settings)
+        val playerContext = PlayerContext(0, table, hand)
+        val move = createMove(playerContext, card, MoveType.UPGRADE_WONDER)
+        move.place(mutableListOf(), settings)
+        move.activate(emptyList(), settings)
     }
 
     @Test
@@ -61,12 +61,12 @@ class BuildWonderMoveTest {
         val table = testTable(settings)
         val hand = sampleCards(0, 7)
         val cardToUse = hand[0]
-        val move = createMove(0, cardToUse, MoveType.UPGRADE_WONDER)
-        move.validate(table, hand) // should not fail
+        val playerContext = PlayerContext(0, table, hand)
+        val move = createMove(playerContext, cardToUse, MoveType.UPGRADE_WONDER)
 
         val initialStage = table.getBoard(0).wonder.nbBuiltStages
 
-        move.place(table, mutableListOf(), settings)
+        move.place(mutableListOf(), settings)
 
         val newStage = table.getBoard(0).wonder.nbBuiltStages
 

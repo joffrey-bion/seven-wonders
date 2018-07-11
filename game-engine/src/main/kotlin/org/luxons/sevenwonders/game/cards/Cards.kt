@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.effects.Effect
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
@@ -27,17 +27,16 @@ data class Card(
     private fun isFreeWithoutChainingOn(board: Board) =
         isAllowedOnBoard(board) && requirements.areMetWithoutNeighboursBy(board) && requirements.gold == 0
 
-    fun isPlayable(table: Table, playerIndex: Int): Boolean {
-        val board = table.getBoard(playerIndex)
-        return isAllowedOnBoard(board) && (isChainableOn(board) || requirements.areMetBy(table, playerIndex))
+    fun isPlayableBy(player: Player): Boolean {
+        val board = player.board
+        return isAllowedOnBoard(board) && (isChainableOn(board) || requirements.areMetBy(player))
     }
 
-    fun applyTo(table: Table, playerIndex: Int, transactions: ResourceTransactions) {
-        val playerBoard = table.getBoard(playerIndex)
-        if (!isChainableOn(playerBoard)) {
-            requirements.pay(table, playerIndex, transactions)
+    fun applyTo(player: Player, transactions: ResourceTransactions) {
+        if (!isChainableOn(player.board)) {
+            requirements.pay(player, transactions)
         }
-        effects.forEach { e -> e.apply(table, playerIndex) }
+        effects.forEach { it.applyTo(player) }
     }
 }
 

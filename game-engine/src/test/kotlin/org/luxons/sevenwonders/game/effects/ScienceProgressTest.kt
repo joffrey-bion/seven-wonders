@@ -24,7 +24,7 @@ class ScienceProgressTest {
         board.science.addAll(initialScience)
 
         val effect = createScienceProgress(compasses, wheels, tablets, jokers)
-        effect.apply(board)
+        effect.applyTo(board)
 
         assertEquals((initCompasses + compasses).toLong(), board.science.getQuantity(ScienceType.COMPASS).toLong())
         assertEquals((initWheels + wheels).toLong(), board.science.getQuantity(ScienceType.WHEEL).toLong())

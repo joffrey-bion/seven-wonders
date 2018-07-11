@@ -1,13 +1,14 @@
 package org.luxons.sevenwonders.game.effects
 
+import org.junit.Assert.assertEquals
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
+import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.test.*
-
-import org.junit.Assert.assertEquals
+import org.luxons.sevenwonders.game.test.testBoard
+import org.luxons.sevenwonders.game.test.testTable
 
 @RunWith(Theories::class)
 class GoldIncreaseTest {
@@ -17,7 +18,7 @@ class GoldIncreaseTest {
         val board = testBoard(type, initialAmount)
         val goldIncrease = GoldIncrease(goldIncreaseAmount)
 
-        goldIncrease.apply(board)
+        goldIncrease.applyTo(board)
 
         assertEquals((initialAmount + goldIncreaseAmount).toLong(), board.gold.toLong())
     }
@@ -25,8 +26,8 @@ class GoldIncreaseTest {
     @Theory
     fun computePoints_isAlwaysZero(gold: Int) {
         val goldIncrease = GoldIncrease(gold)
-        val table = testTable(5)
-        assertEquals(0, goldIncrease.computePoints(table, 0).toLong())
+        val player = SimplePlayer(0, testTable(5))
+        assertEquals(0, goldIncrease.computePoints(player).toLong())
     }
 
     companion object {

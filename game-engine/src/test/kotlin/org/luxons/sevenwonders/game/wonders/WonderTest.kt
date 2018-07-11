@@ -13,22 +13,22 @@ class WonderTest {
     fun buildLevel_increasesNbBuiltStages() {
         val wonder = testWonder()
         assertEquals(0, wonder.nbBuiltStages.toLong())
-        wonder.buildLevel(CardBack("img"))
+        wonder.placeCard(CardBack("img"))
         assertEquals(1, wonder.nbBuiltStages.toLong())
-        wonder.buildLevel(CardBack("img"))
+        wonder.placeCard(CardBack("img"))
         assertEquals(2, wonder.nbBuiltStages.toLong())
-        wonder.buildLevel(CardBack("img"))
+        wonder.placeCard(CardBack("img"))
         assertEquals(3, wonder.nbBuiltStages.toLong())
     }
 
     @Test
     fun buildLevel_failsIfFull() {
         val wonder = testWonder()
-        wonder.buildLevel(CardBack("img"))
-        wonder.buildLevel(CardBack("img"))
-        wonder.buildLevel(CardBack("img"))
+        wonder.placeCard(CardBack("img"))
+        wonder.placeCard(CardBack("img"))
+        wonder.placeCard(CardBack("img"))
         try {
-            wonder.buildLevel(CardBack("img"))
+            wonder.placeCard(CardBack("img"))
             fail()
         } catch (e: IllegalStateException) {
             // expected exception because there is no 4th level in this wonder

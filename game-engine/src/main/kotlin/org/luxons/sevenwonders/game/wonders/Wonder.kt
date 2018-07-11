@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.wonders
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
@@ -29,17 +30,17 @@ class Wonder(
             return stages[lastLevel]
         }
 
-    fun isNextStageBuildable(table: Table, playerIndex: Int, boughtResources: ResourceTransactions): Boolean =
-        nbBuiltStages < stages.size && nextStage.isBuildable(table, playerIndex, boughtResources)
+    fun isNextStageBuildable(board: Board, boughtResources: ResourceTransactions): Boolean =
+        nbBuiltStages < stages.size && nextStage.isBuildable(board, boughtResources)
 
-    fun buildLevel(cardBack: CardBack) = nextStage.build(cardBack)
+    fun placeCard(cardBack: CardBack) = nextStage.placeCard(cardBack)
 
-    fun activateLastBuiltStage(table: Table, playerIndex: Int, boughtResources: ResourceTransactions) =
-        lastBuiltStage.activate(table, playerIndex, boughtResources)
+    fun activateLastBuiltStage(player: Player, boughtResources: ResourceTransactions) =
+        lastBuiltStage.activate(player, boughtResources)
 
-    fun computePoints(table: Table, playerIndex: Int): Int = stages
-        .filter { it.isBuilt }
-        .flatMap { c -> c.effects }
-        .map { e -> e.computePoints(table, playerIndex) }
-        .sum()
+    fun computePoints(player: Player): Int =
+        stages.filter { it.isBuilt }
+            .flatMap { it.effects }
+            .map { it.computePoints(player) }
+            .sum()
 }

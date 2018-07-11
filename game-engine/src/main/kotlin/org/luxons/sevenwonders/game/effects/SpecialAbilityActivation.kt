@@ -1,10 +1,10 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.Player
 
 data class SpecialAbilityActivation(val specialAbility: SpecialAbility) : Effect {
 
-    override fun apply(table: Table, playerIndex: Int) = specialAbility.apply(table.getBoard(playerIndex))
+    override fun applyTo(player: Player) = specialAbility.apply(player.board)
 
-    override fun computePoints(table: Table, playerIndex: Int): Int = specialAbility.computePoints(table, playerIndex)
+    override fun computePoints(player: Player): Int = specialAbility.computePoints(player)
 }

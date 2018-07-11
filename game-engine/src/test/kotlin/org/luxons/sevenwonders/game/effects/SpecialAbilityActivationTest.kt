@@ -8,6 +8,7 @@ import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
+import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
@@ -20,12 +21,11 @@ class SpecialAbilityActivationTest {
     @Theory
     fun apply_addsAbility(ability: SpecialAbility) {
         val effect = SpecialAbilityActivation(ability)
-        val table = testTable(5)
+        val player = SimplePlayer(0, testTable(5))
 
-        effect.apply(table, 0)
+        effect.applyTo(player)
 
-        val board = table.getBoard(0)
-        assertTrue(board.hasSpecial(ability))
+        assertTrue(player.board.hasSpecial(ability))
     }
 
     @Theory
@@ -33,46 +33,41 @@ class SpecialAbilityActivationTest {
         Assume.assumeTrue(ability !== SpecialAbility.COPY_GUILD)
 
         val effect = SpecialAbilityActivation(ability)
-        val table = testTable(5)
+        val player = SimplePlayer(0, testTable(5))
 
-        assertEquals(0, effect.computePoints(table, 0).toLong())
+        assertEquals(0, effect.computePoints(player).toLong())
     }
 
     @Theory
     fun computePoints_copiedGuild(guildCard: Card, neighbour: RelativeBoardPosition) {
         val effect = SpecialAbilityActivation(SpecialAbility.COPY_GUILD)
-        val table = testTable(5)
+        val player = SimplePlayer(0, testTable(5))
 
-        val neighbourBoard = table.getBoard(0, neighbour)
+        val neighbourBoard = player.getBoard(neighbour)
         neighbourBoard.addCard(guildCard)
 
-        val board = table.getBoard(0)
-        board.copiedGuild = guildCard
+        player.board.copiedGuild = guildCard
 
-        val directPointsFromGuildCard = guildCard.effects.stream().mapToInt { e -> e.computePoints(table, 0) }.sum()
-        assertEquals(directPointsFromGuildCard.toLong(), effect.computePoints(table, 0).toLong())
+        val directPointsFromGuildCard = guildCard.effects.stream().mapToInt { e -> e.computePoints(player) }.sum()
+        assertEquals(directPointsFromGuildCard.toLong(), effect.computePoints(player).toLong())
     }
 
     @Test(expected = IllegalStateException::class)
     fun computePoints_copyGuild_failWhenNoChosenGuild() {
         val effect = SpecialAbilityActivation(SpecialAbility.COPY_GUILD)
-        val table = testTable(5)
-        effect.computePoints(table, 0)
+        val player = SimplePlayer(0, testTable(5))
+        effect.computePoints(player)
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints
-        fun abilities(): Array<SpecialAbility> {
-            return SpecialAbility.values()
-        }
+        fun abilities(): Array<SpecialAbility> = SpecialAbility.values()
 
         @JvmStatic
         @DataPoints
-        fun neighbours(): Array<RelativeBoardPosition> {
-            return arrayOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT)
-        }
+        fun neighbours(): Array<RelativeBoardPosition> = arrayOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT)
 
         @JvmStatic
         @DataPoints

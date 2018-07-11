@@ -1,25 +1,21 @@
 package org.luxons.sevenwonders.game.moves
 
+import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.PlayerMove
-import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.cards.Card
 
-class PlayCardMove internal constructor(playerIndex: Int, card: Card, move: PlayerMove) :
-    CardFromHandMove(playerIndex, card, move) {
+internal class PlayCardMove(move: PlayerMove, card: Card, player: PlayerContext) :
+    CardFromHandMove(move, card, player) {
 
-    @Throws(InvalidMoveException::class)
-    override fun validate(table: Table, playerHand: List<Card>) {
-        super.validate(table, playerHand)
-        val board = table.getBoard(playerIndex)
+    init {
+        val board = player.board
         if (!card.isChainableOn(board) && !card.requirements.areMetWithHelpBy(board, transactions)) {
-            throw InvalidMoveException("Player $playerIndex cannot play the card ${card.name} with the given resources")
+            throw InvalidMoveException(this, "requirements not met to play the card ${card.name}")
         }
     }
 
-    override fun place(table: Table, discardedCards: MutableList<Card>, settings: Settings) =
-        table.getBoard(playerIndex).addCard(card)
+    override fun place(discardedCards: MutableList<Card>, settings: Settings) = playerContext.board.addCard(card)
 
-    override fun activate(table: Table, discardedCards: List<Card>, settings: Settings) =
-        card.applyTo(table, playerIndex, transactions)
+    override fun activate(discardedCards: List<Card>, settings: Settings) = card.applyTo(playerContext, transactions)
 }

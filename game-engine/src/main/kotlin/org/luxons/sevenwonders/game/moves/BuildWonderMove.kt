@@ -1,25 +1,23 @@
 package org.luxons.sevenwonders.game.moves
 
+import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.PlayerMove
-import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.cards.Card
 
-class BuildWonderMove internal constructor(playerIndex: Int, card: Card, move: PlayerMove) :
-    CardFromHandMove(playerIndex, card, move) {
+internal class BuildWonderMove(move: PlayerMove, card: Card, player: PlayerContext) :
+    CardFromHandMove(move, card, player) {
 
-    @Throws(InvalidMoveException::class)
-    override fun validate(table: Table, playerHand: List<Card>) {
-        super.validate(table, playerHand)
-        val board = table.getBoard(playerIndex)
-        if (!board.wonder.isNextStageBuildable(table, playerIndex, transactions)) {
-            throw InvalidMoveException("Player $playerIndex cannot upgrade his wonder with the given resources")
+    private val wonder = player.board.wonder
+
+    init {
+        if (!wonder.isNextStageBuildable(playerContext.board, transactions)) {
+            throw InvalidMoveException(this, "all levels are already built, or the given resources are insufficient")
         }
     }
 
-    override fun place(table: Table, discardedCards: MutableList<Card>, settings: Settings) =
-        table.getBoard(playerIndex).wonder.buildLevel(card.back)
+    override fun place(discardedCards: MutableList<Card>, settings: Settings) = wonder.placeCard(card.back)
 
-    override fun activate(table: Table, discardedCards: List<Card>, settings: Settings) =
-        table.getBoard(playerIndex).wonder.activateLastBuiltStage(table, playerIndex, transactions)
+    override fun activate(discardedCards: List<Card>, settings: Settings) =
+        wonder.activateLastBuiltStage(playerContext, transactions)
 }

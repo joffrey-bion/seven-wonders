@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game.boards
 
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.Settings
-import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.data.Age
@@ -74,22 +74,22 @@ class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
         consumedFreeCards[age] = true
     }
 
-    fun computePoints(table: Table): PlayerScore = PlayerScore(
+    fun computeScore(player: Player): PlayerScore = PlayerScore(
         gold, mapOf(
-            ScoreCategory.CIVIL to computePointsForCards(table, Color.BLUE),
+            ScoreCategory.CIVIL to computePointsForCards(player, Color.BLUE),
             ScoreCategory.MILITARY to military.totalPoints,
             ScoreCategory.SCIENCE to science.computePoints(),
-            ScoreCategory.TRADE to computePointsForCards(table, Color.YELLOW),
-            ScoreCategory.GUILD to computePointsForCards(table, Color.PURPLE),
-            ScoreCategory.WONDER to wonder.computePoints(table, playerIndex),
+            ScoreCategory.TRADE to computePointsForCards(player, Color.YELLOW),
+            ScoreCategory.GUILD to computePointsForCards(player, Color.PURPLE),
+            ScoreCategory.WONDER to wonder.computePoints(player),
             ScoreCategory.GOLD to computeGoldPoints()
         )
     )
 
-    private fun computePointsForCards(table: Table, color: Color): Int =
+    private fun computePointsForCards(player: Player, color: Color): Int =
         playedCards.filter { it.color === color }
             .flatMap { it.effects }
-            .map { it.computePoints(table, playerIndex) }
+            .map { it.computePoints(player) }
             .sum()
 
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
