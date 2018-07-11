@@ -12,15 +12,14 @@ import org.luxons.sevenwonders.game.cards.Decks
 import org.luxons.sevenwonders.game.cards.Hands
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.effects.SpecialAbility
-import org.luxons.sevenwonders.game.moves.InvalidMoveException
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.score.ScoreBoard
 
 class Game(
     val id: Long, val settings: Settings, boards: List<Board>, private val decks: Decks
 ) {
-    private val nbPlayers: Int = boards.size
     private val table: Table = Table(boards)
+    private val players: List<Player> = boards.map { SimplePlayer(it.playerIndex, table) }
     private val discardedCards: MutableList<Card> = ArrayList()
     private val preparedMoves: MutableMap<Int, Move> = HashMap()
     private var currentTurnInfo: List<PlayerTurnInfo> = emptyList()
@@ -32,42 +31,38 @@ class Game(
 
     private fun startNewAge() {
         table.increaseCurrentAge()
-        hands = decks.deal(table.currentAge, table.nbPlayers)
+        hands = decks.deal(table.currentAge, players.size)
         startNewTurn()
     }
 
     private fun startNewTurn() {
-        currentTurnInfo = IntRange(0, nbPlayers - 1).map { createPlayerTurnInfo(it) }
+        currentTurnInfo = players.map { createPlayerTurnInfo(it) }
     }
 
-    private fun createPlayerTurnInfo(playerIndex: Int): PlayerTurnInfo {
-        val hand = hands.createHand(player(playerIndex))
-        val action = determineAction(hand, table.getBoard(playerIndex))
+    private fun createPlayerTurnInfo(player: Player): PlayerTurnInfo {
+        val hand = hands.createHand(player)
+        val action = determineAction(hand, player.board)
 
-        var neighbourGuildCards = emptyList<Card>()
-        if (action === Action.PICK_NEIGHBOR_GUILD) {
-            neighbourGuildCards = table.getNeighbourGuildCards(playerIndex)
-        }
-
-        return PlayerTurnInfo(playerIndex, table, action, hand, neighbourGuildCards)
-    }
-
-    fun getCurrentTurnInfo(): Collection<PlayerTurnInfo> {
-        return currentTurnInfo
-    }
-
-    private fun determineAction(hand: List<HandCard>, board: Board): Action {
-        return if (endOfGameReached() && board.hasSpecial(SpecialAbility.COPY_GUILD)) {
-            determineCopyGuildAction(board)
-        } else if (hand.size == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
-            Action.PLAY_LAST
-        } else if (hand.size == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
-            Action.PLAY_2
-        } else if (hand.isEmpty()) {
-            Action.WAIT
+        val neighbourGuildCards = if (action === Action.PICK_NEIGHBOR_GUILD) {
+            table.getNeighbourGuildCards(player.index)
         } else {
-            Action.PLAY
+            emptyList()
         }
+
+        return PlayerTurnInfo(player.index, table, action, hand, neighbourGuildCards)
+    }
+
+    /**
+     * Returns information for each player about the current turn.
+     */
+    fun getCurrentTurnInfo(): Collection<PlayerTurnInfo> = currentTurnInfo
+
+    private fun determineAction(hand: List<HandCard>, board: Board): Action = when {
+        endOfGameReached() && board.hasSpecial(SpecialAbility.COPY_GUILD) -> determineCopyGuildAction(board)
+        hand.size == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_LAST
+        hand.size == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_2
+        hand.isEmpty()                                                    -> Action.WAIT
+        else                                                              -> Action.PLAY
     }
 
     private fun determineCopyGuildAction(board: Board): Action {
@@ -75,20 +70,33 @@ class Game(
         return if (neighbourGuildCards.isEmpty()) Action.WAIT else Action.PICK_NEIGHBOR_GUILD
     }
 
-    @Throws(InvalidMoveException::class)
-    fun prepareMove(playerIndex: Int, playerMove: PlayerMove): CardBack {
-        val card = decks.getCard(table.currentAge, playerMove.cardName)
+    /**
+     * Prepares the given [move] for the player at the given [playerIndex].
+     *
+     * @return the back of the card that is prepared on the table
+     */
+    fun prepareMove(playerIndex: Int, move: PlayerMove): CardBack {
+        val card = decks.getCard(table.currentAge, move.cardName)
         val context = PlayerContext(playerIndex, table, hands[playerIndex])
-        val move = playerMove.type.resolve(playerMove, card, context)
-        preparedMoves[playerIndex] = move
+        val resolvedMove = move.type.resolve(move, card, context)
+        preparedMoves[playerIndex] = resolvedMove
         return card.back
     }
 
+    /**
+     * Returns true if all players that had to do something have [prepared their move][prepareMove]. This means we are
+     * ready to [play the current turn][playTurn].
+     */
     fun allPlayersPreparedTheirMove(): Boolean {
         val nbExpectedMoves = currentTurnInfo.filter { it.action !== Action.WAIT }.count()
         return preparedMoves.size == nbExpectedMoves
     }
 
+    /**
+     * Plays all the [prepared moves][prepareMove] for the current turn. An exception will be thrown if some players
+     * had not prepared their moves (unless these players had nothing to do). To avoid this, please check if everyone
+     * is ready using [allPlayersPreparedTheirMove].
+     */
     fun playTurn(): Table {
         makeMoves()
         if (endOfAgeReached()) {
@@ -104,25 +112,28 @@ class Game(
     }
 
     private fun makeMoves() {
-        val playedMoves = mapToList(preparedMoves)
+        val moves = getMovesToPerform()
 
         // all cards from this turn need to be placed before executing any effect
         // because effects depending on played cards need to take the ones from the current turn into account too
-        placePreparedCards(playedMoves)
+        placePreparedCards(moves)
 
         // same goes for the discarded cards during the last turn, which should be available for special actions
         if (hands.maxOneCardRemains()) {
             discardLastCardsOfHands()
         }
 
-        activatePlayedCards(playedMoves)
+        activatePlayedCards(moves)
 
-        table.lastPlayedMoves = playedMoves
+        table.lastPlayedMoves = moves
         preparedMoves.clear()
     }
 
-    private fun mapToList(movesPerPlayer: Map<Int, Move>): List<Move> =
-        IntRange(0, nbPlayers - 1).map { p -> movesPerPlayer[p] ?: throw MissingPreparedMoveException(p) }
+    private fun getMovesToPerform(): List<Move> =
+        currentTurnInfo.filter { it.action !== Action.WAIT }.map { getMoveToPerformFor(it.playerIndex) }
+
+    private fun getMoveToPerformFor(playerIndex: Int) =
+        preparedMoves[playerIndex] ?: throw MissingPreparedMoveException(playerIndex)
 
     private fun endOfAgeReached(): Boolean = hands.isEmpty
 
@@ -144,14 +155,8 @@ class Game(
         }
     }
 
-    private fun discardLastCardsOfHands() {
-        for (i in 0 until nbPlayers) {
-            val board = table.getBoard(i)
-            if (!board.hasSpecial(SpecialAbility.PLAY_LAST_CARD)) {
-                discardHand(i)
-            }
-        }
-    }
+    private fun discardLastCardsOfHands() =
+        table.boards.filterNot { it.hasSpecial(SpecialAbility.PLAY_LAST_CARD) }.forEach { discardHand(it.playerIndex) }
 
     private fun discardHand(playerIndex: Int) {
         val hand = hands[playerIndex]
@@ -162,9 +167,10 @@ class Game(
     private fun activatePlayedCards(playedMoves: List<Move>) =
         playedMoves.forEach { it.activate(discardedCards, settings) }
 
-    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computeScore(player(it.playerIndex)) })
-
-    private fun player(playerIndex: Int) = SimplePlayer(playerIndex, table)
+    /**
+     * Computes the score for all players.
+     */
+    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computeScore(players[it.playerIndex]) })
 
     private class MissingPreparedMoveException internal constructor(playerIndex: Int) :
         IllegalStateException("Player $playerIndex has not prepared his move")
