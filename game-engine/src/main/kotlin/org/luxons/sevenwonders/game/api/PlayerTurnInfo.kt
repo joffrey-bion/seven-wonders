@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.api
 
 import org.luxons.sevenwonders.game.cards.Card
 
-data class PlayerTurnInfo(
+data class PlayerTurnInfo internal constructor(
     val playerIndex: Int,
     val table: Table,
     val action: Action,

@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.resources
 
 import org.luxons.sevenwonders.game.Player
 
-data class ResourceTransactions(private val resourcesByProvider: MutableMap<Provider, Resources> = mutableMapOf()) {
+internal data class ResourceTransactions(private val resourcesByProvider: MutableMap<Provider, Resources> = mutableMapOf()) {
 
     constructor(transactions: Collection<ResourceTransaction>) : this() {
         transactions.forEach { t -> add(t.provider, t.resources) }

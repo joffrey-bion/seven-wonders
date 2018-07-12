@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.effects
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.resources.Production
 
-data class ProductionIncrease(val production: Production, val isSellable: Boolean) : InstantOwnBoardEffect() {
+internal data class ProductionIncrease(val production: Production, val isSellable: Boolean) : InstantOwnBoardEffect() {
 
     public override fun applyTo(board: Board) {
         board.production.addAll(production)

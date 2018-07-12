@@ -15,8 +15,11 @@ import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.score.ScoreBoard
 
-class Game(
-    val id: Long, val settings: Settings, boards: List<Board>, private val decks: Decks
+class Game internal constructor(
+    val id: Long,
+    private val settings: Settings,
+    boards: List<Board>,
+    private val decks: Decks
 ) {
     private val table: Table = Table(boards)
     private val players: List<Player> = boards.map { SimplePlayer(it.playerIndex, table) }
@@ -42,12 +45,7 @@ class Game(
     private fun createPlayerTurnInfo(player: Player): PlayerTurnInfo {
         val hand = hands.createHand(player)
         val action = determineAction(hand, player.board)
-
-        val neighbourGuildCards = if (action === Action.PICK_NEIGHBOR_GUILD) {
-            table.getNeighbourGuildCards(player.index)
-        } else {
-            emptyList()
-        }
+        val neighbourGuildCards = table.getNeighbourGuildCards(player.index)
 
         return PlayerTurnInfo(player.index, table, action, hand, neighbourGuildCards)
     }

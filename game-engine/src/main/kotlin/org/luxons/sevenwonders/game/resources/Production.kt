@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.resources
 import java.util.Arrays
 import java.util.EnumSet
 
-class Production {
+class Production internal constructor() {
 
     val fixedResources = Resources()
     private val alternativeResources: MutableSet<Set<ResourceType>> = mutableSetOf()

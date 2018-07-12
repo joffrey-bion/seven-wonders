@@ -33,7 +33,7 @@ enum class SpecialAbility {
         }
     };
 
-    fun apply(board: Board) = board.addSpecial(this)
+    internal fun apply(board: Board) = board.addSpecial(this)
 
-    open fun computePoints(player: Player): Int = 0
+    internal open fun computePoints(player: Player): Int = 0
 }

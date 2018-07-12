@@ -4,7 +4,7 @@ import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.resources.Provider
 import org.luxons.sevenwonders.game.resources.ResourceType
 
-data class Discount(
+internal data class Discount(
     val resourceTypes: List<ResourceType> = emptyList(),
     val providers: List<Provider> = emptyList(),
     val discountedPrice: Int = 1

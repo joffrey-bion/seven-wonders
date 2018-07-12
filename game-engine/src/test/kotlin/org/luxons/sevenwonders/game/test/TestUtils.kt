@@ -35,7 +35,7 @@ fun testCustomizableSettings(initialGold: Int = 0): CustomizableSettings {
     return CustomizableSettings(randomSeedForTests = SEED).copy(initialGold = initialGold)
 }
 
-fun testSettings(nbPlayers: Int): Settings {
+internal fun testSettings(nbPlayers: Int): Settings {
     return Settings(nbPlayers, testCustomizableSettings())
 }
 
@@ -43,7 +43,7 @@ fun testTable(nbPlayers: Int): Table {
     return testTable(testSettings(nbPlayers))
 }
 
-fun testTable(settings: Settings): Table {
+internal fun testTable(settings: Settings): Table {
     return Table(testBoards(settings.nbPlayers, settings))
 }
 
@@ -103,12 +103,12 @@ fun createResources(vararg types: ResourceType): Resources {
     return resources
 }
 
-fun createTransactions(provider: Provider, vararg resources: ResourceType): ResourceTransactions {
+internal fun createTransactions(provider: Provider, vararg resources: ResourceType): ResourceTransactions {
     val transaction = createTransaction(provider, *resources)
     return ResourceTransactions(listOf(transaction))
 }
 
-fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions {
+internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions {
     return ResourceTransactions(Arrays.asList(*transactions))
 }
 
@@ -133,7 +133,7 @@ fun testCard(color: Color): Card {
     return testCard("Test Card", color)
 }
 
-fun testCard(color: Color, effect: Effect): Card {
+internal fun testCard(color: Color, effect: Effect): Card {
     return testCard("Test Card", color, effect)
 }
 
@@ -145,11 +145,11 @@ fun createGuildCards(count: Int): List<Card> {
     return IntRange(0, count).map { createGuildCard(it) }
 }
 
-fun createGuildCard(num: Int, effect: Effect? = null): Card {
+internal fun createGuildCard(num: Int, effect: Effect? = null): Card {
     return testCard("Test Guild $num", Color.PURPLE, effect)
 }
 
-fun testCard(
+internal fun testCard(
     name: String = "Test Card",
     color: Color = Color.BLUE,
     effect: Effect? = null,
@@ -185,7 +185,7 @@ fun getDifferentColorFrom(vararg colors: Color): Color {
     throw IllegalArgumentException("All colors are forbidden!")
 }
 
-fun createScienceProgress(compasses: Int, wheels: Int, tablets: Int, jokers: Int): ScienceProgress {
+internal fun createScienceProgress(compasses: Int, wheels: Int, tablets: Int, jokers: Int): ScienceProgress {
     return ScienceProgress(createScience(compasses, wheels, tablets, jokers))
 }
 
@@ -206,18 +206,18 @@ fun createScience(compasses: Int, wheels: Int, tablets: Int, jokers: Int): Scien
     return science
 }
 
-fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
+internal fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
     val card = testCard(color, effect)
     player.board.addCard(card)
     card.applyTo(player, ResourceTransactions())
 }
 
-fun createMove(context: PlayerContext, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {
+internal fun createMove(context: PlayerContext, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {
     val playerMove = PlayerMove(type, card.name, Arrays.asList(*transactions))
     return type.create(playerMove, card, context)
 }
 
-fun singleBoardPlayer(board: Board): Player {
+internal fun singleBoardPlayer(board: Board): Player {
     return object: Player {
         override val index=0
         override val board = board

@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.game.resources.ResourceTransactions
 
 data class CardBack(val image: String)
 
-data class Card(
+data class Card internal constructor(
     val name: String,
     val color: Color,
     val requirements: Requirements,
@@ -19,20 +19,20 @@ data class Card(
 ) {
     private fun isAllowedOnBoard(board: Board): Boolean = !board.isPlayed(name) // cannot play twice the same card
 
-    fun isFreeFor(board: Board): Boolean = isChainableOn(board) || isFreeWithoutChainingOn(board)
+    internal fun isFreeFor(board: Board): Boolean = isChainableOn(board) || isFreeWithoutChainingOn(board)
 
-    fun isChainableOn(board: Board): Boolean =
+    internal fun isChainableOn(board: Board): Boolean =
         isAllowedOnBoard(board) && chainParent != null && board.isPlayed(chainParent)
 
     private fun isFreeWithoutChainingOn(board: Board) =
         isAllowedOnBoard(board) && requirements.areMetWithoutNeighboursBy(board) && requirements.gold == 0
 
-    fun isPlayableBy(player: Player): Boolean {
+    internal fun isPlayableBy(player: Player): Boolean {
         val board = player.board
         return isAllowedOnBoard(board) && (isChainableOn(board) || requirements.areMetBy(player))
     }
 
-    fun applyTo(player: Player, transactions: ResourceTransactions) {
+    internal fun applyTo(player: Player, transactions: ResourceTransactions) {
         if (!isChainableOn(player.board)) {
             requirements.pay(player, transactions)
         }

@@ -7,17 +7,18 @@ import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 
 abstract class Move internal constructor(
-    move: PlayerMove,
+    val move: PlayerMove,
     val card: Card,
     internal val playerContext: PlayerContext
 ) {
     val type: MoveType = move.type
 
-    val transactions: ResourceTransactions = ResourceTransactions(move.transactions)
+    // TODO restore visibility to public
+    internal val transactions: ResourceTransactions = ResourceTransactions(move.transactions)
 
-    abstract fun place(discardedCards: MutableList<Card>, settings: Settings)
+    internal abstract fun place(discardedCards: MutableList<Card>, settings: Settings)
 
-    abstract fun activate(discardedCards: List<Card>, settings: Settings)
+    internal abstract fun activate(discardedCards: List<Card>, settings: Settings)
 }
 
 class InvalidMoveException internal constructor(move: Move, message: String) : IllegalArgumentException(

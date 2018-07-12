@@ -5,13 +5,13 @@ import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.cards.Card
 
-interface Player {
+internal interface Player {
     val index: Int
     val board: Board
     fun getBoard(relativePosition: RelativeBoardPosition): Board
 }
 
-data class SimplePlayer(
+internal data class SimplePlayer(
     override val index: Int,
     private val table: Table
 ): Player {
@@ -19,7 +19,7 @@ data class SimplePlayer(
     override fun getBoard(relativePosition: RelativeBoardPosition) = table.getBoard(index, relativePosition)
 }
 
-data class PlayerContext(
+internal data class PlayerContext(
     override val index: Int,
     private val table: Table,
     val hand: List<Card>

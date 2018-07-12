@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.cards
 
-fun List<Card>.deal(nbPlayers: Int): Hands {
+internal fun List<Card>.deal(nbPlayers: Int): Hands {
     val hands: Map<Int, List<Card>> = this.withIndex()
         .groupBy { (index, _) -> index % nbPlayers }
         .mapValues { it.value.map { (_, cards) -> cards } }
@@ -9,7 +9,7 @@ fun List<Card>.deal(nbPlayers: Int): Hands {
     return Hands(allHands)
 }
 
-class Decks(private val cardsPerAge: Map<Int, List<Card>>) {
+internal class Decks(private val cardsPerAge: Map<Int, List<Card>>) {
 
     @Throws(Decks.CardNotFoundException::class)
     fun getCard(age: Int, cardName: String): Card =

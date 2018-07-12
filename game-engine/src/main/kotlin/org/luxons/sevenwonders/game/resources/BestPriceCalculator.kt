@@ -4,20 +4,20 @@ import org.luxons.sevenwonders.game.Player
 import java.util.ArrayList
 import java.util.EnumSet
 
-fun bestPrice(resources: Resources, player: Player): Int? {
+internal fun bestPrice(resources: Resources, player: Player): Int? {
     return bestSolution(resources, player)?.price
 }
 
-fun bestTransaction(resources: Resources, player: Player): ResourceTransactions? {
+internal fun bestTransaction(resources: Resources, player: Player): ResourceTransactions? {
     return bestSolution(resources, player)?.transactions
 }
 
-fun bestSolution(resources: Resources, player: Player): TransactionPlan? {
+internal fun bestSolution(resources: Resources, player: Player): TransactionPlan? {
     val calculator = BestPriceCalculator(resources, player)
     return calculator.computeBestSolution()
 }
 
-data class TransactionPlan(val price: Int, val transactions: ResourceTransactions)
+internal data class TransactionPlan(val price: Int, val transactions: ResourceTransactions)
 
 private class ResourcePool(
     val provider: Provider?,

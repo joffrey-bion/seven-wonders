@@ -5,7 +5,7 @@ import org.luxons.sevenwonders.game.data.WonderSide
 import org.luxons.sevenwonders.game.data.WonderSidePickMethod
 import java.util.Random
 
-class Settings @JvmOverloads constructor(
+internal class Settings(
     val nbPlayers: Int,
     customSettings: CustomizableSettings = CustomizableSettings()
 ) {

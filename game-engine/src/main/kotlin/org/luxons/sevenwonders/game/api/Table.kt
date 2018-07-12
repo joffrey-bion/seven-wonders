@@ -13,7 +13,7 @@ import org.luxons.sevenwonders.game.moves.Move
  * The table contains what is visible by all the players in the game: the boards and their played cards, and the
  * players' information.
  */
-class Table(val boards: List<Board>) {
+class Table internal constructor(val boards: List<Board>) {
 
     val nbPlayers: Int = boards.size
 
@@ -30,11 +30,11 @@ class Table(val boards: List<Board>) {
     fun getBoard(playerIndex: Int, position: RelativeBoardPosition): Board =
         boards[position.getIndexFrom(playerIndex, nbPlayers)]
 
-    fun increaseCurrentAge() {
+    internal fun increaseCurrentAge() {
         this.currentAge++
     }
 
-    fun resolveMilitaryConflicts() {
+    internal fun resolveMilitaryConflicts() {
         for (i in 0 until nbPlayers) {
             val board1 = getBoard(i)
             val board2 = getBoard(i, RelativeBoardPosition.RIGHT)
@@ -54,7 +54,7 @@ class Table(val boards: List<Board>) {
         }
     }
 
-    fun getNeighbourGuildCards(playerIndex: Int): List<Card> = neighboursPositions()
+    internal fun getNeighbourGuildCards(playerIndex: Int): List<Card> = neighboursPositions()
         .flatMap { getBoard(playerIndex, it).getPlayedCards() }
         .filter { it.color == Color.PURPLE }
 }

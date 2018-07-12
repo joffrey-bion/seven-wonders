@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.cards
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.api.HandCard
 
-class Hands internal constructor(private val hands: List<List<Card>>) {
+internal class Hands(private val hands: List<List<Card>>) {
 
     val isEmpty: Boolean = this.hands.all(List<Card>::isEmpty)
 

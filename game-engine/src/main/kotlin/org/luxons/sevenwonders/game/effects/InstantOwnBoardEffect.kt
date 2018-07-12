@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.effects
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 
-abstract class InstantOwnBoardEffect : Effect {
+internal abstract class InstantOwnBoardEffect : Effect {
 
     override fun applyTo(player: Player) = applyTo(player.board)
 

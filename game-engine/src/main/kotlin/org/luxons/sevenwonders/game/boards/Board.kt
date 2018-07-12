@@ -12,7 +12,7 @@ import org.luxons.sevenwonders.game.score.PlayerScore
 import org.luxons.sevenwonders.game.score.ScoreCategory
 import org.luxons.sevenwonders.game.wonders.Wonder
 
-class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
+class Board internal constructor(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
 
     val production = Production()
     val publicProduction = Production()
@@ -74,7 +74,7 @@ class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
         consumedFreeCards[age] = true
     }
 
-    fun computeScore(player: Player): PlayerScore = PlayerScore(
+    internal fun computeScore(player: Player): PlayerScore = PlayerScore(
         gold, mapOf(
             ScoreCategory.CIVIL to computePointsForCards(player, Color.BLUE),
             ScoreCategory.MILITARY to military.totalPoints,

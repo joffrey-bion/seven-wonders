@@ -6,7 +6,7 @@ import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.Resources
 import org.luxons.sevenwonders.game.resources.bestPrice
 
-data class Requirements @JvmOverloads constructor(
+data class Requirements internal constructor(
     val gold: Int = 0,
     val resources: Resources = Resources()
 ) {
@@ -17,7 +17,7 @@ data class Requirements @JvmOverloads constructor(
      *
      * @return true if the given board meets these requirements without any transaction with its neighbours
      */
-    fun areMetWithoutNeighboursBy(board: Board): Boolean {
+    internal fun areMetWithoutNeighboursBy(board: Board): Boolean {
         return hasRequiredGold(board) && producesRequiredResources(board)
     }
 
@@ -29,7 +29,7 @@ data class Requirements @JvmOverloads constructor(
      *
      * @return true if the given board meets these requirements
      */
-    fun areMetWithHelpBy(board: Board, boughtResources: ResourceTransactions): Boolean {
+    internal fun areMetWithHelpBy(board: Board, boughtResources: ResourceTransactions): Boolean {
         if (!hasRequiredGold(board, boughtResources)) {
             return false
         }
@@ -37,15 +37,14 @@ data class Requirements @JvmOverloads constructor(
     }
 
     /**
-     * Returns whether the given player's board meets these requirements, either on its own or by buying resources to
+     * Returns whether the given player meets these requirements, either on its own or by buying resources to
      * neighbours.
      *
-     * @param table the current game table
-     * @param playerIndex the index of the player to check
+     * @param player the player to check
      *
      * @return true if the given player's board could meet these requirements
      */
-    fun areMetBy(player: Player): Boolean {
+    internal fun areMetBy(player: Player): Boolean {
         val board = player.board
         if (!hasRequiredGold(board)) {
             return false
@@ -76,7 +75,7 @@ data class Requirements @JvmOverloads constructor(
         return board.production.contains(remainingResources)
     }
 
-    fun pay(player: Player, transactions: ResourceTransactions) {
+    internal fun pay(player: Player, transactions: ResourceTransactions) {
         player.board.removeGold(gold)
         transactions.execute(player)
     }

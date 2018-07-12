@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.game.Player
  * may affect (or depend on) the adjacent boards. It can have an instantaneous effect on the board, or be postponed to
  * the end of game where point calculations take place.
  */
-interface Effect {
+internal interface Effect {
 
     fun applyTo(player: Player)
 
