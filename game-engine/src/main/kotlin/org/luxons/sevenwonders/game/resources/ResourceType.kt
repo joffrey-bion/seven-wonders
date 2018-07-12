@@ -20,9 +20,7 @@ enum class ResourceType(val symbol: Char?) {
             return fromSymbol(symbol[0])
         }
 
-        fun fromSymbol(symbol: Char?): ResourceType {
-            return typesPerSymbol[symbol]
-                    ?: throw IllegalArgumentException(String.format("Unknown resource type symbol '%s'", symbol))
-        }
+        fun fromSymbol(symbol: Char?): ResourceType =
+            typesPerSymbol[symbol] ?: throw IllegalArgumentException("Unknown resource type symbol '$symbol'")
     }
 }

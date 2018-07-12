@@ -95,5 +95,5 @@ class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
 
     internal class InsufficientFundsException(current: Int, required: Int) :
-        RuntimeException(String.format("Current balance is %d gold, but %d are required", current, required))
+        IllegalStateException("Current balance is $current gold, but $required are required")
 }
