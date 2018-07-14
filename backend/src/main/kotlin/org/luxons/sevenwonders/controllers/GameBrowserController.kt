@@ -3,6 +3,8 @@ package org.luxons.sevenwonders.controllers
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.actions.CreateGameAction
 import org.luxons.sevenwonders.actions.JoinGameAction
+import org.luxons.sevenwonders.api.LobbyDTO
+import org.luxons.sevenwonders.api.toDTO
 import org.luxons.sevenwonders.errors.ApiMisuseException
 import org.luxons.sevenwonders.lobby.Lobby
 import org.luxons.sevenwonders.repositories.LobbyRepository
@@ -38,9 +40,9 @@ class GameBrowserController @Autowired constructor(
      * @return the current list of [Lobby]s
      */
     @SubscribeMapping("/games") // prefix /topic not shown
-    fun listGames(principal: Principal): Collection<Lobby> {
+    fun listGames(principal: Principal): Collection<LobbyDTO> {
         logger.info("Player '{}' subscribed to /topic/games", principal.name)
-        return lobbyRepository.list()
+        return lobbyRepository.list().map { it.toDTO(principal.name) }
     }
 
     /**
@@ -53,7 +55,7 @@ class GameBrowserController @Autowired constructor(
      */
     @MessageMapping("/lobby/create")
     @SendToUser("/queue/lobby/joined")
-    fun createGame(@Validated action: CreateGameAction, principal: Principal): Lobby {
+    fun createGame(@Validated action: CreateGameAction, principal: Principal): LobbyDTO {
         checkThatUserIsNotInAGame(principal, "cannot create another game")
 
         val gameOwner = playerRepository.find(principal.name)
@@ -64,8 +66,9 @@ class GameBrowserController @Autowired constructor(
         )
 
         // notify everyone that a new game exists
-        template.convertAndSend("/topic/games", listOf(lobby))
-        return lobby
+        val lobbyDto = lobby.toDTO(principal.name)
+        template.convertAndSend("/topic/games", listOf(lobbyDto))
+        return lobbyDto
     }
 
     /**
@@ -78,18 +81,19 @@ class GameBrowserController @Autowired constructor(
      */
     @MessageMapping("/lobby/join")
     @SendToUser("/queue/lobby/joined")
-    fun joinGame(@Validated action: JoinGameAction, principal: Principal): Lobby {
+    fun joinGame(@Validated action: JoinGameAction, principal: Principal): LobbyDTO {
         checkThatUserIsNotInAGame(principal, "cannot join another game")
 
-        val lobby = lobbyRepository.find(action.gameId!!)
+        val lobby = lobbyRepository.find(action.gameId)
         val newPlayer = playerRepository.find(principal.name)
         lobby.addPlayer(newPlayer)
 
         logger.info(
             "Player '{}' ({}) joined game {}", newPlayer.displayName, newPlayer.username, lobby.name
         )
-        lobbyController.sendLobbyUpdateToPlayers(lobby)
-        return lobby
+        val lobbyDTO = lobby.toDTO(principal.name)
+        lobbyController.sendLobbyUpdateToPlayers(lobbyDTO)
+        return lobbyDTO
     }
 
     private fun checkThatUserIsNotInAGame(principal: Principal, impossibleActionDescription: String) {
@@ -103,7 +107,6 @@ class GameBrowserController @Autowired constructor(
         ApiMisuseException("Client already in game '$gameName', $impossibleActionDescription")
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(GameBrowserController::class.java)
     }
 }

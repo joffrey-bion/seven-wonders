@@ -3,7 +3,8 @@ package org.luxons.sevenwonders.controllers
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.actions.UpdateSettingsAction
-import org.luxons.sevenwonders.lobby.Lobby
+import org.luxons.sevenwonders.api.LobbyDTO
+import org.luxons.sevenwonders.api.toDTO
 import org.luxons.sevenwonders.lobby.Player
 import org.luxons.sevenwonders.repositories.LobbyRepository
 import org.luxons.sevenwonders.repositories.PlayerRepository
@@ -43,7 +44,7 @@ class LobbyController @Autowired constructor(
         }
 
         logger.info("Player {} left game '{}'", player, lobby.name)
-        sendLobbyUpdateToPlayers(lobby)
+        sendLobbyUpdateToPlayers(lobby.toDTO(principal.name))
     }
 
     /**
@@ -60,7 +61,7 @@ class LobbyController @Autowired constructor(
         lobby.reorderPlayers(action.orderedPlayers)
 
         logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
-        sendLobbyUpdateToPlayers(lobby)
+        sendLobbyUpdateToPlayers(lobby.toDTO(principal.name))
     }
 
     /**
@@ -77,10 +78,10 @@ class LobbyController @Autowired constructor(
         lobby.settings = action.settings
 
         logger.info("Updated settings of game '{}'", lobby.name)
-        sendLobbyUpdateToPlayers(lobby)
+        sendLobbyUpdateToPlayers(lobby.toDTO(principal.name))
     }
 
-    internal fun sendLobbyUpdateToPlayers(lobby: Lobby) {
+    internal fun sendLobbyUpdateToPlayers(lobby: LobbyDTO) {
         template.convertAndSend("/topic/lobby/" + lobby.id + "/updated", lobby)
         template.convertAndSend("/topic/games", listOf(lobby))
     }

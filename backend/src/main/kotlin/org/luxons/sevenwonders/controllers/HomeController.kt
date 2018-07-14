@@ -2,7 +2,8 @@ package org.luxons.sevenwonders.controllers
 
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.actions.ChooseNameAction
-import org.luxons.sevenwonders.lobby.Player
+import org.luxons.sevenwonders.api.PlayerDTO
+import org.luxons.sevenwonders.api.toDTO
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,16 +30,16 @@ class HomeController @Autowired constructor(
      * @param principal
      * the connected user's information
      *
-     * @return the created [Player] object
+     * @return the created [PlayerDTO] object
      */
     @MessageMapping("/chooseName")
     @SendToUser("/queue/nameChoice")
-    fun chooseName(@Validated action: ChooseNameAction, principal: Principal): Player {
+    fun chooseName(@Validated action: ChooseNameAction, principal: Principal): PlayerDTO {
         val username = principal.name
         val player = playerRepository.createOrUpdate(username, action.playerName)
 
         logger.info("Player '{}' chose the name '{}'", username, player.displayName)
-        return player
+        return player.toDTO(username)
     }
 
     companion object {

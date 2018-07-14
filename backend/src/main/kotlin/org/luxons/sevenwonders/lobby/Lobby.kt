@@ -12,20 +12,18 @@ enum class State {
 class Lobby(
     val id: Long,
     val name: String,
-    private var _owner: Player,
+    var owner: Player,
     @field:Transient private val gameDefinition: GameDefinition
 ) {
     private var players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
 
     var settings: CustomizableSettings = CustomizableSettings()
 
-    var owner = _owner.username
-
     var state = State.LOBBY
         private set
 
     init {
-        addPlayer(_owner)
+        addPlayer(owner)
     }
 
     fun getPlayers(): List<Player> = players
@@ -73,7 +71,7 @@ class Lobby(
         players.firstOrNull { it.username == username } ?: throw UnknownPlayerException(username)
 
     @Synchronized
-    fun isOwner(username: String?): Boolean = _owner.username == username
+    fun isOwner(username: String?): Boolean = owner.username == username
 
     @Synchronized
     fun containsUser(username: String): Boolean = players.any { it.username == username }
@@ -84,8 +82,8 @@ class Lobby(
         players.remove(player)
         player.leave()
 
-        if (player == _owner && !players.isEmpty()) {
-            _owner = players[0]
+        if (player == owner && !players.isEmpty()) {
+            owner = players[0]
         }
         return player
     }

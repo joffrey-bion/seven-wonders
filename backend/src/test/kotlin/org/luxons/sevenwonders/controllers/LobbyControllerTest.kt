@@ -42,7 +42,7 @@ class LobbyControllerTest {
 
         assertTrue(lobby.getPlayers().contains(owner))
         assertSame(lobby, owner.lobby)
-        assertEquals(owner.username, lobby.owner)
+        assertEquals(owner, lobby.owner)
         assertTrue(owner.isInLobby)
         assertFalse(owner.isInGame)
     }
