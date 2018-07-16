@@ -2,31 +2,25 @@ package org.luxons.sevenwonders.game.resources
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.game.test.createTransaction
+import org.luxons.sevenwonders.game.test.of
 
 class ResourceTransactionsTest {
 
     @Test
     fun toTransactions() {
-        val transactionList = listOf(
-            createTransaction(Provider.LEFT_PLAYER, ResourceType.WOOD),
-            createTransaction(Provider.LEFT_PLAYER, ResourceType.CLAY),
-            createTransaction(Provider.RIGHT_PLAYER, ResourceType.WOOD)
+        val transactionMap = mapOf(
+            Provider.LEFT_PLAYER to (1 of WOOD) + (1 of CLAY),
+            Provider.RIGHT_PLAYER to (1 of WOOD)
         )
-
-        val transactions = ResourceTransactions(transactionList)
 
         val expectedNormalized = setOf(
-            createTransaction(Provider.LEFT_PLAYER, ResourceType.WOOD, ResourceType.CLAY),
-            createTransaction(Provider.RIGHT_PLAYER, ResourceType.WOOD)
+            createTransaction(Provider.LEFT_PLAYER, WOOD, CLAY),
+            createTransaction(Provider.RIGHT_PLAYER, WOOD)
         )
 
-        assertEquals(expectedNormalized, transactions.asList().toSet())
-    }
-
-    @Test(expected = IllegalStateException::class)
-    fun remove_failsIfNoResourceForThatProvider() {
-        val transactions = ResourceTransactions()
-        transactions.remove(Provider.LEFT_PLAYER, Resources(ResourceType.WOOD))
+        assertEquals(expectedNormalized, transactionMap.toTransactions().toSet())
     }
 }

@@ -14,7 +14,7 @@ abstract class Move internal constructor(
     val type: MoveType = move.type
 
     // TODO restore visibility to public
-    internal val transactions: ResourceTransactions = ResourceTransactions(move.transactions)
+    internal val transactions: ResourceTransactions = move.transactions
 
     internal abstract fun place(discardedCards: MutableList<Card>, settings: Settings)
 

@@ -4,20 +4,10 @@ import org.luxons.sevenwonders.game.Player
 import java.util.ArrayList
 import java.util.EnumSet
 
-internal fun bestPrice(resources: Resources, player: Player): Int? {
-    return bestSolution(resources, player)?.price
-}
+internal fun bestSolution(resources: Resources, player: Player): TransactionPlan =
+    BestPriceCalculator(resources, player).computeBestSolution()
 
-internal fun bestTransaction(resources: Resources, player: Player): ResourceTransactions? {
-    return bestSolution(resources, player)?.transactions
-}
-
-internal fun bestSolution(resources: Resources, player: Player): TransactionPlan? {
-    val calculator = BestPriceCalculator(resources, player)
-    return calculator.computeBestSolution()
-}
-
-internal data class TransactionPlan(val price: Int, val transactions: ResourceTransactions)
+internal data class TransactionPlan(val price: Int, val possibleTransactions: Set<ResourceTransactions>)
 
 private class ResourcePool(
     val provider: Provider?,
@@ -30,16 +20,16 @@ private class ResourcePool(
 private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
 
     private val pools: List<ResourcePool>
-    private val resourcesLeftToPay: Resources
-    private val boughtResources: ResourceTransactions = ResourceTransactions()
+    private val resourcesLeftToPay: MutableResources
+    private val boughtResources: MutableMap<Provider, MutableResources> = HashMap()
     private var pricePaid: Int = 0
 
-    var bestSolution: ResourceTransactions? = null
-    var bestPrice: Int = Integer.MAX_VALUE
+    private var bestSolutions: MutableSet<ResourceTransactions> = mutableSetOf()
+    private var bestPrice: Int = Integer.MAX_VALUE
 
     init {
         val board = player.board
-        this.resourcesLeftToPay = resourcesToPay.minus(board.production.fixedResources)
+        this.resourcesLeftToPay = resourcesToPay.minus(board.production.getFixedResources()).toMutableResources()
         this.pools = createResourcePools(player)
     }
 
@@ -56,24 +46,25 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
 
         for (provider in providers) {
             val providerBoard = player.getBoard(provider.boardPosition)
-            val pool = ResourcePool(provider, rules, providerBoard.publicProduction.asChoices().map { it.toMutableSet() }.toSet())
+            val choices = providerBoard.publicProduction.asChoices().map { it.toMutableSet() }.toSet()
+            val pool = ResourcePool(provider, rules, choices)
             pools.add(pool)
         }
         return pools
     }
 
-    fun computeBestSolution(): TransactionPlan? {
+    fun computeBestSolution(): TransactionPlan {
         computePossibilities()
-        return if (bestSolution == null) null else TransactionPlan(bestPrice, bestSolution!!)
+        return TransactionPlan(bestPrice, bestSolutions)
     }
 
     private fun computePossibilities() {
-        if (resourcesLeftToPay.isEmpty) {
+        if (resourcesLeftToPay.isEmpty()) {
             updateBestSolutionIfNeeded()
             return
         }
         for (type in ResourceType.values()) {
-            if (resourcesLeftToPay.getQuantity(type) > 0) {
+            if (resourcesLeftToPay[type] > 0) {
                 for (pool in pools) {
                     if (pool.provider == null) {
                         computeSelfPossibilities(type, pool)
@@ -94,12 +85,20 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
     private fun computeNeighbourPossibilities(pool: ResourcePool, type: ResourceType, provider: Provider) {
         val cost = pool.getCost(type)
         resourcesLeftToPay.remove(type, 1)
-        boughtResources.add(provider, Resources(type))
-        pricePaid += cost
+        buyOne(provider, type, cost)
         computePossibilitiesWhenUsing(type, pool)
-        pricePaid -= cost
-        boughtResources.remove(provider, Resources(type))
+        unbuyOne(provider, type, cost)
         resourcesLeftToPay.add(type, 1)
+    }
+
+    fun buyOne(provider: Provider, type: ResourceType, cost: Int) {
+        boughtResources.getOrPut(provider) { MutableResources() }.add(type, 1)
+        pricePaid += cost
+    }
+
+    fun unbuyOne(provider: Provider, type: ResourceType, cost: Int) {
+        pricePaid -= cost
+        boughtResources.get(provider)!!.remove(type, 1)
     }
 
     private fun computePossibilitiesWhenUsing(type: ResourceType, pool: ResourcePool) {
@@ -114,9 +113,13 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
     }
 
     private fun updateBestSolutionIfNeeded() {
+        if (pricePaid > bestPrice) return
+
         if (pricePaid < bestPrice) {
             bestPrice = pricePaid
-            bestSolution = ResourceTransactions(boughtResources.asList())
+            bestSolutions.clear()
         }
+        // avoid mutating the resources from the transactions
+        bestSolutions.add(boughtResources.mapValues { MutableResources(HashMap(it.value.quantities)) }.toTransactions())
     }
 }

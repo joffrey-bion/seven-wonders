@@ -15,10 +15,10 @@ import java.lang.reflect.Type
 internal class ProductionSerializer : JsonSerializer<Production>, JsonDeserializer<Production> {
 
     override fun serialize(production: Production, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        val fixedResources = production.fixedResources
+        val fixedResources = production.getFixedResources()
         val choices = production.getAlternativeResources()
         return when {
-            fixedResources.isEmpty -> serializeAsChoice(choices, context)
+            fixedResources.isEmpty() -> serializeAsChoice(choices, context)
             choices.isEmpty() -> serializeAsResources(fixedResources, context)
             else -> throw IllegalArgumentException("Cannot serialize a production with mixed fixed resources and choices")
         }

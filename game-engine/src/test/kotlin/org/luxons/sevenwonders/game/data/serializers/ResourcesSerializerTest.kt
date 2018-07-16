@@ -6,8 +6,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.resources.MutableResources
+import org.luxons.sevenwonders.game.resources.ResourceType.*
 import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.game.resources.emptyResources
+import org.luxons.sevenwonders.game.resources.resourcesOf
 
 class ResourcesSerializerTest {
 
@@ -15,7 +18,10 @@ class ResourcesSerializerTest {
 
     @Before
     fun setUp() {
-        gson = GsonBuilder().registerTypeAdapter(Resources::class.java, ResourcesSerializer()).create()
+        gson = GsonBuilder()
+            .registerTypeAdapter(Resources::class.java, ResourcesSerializer())
+            .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
+            .create()
     }
 
     @Test
@@ -25,40 +31,31 @@ class ResourcesSerializerTest {
 
     @Test
     fun serialize_emptyResourcesToNull() {
-        val resources = Resources()
+        val resources = emptyResources()
         assertEquals("null", gson!!.toJson(resources))
     }
 
     @Test
     fun serialize_singleType() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 1)
+        val resources = resourcesOf(WOOD)
         assertEquals("\"W\"", gson!!.toJson(resources))
     }
 
     @Test
     fun serialize_multipleTimesSameType() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 3)
+        val resources = resourcesOf(WOOD to 3)
         assertEquals("\"WWW\"", gson!!.toJson(resources))
     }
 
     @Test
     fun serialize_mixedTypes() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 1)
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 1)
+        val resources = resourcesOf(WOOD, STONE, CLAY)
         assertEquals("\"WSC\"", gson!!.toJson(resources))
     }
 
     @Test
     fun serialize_mixedTypes_unordered() {
-        val resources = Resources()
-        resources.add(ResourceType.CLAY, 1)
-        resources.add(ResourceType.WOOD, 2)
-        resources.add(ResourceType.CLAY, 1)
-        resources.add(ResourceType.STONE, 1)
+        val resources = resourcesOf(CLAY to 1, WOOD to 2, CLAY to 1, STONE to 1)
         assertEquals("\"CCWWS\"", gson!!.toJson(resources))
     }
 
@@ -69,39 +66,31 @@ class ResourcesSerializerTest {
 
     @Test
     fun deserialize_emptyList() {
-        val resources = Resources()
+        val resources = emptyResources()
         assertEquals(resources, gson!!.fromJson("\"\"", Resources::class.java))
     }
 
     @Test
     fun deserialize_singleType() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 1)
+        val resources = resourcesOf(WOOD)
         assertEquals(resources, gson!!.fromJson("\"W\"", Resources::class.java))
     }
 
     @Test
     fun deserialize_multipleTimesSameType() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 3)
+        val resources = resourcesOf(WOOD to 3)
         assertEquals(resources, gson!!.fromJson("\"WWW\"", Resources::class.java))
     }
 
     @Test
     fun deserialize_mixedTypes() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 1)
-        resources.add(ResourceType.CLAY, 1)
-        resources.add(ResourceType.STONE, 1)
+        val resources = resourcesOf(WOOD, CLAY, STONE)
         assertEquals(resources, gson!!.fromJson("\"WCS\"", Resources::class.java))
     }
 
     @Test
     fun deserialize_mixedTypes_unordered() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 1)
-        resources.add(ResourceType.CLAY, 2)
-        resources.add(ResourceType.STONE, 3)
+        val resources = resourcesOf(WOOD to 1, CLAY to 2, STONE to 3)
         assertEquals(resources, gson!!.fromJson("\"SCWCSS\"", Resources::class.java))
     }
 }

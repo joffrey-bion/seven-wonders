@@ -11,7 +11,9 @@ import org.luxons.sevenwonders.game.data.GameDefinitionLoader
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.ResourceTransaction
-import org.luxons.sevenwonders.game.resources.bestTransaction
+import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.game.resources.bestSolution
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
 import java.util.HashMap
 
@@ -78,16 +80,19 @@ class GameTest {
         return PlayerMove(MoveType.DISCARD, firstCardInHand.card.name)
     }
 
-    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): List<ResourceTransaction> {
+    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): Collection<ResourceTransaction> {
         if (handCard.isFree) {
             return emptyList()
         }
         val requiredResources = handCard.card.requirements.resources
         val table = turnInfo.table
         val playerIndex = turnInfo.playerIndex
-        val transactions = bestTransaction(requiredResources, PlayerContext(playerIndex, table, listOf()))
         // we're supposed to have a best transaction plan because the card is playable
-        return transactions!!.asList()
+        return bestTransaction(requiredResources, PlayerContext(playerIndex, table, listOf()))
+    }
+
+    private fun bestTransaction(resources: Resources, player: Player): ResourceTransactions {
+        return bestSolution(resources, player).possibleTransactions.first()
     }
 
     private fun createPickGuildMove(turnInfo: PlayerTurnInfo): PlayerMove {

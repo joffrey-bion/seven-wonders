@@ -15,22 +15,10 @@ class TradingRules internal constructor(private val defaultCost: Int) {
         costs.computeIfAbsent(type) { mutableMapOf() }[provider] = cost
     }
 
-    internal fun computeCost(transactions: ResourceTransactions): Int {
-        return transactions.asList().map { this.computeCost(it) }.sum()
-    }
+    internal fun computeCost(transactions: ResourceTransactions): Int = transactions.map { computeCost(it) }.sum()
 
-    internal fun computeCost(transaction: ResourceTransaction): Int {
-        val resources = transaction.resources
-        val provider = transaction.provider
-        return computeCost(resources, provider)
-    }
+    internal fun computeCost(transact: ResourceTransaction) = computeCost(transact.resources, transact.provider)
 
-    private fun computeCost(resources: Resources, provider: Provider): Int {
-        var total = 0
-        for (type in ResourceType.values()) {
-            val count = resources.getQuantity(type)
-            total += getCost(type, provider) * count
-        }
-        return total
-    }
+    private fun computeCost(resources: Resources, provider: Provider): Int =
+        resources.quantities.map { (type, qty) -> getCost(type, provider) * qty }.sum()
 }

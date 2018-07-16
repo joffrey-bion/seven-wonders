@@ -65,7 +65,7 @@ dependencies {
     annotationProcessor 'org.hildan.livedoc:livedoc-javadoc-processor:4.3.2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'org.hildan.jackstomp:jackstomp:1.1.0'
+    testCompile 'org.hildan.jackstomp:jackstomp:2.0.0'
 
     checkstyleConfig 'org.hildan.checkstyle:checkstyle-config:2.1.0'
 }

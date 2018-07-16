@@ -8,8 +8,8 @@ import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.resources.Production
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.wonders.Wonder
 
@@ -36,7 +36,7 @@ class CardTest {
         table.getBoard(0).gold = 3
         table.getBoard(1).gold = 3
         table.getBoard(2).gold = 3
-        treeFarmCard.applyTo(SimplePlayer(0, table), ResourceTransactions())
+        treeFarmCard.applyTo(SimplePlayer(0, table), noTransactions())
         assertEquals(2, table.getBoard(0).gold.toLong())
         assertEquals(3, table.getBoard(1).gold.toLong())
         assertEquals(3, table.getBoard(2).gold.toLong())

@@ -4,6 +4,7 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
+import org.luxons.sevenwonders.game.resources.ResourceType.*
 import java.util.NoSuchElementException
 
 class ResourcesTest {
@@ -14,503 +15,417 @@ class ResourcesTest {
 
     @Test
     fun init_shouldBeEmpty() {
-        val resources = Resources()
-        for (resourceType in ResourceType.values()) {
-            assertEquals(0, resources.getQuantity(resourceType).toLong())
+        val resources = emptyResources()
+        for (resourceType in values()) {
+            assertEquals(0, resources[resourceType])
         }
-        assertEquals(0, resources.size().toLong())
-        assertTrue(resources.isEmpty)
+        assertEquals(0, resources.size)
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun add_zero() {
-        val resources = Resources()
-        resources.add(ResourceType.CLAY, 0)
-        assertEquals(0, resources.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, resources.size().toLong())
-        assertTrue(resources.isEmpty)
+        val resources = mutableResourcesOf()
+        resources.add(CLAY, 0)
+        assertEquals(0, resources[CLAY])
+        assertEquals(0, resources.size)
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun add_simple() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 3)
-        assertEquals(3, resources.getQuantity(ResourceType.WOOD).toLong())
-        assertEquals(3, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        val resources = mutableResourcesOf()
+        resources.add(WOOD, 3)
+        assertEquals(3, resources[WOOD])
+        assertEquals(3, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun add_multipleCallsStacked() {
-        val resources = Resources()
-        resources.add(ResourceType.ORE, 3)
-        resources.add(ResourceType.ORE, 2)
-        assertEquals(5, resources.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(5, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        val resources = mutableResourcesOf()
+        resources.add(ORE, 3)
+        resources.add(ORE, 2)
+        assertEquals(5, resources[ORE])
+        assertEquals(5, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun add_interlaced() {
-        val resources = Resources()
-        resources.add(ResourceType.GLASS, 3)
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.WOOD, 4)
-        resources.add(ResourceType.GLASS, 2)
-        assertEquals(5, resources.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(10, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        val resources = mutableResourcesOf()
+        resources.add(GLASS, 3)
+        resources.add(STONE, 1)
+        resources.add(WOOD, 4)
+        resources.add(GLASS, 2)
+        assertEquals(5, resources[GLASS])
+        assertEquals(10, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun plus_zero() {
-        val resources = Resources(mapOf(ResourceType.CLAY to 2))
-        val resourcesPlusZero = resources + Resources()
-        val zeroPlusResources = Resources() + resources
+        val resources = resourcesOf(CLAY to 2)
+        val resourcesPlusZero = resources + emptyResources()
+        val zeroPlusResources = emptyResources() + resources
 
-        assertEquals(2, resourcesPlusZero.getQuantity(ResourceType.CLAY))
-        assertEquals(2, resourcesPlusZero.size())
-        assertEquals(2, zeroPlusResources.getQuantity(ResourceType.CLAY))
-        assertEquals(2, zeroPlusResources.size())
+        assertEquals(2, resourcesPlusZero[CLAY])
+        assertEquals(2, resourcesPlusZero.size)
+        assertEquals(2, zeroPlusResources[CLAY])
+        assertEquals(2, zeroPlusResources.size)
     }
 
     @Test
     fun plus_sameResource() {
-        val resources1 = Resources(mapOf(ResourceType.WOOD to 1))
-        val resources2 = Resources(mapOf(ResourceType.WOOD to 3))
+        val resources1 = resourcesOf(WOOD to 1)
+        val resources2 = resourcesOf(WOOD to 3)
         val sum = resources1 + resources2
 
-        assertEquals(4, sum.getQuantity(ResourceType.WOOD).toLong())
-        assertEquals(4, sum.size())
+        assertEquals(1, resources1.size)
+        assertEquals(3, resources2.size)
+        assertEquals(4, sum[WOOD])
+        assertEquals(4, sum.size)
     }
 
     @Test
-    fun plus_differentResources() {
-        val resources1 = Resources(mapOf(ResourceType.WOOD to 1))
-        val resources2 = Resources(mapOf(ResourceType.ORE to 3))
+    fun plus_differentemptyResources() {
+        val resources1 = resourcesOf(WOOD to 1)
+        val resources2 = resourcesOf(ORE to 3)
         val sum = resources1 + resources2
 
-        assertEquals(1, sum.getQuantity(ResourceType.WOOD).toLong())
-        assertEquals(3, sum.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(4, sum.size())
+        assertEquals(1, resources1.size)
+        assertEquals(3, resources2.size)
+        assertEquals(1, sum[WOOD])
+        assertEquals(3, sum[ORE])
+        assertEquals(4, sum.size)
     }
 
     @Test
-    fun plus_overlappingResources() {
-        val resources1 = Resources(mapOf(ResourceType.WOOD to 1))
-        val resources2 = Resources(mapOf(ResourceType.WOOD to 2, ResourceType.ORE to 4))
+    fun plus_overlappingemptyResources() {
+        val resources1 = resourcesOf(WOOD to 1)
+        val resources2 = resourcesOf(WOOD to 2, ORE to 4)
         val sum = resources1 + resources2
 
-        assertEquals(3, sum.getQuantity(ResourceType.WOOD).toLong())
-        assertEquals(4, sum.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(7, sum.size())
+        assertEquals(1, resources1.size)
+        assertEquals(6, resources2.size)
+        assertEquals(3, sum[WOOD])
+        assertEquals(4, sum[ORE])
+        assertEquals(7, sum.size)
     }
 
     @Test
     fun remove_some() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 3)
-        resources.remove(ResourceType.WOOD, 2)
-        assertEquals(1, resources.getQuantity(ResourceType.WOOD).toLong())
-        assertEquals(1, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        val resources = mutableResourcesOf(WOOD to 3)
+        resources.remove(WOOD, 2)
+        assertEquals(1, resources[WOOD])
+        assertEquals(1, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun remove_all() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 3)
-        resources.remove(ResourceType.WOOD, 3)
-        assertEquals(0, resources.getQuantity(ResourceType.WOOD).toLong())
-        assertEquals(0, resources.size().toLong())
-        assertTrue(resources.isEmpty)
+        val resources = mutableResourcesOf(WOOD to 3)
+        resources.remove(WOOD, 3)
+        assertEquals(0, resources[WOOD])
+        assertEquals(0, resources.size)
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun remove_tooMany() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 2)
+        val resources = mutableResourcesOf(WOOD to 2)
 
         thrown.expect(NoSuchElementException::class.java)
-        resources.remove(ResourceType.WOOD, 3)
+        resources.remove(WOOD, 3)
     }
 
     @Test
     fun addAll_empty() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
+        val resources = mutableResourcesOf(STONE to 1, CLAY to 3)
 
-        val emptyResources = Resources()
+        val emptyResources = emptyResources()
 
-        resources.addAll(emptyResources)
-        assertEquals(1, resources.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(3, resources.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.LOOM).toLong())
-        assertEquals(4, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        resources.add(emptyResources)
+        assertEquals(1, resources[STONE])
+        assertEquals(3, resources[CLAY])
+        assertEquals(0, resources[ORE])
+        assertEquals(0, resources[GLASS])
+        assertEquals(0, resources[LOOM])
+        assertEquals(4, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun addAll_zeros() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
+        val resources = mutableResourcesOf(STONE to 1, CLAY to 3)
 
-        val emptyResources = Resources()
-        emptyResources.add(ResourceType.STONE, 0)
-        emptyResources.add(ResourceType.CLAY, 0)
+        val emptyResources = resourcesOf(STONE to 0, CLAY to 0)
 
-        resources.addAll(emptyResources)
-        assertEquals(1, resources.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(3, resources.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.LOOM).toLong())
-        assertEquals(4, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        resources.add(emptyResources)
+        assertEquals(1, resources[STONE])
+        assertEquals(3, resources[CLAY])
+        assertEquals(0, resources[ORE])
+        assertEquals(0, resources[GLASS])
+        assertEquals(0, resources[LOOM])
+        assertEquals(4, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun addAll_same() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
+        val resources = mutableResourcesOf(STONE to 1, CLAY to 3)
+        val resources2 = resourcesOf(STONE to 2, CLAY to 6)
 
-        val resources2 = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 6)
-
-        resources.addAll(resources2)
-        assertEquals(3, resources.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(9, resources.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.LOOM).toLong())
-        assertEquals(12, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        resources.add(resources2)
+        assertEquals(3, resources[STONE])
+        assertEquals(9, resources[CLAY])
+        assertEquals(0, resources[ORE])
+        assertEquals(0, resources[GLASS])
+        assertEquals(0, resources[LOOM])
+        assertEquals(12, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun addAll_overlap() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
+        val resources = mutableResourcesOf(STONE to 1, CLAY to 3)
+        val resources2 = resourcesOf(CLAY to 6, ORE to 4)
 
-        val resources2 = Resources()
-        resources.add(ResourceType.CLAY, 6)
-        resources.add(ResourceType.ORE, 4)
-
-        resources.addAll(resources2)
-        assertEquals(1, resources.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(9, resources.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(4, resources.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, resources.getQuantity(ResourceType.LOOM).toLong())
-        assertEquals(14, resources.size().toLong())
-        assertFalse(resources.isEmpty)
+        resources.add(resources2)
+        assertEquals(1, resources[STONE])
+        assertEquals(9, resources[CLAY])
+        assertEquals(4, resources[ORE])
+        assertEquals(0, resources[GLASS])
+        assertEquals(0, resources[LOOM])
+        assertEquals(14, resources.size)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun contains_emptyContainsEmpty() {
-        val emptyResources = Resources()
-        val emptyResources2 = Resources()
+        val emptyResources = emptyResources()
+        val emptyResources2 = emptyResources()
         assertTrue(emptyResources.containsAll(emptyResources2))
     }
 
     @Test
     fun contains_singleTypeContainsEmpty() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-
-        val emptyResources = Resources()
+        val resources = resourcesOf(STONE to 1)
+        val emptyResources = emptyResources()
 
         assertTrue(resources.containsAll(emptyResources))
     }
 
     @Test
     fun contains_multipleTypesContainsEmpty() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
-
-        val emptyResources = Resources()
+        val resources = resourcesOf(STONE to 1, CLAY to 3)
+        val emptyResources = emptyResources()
 
         assertTrue(resources.containsAll(emptyResources))
     }
 
     @Test
     fun contains_self() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 1, CLAY to 3)
 
         assertTrue(resources.containsAll(resources))
     }
 
     @Test
     fun contains_allOfEachType() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.STONE, 1)
-        resources2.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 1, CLAY to 3)
+        val resources2 = resourcesOf(STONE to 1, CLAY to 3)
 
         assertTrue(resources.containsAll(resources2))
     }
 
     @Test
     fun contains_someOfEachType() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.STONE, 1)
-        resources2.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 2, CLAY to 4)
+        val resources2 = resourcesOf(STONE to 1, CLAY to 3)
 
         assertTrue(resources.containsAll(resources2))
     }
 
     @Test
     fun contains_someOfSomeTypes() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 2, CLAY to 4)
+        val resources2 = resourcesOf(CLAY to 3)
 
         assertTrue(resources.containsAll(resources2))
     }
 
     @Test
     fun contains_allOfSomeTypes() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.CLAY, 4)
+        val resources = resourcesOf(STONE to 2, CLAY to 4)
+        val resources2 = resourcesOf(CLAY to 4)
 
         assertTrue(resources.containsAll(resources2))
     }
 
     @Test
     fun minus_empty() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
-
-        val emptyResources = Resources()
+        val resources = resourcesOf(STONE to 1, CLAY to 3)
+        val emptyResources = emptyResources()
 
         val diff = resources.minus(emptyResources)
-        assertEquals(1, diff.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(3, diff.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(1, diff[STONE])
+        assertEquals(3, diff[CLAY])
+        assertEquals(0, diff[ORE])
+        assertEquals(0, diff[GLASS])
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_self() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 1, CLAY to 3)
 
         val diff = resources.minus(resources)
-        assertEquals(0, diff.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(0, diff[STONE])
+        assertEquals(0, diff[CLAY])
+        assertEquals(0, diff[ORE])
+        assertEquals(0, diff[GLASS])
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_allOfEachType() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 1)
-        resources.add(ResourceType.CLAY, 3)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.STONE, 1)
-        resources2.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 1, CLAY to 3)
+        val resources2 = resourcesOf(STONE to 1, CLAY to 3)
 
         val diff = resources.minus(resources2)
-        assertEquals(0, diff.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(0, diff[STONE])
+        assertEquals(0, diff[CLAY])
+        assertEquals(0, diff[ORE])
+        assertEquals(0, diff[GLASS])
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_someOfEachType() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.STONE, 1)
-        resources2.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 2, CLAY to 4)
+        val resources2 = resourcesOf(STONE to 1, CLAY to 3)
 
         val diff = resources.minus(resources2)
-        assertEquals(1, diff.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(1, diff.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(1, diff[STONE])
+        assertEquals(1, diff[CLAY])
+        assertEquals(0, diff[ORE])
+        assertEquals(0, diff[GLASS])
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_someOfSomeTypes() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.CLAY, 3)
+        val resources = resourcesOf(STONE to 2, CLAY to 4)
+        val resources2 = resourcesOf(CLAY to 3)
 
         val diff = resources.minus(resources2)
-        assertEquals(2, diff.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(1, diff.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(2, diff[STONE])
+        assertEquals(1, diff[CLAY])
+        assertEquals(0, diff[ORE])
+        assertEquals(0, diff[GLASS])
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_allOfSomeTypes() {
-        val resources = Resources()
-        resources.add(ResourceType.STONE, 2)
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.CLAY, 4)
+        val resources = resourcesOf(STONE to 2, CLAY to 4)
+        val resources2 = resourcesOf(CLAY to 4)
 
         val diff = resources.minus(resources2)
-        assertEquals(2, diff.getQuantity(ResourceType.STONE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.CLAY).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.ORE).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.GLASS).toLong())
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(2, diff[STONE])
+        assertEquals(0, diff[CLAY])
+        assertEquals(0, diff[ORE])
+        assertEquals(0, diff[GLASS])
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_tooMuchOfExistingType() {
-        val resources = Resources()
-        resources.add(ResourceType.CLAY, 4)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.CLAY, 5)
+        val resources = resourcesOf(CLAY to 4)
+        val resources2 = resourcesOf(CLAY to 5)
 
         val diff = resources.minus(resources2)
-        assertEquals(0, diff.getQuantity(ResourceType.CLAY).toLong())
+        assertEquals(0, diff[CLAY])
     }
 
     @Test
     fun minus_someOfAnAbsentType() {
-        val resources = Resources()
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.LOOM, 5)
+        val resources = emptyResources()
+        val resources2 = resourcesOf(LOOM to 5)
 
         val diff = resources.minus(resources2)
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun minus_someOfATypeWithZero() {
-        val resources = Resources()
-        resources.add(ResourceType.LOOM, 0)
-
-        val resources2 = Resources()
-        resources2.add(ResourceType.LOOM, 5)
+        val resources = resourcesOf(LOOM to 0)
+        val resources2 = resourcesOf(LOOM to 5)
 
         val diff = resources.minus(resources2)
-        assertEquals(0, diff.getQuantity(ResourceType.LOOM).toLong())
+        assertEquals(0, diff[LOOM])
     }
 
     @Test
     fun isEmpty_noElement() {
-        val resources = Resources()
-        assertTrue(resources.isEmpty)
+        val resources = emptyResources()
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun isEmpty_singleZeroElement() {
-        val resources = Resources()
-        resources.add(ResourceType.LOOM, 0)
-        assertTrue(resources.isEmpty)
+        val resources = resourcesOf(LOOM to 0)
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun isEmpty_multipleZeroElements() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 0)
-        resources.add(ResourceType.ORE, 0)
-        resources.add(ResourceType.LOOM, 0)
-        assertTrue(resources.isEmpty)
+        val resources = resourcesOf(WOOD to 0, ORE to 0, LOOM to 0)
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun isEmpty_singleElementMoreThanZero() {
-        val resources = Resources()
-        resources.add(ResourceType.LOOM, 3)
-        assertFalse(resources.isEmpty)
+        val resources = resourcesOf(LOOM to 3)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun isEmpty_mixedZeroAndNonZeroElements() {
-        val resources = Resources()
-        resources.add(ResourceType.WOOD, 0)
-        resources.add(ResourceType.LOOM, 3)
-        assertFalse(resources.isEmpty)
+        val resources = resourcesOf(WOOD to 0, LOOM to 3)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun isEmpty_mixedZeroAndNonZeroElements_reverseOrder() {
-        val resources = Resources()
-        resources.add(ResourceType.ORE, 3)
-        resources.add(ResourceType.PAPYRUS, 0)
-        assertFalse(resources.isEmpty)
-    }
-
-    @Test
-    fun equals_falseWhenNull() {
-        val resources = Resources()
-        resources.add(ResourceType.GLASS, 1)
-
-        assertFalse(resources == null)
+        val resources = resourcesOf(ORE to 3, PAPYRUS to 0)
+        assertFalse(resources.isEmpty())
     }
 
     @Test
     fun equals_trueWhenSame() {
-        val resources = Resources()
+        val resources = emptyResources()
         assertEquals(resources, resources)
     }
 
     @Test
     fun equals_trueWhenSameContent() {
-        val resources1 = Resources()
-        val resources2 = Resources()
+        val resources1 = mutableResourcesOf()
+        val resources2 = mutableResourcesOf()
         assertTrue(resources1 == resources2)
-        resources1.add(ResourceType.GLASS, 1)
-        resources2.add(ResourceType.GLASS, 1)
+        resources1.add(GLASS, 1)
+        resources2.add(GLASS, 1)
         assertTrue(resources1 == resources2)
     }
 
     @Test
     fun hashCode_sameWhenSameContent() {
-        val resources1 = Resources()
-        val resources2 = Resources()
-        assertEquals(resources1.hashCode().toLong(), resources2.hashCode().toLong())
-        resources1.add(ResourceType.GLASS, 1)
-        resources2.add(ResourceType.GLASS, 1)
-        assertEquals(resources1.hashCode().toLong(), resources2.hashCode().toLong())
+        val resources1 = mutableResourcesOf()
+        val resources2 = mutableResourcesOf()
+        assertEquals(resources1.hashCode(), resources2.hashCode())
+        resources1.add(GLASS, 1)
+        resources2.add(GLASS, 1)
+        assertEquals(resources1.hashCode(), resources2.hashCode())
     }
 }

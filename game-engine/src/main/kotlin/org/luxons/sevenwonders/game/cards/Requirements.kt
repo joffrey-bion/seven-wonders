@@ -4,11 +4,14 @@ import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.Resources
-import org.luxons.sevenwonders.game.resources.bestPrice
+import org.luxons.sevenwonders.game.resources.asResources
+import org.luxons.sevenwonders.game.resources.bestSolution
+import org.luxons.sevenwonders.game.resources.emptyResources
+import org.luxons.sevenwonders.game.resources.execute
 
 data class Requirements internal constructor(
     val gold: Int = 0,
-    val resources: Resources = Resources()
+    val resources: Resources = emptyResources()
 ) {
     /**
      * Returns whether the given [board] meets these requirements on its own.
@@ -52,8 +55,8 @@ data class Requirements internal constructor(
         if (producesRequiredResources(board)) {
             return true
         }
-        val bestPrice = bestPrice(resources, player)
-        return bestPrice != null && bestPrice <= board.gold - gold
+        val solution = bestSolution(resources, player)
+        return !solution.possibleTransactions.isEmpty() && solution.price <= board.gold - gold
     }
 
     private fun hasRequiredGold(board: Board): Boolean {
@@ -71,7 +74,7 @@ data class Requirements internal constructor(
 
     private fun producesRequiredResourcesWithHelp(board: Board, transactions: ResourceTransactions): Boolean {
         val totalBoughtResources = transactions.asResources()
-        val remainingResources = this.resources.minus(totalBoughtResources)
+        val remainingResources = resources - totalBoughtResources
         return board.production.contains(remainingResources)
     }
 

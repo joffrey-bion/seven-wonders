@@ -7,6 +7,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import org.luxons.sevenwonders.game.resources.MutableResources
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
@@ -17,10 +18,9 @@ class ProductionSerializerTest {
 
     @Before
     fun setUp() {
-        val resourceTypeList = object : TypeToken<List<ResourceType>>() {
-
-        }.type
+        val resourceTypeList = object : TypeToken<List<ResourceType>>() {}.type
         gson = GsonBuilder().registerTypeAdapter(Resources::class.java, ResourcesSerializer())
+            .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
             .registerTypeAdapter(ResourceType::class.java, ResourceTypeSerializer())
             .registerTypeAdapter(resourceTypeList, ResourceTypesSerializer())
             .registerTypeAdapter(Production::class.java, ProductionSerializer())

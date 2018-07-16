@@ -7,7 +7,7 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.test.createResources
+import org.luxons.sevenwonders.game.resources.resourcesOf
 import org.luxons.sevenwonders.game.test.fixedProduction
 import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testTable
@@ -26,11 +26,11 @@ class ProductionIncreaseTest {
 
         effect.applyTo(board)
 
-        val resources = createResources(initialType, addedType)
+        val resources = resourcesOf(initialType, addedType)
         assertTrue(board.production.contains(resources))
         assertFalse(board.publicProduction.contains(resources))
 
-        val moreResources = createResources(initialType, addedType, extraType)
+        val moreResources = resourcesOf(initialType, addedType, extraType)
         assertFalse(board.production.contains(moreResources))
         assertFalse(board.publicProduction.contains(moreResources))
     }
@@ -46,11 +46,11 @@ class ProductionIncreaseTest {
 
         effect.applyTo(board)
 
-        val resources = createResources(initialType, addedType)
+        val resources = resourcesOf(initialType, addedType)
         assertTrue(board.production.contains(resources))
         assertTrue(board.publicProduction.contains(resources))
 
-        val moreResources = createResources(initialType, addedType, extraType)
+        val moreResources = resourcesOf(initialType, addedType, extraType)
         assertFalse(board.production.contains(moreResources))
         assertFalse(board.publicProduction.contains(moreResources))
     }

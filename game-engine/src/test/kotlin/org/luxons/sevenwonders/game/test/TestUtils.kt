@@ -24,6 +24,8 @@ import org.luxons.sevenwonders.game.resources.ResourceTransaction
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.game.resources.noTransactions
+import org.luxons.sevenwonders.game.resources.resourcesOf
 import org.luxons.sevenwonders.game.wonders.Wonder
 import org.luxons.sevenwonders.game.wonders.WonderStage
 import java.util.Arrays
@@ -90,34 +92,29 @@ private fun createWonderStage(vararg effects: Effect): WonderStage {
 
 fun fixedProduction(vararg producedTypes: ResourceType): Production {
     val production = Production()
-    val fixedProducedResources = production.fixedResources
-    fixedProducedResources.addAll(createResources(*producedTypes))
+    production.addAll(resourcesOf(*producedTypes))
     return production
 }
 
-fun createResources(vararg types: ResourceType): Resources {
-    val resources = Resources()
-    for (producedType in types) {
-        resources.add(producedType, 1)
-    }
-    return resources
+infix fun Int.of(type: ResourceType): Resources {
+    return resourcesOf(type to this)
 }
 
 internal fun createTransactions(provider: Provider, vararg resources: ResourceType): ResourceTransactions {
     val transaction = createTransaction(provider, *resources)
-    return ResourceTransactions(listOf(transaction))
+    return listOf(transaction)
 }
 
 internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions {
-    return ResourceTransactions(Arrays.asList(*transactions))
+    return transactions.toList()
 }
 
 fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction {
-    return ResourceTransaction(provider, createResources(*resources))
+    return ResourceTransaction(provider, resourcesOf(*resources))
 }
 
 fun createRequirements(vararg types: ResourceType): Requirements {
-    val resources = createResources(*types)
+    val resources = resourcesOf(*types)
     return Requirements(resources = resources)
 }
 
@@ -209,7 +206,7 @@ fun createScience(compasses: Int, wheels: Int, tablets: Int, jokers: Int): Scien
 internal fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
     val card = testCard(color, effect)
     player.board.addCard(card)
-    card.applyTo(player, ResourceTransactions())
+    card.applyTo(player, noTransactions())
 }
 
 internal fun createMove(context: PlayerContext, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {

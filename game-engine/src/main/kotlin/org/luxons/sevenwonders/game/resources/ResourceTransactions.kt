@@ -2,36 +2,25 @@ package org.luxons.sevenwonders.game.resources
 
 import org.luxons.sevenwonders.game.Player
 
-internal data class ResourceTransactions(private val resourcesByProvider: MutableMap<Provider, Resources> = mutableMapOf()) {
+typealias ResourceTransactions = Collection<ResourceTransaction>
 
-    constructor(transactions: Collection<ResourceTransaction>) : this() {
-        transactions.forEach { t -> add(t.provider, t.resources) }
-    }
+fun noTransactions(): ResourceTransactions = emptyList()
 
-    fun add(provider: Provider, resources: Resources) {
-        resourcesByProvider.merge(provider, resources) { old, new -> old + new }
-    }
+fun Map<Provider, Resources>.toTransactions() =
+    filter { (_, res) -> !res.isEmpty() }.map { (p, res) -> ResourceTransaction(p, res) }
 
-    fun remove(provider: Provider, resources: Resources) {
-        resourcesByProvider.compute(provider) { _, prevResources ->
-            if (prevResources == null) {
-                throw IllegalStateException("Cannot remove resources from resource transactions")
-            }
-            prevResources.minus(resources)
-        }
-    }
+fun ResourceTransactions.asResources(): Resources = map { it.resources }.merge()
 
-    fun execute(player: Player) {
-        asList().forEach { it.execute(player) }
-    }
+internal fun ResourceTransactions.execute(player: Player) = forEach { it.execute(player) }
 
-    fun asList(): List<ResourceTransaction> {
-        return resourcesByProvider
-            .filter { (_, resources) -> !resources.isEmpty }
-            .map { (provider, resources) -> ResourceTransaction(provider, resources) }
-    }
+data class ResourceTransaction(val provider: Provider, val resources: Resources) {
 
-    fun asResources(): Resources {
-        return resourcesByProvider.values.fold(Resources(), Resources::plus)
+    internal fun execute(player: Player) {
+        val board = player.board
+        val price = board.tradingRules.computeCost(this)
+        board.removeGold(price)
+        val providerPosition = provider.boardPosition
+        val providerBoard = player.getBoard(providerPosition)
+        providerBoard.addGold(price)
     }
 }

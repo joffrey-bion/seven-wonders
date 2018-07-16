@@ -1,15 +1,14 @@
 package org.luxons.sevenwonders.game.resources
 
-import java.util.ArrayList
-
+import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeTrue
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.test.*
-
-import org.junit.Assert.assertEquals
-import org.junit.Assume.assumeTrue
+import org.luxons.sevenwonders.game.test.createTransaction
+import org.luxons.sevenwonders.game.test.createTransactions
+import java.util.ArrayList
 
 @RunWith(Theories::class)
 class TradingRulesTest {
@@ -32,7 +31,7 @@ class TradingRulesTest {
     @Theory
     fun computeCost_zeroForNoResources(defaultCost: Int) {
         val rules = TradingRules(defaultCost)
-        assertEquals(0, rules.computeCost(ResourceTransactions()).toLong())
+        assertEquals(0, rules.computeCost(noTransactions()).toLong())
     }
 
     @Theory
@@ -59,9 +58,11 @@ class TradingRulesTest {
 
     @Theory
     fun computeCost_defaultCostWhenOverrideOnOtherProviderOrType(
-        defaultCost: Int, overriddenCost: Int,
+        defaultCost: Int,
+        overriddenCost: Int,
         overriddenProvider: Provider,
-        overriddenType: ResourceType, provider: Provider,
+        overriddenType: ResourceType,
+        provider: Provider,
         type: ResourceType
     ) {
         assumeTrue(overriddenProvider != provider || overriddenType != type)
@@ -73,8 +74,10 @@ class TradingRulesTest {
 
     @Theory
     fun computeCost_oneDefaultAndOneOverriddenType(
-        defaultCost: Int, overriddenCost: Int,
-        overriddenType: ResourceType, provider: Provider,
+        defaultCost: Int,
+        overriddenCost: Int,
+        overriddenType: ResourceType,
+        provider: Provider,
         type: ResourceType
     ) {
         assumeTrue(overriddenType != type)
@@ -86,8 +89,10 @@ class TradingRulesTest {
 
     @Theory
     fun computeCost_oneDefaultAndOneOverriddenProvider(
-        defaultCost: Int, overriddenCost: Int,
-        overriddenProvider: Provider, provider: Provider,
+        defaultCost: Int,
+        overriddenCost: Int,
+        overriddenProvider: Provider,
+        provider: Provider,
         type: ResourceType
     ) {
         assumeTrue(overriddenProvider != provider)
@@ -98,10 +103,7 @@ class TradingRulesTest {
         boughtResources.add(createTransaction(provider, type))
         boughtResources.add(createTransaction(overriddenProvider, type))
 
-        assertEquals(
-            (defaultCost + overriddenCost).toLong(),
-            rules.computeCost(ResourceTransactions(boughtResources)).toLong()
-        )
+        assertEquals(defaultCost + overriddenCost, rules.computeCost(boughtResources))
     }
 
     companion object {

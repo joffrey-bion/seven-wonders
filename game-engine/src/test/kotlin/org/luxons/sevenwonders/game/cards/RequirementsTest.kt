@@ -10,9 +10,9 @@ import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.resources.Provider
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.game.resources.emptyResources
+import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.createRequirements
 import org.luxons.sevenwonders.game.test.createTransactions
 import org.luxons.sevenwonders.game.test.singleBoardPlayer
@@ -25,14 +25,14 @@ class RequirementsTest {
     @Test
     fun getResources_emptyAfterInit() {
         val (_, resources) = Requirements()
-        assertTrue(resources.isEmpty)
+        assertTrue(resources.isEmpty())
     }
 
     @Test
     fun setResources_success() {
-        val resources = Resources()
-        val (_, resources1) = Requirements(0, resources)
-        assertSame(resources, resources1)
+        val resources = emptyResources()
+        val requirements = Requirements(0, resources)
+        assertSame(resources, requirements.resources)
     }
 
     @Theory
@@ -43,7 +43,7 @@ class RequirementsTest {
         val player = singleBoardPlayer(board)
 
         assertEquals(boardGold >= requiredGold, requirements.areMetWithoutNeighboursBy(board))
-        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, ResourceTransactions()))
+        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, noTransactions()))
         assertEquals(boardGold >= requiredGold, requirements.areMetBy(player))
     }
 
@@ -55,10 +55,7 @@ class RequirementsTest {
         val player = singleBoardPlayer(board)
 
         assertEquals(initialResource == requiredResource, requirements.areMetWithoutNeighboursBy(board))
-        assertEquals(
-            initialResource == requiredResource,
-            requirements.areMetWithHelpBy(board, ResourceTransactions())
-        )
+        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
 
         if (initialResource == requiredResource) {
             assertTrue(requirements.areMetBy(player))
@@ -67,7 +64,8 @@ class RequirementsTest {
 
     @Theory
     fun resourceRequirement_ownProduction(
-        initialResource: ResourceType, producedResource: ResourceType,
+        initialResource: ResourceType,
+        producedResource: ResourceType,
         requiredResource: ResourceType
     ) {
         assumeTrue(initialResource != requiredResource)
@@ -79,10 +77,7 @@ class RequirementsTest {
         val player = singleBoardPlayer(board)
 
         assertEquals(producedResource == requiredResource, requirements.areMetWithoutNeighboursBy(board))
-        assertEquals(
-            producedResource == requiredResource,
-            requirements.areMetWithHelpBy(board, ResourceTransactions())
-        )
+        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
 
         if (producedResource == requiredResource) {
             assertTrue(requirements.areMetBy(player))
@@ -91,7 +86,8 @@ class RequirementsTest {
 
     @Theory
     fun resourceRequirement_boughtResource(
-        initialResource: ResourceType, boughtResource: ResourceType,
+        initialResource: ResourceType,
+        boughtResource: ResourceType,
         requiredResource: ResourceType
     ) {
         assumeTrue(initialResource != requiredResource)
@@ -108,10 +104,7 @@ class RequirementsTest {
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board))
         assertEquals(boughtResource == requiredResource, requirements.areMetWithHelpBy(board, resources))
-
-        if (boughtResource == requiredResource) {
-            assertTrue(requirements.areMetBy(player))
-        }
+        assertEquals(boughtResource == requiredResource, requirements.areMetBy(player))
     }
 
     @Theory
@@ -125,10 +118,7 @@ class RequirementsTest {
         val table = Table(Arrays.asList(board, neighbourBoard))
         val player = SimplePlayer(0, table)
 
-        val transactions = createTransactions(
-            Provider.RIGHT_PLAYER,
-            requiredResource
-        )
+        val transactions = createTransactions(Provider.RIGHT_PLAYER, requiredResource)
 
         assertFalse(requirements.areMetWithoutNeighboursBy(board))
         assertTrue(requirements.areMetWithHelpBy(board, transactions))

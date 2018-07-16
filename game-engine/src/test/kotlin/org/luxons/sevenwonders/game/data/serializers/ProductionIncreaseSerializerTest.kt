@@ -8,6 +8,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.game.effects.ProductionIncrease
+import org.luxons.sevenwonders.game.resources.MutableResources
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
@@ -22,6 +23,7 @@ class ProductionIncreaseSerializerTest {
 
         }.type
         gson = GsonBuilder().registerTypeAdapter(Resources::class.java, ResourcesSerializer())
+            .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
             .registerTypeAdapter(ResourceType::class.java, ResourceTypeSerializer())
             .registerTypeAdapter(resourceTypeList, ResourceTypesSerializer())
             .registerTypeAdapter(Production::class.java, ProductionSerializer())

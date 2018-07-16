@@ -18,9 +18,9 @@ import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation
 import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.resources.resourcesOf
 import org.luxons.sevenwonders.game.score.ScoreCategory
 import org.luxons.sevenwonders.game.test.addCards
-import org.luxons.sevenwonders.game.test.createResources
 import org.luxons.sevenwonders.game.test.getDifferentColorFrom
 import org.luxons.sevenwonders.game.test.playCardWithEffect
 import org.luxons.sevenwonders.game.test.singleBoardPlayer
@@ -47,7 +47,7 @@ class BoardTest {
     @Theory
     fun initialProduction_containsInitialResource(type: ResourceType) {
         val board = Board(testWonder(type), 0, Settings(5))
-        val resources = createResources(type)
+        val resources = resourcesOf(type)
         assertTrue(board.production.contains(resources))
         assertTrue(board.publicProduction.contains(resources))
     }

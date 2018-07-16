@@ -10,6 +10,8 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler
 
+const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
+
 @Configuration
 @EnableWebSocketMessageBroker
 class WebSocketConfig @Autowired constructor(private val topicSubscriptionInterceptor: TopicSubscriptionInterceptor) :
@@ -25,7 +27,7 @@ class WebSocketConfig @Autowired constructor(private val topicSubscriptionInterc
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/seven-wonders-websocket")
+        registry.addEndpoint(SEVEN_WONDERS_WS_ENDPOINT)
             .setHandshakeHandler(handshakeHandler())
             .setAllowedOrigins("http://localhost:3000") // to allow frontend server proxy requests in dev mode
             .withSockJS()
