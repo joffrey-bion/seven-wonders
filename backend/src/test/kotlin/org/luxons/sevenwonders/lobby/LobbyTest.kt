@@ -223,7 +223,7 @@ class LobbyTest {
         @JvmStatic
         @BeforeClass
         fun loadDefinition() {
-            gameDefinition = GameDefinitionLoader().gameDefinition
+            gameDefinition = GameDefinitionLoader.gameDefinition
         }
     }
 }

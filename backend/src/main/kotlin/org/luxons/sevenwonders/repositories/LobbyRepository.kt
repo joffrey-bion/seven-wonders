@@ -10,8 +10,6 @@ import java.util.HashMap
 @Repository
 class LobbyRepository @Autowired constructor() {
 
-    private val gameDefinitionLoader: GameDefinitionLoader = GameDefinitionLoader()
-
     private val lobbies = HashMap<Long, Lobby>()
 
     private var lastGameId: Long = 0
@@ -20,7 +18,7 @@ class LobbyRepository @Autowired constructor() {
 
     fun create(gameName: String, owner: Player): Lobby {
         val id = lastGameId++
-        val lobby = Lobby(id, gameName, owner, gameDefinitionLoader.gameDefinition)
+        val lobby = Lobby(id, gameName, owner, GameDefinitionLoader.gameDefinition)
         lobbies[id] = lobby
         return lobby
     }

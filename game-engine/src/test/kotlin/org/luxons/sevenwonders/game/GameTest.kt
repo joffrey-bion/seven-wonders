@@ -38,7 +38,7 @@ class GameTest {
 
     private fun createGame(nbPlayers: Int): Game {
         val settings = testCustomizableSettings()
-        return GameDefinitionLoader().gameDefinition.initGame(0, settings, nbPlayers)
+        return GameDefinitionLoader.gameDefinition.initGame(0, settings, nbPlayers)
     }
 
     private fun playTurn(nbPlayers: Int, game: Game, ageToCheck: Int, handSize: Int) {

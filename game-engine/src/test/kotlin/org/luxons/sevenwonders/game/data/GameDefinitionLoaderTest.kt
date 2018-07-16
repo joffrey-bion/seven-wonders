@@ -7,8 +7,7 @@ class GameDefinitionLoaderTest {
 
     @Test
     fun successfulLoad() {
-        val loader = GameDefinitionLoader()
-        val gameDefinition = loader.gameDefinition
+        val gameDefinition = GameDefinitionLoader.gameDefinition
         assertNotNull(gameDefinition)
     }
 }

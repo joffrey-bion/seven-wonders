@@ -9,7 +9,7 @@ class GameDefinitionTest {
 
     @Test
     fun successfulGameInit() {
-        val gameDefinition = GameDefinitionLoader().gameDefinition
+        val gameDefinition = GameDefinitionLoader.gameDefinition
         assertNotNull(gameDefinition)
         assertEquals(3, gameDefinition.minPlayers.toLong())
         assertEquals(7, gameDefinition.maxPlayers.toLong())

@@ -21,7 +21,7 @@ import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
 
-class GameDefinitionLoader {
+object GameDefinitionLoader {
 
     val gameDefinition: GameDefinition by lazy { load() }
 
