@@ -1,5 +1,19 @@
 # Technical decisions and issues log
 
+## 2018.07.05-10 Kotlin Migration
+[@joffrey-bion][1] — :key: *Backend, Kotlin*
+
+I recently fell in love with Kotlin, as it seems to improve the few things I disliked about Java:
+
+- no unnecessary verbosity, Kotlin is much more condensed than Java: properties, streams, data classes, etc. There 
+seems to be idioms for most things developers do all the time.
+- non-nullability is enforced at compile time when using non nullable types (no more NPEs and unnecessary null checks)
+- Kotlin stdlib has 2 different interfaces for read only and mutable collections
+
+Kotlin claims complete interoperability with Java and the possibility of incremental migration, so I decided to give 
+it a try and migrated the game engine and backend server of Seven Wonders to see how it goes and if I could do this 
+kind of change at work. For now, this has been quite a success.
+
 ## 2017.08-2018.04 Livedoc development
 [@joffrey-bion][1] — :key: *API, Documentation*
 
