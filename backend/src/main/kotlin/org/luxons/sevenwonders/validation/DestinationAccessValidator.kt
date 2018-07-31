@@ -11,10 +11,10 @@ class DestinationAccessValidator @Autowired constructor(private val lobbyReposit
 
     fun hasAccess(username: String?, destination: String): Boolean {
         return when {
-            username == null                                  -> false // unnamed user cannot belong to anything
-            hasForbiddenGameReference(username, destination)  -> false
+            username == null -> false // unnamed user cannot belong to anything
+            hasForbiddenGameReference(username, destination) -> false
             hasForbiddenLobbyReference(username, destination) -> false
-            else                                              -> true
+            else -> true
         }
     }
 

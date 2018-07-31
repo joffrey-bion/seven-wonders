@@ -14,7 +14,7 @@ internal interface Player {
 internal data class SimplePlayer(
     override val index: Int,
     private val table: Table
-): Player {
+) : Player {
     override val board = table.getBoard(index)
     override fun getBoard(relativePosition: RelativeBoardPosition) = table.getBoard(index, relativePosition)
 }

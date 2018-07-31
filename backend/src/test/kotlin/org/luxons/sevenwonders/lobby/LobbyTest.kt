@@ -1,6 +1,10 @@
 package org.luxons.sevenwonders.lobby
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.BeforeClass
@@ -14,7 +18,11 @@ import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader
-import org.luxons.sevenwonders.lobby.Lobby.*
+import org.luxons.sevenwonders.lobby.Lobby.GameAlreadyStartedException
+import org.luxons.sevenwonders.lobby.Lobby.PlayerNameAlreadyUsedException
+import org.luxons.sevenwonders.lobby.Lobby.PlayerOverflowException
+import org.luxons.sevenwonders.lobby.Lobby.PlayerUnderflowException
+import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException
 import java.util.Arrays
 
 @RunWith(Theories::class)

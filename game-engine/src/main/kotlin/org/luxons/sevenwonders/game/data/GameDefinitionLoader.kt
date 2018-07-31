@@ -55,6 +55,6 @@ object GameDefinitionLoader {
             .create()
     }
 
-    private inline fun <reified T: Any> GsonBuilder.registerTypeAdapter(typeAdapter: Any): GsonBuilder
-            = this.registerTypeAdapter(typeToken<T>(), typeAdapter)
+    private inline fun <reified T : Any> GsonBuilder.registerTypeAdapter(typeAdapter: Any): GsonBuilder =
+        this.registerTypeAdapter(typeToken<T>(), typeAdapter)
 }

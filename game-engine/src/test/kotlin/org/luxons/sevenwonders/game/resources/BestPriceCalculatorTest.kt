@@ -6,7 +6,11 @@ import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.resources.Provider.LEFT_PLAYER
 import org.luxons.sevenwonders.game.resources.Provider.RIGHT_PLAYER
-import org.luxons.sevenwonders.game.resources.ResourceType.*
+import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.game.resources.ResourceType.GLASS
+import org.luxons.sevenwonders.game.resources.ResourceType.ORE
+import org.luxons.sevenwonders.game.resources.ResourceType.STONE
+import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.game.test.createTransaction
 import org.luxons.sevenwonders.game.test.createTransactions
 import org.luxons.sevenwonders.game.test.testBoard

@@ -19,9 +19,7 @@ class ProductionIncreaseSerializerTest {
 
     @Before
     fun setUp() {
-        val resourceTypeList = object : TypeToken<List<ResourceType>>() {
-
-        }.type
+        val resourceTypeList = object : TypeToken<List<ResourceType>>() {}.type
         gson = GsonBuilder().registerTypeAdapter(Resources::class.java, ResourcesSerializer())
             .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
             .registerTypeAdapter(ResourceType::class.java, ResourceTypeSerializer())

@@ -1,10 +1,19 @@
 package org.luxons.sevenwonders.game.resources
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
-import org.luxons.sevenwonders.game.resources.ResourceType.*
+import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.game.resources.ResourceType.GLASS
+import org.luxons.sevenwonders.game.resources.ResourceType.LOOM
+import org.luxons.sevenwonders.game.resources.ResourceType.ORE
+import org.luxons.sevenwonders.game.resources.ResourceType.PAPYRUS
+import org.luxons.sevenwonders.game.resources.ResourceType.STONE
+import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
+import org.luxons.sevenwonders.game.resources.ResourceType.values
 import java.util.NoSuchElementException
 
 class ResourcesTest {

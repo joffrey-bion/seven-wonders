@@ -8,7 +8,7 @@ enum class ScienceType {
 
 class Science {
 
-    private val quantities : MutableMap<ScienceType, Int> = mutableMapOf()
+    private val quantities: MutableMap<ScienceType, Int> = mutableMapOf()
 
     var jokers: Int = 0
         private set

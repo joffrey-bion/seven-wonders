@@ -1,9 +1,8 @@
 package org.luxons.sevenwonders.test.api
 
-import java.util.Objects
-
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.lobby.State
+import java.util.Objects
 
 class ApiLobby {
 
@@ -19,14 +18,14 @@ class ApiLobby {
 
     var state: State? = null
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
             return true
         }
-        if (o == null || javaClass != o.javaClass) {
+        if (other == null || javaClass != other.javaClass) {
             return false
         }
-        val apiLobby = o as ApiLobby?
+        val apiLobby = other as ApiLobby?
         return (id == apiLobby!!.id && name == apiLobby.name && owner == apiLobby.owner && players == apiLobby.players && settings == apiLobby.settings && state === apiLobby.state)
     }
 

@@ -20,7 +20,7 @@ internal class ProductionIncreaseSerializer : JsonSerializer<ProductionIncrease>
     ): JsonElement {
         val production = productionIncrease.production
         val json = context.serialize(production)
-        return if (!json.isJsonNull && !productionIncrease.isSellable) { JsonPrimitive("(${json.asString})")} else json
+        return if (!json.isJsonNull && !productionIncrease.isSellable) { JsonPrimitive("(${json.asString})") } else json
     }
 
     @Throws(JsonParseException::class)

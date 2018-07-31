@@ -15,8 +15,11 @@ class TradingRulesTest {
 
     @Theory
     fun setCost_overridesCost(
-        defaultCost: Int, overriddenCost: Int, overriddenProvider: Provider,
-        provider: Provider, type: ResourceType
+        defaultCost: Int,
+        overriddenCost: Int,
+        overriddenProvider: Provider,
+        provider: Provider,
+        type: ResourceType
     ) {
         assumeTrue(defaultCost != overriddenCost)
         assumeTrue(overriddenProvider != provider)

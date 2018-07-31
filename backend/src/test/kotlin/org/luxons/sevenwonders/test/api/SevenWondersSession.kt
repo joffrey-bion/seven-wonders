@@ -2,7 +2,9 @@ package org.luxons.sevenwonders.test.api
 
 import org.hildan.jackstomp.Channel
 import org.hildan.jackstomp.JackstompSession
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.luxons.sevenwonders.actions.ChooseNameAction
 import org.luxons.sevenwonders.actions.CreateGameAction
 import org.luxons.sevenwonders.actions.JoinGameAction

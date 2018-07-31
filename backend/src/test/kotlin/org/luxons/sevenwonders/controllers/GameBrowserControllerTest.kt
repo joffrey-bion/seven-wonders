@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.controllers
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.actions.CreateGameAction

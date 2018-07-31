@@ -17,5 +17,3 @@ class CreateGameAction(
     @ApiTypeProperty(required = true)
     val gameName: String
 )
-
-

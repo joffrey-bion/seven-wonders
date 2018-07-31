@@ -16,8 +16,14 @@ class ScienceProgressTest {
 
     @Theory
     fun apply_initContainsAddedScience(
-        initCompasses: Int, initWheels: Int, initTablets: Int, initJokers: Int,
-        compasses: Int, wheels: Int, tablets: Int, jokers: Int
+        initCompasses: Int,
+        initWheels: Int,
+        initTablets: Int,
+        initJokers: Int,
+        compasses: Int,
+        wheels: Int,
+        tablets: Int,
+        jokers: Int
     ) {
         val board = testBoard(ResourceType.ORE)
         val initialScience = createScience(initCompasses, initWheels, initTablets, initJokers)

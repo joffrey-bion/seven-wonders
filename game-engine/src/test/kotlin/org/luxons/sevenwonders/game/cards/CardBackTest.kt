@@ -1,8 +1,7 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.junit.Test
-
 import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class CardBackTest {
 

@@ -21,9 +21,7 @@ class ResourceTypesSerializerTest {
     }
 
     private fun createListTypeToken(): Type {
-        return object : TypeToken<List<ResourceType>>() {
-
-        }.type
+        return object : TypeToken<List<ResourceType>>() {}.type
     }
 
     @Test

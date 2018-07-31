@@ -1,9 +1,8 @@
 package org.luxons.sevenwonders.test.api
 
-import java.util.Objects
-
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.effects.SpecialAbility
+import java.util.Objects
 
 class ApiBoard {
 
@@ -33,14 +32,14 @@ class ApiBoard {
 
     var pointsPer3Gold: Int = 0
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
             return true
         }
-        if (o == null || javaClass != o.javaClass) {
+        if (other == null || javaClass != other.javaClass) {
             return false
         }
-        val apiBoard = o as ApiBoard?
+        val apiBoard = other as ApiBoard?
         return (playerIndex == apiBoard!!.playerIndex && gold == apiBoard.gold && pointsPer3Gold == apiBoard.pointsPer3Gold && wonder == apiBoard.wonder && playedCards == apiBoard.playedCards && production == apiBoard.production && publicProduction == apiBoard.publicProduction && science == apiBoard.science && tradingRules == apiBoard.tradingRules && military == apiBoard.military && specialAbilities == apiBoard.specialAbilities && consumedFreeCards == apiBoard.consumedFreeCards && copiedGuild == apiBoard.copiedGuild)
     }
 

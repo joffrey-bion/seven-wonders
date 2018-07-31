@@ -7,7 +7,9 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.game.resources.MutableResources
-import org.luxons.sevenwonders.game.resources.ResourceType.*
+import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.game.resources.ResourceType.STONE
+import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.game.resources.Resources
 import org.luxons.sevenwonders.game.resources.emptyResources
 import org.luxons.sevenwonders.game.resources.resourcesOf

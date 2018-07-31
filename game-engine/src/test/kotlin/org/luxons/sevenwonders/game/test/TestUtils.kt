@@ -209,14 +209,19 @@ internal fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
     card.applyTo(player, noTransactions())
 }
 
-internal fun createMove(context: PlayerContext, card: Card, type: MoveType, vararg transactions: ResourceTransaction): Move {
+internal fun createMove(
+    context: PlayerContext,
+    card: Card,
+    type: MoveType,
+    vararg transactions: ResourceTransaction
+): Move {
     val playerMove = PlayerMove(type, card.name, Arrays.asList(*transactions))
     return type.create(playerMove, card, context)
 }
 
 internal fun singleBoardPlayer(board: Board): Player {
-    return object: Player {
-        override val index=0
+    return object : Player {
+        override val index = 0
         override val board = board
         override fun getBoard(relativePosition: RelativeBoardPosition): Board = board
     }

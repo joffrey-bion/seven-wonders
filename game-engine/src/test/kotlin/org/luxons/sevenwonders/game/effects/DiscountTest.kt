@@ -26,8 +26,11 @@ class DiscountTest {
 
     @Theory
     fun apply_doesNotAffectOtherResources(
-        discountedPrice: Int, discountedType: ResourceType, provider: Provider,
-        otherType: ResourceType, otherProvider: Provider
+        discountedPrice: Int,
+        discountedType: ResourceType,
+        provider: Provider,
+        otherType: ResourceType,
+        otherProvider: Provider
     ) {
         Assume.assumeTrue(otherProvider != provider)
         Assume.assumeTrue(otherType != discountedType)

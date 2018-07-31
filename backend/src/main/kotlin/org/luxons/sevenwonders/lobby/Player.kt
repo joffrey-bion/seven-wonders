@@ -67,4 +67,3 @@ internal class PlayerIsNotOwnerException(username: String) :
 
 internal class PlayerNotInGameException(username: String) :
     ApiMisuseException("User $username is not in a game, start a game first")
-

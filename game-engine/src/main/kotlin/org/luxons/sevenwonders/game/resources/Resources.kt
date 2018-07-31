@@ -22,7 +22,7 @@ internal fun mutableResourcesOf(vararg resources: Pair<ResourceType, Int>) =
 
 fun Iterable<ResourceType>.toResources(): Resources = resourcesOf(this)
 
-fun Iterable<Resources>.merge(): Resources = fold(MutableResources()) { r1, r2 -> r1.add(r2); r1}
+fun Iterable<Resources>.merge(): Resources = fold(MutableResources()) { r1, r2 -> r1.add(r2); r1 }
 
 internal fun Resources.toMutableResources(): MutableResources {
     val resources = MutableResources()

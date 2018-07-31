@@ -29,7 +29,12 @@ class BonusPerBoardElementTest {
 
     @Theory
     fun computePoints_countsCards(
-        boardPosition: RelativeBoardPosition, nbCards: Int, nbOtherCards: Int, points: Int, gold: Int, color: Color
+        boardPosition: RelativeBoardPosition,
+        nbCards: Int,
+        nbOtherCards: Int,
+        points: Int,
+        gold: Int,
+        color: Color
     ) {
         val board = table!!.getBoard(0, boardPosition)
         addCards(board, nbCards, nbOtherCards, color)
@@ -41,7 +46,10 @@ class BonusPerBoardElementTest {
 
     @Theory
     fun computePoints_countsDefeatTokens(
-        boardPosition: RelativeBoardPosition, nbDefeatTokens: Int, points: Int, gold: Int
+        boardPosition: RelativeBoardPosition,
+        nbDefeatTokens: Int,
+        points: Int,
+        gold: Int
     ) {
         val board = table!!.getBoard(0, boardPosition)
         for (i in 0 until nbDefeatTokens) {
@@ -68,7 +76,12 @@ class BonusPerBoardElementTest {
 
     @Theory
     fun apply_countsCards(
-        boardPosition: RelativeBoardPosition, nbCards: Int, nbOtherCards: Int, points: Int, gold: Int, color: Color
+        boardPosition: RelativeBoardPosition,
+        nbCards: Int,
+        nbOtherCards: Int,
+        points: Int,
+        gold: Int,
+        color: Color
     ) {
         val board = table!!.getBoard(0, boardPosition)
         addCards(board, nbCards, nbOtherCards, color)
@@ -82,9 +95,7 @@ class BonusPerBoardElementTest {
     }
 
     @Theory
-    fun apply_countsDefeatTokens(
-        boardPosition: RelativeBoardPosition, nbDefeatTokens: Int, points: Int, gold: Int
-    ) {
+    fun apply_countsDefeatTokens(boardPosition: RelativeBoardPosition, nbDefeatTokens: Int, points: Int, gold: Int) {
         val board = table!!.getBoard(0, boardPosition)
         for (i in 0 until nbDefeatTokens) {
             board.military.defeat()

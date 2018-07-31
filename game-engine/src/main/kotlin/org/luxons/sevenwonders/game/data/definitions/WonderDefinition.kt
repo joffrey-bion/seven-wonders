@@ -18,7 +18,7 @@ internal class WonderSideDefinition(
     private val stages: List<WonderStageDefinition>,
     private val image: String
 ) {
-    fun createWonder(name: String): Wonder =  Wonder(name, initialResource, stages.map { it.create() }, image)
+    fun createWonder(name: String): Wonder = Wonder(name, initialResource, stages.map { it.create() }, image)
 }
 
 internal class WonderStageDefinition(

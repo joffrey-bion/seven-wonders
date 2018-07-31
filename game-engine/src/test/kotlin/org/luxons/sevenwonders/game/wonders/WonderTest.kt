@@ -1,11 +1,10 @@
 package org.luxons.sevenwonders.game.wonders
 
-import org.junit.Test
-import org.luxons.sevenwonders.game.cards.CardBack
-import org.luxons.sevenwonders.game.test.*
-
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
+import org.junit.Test
+import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.test.testWonder
 
 class WonderTest {
 

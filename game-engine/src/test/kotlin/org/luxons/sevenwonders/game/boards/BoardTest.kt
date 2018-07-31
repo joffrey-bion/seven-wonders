@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.game.boards
 
 import junit.framework.TestCase.assertEquals
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
@@ -190,7 +192,6 @@ class BoardTest {
         assertEquals(5, score.pointsByCategory[ScoreCategory.CIVIL])
         assertEquals(5 + gold / 3, score.totalPoints)
     }
-
 
     companion object {
 

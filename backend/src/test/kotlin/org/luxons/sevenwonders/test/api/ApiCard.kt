@@ -1,9 +1,8 @@
 package org.luxons.sevenwonders.test.api
 
-import java.util.Objects
-
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.cards.Requirements
+import java.util.Objects
 
 class ApiCard {
 
@@ -21,14 +20,14 @@ class ApiCard {
 
     var back: ApiCardBack? = null
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
             return true
         }
-        if (o == null || javaClass != o.javaClass) {
+        if (other == null || javaClass != other.javaClass) {
             return false
         }
-        val apiCard = o as ApiCard?
+        val apiCard = other as ApiCard?
         return name == apiCard!!.name && color === apiCard.color && requirements == apiCard.requirements && chainParent == apiCard.chainParent && chainChildren == apiCard.chainChildren && image == apiCard.image && back == apiCard.back
     }
 

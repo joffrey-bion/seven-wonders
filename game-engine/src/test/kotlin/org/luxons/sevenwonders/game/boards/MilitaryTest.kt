@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.game.boards
 
-import java.util.HashMap
-
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.FromDataPoints
@@ -10,8 +9,7 @@ import org.junit.experimental.theories.Theory
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.boards.Military.UnknownAgeException
-
-import org.junit.Assert.assertEquals
+import java.util.HashMap
 
 @RunWith(Theories::class)
 class MilitaryTest {

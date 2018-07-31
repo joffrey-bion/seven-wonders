@@ -59,8 +59,8 @@ class Game internal constructor(
         endOfGameReached() && board.hasSpecial(SpecialAbility.COPY_GUILD) -> determineCopyGuildAction(board)
         hand.size == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_LAST
         hand.size == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_2
-        hand.isEmpty()                                                    -> Action.WAIT
-        else                                                              -> Action.PLAY
+        hand.isEmpty() -> Action.WAIT
+        else -> Action.PLAY
     }
 
     private fun determineCopyGuildAction(board: Board): Action {

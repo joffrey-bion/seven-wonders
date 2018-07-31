@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.game.api
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories

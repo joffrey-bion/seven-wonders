@@ -1,12 +1,11 @@
 package org.luxons.sevenwonders.game.boards
 
+import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeTrue
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
-
-import org.junit.Assert.assertEquals
-import org.junit.Assume.assumeTrue
 
 @RunWith(Theories::class)
 class RelativeBoardPositionTest {
