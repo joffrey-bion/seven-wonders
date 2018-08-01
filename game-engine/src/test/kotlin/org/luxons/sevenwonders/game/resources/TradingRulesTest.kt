@@ -8,7 +8,6 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.test.createTransaction
 import org.luxons.sevenwonders.game.test.createTransactions
-import java.util.ArrayList
 
 @RunWith(Theories::class)
 class TradingRulesTest {
@@ -102,9 +101,10 @@ class TradingRulesTest {
         val rules = TradingRules(defaultCost)
         rules.setCost(type, overriddenProvider, overriddenCost)
 
-        val boughtResources = ArrayList<ResourceTransaction>(2)
-        boughtResources.add(createTransaction(provider, type))
-        boughtResources.add(createTransaction(overriddenProvider, type))
+        val boughtResources = createTransactions(
+            createTransaction(provider, type),
+            createTransaction(overriddenProvider, type)
+        )
 
         assertEquals(defaultCost + overriddenCost, rules.computeCost(boughtResources))
     }

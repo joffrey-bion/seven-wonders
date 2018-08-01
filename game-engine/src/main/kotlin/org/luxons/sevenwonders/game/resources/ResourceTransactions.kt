@@ -4,10 +4,10 @@ import org.luxons.sevenwonders.game.Player
 
 typealias ResourceTransactions = Collection<ResourceTransaction>
 
-fun noTransactions(): ResourceTransactions = emptyList()
+fun noTransactions(): ResourceTransactions = emptySet()
 
-fun Map<Provider, Resources>.toTransactions() =
-    filter { (_, res) -> !res.isEmpty() }.map { (p, res) -> ResourceTransaction(p, res) }
+fun Map<Provider, Resources>.toTransactions(): ResourceTransactions =
+    filter { (_, res) -> !res.isEmpty() }.map { (p, res) -> ResourceTransaction(p, res) }.toSet()
 
 fun ResourceTransactions.asResources(): Resources = map { it.resources }.merge()
 

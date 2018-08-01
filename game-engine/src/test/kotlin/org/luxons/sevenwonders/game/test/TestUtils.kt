@@ -102,11 +102,11 @@ infix fun Int.of(type: ResourceType): Resources {
 
 internal fun createTransactions(provider: Provider, vararg resources: ResourceType): ResourceTransactions {
     val transaction = createTransaction(provider, *resources)
-    return listOf(transaction)
+    return createTransactions(transaction)
 }
 
 internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions {
-    return transactions.toList()
+    return transactions.toSet()
 }
 
 fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction {
@@ -209,13 +209,8 @@ internal fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
     card.applyTo(player, noTransactions())
 }
 
-internal fun createMove(
-    context: PlayerContext,
-    card: Card,
-    type: MoveType,
-    vararg transactions: ResourceTransaction
-): Move {
-    val playerMove = PlayerMove(type, card.name, Arrays.asList(*transactions))
+internal fun createMove(context: PlayerContext, card: Card, type: MoveType): Move {
+    val playerMove = PlayerMove(type, card.name)
     return type.create(playerMove, card, context)
 }
 

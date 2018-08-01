@@ -13,10 +13,10 @@ import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.data.GameDefinitionLoader
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
-import org.luxons.sevenwonders.game.resources.ResourceTransaction
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.Resources
 import org.luxons.sevenwonders.game.resources.bestSolution
+import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
 import java.util.HashMap
 
@@ -83,9 +83,9 @@ class GameTest {
         return PlayerMove(MoveType.DISCARD, firstCardInHand.card.name)
     }
 
-    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): Collection<ResourceTransaction> {
+    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): ResourceTransactions {
         if (handCard.isFree) {
-            return emptyList()
+            return noTransactions()
         }
         val requiredResources = handCard.card.requirements.resources
         val table = turnInfo.table
