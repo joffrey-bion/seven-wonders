@@ -1,50 +1,16 @@
-buildscript {
-    ext {
-        kotlinVersion = '1.2.51'
-        springBootVersion = '2.0.3.RELEASE'
-    }
-    repositories {
-        mavenCentral() // for kotlin and spring boot
-        maven {
-            url "https://plugins.gradle.org/m2/" // for ktlint
-        }
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:4.1.0"
-    }
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.21'
+    id 'org.springframework.boot' version '2.1.3.RELEASE'
+    id "org.jlleitschuh.gradle.ktlint" version "7.1.0"
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'kotlin-spring'
-apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: "org.jlleitschuh.gradle.ktlint"
 
-group 'org.luxons'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
-
-compileKotlin {
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
         jvmTarget = "1.8"
     }
-}
-
-compileTestKotlin {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict"]
-        jvmTarget = "1.8"
-    }
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
 }
 
 dependencies {
