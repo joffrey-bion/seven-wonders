@@ -11,7 +11,7 @@ enum class BoardElementType {
     DEFEAT_TOKEN
 }
 
-internal data class BonusPerBoardElement (
+internal data class BonusPerBoardElement(
     val boards: List<RelativeBoardPosition>,
     val type: BoardElementType,
     val gold: Int = 0,
