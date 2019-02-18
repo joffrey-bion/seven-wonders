@@ -11,7 +11,7 @@ data class Card internal constructor(
     val name: String,
     val color: Color,
     val requirements: Requirements,
-    val effects: List<Effect>,
+    internal val effects: List<Effect>,
     val chainParent: String?,
     val chainChildren: List<String>,
     val image: String,

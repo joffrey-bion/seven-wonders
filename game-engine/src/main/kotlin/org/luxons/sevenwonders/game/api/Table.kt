@@ -24,10 +24,11 @@ class Table internal constructor(val boards: List<Board>) {
         get() = HandRotationDirection.forAge(currentAge)
 
     var lastPlayedMoves: List<Move> = emptyList()
+        internal set
 
-    fun getBoard(playerIndex: Int): Board = boards[playerIndex]
+    internal fun getBoard(playerIndex: Int): Board = boards[playerIndex]
 
-    fun getBoard(playerIndex: Int, position: RelativeBoardPosition): Board =
+    internal fun getBoard(playerIndex: Int, position: RelativeBoardPosition): Board =
         boards[position.getIndexFrom(playerIndex, nbPlayers)]
 
     internal fun increaseCurrentAge() {

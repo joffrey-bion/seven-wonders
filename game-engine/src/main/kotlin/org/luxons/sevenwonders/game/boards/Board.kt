@@ -26,9 +26,10 @@ class Board internal constructor(val wonder: Wonder, val playerIndex: Int, setti
     private val consumedFreeCards: MutableMap<Age, Boolean> = mutableMapOf()
 
     var gold: Int = settings.initialGold
+        private set
 
     var copiedGuild: Card? = null
-        set(copiedGuild) {
+        internal set(copiedGuild) {
             if (copiedGuild!!.color !== Color.PURPLE) {
                 throw IllegalArgumentException("The given card '$copiedGuild' is not a Guild card")
             }
@@ -42,7 +43,7 @@ class Board internal constructor(val wonder: Wonder, val playerIndex: Int, setti
 
     fun getPlayedCards(): List<Card> = playedCards
 
-    fun addCard(card: Card) {
+    internal fun addCard(card: Card) {
         playedCards.add(card)
     }
 
@@ -50,18 +51,18 @@ class Board internal constructor(val wonder: Wonder, val playerIndex: Int, setti
 
     fun isPlayed(cardName: String): Boolean = playedCards.count { it.name == cardName } > 0
 
-    fun addGold(amount: Int) {
+    internal fun addGold(amount: Int) {
         this.gold += amount
     }
 
-    fun removeGold(amount: Int) {
+    internal fun removeGold(amount: Int) {
         if (gold < amount) {
             throw InsufficientFundsException(gold, amount)
         }
         this.gold -= amount
     }
 
-    fun addSpecial(specialAbility: SpecialAbility) {
+    internal fun addSpecial(specialAbility: SpecialAbility) {
         specialAbilities.add(specialAbility)
     }
 
@@ -75,7 +76,8 @@ class Board internal constructor(val wonder: Wonder, val playerIndex: Int, setti
     }
 
     internal fun computeScore(player: Player): PlayerScore = PlayerScore(
-        gold, mapOf(
+        boardGold = gold,
+        pointsByCategory = mapOf(
             ScoreCategory.CIVIL to computePointsForCards(player, Color.BLUE),
             ScoreCategory.MILITARY to military.totalPoints,
             ScoreCategory.SCIENCE to science.computePoints(),

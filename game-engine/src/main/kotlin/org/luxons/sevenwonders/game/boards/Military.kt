@@ -15,16 +15,16 @@ class Military internal constructor(
     var nbDefeatTokens = 0
         private set
 
-    fun addShields(nbShields: Int) {
+    internal fun addShields(nbShields: Int) {
         this.nbShields += nbShields
     }
 
-    fun victory(age: Age) {
+    internal fun victory(age: Age) {
         val wonPoints = wonPointsPerVictoryPerAge[age] ?: throw UnknownAgeException(age)
         totalPoints += wonPoints
     }
 
-    fun defeat() {
+    internal fun defeat() {
         totalPoints -= lostPointsPerDefeat
         nbDefeatTokens++
     }
