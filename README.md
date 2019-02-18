@@ -1,7 +1,7 @@
 # Seven Wonders Online
 
-[![Travis Build](https://img.shields.io/travis/luxons/seven-wonders/master.svg)](https://travis-ci.org/luxons/seven-wonders)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/luxons/seven-wonders/blob/master/LICENSE)
+[![Travis Build](https://img.shields.io/travis/joffrey-bion/seven-wonders/master.svg)](https://travis-ci.org/joffrey-bion/seven-wonders)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/seven-wonders/blob/master/LICENSE)
 
 A digital version of the famous [7 Wonders board game](https://en.wikipedia.org/wiki/7_Wonders_(board_game)).
 
