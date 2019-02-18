@@ -62,7 +62,7 @@ interface Resources {
     fun toList(): List<ResourceType> = quantities.flatMap { (type, quantity) -> List(quantity) { type } }
 }
 
-internal data class MutableResources(
+data class MutableResources(
     override val quantities: MutableMap<ResourceType, Int> = mutableMapOf()
 ) : Resources {
 
