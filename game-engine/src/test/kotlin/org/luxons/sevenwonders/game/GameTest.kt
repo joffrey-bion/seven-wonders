@@ -10,7 +10,6 @@ import org.luxons.sevenwonders.game.api.HandCard
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
 import org.luxons.sevenwonders.game.api.Table
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
@@ -41,7 +40,7 @@ class GameTest {
 
     private fun createGame(nbPlayers: Int): Game {
         val settings = testCustomizableSettings()
-        return GameDefinitionLoader.gameDefinition.initGame(0, settings, nbPlayers)
+        return GameDefinition.load().initGame(0, settings, nbPlayers)
     }
 
     private fun playTurn(nbPlayers: Int, game: Game, ageToCheck: Int, handSize: Int) {

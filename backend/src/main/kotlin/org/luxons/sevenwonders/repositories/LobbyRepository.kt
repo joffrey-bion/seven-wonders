@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.repositories
 
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader
+import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.lobby.Lobby
 import org.luxons.sevenwonders.lobby.Player
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +18,7 @@ class LobbyRepository @Autowired constructor() {
 
     fun create(gameName: String, owner: Player): Lobby {
         val id = lastGameId++
-        val lobby = Lobby(id, gameName, owner, GameDefinitionLoader.gameDefinition)
+        val lobby = Lobby(id, gameName, owner, GameDefinition.load())
         lobbies[id] = lobby
         return lobby
     }

@@ -1,10 +1,14 @@
 package org.luxons.sevenwonders.game.data.definitions
 
 import org.luxons.sevenwonders.game.cards.Requirements
-import org.luxons.sevenwonders.game.data.WonderSide
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.wonders.Wonder
 import org.luxons.sevenwonders.game.wonders.WonderStage
+
+enum class WonderSide {
+    A,
+    B
+}
 
 internal class WonderDefinition(
     private val name: String,

@@ -7,8 +7,7 @@ import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.data.WonderSide
-import org.luxons.sevenwonders.game.data.WonderSidePickMethod
+import org.luxons.sevenwonders.game.api.WonderSidePickMethod
 import java.util.Random
 
 @RunWith(Theories::class)

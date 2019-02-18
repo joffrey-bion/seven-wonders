@@ -17,7 +17,6 @@ import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.data.GameDefinition
-import org.luxons.sevenwonders.game.data.GameDefinitionLoader
 import org.luxons.sevenwonders.lobby.Lobby.GameAlreadyStartedException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerNameAlreadyUsedException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerOverflowException
@@ -231,7 +230,7 @@ class LobbyTest {
         @JvmStatic
         @BeforeClass
         fun loadDefinition() {
-            gameDefinition = GameDefinitionLoader.gameDefinition
+            gameDefinition = GameDefinition.load()
         }
     }
 }
