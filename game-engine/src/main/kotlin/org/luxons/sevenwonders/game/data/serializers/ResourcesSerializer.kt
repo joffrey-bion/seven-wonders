@@ -21,8 +21,6 @@ internal class ResourcesSerializer : JsonSerializer<Resources>, JsonDeserializer
     }
 
     @Throws(JsonParseException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Resources {
-        val s = json.asString
-        return s.toCharArray().map { ResourceType.fromSymbol(it) to 1 }.toResources()
-    }
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Resources =
+        json.asString.map { ResourceType.fromSymbol(it) to 1 }.toResources()
 }

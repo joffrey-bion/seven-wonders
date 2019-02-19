@@ -26,12 +26,5 @@ internal class ResourceTypesSerializer : JsonSerializer<List<ResourceType>>, Jso
         json: JsonElement,
         typeOfT: Type,
         context: JsonDeserializationContext
-    ): List<ResourceType> {
-        val s = json.asString
-        val resources = ArrayList<ResourceType>()
-        for (c in s.toCharArray()) {
-            resources.add(ResourceType.fromSymbol(c))
-        }
-        return resources
-    }
+    ): List<ResourceType> = json.asString.map { ResourceType.fromSymbol(it) }
 }

@@ -12,9 +12,8 @@ import java.lang.reflect.Type
 
 internal class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeserializer<ResourceType> {
 
-    override fun serialize(type: ResourceType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return JsonPrimitive(type.symbol!!)
-    }
+    override fun serialize(type: ResourceType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement =
+        JsonPrimitive(type.symbol)
 
     @Throws(JsonParseException::class)
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ResourceType {

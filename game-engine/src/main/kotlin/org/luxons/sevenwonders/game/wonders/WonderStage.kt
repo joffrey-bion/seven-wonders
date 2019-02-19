@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.effects.Effect
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 
-class WonderStage internal constructor(val requirements: Requirements, val effects: List<Effect>) {
+class WonderStage internal constructor(val requirements: Requirements, internal val effects: List<Effect>) {
 
     var cardBack: CardBack? = null
         private set

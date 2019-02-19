@@ -1,6 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.21"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.3.21"
+    val kotlinVersion = "1.3.21"
+    id("org.jetbrains.kotlin.jvm") version kotlinVersion
+    id("org.jetbrains.kotlin.plugin.spring") version kotlinVersion
     id("org.springframework.boot") version "2.1.3.RELEASE"
     id("org.jlleitschuh.gradle.ktlint") version "7.1.0"
 }
@@ -13,8 +14,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 dependencies {
     compile(project(":game-engine"))
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect") // required by Spring 5
+    compile(kotlin("stdlib-jdk8"))
+    compile(kotlin("reflect")) // required by Spring 5
 
     compile("org.springframework.boot:spring-boot-starter-websocket")
     compile("org.springframework.boot:spring-boot-starter-security")

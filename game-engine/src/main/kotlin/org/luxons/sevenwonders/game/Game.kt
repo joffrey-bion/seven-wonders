@@ -86,7 +86,7 @@ class Game internal constructor(
      * ready to [play the current turn][playTurn].
      */
     fun allPlayersPreparedTheirMove(): Boolean {
-        val nbExpectedMoves = currentTurnInfo.filter { it.action !== Action.WAIT }.count()
+        val nbExpectedMoves = currentTurnInfo.count { it.action !== Action.WAIT }
         return preparedMoves.size == nbExpectedMoves
     }
 

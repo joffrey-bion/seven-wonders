@@ -7,7 +7,7 @@ typealias ResourceTransactions = Collection<ResourceTransaction>
 fun noTransactions(): ResourceTransactions = emptySet()
 
 fun Map<Provider, Resources>.toTransactions(): ResourceTransactions =
-    filter { (_, res) -> !res.isEmpty() }.map { (p, res) -> ResourceTransaction(p, res) }.toSet()
+    filterValues { !it.isEmpty() }.map { (p, res) -> ResourceTransaction(p, res) }.toSet()
 
 fun ResourceTransactions.asResources(): Resources = map { it.resources }.merge()
 

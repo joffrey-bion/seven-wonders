@@ -20,9 +20,8 @@ data class Requirements internal constructor(
      *
      * @return true if the given board meets these requirements without any transaction with its neighbours
      */
-    internal fun areMetWithoutNeighboursBy(board: Board): Boolean {
-        return hasRequiredGold(board) && producesRequiredResources(board)
-    }
+    internal fun areMetWithoutNeighboursBy(board: Board): Boolean =
+        hasRequiredGold(board) && producesRequiredResources(board)
 
     /**
      * Returns whether the given board meets these requirements, if the specified resources are bought from neighbours.
@@ -59,18 +58,14 @@ data class Requirements internal constructor(
         return !solution.possibleTransactions.isEmpty() && solution.price <= board.gold - gold
     }
 
-    private fun hasRequiredGold(board: Board): Boolean {
-        return board.gold >= gold
-    }
+    private fun hasRequiredGold(board: Board): Boolean = board.gold >= gold
 
     private fun hasRequiredGold(board: Board, resourceTransactions: ResourceTransactions): Boolean {
         val resourcesPrice = board.tradingRules.computeCost(resourceTransactions)
         return board.gold >= gold + resourcesPrice
     }
 
-    private fun producesRequiredResources(board: Board): Boolean {
-        return board.production.contains(resources)
-    }
+    private fun producesRequiredResources(board: Board): Boolean = board.production.contains(resources)
 
     private fun producesRequiredResourcesWithHelp(board: Board, transactions: ResourceTransactions): Boolean {
         val totalBoughtResources = transactions.asResources()
