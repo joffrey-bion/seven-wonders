@@ -2,13 +2,13 @@ package org.luxons.sevenwonders.test.api
 
 import org.hildan.jackstomp.Channel
 import org.hildan.jackstomp.JackstompSession
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.luxons.sevenwonders.actions.ChooseNameAction
 import org.luxons.sevenwonders.actions.CreateGameAction
 import org.luxons.sevenwonders.actions.JoinGameAction
 import org.luxons.sevenwonders.errors.ErrorDTO
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class SevenWondersSession(val jackstompSession: JackstompSession) {
 

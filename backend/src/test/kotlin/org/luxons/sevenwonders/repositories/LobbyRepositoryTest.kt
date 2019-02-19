@@ -1,12 +1,12 @@
 package org.luxons.sevenwonders.repositories
 
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.lobby.Player
+import kotlin.test.assertNotNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class LobbyRepositoryTest {
 

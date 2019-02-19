@@ -1,9 +1,5 @@
 package org.luxons.sevenwonders.game
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.luxons.sevenwonders.game.api.Action
 import org.luxons.sevenwonders.game.api.HandCard
@@ -19,6 +15,10 @@ import org.luxons.sevenwonders.game.resources.bestSolution
 import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
 import java.util.HashMap
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class GameTest {
 
@@ -109,7 +109,7 @@ class GameTest {
             val sentMove = sentMoves[move.playerContext.index]
             assertNotNull(sentMove)
             assertNotNull(move.card)
-            assertEquals(sentMove!!.cardName, move.card.name)
+            assertEquals(sentMove.cardName, move.card.name)
         }
     }
 }

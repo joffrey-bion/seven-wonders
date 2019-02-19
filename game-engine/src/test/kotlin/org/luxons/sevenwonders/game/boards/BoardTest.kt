@@ -1,9 +1,6 @@
 package org.luxons.sevenwonders.game.boards
 
 import junit.framework.TestCase.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
@@ -29,6 +26,9 @@ import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.test.testWonder
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class BoardTest {

@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.controllers
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.luxons.sevenwonders.actions.ChooseNameAction
 import org.luxons.sevenwonders.repositories.PlayerRepository
+import kotlin.test.assertEquals
 
 class HomeControllerTest {
 

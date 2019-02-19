@@ -1,8 +1,5 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
@@ -13,6 +10,9 @@ import org.luxons.sevenwonders.game.resources.resourcesOf
 import org.luxons.sevenwonders.game.test.fixedProduction
 import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testTable
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class ProductionIncreaseTest {

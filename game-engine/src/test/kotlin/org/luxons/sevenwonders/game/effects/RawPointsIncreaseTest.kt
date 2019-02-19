@@ -1,12 +1,12 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.junit.Assert.assertEquals
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.test.testTable
+import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
 class RawPointsIncreaseTest {

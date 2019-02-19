@@ -1,7 +1,5 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Assume
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
@@ -14,6 +12,8 @@ import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.test.createGuildCard
 import org.luxons.sevenwonders.game.test.testTable
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class SpecialAbilityActivationTest {

@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.game.data.definitions
 
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
@@ -9,6 +8,7 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.api.WonderSidePickMethod
 import java.util.Random
+import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
 class WonderSidePickMethodTest {

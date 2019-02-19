@@ -1,12 +1,13 @@
 package org.luxons.sevenwonders.game.data.serializers
 
+import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.game.resources.ResourceType
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class ResourceTypeSerializerTest {
 
@@ -19,7 +20,7 @@ class ResourceTypeSerializerTest {
 
     @Test
     fun serialize_useSymbolForEachType() {
-        for (type in ResourceType.values()) {
+        ResourceType.values().forEach { type ->
             val expectedJson = "\"" + type.symbol + "\""
             assertEquals(expectedJson, gson.toJson(type))
         }
@@ -27,9 +28,9 @@ class ResourceTypeSerializerTest {
 
     @Test
     fun deserialize_useSymbolForEachType() {
-        for (type in ResourceType.values()) {
+        ResourceType.values().forEach { type ->
             val typeInJson = "\"" + type.symbol + "\""
-            assertEquals(type, gson.fromJson(typeInJson, ResourceType::class.java))
+            assertEquals(type, gson.fromJson(typeInJson))
         }
     }
 
@@ -40,11 +41,11 @@ class ResourceTypeSerializerTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failsOnEmptyString() {
-        gson.fromJson("\"\"", ResourceType::class.java)
+        gson.fromJson<ResourceType>("\"\"")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failsOnGarbageString() {
-        gson.fromJson("\"thisisgarbage\"", ResourceType::class.java)
+        gson.fromJson<ResourceType>("\"thisisgarbage\"")
     }
 }

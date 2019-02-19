@@ -1,8 +1,5 @@
 package org.luxons.sevenwonders.controllers
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.actions.CreateGameAction
@@ -13,6 +10,9 @@ import org.luxons.sevenwonders.repositories.LobbyRepository
 import org.luxons.sevenwonders.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.luxons.sevenwonders.test.TestUtils
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class GameBrowserControllerTest {
 

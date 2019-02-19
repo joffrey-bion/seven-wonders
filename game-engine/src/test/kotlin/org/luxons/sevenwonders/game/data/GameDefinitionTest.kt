@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.game.data
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.luxons.sevenwonders.game.api.CustomizableSettings
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class GameDefinitionTest {
 

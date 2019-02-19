@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.junit.Assert.assertEquals
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
@@ -10,6 +9,7 @@ import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.test.createScience
 import org.luxons.sevenwonders.game.test.createScienceProgress
 import org.luxons.sevenwonders.game.test.testBoard
+import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
 class ScienceProgressTest {

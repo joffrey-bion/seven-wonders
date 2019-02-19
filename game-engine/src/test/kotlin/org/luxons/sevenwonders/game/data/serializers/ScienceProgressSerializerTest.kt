@@ -1,14 +1,15 @@
 package org.luxons.sevenwonders.game.data.serializers
 
+import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.game.boards.ScienceType
 import org.luxons.sevenwonders.game.effects.ScienceProgress
 import org.luxons.sevenwonders.game.test.createScienceProgress
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 private const val TABLET_STR = "\"TABLET\""
 private const val COMPASS_STR = "\"COMPASS\""
@@ -91,17 +92,17 @@ class ScienceProgressSerializerTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnEmptyString() {
-        gson.fromJson("\"\"", ScienceProgress::class.java)
+        gson.fromJson<ScienceProgress>("\"\"")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnGarbageString() {
-        gson.fromJson("thisisgarbage", ScienceProgress::class.java)
+        gson.fromJson<ScienceProgress>("thisisgarbage")
     }
 
     @Test
     fun deserialize_compass() {
-        val progress = gson.fromJson(COMPASS_STR, ScienceProgress::class.java)
+        val progress = gson.fromJson<ScienceProgress>(COMPASS_STR)
         assertNotNull(progress.science)
         assertEquals(1, progress.science.getQuantity(ScienceType.COMPASS))
         assertEquals(0, progress.science.getQuantity(ScienceType.WHEEL))
@@ -111,7 +112,7 @@ class ScienceProgressSerializerTest {
 
     @Test
     fun deserialize_wheel() {
-        val progress = gson.fromJson(WHEEL_STR, ScienceProgress::class.java)
+        val progress = gson.fromJson<ScienceProgress>(WHEEL_STR)
         assertNotNull(progress.science)
         assertEquals(0, progress.science.getQuantity(ScienceType.COMPASS))
         assertEquals(1, progress.science.getQuantity(ScienceType.WHEEL))
@@ -121,7 +122,7 @@ class ScienceProgressSerializerTest {
 
     @Test
     fun deserialize_tablet() {
-        val progress = gson.fromJson(TABLET_STR, ScienceProgress::class.java)
+        val progress = gson.fromJson<ScienceProgress>(TABLET_STR)
         assertNotNull(progress.science)
         assertEquals(0, progress.science.getQuantity(ScienceType.COMPASS))
         assertEquals(0, progress.science.getQuantity(ScienceType.WHEEL))
@@ -131,7 +132,7 @@ class ScienceProgressSerializerTest {
 
     @Test
     fun deserialize_joker() {
-        val progress = gson.fromJson(JOKER_STR, ScienceProgress::class.java)
+        val progress = gson.fromJson<ScienceProgress>(JOKER_STR)
         assertNotNull(progress.science)
         assertEquals(0, progress.science.getQuantity(ScienceType.COMPASS))
         assertEquals(0, progress.science.getQuantity(ScienceType.WHEEL))

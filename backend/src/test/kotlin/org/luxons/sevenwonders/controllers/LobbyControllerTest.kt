@@ -1,9 +1,5 @@
 package org.luxons.sevenwonders.controllers
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.actions.ReorderPlayersAction
@@ -21,6 +17,10 @@ import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.luxons.sevenwonders.test.TestUtils
 import java.util.Arrays
 import java.util.HashMap
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class LobbyControllerTest {
 

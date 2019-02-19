@@ -1,7 +1,5 @@
 package org.luxons.sevenwonders.game.moves
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Test
 import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
@@ -12,6 +10,8 @@ import org.luxons.sevenwonders.game.test.sampleCards
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.test.testTable
+import kotlin.test.assertEquals
+import kotlin.test.fail
 
 class BuildWonderMoveTest {
 

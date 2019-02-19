@@ -1,8 +1,5 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
@@ -13,6 +10,9 @@ import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.test.sampleCards
 import org.luxons.sevenwonders.game.test.testTable
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class HandsTest {

@@ -1,9 +1,5 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
@@ -21,6 +17,10 @@ import org.luxons.sevenwonders.game.test.createTransactions
 import org.luxons.sevenwonders.game.test.singleBoardPlayer
 import org.luxons.sevenwonders.game.test.testBoard
 import java.util.Arrays
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class RequirementsTest {

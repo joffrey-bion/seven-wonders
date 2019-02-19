@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.game.effects
 
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
@@ -14,6 +13,7 @@ import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.test.addCards
 import org.luxons.sevenwonders.game.test.testTable
+import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
 class BonusPerBoardElementTest {

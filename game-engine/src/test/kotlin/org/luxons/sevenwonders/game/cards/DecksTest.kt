@@ -1,8 +1,5 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
@@ -13,6 +10,9 @@ import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.cards.Decks.CardNotFoundException
 import org.luxons.sevenwonders.game.test.sampleCards
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class DecksTest {

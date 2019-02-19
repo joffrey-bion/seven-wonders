@@ -1,10 +1,10 @@
 package org.luxons.sevenwonders.game.wonders
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Test
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.test.testWonder
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class WonderTest {
 
@@ -26,11 +26,9 @@ class WonderTest {
         wonder.placeCard(CardBack("img"))
         wonder.placeCard(CardBack("img"))
         wonder.placeCard(CardBack("img"))
-        try {
+
+        assertFailsWith(IllegalStateException::class) {
             wonder.placeCard(CardBack("img"))
-            fail()
-        } catch (e: IllegalStateException) {
-            // expected exception because there is no 4th level in this wonder
         }
     }
 }

@@ -1,10 +1,5 @@
 package org.luxons.sevenwonders.lobby
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.BeforeClass
@@ -23,6 +18,11 @@ import org.luxons.sevenwonders.lobby.Lobby.PlayerOverflowException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerUnderflowException
 import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException
 import java.util.Arrays
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class LobbyTest {

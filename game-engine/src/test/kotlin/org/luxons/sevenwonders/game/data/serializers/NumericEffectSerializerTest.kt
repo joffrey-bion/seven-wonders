@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.game.data.serializers
 
+import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
@@ -14,6 +14,7 @@ import org.luxons.sevenwonders.game.effects.MilitaryReinforcements
 import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.resources.Production
+import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
 class NumericEffectSerializerTest {
@@ -71,54 +72,54 @@ class NumericEffectSerializerTest {
     @Theory
     fun deserialize_militaryReinforcements(count: Int) {
         val reinforcements = MilitaryReinforcements(count)
-        assertEquals(reinforcements, gson.fromJson(count.toString(), MilitaryReinforcements::class.java))
+        assertEquals(reinforcements, gson.fromJson<MilitaryReinforcements>(count.toString()))
     }
 
     @Theory
     fun deserialize_rawPointsIncrease(count: Int) {
         val points = RawPointsIncrease(count)
-        assertEquals(points, gson.fromJson(count.toString(), RawPointsIncrease::class.java))
+        assertEquals(points, gson.fromJson<RawPointsIncrease>(count.toString()))
     }
 
     @Theory
     fun deserialize_goldIncrease(count: Int) {
         val goldIncrease = GoldIncrease(count)
-        assertEquals(goldIncrease, gson.fromJson(count.toString(), GoldIncrease::class.java))
+        assertEquals(goldIncrease, gson.fromJson<GoldIncrease>(count.toString()))
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_militaryReinforcements_failOnEmptyString() {
-        gson.fromJson("\"\"", MilitaryReinforcements::class.java)
+        gson.fromJson<MilitaryReinforcements>("\"\"")
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_rawPointsIncrease_failOnEmptyString() {
-        gson.fromJson("\"\"", RawPointsIncrease::class.java)
+        gson.fromJson<RawPointsIncrease>("\"\"")
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_goldIncrease_failOnEmptyString() {
-        gson.fromJson("\"\"", GoldIncrease::class.java)
+        gson.fromJson<GoldIncrease>("\"\"")
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_militaryReinforcements_failOnNonNumericString() {
-        gson.fromJson("\"abc\"", MilitaryReinforcements::class.java)
+        gson.fromJson<MilitaryReinforcements>("\"abc\"")
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_rawPointsIncrease_failOnNonNumericString() {
-        gson.fromJson("\"abc\"", RawPointsIncrease::class.java)
+        gson.fromJson<RawPointsIncrease>("\"abc\"")
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_goldIncrease_failOnNonNumericString() {
-        gson.fromJson("\"abc\"", GoldIncrease::class.java)
+        gson.fromJson<GoldIncrease>("\"abc\"")
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnUnknownType() {
-        gson.fromJson("\"2\"", ProductionIncrease::class.java)
+        gson.fromJson<ProductionIncrease>("\"2\"")
     }
 
     companion object {

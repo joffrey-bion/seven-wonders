@@ -1,10 +1,10 @@
 package org.luxons.sevenwonders.game.resources
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
 import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.game.test.createTransaction
+import kotlin.test.assertEquals
 
 class ResourceTransactionsTest {
 

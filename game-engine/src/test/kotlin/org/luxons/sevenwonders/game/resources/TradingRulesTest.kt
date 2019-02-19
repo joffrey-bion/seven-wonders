@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.game.resources
 
-import org.junit.Assert.assertEquals
 import org.junit.Assume.assumeTrue
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
@@ -8,6 +7,7 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.test.createTransaction
 import org.luxons.sevenwonders.game.test.createTransactions
+import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
 class TradingRulesTest {

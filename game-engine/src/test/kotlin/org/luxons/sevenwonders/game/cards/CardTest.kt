@@ -1,8 +1,6 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
@@ -13,6 +11,7 @@ import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.wonders.Wonder
+import kotlin.test.assertEquals
 
 class CardTest {
 

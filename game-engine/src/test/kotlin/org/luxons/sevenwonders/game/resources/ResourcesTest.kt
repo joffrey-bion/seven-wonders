@@ -1,8 +1,5 @@
 package org.luxons.sevenwonders.game.resources
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -14,6 +11,9 @@ import org.luxons.sevenwonders.game.resources.ResourceType.PAPYRUS
 import org.luxons.sevenwonders.game.resources.ResourceType.STONE
 import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import java.util.NoSuchElementException
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ResourcesTest {
 
