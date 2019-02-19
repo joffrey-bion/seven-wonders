@@ -118,8 +118,8 @@ class LobbyTest {
     }
 
     private fun addPlayers(nbPlayers: Int) {
-        for (i in 0 until nbPlayers) {
-            val player = Player("testuser$i", "Test User $i")
+        repeat(nbPlayers) {
+            val player = Player("testuser$it", "Test User $it")
             lobby.addPlayer(player)
         }
     }

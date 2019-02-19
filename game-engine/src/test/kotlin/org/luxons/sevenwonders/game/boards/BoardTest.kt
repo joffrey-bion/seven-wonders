@@ -13,7 +13,6 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.boards.Board.InsufficientFundsException
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease
@@ -28,7 +27,7 @@ import org.luxons.sevenwonders.game.test.playCardWithEffect
 import org.luxons.sevenwonders.game.test.singleBoardPlayer
 import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testCard
-import org.luxons.sevenwonders.game.test.testCustomizableSettings
+import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.test.testWonder
 
 @RunWith(Theories::class)
@@ -40,15 +39,14 @@ class BoardTest {
 
     @Theory
     fun initialGold_respectsSettings(@FromDataPoints("gold") goldAmountInSettings: Int) {
-        val customSettings = testCustomizableSettings(goldAmountInSettings)
-        val settings = Settings(5, customSettings)
+        val settings = testSettings(initialGold = goldAmountInSettings)
         val board = Board(testWonder(), 0, settings)
         assertEquals(goldAmountInSettings, board.gold)
     }
 
     @Theory
     fun initialProduction_containsInitialResource(type: ResourceType) {
-        val board = Board(testWonder(type), 0, Settings(5))
+        val board = Board(testWonder(type), 0, testSettings())
         val resources = resourcesOf(type)
         assertTrue(board.production.contains(resources))
         assertTrue(board.publicProduction.contains(resources))
@@ -61,8 +59,8 @@ class BoardTest {
     ) {
         assumeTrue(goldRemoved >= 0)
         assumeTrue(initialGold >= goldRemoved)
-        val board = Board(testWonder(), 0, Settings(5))
-        board.gold = initialGold
+
+        val board = Board(testWonder(), 0, testSettings(initialGold = initialGold))
         board.removeGold(goldRemoved)
         assertEquals(initialGold - goldRemoved, board.gold)
     }
@@ -75,8 +73,8 @@ class BoardTest {
         assumeTrue(goldRemoved >= 0)
         assumeTrue(initialGold < goldRemoved)
         thrown.expect(InsufficientFundsException::class.java)
-        val board = Board(testWonder(), 0, Settings(5))
-        board.gold = initialGold
+
+        val board = Board(testWonder(), 0, testSettings(initialGold = initialGold))
         board.removeGold(goldRemoved)
     }
 
@@ -87,7 +85,7 @@ class BoardTest {
         @FromDataPoints("nbCards") nbOtherCards: Int,
         color: Color
     ) {
-        val board = testBoard(type)
+        val board = testBoard(initialResource = type)
         addCards(board, nbCards, nbOtherCards, color)
         assertEquals(nbCards, board.getNbCardsOfColor(listOf(color)))
     }
@@ -101,7 +99,7 @@ class BoardTest {
         color1: Color,
         color2: Color
     ) {
-        val board = testBoard(type)
+        val board = testBoard(initialResource = type)
         addCards(board, nbCards1, color1)
         addCards(board, nbCards2, color2)
         addCards(board, nbOtherCards, getDifferentColorFrom(color1, color2))
@@ -110,8 +108,8 @@ class BoardTest {
 
     @Test
     fun setCopiedGuild_succeedsOnPurpleCard() {
-        val board = testBoard(ResourceType.CLAY)
-        val card = testCard(Color.PURPLE)
+        val board = testBoard()
+        val card = testCard(color = Color.PURPLE)
 
         board.copiedGuild = card
         assertSame(card, board.copiedGuild)
@@ -120,8 +118,8 @@ class BoardTest {
     @Theory
     fun setCopiedGuild_failsOnNonPurpleCard(color: Color) {
         assumeTrue(color !== Color.PURPLE)
-        val board = testBoard(ResourceType.CLAY)
-        val card = testCard(color)
+        val board = testBoard()
+        val card = testCard(color = color)
 
         thrown.expect(IllegalArgumentException::class.java)
         board.copiedGuild = card
@@ -129,7 +127,7 @@ class BoardTest {
 
     @Theory
     fun hasSpecial(applied: SpecialAbility, tested: SpecialAbility) {
-        val board = testBoard(ResourceType.CLAY)
+        val board = testBoard()
         val special = SpecialAbilityActivation(applied)
 
         special.applyTo(singleBoardPlayer(board))
@@ -139,7 +137,7 @@ class BoardTest {
 
     @Test
     fun canPlayFreeCard() {
-        val board = testBoard(ResourceType.CLAY)
+        val board = testBoard()
         val special = SpecialAbilityActivation(SpecialAbility.ONE_FREE_PER_AGE)
 
         special.applyTo(singleBoardPlayer(board))
@@ -170,8 +168,7 @@ class BoardTest {
     @Theory
     fun computePoints_gold(@FromDataPoints("gold") gold: Int) {
         assumeTrue(gold >= 0)
-        val board = testBoard(ResourceType.WOOD)
-        board.gold = gold
+        val board = testBoard(initialGold = gold)
 
         val score = board.computeScore(singleBoardPlayer(board))
         assertEquals(gold / 3, score.pointsByCategory[ScoreCategory.GOLD])
@@ -181,8 +178,7 @@ class BoardTest {
     @Theory
     fun computePoints_(@FromDataPoints("gold") gold: Int) {
         assumeTrue(gold >= 0)
-        val board = testBoard(ResourceType.WOOD)
-        board.gold = gold
+        val board = testBoard(initialGold = gold)
 
         val effect = RawPointsIncrease(5)
         playCardWithEffect(singleBoardPlayer(board), Color.BLUE, effect)

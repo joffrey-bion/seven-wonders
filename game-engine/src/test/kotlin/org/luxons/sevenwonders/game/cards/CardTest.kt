@@ -11,13 +11,16 @@ import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCard
+import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.wonders.Wonder
 
 class CardTest {
 
     @Test
     fun playCardCostingMoney() {
-        val settings = Settings(3)
+        val initialGold = 3
+        val price = 1
+        val settings = testSettings(3, initialGold)
 
         val boards = listOf(
             Board(Wonder("TestWonder", ResourceType.WOOD, emptyList(), ""), 0, settings),
@@ -26,19 +29,15 @@ class CardTest {
         )
         val table = Table(boards)
 
-        val treeFarmRequirements = Requirements(1)
-        val treeFarmProduction = Production()
-        treeFarmProduction.addChoice(ResourceType.WOOD, ResourceType.CLAY)
+        val treeFarmRequirements = Requirements(gold = price)
+        val treeFarmProduction = Production().apply { addChoice(ResourceType.WOOD, ResourceType.CLAY) }
         val treeFarmEffect = ProductionIncrease(treeFarmProduction, false)
+        val treeFarmCard = testCard("Tree Farm", Color.BROWN, treeFarmRequirements, treeFarmEffect)
 
-        val treeFarmCard = testCard("Tree Farm", Color.BROWN, treeFarmEffect, treeFarmRequirements)
-
-        table.getBoard(0).gold = 3
-        table.getBoard(1).gold = 3
-        table.getBoard(2).gold = 3
         treeFarmCard.applyTo(SimplePlayer(0, table), noTransactions())
-        assertEquals(2, table.getBoard(0).gold.toLong())
-        assertEquals(3, table.getBoard(1).gold.toLong())
-        assertEquals(3, table.getBoard(2).gold.toLong())
+
+        assertEquals(initialGold - price, table.getBoard(0).gold)
+        assertEquals(initialGold, table.getBoard(1).gold)
+        assertEquals(initialGold, table.getBoard(2).gold)
     }
 }

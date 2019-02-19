@@ -20,28 +20,24 @@ class GoldIncreaseTest {
 
         goldIncrease.applyTo(board)
 
-        assertEquals((initialAmount + goldIncreaseAmount).toLong(), board.gold.toLong())
+        assertEquals(initialAmount + goldIncreaseAmount, board.gold)
     }
 
     @Theory
     fun computePoints_isAlwaysZero(gold: Int) {
         val goldIncrease = GoldIncrease(gold)
         val player = SimplePlayer(0, testTable(5))
-        assertEquals(0, goldIncrease.computePoints(player).toLong())
+        assertEquals(0, goldIncrease.computePoints(player))
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints
-        fun goldAmounts(): IntArray {
-            return intArrayOf(-5, -1, 0, 1, 2, 5, 10)
-        }
+        fun goldAmounts(): IntArray = intArrayOf(-5, -1, 0, 1, 2, 5, 10)
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> {
-            return ResourceType.values()
-        }
+        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
     }
 }

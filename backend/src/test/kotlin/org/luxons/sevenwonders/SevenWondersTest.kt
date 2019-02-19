@@ -100,7 +100,7 @@ class SevenWondersTest {
 
         var receivedLobbies = games.next()
         assertNotNull(receivedLobbies)
-        assertEquals(0, receivedLobbies.size.toLong())
+        assertEquals(0, receivedLobbies.size)
 
         val ownerSession = newPlayer("GameOwner")
         val gameName = "Test Game"
@@ -108,7 +108,7 @@ class SevenWondersTest {
 
         receivedLobbies = games.next()
         assertNotNull(receivedLobbies)
-        assertEquals(1, receivedLobbies.size.toLong())
+        assertEquals(1, receivedLobbies.size)
         val receivedLobby = receivedLobbies[0]
         assertEquals(createdLobby.id, receivedLobby.id)
         assertEquals(createdLobby.name, receivedLobby.name)

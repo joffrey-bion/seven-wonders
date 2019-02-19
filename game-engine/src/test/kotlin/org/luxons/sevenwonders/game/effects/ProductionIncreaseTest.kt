@@ -61,15 +61,13 @@ class ProductionIncreaseTest {
     fun computePoints_isAlwaysZero(addedType: ResourceType) {
         val effect = ProductionIncrease(fixedProduction(addedType), false)
         val player = SimplePlayer(0, testTable(5))
-        assertEquals(0, effect.computePoints(player).toLong())
+        assertEquals(0, effect.computePoints(player))
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> {
-            return ResourceType.values()
-        }
+        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
     }
 }

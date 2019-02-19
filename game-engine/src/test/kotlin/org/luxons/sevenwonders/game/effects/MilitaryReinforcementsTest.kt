@@ -21,14 +21,14 @@ class MilitaryReinforcementsTest {
         val reinforcements = MilitaryReinforcements(additionalShields)
         reinforcements.applyTo(board)
 
-        assertEquals((initialShields + additionalShields).toLong(), board.military.nbShields.toLong())
+        assertEquals(initialShields + additionalShields, board.military.nbShields)
     }
 
     @Theory
     fun computePoints_isAlwaysZero(shields: Int) {
         val reinforcements = MilitaryReinforcements(shields)
         val player = SimplePlayer(0, testTable(5))
-        assertEquals(0, reinforcements.computePoints(player).toLong())
+        assertEquals(0, reinforcements.computePoints(player))
     }
 
     companion object {

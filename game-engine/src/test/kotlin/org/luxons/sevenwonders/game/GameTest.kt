@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.game.api.HandCard
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
 import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
@@ -33,24 +34,22 @@ class GameTest {
     }
 
     private fun playAge(nbPlayers: Int, game: Game, age: Int) {
-        for (i in 0..5) {
-            playTurn(nbPlayers, game, age, 7 - i)
+        repeat(6) {
+            playTurn(nbPlayers, game, age, 7 - it)
         }
     }
 
-    private fun createGame(nbPlayers: Int): Game {
-        val settings = testCustomizableSettings()
-        return GameDefinition.load().initGame(0, settings, nbPlayers)
-    }
+    private fun createGame(nbPlayers: Int): Game =
+        GameDefinition.load().initGame(0, testCustomizableSettings(), nbPlayers)
 
     private fun playTurn(nbPlayers: Int, game: Game, ageToCheck: Int, handSize: Int) {
         val turnInfos = game.getCurrentTurnInfo()
-        assertEquals(nbPlayers.toLong(), turnInfos.size.toLong())
+        assertEquals(nbPlayers, turnInfos.size)
 
         val sentMoves = HashMap<Int, PlayerMove>(turnInfos.size)
         for (turnInfo in turnInfos) {
-            assertEquals(ageToCheck.toLong(), turnInfo.currentAge.toLong())
-            assertEquals(handSize.toLong(), turnInfo.hand.size.toLong())
+            assertEquals(ageToCheck, turnInfo.currentAge)
+            assertEquals(handSize, turnInfo.hand.size)
             val move = getFirstAvailableMove(turnInfo)
             if (move != null) {
                 game.prepareMove(turnInfo.playerIndex, move)

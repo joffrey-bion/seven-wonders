@@ -1,8 +1,6 @@
 package org.luxons.sevenwonders.game.api
 
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
@@ -54,34 +52,20 @@ class TableTest {
         table.getBoard(1).addCard(guildCards[2])
         table.getBoard(2).addCard(guildCards[3])
 
-        val neightbourCards0 = table.getNeighbourGuildCards(0)
-        assertEquals(1, neightbourCards0.size.toLong())
-        assertFalse(neightbourCards0.contains(guildCards[0]))
-        assertFalse(neightbourCards0.contains(guildCards[1]))
-        assertTrue(neightbourCards0.contains(guildCards[2]))
-        assertFalse(neightbourCards0.contains(guildCards[3]))
+        val neighbourCards0 = table.getNeighbourGuildCards(0)
+        assertEquals(listOf(guildCards[2]), neighbourCards0)
 
-        val neightbourCards1 = table.getNeighbourGuildCards(1)
-        assertEquals(3, neightbourCards1.size.toLong())
-        assertTrue(neightbourCards1.contains(guildCards[0]))
-        assertTrue(neightbourCards1.contains(guildCards[1]))
-        assertFalse(neightbourCards1.contains(guildCards[2]))
-        assertTrue(neightbourCards1.contains(guildCards[3]))
+        val neighbourCards1 = table.getNeighbourGuildCards(1)
+        assertEquals(guildCards - guildCards[2], neighbourCards1)
 
-        val neightbourCards2 = table.getNeighbourGuildCards(2)
-        assertEquals(1, neightbourCards2.size.toLong())
-        assertFalse(neightbourCards2.contains(guildCards[0]))
-        assertFalse(neightbourCards2.contains(guildCards[1]))
-        assertTrue(neightbourCards2.contains(guildCards[2]))
-        assertFalse(neightbourCards2.contains(guildCards[3]))
+        val neighbourCards2 = table.getNeighbourGuildCards(2)
+        assertEquals(listOf(guildCards[2]), neighbourCards2)
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints
-        fun nbPlayers(): IntArray {
-            return intArrayOf(2, 3, 4, 5, 6, 7, 8)
-        }
+        fun nbPlayers(): IntArray = intArrayOf(2, 3, 4, 5, 6, 7, 8)
     }
 }

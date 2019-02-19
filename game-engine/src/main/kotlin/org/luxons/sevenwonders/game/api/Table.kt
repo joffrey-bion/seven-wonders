@@ -36,9 +36,9 @@ class Table internal constructor(val boards: List<Board>) {
     }
 
     internal fun resolveMilitaryConflicts() {
-        for (i in 0 until nbPlayers) {
-            val board1 = getBoard(i)
-            val board2 = getBoard(i, RelativeBoardPosition.RIGHT)
+        repeat(nbPlayers) {
+            val board1 = getBoard(it)
+            val board2 = getBoard(it, RelativeBoardPosition.RIGHT)
             resolveConflict(board1, board2)
         }
     }

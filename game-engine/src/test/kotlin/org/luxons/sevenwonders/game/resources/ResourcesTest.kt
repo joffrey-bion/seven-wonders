@@ -13,7 +13,6 @@ import org.luxons.sevenwonders.game.resources.ResourceType.ORE
 import org.luxons.sevenwonders.game.resources.ResourceType.PAPYRUS
 import org.luxons.sevenwonders.game.resources.ResourceType.STONE
 import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
-import org.luxons.sevenwonders.game.resources.ResourceType.values
 import java.util.NoSuchElementException
 
 class ResourcesTest {
@@ -25,7 +24,7 @@ class ResourcesTest {
     @Test
     fun init_shouldBeEmpty() {
         val resources = emptyResources()
-        for (resourceType in values()) {
+        for (resourceType in ResourceType.values()) {
             assertEquals(0, resources[resourceType])
         }
         assertEquals(0, resources.size)

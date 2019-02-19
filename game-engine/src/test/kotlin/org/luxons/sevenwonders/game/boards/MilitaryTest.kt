@@ -27,7 +27,7 @@ class MilitaryTest {
         val initialPoints = military.totalPoints
 
         military.victory(age)
-        assertEquals((initialPoints + nbPointsPerVictory).toLong(), military.totalPoints.toLong())
+        assertEquals(initialPoints + nbPointsPerVictory, military.totalPoints)
     }
 
     @Theory
@@ -43,27 +43,20 @@ class MilitaryTest {
         val initialPoints = military.totalPoints
 
         military.defeat()
-        assertEquals((initialPoints - nbPointsLostPerDefeat).toLong(), military.totalPoints.toLong())
+        assertEquals(initialPoints - nbPointsLostPerDefeat, military.totalPoints)
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints("points")
-        fun points(): IntArray {
-            return intArrayOf(0, 1, 3, 5)
-        }
+        fun points(): IntArray = intArrayOf(0, 1, 3, 5)
 
         @JvmStatic
         @DataPoints("ages")
-        fun ages(): IntArray {
-            return intArrayOf(1, 2, 3)
-        }
+        fun ages(): IntArray = intArrayOf(1, 2, 3)
 
-        private fun createMilitary(age: Int, nbPointsPerVictory: Int, nbPointsPerDefeat: Int): Military {
-            val wonPointsPerAge = HashMap<Int, Int>()
-            wonPointsPerAge[age] = nbPointsPerVictory
-            return Military(nbPointsPerDefeat, wonPointsPerAge)
-        }
+        private fun createMilitary(age: Int, nbPointsPerVictory: Int, nbPointsPerDefeat: Int): Military =
+            Military(nbPointsPerDefeat, mapOf(age to nbPointsPerVictory))
     }
 }

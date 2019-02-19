@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.resources
 
-enum class ResourceType(val symbol: Char?) {
+enum class ResourceType(val symbol: Char) {
     WOOD('W'),
     STONE('S'),
     ORE('O'),

@@ -18,7 +18,7 @@ class BuildWonderMoveTest {
     @Test(expected = InvalidMoveException::class)
     fun init_failsWhenCardNotInHand() {
         val table = testTable(3)
-        val hand = sampleCards(0, 7)
+        val hand = sampleCards(7)
         val playerContext = PlayerContext(0, table, hand)
         val anotherCard = testCard("Card that is not in the hand")
         createMove(playerContext, anotherCard, MoveType.UPGRADE_WONDER)
@@ -28,7 +28,7 @@ class BuildWonderMoveTest {
     fun init_failsWhenWonderIsCompletelyBuilt() {
         val settings = testSettings(3)
         val table = testTable(settings)
-        val hand = sampleCards(0, 7)
+        val hand = sampleCards(7)
 
         fillPlayerWonderLevels(settings, table, hand)
 
@@ -39,8 +39,8 @@ class BuildWonderMoveTest {
     private fun fillPlayerWonderLevels(settings: Settings, table: Table, hand: List<Card>) {
         try {
             val nbLevels = table.getBoard(0).wonder.stages.size
-            for (i in 0 until nbLevels) {
-                buildOneWonderLevel(settings, table, hand, i)
+            repeat(nbLevels) {
+                buildOneWonderLevel(settings, table, hand, it)
             }
         } catch (e: InvalidMoveException) {
             fail("Building wonder levels should not fail before being full")
@@ -59,7 +59,7 @@ class BuildWonderMoveTest {
     fun place_increasesWonderLevel() {
         val settings = testSettings(3)
         val table = testTable(settings)
-        val hand = sampleCards(0, 7)
+        val hand = sampleCards(7)
         val cardToUse = hand[0]
         val playerContext = PlayerContext(0, table, hand)
         val move = createMove(playerContext, cardToUse, MoveType.UPGRADE_WONDER)
@@ -71,6 +71,6 @@ class BuildWonderMoveTest {
         val newStage = table.getBoard(0).wonder.nbBuiltStages
 
         // we need to see the level increase before activation so that other players
-        assertEquals((initialStage + 1).toLong(), newStage.toLong())
+        assertEquals(initialStage + 1, newStage)
     }
 }

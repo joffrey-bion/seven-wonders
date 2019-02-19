@@ -70,7 +70,7 @@ class DecksTest {
     fun deal_succeedsOnZeroCards(nbPlayers: Int) {
         val decks = createDecks(1, 0)
         val hands = decks.deal(1, nbPlayers)
-        for (i in 0 until nbPlayers) {
+        repeat(nbPlayers) { i ->
             assertNotNull(hands[i])
             assertTrue(hands[i].isEmpty())
         }
@@ -81,8 +81,8 @@ class DecksTest {
         val nbCardsPerAge = nbPlayers * nbCardsPerPlayer
         val decks = createDecks(1, nbCardsPerAge)
         val hands = decks.deal(1, nbPlayers)
-        for (i in 0 until nbPlayers) {
-            assertEquals(nbCardsPerPlayer.toLong(), hands[i].size.toLong())
+        repeat(nbPlayers) { i ->
+            assertEquals(nbCardsPerPlayer, hands[i].size)
         }
     }
 
@@ -90,12 +90,9 @@ class DecksTest {
 
         @JvmStatic
         @DataPoints
-        fun dataPoints(): IntArray {
-            return intArrayOf(1, 2, 3, 5, 10)
-        }
+        fun dataPoints(): IntArray = intArrayOf(1, 2, 3, 5, 10)
 
-        private fun createDecks(nbAges: Int, nbCardsPerAge: Int): Decks {
-            return Decks(IntRange(1, nbAges).map { it to sampleCards(0, nbCardsPerAge) }.toMap())
-        }
+        private fun createDecks(nbAges: Int, nbCardsPerAge: Int): Decks =
+            Decks((1..nbAges).map { it to sampleCards(nbCardsPerAge) }.toMap())
     }
 }

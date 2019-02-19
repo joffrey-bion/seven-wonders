@@ -32,10 +32,10 @@ class ScienceProgressTest {
         val effect = createScienceProgress(compasses, wheels, tablets, jokers)
         effect.applyTo(board)
 
-        assertEquals((initCompasses + compasses).toLong(), board.science.getQuantity(ScienceType.COMPASS).toLong())
-        assertEquals((initWheels + wheels).toLong(), board.science.getQuantity(ScienceType.WHEEL).toLong())
-        assertEquals((initTablets + tablets).toLong(), board.science.getQuantity(ScienceType.TABLET).toLong())
-        assertEquals((initJokers + jokers).toLong(), board.science.jokers.toLong())
+        assertEquals(initCompasses + compasses, board.science.getQuantity(ScienceType.COMPASS))
+        assertEquals(initWheels + wheels, board.science.getQuantity(ScienceType.WHEEL))
+        assertEquals(initTablets + tablets, board.science.getQuantity(ScienceType.TABLET))
+        assertEquals(initJokers + jokers, board.science.jokers)
     }
 
     companion object {

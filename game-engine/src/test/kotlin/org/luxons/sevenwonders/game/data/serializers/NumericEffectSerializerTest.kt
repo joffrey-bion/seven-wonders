@@ -18,7 +18,7 @@ import org.luxons.sevenwonders.game.resources.Production
 @RunWith(Theories::class)
 class NumericEffectSerializerTest {
 
-    private var gson: Gson? = null
+    private lateinit var gson: Gson
 
     @Before
     fun setUp() {
@@ -32,101 +32,99 @@ class NumericEffectSerializerTest {
 
     @Test
     fun serialize_militaryReinforcements_null() {
-        assertEquals("null", gson!!.toJson(null, MilitaryReinforcements::class.java))
+        assertEquals("null", gson.toJson(null, MilitaryReinforcements::class.java))
     }
 
     @Test
     fun serialize_rawPointsIncrease_null() {
-        assertEquals("null", gson!!.toJson(null, RawPointsIncrease::class.java))
+        assertEquals("null", gson.toJson(null, RawPointsIncrease::class.java))
     }
 
     @Test
     fun serialize_goldIncrease_null() {
-        assertEquals("null", gson!!.toJson(null, GoldIncrease::class.java))
+        assertEquals("null", gson.toJson(null, GoldIncrease::class.java))
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun serialize_failOnUnknownType() {
-        gson!!.toJson(ProductionIncrease(Production(), false))
+        gson.toJson(ProductionIncrease(Production(), false))
     }
 
     @Theory
     fun serialize_militaryReinforcements(count: Int) {
         val reinforcements = MilitaryReinforcements(count)
-        assertEquals(count.toString(), gson!!.toJson(reinforcements))
+        assertEquals(count.toString(), gson.toJson(reinforcements))
     }
 
     @Theory
     fun serialize_rawPointsIncrease(count: Int) {
         val points = RawPointsIncrease(count)
-        assertEquals(count.toString(), gson!!.toJson(points))
+        assertEquals(count.toString(), gson.toJson(points))
     }
 
     @Theory
     fun serialize_goldIncrease(count: Int) {
         val goldIncrease = GoldIncrease(count)
-        assertEquals(count.toString(), gson!!.toJson(goldIncrease))
+        assertEquals(count.toString(), gson.toJson(goldIncrease))
     }
 
     @Theory
     fun deserialize_militaryReinforcements(count: Int) {
         val reinforcements = MilitaryReinforcements(count)
-        assertEquals(reinforcements, gson!!.fromJson(count.toString(), MilitaryReinforcements::class.java))
+        assertEquals(reinforcements, gson.fromJson(count.toString(), MilitaryReinforcements::class.java))
     }
 
     @Theory
     fun deserialize_rawPointsIncrease(count: Int) {
         val points = RawPointsIncrease(count)
-        assertEquals(points, gson!!.fromJson(count.toString(), RawPointsIncrease::class.java))
+        assertEquals(points, gson.fromJson(count.toString(), RawPointsIncrease::class.java))
     }
 
     @Theory
     fun deserialize_goldIncrease(count: Int) {
         val goldIncrease = GoldIncrease(count)
-        assertEquals(goldIncrease, gson!!.fromJson(count.toString(), GoldIncrease::class.java))
+        assertEquals(goldIncrease, gson.fromJson(count.toString(), GoldIncrease::class.java))
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_militaryReinforcements_failOnEmptyString() {
-        gson!!.fromJson("\"\"", MilitaryReinforcements::class.java)
+        gson.fromJson("\"\"", MilitaryReinforcements::class.java)
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_rawPointsIncrease_failOnEmptyString() {
-        gson!!.fromJson("\"\"", RawPointsIncrease::class.java)
+        gson.fromJson("\"\"", RawPointsIncrease::class.java)
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_goldIncrease_failOnEmptyString() {
-        gson!!.fromJson("\"\"", GoldIncrease::class.java)
+        gson.fromJson("\"\"", GoldIncrease::class.java)
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_militaryReinforcements_failOnNonNumericString() {
-        gson!!.fromJson("\"abc\"", MilitaryReinforcements::class.java)
+        gson.fromJson("\"abc\"", MilitaryReinforcements::class.java)
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_rawPointsIncrease_failOnNonNumericString() {
-        gson!!.fromJson("\"abc\"", RawPointsIncrease::class.java)
+        gson.fromJson("\"abc\"", RawPointsIncrease::class.java)
     }
 
     @Test(expected = NumberFormatException::class)
     fun deserialize_goldIncrease_failOnNonNumericString() {
-        gson!!.fromJson("\"abc\"", GoldIncrease::class.java)
+        gson.fromJson("\"abc\"", GoldIncrease::class.java)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnUnknownType() {
-        gson!!.fromJson("\"2\"", ProductionIncrease::class.java)
+        gson.fromJson("\"2\"", ProductionIncrease::class.java)
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints
-        fun dataPoints(): IntArray {
-            return intArrayOf(-2, -1, 0, 1, 2, 5)
-        }
+        fun dataPoints(): IntArray = intArrayOf(-2, -1, 0, 1, 2, 5)
     }
 }

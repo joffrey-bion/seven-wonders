@@ -281,12 +281,12 @@ class ProductionTest {
     fun hashCode_sameWhenSameContent() {
         val production1 = Production()
         val production2 = Production()
-        assertEquals(production1.hashCode().toLong(), production2.hashCode().toLong())
+        assertEquals(production1.hashCode(), production2.hashCode())
         production1.addFixedResource(GLASS, 1)
         production2.addFixedResource(GLASS, 1)
-        assertEquals(production1.hashCode().toLong(), production2.hashCode().toLong())
+        assertEquals(production1.hashCode(), production2.hashCode())
         production1.addChoice(ORE, WOOD)
         production2.addChoice(ORE, WOOD)
-        assertEquals(production1.hashCode().toLong(), production2.hashCode().toLong())
+        assertEquals(production1.hashCode(), production2.hashCode())
     }
 }

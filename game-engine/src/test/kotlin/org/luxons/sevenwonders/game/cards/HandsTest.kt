@@ -25,8 +25,8 @@ class HandsTest {
 
     @Test
     fun get_retrievesCorrectCards() {
-        val hand0 = sampleCards(0, 5)
-        val hand1 = sampleCards(5, 10)
+        val hand0 = sampleCards(5, 0)
+        val hand1 = sampleCards(10, 5)
         val hands = Hands(listOf(hand0, hand1))
         assertEquals(hand0, hands[0])
         assertEquals(hand1, hands[1])
@@ -71,7 +71,6 @@ class HandsTest {
     @Theory
     fun maxOneCardRemains_trueWhenAtMost1_someZero(@FromDataPoints("nbPlayers") nbPlayers: Int) {
         val hands = createHands(nbPlayers, 1)
-        hands[0].drop(1)
         assertTrue(hands.maxOneCardRemains())
     }
 
@@ -95,16 +94,14 @@ class HandsTest {
 
     @Test
     fun createHand_containsAllCards() {
-        val hand0 = sampleCards(0, 5)
-        val hand1 = sampleCards(5, 10)
+        val hand0 = sampleCards(5, 0)
+        val hand1 = sampleCards(10, 5)
         val hands = Hands(listOf(hand0, hand1))
 
         val table = testTable(2)
         val hand = hands.createHand(SimplePlayer(0, table))
 
-        for (handCard in hand) {
-            assertTrue(hand0.contains(handCard.card))
-        }
+        hand.map { it.card }.forEach { assertTrue(it in hand0) }
     }
 
     companion object {
@@ -122,7 +119,7 @@ class HandsTest {
         }
 
         private fun createHands(nbPlayers: Int, nbCardsPerPlayer: Int): Hands {
-            return sampleCards(0, nbCardsPerPlayer * nbPlayers).deal(nbPlayers)
+            return sampleCards(nbCardsPerPlayer * nbPlayers, 0).deal(nbPlayers)
         }
     }
 }

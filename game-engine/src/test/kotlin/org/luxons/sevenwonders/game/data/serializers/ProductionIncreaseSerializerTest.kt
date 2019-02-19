@@ -15,7 +15,7 @@ import org.luxons.sevenwonders.game.resources.Resources
 
 class ProductionIncreaseSerializerTest {
 
-    private var gson: Gson? = null
+    private lateinit var gson: Gson
 
     @Before
     fun setUp() {
@@ -51,130 +51,130 @@ class ProductionIncreaseSerializerTest {
 
     @Test
     fun serialize_nullAsNull() {
-        assertEquals("null", gson!!.toJson(null, ProductionIncrease::class.java))
+        assertEquals("null", gson.toJson(null, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_emptyProdIncreaseAsNull() {
         val prodIncrease = ProductionIncrease(Production(), false)
-        assertEquals("null", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("null", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_singleType() {
         val prodIncrease = create(true, 1, 0, 0)
-        assertEquals("\"W\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"W\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_mixedTypes() {
         val prodIncrease = create(true, 1, 1, 1)
-        assertEquals("\"WSC\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"WSC\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_mixedTypes_notSellable() {
         val prodIncrease = create(false, 1, 1, 1)
-        assertEquals("\"(WSC)\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"(WSC)\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_choice2() {
         val prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY)
-        assertEquals("\"W/C\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"W/C\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_choice3() {
         val prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY)
-        assertEquals("\"W/O/C\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"W/O/C\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_choice3_notSellable() {
         val prodIncrease = createChoice(false, ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY)
-        assertEquals("\"(W/O/C)\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"(W/O/C)\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_choice2_unordered() {
         val prodIncrease = createChoice(true, ResourceType.CLAY, ResourceType.WOOD)
-        assertEquals("\"W/C\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"W/C\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test
     fun serialize_choice3_unordered() {
         val prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY, ResourceType.ORE)
-        assertEquals("\"W/O/C\"", gson!!.toJson(prodIncrease, ProductionIncrease::class.java))
+        assertEquals("\"W/O/C\"", gson.toJson(prodIncrease, ProductionIncrease::class.java))
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun serialize_failIfMultipleChoices() {
         val prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY)
         prodIncrease.production.addChoice(ResourceType.ORE, ResourceType.GLASS)
-        gson!!.toJson(prodIncrease, ProductionIncrease::class.java)
+        gson.toJson(prodIncrease, ProductionIncrease::class.java)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun serialize_failIfMixedFixedAndChoices() {
         val prodIncrease = create(true, 1, 0, 0)
         prodIncrease.production.addChoice(ResourceType.WOOD, ResourceType.CLAY)
-        gson!!.toJson(prodIncrease, ProductionIncrease::class.java)
+        gson.toJson(prodIncrease, ProductionIncrease::class.java)
     }
 
     @Test
     fun deserialize_nullFromNull() {
-        assertNull(gson!!.fromJson("null", ProductionIncrease::class.java))
+        assertNull(gson.fromJson("null", ProductionIncrease::class.java))
     }
 
     @Test
     fun deserialize_emptyList() {
         val prodIncrease = ProductionIncrease(Production(), true)
-        assertEquals(prodIncrease, gson!!.fromJson("\"\"", ProductionIncrease::class.java))
+        assertEquals(prodIncrease, gson.fromJson("\"\"", ProductionIncrease::class.java))
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnGarbageString() {
-        gson!!.fromJson("\"this is garbage\"", ProductionIncrease::class.java)
+        gson.fromJson("\"this is garbage\"", ProductionIncrease::class.java)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnGarbageStringWithSlashes() {
-        gson!!.fromJson("\"this/is/garbage\"", ProductionIncrease::class.java)
+        gson.fromJson("\"this/is/garbage\"", ProductionIncrease::class.java)
     }
 
     @Test
     fun deserialize_singleType() {
         val prodIncrease = create(true, 1, 0, 0)
-        assertEquals(prodIncrease, gson!!.fromJson("\"W\"", ProductionIncrease::class.java))
+        assertEquals(prodIncrease, gson.fromJson("\"W\"", ProductionIncrease::class.java))
     }
 
     @Test
     fun deserialize_multipleTimesSameType_notSellable() {
         val prodIncrease = create(false, 3, 0, 0)
-        assertEquals(prodIncrease, gson!!.fromJson("\"(WWW)\"", ProductionIncrease::class.java))
+        assertEquals(prodIncrease, gson.fromJson("\"(WWW)\"", ProductionIncrease::class.java))
     }
 
     @Test
     fun deserialize_mixedTypes() {
         val prodIncrease = create(true, 1, 1, 1)
-        assertEquals(prodIncrease, gson!!.fromJson("\"WCS\"", ProductionIncrease::class.java))
+        assertEquals(prodIncrease, gson.fromJson("\"WCS\"", ProductionIncrease::class.java))
     }
 
     @Test
     fun deserialize_choice2() {
         val prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY)
-        assertEquals(prodIncrease, gson!!.fromJson("\"W/C\"", ProductionIncrease::class.java))
+        assertEquals(prodIncrease, gson.fromJson("\"W/C\"", ProductionIncrease::class.java))
     }
 
     @Test
     fun deserialize_choice3_notSellable() {
         val prodIncrease = createChoice(false, ResourceType.WOOD, ResourceType.ORE, ResourceType.CLAY)
-        assertEquals(prodIncrease, gson!!.fromJson("\"(W/O/C)\"", ProductionIncrease::class.java))
+        assertEquals(prodIncrease, gson.fromJson("\"(W/O/C)\"", ProductionIncrease::class.java))
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun deserialize_failOnMultipleResourcesInChoice() {
-        gson!!.fromJson("\"W/SS/C\"", ProductionIncrease::class.java)
+        gson.fromJson("\"W/SS/C\"", ProductionIncrease::class.java)
     }
 }

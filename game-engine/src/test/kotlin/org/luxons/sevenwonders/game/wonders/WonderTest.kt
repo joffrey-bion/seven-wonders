@@ -11,13 +11,13 @@ class WonderTest {
     @Test
     fun buildLevel_increasesNbBuiltStages() {
         val wonder = testWonder()
-        assertEquals(0, wonder.nbBuiltStages.toLong())
+        assertEquals(0, wonder.nbBuiltStages)
         wonder.placeCard(CardBack("img"))
-        assertEquals(1, wonder.nbBuiltStages.toLong())
+        assertEquals(1, wonder.nbBuiltStages)
         wonder.placeCard(CardBack("img"))
-        assertEquals(2, wonder.nbBuiltStages.toLong())
+        assertEquals(2, wonder.nbBuiltStages)
         wonder.placeCard(CardBack("img"))
-        assertEquals(3, wonder.nbBuiltStages.toLong())
+        assertEquals(3, wonder.nbBuiltStages)
     }
 
     @Test

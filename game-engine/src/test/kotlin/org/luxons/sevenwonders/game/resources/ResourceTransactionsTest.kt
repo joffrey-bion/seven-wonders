@@ -5,7 +5,6 @@ import org.junit.Test
 import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
 import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.game.test.createTransaction
-import org.luxons.sevenwonders.game.test.of
 
 class ResourceTransactionsTest {
 
@@ -23,4 +22,6 @@ class ResourceTransactionsTest {
 
         assertEquals(expectedNormalized, transactionMap.toTransactions().toSet())
     }
+
+    private infix fun Int.of(type: ResourceType): Resources = resourcesOf(type to this)
 }

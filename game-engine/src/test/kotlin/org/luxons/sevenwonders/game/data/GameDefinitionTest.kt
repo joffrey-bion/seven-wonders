@@ -11,8 +11,8 @@ class GameDefinitionTest {
     fun successfulGameInit() {
         val gameDefinition = GameDefinition.load()
         assertNotNull(gameDefinition)
-        assertEquals(3, gameDefinition.minPlayers.toLong())
-        assertEquals(7, gameDefinition.maxPlayers.toLong())
+        assertEquals(3, gameDefinition.minPlayers)
+        assertEquals(7, gameDefinition.maxPlayers)
 
         val game = gameDefinition.initGame(0, CustomizableSettings(), 7)
         assertNotNull(game)

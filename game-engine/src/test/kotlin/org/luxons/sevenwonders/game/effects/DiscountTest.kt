@@ -21,7 +21,7 @@ class DiscountTest {
         discount.applyTo(board)
 
         val transactions = createTransactions(provider, discountedType)
-        assertEquals(discountedPrice.toLong(), board.tradingRules.computeCost(transactions).toLong())
+        assertEquals(discountedPrice, board.tradingRules.computeCost(transactions))
     }
 
     @Theory
@@ -43,13 +43,13 @@ class DiscountTest {
         val normalPrice = 2
 
         val fromOtherType = createTransactions(provider, otherType)
-        assertEquals(normalPrice.toLong(), board.tradingRules.computeCost(fromOtherType).toLong())
+        assertEquals(normalPrice, board.tradingRules.computeCost(fromOtherType))
 
         val fromOtherProvider = createTransactions(otherProvider, discountedType)
-        assertEquals(normalPrice.toLong(), board.tradingRules.computeCost(fromOtherProvider).toLong())
+        assertEquals(normalPrice, board.tradingRules.computeCost(fromOtherProvider))
 
         val fromOtherProviderAndType = createTransactions(otherProvider, otherType)
-        assertEquals(normalPrice.toLong(), board.tradingRules.computeCost(fromOtherProviderAndType).toLong())
+        assertEquals(normalPrice, board.tradingRules.computeCost(fromOtherProviderAndType))
     }
 
     companion object {

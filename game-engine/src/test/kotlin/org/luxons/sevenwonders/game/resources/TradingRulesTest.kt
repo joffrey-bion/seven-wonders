@@ -26,28 +26,28 @@ class TradingRulesTest {
         val rules = TradingRules(defaultCost)
         rules.setCost(type, overriddenProvider, overriddenCost)
 
-        assertEquals(overriddenCost.toLong(), rules.getCost(type, overriddenProvider).toLong())
-        assertEquals(defaultCost.toLong(), rules.getCost(type, provider).toLong())
+        assertEquals(overriddenCost, rules.getCost(type, overriddenProvider))
+        assertEquals(defaultCost, rules.getCost(type, provider))
     }
 
     @Theory
     fun computeCost_zeroForNoResources(defaultCost: Int) {
         val rules = TradingRules(defaultCost)
-        assertEquals(0, rules.computeCost(noTransactions()).toLong())
+        assertEquals(0, rules.computeCost(noTransactions()))
     }
 
     @Theory
     fun computeCost_defaultCostWhenNoOverride(defaultCost: Int, provider: Provider, type: ResourceType) {
         val rules = TradingRules(defaultCost)
         val transactions = createTransactions(provider, type)
-        assertEquals(defaultCost.toLong(), rules.computeCost(transactions).toLong())
+        assertEquals(defaultCost, rules.computeCost(transactions))
     }
 
     @Theory
     fun computeCost_twiceDefaultFor2Resources(defaultCost: Int, provider: Provider, type: ResourceType) {
         val rules = TradingRules(defaultCost)
         val transactions = createTransactions(provider, type, type)
-        assertEquals((2 * defaultCost).toLong(), rules.computeCost(transactions).toLong())
+        assertEquals(2 * defaultCost, rules.computeCost(transactions))
     }
 
     @Theory
@@ -55,7 +55,7 @@ class TradingRulesTest {
         val rules = TradingRules(defaultCost)
         rules.setCost(type, provider, overriddenCost)
         val transactions = createTransactions(provider, type)
-        assertEquals(overriddenCost.toLong(), rules.computeCost(transactions).toLong())
+        assertEquals(overriddenCost, rules.computeCost(transactions))
     }
 
     @Theory
@@ -71,7 +71,7 @@ class TradingRulesTest {
         val rules = TradingRules(defaultCost)
         rules.setCost(overriddenType, overriddenProvider, overriddenCost)
         val transactions = createTransactions(provider, type)
-        assertEquals(defaultCost.toLong(), rules.computeCost(transactions).toLong())
+        assertEquals(defaultCost, rules.computeCost(transactions))
     }
 
     @Theory
@@ -86,7 +86,7 @@ class TradingRulesTest {
         val rules = TradingRules(defaultCost)
         rules.setCost(overriddenType, provider, overriddenCost)
         val transactions = createTransactions(provider, overriddenType, type)
-        assertEquals((defaultCost + overriddenCost).toLong(), rules.computeCost(transactions).toLong())
+        assertEquals(defaultCost + overriddenCost, rules.computeCost(transactions))
     }
 
     @Theory
@@ -113,20 +113,14 @@ class TradingRulesTest {
 
         @JvmStatic
         @DataPoints
-        fun costs(): IntArray {
-            return intArrayOf(0, 1, 2)
-        }
+        fun costs(): IntArray = intArrayOf(0, 1, 2)
 
         @JvmStatic
         @DataPoints
-        fun providers(): Array<Provider> {
-            return Provider.values()
-        }
+        fun providers(): Array<Provider> = Provider.values()
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> {
-            return ResourceType.values()
-        }
+        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
     }
 }

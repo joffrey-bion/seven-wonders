@@ -13,8 +13,8 @@ import java.util.ArrayList
 
 class ResourceTypesSerializerTest {
 
-    private var gson: Gson? = null
-
+    private lateinit var gson: Gson
+    
     @Before
     fun setUp() {
         gson = GsonBuilder().registerTypeAdapter(createListTypeToken(), ResourceTypesSerializer()).create()
@@ -26,20 +26,20 @@ class ResourceTypesSerializerTest {
 
     @Test
     fun serialize_null() {
-        assertEquals("null", gson!!.toJson(null, createListTypeToken()))
+        assertEquals("null", gson.toJson(null, createListTypeToken()))
     }
 
     @Test
     fun serialize_emptyList() {
         val types = ArrayList<ResourceType>()
-        assertEquals("\"\"", gson!!.toJson(types, createListTypeToken()))
+        assertEquals("\"\"", gson.toJson(types, createListTypeToken()))
     }
 
     @Test
     fun serialize_singleType() {
         val types = ArrayList<ResourceType>()
         types.add(ResourceType.WOOD)
-        assertEquals("\"W\"", gson!!.toJson(types, createListTypeToken()))
+        assertEquals("\"W\"", gson.toJson(types, createListTypeToken()))
     }
 
     @Test
@@ -48,7 +48,7 @@ class ResourceTypesSerializerTest {
         types.add(ResourceType.WOOD)
         types.add(ResourceType.WOOD)
         types.add(ResourceType.WOOD)
-        assertEquals("\"WWW\"", gson!!.toJson(types, createListTypeToken()))
+        assertEquals("\"WWW\"", gson.toJson(types, createListTypeToken()))
     }
 
     @Test
@@ -57,25 +57,25 @@ class ResourceTypesSerializerTest {
         types.add(ResourceType.WOOD)
         types.add(ResourceType.CLAY)
         types.add(ResourceType.STONE)
-        assertEquals("\"WCS\"", gson!!.toJson(types, createListTypeToken()))
+        assertEquals("\"WCS\"", gson.toJson(types, createListTypeToken()))
     }
 
     @Test
     fun deserialize_null() {
-        assertNull(gson!!.fromJson("null", createListTypeToken()))
+        assertNull(gson.fromJson("null", createListTypeToken()))
     }
 
     @Test
     fun deserialize_emptyList() {
         val types = ArrayList<ResourceType>()
-        assertEquals(types, gson!!.fromJson("\"\"", createListTypeToken()))
+        assertEquals(types, gson.fromJson("\"\"", createListTypeToken()))
     }
 
     @Test
     fun deserialize_singleType() {
         val types = ArrayList<ResourceType>()
         types.add(ResourceType.WOOD)
-        assertEquals(types, gson!!.fromJson("\"W\"", createListTypeToken()))
+        assertEquals(types, gson.fromJson("\"W\"", createListTypeToken()))
     }
 
     @Test
@@ -84,7 +84,7 @@ class ResourceTypesSerializerTest {
         types.add(ResourceType.WOOD)
         types.add(ResourceType.WOOD)
         types.add(ResourceType.WOOD)
-        assertEquals(types, gson!!.fromJson("\"WWW\"", createListTypeToken()))
+        assertEquals(types, gson.fromJson("\"WWW\"", createListTypeToken()))
     }
 
     @Test
@@ -93,6 +93,6 @@ class ResourceTypesSerializerTest {
         types.add(ResourceType.WOOD)
         types.add(ResourceType.CLAY)
         types.add(ResourceType.STONE)
-        assertEquals(types, gson!!.fromJson("\"WCS\"", createListTypeToken()))
+        assertEquals(types, gson.fromJson("\"WCS\"", createListTypeToken()))
     }
 }

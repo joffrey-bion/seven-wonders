@@ -35,7 +35,7 @@ class SpecialAbilityActivationTest {
         val effect = SpecialAbilityActivation(ability)
         val player = SimplePlayer(0, testTable(5))
 
-        assertEquals(0, effect.computePoints(player).toLong())
+        assertEquals(0, effect.computePoints(player))
     }
 
     @Theory
@@ -49,7 +49,7 @@ class SpecialAbilityActivationTest {
         player.board.copiedGuild = guildCard
 
         val directPointsFromGuildCard = guildCard.effects.stream().mapToInt { e -> e.computePoints(player) }.sum()
-        assertEquals(directPointsFromGuildCard.toLong(), effect.computePoints(player).toLong())
+        assertEquals(directPointsFromGuildCard, effect.computePoints(player))
     }
 
     @Test(expected = IllegalStateException::class)

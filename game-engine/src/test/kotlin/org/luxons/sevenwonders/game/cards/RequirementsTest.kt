@@ -129,22 +129,18 @@ class RequirementsTest {
 
         requirements.pay(player, transactions)
 
-        assertEquals(0, board.gold.toLong())
-        assertEquals(2, neighbourBoard.gold.toLong())
+        assertEquals(0, board.gold)
+        assertEquals(2, neighbourBoard.gold)
     }
 
     companion object {
 
         @JvmStatic
         @DataPoints
-        fun goldAmounts(): IntArray {
-            return intArrayOf(0, 1, 2, 5)
-        }
+        fun goldAmounts(): IntArray = intArrayOf(0, 1, 2, 5)
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> {
-            return ResourceType.values()
-        }
+        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
     }
 }

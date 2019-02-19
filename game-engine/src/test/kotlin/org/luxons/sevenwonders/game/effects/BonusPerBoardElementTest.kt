@@ -18,13 +18,13 @@ import org.luxons.sevenwonders.game.test.testTable
 @RunWith(Theories::class)
 class BonusPerBoardElementTest {
 
-    private var table: Table? = null
-    private var player0: Player? = null
+    private lateinit var table: Table
+    private lateinit var player0: Player
 
     @Before
     fun setUp() {
         table = testTable(4)
-        player0 = SimplePlayer(0, table!!)
+        player0 = SimplePlayer(0, table)
     }
 
     @Theory
@@ -36,12 +36,12 @@ class BonusPerBoardElementTest {
         gold: Int,
         color: Color
     ) {
-        val board = table!!.getBoard(0, boardPosition)
+        val board = table.getBoard(0, boardPosition)
         addCards(board, nbCards, nbOtherCards, color)
 
         val bonus = BonusPerBoardElement(listOf(boardPosition), BoardElementType.CARD, gold, points, listOf(color))
 
-        assertEquals((nbCards * points).toLong(), bonus.computePoints(player0!!).toLong())
+        assertEquals(nbCards * points, bonus.computePoints(player0))
     }
 
     @Theory
@@ -51,27 +51,27 @@ class BonusPerBoardElementTest {
         points: Int,
         gold: Int
     ) {
-        val board = table!!.getBoard(0, boardPosition)
-        for (i in 0 until nbDefeatTokens) {
+        val board = table.getBoard(0, boardPosition)
+        repeat(nbDefeatTokens) {
             board.military.defeat()
         }
 
         val bonus = BonusPerBoardElement(listOf(boardPosition), BoardElementType.DEFEAT_TOKEN, gold, points, listOf())
 
-        assertEquals((nbDefeatTokens * points).toLong(), bonus.computePoints(player0!!).toLong())
+        assertEquals(nbDefeatTokens * points, bonus.computePoints(player0))
     }
 
     @Theory
     fun computePoints_countsWonderStages(boardPosition: RelativeBoardPosition, nbStages: Int, points: Int, gold: Int) {
-        val board = table!!.getBoard(0, boardPosition)
-        for (i in 0 until nbStages) {
+        val board = table.getBoard(0, boardPosition)
+        repeat(nbStages) {
             board.wonder.placeCard(CardBack(""))
         }
 
         val bonus =
             BonusPerBoardElement(listOf(boardPosition), BoardElementType.BUILT_WONDER_STAGES, gold, points, listOf())
 
-        assertEquals((nbStages * points).toLong(), bonus.computePoints(player0!!).toLong())
+        assertEquals(nbStages * points, bonus.computePoints(player0))
     }
 
     @Theory
@@ -83,46 +83,46 @@ class BonusPerBoardElementTest {
         gold: Int,
         color: Color
     ) {
-        val board = table!!.getBoard(0, boardPosition)
+        val board = table.getBoard(0, boardPosition)
         addCards(board, nbCards, nbOtherCards, color)
 
         val bonus = BonusPerBoardElement(listOf(boardPosition), BoardElementType.CARD, gold, points, listOf(color))
 
-        val selfBoard = table!!.getBoard(0)
+        val selfBoard = table.getBoard(0)
         val initialGold = selfBoard.gold
-        bonus.applyTo(player0!!)
-        assertEquals((initialGold + nbCards * gold).toLong(), selfBoard.gold.toLong())
+        bonus.applyTo(player0)
+        assertEquals(initialGold + nbCards * gold, selfBoard.gold)
     }
 
     @Theory
     fun apply_countsDefeatTokens(boardPosition: RelativeBoardPosition, nbDefeatTokens: Int, points: Int, gold: Int) {
-        val board = table!!.getBoard(0, boardPosition)
-        for (i in 0 until nbDefeatTokens) {
+        val board = table.getBoard(0, boardPosition)
+        repeat(nbDefeatTokens) {
             board.military.defeat()
         }
 
         val bonus = BonusPerBoardElement(listOf(boardPosition), BoardElementType.DEFEAT_TOKEN, gold, points, listOf())
 
-        val selfBoard = table!!.getBoard(0)
+        val selfBoard = table.getBoard(0)
         val initialGold = selfBoard.gold
-        bonus.applyTo(player0!!)
-        assertEquals((initialGold + nbDefeatTokens * gold).toLong(), selfBoard.gold.toLong())
+        bonus.applyTo(player0)
+        assertEquals(initialGold + nbDefeatTokens * gold, selfBoard.gold)
     }
 
     @Theory
     fun apply_countsWonderStages(boardPosition: RelativeBoardPosition, nbStages: Int, points: Int, gold: Int) {
-        val board = table!!.getBoard(0, boardPosition)
-        for (i in 0 until nbStages) {
+        val board = table.getBoard(0, boardPosition)
+        repeat(nbStages) {
             board.wonder.placeCard(CardBack(""))
         }
 
         val bonus =
             BonusPerBoardElement(listOf(boardPosition), BoardElementType.BUILT_WONDER_STAGES, gold, points, listOf())
 
-        val selfBoard = table!!.getBoard(0)
+        val selfBoard = table.getBoard(0)
         val initialGold = selfBoard.gold
-        bonus.applyTo(player0!!)
-        assertEquals((initialGold + nbStages * gold).toLong(), selfBoard.gold.toLong())
+        bonus.applyTo(player0)
+        assertEquals(initialGold + nbStages * gold, selfBoard.gold)
     }
 
     companion object {

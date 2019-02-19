@@ -15,7 +15,7 @@ class RawPointsIncreaseTest {
     fun computePoints_equalsNbOfPoints(points: Int) {
         val rawPointsIncrease = RawPointsIncrease(points)
         val player = SimplePlayer(0, testTable(5))
-        assertEquals(points.toLong(), rawPointsIncrease.computePoints(player).toLong())
+        assertEquals(points, rawPointsIncrease.computePoints(player))
     }
 
     companion object {

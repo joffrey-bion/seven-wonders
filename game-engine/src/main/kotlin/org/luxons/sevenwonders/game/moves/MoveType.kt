@@ -4,7 +4,7 @@ import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.cards.Card
 
-enum class MoveType(val create: (move: PlayerMove, card: Card, context: PlayerContext) -> Move) {
+enum class MoveType(private val create: (move: PlayerMove, card: Card, context: PlayerContext) -> Move) {
     PLAY(::PlayCardMove),
     PLAY_FREE(::PlayFreeCardMove),
     UPGRADE_WONDER(::BuildWonderMove),
