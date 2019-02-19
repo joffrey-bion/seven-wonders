@@ -1,34 +1,29 @@
 package org.luxons.sevenwonders.game.resources
 
-import java.util.NoSuchElementException
-
 fun emptyResources(): Resources = MutableResources()
 
-fun resourcesOf(singleResource: ResourceType): Resources = MutableResources(mutableMapOf(singleResource to 1))
+fun resourcesOf(singleResource: ResourceType): Resources = mapOf(singleResource to 1).toMutableResources()
 
-fun resourcesOf(vararg resources: ResourceType): Resources =
-    resources.fold(MutableResources()) { rs, r -> rs.add(r, 1); rs }
+fun resourcesOf(vararg resources: ResourceType): Resources = resources.map { it to 1 }.toMutableResources()
 
-fun resourcesOf(resources: Iterable<ResourceType>): Resources =
-    resources.fold(MutableResources()) { rs, r -> rs.add(r, 1); rs }
+fun resourcesOf(vararg resources: Pair<ResourceType, Int>): Resources = mutableResourcesOf(*resources)
 
-fun resourcesOf(vararg resources: Pair<ResourceType, Int>): Resources =
-    resources.fold(MutableResources()) { rs, (type, qty) -> rs.add(type, qty); rs }
+fun Iterable<Pair<ResourceType, Int>>.toResources(): Resources = toMutableResources()
 
-internal fun mutableResourcesOf() = MutableResources()
-
-internal fun mutableResourcesOf(vararg resources: Pair<ResourceType, Int>) =
-    resources.fold(MutableResources()) { rs, (type, qty) -> rs.add(type, qty); rs }
-
-fun Iterable<ResourceType>.toResources(): Resources = resourcesOf(this)
+fun Map<ResourceType, Int>.toResources(): Resources = toMutableResources()
 
 fun Iterable<Resources>.merge(): Resources = fold(MutableResources()) { r1, r2 -> r1.add(r2); r1 }
 
-internal fun Resources.toMutableResources(): MutableResources {
-    val resources = MutableResources()
-    resources.add(this)
-    return resources
-}
+internal fun mutableResourcesOf() = MutableResources()
+
+internal fun mutableResourcesOf(vararg resources: Pair<ResourceType, Int>) = resources.asIterable().toMutableResources()
+
+internal fun Iterable<Pair<ResourceType, Int>>.toMutableResources(): MutableResources =
+    fold(MutableResources()) { mr, (type, qty) -> mr.add(type, qty); mr }
+
+internal fun Map<ResourceType, Int>.toMutableResources(): MutableResources = MutableResources(toMutableMap())
+
+internal fun Resources.toMutableResources(): MutableResources = quantities.toMutableResources()
 
 interface Resources {
 
@@ -43,26 +38,21 @@ interface Resources {
 
     fun containsAll(resources: Resources): Boolean = resources.quantities.all { it.value <= this[it.key] }
 
-    operator fun plus(resources: Resources): Resources {
-        val new = MutableResources()
-        new.add(this)
-        new.add(resources)
-        return new
-    }
+    operator fun plus(resources: Resources): Resources =
+        ResourceType.values().map { it to this[it] + resources[it] }.toResources()
 
-    operator fun minus(resources: Resources): Resources {
-        val diff = MutableResources()
-        quantities.forEach { type, count ->
-            val remainder = count - resources[type]
-            diff.quantities[type] = Math.max(0, remainder)
-        }
-        return diff
-    }
+    /**
+     * Returns new resources containing these resources minus the given [resources]. If the given resources contain
+     * more than these resources contain for a resource type, then the resulting resources will contain none of that
+     * type.
+     */
+    operator fun minus(resources: Resources): Resources =
+        quantities.mapValues { (type, q) -> Math.max(0, q - resources[type]) }.toResources()
 
     fun toList(): List<ResourceType> = quantities.flatMap { (type, quantity) -> List(quantity) { type } }
 }
 
-data class MutableResources(
+class MutableResources(
     override val quantities: MutableMap<ResourceType, Int> = mutableMapOf()
 ) : Resources {
 
@@ -77,9 +67,10 @@ data class MutableResources(
             throw NoSuchElementException("Can't remove $quantity resources of type $type")
         }
         quantities.computeIfPresent(type) { _, oldQty -> oldQty - quantity }
-        // to ensure equals() work properly
-        if (quantities[type] == 0) {
-            quantities.remove(type)
-        }
     }
+
+    override fun equals(other: Any?): Boolean =
+        other is Resources && quantities.filterValues { it > 0 } == other.quantities.filterValues { it > 0 }
+
+    override fun hashCode(): Int = quantities.filterValues { it > 0 }.hashCode()
 }
