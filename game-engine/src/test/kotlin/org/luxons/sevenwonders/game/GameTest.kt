@@ -10,8 +10,6 @@ import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.Resources
-import org.luxons.sevenwonders.game.resources.bestSolution
 import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
 import java.util.HashMap
@@ -73,27 +71,19 @@ class GameTest {
     private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
         for (handCard in turnInfo.hand) {
             if (handCard.isPlayable) {
-                val resourcesToBuy = findResourcesToBuyFor(handCard, turnInfo)
-                return PlayerMove(MoveType.PLAY, handCard.card.name, resourcesToBuy)
+                val transactions = findResourcesToBuyFor(handCard)
+                return PlayerMove(MoveType.PLAY, handCard.name, transactions)
             }
         }
         val firstCardInHand = turnInfo.hand[0]
-        return PlayerMove(MoveType.DISCARD, firstCardInHand.card.name)
+        return PlayerMove(MoveType.DISCARD, firstCardInHand.name)
     }
 
-    private fun findResourcesToBuyFor(handCard: HandCard, turnInfo: PlayerTurnInfo): ResourceTransactions {
+    private fun findResourcesToBuyFor(handCard: HandCard): ResourceTransactions {
         if (handCard.isFree) {
             return noTransactions()
         }
-        val requiredResources = handCard.card.requirements.resources
-        val table = turnInfo.table
-        val playerIndex = turnInfo.playerIndex
-        // we're supposed to have a best transaction plan because the card is playable
-        return bestTransaction(requiredResources, PlayerContext(playerIndex, table, listOf()))
-    }
-
-    private fun bestTransaction(resources: Resources, player: Player): ResourceTransactions {
-        return bestSolution(resources, player).possibleTransactions.first()
+        return handCard.cheapestTransactions.possibleTransactions.first()
     }
 
     private fun createPickGuildMove(turnInfo: PlayerTurnInfo): PlayerMove {
@@ -106,7 +96,7 @@ class GameTest {
 
     private fun checkLastPlayedMoves(sentMoves: Map<Int, PlayerMove>, table: Table) {
         for (move in table.lastPlayedMoves) {
-            val sentMove = sentMoves[move.playerContext.index]
+            val sentMove = sentMoves[move.playerIndex]
             assertNotNull(sentMove)
             assertNotNull(move.card)
             assertEquals(sentMove.cardName, move.card.name)

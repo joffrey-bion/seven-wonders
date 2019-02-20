@@ -7,7 +7,7 @@ import java.util.EnumSet
 internal fun bestSolution(resources: Resources, player: Player): TransactionPlan =
     BestPriceCalculator(resources, player).computeBestSolution()
 
-internal data class TransactionPlan(val price: Int, val possibleTransactions: Set<ResourceTransactions>)
+data class TransactionPlan(val price: Int, val possibleTransactions: Set<ResourceTransactions>)
 
 private class ResourcePool(
     val provider: Provider?,

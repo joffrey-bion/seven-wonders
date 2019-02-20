@@ -8,17 +8,19 @@ import org.luxons.sevenwonders.game.data.Age
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.TradingRules
+import org.luxons.sevenwonders.game.resources.mutableResourcesOf
 import org.luxons.sevenwonders.game.score.PlayerScore
 import org.luxons.sevenwonders.game.score.ScoreCategory
 import org.luxons.sevenwonders.game.wonders.Wonder
 
-class Board internal constructor(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
+internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
 
-    val production = Production()
-    val publicProduction = Production()
+    val production = Production(mutableResourcesOf(wonder.initialResource))
+    val publicProduction = Production(mutableResourcesOf(wonder.initialResource))
     val science = Science()
-    val tradingRules: TradingRules = TradingRules(settings.defaultTradingCost)
     val military: Military = Military(settings.lostPointsPerDefeat, settings.wonPointsPerVictoryPerAge)
+    val tradingRules: TradingRules = TradingRules(settings.defaultTradingCost)
+
     private val pointsPer3Gold: Int = settings.pointsPer3Gold
 
     private val playedCards: MutableList<Card> = arrayListOf()
@@ -36,33 +38,28 @@ class Board internal constructor(val wonder: Wonder, val playerIndex: Int, setti
             field = copiedGuild
         }
 
-    init {
-        this.production.addFixedResource(wonder.initialResource, 1)
-        this.publicProduction.addFixedResource(wonder.initialResource, 1)
-    }
-
     fun getPlayedCards(): List<Card> = playedCards
 
-    internal fun addCard(card: Card) {
+    fun addCard(card: Card) {
         playedCards.add(card)
     }
 
-    internal fun getNbCardsOfColor(colorFilter: List<Color>): Int = playedCards.count { colorFilter.contains(it.color) }
+    fun getNbCardsOfColor(colorFilter: List<Color>): Int = playedCards.count { colorFilter.contains(it.color) }
 
     fun isPlayed(cardName: String): Boolean = playedCards.count { it.name == cardName } > 0
 
-    internal fun addGold(amount: Int) {
+    fun addGold(amount: Int) {
         this.gold += amount
     }
 
-    internal fun removeGold(amount: Int) {
+    fun removeGold(amount: Int) {
         if (gold < amount) {
             throw InsufficientFundsException(gold, amount)
         }
         this.gold -= amount
     }
 
-    internal fun addSpecial(specialAbility: SpecialAbility) {
+    fun addSpecial(specialAbility: SpecialAbility) {
         specialAbilities.add(specialAbility)
     }
 
@@ -75,7 +72,7 @@ class Board internal constructor(val wonder: Wonder, val playerIndex: Int, setti
         consumedFreeCards[age] = true
     }
 
-    internal fun computeScore(player: Player): PlayerScore = PlayerScore(
+    fun computeScore(player: Player): PlayerScore = PlayerScore(
         boardGold = gold,
         pointsByCategory = mapOf(
             ScoreCategory.CIVIL to computePointsForCards(player, Color.BLUE),

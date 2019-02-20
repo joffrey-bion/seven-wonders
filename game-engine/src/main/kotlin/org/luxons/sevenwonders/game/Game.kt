@@ -4,8 +4,10 @@ import org.luxons.sevenwonders.game.api.Action
 import org.luxons.sevenwonders.game.api.HandCard
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.api.toApiTable
+import org.luxons.sevenwonders.game.api.toTableCard
 import org.luxons.sevenwonders.game.boards.Board
+import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Decks
@@ -14,6 +16,7 @@ import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.score.ScoreBoard
+import org.luxons.sevenwonders.game.api.Table as ApiTable
 
 class Game internal constructor(
     val id: Long,
@@ -45,9 +48,9 @@ class Game internal constructor(
     private fun createPlayerTurnInfo(player: Player): PlayerTurnInfo {
         val hand = hands.createHand(player)
         val action = determineAction(hand, player.board)
-        val neighbourGuildCards = table.getNeighbourGuildCards(player.index)
+        val neighbourGuildCards = table.getNeighbourGuildCards(player.index).map { it.toTableCard() }
 
-        return PlayerTurnInfo(player.index, table, action, hand, neighbourGuildCards)
+        return PlayerTurnInfo(player.index, table.toApiTable(), action, hand, neighbourGuildCards)
     }
 
     /**
@@ -95,7 +98,7 @@ class Game internal constructor(
      * had not prepared their moves (unless these players had nothing to do). To avoid this, please check if everyone
      * is ready using [allPlayersPreparedTheirMove].
      */
-    fun playTurn(): Table {
+    fun playTurn(): ApiTable {
         makeMoves()
         if (endOfAgeReached()) {
             executeEndOfAgeEvents()
@@ -106,7 +109,7 @@ class Game internal constructor(
             rotateHandsIfRelevant()
             startNewTurn()
         }
-        return table
+        return table.toApiTable()
     }
 
     private fun makeMoves() {

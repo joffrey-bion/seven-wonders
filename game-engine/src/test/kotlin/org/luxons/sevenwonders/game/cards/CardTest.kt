@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.game.cards
 
 import org.junit.Test
 import org.luxons.sevenwonders.game.SimplePlayer
-import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
+import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType

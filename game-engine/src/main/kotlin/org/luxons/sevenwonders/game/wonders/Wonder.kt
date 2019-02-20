@@ -6,7 +6,7 @@ import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
 
-class Wonder internal constructor(
+internal class Wonder(
     val name: String,
     val initialResource: ResourceType,
     val stages: List<WonderStage>,
@@ -30,15 +30,15 @@ class Wonder internal constructor(
             return stages[lastLevel]
         }
 
-    internal fun isNextStageBuildable(board: Board, boughtResources: ResourceTransactions): Boolean =
+    fun isNextStageBuildable(board: Board, boughtResources: ResourceTransactions): Boolean =
         nbBuiltStages < stages.size && nextStage.isBuildable(board, boughtResources)
 
-    internal fun placeCard(cardBack: CardBack) = nextStage.placeCard(cardBack)
+    fun placeCard(cardBack: CardBack) = nextStage.placeCard(cardBack)
 
-    internal fun activateLastBuiltStage(player: Player, boughtResources: ResourceTransactions) =
+    fun activateLastBuiltStage(player: Player, boughtResources: ResourceTransactions) =
         lastBuiltStage.activate(player, boughtResources)
 
-    internal fun computePoints(player: Player): Int =
+    fun computePoints(player: Player): Int =
         stages.filter { it.isBuilt }
             .flatMap { it.effects }
             .map { it.computePoints(player) }

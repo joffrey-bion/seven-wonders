@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.resources
 
 import org.junit.Test
 import org.luxons.sevenwonders.game.SimplePlayer
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.resources.Provider.LEFT_PLAYER
 import org.luxons.sevenwonders.game.resources.Provider.RIGHT_PLAYER
 import org.luxons.sevenwonders.game.resources.ResourceType.CLAY

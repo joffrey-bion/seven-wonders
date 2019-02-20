@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.game.cards
 
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.api.HandCard
+import org.luxons.sevenwonders.game.api.toHandCard
 
 internal class Hands(private val hands: List<List<Card>>) {
 
@@ -23,9 +24,7 @@ internal class Hands(private val hands: List<List<Card>>) {
         return Hands(mutatedHands)
     }
 
-    fun createHand(player: Player): List<HandCard> {
-        return hands[player.index].map { c -> HandCard(c, player) }
-    }
+    fun createHand(player: Player): List<HandCard> = hands[player.index].map { c -> c.toHandCard(player) }
 
     fun rotate(direction: HandRotationDirection): Hands {
         val newHands = when (direction) {

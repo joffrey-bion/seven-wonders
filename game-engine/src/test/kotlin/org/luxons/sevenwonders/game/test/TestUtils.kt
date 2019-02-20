@@ -5,11 +5,11 @@ import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.api.PlayerMove
-import org.luxons.sevenwonders.game.api.Table
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.boards.Science
 import org.luxons.sevenwonders.game.boards.ScienceType
+import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Color
@@ -38,7 +38,8 @@ internal fun testSettings(nbPlayers: Int = 5, initialGold: Int = 0): Settings =
 
 internal fun testTable(nbPlayers: Int = 5): Table = testTable(testSettings(nbPlayers))
 
-internal fun testTable(settings: Settings): Table = Table(testBoards(settings.nbPlayers, settings))
+internal fun testTable(settings: Settings): Table =
+    Table(testBoards(settings.nbPlayers, settings))
 
 private fun testBoards(count: Int, settings: Settings): List<Board> = List(count) { testBoard(settings) }
 

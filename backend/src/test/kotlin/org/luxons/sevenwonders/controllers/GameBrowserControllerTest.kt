@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.controllers.GameBrowserController.UserAlreadyInGa
 import org.luxons.sevenwonders.repositories.LobbyRepository
 import org.luxons.sevenwonders.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.repositories.PlayerRepository
-import org.luxons.sevenwonders.test.TestUtils
+import org.luxons.sevenwonders.test.mockSimpMessagingTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -24,7 +24,7 @@ class GameBrowserControllerTest {
     fun setUp() {
         playerRepository = PlayerRepository()
         val lobbyRepository = LobbyRepository()
-        val template = TestUtils.createSimpMessagingTemplate()
+        val template = mockSimpMessagingTemplate()
         val lobbyController = LobbyController(lobbyRepository, playerRepository, template)
         gameBrowserController = GameBrowserController(lobbyController, lobbyRepository, playerRepository, template)
     }

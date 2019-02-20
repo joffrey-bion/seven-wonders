@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.test.api
 
 import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.hildan.jackstomp.JackstompClient
 import org.luxons.sevenwonders.config.SEVEN_WONDERS_WS_ENDPOINT
 import org.luxons.sevenwonders.game.resources.MutableResources
@@ -19,6 +20,7 @@ class SevenWondersClient {
 
         val mappingJackson2MessageConverter = MappingJackson2MessageConverter()
         mappingJackson2MessageConverter.objectMapper.registerModule(customMappingsModule)
+        mappingJackson2MessageConverter.objectMapper.registerModule(KotlinModule())
 
         client = JackstompClient()
         client.webSocketClient.messageConverter = mappingJackson2MessageConverter

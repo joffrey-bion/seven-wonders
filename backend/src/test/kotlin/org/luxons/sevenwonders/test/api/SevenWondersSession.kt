@@ -5,7 +5,10 @@ import org.hildan.jackstomp.JackstompSession
 import org.luxons.sevenwonders.actions.ChooseNameAction
 import org.luxons.sevenwonders.actions.CreateGameAction
 import org.luxons.sevenwonders.actions.JoinGameAction
+import org.luxons.sevenwonders.api.LobbyDTO
+import org.luxons.sevenwonders.api.PlayerDTO
 import org.luxons.sevenwonders.errors.ErrorDTO
+import org.luxons.sevenwonders.game.api.PlayerTurnInfo
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -16,43 +19,39 @@ class SevenWondersSession(val jackstompSession: JackstompSession) {
         jackstompSession.disconnect()
     }
 
-    fun watchErrors(): Channel<ErrorDTO> {
-        return jackstompSession.subscribe("/user/queue/errors", ErrorDTO::class.java)
-    }
+    fun watchErrors(): Channel<ErrorDTO> = jackstompSession.subscribe("/user/queue/errors", ErrorDTO::class.java)
 
     @Throws(InterruptedException::class)
-    fun chooseName(displayName: String): ApiPlayer {
+    fun chooseName(displayName: String): PlayerDTO {
         val action = ChooseNameAction(displayName)
-        return jackstompSession.request(action, ApiPlayer::class.java, "/app/chooseName", "/user/queue/nameChoice")
+        return jackstompSession.request(action, PlayerDTO::class.java, "/app/chooseName", "/user/queue/nameChoice")
     }
 
-    fun watchGames(): Channel<Array<ApiLobby>> {
-        return jackstompSession.subscribe("/topic/games", Array<ApiLobby>::class.java)
+    fun watchGames(): Channel<Array<LobbyDTO>> {
+        return jackstompSession.subscribe("/topic/games", Array<LobbyDTO>::class.java)
     }
 
     @Throws(InterruptedException::class)
-    fun createGame(gameName: String): ApiLobby {
+    fun createGame(gameName: String): LobbyDTO {
         val action = CreateGameAction(gameName)
-        return jackstompSession.request(action, ApiLobby::class.java, "/app/lobby/create", "/user/queue/lobby/joined")
+        return jackstompSession.request(action, LobbyDTO::class.java, "/app/lobby/create", "/user/queue/lobby/joined")
     }
 
     @Throws(InterruptedException::class)
-    fun joinGame(gameId: Long): ApiLobby {
+    fun joinGame(gameId: Long): LobbyDTO {
         val action = JoinGameAction(gameId)
         val lobby =
-            jackstompSession.request(action, ApiLobby::class.java, "/app/lobby/join", "/user/queue/lobby/joined")
+            jackstompSession.request(action, LobbyDTO::class.java, "/app/lobby/join", "/user/queue/lobby/joined")
         assertNotNull(lobby)
         assertEquals(gameId, lobby.id)
         return lobby
     }
 
-    fun watchLobbyUpdates(gameId: Long): Channel<ApiLobby> {
-        return jackstompSession.subscribe("/topic/lobby/$gameId/updated", ApiLobby::class.java)
-    }
+    fun watchLobbyUpdates(gameId: Long): Channel<LobbyDTO> =
+        jackstompSession.subscribe("/topic/lobby/$gameId/updated", LobbyDTO::class.java)
 
-    fun watchLobbyStart(gameId: Long): Channel<ApiLobby> {
-        return jackstompSession.subscribe("/topic/lobby/$gameId/started", ApiLobby::class.java)
-    }
+    fun watchLobbyStart(gameId: Long): Channel<LobbyDTO> =
+        jackstompSession.subscribe("/topic/lobby/$gameId/started", LobbyDTO::class.java)
 
     @Throws(InterruptedException::class)
     fun startGame(gameId: Long) {
@@ -66,7 +65,6 @@ class SevenWondersSession(val jackstompSession: JackstompSession) {
         jackstompSession.send("/app/game/sayReady", "")
     }
 
-    fun watchTurns(): Channel<ApiPlayerTurnInfo> {
-        return jackstompSession.subscribe("/user/queue/game/turn", ApiPlayerTurnInfo::class.java)
-    }
+    fun watchTurns(): Channel<PlayerTurnInfo> =
+        jackstompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo::class.java)
 }

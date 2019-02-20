@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.boards
 
 import org.luxons.sevenwonders.game.data.Age
 
-class Military internal constructor(
+internal class Military(
     private val lostPointsPerDefeat: Int,
     private val wonPointsPerVictoryPerAge: Map<Age, Int>
 ) {

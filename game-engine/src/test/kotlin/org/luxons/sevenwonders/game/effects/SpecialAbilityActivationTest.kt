@@ -39,7 +39,7 @@ class SpecialAbilityActivationTest {
     }
 
     @Theory
-    fun computePoints_copiedGuild(guildCard: Card, neighbour: RelativeBoardPosition) {
+    internal fun computePoints_copiedGuild(guildCard: Card, neighbour: RelativeBoardPosition) {
         val effect = SpecialAbilityActivation(SpecialAbility.COPY_GUILD)
         val player = SimplePlayer(0, testTable(5))
 
@@ -71,7 +71,7 @@ class SpecialAbilityActivationTest {
 
         @JvmStatic
         @DataPoints
-        fun guilds(): Array<Card> {
+        internal fun guilds(): Array<Card> {
             val bonus = BonusPerBoardElement(
                 listOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT),
                 BoardElementType.CARD,

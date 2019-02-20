@@ -4,7 +4,7 @@ fun emptyResources(): Resources = MutableResources()
 
 fun resourcesOf(singleResource: ResourceType): Resources = mapOf(singleResource to 1).toMutableResources()
 
-fun resourcesOf(vararg resources: ResourceType): Resources = resources.map { it to 1 }.toMutableResources()
+fun resourcesOf(vararg resources: ResourceType): Resources = mutableResourcesOf(*resources)
 
 fun resourcesOf(vararg resources: Pair<ResourceType, Int>): Resources = mutableResourcesOf(*resources)
 
@@ -15,6 +15,9 @@ fun Map<ResourceType, Int>.toResources(): Resources = toMutableResources()
 fun Iterable<Resources>.merge(): Resources = fold(MutableResources()) { r1, r2 -> r1.add(r2); r1 }
 
 internal fun mutableResourcesOf() = MutableResources()
+
+internal fun mutableResourcesOf(vararg resources: ResourceType): MutableResources =
+    resources.map { it to 1 }.toMutableResources()
 
 internal fun mutableResourcesOf(vararg resources: Pair<ResourceType, Int>) = resources.asIterable().toMutableResources()
 

@@ -10,9 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit4.SpringRunner
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -41,7 +39,6 @@ class SevenWondersTest {
     }
 
     @Test
-    @Throws(InterruptedException::class, ExecutionException::class, TimeoutException::class)
     fun chooseName() {
         val session = client.connect(serverUrl)
         val playerName = "Test User"
@@ -51,7 +48,6 @@ class SevenWondersTest {
         session.disconnect()
     }
 
-    @Throws(InterruptedException::class, TimeoutException::class, ExecutionException::class)
     private fun newPlayer(name: String): SevenWondersSession {
         val otherSession = client.connect(serverUrl)
         otherSession.chooseName(name)
@@ -59,7 +55,6 @@ class SevenWondersTest {
     }
 
     @Test
-    @Throws(InterruptedException::class, ExecutionException::class, TimeoutException::class)
     fun lobbySubscription_ignoredForOutsiders() {
         val ownerSession = newPlayer("GameOwner")
         val session1 = newPlayer("Player1")
@@ -80,7 +75,6 @@ class SevenWondersTest {
     }
 
     @Test
-    @Throws(InterruptedException::class, ExecutionException::class, TimeoutException::class)
     fun createGame_success() {
         val ownerSession = newPlayer("GameOwner")
 
@@ -93,7 +87,6 @@ class SevenWondersTest {
     }
 
     @Test
-    @Throws(InterruptedException::class, ExecutionException::class, TimeoutException::class)
     fun createGame_seenByConnectedPlayers() {
         val otherSession = newPlayer("OtherPlayer")
         val games = otherSession.watchGames()
@@ -117,7 +110,6 @@ class SevenWondersTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun startGame_3players() {
         val session1 = newPlayer("Player1")
         val session2 = newPlayer("Player2")

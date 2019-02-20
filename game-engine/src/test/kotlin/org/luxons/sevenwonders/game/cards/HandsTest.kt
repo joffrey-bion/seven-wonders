@@ -101,7 +101,7 @@ class HandsTest {
         val table = testTable(2)
         val hand = hands.createHand(SimplePlayer(0, table))
 
-        hand.map { it.card }.forEach { assertTrue(it in hand0) }
+        assertEquals(hand0.map { it.name }, hand.map { it.name })
     }
 
     companion object {

@@ -223,9 +223,7 @@ class LobbyTest {
 
         @JvmStatic
         @DataPoints
-        fun nbPlayers(): IntArray {
-            return intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-        }
+        fun nbPlayers(): IntArray = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
         @JvmStatic
         @BeforeClass

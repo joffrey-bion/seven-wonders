@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.lobby.State
 import org.luxons.sevenwonders.repositories.LobbyRepository
 import org.luxons.sevenwonders.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.repositories.PlayerRepository
-import org.luxons.sevenwonders.test.TestUtils
+import org.luxons.sevenwonders.test.mockSimpMessagingTemplate
 import java.util.Arrays
 import java.util.HashMap
 import kotlin.test.assertEquals
@@ -32,7 +32,7 @@ class LobbyControllerTest {
 
     @Before
     fun setUp() {
-        val template = TestUtils.createSimpMessagingTemplate()
+        val template = mockSimpMessagingTemplate()
         playerRepository = PlayerRepository()
         lobbyRepository = LobbyRepository()
         lobbyController = LobbyController(lobbyRepository, playerRepository, template)

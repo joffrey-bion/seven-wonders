@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.effects.Effect
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 
-class WonderStage internal constructor(val requirements: Requirements, internal val effects: List<Effect>) {
+internal class WonderStage(val requirements: Requirements, val effects: List<Effect>) {
 
     var cardBack: CardBack? = null
         private set
@@ -15,15 +15,15 @@ class WonderStage internal constructor(val requirements: Requirements, internal 
     val isBuilt: Boolean
         get() = cardBack != null
 
-    internal fun isBuildable(board: Board, boughtResources: ResourceTransactions): Boolean {
+    fun isBuildable(board: Board, boughtResources: ResourceTransactions): Boolean {
         return requirements.areMetWithHelpBy(board, boughtResources)
     }
 
-    internal fun placeCard(cardBack: CardBack) {
+    fun placeCard(cardBack: CardBack) {
         this.cardBack = cardBack
     }
 
-    internal fun activate(player: Player, boughtResources: ResourceTransactions) {
+    fun activate(player: Player, boughtResources: ResourceTransactions) {
         effects.forEach { it.applyTo(player) }
         requirements.pay(player, boughtResources)
     }
