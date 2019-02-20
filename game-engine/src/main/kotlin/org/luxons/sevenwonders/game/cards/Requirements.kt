@@ -14,14 +14,39 @@ data class Requirements internal constructor(
     val resources: Resources = emptyResources()
 ) {
     /**
-     * Returns whether the given [board] meets these requirements on its own.
-     *
-     * @param board the board to check
-     *
-     * @return true if the given board meets these requirements without any transaction with its neighbours
+     * Returns information about the extent to which the given [player] meets these requirements, either on its own or
+     * by buying resources to neighbours.
      */
-    internal fun areMetWithoutNeighboursBy(board: Board): Boolean =
-        hasRequiredGold(board) && producesRequiredResources(board)
+    internal fun computeSatisfaction(player: Player): RequirementsSatisfaction {
+        if (player.board.gold < gold) {
+            return RequirementsSatisfaction.missingRequiredGold(gold)
+        }
+        if (resources.isEmpty()) {
+            if (gold > 0) {
+                return RequirementsSatisfaction.enoughGold(gold)
+            }
+            return RequirementsSatisfaction.noRequirements()
+        }
+        if (producesRequiredResources(player.board)) {
+            if (gold > 0) {
+                return RequirementsSatisfaction.enoughResourcesAndGold(gold)
+            }
+            return RequirementsSatisfaction.enoughResources()
+        }
+        return satisfactionWithPotentialHelp(player)
+    }
+
+    private fun satisfactionWithPotentialHelp(player: Player): RequirementsSatisfaction {
+        val (minPriceForResources, possibleTransactions) = bestSolution(resources, player)
+        val minPrice = minPriceForResources + gold
+        if (possibleTransactions.isEmpty()) {
+            return RequirementsSatisfaction.resourcesUnavailable()
+        }
+        if (player.board.gold < minPrice) {
+            return RequirementsSatisfaction.missingGoldForResources(minPrice, possibleTransactions)
+        }
+        return RequirementsSatisfaction.metWithHelp(minPrice, possibleTransactions)
+    }
 
     /**
      * Returns whether the given board meets these requirements, if the specified resources are bought from neighbours.
@@ -37,28 +62,6 @@ data class Requirements internal constructor(
         }
         return producesRequiredResources(board) || producesRequiredResourcesWithHelp(board, boughtResources)
     }
-
-    /**
-     * Returns whether the given player meets these requirements, either on its own or by buying resources to
-     * neighbours.
-     *
-     * @param player the player to check
-     *
-     * @return true if the given player's board could meet these requirements
-     */
-    internal fun areMetBy(player: Player): Boolean {
-        val board = player.board
-        if (!hasRequiredGold(board)) {
-            return false
-        }
-        if (producesRequiredResources(board)) {
-            return true
-        }
-        val solution = bestSolution(resources, player)
-        return !solution.possibleTransactions.isEmpty() && solution.price <= board.gold - gold
-    }
-
-    private fun hasRequiredGold(board: Board): Boolean = board.gold >= gold
 
     private fun hasRequiredGold(board: Board, resourceTransactions: ResourceTransactions): Boolean {
         val resourcesPrice = board.tradingRules.computeCost(resourceTransactions)

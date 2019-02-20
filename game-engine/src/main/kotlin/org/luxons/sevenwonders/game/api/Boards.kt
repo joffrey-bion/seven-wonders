@@ -4,6 +4,8 @@ import org.luxons.sevenwonders.game.boards.Military
 import org.luxons.sevenwonders.game.boards.Science
 import org.luxons.sevenwonders.game.boards.ScienceType
 import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.moves.Move
+import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
@@ -22,14 +24,14 @@ data class Board(
     val gold: Int
 )
 
-internal fun InternalBoard.toApiBoard(): Board = Board(
+internal fun InternalBoard.toApiBoard(lastMove: Move?): Board = Board(
     playerIndex = playerIndex,
-    wonder = wonder.toApiWonder(),
+    wonder = wonder.toApiWonder(lastMove),
     production = production.toApiProduction(),
     publicProduction = publicProduction.toApiProduction(),
     science = science.toApiScience(),
     military = military.toApiMilitary(),
-    playedCards = getPlayedCards().map { it.toTableCard() },
+    playedCards = getPlayedCards().map { it.toTableCard(lastMove) },
     gold = gold
 )
 
@@ -41,23 +43,26 @@ data class Wonder(
     val nbBuiltStages: Int
 )
 
-internal fun InternalWonder.toApiWonder(): Wonder = Wonder(
+internal fun InternalWonder.toApiWonder(lastMove: Move?): Wonder = Wonder(
     name = name,
     initialResource = initialResource,
-    stages = stages.map { it.toApiWonderStage() },
+    stages = stages.map { it.toApiWonderStage(lastBuiltStage == it, lastMove) },
     image = image,
     nbBuiltStages = nbBuiltStages
 )
 
 data class WonderStage(
     val cardBack: CardBack?,
-    val isBuilt: Boolean
+    val isBuilt: Boolean,
+    val builtDuringLastMove: Boolean
 )
 
-internal fun InternalWonderStage.toApiWonderStage(): WonderStage = WonderStage(
-    cardBack = cardBack,
-    isBuilt = isBuilt
-)
+internal fun InternalWonderStage.toApiWonderStage(isLastBuiltStage: Boolean, lastMove: Move?): WonderStage =
+    WonderStage(
+        cardBack = cardBack,
+        isBuilt = isBuilt,
+        builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage
+    )
 
 data class ApiProduction(
     val fixedResources: Resources,

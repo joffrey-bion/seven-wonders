@@ -4,8 +4,17 @@ import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.effects.Effect
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.resources.noTransactions
 
 data class CardBack(val image: String)
+
+data class CardPlayability(
+    val isPlayable: Boolean,
+    val isFree: Boolean = false,
+    val isChainable: Boolean = false,
+    val minPrice: Int = Int.MAX_VALUE,
+    val cheapestTransactions: Set<ResourceTransactions> = emptySet()
+)
 
 internal data class Card(
     val name: String,
@@ -17,20 +26,42 @@ internal data class Card(
     val image: String,
     val back: CardBack
 ) {
+    fun computePlayabilityBy(player: Player): CardPlayability {
+        if (!isAllowedOnBoard(player.board)) {
+            return nonPlayable()
+        }
+        if (isParentOnBoard(player.board)) {
+            return chainablePlayability()
+        }
+        return requirementsPlayability(player)
+    }
+
+    private fun nonPlayable() = CardPlayability(isPlayable = false)
+
+    private fun chainablePlayability(): CardPlayability = CardPlayability(
+        isPlayable = true,
+        isFree = true,
+        isChainable = true,
+        minPrice = 0,
+        cheapestTransactions = setOf(noTransactions())
+    )
+
+    private fun requirementsPlayability(player: Player): CardPlayability {
+        val satisfaction = requirements.computeSatisfaction(player)
+        return CardPlayability(
+            isPlayable = satisfaction is RequirementsSatisfaction.Acceptable,
+            isFree = satisfaction.minPrice == 0,
+            isChainable = false,
+            minPrice = satisfaction.minPrice,
+            cheapestTransactions = satisfaction.cheapestTransactions
+        )
+    }
+
+    fun isChainableOn(board: Board): Boolean = isAllowedOnBoard(board) && isParentOnBoard(board)
+
     private fun isAllowedOnBoard(board: Board): Boolean = !board.isPlayed(name) // cannot play twice the same card
 
-    fun isFreeFor(board: Board): Boolean = isChainableOn(board) || isFreeWithoutChainingOn(board)
-
-    fun isChainableOn(board: Board): Boolean =
-        isAllowedOnBoard(board) && chainParent != null && board.isPlayed(chainParent)
-
-    private fun isFreeWithoutChainingOn(board: Board) =
-        isAllowedOnBoard(board) && requirements.areMetWithoutNeighboursBy(board) && requirements.gold == 0
-
-    fun isPlayableBy(player: Player): Boolean {
-        val board = player.board
-        return isAllowedOnBoard(board) && (isChainableOn(board) || requirements.areMetBy(player))
-    }
+    private fun isParentOnBoard(board: Board): Boolean = chainParent != null && board.isPlayed(chainParent)
 
     fun applyTo(player: Player, transactions: ResourceTransactions) {
         if (!isChainableOn(player.board)) {

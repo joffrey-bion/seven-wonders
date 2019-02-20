@@ -11,7 +11,5 @@ enum class MoveType(private val create: (move: PlayerMove, card: Card, context: 
     DISCARD(::DiscardMove),
     COPY_GUILD(::CopyGuildMove);
 
-    internal fun resolve(move: PlayerMove, card: Card, context: PlayerContext): Move {
-        return create(move, card, context)
-    }
+    internal fun resolve(move: PlayerMove, card: Card, context: PlayerContext): Move = create(move, card, context)
 }

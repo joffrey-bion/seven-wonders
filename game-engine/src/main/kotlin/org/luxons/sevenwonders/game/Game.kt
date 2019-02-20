@@ -48,7 +48,7 @@ class Game internal constructor(
     private fun createPlayerTurnInfo(player: Player): PlayerTurnInfo {
         val hand = hands.createHand(player)
         val action = determineAction(hand, player.board)
-        val neighbourGuildCards = table.getNeighbourGuildCards(player.index).map { it.toTableCard() }
+        val neighbourGuildCards = table.getNeighbourGuildCards(player.index).map { it.toTableCard(null) }
 
         return PlayerTurnInfo(player.index, table.toApiTable(), action, hand, neighbourGuildCards)
     }

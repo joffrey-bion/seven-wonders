@@ -17,7 +17,7 @@ data class Table(
 }
 
 internal fun InternalTable.toApiTable(): Table = Table(
-    boards = boards.map { it.toApiBoard() },
+    boards = boards.mapIndexed { i, b -> b.toApiBoard(lastPlayedMoves.getOrNull(i)) },
     currentAge = currentAge,
     handRotationDirection = handRotationDirection,
     lastPlayedMoves = lastPlayedMoves.map { it.toPlayedMove() }
@@ -33,6 +33,6 @@ data class PlayedMove(
 internal fun Move.toPlayedMove(): PlayedMove = PlayedMove(
     playerIndex = playerContext.index,
     type = type,
-    card = card.toTableCard(),
+    card = card.toTableCard(this),
     transactions = transactions
 )

@@ -13,22 +13,18 @@ internal class Wonder(
     val image: String
 ) {
     val nbBuiltStages: Int
-        get() = stages.filter { it.isBuilt }.count()
+        get() = stages.count { it.isBuilt }
 
     private val nextStage: WonderStage
         get() {
-            val nextLevel = nbBuiltStages
-            if (nextLevel == stages.size) {
+            if (nbBuiltStages == stages.size) {
                 throw IllegalStateException("This wonder has already reached its maximum level")
             }
-            return stages[nextLevel]
+            return stages[nbBuiltStages]
         }
 
-    private val lastBuiltStage: WonderStage
-        get() {
-            val lastLevel = nbBuiltStages - 1
-            return stages[lastLevel]
-        }
+    val lastBuiltStage: WonderStage?
+        get() = stages.getOrNull(nbBuiltStages - 1)
 
     fun isNextStageBuildable(board: Board, boughtResources: ResourceTransactions): Boolean =
         nbBuiltStages < stages.size && nextStage.isBuildable(board, boughtResources)
@@ -36,11 +32,8 @@ internal class Wonder(
     fun placeCard(cardBack: CardBack) = nextStage.placeCard(cardBack)
 
     fun activateLastBuiltStage(player: Player, boughtResources: ResourceTransactions) =
-        lastBuiltStage.activate(player, boughtResources)
+        lastBuiltStage!!.activate(player, boughtResources)
 
     fun computePoints(player: Player): Int =
-        stages.filter { it.isBuilt }
-            .flatMap { it.effects }
-            .map { it.computePoints(player) }
-            .sum()
+        stages.filter { it.isBuilt }.flatMap { it.effects }.sumBy { it.computePoints(player) }
 }
