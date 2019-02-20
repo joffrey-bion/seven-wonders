@@ -123,7 +123,7 @@ class RequirementsTest {
             )
             assertEquals(RequirementsSatisfaction.metWithHelp(2, transactions), satisfaction)
         } else {
-            assertEquals(RequirementsSatisfaction.resourcesUnavailable(), satisfaction)
+            assertEquals(RequirementsSatisfaction.unavailableResources(), satisfaction)
         }
     }
 

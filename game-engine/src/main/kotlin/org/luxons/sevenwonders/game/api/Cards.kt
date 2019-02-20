@@ -7,8 +7,6 @@ import org.luxons.sevenwonders.game.cards.CardPlayability
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.moves.Move
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.bestSolution
 
 data class TableCard(
     val name: String,
@@ -44,27 +42,16 @@ data class HandCard(
     val chainChildren: List<String>,
     val image: String,
     val back: CardBack,
-    val isChainable: Boolean,
-    val isFree: Boolean,
-    val isPlayable: Boolean,
-    val minPrice: Int,
-    val cheapestTransactions: Set<ResourceTransactions>
+    val playability: CardPlayability
 )
 
-internal fun Card.toHandCard(player: Player): HandCard {
-    val playability: CardPlayability = computePlayabilityBy(player)
-    return HandCard(
-        name = name,
-        color = color,
-        requirements = requirements,
-        chainParent = chainParent,
-        chainChildren = chainChildren,
-        image = image,
-        back = back,
-        isChainable = playability.isChainable,
-        isFree = playability.isFree,
-        isPlayable = playability.isPlayable,
-        minPrice = playability.minPrice,
-        cheapestTransactions = playability.cheapestTransactions
-    )
-}
+internal fun Card.toHandCard(player: Player): HandCard = HandCard(
+    name = name,
+    color = color,
+    requirements = requirements,
+    chainParent = chainParent,
+    chainChildren = chainChildren,
+    image = image,
+    back = back,
+    playability = computePlayabilityBy(player)
+)

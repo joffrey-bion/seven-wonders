@@ -77,10 +77,10 @@ class GameTest {
     }
 
     private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
-        val playableCard = turnInfo.hand.firstOrNull { it.isPlayable }
+        val playableCard = turnInfo.hand.firstOrNull { it.playability.isPlayable }
 
         return if (playableCard != null) {
-            PlayerMove(MoveType.PLAY, playableCard.name, playableCard.cheapestTransactions.first())
+            PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.cheapestTransactions.first())
         } else {
             PlayerMove(MoveType.DISCARD, turnInfo.hand.first().name)
         }

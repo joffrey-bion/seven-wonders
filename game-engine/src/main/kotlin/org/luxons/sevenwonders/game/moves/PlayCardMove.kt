@@ -9,8 +9,7 @@ internal class PlayCardMove(move: PlayerMove, card: Card, player: PlayerContext)
     CardFromHandMove(move, card, player) {
 
     init {
-        val board = player.board
-        if (!card.isChainableOn(board) && !card.requirements.areMetWithHelpBy(board, transactions)) {
+        if (!card.isPlayableOnBoardWith(player.board, transactions)) {
             throw InvalidMoveException(this, "requirements not met to play the card ${card.name}")
         }
     }

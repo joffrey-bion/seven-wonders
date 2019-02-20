@@ -50,6 +50,6 @@ internal class ScienceProgressSerializer : JsonSerializer<ScienceProgress>, Json
 
     private fun deserializeScienceType(json: JsonElement, context: JsonDeserializationContext): ScienceType {
         return context.deserialize<ScienceType>(json, ScienceType::class.java)
-                ?: throw IllegalArgumentException("Invalid science type " + json.asString)
+                ?: throw IllegalArgumentException("Invalid science level " + json.asString)
     }
 }

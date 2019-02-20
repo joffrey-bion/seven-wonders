@@ -19,7 +19,7 @@ internal class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeseri
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ResourceType {
         val str = json.asString
         if (str.isEmpty()) {
-            throw IllegalArgumentException("Empty string is not a valid resource type")
+            throw IllegalArgumentException("Empty string is not a valid resource level")
         }
         return ResourceType.fromSymbol(str[0])
     }

@@ -8,14 +8,6 @@ import org.luxons.sevenwonders.game.resources.noTransactions
 
 data class CardBack(val image: String)
 
-data class CardPlayability(
-    val isPlayable: Boolean,
-    val isFree: Boolean = false,
-    val isChainable: Boolean = false,
-    val minPrice: Int = Int.MAX_VALUE,
-    val cheapestTransactions: Set<ResourceTransactions> = emptySet()
-)
-
 internal data class Card(
     val name: String,
     val color: Color,
@@ -26,40 +18,18 @@ internal data class Card(
     val image: String,
     val back: CardBack
 ) {
-    fun computePlayabilityBy(player: Player): CardPlayability {
-        if (!isAllowedOnBoard(player.board)) {
-            return nonPlayable()
-        }
-        if (isParentOnBoard(player.board)) {
-            return chainablePlayability()
-        }
-        return requirementsPlayability(player)
+    fun computePlayabilityBy(player: Player): CardPlayability = when {
+        isAlreadyOnBoard(player.board) -> CardPlayability.incompatibleWithBoard() // cannot play twice the same card
+        isParentOnBoard(player.board) -> CardPlayability.chainable()
+        else -> CardPlayability.requirementDependent(requirements.computeSatisfaction(player))
     }
 
-    private fun nonPlayable() = CardPlayability(isPlayable = false)
+    fun isPlayableOnBoardWith(board: Board, transactions: ResourceTransactions) =
+        isChainableOn(board) || requirements.areMetWithHelpBy(board, transactions)
 
-    private fun chainablePlayability(): CardPlayability = CardPlayability(
-        isPlayable = true,
-        isFree = true,
-        isChainable = true,
-        minPrice = 0,
-        cheapestTransactions = setOf(noTransactions())
-    )
+    private fun isChainableOn(board: Board): Boolean = !isAlreadyOnBoard(board) && isParentOnBoard(board)
 
-    private fun requirementsPlayability(player: Player): CardPlayability {
-        val satisfaction = requirements.computeSatisfaction(player)
-        return CardPlayability(
-            isPlayable = satisfaction is RequirementsSatisfaction.Acceptable,
-            isFree = satisfaction.minPrice == 0,
-            isChainable = false,
-            minPrice = satisfaction.minPrice,
-            cheapestTransactions = satisfaction.cheapestTransactions
-        )
-    }
-
-    fun isChainableOn(board: Board): Boolean = isAllowedOnBoard(board) && isParentOnBoard(board)
-
-    private fun isAllowedOnBoard(board: Board): Boolean = !board.isPlayed(name) // cannot play twice the same card
+    private fun isAlreadyOnBoard(board: Board): Boolean = board.isPlayed(name)
 
     private fun isParentOnBoard(board: Board): Boolean = chainParent != null && board.isPlayed(chainParent)
 
@@ -79,4 +49,37 @@ enum class Color {
     GREEN,
     RED,
     PURPLE
+}
+
+data class CardPlayability(
+    val isPlayable: Boolean,
+    val isFree: Boolean = false,
+    val isChainable: Boolean = false,
+    val minPrice: Int = Int.MAX_VALUE,
+    val cheapestTransactions: Set<ResourceTransactions> = emptySet(),
+    val playabilityLevel: PlayabilityLevel
+) {
+    companion object {
+
+        internal fun incompatibleWithBoard(): CardPlayability =
+            CardPlayability(isPlayable = false, playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD)
+
+        internal fun chainable(): CardPlayability = CardPlayability(
+            isPlayable = true,
+            isFree = true,
+            isChainable = true,
+            minPrice = 0,
+            cheapestTransactions = setOf(noTransactions()),
+            playabilityLevel = PlayabilityLevel.CHAINABLE
+        )
+
+        internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability = CardPlayability(
+            isPlayable = satisfaction.satisfied,
+            isFree = satisfaction.minPrice == 0,
+            isChainable = false,
+            minPrice = satisfaction.minPrice,
+            cheapestTransactions = satisfaction.cheapestTransactions,
+            playabilityLevel = satisfaction.level
+        )
+    }
 }

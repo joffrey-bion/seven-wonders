@@ -40,7 +40,7 @@ data class Requirements internal constructor(
         val (minPriceForResources, possibleTransactions) = bestSolution(resources, player)
         val minPrice = minPriceForResources + gold
         if (possibleTransactions.isEmpty()) {
-            return RequirementsSatisfaction.resourcesUnavailable()
+            return RequirementsSatisfaction.unavailableResources()
         }
         if (player.board.gold < minPrice) {
             return RequirementsSatisfaction.missingGoldForResources(minPrice, possibleTransactions)
