@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.lobby
 import org.luxons.sevenwonders.game.Game
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.data.GameDefinition
-import java.util.ArrayList
 
 enum class State {
     LOBBY, PLAYING
@@ -15,7 +14,7 @@ class Lobby(
     var owner: Player,
     @field:Transient private val gameDefinition: GameDefinition
 ) {
-    private var players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
+    private val players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
 
     var settings: CustomizableSettings = CustomizableSettings()
 
@@ -64,7 +63,11 @@ class Lobby(
 
     @Synchronized
     fun reorderPlayers(orderedUsernames: List<String>) {
-        players = orderedUsernames.map { find(it) }.toMutableList()
+        val usernames = players.map { it.username }
+        if (orderedUsernames.toSet() != usernames.toSet()) {
+            throw PlayerListMismatchException(orderedUsernames)
+        }
+        players.sortBy { orderedUsernames.indexOf(it.username) }
     }
 
     private fun find(username: String): Player =
@@ -98,8 +101,11 @@ class Lobby(
         IllegalStateException("Minimum $min players required to start a game")
 
     internal class PlayerNameAlreadyUsedException(displayName: String, gameName: String) :
-        IllegalStateException("Name '$displayName' is already used by a player in game '$gameName'")
+        IllegalArgumentException("Name '$displayName' is already used by a player in game '$gameName'")
 
     internal class UnknownPlayerException(username: String) :
-        IllegalStateException("Unknown player '$username'")
+        IllegalArgumentException("Unknown player '$username'")
+
+    internal class PlayerListMismatchException(usernames: List<String>) :
+        IllegalArgumentException("Newly ordered usernames $usernames don't match the current player list")
 }

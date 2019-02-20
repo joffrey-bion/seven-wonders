@@ -23,7 +23,7 @@ internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Setting
 
     private val pointsPer3Gold: Int = settings.pointsPer3Gold
 
-    private val playedCards: MutableList<Card> = arrayListOf()
+    private val playedCards: MutableList<Card> = mutableListOf()
     private val specialAbilities: MutableSet<SpecialAbility> = hashSetOf()
     private val consumedFreeCards: MutableMap<Age, Boolean> = mutableMapOf()
 

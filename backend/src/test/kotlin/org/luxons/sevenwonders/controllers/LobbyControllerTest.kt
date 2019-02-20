@@ -15,7 +15,6 @@ import org.luxons.sevenwonders.repositories.LobbyRepository
 import org.luxons.sevenwonders.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.luxons.sevenwonders.test.mockSimpMessagingTemplate
-import java.util.Arrays
 import java.util.HashMap
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -99,10 +98,10 @@ class LobbyControllerTest {
         val player3 = addPlayer(lobby, "testuser3")
         val player4 = addPlayer(lobby, "testuser4")
 
-        val players = Arrays.asList(player, player2, player3, player4)
+        val players = listOf(player, player2, player3, player4)
         assertEquals(players, lobby.getPlayers())
 
-        val reorderedPlayers = Arrays.asList(player3, player, player2, player4)
+        val reorderedPlayers = listOf(player3, player, player2, player4)
         val playerNames = reorderedPlayers.map { it.username }
         val reorderPlayersAction = ReorderPlayersAction(playerNames)
 
@@ -120,7 +119,7 @@ class LobbyControllerTest {
         val player2 = addPlayer(lobby, "testuser2")
         val player3 = addPlayer(lobby, "testuser3")
 
-        val reorderedPlayers = Arrays.asList(player3, player, player2)
+        val reorderedPlayers = listOf(player3, player, player2)
         val playerNames = reorderedPlayers.map { it.username }
         val reorderPlayersAction = ReorderPlayersAction(playerNames)
 

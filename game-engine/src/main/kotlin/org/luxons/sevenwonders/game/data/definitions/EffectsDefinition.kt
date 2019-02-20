@@ -10,7 +10,6 @@ import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.effects.ScienceProgress
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation
-import java.util.ArrayList
 
 internal class EffectsDefinition(
     private val gold: GoldIncrease? = null,
@@ -22,32 +21,14 @@ internal class EffectsDefinition(
     private val points: RawPointsIncrease? = null,
     private val action: SpecialAbility? = null
 ) {
-    fun create(): List<Effect> {
-        val effects = ArrayList<Effect>()
-        if (gold != null) {
-            effects.add(gold)
-        }
-        if (military != null) {
-            effects.add(military)
-        }
-        if (science != null) {
-            effects.add(science)
-        }
-        if (discount != null) {
-            effects.add(discount)
-        }
-        if (perBoardElement != null) {
-            effects.add(perBoardElement)
-        }
-        if (production != null) {
-            effects.add(production)
-        }
-        if (points != null) {
-            effects.add(points)
-        }
-        if (action != null) {
-            effects.add(SpecialAbilityActivation(action))
-        }
-        return effects
+    fun create(): List<Effect> = mutableListOf<Effect>().apply {
+        gold?.let { add(it) }
+        military?.let { add(it) }
+        science?.let { add(it) }
+        discount?.let { add(it) }
+        perBoardElement?.let { add(it) }
+        production?.let { add(it) }
+        points?.let { add(it) }
+        action?.let { add(SpecialAbilityActivation(it)) }
     }
 }

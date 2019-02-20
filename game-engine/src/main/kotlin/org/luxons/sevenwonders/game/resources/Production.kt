@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.game.resources
 
-import java.util.Arrays
 import java.util.EnumSet
 
 data class Production internal constructor(
@@ -14,7 +13,7 @@ data class Production internal constructor(
     fun addFixedResource(type: ResourceType, quantity: Int) = fixedResources.add(type, quantity)
 
     fun addChoice(vararg options: ResourceType) {
-        val optionSet = EnumSet.copyOf(Arrays.asList(*options))
+        val optionSet = EnumSet.copyOf(options.toList())
         alternativeResources.add(optionSet)
     }
 

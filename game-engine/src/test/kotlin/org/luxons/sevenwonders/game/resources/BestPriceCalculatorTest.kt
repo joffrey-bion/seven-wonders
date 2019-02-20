@@ -14,7 +14,6 @@ import org.luxons.sevenwonders.game.test.createTransaction
 import org.luxons.sevenwonders.game.test.createTransactions
 import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testTable
-import java.util.Arrays
 import kotlin.test.assertEquals
 
 class BestPriceCalculatorTest {
@@ -36,7 +35,7 @@ class BestPriceCalculatorTest {
         val left = testBoard(STONE)
         val main = testBoard(STONE)
         val right = testBoard(WOOD)
-        val table = Table(Arrays.asList(main, right, left))
+        val table = Table(listOf(main, right, left))
 
         val player0 = SimplePlayer(0, table)
         val player1 = SimplePlayer(1, table)
@@ -64,7 +63,7 @@ class BestPriceCalculatorTest {
         val left = testBoard(WOOD)
         val right = testBoard(WOOD)
         val opposite = testBoard(GLASS)
-        val table = Table(Arrays.asList(main, right, opposite, left))
+        val table = Table(listOf(main, right, opposite, left))
 
         val player0 = SimplePlayer(0, table)
         val player1 = SimplePlayer(1, table)
@@ -93,7 +92,7 @@ class BestPriceCalculatorTest {
         right.production.addChoice(WOOD, CLAY)
         right.publicProduction.addChoice(WOOD, CLAY)
 
-        val table = Table(Arrays.asList(main, right, left))
+        val table = Table(listOf(main, right, left))
 
         val player0 = SimplePlayer(0, table)
         val player1 = SimplePlayer(1, table)
@@ -121,7 +120,7 @@ class BestPriceCalculatorTest {
         right.publicProduction.addFixedResource(ORE, 1)
         right.publicProduction.addFixedResource(CLAY, 1)
 
-        val table = Table(Arrays.asList(main, right, left))
+        val table = Table(listOf(main, right, left))
 
         val player0 = SimplePlayer(0, table)
         val player1 = SimplePlayer(1, table)

@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.game.resources
 
 import org.luxons.sevenwonders.game.Player
-import java.util.ArrayList
 import java.util.EnumSet
 
 internal fun bestSolution(resources: Resources, player: Player): TransactionPlan =
@@ -12,8 +11,10 @@ data class TransactionPlan(val price: Int, val possibleTransactions: Set<Resourc
 private class ResourcePool(
     val provider: Provider?,
     private val rules: TradingRules,
-    val choices: Set<MutableSet<ResourceType>>
+    choices: Set<Set<ResourceType>>
 ) {
+    val choices: Set<MutableSet<ResourceType>> = choices.map { it.toMutableSet() }.toSet()
+
     fun getCost(type: ResourceType): Int = if (provider == null) 0 else rules.getCost(type, provider)
 }
 
@@ -34,23 +35,18 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
     }
 
     private fun createResourcePools(player: Player): List<ResourcePool> {
-        val providers = Provider.values()
-
-        val board = player.board
-        val rules = board.tradingRules
-
-        val pools = ArrayList<ResourcePool>(providers.size + 1)
         // we only take alternative resources here, because fixed resources were already removed for optimization
-        val ownBoardChoices = board.production.getAlternativeResources()
-        pools.add(ResourcePool(null, rules, ownBoardChoices.map { it.toMutableSet() }.toSet()))
+        val ownBoardChoices = player.board.production.getAlternativeResources()
+        val ownPool = ResourcePool(null, player.board.tradingRules, ownBoardChoices)
+        val providerPools = Provider.values().map { it.toResourcePoolFor(player) }
 
-        for (provider in providers) {
-            val providerBoard = player.getBoard(provider.boardPosition)
-            val choices = providerBoard.publicProduction.asChoices().map { it.toMutableSet() }.toSet()
-            val pool = ResourcePool(provider, rules, choices)
-            pools.add(pool)
-        }
-        return pools
+        return providerPools + ownPool
+    }
+
+    private fun Provider.toResourcePoolFor(player: Player): ResourcePool {
+        val providerBoard = player.getBoard(boardPosition)
+        val choices = providerBoard.publicProduction.asChoices()
+        return ResourcePool(this, player.board.tradingRules, choices)
     }
 
     fun computeBestSolution(): TransactionPlan {
@@ -120,6 +116,6 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
             bestSolutions.clear()
         }
         // avoid mutating the resources from the transactions
-        bestSolutions.add(boughtResources.mapValues { MutableResources(HashMap(it.value.quantities)) }.toTransactions())
+        bestSolutions.add(boughtResources.mapValues { (_, res) -> res.copy() }.toTransactions())
     }
 }

@@ -10,6 +10,10 @@ fun resourcesOf(vararg resources: Pair<ResourceType, Int>): Resources = mutableR
 
 fun Iterable<Pair<ResourceType, Int>>.toResources(): Resources = toMutableResources()
 
+/**
+ * Creates [Resources] from a copy of the given map. Future modifications to the input map won't affect the return
+ * resources.
+ */
 fun Map<ResourceType, Int>.toResources(): Resources = toMutableResources()
 
 fun Iterable<Resources>.merge(): Resources = fold(MutableResources()) { r1, r2 -> r1.add(r2); r1 }
@@ -53,6 +57,8 @@ interface Resources {
         quantities.mapValues { (type, q) -> Math.max(0, q - resources[type]) }.toResources()
 
     fun toList(): List<ResourceType> = quantities.flatMap { (type, quantity) -> List(quantity) { type } }
+
+    fun copy(): Resources = quantities.toResources()
 }
 
 class MutableResources(

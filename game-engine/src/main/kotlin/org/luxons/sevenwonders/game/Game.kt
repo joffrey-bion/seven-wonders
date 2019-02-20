@@ -26,8 +26,8 @@ class Game internal constructor(
 ) {
     private val table: Table = Table(boards)
     private val players: List<Player> = boards.map { SimplePlayer(it.playerIndex, table) }
-    private val discardedCards: MutableList<Card> = ArrayList()
-    private val preparedMoves: MutableMap<Int, Move> = HashMap()
+    private val discardedCards: MutableList<Card> = mutableListOf()
+    private val preparedMoves: MutableMap<Int, Move> = mutableMapOf()
     private var currentTurnInfo: List<PlayerTurnInfo> = emptyList()
     private var hands: Hands = Hands(emptyList())
 

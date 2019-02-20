@@ -13,11 +13,11 @@ import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.lobby.Lobby.GameAlreadyStartedException
+import org.luxons.sevenwonders.lobby.Lobby.PlayerListMismatchException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerNameAlreadyUsedException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerOverflowException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerUnderflowException
 import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException
-import java.util.Arrays
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -150,21 +150,38 @@ class LobbyTest {
         lobby.addPlayer(player1)
         lobby.addPlayer(player2)
         lobby.addPlayer(player3)
-        lobby.reorderPlayers(Arrays.asList("testuser3", "testuser1", "testuser2"))
-        assertEquals("testuser3", lobby.getPlayers()[0].username)
-        assertEquals("testuser1", lobby.getPlayers()[1].username)
-        assertEquals("testuser2", lobby.getPlayers()[2].username)
+
+        val reorderedUsernames = listOf("testuser3", "gameowner", "testuser1", "testuser2")
+        lobby.reorderPlayers(reorderedUsernames)
+
+        assertEquals(reorderedUsernames, lobby.getPlayers().map { it.username })
     }
 
-    @Test(expected = UnknownPlayerException::class)
+    @Test(expected = PlayerListMismatchException::class)
     fun reorderPlayers_failsOnUnknownPlayer() {
         val player1 = Player("testuser1", "Test User 1")
         val player2 = Player("testuser2", "Test User 2")
-        val player3 = Player("testuser3", "Test User 3")
         lobby.addPlayer(player1)
         lobby.addPlayer(player2)
-        lobby.addPlayer(player3)
-        lobby.reorderPlayers(Arrays.asList("unknown", "testuser1", "testuser2"))
+        lobby.reorderPlayers(listOf("unknown", "testuser2", "gameowner"))
+    }
+
+    @Test(expected = PlayerListMismatchException::class)
+    fun reorderPlayers_failsOnExtraPlayer() {
+        val player1 = Player("testuser1", "Test User 1")
+        val player2 = Player("testuser2", "Test User 2")
+        lobby.addPlayer(player1)
+        lobby.addPlayer(player2)
+        lobby.reorderPlayers(listOf("testuser2", "onemore", "testuser1", "gameowner"))
+    }
+
+    @Test(expected = PlayerListMismatchException::class)
+    fun reorderPlayers_failsOnMissingPlayer() {
+        val player1 = Player("testuser1", "Test User 1")
+        val player2 = Player("testuser2", "Test User 2")
+        lobby.addPlayer(player1)
+        lobby.addPlayer(player2)
+        lobby.reorderPlayers(listOf("testuser2", "gameowner"))
     }
 
     @Theory
@@ -203,11 +220,11 @@ class LobbyTest {
 
     @Test
     fun startGame_switchesState() {
-        assertTrue(lobby.state === State.LOBBY)
+        assertEquals(State.LOBBY, lobby.state)
         // there is already the owner
         addPlayers(gameDefinition.minPlayers - 1)
         lobby.startGame()
-        assertTrue(lobby.state === State.PLAYING)
+        assertEquals(State.PLAYING, lobby.state)
     }
 
     @Test
