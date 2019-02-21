@@ -82,4 +82,6 @@ class MutableResources(
         other is Resources && quantities.filterValues { it > 0 } == other.quantities.filterValues { it > 0 }
 
     override fun hashCode(): Int = quantities.filterValues { it > 0 }.hashCode()
+
+    override fun toString(): String = "$quantities"
 }

@@ -3,6 +3,8 @@ package org.luxons.sevenwonders.game.wonders
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.cards.PlayabilityLevel
+import org.luxons.sevenwonders.game.cards.RequirementsSatisfaction
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.ResourceType
 
@@ -26,6 +28,13 @@ internal class Wonder(
     val lastBuiltStage: WonderStage?
         get() = stages.getOrNull(nbBuiltStages - 1)
 
+    fun computeBuildabilityBy(player: Player): WonderBuildability {
+        if (nbBuiltStages == stages.size) {
+            return WonderBuildability.alreadyBuilt()
+        }
+        return WonderBuildability.requirementDependent(nextStage.requirements.assess(player))
+    }
+
     fun isNextStageBuildable(board: Board, boughtResources: ResourceTransactions): Boolean =
         nbBuiltStages < stages.size && nextStage.isBuildable(board, boughtResources)
 
@@ -36,4 +45,28 @@ internal class Wonder(
 
     fun computePoints(player: Player): Int =
         stages.filter { it.isBuilt }.flatMap { it.effects }.sumBy { it.computePoints(player) }
+}
+
+data class WonderBuildability(
+    val isBuildable: Boolean,
+    val minPrice: Int = Int.MAX_VALUE,
+    val cheapestTransactions: Set<ResourceTransactions> = emptySet(),
+    val playabilityLevel: PlayabilityLevel
+) {
+    val isFree: Boolean = minPrice == 0
+
+    companion object {
+
+        fun alreadyBuilt() = WonderBuildability(
+            isBuildable = false,
+            playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
+        )
+
+        internal fun requirementDependent(satisfaction: RequirementsSatisfaction) = WonderBuildability(
+            isBuildable = satisfaction.satisfied,
+            minPrice = satisfaction.minPrice,
+            cheapestTransactions = satisfaction.cheapestTransactions,
+            playabilityLevel = satisfaction.level
+        )
+    }
 }

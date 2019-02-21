@@ -1,14 +1,17 @@
 package org.luxons.sevenwonders.game.api
 
+import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Military
 import org.luxons.sevenwonders.game.boards.Science
 import org.luxons.sevenwonders.game.boards.ScienceType
 import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.game.wonders.WonderBuildability
 import org.luxons.sevenwonders.game.boards.Board as InternalBoard
 import org.luxons.sevenwonders.game.wonders.Wonder as InternalWonder
 import org.luxons.sevenwonders.game.wonders.WonderStage as InternalWonderStage
@@ -24,9 +27,9 @@ data class Board(
     val gold: Int
 )
 
-internal fun InternalBoard.toApiBoard(lastMove: Move?): Board = Board(
+internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): Board = Board(
     playerIndex = playerIndex,
-    wonder = wonder.toApiWonder(lastMove),
+    wonder = wonder.toApiWonder(player, lastMove),
     production = production.toApiProduction(),
     publicProduction = publicProduction.toApiProduction(),
     science = science.toApiScience(),
@@ -40,27 +43,34 @@ data class Wonder(
     val initialResource: ResourceType,
     val stages: List<WonderStage>,
     val image: String,
-    val nbBuiltStages: Int
+    val nbBuiltStages: Int,
+    val buildability: WonderBuildability
 )
 
-internal fun InternalWonder.toApiWonder(lastMove: Move?): Wonder = Wonder(
+internal fun InternalWonder.toApiWonder(player: Player, lastMove: Move?): Wonder = Wonder(
     name = name,
     initialResource = initialResource,
     stages = stages.map { it.toApiWonderStage(lastBuiltStage == it, lastMove) },
     image = image,
-    nbBuiltStages = nbBuiltStages
+    nbBuiltStages = nbBuiltStages,
+    buildability = computeBuildabilityBy(player)
 )
 
 data class WonderStage(
     val cardBack: CardBack?,
     val isBuilt: Boolean,
+    val requirements: Requirements,
     val builtDuringLastMove: Boolean
 )
 
-internal fun InternalWonderStage.toApiWonderStage(isLastBuiltStage: Boolean, lastMove: Move?): WonderStage =
+internal fun InternalWonderStage.toApiWonderStage(
+    isLastBuiltStage: Boolean,
+    lastMove: Move?
+): WonderStage =
     WonderStage(
         cardBack = cardBack,
         isBuilt = isBuilt,
+        requirements = requirements,
         builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage
     )
 

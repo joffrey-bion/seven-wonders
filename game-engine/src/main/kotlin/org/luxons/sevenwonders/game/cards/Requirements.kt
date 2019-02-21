@@ -17,7 +17,7 @@ data class Requirements internal constructor(
      * Returns information about the extent to which the given [player] meets these requirements, either on its own or
      * by buying resources to neighbours.
      */
-    internal fun computeSatisfaction(player: Player): RequirementsSatisfaction {
+    internal fun assess(player: Player): RequirementsSatisfaction {
         if (player.board.gold < gold) {
             return RequirementsSatisfaction.missingRequiredGold(gold)
         }

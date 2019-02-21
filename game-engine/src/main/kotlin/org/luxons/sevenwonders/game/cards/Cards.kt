@@ -21,7 +21,7 @@ internal data class Card(
     fun computePlayabilityBy(player: Player): CardPlayability = when {
         isAlreadyOnBoard(player.board) -> CardPlayability.incompatibleWithBoard() // cannot play twice the same card
         isParentOnBoard(player.board) -> CardPlayability.chainable()
-        else -> CardPlayability.requirementDependent(requirements.computeSatisfaction(player))
+        else -> CardPlayability.requirementDependent(requirements.assess(player))
     }
 
     fun isPlayableOnBoardWith(board: Board, transactions: ResourceTransactions) =
@@ -53,20 +53,22 @@ enum class Color {
 
 data class CardPlayability(
     val isPlayable: Boolean,
-    val isFree: Boolean = false,
     val isChainable: Boolean = false,
     val minPrice: Int = Int.MAX_VALUE,
     val cheapestTransactions: Set<ResourceTransactions> = emptySet(),
     val playabilityLevel: PlayabilityLevel
 ) {
+    val isFree: Boolean = minPrice == 0
+
     companion object {
 
-        internal fun incompatibleWithBoard(): CardPlayability =
-            CardPlayability(isPlayable = false, playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD)
+        internal fun incompatibleWithBoard(): CardPlayability = CardPlayability(
+            isPlayable = false,
+            playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
+        )
 
         internal fun chainable(): CardPlayability = CardPlayability(
             isPlayable = true,
-            isFree = true,
             isChainable = true,
             minPrice = 0,
             cheapestTransactions = setOf(noTransactions()),
@@ -75,7 +77,6 @@ data class CardPlayability(
 
         internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability = CardPlayability(
             isPlayable = satisfaction.satisfied,
-            isFree = satisfaction.minPrice == 0,
             isChainable = false,
             minPrice = satisfaction.minPrice,
             cheapestTransactions = satisfaction.cheapestTransactions,

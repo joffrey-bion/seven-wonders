@@ -45,7 +45,7 @@ class RequirementsTest {
 
         assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, noTransactions()))
 
-        val satisfaction = requirements.computeSatisfaction(player)
+        val satisfaction = requirements.assess(player)
         if (boardGold >= requiredGold) {
             if (requiredGold == 0) {
                 assertEquals(RequirementsSatisfaction.noRequirements(), satisfaction)
@@ -67,7 +67,7 @@ class RequirementsTest {
         assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
 
         if (initialResource == requiredResource) {
-            val satisfaction = requirements.computeSatisfaction(player)
+            val satisfaction = requirements.assess(player)
             assertEquals(RequirementsSatisfaction.enoughResources(), satisfaction)
         }
     }
@@ -89,7 +89,7 @@ class RequirementsTest {
         assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
 
         if (producedResource == requiredResource) {
-            val satisfaction = requirements.computeSatisfaction(player)
+            val satisfaction = requirements.assess(player)
             assertEquals(RequirementsSatisfaction.enoughResources(), satisfaction)
         }
     }
@@ -115,7 +115,7 @@ class RequirementsTest {
         val neighbourHasResource = boughtResource == requiredResource
         assertEquals(neighbourHasResource, requirements.areMetWithHelpBy(board, resources))
 
-        val satisfaction = requirements.computeSatisfaction(player)
+        val satisfaction = requirements.assess(player)
         if (neighbourHasResource) {
             val transactions = setOf(
                 createTransactions(Provider.LEFT_PLAYER, requiredResource),
@@ -141,7 +141,7 @@ class RequirementsTest {
         val transactions = createTransactions(Provider.RIGHT_PLAYER, requiredResource)
 
         assertTrue(requirements.areMetWithHelpBy(board, transactions))
-        assertTrue(requirements.computeSatisfaction(player).satisfied)
+        assertTrue(requirements.assess(player).satisfied)
 
         requirements.pay(player, transactions)
 

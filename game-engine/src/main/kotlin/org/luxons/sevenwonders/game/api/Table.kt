@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.game.api
 
+import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.cards.HandRotationDirection
 import org.luxons.sevenwonders.game.data.Age
 import org.luxons.sevenwonders.game.moves.Move
@@ -17,7 +18,7 @@ data class Table(
 }
 
 internal fun InternalTable.toApiTable(): Table = Table(
-    boards = boards.mapIndexed { i, b -> b.toApiBoard(lastPlayedMoves.getOrNull(i)) },
+    boards = boards.mapIndexed { i, b -> b.toApiBoard(SimplePlayer(i, this), lastPlayedMoves.getOrNull(i)) },
     currentAge = currentAge,
     handRotationDirection = handRotationDirection,
     lastPlayedMoves = lastPlayedMoves.map { it.toPlayedMove() }
