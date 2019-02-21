@@ -2,37 +2,31 @@ package org.luxons.sevenwonders.game
 
 import org.junit.Test
 import org.luxons.sevenwonders.game.api.Action
-import org.luxons.sevenwonders.game.api.Board
+import org.luxons.sevenwonders.game.api.HandCard
 import org.luxons.sevenwonders.game.api.PlayedMove
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.api.TableCard
 import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
+import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
-import java.util.HashMap
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class GameTest {
 
     @Test
-    fun testFullGame3Players() {
-        playGame(nbPlayers = 3)
-    }
+    fun testFullGame3Players() = playGame(nbPlayers = 3)
 
     @Test
-    fun testFullGame5Players() {
-        playGame(nbPlayers = 6)
-    }
+    fun testFullGame5Players() = playGame(nbPlayers = 6)
 
     @Test
-    fun testFullGame7Players() {
-        playGame(nbPlayers = 7)
-    }
+    fun testFullGame7Players() = playGame(nbPlayers = 7)
 
     private fun playGame(nbPlayers: Int) {
         val game = createGame(nbPlayers)
@@ -54,75 +48,62 @@ class GameTest {
     private fun playTurn(nbPlayers: Int, game: Game, ageToCheck: Int, handSize: Int) {
         val turnInfos = game.getCurrentTurnInfo()
         assertEquals(nbPlayers, turnInfos.size)
-
-        val sentMoves = HashMap<Int, PlayerMove>(turnInfos.size)
-        for (turnInfo in turnInfos) {
-            assertEquals(ageToCheck, turnInfo.currentAge)
-            assertEquals(handSize, turnInfo.hand.size)
-            val move = getFirstAvailableMove(turnInfo)
-            if (move != null) {
-                game.prepareMove(turnInfo.playerIndex, move)
-                sentMoves[turnInfo.playerIndex] = move
-            }
+        turnInfos.forEach {
+            assertEquals(ageToCheck, it.currentAge)
+            assertEquals(handSize, it.hand.size)
         }
+
+        val moveExpectations = turnInfos.mapNotNull { it.firstAvailableMove() }
+
+        moveExpectations.forEach { game.prepareMove(it.playerIndex, it.moveToSend) }
         assertTrue(game.allPlayersPreparedTheirMove())
+
         val table = game.playTurn()
-        checkLastPlayedMoves(sentMoves, table)
+
+        val expectedMoves = moveExpectations.map { it.expectedPlayedMove }
+        assertEquals(expectedMoves, table.lastPlayedMoves)
     }
 
-    private fun getFirstAvailableMove(turnInfo: PlayerTurnInfo): PlayerMove? = when (turnInfo.action) {
-        Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> createPlayCardMove(turnInfo)
-        Action.PICK_NEIGHBOR_GUILD -> createPickGuildMove(turnInfo)
+    private fun PlayerTurnInfo.firstAvailableMove(): MoveExpectation? = when (action) {
+        Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> createPlayCardMove(this)
+        Action.PICK_NEIGHBOR_GUILD -> createPickGuildMove(this)
         Action.WAIT -> null
     }
 
-    private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
+    private fun createPlayCardMove(turnInfo: PlayerTurnInfo): MoveExpectation {
         val playableCard = turnInfo.hand.firstOrNull { it.playability.isPlayable }
-
         return if (playableCard != null) {
-            PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.cheapestTransactions.first())
+            planMove(turnInfo, MoveType.PLAY, playableCard, playableCard.playability.cheapestTransactions.first())
         } else {
-            PlayerMove(MoveType.DISCARD, turnInfo.hand.first().name)
+            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand.first(), noTransactions())
         }
     }
 
-    private fun createPickGuildMove(turnInfo: PlayerTurnInfo): PlayerMove {
+    private fun createPickGuildMove(turnInfo: PlayerTurnInfo): MoveExpectation {
         val neighbourGuilds = turnInfo.neighbourGuildCards
+
+        // the game should send action WAIT if no guild cards are available around
         assertFalse(neighbourGuilds.isEmpty())
-        val cardName = neighbourGuilds[0].name
-        return PlayerMove(MoveType.COPY_GUILD, cardName)
+        return MoveExpectation(
+            turnInfo.playerIndex,
+            PlayerMove(MoveType.COPY_GUILD, neighbourGuilds.first().name),
+            PlayedMove(turnInfo.playerIndex, MoveType.COPY_GUILD, neighbourGuilds.first(), noTransactions())
+        )
     }
 
-    private fun checkLastPlayedMoves(sentMoves: Map<Int, PlayerMove>, table: Table) {
-        for (move in table.lastPlayedMoves) {
-            val sentMove = sentMoves[move.playerIndex]
-            assertNotNull(sentMove)
-            assertNotNull(move.card)
-            assertEquals(sentMove.cardName, move.card.name)
-            assertEquals(sentMove.type, move.type)
-            assertEquals(sentMove.transactions, move.transactions)
+    data class MoveExpectation(val playerIndex: Int, val moveToSend: PlayerMove, val expectedPlayedMove: PlayedMove)
 
-            val board = table.boards[move.playerIndex]
-            when (sentMove.type) {
-                MoveType.PLAY, MoveType.PLAY_FREE -> checkLastPlayedCard(move, board)
-                MoveType.UPGRADE_WONDER -> checkWonderUpgraded(move, board)
-                else -> Unit
-            }
-        }
-    }
+    private fun planMove(
+        turnInfo: PlayerTurnInfo,
+        moveType: MoveType,
+        card: HandCard,
+        transactions: ResourceTransactions
+    ): MoveExpectation = MoveExpectation(
+        turnInfo.playerIndex,
+        PlayerMove(moveType, card.name, transactions),
+        PlayedMove(turnInfo.playerIndex, moveType, card.toPlayedCard(), transactions)
+    )
 
-    private fun checkLastPlayedCard(move: PlayedMove, board: Board) {
-        val card = board.playedCards.first { it.name == move.card.name }
-        assertTrue(card.playedDuringLastMove)
-    }
-
-    private fun checkWonderUpgraded(move: PlayedMove, board: Board) {
-        val stages = board.wonder.stages
-
-        val lastBuiltStage = stages.last { it.isBuilt }
-        val otherStages = stages - lastBuiltStage
-
-        assertEquals(move.type == MoveType.UPGRADE_WONDER, lastBuiltStage.builtDuringLastMove)
-        assertFalse(otherStages.any { it.builtDuringLastMove })
-    }
+    private fun HandCard.toPlayedCard(): TableCard =
+        TableCard(name, color, requirements, chainParent, chainChildren, image, back, true)
 }
