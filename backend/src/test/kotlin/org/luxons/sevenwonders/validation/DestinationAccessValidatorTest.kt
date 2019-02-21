@@ -6,6 +6,7 @@ import org.luxons.sevenwonders.lobby.Lobby
 import org.luxons.sevenwonders.lobby.Player
 import org.luxons.sevenwonders.repositories.LobbyNotFoundException
 import org.luxons.sevenwonders.repositories.LobbyRepository
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -68,28 +69,36 @@ class DestinationAccessValidatorTest {
         assertTrue(destinationAccessValidator.hasAccess("testUser", "/lobby/notANumber/suffix"))
     }
 
-    @Test(expected = LobbyNotFoundException::class)
+    @Test
     fun validate_failWhenNoLobbyExist() {
-        destinationAccessValidator.hasAccess("", "/lobby/0")
+        assertFailsWith<LobbyNotFoundException> {
+            destinationAccessValidator.hasAccess("", "/lobby/0")
+        }
     }
 
-    @Test(expected = LobbyNotFoundException::class)
+    @Test
     fun validate_failWhenNoGameExist() {
-        destinationAccessValidator.hasAccess("", "/game/0")
+        assertFailsWith<LobbyNotFoundException> {
+            destinationAccessValidator.hasAccess("", "/game/0")
+        }
     }
 
-    @Test(expected = LobbyNotFoundException::class)
+    @Test
     fun validate_failWhenReferencedLobbyDoesNotExist() {
         createLobby("Test Game", "ownerUser1")
         createLobby("Test Game 2", "ownerUser2")
-        destinationAccessValidator.hasAccess("doesNotMatter", "/lobby/3")
+        assertFailsWith<LobbyNotFoundException> {
+            destinationAccessValidator.hasAccess("doesNotMatter", "/lobby/3")
+        }
     }
 
-    @Test(expected = LobbyNotFoundException::class)
+    @Test
     fun validate_failWhenReferencedGameDoesNotExist() {
         createGame("Test Game 1", "user1", "user2", "user3")
         createGame("Test Game 2", "user4", "user5", "user6")
-        destinationAccessValidator.hasAccess("doesNotMatter", "/game/3")
+        assertFailsWith<LobbyNotFoundException> {
+            destinationAccessValidator.hasAccess("doesNotMatter", "/game/3")
+        }
     }
 
     @Test

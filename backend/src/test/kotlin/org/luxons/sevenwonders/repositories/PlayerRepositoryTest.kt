@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.repositories
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -42,9 +43,11 @@ class PlayerRepositoryTest {
         assertEquals("Much Better Name", player1Updated.displayName)
     }
 
-    @Test(expected = PlayerNotFoundException::class)
+    @Test
     fun find_failsOnUnknownUsername() {
-        repository.find("anyUsername")
+        assertFailsWith<PlayerNotFoundException> {
+            repository.find("anyUsername")
+        }
     }
 
     @Test
@@ -55,9 +58,11 @@ class PlayerRepositoryTest {
         assertSame(player2, repository.find("player2"))
     }
 
-    @Test(expected = PlayerNotFoundException::class)
+    @Test
     fun remove_failsOnUnknownUsername() {
-        repository.remove("anyUsername")
+        assertFailsWith<PlayerNotFoundException> {
+            repository.remove("anyUsername")
+        }
     }
 
     @Test

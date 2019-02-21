@@ -9,6 +9,7 @@ import org.luxons.sevenwonders.game.boards.ScienceType
 import org.luxons.sevenwonders.game.effects.ScienceProgress
 import org.luxons.sevenwonders.game.test.createScienceProgress
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
 private const val TABLET_STR = "\"TABLET\""
@@ -60,44 +61,58 @@ class ScienceProgressSerializerTest {
         assertEquals(JOKER_STR, json)
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test
     fun serialize_failOnMultipleCompasses() {
-        val progress = createScienceProgress(2, 0, 0, 0)
-        gson.toJson(progress)
+        assertFailsWith<UnsupportedOperationException> {
+            val progress = createScienceProgress(2, 0, 0, 0)
+            gson.toJson(progress)
+        }
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test
     fun serialize_failOnMultipleWheels() {
-        val progress = createScienceProgress(0, 2, 0, 0)
-        gson.toJson(progress)
+        assertFailsWith<UnsupportedOperationException> {
+            val progress = createScienceProgress(0, 2, 0, 0)
+            gson.toJson(progress)
+        }
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test
     fun serialize_failOnMultipleTablets() {
-        val progress = createScienceProgress(0, 0, 2, 0)
-        gson.toJson(progress)
+        assertFailsWith<UnsupportedOperationException> {
+            val progress = createScienceProgress(0, 0, 2, 0)
+            gson.toJson(progress)
+        }
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test
     fun serialize_failOnMultipleJokers() {
-        val progress = createScienceProgress(0, 0, 0, 2)
-        gson.toJson(progress)
+        assertFailsWith<UnsupportedOperationException> {
+            val progress = createScienceProgress(0, 0, 0, 2)
+            gson.toJson(progress)
+        }
     }
 
-    @Test(expected = UnsupportedOperationException::class)
+    @Test
     fun serialize_failOnMixedElements() {
-        val progress = createScienceProgress(1, 1, 0, 0)
-        gson.toJson(progress)
+        assertFailsWith<UnsupportedOperationException> {
+            val progress = createScienceProgress(1, 1, 0, 0)
+            gson.toJson(progress)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failOnEmptyString() {
-        gson.fromJson<ScienceProgress>("\"\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<ScienceProgress>("\"\"")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failOnGarbageString() {
-        gson.fromJson<ScienceProgress>("thisisgarbage")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<ScienceProgress>("thisisgarbage")
+        }
     }
 
     @Test

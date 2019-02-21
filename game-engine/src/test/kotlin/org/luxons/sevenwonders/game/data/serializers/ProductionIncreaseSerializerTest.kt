@@ -110,18 +110,22 @@ class ProductionIncreaseSerializerTest {
         assertEquals("\"W/O/C\"", gson.toJson(prodIncrease))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun serialize_failIfMultipleChoices() {
         val prodIncrease = createChoice(true, ResourceType.WOOD, ResourceType.CLAY)
         prodIncrease.production.addChoice(ResourceType.ORE, ResourceType.GLASS)
-        gson.toJson(prodIncrease)
+        assertFailsWith<IllegalArgumentException> {
+            gson.toJson(prodIncrease)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun serialize_failIfMixedFixedAndChoices() {
         val prodIncrease = create(true, 1, 0, 0)
         prodIncrease.production.addChoice(ResourceType.WOOD, ResourceType.CLAY)
-        gson.toJson(prodIncrease)
+        assertFailsWith<IllegalArgumentException> {
+            gson.toJson(prodIncrease)
+        }
     }
 
     @Test

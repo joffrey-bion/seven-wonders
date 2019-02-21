@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 class ProductionSerializerTest {
@@ -24,8 +25,7 @@ class ProductionSerializerTest {
             .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
             .registerTypeAdapter(ResourceType::class.java, ResourceTypeSerializer())
             .registerTypeAdapter(resourceTypeList, ResourceTypesSerializer())
-            .registerTypeAdapter(Production::class.java, ProductionSerializer())
-            .create()
+            .registerTypeAdapter(Production::class.java, ProductionSerializer()).create()
     }
 
     private fun create(wood: Int, stone: Int, clay: Int): Production {
@@ -107,18 +107,22 @@ class ProductionSerializerTest {
         assertEquals("\"W/O/C\"", gson.toJson(prodIncrease))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun serialize_failIfMultipleChoices() {
         val production = createChoice(ResourceType.WOOD, ResourceType.CLAY)
         production.addChoice(ResourceType.ORE, ResourceType.GLASS)
-        gson.toJson(production)
+        assertFailsWith<IllegalArgumentException> {
+            gson.toJson(production)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun serialize_failIfMixedFixedAndChoices() {
         val production = create(1, 0, 0)
         production.addChoice(ResourceType.WOOD, ResourceType.CLAY)
-        gson.toJson(production)
+        assertFailsWith<IllegalArgumentException> {
+            gson.toJson(production)
+        }
     }
 
     @Test
@@ -132,14 +136,18 @@ class ProductionSerializerTest {
         assertEquals(prodIncrease, gson.fromJson("\"\""))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failOnGarbageString() {
-        gson.fromJson<Production>("\"this is garbage\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<Production>("\"this is garbage\"")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failOnGarbageStringWithSlashes() {
-        gson.fromJson<Production>("\"this/is/garbage\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<Production>("\"this/is/garbage\"")
+        }
     }
 
     @Test
@@ -190,8 +198,10 @@ class ProductionSerializerTest {
         assertEquals(prodIncrease, gson.fromJson("\"W/O/C\""))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failOnMultipleResourcesInChoice() {
-        gson.fromJson<Production>("\"W/SS/C\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<Production>("\"W/SS/C\"")
+        }
     }
 }

@@ -11,20 +11,24 @@ import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.test.testTable
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.fail
 
 class BuildWonderMoveTest {
 
-    @Test(expected = InvalidMoveException::class)
+    @Test
     fun init_failsWhenCardNotInHand() {
         val table = testTable(3)
         val hand = sampleCards(7)
         val playerContext = PlayerContext(0, table, hand)
         val anotherCard = testCard("Card that is not in the hand")
-        createMove(playerContext, anotherCard, MoveType.UPGRADE_WONDER)
+
+        assertFailsWith<InvalidMoveException> {
+            createMove(playerContext, anotherCard, MoveType.UPGRADE_WONDER)
+        }
     }
 
-    @Test(expected = InvalidMoveException::class)
+    @Test
     fun init_failsWhenWonderIsCompletelyBuilt() {
         val settings = testSettings(3)
         val table = testTable(settings)
@@ -33,7 +37,9 @@ class BuildWonderMoveTest {
         fillPlayerWonderLevels(settings, table, hand)
 
         // should fail because the wonder is already full
-        buildOneWonderLevel(settings, table, hand, 4)
+        assertFailsWith<InvalidMoveException> {
+            buildOneWonderLevel(settings, table, hand, 4)
+        }
     }
 
     private fun fillPlayerWonderLevels(settings: Settings, table: Table, hand: List<Card>) {

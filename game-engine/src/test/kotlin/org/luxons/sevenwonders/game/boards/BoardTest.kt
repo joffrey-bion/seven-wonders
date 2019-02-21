@@ -2,13 +2,11 @@ package org.luxons.sevenwonders.game.boards
 
 import junit.framework.TestCase.assertEquals
 import org.junit.Assume.assumeTrue
-import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.FromDataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.boards.Board.InsufficientFundsException
 import org.luxons.sevenwonders.game.cards.Color
@@ -26,16 +24,13 @@ import org.luxons.sevenwonders.game.test.testBoard
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.test.testWonder
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class BoardTest {
-
-    @JvmField
-    @Rule
-    var thrown: ExpectedException = ExpectedException.none()
 
     @Theory
     fun initialGold_respectsSettings(@FromDataPoints("gold") goldAmountInSettings: Int) {
@@ -72,10 +67,11 @@ class BoardTest {
     ) {
         assumeTrue(goldRemoved >= 0)
         assumeTrue(initialGold < goldRemoved)
-        thrown.expect(InsufficientFundsException::class.java)
 
-        val board = Board(testWonder(), 0, testSettings(initialGold = initialGold))
-        board.removeGold(goldRemoved)
+        assertFailsWith<InsufficientFundsException> {
+            val board = Board(testWonder(), 0, testSettings(initialGold = initialGold))
+            board.removeGold(goldRemoved)
+        }
     }
 
     @Theory
@@ -121,8 +117,9 @@ class BoardTest {
         val board = testBoard()
         val card = testCard(color = color)
 
-        thrown.expect(IllegalArgumentException::class.java)
-        board.copiedGuild = card
+        assertFailsWith<IllegalArgumentException> {
+            board.copiedGuild = card
+        }
     }
 
     @Theory

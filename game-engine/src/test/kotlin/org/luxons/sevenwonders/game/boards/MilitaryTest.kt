@@ -1,21 +1,16 @@
 package org.luxons.sevenwonders.game.boards
 
-import org.junit.Rule
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.FromDataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.boards.Military.UnknownAgeException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @RunWith(Theories::class)
 class MilitaryTest {
-
-    @JvmField
-    @Rule
-    var thrown = ExpectedException.none()
 
     @Theory
     fun victory_addsCorrectPoints(
@@ -32,8 +27,9 @@ class MilitaryTest {
     @Theory
     fun victory_failsIfUnknownAge(@FromDataPoints("points") nbPointsPerVictory: Int) {
         val military = createMilitary(0, nbPointsPerVictory, 0)
-        thrown.expect(UnknownAgeException::class.java)
-        military.victory(1)
+        assertFailsWith<UnknownAgeException> {
+            military.victory(1)
+        }
     }
 
     @Theory

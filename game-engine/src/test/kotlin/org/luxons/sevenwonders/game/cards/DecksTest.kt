@@ -1,42 +1,43 @@
 package org.luxons.sevenwonders.game.cards
 
 import org.junit.Assume.assumeTrue
-import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.cards.Decks.CardNotFoundException
 import org.luxons.sevenwonders.game.test.sampleCards
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class DecksTest {
 
-    @JvmField
-    @Rule
-    val thrown: ExpectedException = ExpectedException.none()
-
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun getCard_failsOnEmptyNameWhenDeckIsEmpty() {
         val decks = createDecks(0, 0)
-        decks.getCard(0, "")
+        assertFailsWith<IllegalArgumentException> {
+            decks.getCard(0, "")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun getCard_failsWhenDeckIsEmpty() {
         val decks = createDecks(0, 0)
-        decks.getCard(0, "Any name")
+        assertFailsWith<IllegalArgumentException> {
+            decks.getCard(0, "Any name")
+        }
     }
 
-    @Test(expected = CardNotFoundException::class)
+    @Test
     fun getCard_failsWhenCardIsNotFound() {
         val decks = createDecks(3, 20)
-        decks.getCard(1, "Unknown name")
+        assertFailsWith<CardNotFoundException> {
+            decks.getCard(1, "Unknown name")
+        }
     }
 
     @Test
@@ -46,24 +47,29 @@ class DecksTest {
         assertEquals("Test Card 3", name)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deal_failsOnZeroPlayers() {
         val decks = createDecks(3, 20)
-        decks.deal(1, 0)
+        assertFailsWith<IllegalArgumentException> {
+            decks.deal(1, 0)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deal_failsOnMissingAge() {
         val decks = createDecks(2, 0)
-        decks.deal(4, 10)
+        assertFailsWith<IllegalArgumentException> {
+            decks.deal(4, 10)
+        }
     }
 
     @Theory
     fun deal_failsWhenTooFewPlayers(nbPlayers: Int, nbCards: Int) {
         assumeTrue(nbCards % nbPlayers != 0)
-        thrown.expect(IllegalArgumentException::class.java)
         val decks = createDecks(1, nbCards)
-        decks.deal(1, nbPlayers)
+        assertFailsWith<IllegalArgumentException> {
+            decks.deal(1, nbPlayers)
+        }
     }
 
     @Theory

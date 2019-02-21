@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.repositories
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.lobby.Player
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -38,9 +39,11 @@ class LobbyRepositoryTest {
         assertTrue(lobby.isOwner(owner.username))
     }
 
-    @Test(expected = LobbyNotFoundException::class)
+    @Test
     fun find_failsOnUnknownId() {
-        repository.find(123)
+        assertFailsWith<LobbyNotFoundException> {
+            repository.find(123)
+        }
     }
 
     @Test
@@ -52,9 +55,11 @@ class LobbyRepositoryTest {
         assertSame(lobby2, repository.find(lobby2.id))
     }
 
-    @Test(expected = LobbyNotFoundException::class)
+    @Test
     fun remove_failsOnUnknownId() {
-        repository.remove(123)
+        assertFailsWith<LobbyNotFoundException> {
+            repository.remove(123)
+        }
     }
 
     @Test

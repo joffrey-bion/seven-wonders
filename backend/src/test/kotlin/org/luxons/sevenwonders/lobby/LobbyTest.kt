@@ -3,12 +3,10 @@ package org.luxons.sevenwonders.lobby
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
-import org.junit.rules.ExpectedException
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.data.GameDefinition
@@ -19,6 +17,7 @@ import org.luxons.sevenwonders.lobby.Lobby.PlayerOverflowException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerUnderflowException
 import org.luxons.sevenwonders.lobby.Lobby.UnknownPlayerException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
@@ -26,10 +25,6 @@ import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class LobbyTest {
-
-    @JvmField
-    @Rule
-    var thrown = ExpectedException.none()
 
     private lateinit var gameOwner: Player
 
@@ -95,26 +90,32 @@ class LobbyTest {
         assertSame(lobby, player.lobby)
     }
 
-    @Test(expected = PlayerNameAlreadyUsedException::class)
+    @Test
     fun addPlayer_failsOnSameName() {
         val player = Player("testuser", "Test User")
         val player2 = Player("testuser2", "Test User")
         lobby.addPlayer(player)
-        lobby.addPlayer(player2)
+        assertFailsWith<PlayerNameAlreadyUsedException> {
+            lobby.addPlayer(player2)
+        }
     }
 
-    @Test(expected = PlayerOverflowException::class)
+    @Test
     fun addPlayer_playerOverflowWhenTooMany() {
-        // the owner + the max number gives an overflow
-        addPlayers(gameDefinition.maxPlayers)
+        assertFailsWith<PlayerOverflowException> {
+            // the owner + the max number gives an overflow
+            addPlayers(gameDefinition.maxPlayers)
+        }
     }
 
-    @Test(expected = GameAlreadyStartedException::class)
+    @Test
     fun addPlayer_failWhenGameStarted() {
         // total with owner is the minimum
         addPlayers(gameDefinition.minPlayers - 1)
         lobby.startGame()
-        lobby.addPlayer(Player("soonerNextTime", "The Late Guy"))
+        assertFailsWith<GameAlreadyStartedException> {
+            lobby.addPlayer(Player("soonerNextTime", "The Late Guy"))
+        }
     }
 
     private fun addPlayers(nbPlayers: Int) {
@@ -124,9 +125,11 @@ class LobbyTest {
         }
     }
 
-    @Test(expected = UnknownPlayerException::class)
+    @Test
     fun removePlayer_failsWhenNotPresent() {
-        lobby.removePlayer("anyname")
+        assertFailsWith<UnknownPlayerException> {
+            lobby.removePlayer("anyname")
+        }
     }
 
     @Test
@@ -157,40 +160,52 @@ class LobbyTest {
         assertEquals(reorderedUsernames, lobby.getPlayers().map { it.username })
     }
 
-    @Test(expected = PlayerListMismatchException::class)
+    @Test
     fun reorderPlayers_failsOnUnknownPlayer() {
         val player1 = Player("testuser1", "Test User 1")
         val player2 = Player("testuser2", "Test User 2")
         lobby.addPlayer(player1)
         lobby.addPlayer(player2)
-        lobby.reorderPlayers(listOf("unknown", "testuser2", "gameowner"))
+
+        assertFailsWith<PlayerListMismatchException> {
+            lobby.reorderPlayers(listOf("unknown", "testuser2", "gameowner"))
+        }
     }
 
-    @Test(expected = PlayerListMismatchException::class)
+    @Test
     fun reorderPlayers_failsOnExtraPlayer() {
         val player1 = Player("testuser1", "Test User 1")
         val player2 = Player("testuser2", "Test User 2")
         lobby.addPlayer(player1)
         lobby.addPlayer(player2)
-        lobby.reorderPlayers(listOf("testuser2", "onemore", "testuser1", "gameowner"))
+
+        assertFailsWith<PlayerListMismatchException> {
+            lobby.reorderPlayers(listOf("testuser2", "onemore", "testuser1", "gameowner"))
+        }
     }
 
-    @Test(expected = PlayerListMismatchException::class)
+    @Test
     fun reorderPlayers_failsOnMissingPlayer() {
         val player1 = Player("testuser1", "Test User 1")
         val player2 = Player("testuser2", "Test User 2")
         lobby.addPlayer(player1)
         lobby.addPlayer(player2)
-        lobby.reorderPlayers(listOf("testuser2", "gameowner"))
+
+        assertFailsWith<PlayerListMismatchException> {
+            lobby.reorderPlayers(listOf("testuser2", "gameowner"))
+        }
     }
 
     @Theory
     fun startGame_failsBelowMinPlayers(nbPlayers: Int) {
         assumeTrue(nbPlayers < gameDefinition.minPlayers)
-        thrown.expect(PlayerUnderflowException::class.java)
+
         // there is already the owner
         addPlayers(nbPlayers - 1)
-        lobby.startGame()
+
+        assertFailsWith<PlayerUnderflowException> {
+            lobby.startGame()
+        }
     }
 
     @Theory

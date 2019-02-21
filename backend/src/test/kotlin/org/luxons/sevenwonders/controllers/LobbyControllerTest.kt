@@ -17,6 +17,7 @@ import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.luxons.sevenwonders.test.mockSimpMessagingTemplate
 import java.util.HashMap
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -49,17 +50,23 @@ class LobbyControllerTest {
         assertFalse(owner.isInGame)
     }
 
-    @Test(expected = PlayerNotFoundException::class)
+    @Test
     fun leave_failsWhenPlayerDoesNotExist() {
         val principal = TestPrincipal("I don't exist")
-        lobbyController.leave(principal)
+
+        assertFailsWith<PlayerNotFoundException> {
+            lobbyController.leave(principal)
+        }
     }
 
-    @Test(expected = PlayerNotInLobbyException::class)
+    @Test
     fun leave_failsWhenNotInLobby() {
         playerRepository.createOrUpdate("testuser", "Test User")
         val principal = TestPrincipal("testuser")
-        lobbyController.leave(principal)
+
+        assertFailsWith<PlayerNotInLobbyException> {
+            lobbyController.leave(principal)
+        }
     }
 
     @Test
@@ -111,7 +118,7 @@ class LobbyControllerTest {
         assertEquals(reorderedPlayers, lobby.getPlayers())
     }
 
-    @Test(expected = PlayerIsNotOwnerException::class)
+    @Test
     fun reorderPlayers_failsForPeasant() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
@@ -124,7 +131,10 @@ class LobbyControllerTest {
         val reorderPlayersAction = ReorderPlayersAction(playerNames)
 
         val principal = TestPrincipal("testuser2")
-        lobbyController.reorderPlayers(reorderPlayersAction, principal)
+
+        assertFailsWith<PlayerIsNotOwnerException> {
+            lobbyController.reorderPlayers(reorderPlayersAction, principal)
+        }
     }
 
     @Test
@@ -147,7 +157,7 @@ class LobbyControllerTest {
         assertEquals(newSettings, lobby.settings)
     }
 
-    @Test(expected = PlayerIsNotOwnerException::class)
+    @Test
     fun updateSettings_failsForPeasant() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
@@ -158,7 +168,10 @@ class LobbyControllerTest {
         val updateSettingsAction = UpdateSettingsAction(CustomizableSettings())
 
         val principal = TestPrincipal("testuser2")
-        lobbyController.updateSettings(updateSettingsAction, principal)
+
+        assertFailsWith<PlayerIsNotOwnerException> {
+            lobbyController.updateSettings(updateSettingsAction, principal)
+        }
     }
 
     @Test
@@ -176,7 +189,7 @@ class LobbyControllerTest {
         assertSame(State.PLAYING, lobby.state)
     }
 
-    @Test(expected = PlayerIsNotOwnerException::class)
+    @Test
     fun startGame_failsForPeasant() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
@@ -185,7 +198,10 @@ class LobbyControllerTest {
         addPlayer(lobby, "testuser3")
 
         val principal = TestPrincipal("testuser2")
-        lobbyController.startGame(principal)
+
+        assertFailsWith<PlayerIsNotOwnerException> {
+            lobbyController.startGame(principal)
+        }
     }
 
     private fun addPlayer(lobby: Lobby, username: String): Player {

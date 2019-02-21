@@ -1,8 +1,6 @@
 package org.luxons.sevenwonders.game.resources
 
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExpectedException
 import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
 import org.luxons.sevenwonders.game.resources.ResourceType.GLASS
 import org.luxons.sevenwonders.game.resources.ResourceType.LOOM
@@ -12,14 +10,11 @@ import org.luxons.sevenwonders.game.resources.ResourceType.STONE
 import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
 import java.util.NoSuchElementException
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ResourcesTest {
-
-    @JvmField
-    @Rule
-    var thrown = ExpectedException.none()
 
     @Test
     fun init_shouldBeEmpty() {
@@ -143,8 +138,9 @@ class ResourcesTest {
     fun remove_tooMany() {
         val resources = mutableResourcesOf(WOOD to 2)
 
-        thrown.expect(NoSuchElementException::class.java)
-        resources.remove(WOOD, 3)
+        assertFailsWith<NoSuchElementException> {
+            resources.remove(WOOD, 3)
+        }
     }
 
     @Test

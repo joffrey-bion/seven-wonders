@@ -15,6 +15,7 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.resources.Production
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @RunWith(Theories::class)
 class NumericEffectSerializerTest {
@@ -27,8 +28,7 @@ class NumericEffectSerializerTest {
             .registerTypeAdapter(RawPointsIncrease::class.java, NumericEffectSerializer())
             .registerTypeAdapter(GoldIncrease::class.java, NumericEffectSerializer())
             // ProductionIncrease is not a numeric effect, it is here for negative testing purpose
-            .registerTypeAdapter(ProductionIncrease::class.java, NumericEffectSerializer())
-            .create()
+            .registerTypeAdapter(ProductionIncrease::class.java, NumericEffectSerializer()).create()
     }
 
     @Test
@@ -46,9 +46,11 @@ class NumericEffectSerializerTest {
         assertEquals("null", gson.toJson(null, GoldIncrease::class.java))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun serialize_failOnUnknownType() {
-        gson.toJson(ProductionIncrease(Production(), false))
+        assertFailsWith<IllegalArgumentException> {
+            gson.toJson(ProductionIncrease(Production(), false))
+        }
     }
 
     @Theory
@@ -87,39 +89,53 @@ class NumericEffectSerializerTest {
         assertEquals(goldIncrease, gson.fromJson<GoldIncrease>(count.toString()))
     }
 
-    @Test(expected = NumberFormatException::class)
+    @Test
     fun deserialize_militaryReinforcements_failOnEmptyString() {
-        gson.fromJson<MilitaryReinforcements>("\"\"")
+        assertFailsWith<NumberFormatException> {
+            gson.fromJson<MilitaryReinforcements>("\"\"")
+        }
     }
 
-    @Test(expected = NumberFormatException::class)
+    @Test
     fun deserialize_rawPointsIncrease_failOnEmptyString() {
-        gson.fromJson<RawPointsIncrease>("\"\"")
+        assertFailsWith<NumberFormatException> {
+            gson.fromJson<RawPointsIncrease>("\"\"")
+        }
     }
 
-    @Test(expected = NumberFormatException::class)
+    @Test
     fun deserialize_goldIncrease_failOnEmptyString() {
-        gson.fromJson<GoldIncrease>("\"\"")
+        assertFailsWith<NumberFormatException> {
+            gson.fromJson<GoldIncrease>("\"\"")
+        }
     }
 
-    @Test(expected = NumberFormatException::class)
+    @Test
     fun deserialize_militaryReinforcements_failOnNonNumericString() {
-        gson.fromJson<MilitaryReinforcements>("\"abc\"")
+        assertFailsWith<NumberFormatException> {
+            gson.fromJson<MilitaryReinforcements>("\"abc\"")
+        }
     }
 
-    @Test(expected = NumberFormatException::class)
+    @Test
     fun deserialize_rawPointsIncrease_failOnNonNumericString() {
-        gson.fromJson<RawPointsIncrease>("\"abc\"")
+        assertFailsWith<NumberFormatException> {
+            gson.fromJson<RawPointsIncrease>("\"abc\"")
+        }
     }
 
-    @Test(expected = NumberFormatException::class)
+    @Test
     fun deserialize_goldIncrease_failOnNonNumericString() {
-        gson.fromJson<GoldIncrease>("\"abc\"")
+        assertFailsWith<NumberFormatException> {
+            gson.fromJson<GoldIncrease>("\"abc\"")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failOnUnknownType() {
-        gson.fromJson<ProductionIncrease>("\"2\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<ProductionIncrease>("\"2\"")
+        }
     }
 
     companion object {

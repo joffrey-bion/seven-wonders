@@ -13,6 +13,7 @@ import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.test.createGuildCard
 import org.luxons.sevenwonders.game.test.testTable
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
@@ -52,11 +53,13 @@ class SpecialAbilityActivationTest {
         assertEquals(directPointsFromGuildCard, effect.computePoints(player))
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test
     fun computePoints_copyGuild_failWhenNoChosenGuild() {
         val effect = SpecialAbilityActivation(SpecialAbility.COPY_GUILD)
         val player = SimplePlayer(0, testTable(5))
-        effect.computePoints(player)
+        assertFailsWith<IllegalStateException> {
+            effect.computePoints(player)
+        }
     }
 
     companion object {
@@ -67,7 +70,8 @@ class SpecialAbilityActivationTest {
 
         @JvmStatic
         @DataPoints
-        fun neighbours(): Array<RelativeBoardPosition> = arrayOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT)
+        fun neighbours(): Array<RelativeBoardPosition> =
+            arrayOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT)
 
         @JvmStatic
         @DataPoints

@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.luxons.sevenwonders.test.mockSimpMessagingTemplate
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -54,15 +55,17 @@ class GameBrowserControllerTest {
         assertEquals(player.toDTO(principal.name), lobby.players[0])
     }
 
-    @Test(expected = PlayerNotFoundException::class)
+    @Test
     fun createGame_failsForUnknownPlayer() {
         val principal = TestPrincipal("unknown")
-
         val action = CreateGameAction("Test Game")
-        gameBrowserController.createGame(action, principal)
+
+        assertFailsWith<PlayerNotFoundException> {
+            gameBrowserController.createGame(action, principal)
+        }
     }
 
-    @Test(expected = UserAlreadyInGameException::class)
+    @Test
     fun createGame_failsWhenAlreadyInGame() {
         playerRepository.createOrUpdate("testuser", "Test User")
         val principal = TestPrincipal("testuser")
@@ -75,7 +78,9 @@ class GameBrowserControllerTest {
         val createGameAction2 = CreateGameAction("Test Game 2")
 
         // already in a game
-        gameBrowserController.createGame(createGameAction2, principal)
+        assertFailsWith<UserAlreadyInGameException> {
+            gameBrowserController.createGame(createGameAction2, principal)
+        }
     }
 
     @Test
@@ -97,7 +102,7 @@ class GameBrowserControllerTest {
         assertEquals(joiner.toDTO(joinerPrincipal.name), joinedLobby.players[1])
     }
 
-    @Test(expected = UserAlreadyInGameException::class)
+    @Test
     fun joinGame_failsWhenAlreadyInGame() {
         playerRepository.createOrUpdate("testowner", "Test User Owner")
         val ownerPrincipal = TestPrincipal("testowner")
@@ -112,6 +117,8 @@ class GameBrowserControllerTest {
         // joins the game
         gameBrowserController.joinGame(joinGameAction, joinerPrincipal)
         // should fail because already in a game
-        gameBrowserController.joinGame(joinGameAction, joinerPrincipal)
+        assertFailsWith<UserAlreadyInGameException> {
+            gameBrowserController.joinGame(joinGameAction, joinerPrincipal)
+        }
     }
 }

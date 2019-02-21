@@ -11,16 +11,18 @@ import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.test.sampleCards
 import org.luxons.sevenwonders.game.test.testTable
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
 class HandsTest {
 
-    @Test(expected = IndexOutOfBoundsException::class)
+    @Test
     fun get_failsOnMissingPlayer() {
         val hands = createHands(4, 7)
-        hands[5]
+
+        assertFailsWith<IndexOutOfBoundsException> { hands[5] }
     }
 
     @Test

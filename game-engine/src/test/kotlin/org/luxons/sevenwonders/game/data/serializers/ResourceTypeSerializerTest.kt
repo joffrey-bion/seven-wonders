@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.game.resources.ResourceType
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 class ResourceTypeSerializerTest {
@@ -39,13 +40,17 @@ class ResourceTypeSerializerTest {
         assertNull(gson.fromJson("null", ResourceType::class.java))
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failsOnEmptyString() {
-        gson.fromJson<ResourceType>("\"\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<ResourceType>("\"\"")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun deserialize_failsOnGarbageString() {
-        gson.fromJson<ResourceType>("\"thisisgarbage\"")
+        assertFailsWith<IllegalArgumentException> {
+            gson.fromJson<ResourceType>("\"thisisgarbage\"")
+        }
     }
 }
