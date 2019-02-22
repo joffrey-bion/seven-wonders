@@ -15,6 +15,7 @@ export type SettingsShape = {
   wonderSidePickMethod: "EACH_RANDOM" | "TODO",
   pointsPer3Gold: number
 };
+
 export type SettingsType = Record<SettingsShape>;
 
 const SettingsRecord: SettingsType = Record({
@@ -32,6 +33,7 @@ const SettingsRecord: SettingsType = Record({
   wonderSidePickMethod: 'EACH_RANDOM',
   pointsPer3Gold: 1,
 });
+
 export class Settings extends SettingsRecord {}
 
 export type GameState = 'LOBBY' | 'PLAYING';
@@ -43,6 +45,7 @@ export type GameShape = {
   settings: SettingsType,
   state: GameState,
 };
+
 export type GameType = Record<GameShape>;
 export type GameMapType = Map<string, GameShape>;
 export type GameNormalMapType = { [string]: GameShape };
@@ -55,18 +58,21 @@ const GameRecord: GameType = Record({
   settings: new Settings(),
   state: 'LOBBY',
 });
+
 export class Game extends GameRecord {}
 
 export type GamesShape = {
   all: Map<Game>,
   current: string
 };
+
 export type GamesType = Record<GamesShape>;
 
 const GamesRecord: GamesType = Record({
   all: new Map(),
   current: null,
 });
+
 export class GamesState extends GamesRecord {
   addGame(g: GameShape) {
     const game: Game = new Game(g);

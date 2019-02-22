@@ -81,7 +81,7 @@ export class SevenWondersSession {
     return this.client.subscriber(`/topic/game/${currentGameId}/tableUpdates`);
   }
 
-  watchPreparedMove(currentGameId: number): SubscribeFn<ApiPreparedCard> {
+  watchPreparedCards(currentGameId: number): SubscribeFn<ApiPreparedCard> {
     return this.client.subscriber(`/topic/game/${currentGameId}/prepared`);
   }
 

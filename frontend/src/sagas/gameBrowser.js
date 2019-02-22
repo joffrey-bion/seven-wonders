@@ -5,8 +5,9 @@ import type { SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions as gameActions, types } from '../redux/games';
-import { actions as playerActions } from '../redux/players';
+import { actions as gameActions } from '../redux/actions/lobby';
+import { types } from '../redux/actions/lobby';
+import { actions as playerActions } from '../redux/actions/players';
 import { game as gameSchema, gameList as gameListSchema } from '../schemas/games';
 
 function* watchGames(session: SevenWondersSession): SagaIterator {
@@ -32,7 +33,7 @@ function* watchLobbyJoined(session: SevenWondersSession): SagaIterator {
     const gameId = normalized.result;
     yield put(playerActions.updatePlayers(normalized.entities.players));
     yield put(gameActions.updateGames(normalized.entities.games));
-    yield put(gameActions.enterLobby(normalized.entities.games[gameId]));
+    yield put(gameActions.enterLobby(gameId));
     yield put(push(`/lobby/${gameId}`));
   } finally {
     yield apply(joinedLobbyChannel, joinedLobbyChannel.close);

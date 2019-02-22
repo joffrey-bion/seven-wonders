@@ -3,9 +3,9 @@ import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Flex } from 'reflexbox';
+import { actions } from '../../redux/actions/lobby';
 import { GameList } from './GameList';
 import { PlayerInfo } from './PlayerInfo';
-import { actions } from '../../redux/games';
 
 type GameBrowserProps = {
   createGame: (gameName: string) => void,
@@ -26,12 +26,14 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
     return (
       <div>
         <Flex align="center" justify='space-between' p={1}>
-          <InputGroup
-                  placeholder="Game name"
-                  name="game_name"
-                  onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
-                  rightElement={<CreateGameButton onClick={this.createGame}/>}
-          />
+          <form onSubmit={this.createGame}>
+            <InputGroup
+                    placeholder="Game name"
+                    name="game_name"
+                    onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
+                    rightElement={<CreateGameButton onClick={this.createGame}/>}
+            />
+          </form>
           <PlayerInfo />
         </Flex>
         <GameList />

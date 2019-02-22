@@ -37,18 +37,28 @@ export type ApiPlayer = {
   username: string,
   displayName: string,
   index: number,
-  ready: boolean
+  gameOwner: Boolean,
+  user: Boolean,
 };
 
-export type ApiTable = {};
+export type ApiTable = {
+
+};
 
 export type ApiAction = {};
 
 export type ApiHandCard = {};
 
-export type ApiCard = {};
+export type ApiTableCard = {};
 
-export type ApiPreparedCard = {};
+export type ApiCardBack = {
+  image: string
+};
+
+export type ApiPreparedCard = {
+  player: ApiPlayer,
+  cardBack: ApiCardBack
+};
 
 export type ApiPlayerTurnInfo = {
   playerIndex: number,
@@ -56,7 +66,7 @@ export type ApiPlayerTurnInfo = {
   currentAge: number,
   action: ApiAction,
   hand: ApiHandCard[],
-  neighbourGuildCards: ApiCard[],
+  neighbourGuildCards: ApiTableCard[],
   message: string
 };
 

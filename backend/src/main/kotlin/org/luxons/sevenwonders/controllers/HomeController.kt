@@ -25,10 +25,8 @@ class HomeController @Autowired constructor(
     /**
      * Creates/updates the player's name (for the user's session).
      *
-     * @param action
-     * the action to choose the name of the player
-     * @param principal
-     * the connected user's information
+     * @param action the action to choose the name of the player
+     * @param principal the connected user's information
      *
      * @return the created [PlayerDTO] object
      */

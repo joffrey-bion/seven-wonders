@@ -2,10 +2,12 @@ package org.luxons.sevenwonders.controllers
 
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.actions.PrepareMoveAction
+import org.luxons.sevenwonders.api.PlayerDTO
+import org.luxons.sevenwonders.api.toDTO
 import org.luxons.sevenwonders.game.Game
 import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.lobby.Player
-import org.luxons.sevenwonders.output.PreparedCard
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,13 +44,13 @@ class GameController @Autowired constructor(
         val lobby = player.lobby
         val players = lobby.getPlayers()
 
-        val allReady = players.stream().allMatch { it.isReady }
+        sendPlayerReady(game.id, player)
+
+        val allReady = players.all { it.isReady }
         if (allReady) {
             logger.info("Game {}: all players ready, sending turn info", game.id)
             players.forEach { it.isReady = false }
             sendTurnInfo(players, game)
-        } else {
-            sendPlayerReady(game.id, player)
         }
     }
 
@@ -60,7 +62,7 @@ class GameController @Autowired constructor(
     }
 
     private fun sendPlayerReady(gameId: Long, player: Player) =
-        template.convertAndSend("/topic/game/$gameId/playerReady", player.username)
+        template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
 
     /**
      * Prepares the player's next move. When all players have prepared their moves, all moves are executed.
@@ -75,7 +77,7 @@ class GameController @Autowired constructor(
         val player = principal.player
         val game = player.game
         val preparedCardBack = game.prepareMove(player.index, action.move)
-        val preparedCard = PreparedCard(player, preparedCardBack)
+        val preparedCard = PreparedCard(player.toDTO(principal.name), preparedCardBack)
         logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
 
         if (game.allPlayersPreparedTheirMove()) {
@@ -97,3 +99,5 @@ class GameController @Autowired constructor(
         private val logger = LoggerFactory.getLogger(GameController::class.java)
     }
 }
+
+class PreparedCard(val player: PlayerDTO, val cardBack: CardBack)

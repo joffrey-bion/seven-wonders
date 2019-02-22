@@ -5,7 +5,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import type { Game } from '../../models/games';
 import type { Player } from '../../models/players';
-import { actions, getCurrentGame } from '../../redux/games';
+import { actions } from '../../redux/actions/lobby';
+import { getCurrentGame } from '../../redux/games';
 import { getCurrentPlayer, getPlayers } from '../../redux/players';
 import { RadialPlayerList } from './RadialPlayerList';
 

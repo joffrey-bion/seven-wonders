@@ -5,37 +5,31 @@ import type { Channel, SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions as gameActions, types } from '../redux/games';
-import { actions as playerActions } from '../redux/players';
+import { actions as gameActions, types } from '../redux/actions/lobby';
+import { actions as playerActions } from '../redux/actions/players';
 import { game as gameSchema } from '../schemas/games';
 
-function getCurrentGameId(): number {
-  const path = window.location.pathname;
-  return path.split('lobby/')[1];
-}
-
-function* watchLobbyUpdates(session: SevenWondersSession): SagaIterator {
-  const currentGameId: number = getCurrentGameId();
-  const lobbyUpdatesChannel: Channel = yield eventChannel(session.watchLobbyUpdated(currentGameId));
+function* watchLobbyUpdates(session: SevenWondersSession, lobbyId: number): SagaIterator {
+  const lobbyUpdatesChannel: Channel = yield eventChannel(session.watchLobbyUpdated(lobbyId));
   try {
     while (true) {
       const lobby = yield take(lobbyUpdatesChannel);
       const normalized = normalize(lobby, gameSchema);
-      yield put(gameActions.updateGames(normalized.entities.games));
+      // players update needs to be first, otherwise the UI cannot find the player in the list
       yield put(playerActions.updatePlayers(normalized.entities.players));
+      yield put(gameActions.updateGames(normalized.entities.games));
     }
   } finally {
     yield apply(lobbyUpdatesChannel, lobbyUpdatesChannel.close);
   }
 }
 
-function* watchGameStart(session: SevenWondersSession): SagaIterator {
-  const currentGameId = getCurrentGameId();
-  const gameStartedChannel = yield eventChannel(session.watchGameStarted(currentGameId));
+function* watchGameStart(session: SevenWondersSession, lobbyId: number): SagaIterator {
+  const gameStartedChannel = yield eventChannel(session.watchGameStarted(lobbyId));
   try {
     yield take(gameStartedChannel);
-    yield put(gameActions.enterGame());
-    yield put(push('/game'));
+    yield put(gameActions.enterGame(lobbyId));
+    yield put(push(`/game/${lobbyId}`));
   } finally {
     yield apply(gameStartedChannel, gameStartedChannel.close);
   }
@@ -49,5 +43,10 @@ function* startGame(session: SevenWondersSession): SagaIterator {
 }
 
 export function* lobbySaga(session: SevenWondersSession): SagaIterator {
-  yield all([call(watchLobbyUpdates, session), call(watchGameStart, session), call(startGame, session)]);
+  const { gameId } = yield take(types.ENTER_LOBBY);
+  yield all([
+    call(watchLobbyUpdates, session, gameId),
+    call(watchGameStart, session, gameId),
+    call(startGame, session)
+  ]);
 }
