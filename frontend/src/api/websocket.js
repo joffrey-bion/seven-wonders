@@ -7,7 +7,7 @@ const DEFAULT_DEBUG_OPTIONS = {
   debug: process.env.NODE_ENV !== 'production',
 };
 
-export type Callback<T> = (value?: T) => void;
+export type Callback<T> = (value: T) => void;
 export type UnsubscribeFn = () => void;
 export type SubscribeFn<T> = (callback: Callback<T>) => UnsubscribeFn;
 
@@ -28,7 +28,7 @@ export class JsonStompClient {
     const socketSubscription: Subscription = this.client.subscribe(path, (message: Message) => {
       // not all frames have a JSON body
       const value: T | void = message && JsonStompClient.parseBody(message);
-      callback(value);
+      callback(value || {});
     });
     return () => socketSubscription.unsubscribe();
   }
