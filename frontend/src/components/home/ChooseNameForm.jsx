@@ -23,6 +23,7 @@ class ChooseNameFormPresenter extends Component<ChooseNameFormPresenterProps> {
     return (
         <form onSubmit={this.play}>
           <InputGroup
+            className={Classes.LARGE}
             placeholder="Username"
             onChange={e => (this._username = e.target.value)}
             rightElement={this.renderSubmit()}
