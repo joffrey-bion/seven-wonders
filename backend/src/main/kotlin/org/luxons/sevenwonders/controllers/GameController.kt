@@ -79,13 +79,12 @@ class GameController @Autowired constructor(
         val preparedCardBack = game.prepareMove(player.index, action.move)
         val preparedCard = PreparedCard(player.toDTO(principal.name), preparedCardBack)
         logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
+        sendPreparedCard(game.id, preparedCard)
 
         if (game.allPlayersPreparedTheirMove()) {
             logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
             val table = game.playTurn()
             sendPlayedMoves(game.id, table)
-        } else {
-            sendPreparedCard(game.id, preparedCard)
         }
     }
 
