@@ -38,11 +38,11 @@ dependencies {
 }
 
 // packages the frontend app within the jar
-tasks.jar {
+tasks.bootJar {
     from("../frontend/build") {
         into("static")
     }
 }
 
 // make sure we build the frontend before creating the jar
-tasks.jar.get().dependsOn(":frontend:assemble")
+tasks.bootJar.get().dependsOn(":frontend:assemble")
