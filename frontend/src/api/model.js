@@ -47,9 +47,21 @@ export type ApiTable = {
 
 export type ApiAction = {};
 
-export type ApiHandCard = {};
+export type ApiCard = {
+  name: string,
+  image: string
+};
 
-export type ApiTableCard = {};
+export type ApiHandCard = ApiCard & {
+  playability: ApiPlayability
+};
+
+export type ApiPlayability = {
+  playable: boolean
+};
+
+export type ApiTableCard = ApiCard & {
+};
 
 export type ApiCardBack = {
   image: string

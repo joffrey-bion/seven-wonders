@@ -2,7 +2,7 @@ import { Button, Classes, Intent } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { ApiPlayerTurnInfo } from '../../api/model';
+import type { ApiHandCard, ApiPlayerTurnInfo } from '../../api/model';
 import { Game } from '../../models/games';
 import { Player } from '../../models/players';
 import { actions } from '../../redux/actions/game';
@@ -10,7 +10,9 @@ import { getCurrentTurnInfo } from '../../redux/currentGame';
 import { getCurrentGame } from '../../redux/games';
 
 import { getCurrentPlayer, getPlayers } from '../../redux/players';
-import { PlayerList } from '../lobby/PlayerList';
+import { Hand } from './Hand';
+
+import './GameScene.css'
 
 type GameSceneProps = {
   game: Game,
@@ -20,21 +22,31 @@ type GameSceneProps = {
   sayReady: () => void
 }
 
-class GameScenePresenter extends Component<GameSceneProps> {
-  getTitle() {
-    if (this.props.game) {
-      return this.props.game.name + ' — Game';
-    } else {
-      return 'What are you doing here? You haven\'t joined a game yet!';
-    }
+type GameSceneState = {
+  selectedCard: ApiHandCard | void
+}
+
+class GameScenePresenter extends Component<GameSceneProps, GameSceneState> {
+
+  state = {
+    selectedCard: null
+  };
+
+  selectCard(c: ApiHandCard) {
+    this.setState({selectedCard: c})
   }
 
   render() {
     return (
-      <div>
-        <h2>{this.getTitle()}</h2>
-        <PlayerList players={this.props.players} currentPlayer={this.props.currentPlayer} owner={this.props.game.owner}/>
-        <Button text="READY" className={Classes.LARGE} intent={Intent.PRIMARY} icon='play' onClick={this.props.sayReady} />
+      <div className='gameSceneRoot fullscreen'>
+        <h2>Now playing!</h2>
+        <p>{this.props.turnInfo ? this.props.turnInfo.message : 'Click "ready" when you are'}</p>
+
+        {this.props.turnInfo && <Hand cards={this.props.turnInfo.hand}
+                                      selectedCard={this.state.selectedCard}
+                                      onClick={(c) => this.selectCard(c)}/>}
+
+        {!this.props.turnInfo && <Button text="READY" className={Classes.LARGE} intent={Intent.PRIMARY} icon='play' onClick={this.props.sayReady} />}
 
         <h3>Turn Info</h3>
         <div>

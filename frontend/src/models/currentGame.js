@@ -1,6 +1,7 @@
+import { List } from 'immutable';
 import type { ApiPlayerTurnInfo } from '../api/model';
 
 export class CurrentGameState {
-  playersReadiness: Map<string, boolean> = new Map();
+  readyUsernames: List<string> = new List();
   turnInfo: ApiPlayerTurnInfo | null = null
 }

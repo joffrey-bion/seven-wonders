@@ -1,0 +1,26 @@
+.hand {
+    display: flex;
+}
+
+.hand-card {
+    margin: 0.2rem;
+}
+
+.hand-card-unplayable {
+    opacity: 0.7;
+}
+
+.hand-card-img-selected {
+    border: 2px solid #0054ff;
+}
+
+.hand-card-img {
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px black;
+    width: 11rem;
+}
+
+.hand-card-img:hover {
+    box-shadow: 0 10px 40px black;
+    width: 14rem;
+}
