@@ -71,7 +71,7 @@ class GameTest {
     }
 
     private fun createPlayCardMove(turnInfo: PlayerTurnInfo): MoveExpectation {
-        val wonderBuildability = turnInfo.table.boards[turnInfo.playerIndex].wonder.buildability
+        val wonderBuildability = turnInfo.wonderBuildability
         if (wonderBuildability.isBuildable) {
             val transactions = wonderBuildability.cheapestTransactions.first()
             return planMove(turnInfo, MoveType.UPGRADE_WONDER, turnInfo.hand.first(), transactions)

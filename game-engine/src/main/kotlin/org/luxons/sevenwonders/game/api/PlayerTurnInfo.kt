@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.game.api
 
+import org.luxons.sevenwonders.game.wonders.WonderBuildability
+
 enum class Action(val message: String) {
     PLAY("Pick the card you want to play or discard."),
     PLAY_2("Pick the first card you want to play or discard. Note that you have the ability to play these 2 last cards. You will choose how to play the last one during your next turn."),
@@ -17,4 +19,5 @@ data class PlayerTurnInfo internal constructor(
 ) {
     val currentAge: Int = table.currentAge
     val message: String = action.message
+    val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
 }

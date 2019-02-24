@@ -1,34 +1,44 @@
+import { Button, ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import React from 'react';
-import type { ApiHandCard } from '../../api/model';
+import type { ApiHandCard, ApiPlayerMove } from '../../api/model';
 import './Hand.css'
-
-type HandCardProps = {
-  card: ApiHandCard,
-  isSelected: boolean,
-  onClick: () => void
-}
-
-const HandCard = ({card, isSelected, onClick}: HandCardProps) => {
-  let playableClass = card.playability.playable ? '' : 'hand-card-unplayable';
-  let selectedClass = isSelected ? 'hand-card-img-selected' : '';
-  return <div className={`hand-card ${playableClass}`}
-              onClick={() => card.playability.playable && onClick()}
-              aria-disabled={!card.playability.playable}>
-    <img src={`/images/cards/${card.image}`}
-         title={card.name}
-         alt={'Card ' + card.name}
-         className={`hand-card-img ${selectedClass}`}/>
-  </div>
-};
 
 type HandProps = {
   cards: ApiHandCard[],
-  selectedCard: ApiHandCard,
-  onClick: (card: ApiHandCard) => void
+  wonderUpgradable: boolean,
+  prepareMove: (move: ApiPlayerMove) => void
 }
 
-export const Hand = ({cards, selectedCard, onClick}: HandProps) => {
+export const Hand = ({cards, wonderUpgradable, prepareMove}: HandProps) => {
   return <div className='hand'>{cards.map((c, i) => <HandCard key={i} card={c}
-                                                              isSelected={selectedCard === c}
-                                                              onClick={() => onClick(c)}/>)}</div>;
+                                                              wonderUpgradable={wonderUpgradable}
+                                                              prepareMove={prepareMove}/>)}</div>;
+};
+
+type HandCardProps = {
+  card: ApiHandCard,
+  wonderUpgradable: boolean,
+  prepareMove: (move: ApiPlayerMove) => void
 }
+
+const HandCard = ({card, wonderUpgradable, prepareMove}: HandCardProps) => {
+  let playableClass = card.playability.playable ? '' : 'unplayable';
+  return <div className={`hand-card ${playableClass}`}>
+    <img src={`/images/cards/${card.image}`}
+         title={card.name}
+         alt={'Card ' + card.name}
+         className="hand-card-img"/>
+    <ActionButtons card={card} wonderUpgradable={wonderUpgradable} prepareMove={prepareMove} />
+  </div>
+};
+
+const ActionButtons = ({card, wonderUpgradable, prepareMove}) => <ButtonGroup className="action-buttons">
+  <Button title="PLAY" className={Classes.LARGE} intent={Intent.SUCCESS} icon='play'
+          disabled={!card.playability.playable}
+          onClick={() => prepareMove({type: 'PLAY', cardName: card.name, boughtResources: []})}/>
+  <Button title="BUILD WONDER" className={Classes.LARGE} intent={Intent.PRIMARY} icon='key-shift'
+          disabled={!wonderUpgradable}
+          onClick={() => prepareMove({type: 'UPGRADE_WONDER', cardName: card.name, boughtResources: []})}/>
+  <Button title="DISCARD" className={Classes.LARGE} intent={Intent.DANGER} icon='cross'
+          onClick={() => prepareMove({type: 'DISCARD', cardName: card.name, boughtResources: []})}/>
+</ButtonGroup>;

@@ -49,6 +49,13 @@ function* sayReady(session: SevenWondersSession) {
   }
 }
 
+function* prepareMove(session: SevenWondersSession) {
+  while (true) {
+    let action = yield take(types.REQUEST_PREPARE_MOVE);
+    yield apply(session, session.prepareMove, [action.move]);
+  }
+}
+
 function* watchTurnInfo(session: SevenWondersSession) {
   const channel = yield eventChannel(session.watchTurnInfo());
   try {
@@ -69,6 +76,7 @@ export function* gameSaga(session: SevenWondersSession) {
     call(watchTableUpdates, session, gameId),
     call(watchPreparedCards, session, gameId),
     call(sayReady, session),
+    call(prepareMove, session),
     call(watchTurnInfo, session)
   ];
 }

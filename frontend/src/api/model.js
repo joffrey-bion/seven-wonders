@@ -79,8 +79,13 @@ export type ApiPlayerTurnInfo = {
   action: ApiAction,
   hand: ApiHandCard[],
   neighbourGuildCards: ApiTableCard[],
-  message: string
+  message: string,
+  wonderBuildability: ApiWonderBuildability,
 };
+
+export type ApiWonderBuildability = {
+  buildable: boolean
+}
 
 export type ApiMoveType = "PLAY" | "PLAY_FREE" | "UPGRADE_WONDER" | "DISCARD" | "COPY_GUILD";
 export type ApiProvider = "LEFT_NEIGHBOUR" | "RIGHT_NEIGHBOUR";

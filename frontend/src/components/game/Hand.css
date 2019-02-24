@@ -3,24 +3,33 @@
 }
 
 .hand-card {
+    align-items: flex-end;
+    display: grid;
     margin: 0.2rem;
 }
 
-.hand-card-unplayable {
-    opacity: 0.7;
-}
-
-.hand-card-img-selected {
-    border: 2px solid #0054ff;
-}
-
-.hand-card-img {
+.hand-card .hand-card-img {
     border-radius: 0.5rem;
     box-shadow: 0 0 10px black;
+    grid-row: 1;
+    grid-column: 1;
+    opacity: 1;
     width: 11rem;
 }
-
-.hand-card-img:hover {
+.hand-card.unplayable .hand-card-img {
+    opacity: 0.7;
+}
+.hand-card:hover .hand-card-img {
     box-shadow: 0 10px 40px black;
     width: 14rem;
+}
+
+.hand-card .action-buttons {
+    align-items: flex-end;
+    display: none;
+    grid-row: 1;
+    grid-column: 1;
+}
+.hand-card:hover .action-buttons {
+    display: flex;
 }
