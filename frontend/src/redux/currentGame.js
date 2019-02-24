@@ -10,6 +10,7 @@ export function createCurrentGameReducer() {
   return combineReducers({
     readyUsernames: readyUsernamesReducer,
     turnInfo: turnInfoReducer,
+    table: tableUpdatesReducer,
   });
 }
 
@@ -22,18 +23,24 @@ const readyUsernamesReducer = (state: List<string> = new List(), action: Action)
 };
 
 const turnInfoReducer = (state: ApiPlayerTurnInfo | null = null, action: Action) => {
-  if (action.type === types.TURN_INFO_RECEIVED) {
-    return action.turnInfo;
-  } else {
-    return state;
+  switch (action.type) {
+    case types.TURN_INFO_RECEIVED:
+      return action.turnInfo;
+    case types.TABLE_UPDATE_RECEIVED:
+      return null;
+    default:
+      return state;
   }
 };
 
-const tableUpdatesReducer = (state: ApiTable, action: Action) => {
-  if (action.type === types.TABLE_UPDATE_RECEIVED) {
-    return action.table;
-  } else {
-    return state;
+const tableUpdatesReducer = (state: ApiTable | null = null, action: Action) => {
+  switch (action.type) {
+    case types.TURN_INFO_RECEIVED:
+      return action.turnInfo.table;
+    case types.TABLE_UPDATE_RECEIVED:
+      return action.table;
+    default:
+      return state;
   }
 };
 
