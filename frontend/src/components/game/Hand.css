@@ -1,5 +1,15 @@
 .hand {
+    align-items: center;
+    bottom: -14rem;
     display: flex;
+    height: 345px; /* can hold enhanced cards */
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    transition: 0.5s
+}
+.hand:hover {
+    bottom: 1rem;
 }
 
 .hand-card {
@@ -14,6 +24,7 @@
     grid-row: 1;
     grid-column: 1;
     opacity: 1;
+    transition: 0.1s;
     width: 11rem;
 }
 .hand-card.unplayable .hand-card-img {
