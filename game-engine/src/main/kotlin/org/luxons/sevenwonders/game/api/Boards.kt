@@ -90,7 +90,7 @@ data class ApiCountedResource(
 )
 
 internal fun Resources.toCountedResourcesList(): List<ApiCountedResource> =
-        quantities.map { (type, count) -> ApiCountedResource(count, type)}.sortedBy { it.type }
+        quantities.map { (type, count) -> ApiCountedResource(count, type) }.sortedBy { it.type }
 
 data class ApiMilitary(
     var nbShields: Int,
