@@ -75,11 +75,22 @@ internal fun InternalWonderStage.toApiWonderStage(
     )
 
 data class ApiProduction(
-    val fixedResources: Resources,
-    val aternativeResources: Set<Set<ResourceType>>
+    val fixedResources: List<ApiCountedResource>,
+    val alternativeResources: Set<Set<ResourceType>>
 )
 
-internal fun Production.toApiProduction(): ApiProduction = ApiProduction(getFixedResources(), getAlternativeResources())
+internal fun Production.toApiProduction(): ApiProduction = ApiProduction(
+        fixedResources = getFixedResources().toCountedResourcesList(),
+        alternativeResources = getAlternativeResources()
+)
+
+data class ApiCountedResource(
+    val count: Int,
+    val type: ResourceType
+)
+
+internal fun Resources.toCountedResourcesList(): List<ApiCountedResource> =
+        quantities.map { (type, count) -> ApiCountedResource(count, type)}.sortedBy { it.type }
 
 data class ApiMilitary(
     var nbShields: Int,
