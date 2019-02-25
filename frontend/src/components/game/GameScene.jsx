@@ -1,4 +1,4 @@
-import { Button, Classes, Intent } from '@blueprintjs/core';
+import { Button, Classes, Intent, NonIdealState } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -26,7 +26,6 @@ class GameScenePresenter extends Component<GameSceneProps> {
   render() {
     return (
       <div className='gameSceneRoot fullscreen'>
-        <h1>{this.props.game.name}</h1>
         {!this.props.turnInfo && <GamePreStart onReadyClicked={this.props.sayReady}/>}
         {this.props.turnInfo && this.turnInfoScene()}
 
@@ -48,10 +47,11 @@ class GameScenePresenter extends Component<GameSceneProps> {
   }
 }
 
-const GamePreStart = ({onReadyClicked}) => <div>
-  <p>Click "ready" when you are</p>
-  <Button text="READY" className={Classes.LARGE} intent={Intent.PRIMARY} icon='play' onClick={onReadyClicked} />
-</div>;
+const GamePreStart = ({onReadyClicked}) => <NonIdealState
+        description={<p>Click "ready" when you are</p>}
+        action={<Button text="READY" className={Classes.LARGE} intent={Intent.PRIMARY} icon='play'
+                        onClick={onReadyClicked}/>}
+/>;
 
 const mapStateToProps: (state) => GameSceneProps = state => {
   const game = getCurrentGame(state.get('games'));
