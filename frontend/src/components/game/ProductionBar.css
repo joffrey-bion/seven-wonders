@@ -1,0 +1,49 @@
+.production-bar {
+    align-items: center;
+    background: lightgray;
+    bottom: 0;
+    border-top: 1px #8b8b8b solid;
+    background: linear-gradient(#eaeaea, #888 7%);
+    box-shadow: 0 0 15px 0 #747474;
+    display: flex;
+    height: 3.5rem;
+    position: fixed;
+    width: 100vw;
+}
+
+.fixed-resources {
+    margin: auto;
+    display: flex;
+}
+.alternative-resources {
+    margin: auto;
+    display: flex;
+}
+
+.resource-with-count {
+    margin-left: 2px
+}
+.resource-choice {
+    margin-left: 2px;
+}
+
+.resource-img {
+    height: 3rem;
+    vertical-align: middle;
+    width: 3rem;
+}
+
+.resource-count {
+    font-family: fantasy;
+    font-size: 1.5rem;
+    margin-left: 0.2rem;
+    vertical-align: middle;
+}
+
+.choice-separator {
+    font-size: 2rem;
+    vertical-align: middle;
+    margin: 5px;
+    color: #c29929;
+    text-shadow: 0 0 1px black;
+}

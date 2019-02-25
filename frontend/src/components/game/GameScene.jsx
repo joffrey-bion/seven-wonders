@@ -11,6 +11,7 @@ import { getCurrentGame } from '../../redux/games';
 import { getCurrentPlayer, getPlayers } from '../../redux/players';
 import { Hand } from './Hand';
 import './GameScene.css'
+import { ProductionBar } from './ProductionBar';
 
 type GameSceneProps = {
   game: Game,
@@ -38,11 +39,14 @@ class GameScenePresenter extends Component<GameSceneProps> {
   }
 
   turnInfoScene() {
+    let turnInfo = this.props.turnInfo;
+    let board = turnInfo.table.boards[turnInfo.playerIndex];
     return <div>
-      <p>{this.props.turnInfo.message}</p>
-      <Hand cards={this.props.turnInfo.hand}
-            wonderUpgradable={this.props.turnInfo.wonderBuildability.buildable}
+      <p>{turnInfo.message}</p>
+      <Hand cards={turnInfo.hand}
+            wonderUpgradable={turnInfo.wonderBuildability.buildable}
             prepareMove={this.props.prepareMove}/>
+      <ProductionBar production={board.production}/>
     </div>
   }
 }

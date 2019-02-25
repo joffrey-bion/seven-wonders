@@ -1,6 +1,6 @@
 .hand {
     align-items: center;
-    bottom: -14rem;
+    bottom: -11rem;
     display: flex;
     height: 345px; /* can hold enhanced cards */
     left: 50%;
@@ -9,7 +9,7 @@
     transition: 0.5s
 }
 .hand:hover {
-    bottom: 1rem;
+    bottom: 4rem;
 }
 
 .hand-card {
@@ -20,7 +20,7 @@
 
 .hand-card .hand-card-img {
     border-radius: 0.5rem;
-    box-shadow: 0 0 10px black;
+    box-shadow: 2px 2px 5px black;
     grid-row: 1;
     grid-column: 1;
     opacity: 1;
