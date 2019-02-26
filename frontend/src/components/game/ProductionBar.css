@@ -27,23 +27,23 @@
     margin-left: 1.5rem;
 }
 
-.resource-img {
-    height: 3rem;
-    vertical-align: middle;
-    width: 3rem;
-}
-
-.resource-count {
-    font-family: fantasy;
-    font-size: 1.5rem;
-    margin-left: 0.2rem;
-    vertical-align: middle;
-}
-
 .choice-separator {
     font-size: 2rem;
     vertical-align: middle;
     margin: 5px;
     color: #c29929;
     text-shadow: 0 0 1px black;
+}
+
+.token-img {
+    height: 3rem;
+    vertical-align: middle;
+    width: 3rem;
+}
+
+.token-count {
+    font-family: fantasy;
+    font-size: 1.5rem;
+    margin-left: 0.2rem;
+    vertical-align: middle;
 }

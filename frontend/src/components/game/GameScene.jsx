@@ -46,7 +46,7 @@ class GameScenePresenter extends Component<GameSceneProps> {
       <Hand cards={turnInfo.hand}
             wonderUpgradable={turnInfo.wonderBuildability.buildable}
             prepareMove={this.props.prepareMove}/>
-      <ProductionBar production={board.production}/>
+      <ProductionBar gold={board.gold} production={board.production}/>
     </div>
   }
 }
