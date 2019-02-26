@@ -2,6 +2,7 @@ import { Button, ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import React from 'react';
 import type { ApiHandCard, ApiPlayerMove } from '../../api/model';
 import './Hand.css'
+import { CardImage } from './CardImage';
 
 type HandProps = {
   cards: ApiHandCard[],
@@ -24,10 +25,7 @@ type HandCardProps = {
 const HandCard = ({card, wonderUpgradable, prepareMove}: HandCardProps) => {
   let playableClass = card.playability.playable ? '' : 'unplayable';
   return <div className={`hand-card ${playableClass}`}>
-    <img src={`/images/cards/${card.image}`}
-         title={card.name}
-         alt={'Card ' + card.name}
-         className="hand-card-img"/>
+    <CardImage card={card} otherClasses="hand-card-img"/>
     <ActionButtons card={card} wonderUpgradable={wonderUpgradable} prepareMove={prepareMove} />
   </div>
 };
