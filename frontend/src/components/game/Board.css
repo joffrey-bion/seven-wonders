@@ -1,0 +1,34 @@
+.board {
+    width: 100vw
+}
+
+.cards {
+    width: 100vw;
+}
+
+.card-column {
+    height: 40vh;
+    margin: auto;
+    position: relative;
+    width: 15vw;
+}
+
+.card {
+    position: absolute;
+    /* dynamic positioning in JS */
+}
+
+.table-card-img {
+    max-width: 10vw;
+    max-height: 25vh;
+}
+
+.wonder {
+    width: 100vw;
+    text-align: center;
+}
+
+.wonder-img {
+    max-height: 30vh;
+    max-width: 95vw;
+}

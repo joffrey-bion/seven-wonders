@@ -9,6 +9,7 @@ import { actions } from '../../redux/actions/game';
 import { getCurrentTurnInfo } from '../../redux/currentGame';
 import { getCurrentGame } from '../../redux/games';
 import { getCurrentPlayer, getPlayers } from '../../redux/players';
+import { Board } from './Board';
 import { Hand } from './Hand';
 import './GameScene.css'
 import { ProductionBar } from './ProductionBar';
@@ -29,11 +30,6 @@ class GameScenePresenter extends Component<GameSceneProps> {
       <div className='gameSceneRoot fullscreen'>
         {!this.props.turnInfo && <GamePreStart onReadyClicked={this.props.sayReady}/>}
         {this.props.turnInfo && this.turnInfoScene()}
-
-        <h4 style={{marginTop: '2rem'}}>Debug</h4>
-        <div>
-          <pre>{JSON.stringify(this.props.turnInfo, null, 2) }</pre>
-        </div>
       </div>
     );
   }
@@ -43,6 +39,7 @@ class GameScenePresenter extends Component<GameSceneProps> {
     let board = turnInfo.table.boards[turnInfo.playerIndex];
     return <div>
       <p>{turnInfo.message}</p>
+      <Board board={board}/>
       <Hand cards={turnInfo.hand}
             wonderUpgradable={turnInfo.wonderBuildability.buildable}
             prepareMove={this.props.prepareMove}/>
