@@ -5,7 +5,9 @@ export type PlayerShape = {
   username: string,
   displayName: string,
   index: number,
-  ready: boolean
+  ready: boolean,
+  gameOwner: boolean,
+  user: boolean,
 };
 export type PlayerType = Record<PlayerShape>;
 
@@ -14,6 +16,8 @@ const PlayerRecord: PlayerType = Record({
   displayName: null,
   index: 0,
   ready: false,
+  gameOwner: false,
+  user: false,
 });
 // $FlowFixMe
 export class Player extends PlayerRecord {}

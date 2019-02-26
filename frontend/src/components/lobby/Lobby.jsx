@@ -1,5 +1,5 @@
 //@flow
-import { Button } from '@blueprintjs/core';
+import { Button, Classes, Intent } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -25,7 +25,8 @@ class LobbyPresenter extends Component<LobbyProps> {
       <div>
         <h2>{currentGame.name + ' — Lobby'}</h2>
         <RadialPlayerList players={players} owner={currentGame.owner} currentPlayer={currentPlayer}/>
-        <Button onClick={startGame}>Start Game</Button>
+        {currentPlayer.gameOwner && <Button text="START" className={Classes.LARGE} intent={Intent.PRIMARY} icon='play'
+                onClick={startGame} disabled={players.size < 3}/>}
       </div>
     );
   }
