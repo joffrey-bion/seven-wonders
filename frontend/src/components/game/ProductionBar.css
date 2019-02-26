@@ -9,6 +9,7 @@
     height: 3.5rem;
     position: fixed;
     width: 100vw;
+    z-index: 99;
 }
 
 .fixed-resources {

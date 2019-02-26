@@ -23,7 +23,7 @@ data class Board(
     val publicProduction: ApiProduction,
     val science: ApiScience,
     val military: ApiMilitary,
-    val playedCards: List<TableCard>,
+    val playedCards: List<List<TableCard>>,
     val gold: Int
 )
 
@@ -34,9 +34,20 @@ internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): Board = 
     publicProduction = publicProduction.toApiProduction(),
     science = science.toApiScience(),
     military = military.toApiMilitary(),
-    playedCards = getPlayedCards().map { it.toTableCard(lastMove) },
+    playedCards = getPlayedCards().map { it.toTableCard(lastMove) }.toColumns(),
     gold = gold
 )
+
+internal fun List<TableCard>.toColumns(): List<List<TableCard>> {
+    val cardsByColor = this.groupBy { it.color }
+    val (resourceCardsCols, otherCols) = cardsByColor.values.partition { it[0].color.isResource }
+    val resourceCardsCol = resourceCardsCols.flatten()
+    val otherColsSorted = otherCols.sortedBy { it[0].color }
+    if (resourceCardsCol.isEmpty()) {
+        return otherColsSorted // we want only non-empty columns
+    }
+    return listOf(resourceCardsCol) + otherColsSorted
+}
 
 data class Wonder(
     val name: String,

@@ -7,7 +7,8 @@
     max-height: 25vw;
     position: absolute;
     transform: translate(-50%, 55%);
-    transition: 0.5s
+    transition: 0.5s;
+    z-index: 30;
 }
 .hand:hover {
     bottom: 4rem;
@@ -21,18 +22,15 @@
 }
 
 .hand-card .hand-card-img {
-    border-radius: 0.5rem;
-    box-shadow: 2px 2px 5px black;
     grid-row: 1;
     grid-column: 1;
     max-width: 13vw;
     max-height: 60vh;
-    opacity: 1;
     transition: 0.1s;
     width: 11rem;
 }
 .hand-card.unplayable .hand-card-img {
-    opacity: 0.7;
+    filter: grayscale(50%) contrast(50%);
 }
 .hand-card:hover .hand-card-img {
     box-shadow: 0 10px 40px black;

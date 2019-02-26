@@ -5,7 +5,7 @@ import { CardImage } from './CardImage';
 
 // card offsets in % of their size when displayed in columns
 const xOffset = 20;
-const yOffset = 23;
+const yOffset = 21;
 
 type BoardProps = {
   board: ApiBoard,
@@ -13,19 +13,18 @@ type BoardProps = {
 
 export const Board = ({board}: BoardProps) => {
   return <div className='board'>
-    <TableCards cards={board.playedCards}/>
+    <TableCards cardColumns={board.playedCards}/>
     <Wonder wonder={board.wonder}/>
   </div>;
 };
 
 type TableCardsProps = {
-  cards: ApiTableCard[],
+  cardColumns: ApiTableCard[][],
 }
 
-const TableCards = ({cards}: TableCardsProps) => {
-  // TODO split cards into multiple columns
+const TableCards = ({cardColumns}: TableCardsProps) => {
   return <div className="cards">
-    <TableCardColumn cards={cards}/>
+    {cardColumns.map(column => <TableCardColumn key={column[0].color} cards={column}/>)}
   </div>
 };
 

@@ -41,14 +41,14 @@ internal data class Card(
     }
 }
 
-enum class Color {
-    BROWN,
-    GREY,
-    YELLOW,
-    BLUE,
-    GREEN,
-    RED,
-    PURPLE
+enum class Color(val isResource: Boolean) {
+    BROWN(true),
+    GREY(true),
+    YELLOW(false),
+    BLUE(false),
+    GREEN(false),
+    RED(false),
+    PURPLE(false)
 }
 
 data class CardPlayability(

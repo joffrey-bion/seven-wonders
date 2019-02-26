@@ -56,7 +56,7 @@ export type ApiBoard = {
   publicProduction: ApiProduction,
   science: ApiScience,
   military: ApiMilitary,
-  playedCards: ApiTableCard[],
+  playedCards: ApiTableCard[][],
   gold: number,
 };
 
