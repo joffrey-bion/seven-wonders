@@ -1,10 +1,9 @@
 package org.luxons.sevenwonders.game.api
 
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.test.testCard
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BoardsKtTest {
 
