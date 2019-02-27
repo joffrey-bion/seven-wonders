@@ -15,6 +15,7 @@ data class PlayerTurnInfo internal constructor(
     val table: Table,
     val action: Action,
     val hand: List<HandCard>,
+    val preparedMove: PlayedMove?,
     val neighbourGuildCards: List<TableCard>
 ) {
     val currentAge: Int = table.currentAge

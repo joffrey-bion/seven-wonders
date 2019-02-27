@@ -119,6 +119,7 @@ export type ApiPlayerTurnInfo = {
   currentAge: number,
   action: ApiAction,
   hand: ApiHandCard[],
+  playedMove: ApiPlayedMove | null,
   neighbourGuildCards: ApiTableCard[],
   message: string,
   wonderBuildability: ApiWonderBuildability,
