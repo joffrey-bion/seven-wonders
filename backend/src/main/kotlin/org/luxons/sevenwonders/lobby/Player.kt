@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.lobby
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.luxons.sevenwonders.errors.ApiMisuseException
 import org.luxons.sevenwonders.game.Game
 
@@ -21,21 +20,16 @@ class Player(
     val isInGame: Boolean
         get() = _game != null
 
-    @Transient
     private var _lobby: Lobby? = null
 
-    @get:JsonIgnore
     val lobby: Lobby
         get() = _lobby ?: throw PlayerNotInLobbyException(username)
 
-    @get:JsonIgnore
     val ownedLobby: Lobby
         get() = if (isGameOwner) lobby else throw PlayerIsNotOwnerException(username)
 
-    @Transient
     private var _game: Game? = null
 
-    @get:JsonIgnore
     val game: Game
         get() = _game ?: throw PlayerNotInGameException(username)
 
@@ -54,9 +48,7 @@ class Player(
         index = -1
     }
 
-    override fun toString(): String {
-        return "'$displayName' ($username)"
-    }
+    override fun toString(): String = "'$displayName' ($username)"
 }
 
 internal class PlayerNotInLobbyException(username: String) :

@@ -12,7 +12,7 @@ class Lobby(
     val id: Long,
     val name: String,
     var owner: Player,
-    @field:Transient private val gameDefinition: GameDefinition
+    private val gameDefinition: GameDefinition
 ) {
     private val players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
 
