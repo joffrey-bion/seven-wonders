@@ -2,23 +2,24 @@
 import { Text } from '@blueprintjs/core';
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Player } from '../../models/players';
-import { getCurrentPlayer } from '../../redux/players';
+import type { GlobalState } from '../../reducers';
+import type { User } from '../../redux/user';
+import { getCurrentUser } from '../../redux/user';
 
 type PlayerInfoProps = {
-  player: ?Player,
+  user: ?User,
 }
 
-const PlayerInfoPresenter = ({player}: PlayerInfoProps) => (
+const PlayerInfoPresenter = ({user}: PlayerInfoProps) => (
     <Text>
       <b>Username:</b>
       {' '}
-      {player && player.displayName}
+      {user && user.displayName}
     </Text>
 );
 
-const mapStateToProps = state => ({
-  player: getCurrentPlayer(state),
+const mapStateToProps = (state: GlobalState): PlayerInfoProps => ({
+  user: getCurrentUser(state),
 });
 
 const mapDispatchToProps = {

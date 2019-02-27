@@ -2,7 +2,7 @@
 import { Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { actions } from '../../redux/actions/players';
+import { actions } from '../../redux/actions/user';
 import { IconButton } from '../shared/IconButton';
 
 type ChooseNameFormPresenterProps = {

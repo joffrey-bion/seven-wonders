@@ -1,5 +1,4 @@
-import { fromJS } from 'immutable';
-import type { GameMapType, GameNormalMapType } from '../../models/games';
+import type { ApiLobby } from '../../api/model';
 
 export const types = {
   UPDATE_GAMES: 'GAMES/UPDATE_GAMES',
@@ -10,7 +9,7 @@ export const types = {
   ENTER_GAME: 'GAMES/ENTER_GAME',
 };
 
-export type UpdateGamesAction = { type: 'GAMES/UPDATE_GAMES', games: GameMapType };
+export type UpdateGamesAction = { type: 'GAMES/UPDATE_GAMES', games: ApiLobby[]};
 export type RequestCreateGameAction = { type: 'GAMES/REQUEST_CREATE_GAME', gameName: string };
 export type RequestJoinGameAction = { type: 'GAMES/REQUEST_JOIN_GAME', gameId: number };
 export type RequestStartGameAction = { type: 'GAMES/REQUEST_START_GAME' };
@@ -26,7 +25,7 @@ export type LobbyAction =
         | EnterGameAction;
 
 export const actions = {
-  updateGames: (games: GameNormalMapType): UpdateGamesAction => ({ type: types.UPDATE_GAMES, games: fromJS(games) }),
+  updateGames: (games: ApiLobby[]): UpdateGamesAction => ({ type: types.UPDATE_GAMES, games }),
   requestJoinGame: (gameId: number): RequestJoinGameAction => ({ type: types.REQUEST_JOIN_GAME, gameId }),
   requestCreateGame: (gameName: string): RequestCreateGameAction => ({ type: types.REQUEST_CREATE_GAME, gameName }),
   requestStartGame: (): RequestStartGameAction => ({ type: types.REQUEST_START_GAME }),

@@ -1,13 +1,13 @@
 // @flow
 import createHistory from 'history/createBrowserHistory';
-import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import type { GlobalState } from './reducers';
 import { createReducer } from './reducers';
 import { rootSaga } from './sagas';
 
-export function configureStore(initialState: Object = {}) {
+export function configureStore(initialState: GlobalState = {}) {
   const sagaMiddleware = createSagaMiddleware();
 
   const history = createHistory();
@@ -22,7 +22,7 @@ export function configureStore(initialState: Object = {}) {
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-  const store = createStore(createReducer(), fromJS(initialState), composeEnhancers(...enhancers));
+  const store = createStore(createReducer(), initialState, composeEnhancers(...enhancers));
 
   sagaMiddleware.run(rootSaga);
 

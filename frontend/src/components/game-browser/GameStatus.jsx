@@ -1,10 +1,10 @@
 //@flow
 import { Tag } from '@blueprintjs/core';
 import * as React from 'react';
-import type { GameState } from '../../models/games';
+import type { ApiGameState } from '../../api/model';
 
 type GameStatusProps = {
-  state: GameState,
+  state: ApiGameState,
 }
 
 export const GameStatus = ({state}: GameStatusProps) => (

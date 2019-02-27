@@ -1,22 +1,42 @@
 // @flow
-import type { List, Map } from 'immutable';
-import type { Game } from '../models/games';
-import { GamesState } from '../models/games';
+import { List, Map } from 'immutable';
+import { combineReducers } from 'redux';
+import type { ApiLobby } from '../api/model';
+import type { GlobalState } from '../reducers';
 import type { Action } from './actions/all';
 import { types } from './actions/lobby';
 
-export const gamesReducer = (state: GamesState = new GamesState(), action: Action) => {
+export type GamesState = {
+  all: Map<string, ApiLobby>,
+  current: string | void
+};
+
+export const createGamesReducer = () => {
+  return combineReducers({
+    all: allGamesReducer,
+    current: currentGameIdReducer
+  })
+};
+
+export const allGamesReducer = (state: Map<string, ApiLobby> = Map(), action: Action) => {
   switch (action.type) {
     case types.UPDATE_GAMES:
-      return state.addGames(action.games);
-    case types.ENTER_LOBBY:
-      return state.set('current', action.gameId);
+      let newGames = {};
+      action.games.forEach(g => newGames[g.id] = g);
+      return state.merge(Map(newGames));
     default:
       return state;
   }
 };
 
-export const getAllGamesById = (games: GamesState): Map<string, Game> => games.all;
-export const getAllGames = (games: GamesState): List<Game> => getAllGamesById(games).toList();
-export const getGame = (games: GamesState, id: string | number): Game => getAllGamesById(games).get(`${id}`);
-export const getCurrentGame = (games: GamesState): Game => getGame(games, games.current);
+export const currentGameIdReducer = (state: string | void = null, action: Action) => {
+  switch (action.type) {
+    case types.ENTER_LOBBY:
+      return `${action.gameId}`;
+    default:
+      return state;
+  }
+};
+
+export const getAllGames = (state: GlobalState): List<ApiLobby> => state.games.all.toList();
+export const getCurrentGame = (state: GlobalState): ApiLobby | null => state.games.all.get(state.games.current);

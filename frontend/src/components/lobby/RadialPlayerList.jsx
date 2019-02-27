@@ -3,19 +3,17 @@ import { Icon } from '@blueprintjs/core'
 import { List } from 'immutable';
 import * as React from 'react';
 import { Flex } from 'reflexbox';
-import { Player } from '../../models/players';
+import { ApiPlayer } from '../../api/model';
 import { RadialList } from './radial-list/RadialList';
 import roundTable from './round-table.png';
 
 type RadialPlayerListProps = {
-  players: List<Player>,
-  owner: string,
-  currentPlayer: Player,
+  players: List<ApiPlayer>
 };
 
-const PlayerItem = ({player, isOwner, isUser}) => (
+const PlayerItem = ({player}) => (
   <Flex column align='center'>
-    <UserIcon isOwner={isOwner} isUser={isUser} title={isOwner ? 'Game owner' : false}/>
+    <UserIcon isOwner={player.gameOwner} isUser={player.user} title={player.gameOwner ? 'Game owner' : false}/>
     <h5 style={{margin: 0}}>{player.displayName}</h5>
   </Flex>
 );
@@ -33,12 +31,9 @@ const UserIcon = ({isUser, isOwner, title}) => {
   return <Icon icon={icon} iconSize={50} intent={intent} title={title}/>;
 };
 
-export const RadialPlayerList = ({players, owner, currentPlayer}: RadialPlayerListProps) => {
-  const orderedPlayers = placeFirst(players.toArray(), currentPlayer.username);
-  const playerItems = orderedPlayers.map(player => <PlayerItem key={player.username}
-                                                               player={player}
-                                                               isOwner={player.username === owner}
-                                                               isUser={player.username === currentPlayer.username}/>);
+export const RadialPlayerList = ({players}: RadialPlayerListProps) => {
+  const orderedPlayers = placeUserFirst(players.toArray());
+  const playerItems = orderedPlayers.map(player => <PlayerItem key={player.username} player={player}/>);
   const tableImg = <img src={roundTable} alt='Round table' style={{width: 200, height: 200}}/>;
   return <RadialList items={completeWithPlaceholders(playerItems)}
                      centerElement={tableImg}
@@ -48,8 +43,8 @@ export const RadialPlayerList = ({players, owner, currentPlayer}: RadialPlayerLi
                      itemHeight={100}/>;
 };
 
-function placeFirst(players: Array<Player>, targetFirstUsername: string): Array<Player> {
-  while (players[0].username !== targetFirstUsername) {
+function placeUserFirst(players: Array<ApiPlayer>): Array<ApiPlayer> {
+  while (!players[0].user) {
     players.push(players.shift());
   }
   return players;

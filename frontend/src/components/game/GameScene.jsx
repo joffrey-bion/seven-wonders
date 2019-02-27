@@ -2,22 +2,18 @@ import { Button, Classes, Intent, NonIdealState } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { ApiPlayerMove, ApiPlayerTurnInfo } from '../../api/model';
-import { Game } from '../../models/games';
-import { Player } from '../../models/players';
+import type { ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo } from '../../api/model';
+import type { GlobalState } from '../../reducers';
 import { actions } from '../../redux/actions/game';
 import { getCurrentTurnInfo } from '../../redux/currentGame';
 import { getCurrentGame } from '../../redux/games';
-import { getCurrentPlayer, getPlayers } from '../../redux/players';
 import { Board } from './Board';
-import { Hand } from './Hand';
 import './GameScene.css'
+import { Hand } from './Hand';
 import { ProductionBar } from './ProductionBar';
 
 type GameSceneProps = {
-  game: Game,
-  currentPlayer: Player,
-  players: List<Player>,
+  players: List<ApiPlayer>,
   turnInfo: ApiPlayerTurnInfo,
   sayReady: () => void,
   prepareMove: (move: ApiPlayerMove) => void,
@@ -54,15 +50,13 @@ const GamePreStart = ({onReadyClicked}) => <NonIdealState
                         onClick={onReadyClicked}/>}
 />;
 
-const mapStateToProps: (state) => GameSceneProps = state => {
-  const game = getCurrentGame(state.get('games'));
+const mapStateToProps: (state: GlobalState) => GameSceneProps = state => {
+  const game = getCurrentGame(state);
   console.info(game);
 
   return {
-    game: game,
-    currentPlayer: getCurrentPlayer(state),
-    players: game ? getPlayers(state.get('players'), game.players) : new List(),
-    turnInfo: getCurrentTurnInfo(state.get('currentGame')),
+    players: game ? new List(game.players) : new List(),
+    turnInfo: getCurrentTurnInfo(state),
   };
 };
 

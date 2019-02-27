@@ -5,8 +5,8 @@ import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import type { ApiPlayer } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions } from '../redux/actions/players';
-import { types } from '../redux/actions/players';
+import { actions } from '../redux/actions/user';
+import { types } from '../redux/actions/user';
 
 function* sendUsername(session: SevenWondersSession): SagaIterator {
   while (true) {

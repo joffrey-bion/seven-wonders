@@ -10,10 +10,18 @@ export type ApiErrorDetail = {
 
 export type ApiGameState = "LOBBY" | "PLAYING";
 
+export type ApiPlayer = {
+  username: string,
+  displayName: string,
+  index: number,
+  gameOwner: Boolean,
+  user: Boolean,
+};
+
 export type ApiLobby = {
   id: number,
   name: string,
-  owner: ApiPlayer,
+  owner: string,
   players: ApiPlayer[],
   settings: ApiSettings,
   state: ApiGameState
@@ -31,14 +39,6 @@ export type ApiSettings = {
   pointsPer3Gold: number,
   lostPointsPerDefeat: number,
   wonPointsPerVictoryPerAge: Map<number, number>
-};
-
-export type ApiPlayer = {
-  username: string,
-  displayName: string,
-  index: number,
-  gameOwner: Boolean,
-  user: Boolean,
 };
 
 export type ApiTable = {

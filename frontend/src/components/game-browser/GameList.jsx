@@ -2,7 +2,8 @@
 import type { List } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
-import type { Game } from '../../models/games';
+import type { ApiLobby } from '../../api/model';
+import type { GlobalState } from '../../reducers';
 import { actions } from '../../redux/actions/lobby';
 import { getAllGames } from '../../redux/games';
 import { IconButton } from '../shared/IconButton';
@@ -11,7 +12,7 @@ import { GameStatus } from './GameStatus';
 import { PlayerCount } from './PlayerCount';
 
 type GameListProps = {
-  games: List<Game>,
+  games: List<ApiLobby>,
   joinGame: (gameId: string) => void,
 };
 
@@ -21,7 +22,7 @@ const GameListPresenter = ({ games, joinGame }: GameListProps) => (
           <GameListHeaderRow />
           </thead>
           <tbody>
-          {games.map((game: Game) => <GameListItemRow key={game.id} game={game} joinGame={joinGame}/>)}
+          {games.map((game: ApiLobby) => <GameListItemRow key={game.id} game={game} joinGame={joinGame}/>)}
           </tbody>
         </table>
 );
@@ -56,8 +57,8 @@ const JoinButton = ({game, joinGame}) => {
   return <IconButton minimal disabled={disabled} icon='arrow-right' title='Join Game' onClick={onClick}/>;
 };
 
-const mapStateToProps = state => ({
-  games: getAllGames(state.get('games')),
+const mapStateToProps = (state: GlobalState) => ({
+  games: getAllGames(state),
 });
 
 const mapDispatchToProps = {

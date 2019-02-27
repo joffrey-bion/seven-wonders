@@ -3,12 +3,12 @@ import { Icon } from '@blueprintjs/core'
 import { List } from 'immutable';
 import * as React from 'react';
 import { Flex } from 'reflexbox';
-import { Player } from '../../models/players';
+import { ApiPlayer } from '../../api/model';
 
 type PlayerListProps = {
-  players: List<Player>,
+  players: List<ApiPlayer>,
   owner: string,
-  currentPlayer: Player,
+  currentPlayer: ApiPlayer,
 };
 
 const PlayerListItem = ({player, isOwner, isUser}) => (

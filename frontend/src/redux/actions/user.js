@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { PlayerShape } from '../../models/players';
+import type { ApiPlayer } from '../../api/model';
 
 export const types = {
   REQUEST_CHOOSE_USERNAME: 'USER/REQUEST_CHOOSE_USERNAME',
@@ -8,8 +8,8 @@ export const types = {
 };
 
 export type RequestChooseUsernameAction = { type: types.REQUEST_CHOOSE_USERNAME, username: string };
-export type SetCurrentPlayerAction = { type: types.SET_CURRENT_PLAYER, player: PlayerShape };
-export type UpdatePlayersAction = { type: types.UPDATE_PLAYERS, players: Map<string, PlayerShape> };
+export type SetCurrentPlayerAction = { type: types.SET_CURRENT_PLAYER, player: ApiPlayer };
+export type UpdatePlayersAction = { type: types.UPDATE_PLAYERS, players: Map<string, ApiPlayer> };
 
 export type PlayerAction = RequestChooseUsernameAction | SetCurrentPlayerAction | UpdatePlayersAction;
 
@@ -18,12 +18,8 @@ export const actions = {
     type: types.REQUEST_CHOOSE_USERNAME,
     username,
   }),
-  setCurrentPlayer: (player: PlayerShape): SetCurrentPlayerAction => ({
+  setCurrentPlayer: (player: ApiPlayer): SetCurrentPlayerAction => ({
     type: types.SET_CURRENT_PLAYER,
-    player,
-  }),
-  updatePlayers: (players: Map<string, PlayerShape>): UpdatePlayersAction => ({
-    type: types.UPDATE_PLAYERS,
-    players,
+    player: player,
   }),
 };
