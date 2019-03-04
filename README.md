@@ -36,11 +36,14 @@ The client is just at the start of the development. It handles:
 - Create / Join a game
 - View joined lobby
 - Start game
+- View personal board
+- Play/discard cards, upgrade wonder
 
-Missing steps:
-- View game elements
-- Whole game process
-- Scoring
+Missing features:
+- View other boards' elements
+- Buy resources from neighbours
+- Pick neighbour guild (for special power)
+- Display winner and score
 
 ## Disclaimer
 
