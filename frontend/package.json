@@ -8,12 +8,13 @@
     "flow-bin": "^0.74.0",
     "flow-typed": "^2.4.0",
     "prettier-eslint-cli": "^4.7.1",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "3.0.0"
   },
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
     "@blueprintjs/icons": "^2.2.1",
     "history": "^4.7.2",
+    "http-proxy-middleware": "^0.19.1",
     "immutable": "^3.8.1",
     "normalizr": "^3.2.3",
     "react": "^16.8.3",
@@ -39,10 +40,10 @@
     "prettier": "prettier-eslint --print-width 120 --write '{src,__{tests,mocks}__}/**/*.js'",
     "flow": "flow"
   },
-  "proxy": {
-    "/*": {
-      "target": "http://localhost:8080",
-      "ws": true
-    }
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
