@@ -49,6 +49,19 @@ export type ApiTable = {
   nbPlayers: number,
 };
 
+export type ApiScience = {
+  jokers: number,
+  nbWheels: number,
+  nbCompasses: number,
+  nbTablets: number,
+}
+
+export type ApiMilitary = {
+  nbShields: number,
+  totalPoints: number,
+  nbDefeatTokens: number,
+}
+
 export type ApiBoard = {
   playerIndex: number,
   wonder: ApiWonder,
@@ -65,7 +78,7 @@ export type ApiWonder = {
   initialResource: ApiResourceType,
   stages: ApiWonderStage[],
   image: string,
-  nbBuiltStages: Int,
+  nbBuiltStages: number,
   buildability: ApiWonderBuildability,
 }
 
@@ -79,6 +92,13 @@ export type ApiWonderStage = {
 export type HandRotationDirection = 'LEFT' | 'RIGHT';
 
 export type ApiAction = 'PLAY' | 'PLAY_2' | 'PLAY_LAST' | 'PICK_NEIGHBOR_GUILD' | 'WAIT';
+
+export type Color = 'BLUE' | 'GREEN' | 'RED' | 'BROWN' | 'GREY' | 'PURPLE' | 'YELLOW';
+
+export type ApiRequirements = {
+  gold: number,
+  resources: ApiResources
+}
 
 export type ApiCard = {
   name: string,
