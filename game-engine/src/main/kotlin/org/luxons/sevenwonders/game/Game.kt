@@ -1,6 +1,12 @@
 package org.luxons.sevenwonders.game
 
-import org.luxons.sevenwonders.game.api.*
+import org.luxons.sevenwonders.game.api.Action
+import org.luxons.sevenwonders.game.api.HandCard
+import org.luxons.sevenwonders.game.api.PlayerMove
+import org.luxons.sevenwonders.game.api.PlayerTurnInfo
+import org.luxons.sevenwonders.game.api.toApiTable
+import org.luxons.sevenwonders.game.api.toPlayedMove
+import org.luxons.sevenwonders.game.api.toTableCard
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.cards.Card
