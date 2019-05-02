@@ -15,7 +15,6 @@
     "history": "^4.9.0",
     "http-proxy-middleware": "^0.19.1",
     "immutable": "^3.8.1",
-    "normalizr": "^3.2.3",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-redux": "^5.0.7",
