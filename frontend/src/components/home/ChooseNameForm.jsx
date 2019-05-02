@@ -1,9 +1,8 @@
 // @flow
-import { Classes, InputGroup, Intent } from '@blueprintjs/core';
+import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/actions/user';
-import { IconButton } from '../shared/IconButton';
 
 type ChooseNameFormPresenterProps = {
   chooseUsername: (username: string) => void,
@@ -33,7 +32,7 @@ class ChooseNameFormPresenter extends Component<ChooseNameFormPresenterProps> {
   }
 
   renderSubmit = () => (
-    <IconButton className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} icon="arrow-right" />
+    <Button className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} icon="arrow-right" />
   );
 }
 

@@ -1,5 +1,5 @@
 //@flow
-import { Icon } from '@blueprintjs/core'
+import { Classes, Icon } from '@blueprintjs/core'
 import { List } from 'immutable';
 import * as React from 'react';
 import { Flex } from 'reflexbox';
@@ -25,7 +25,7 @@ const PlayerListItem = ({player, isOwner, isUser}) => (
 );
 
 export const PlayerList = ({players, owner, currentPlayer}: PlayerListProps) => (
-  <table className='pt-html-table'>
+  <table className={Classes.HTML_TABLE}>
     <tbody>
       {players.map(player => <PlayerListItem key={player.username}
                                              player={player}

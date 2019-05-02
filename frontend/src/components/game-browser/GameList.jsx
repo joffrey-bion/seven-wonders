@@ -1,4 +1,5 @@
 // @flow
+import { Button, Classes } from '@blueprintjs/core'
 import type { List } from 'immutable';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -6,7 +7,6 @@ import type { ApiLobby } from '../../api/model';
 import type { GlobalState } from '../../reducers';
 import { actions } from '../../redux/actions/lobby';
 import { getAllGames } from '../../redux/games';
-import { IconButton } from '../shared/IconButton';
 import './GameList.css';
 import { GameStatus } from './GameStatus';
 import { PlayerCount } from './PlayerCount';
@@ -17,7 +17,7 @@ type GameListProps = {
 };
 
 const GameListPresenter = ({ games, joinGame }: GameListProps) => (
-        <table className='pt-html-table'>
+        <table className={Classes.HTML_TABLE}>
           <thead>
           <GameListHeaderRow />
           </thead>
@@ -37,13 +37,13 @@ const GameListHeaderRow = () => (
 );
 
 const GameListItemRow = ({game, joinGame}) => (
-  <tr>
+  <tr className="gameListRow">
     <td>{game.name}</td>
     <td>
       <GameStatus state={game.state} />
     </td>
     <td>
-      <PlayerCount nbPlayers={game.players.size} />
+      <PlayerCount nbPlayers={game.players.length} />
     </td>
     <td>
       <JoinButton game={game} joinGame={joinGame}/>
@@ -54,7 +54,7 @@ const GameListItemRow = ({game, joinGame}) => (
 const JoinButton = ({game, joinGame}) => {
   const disabled = game.state !== 'LOBBY';
   const onClick = () => joinGame(game.id);
-  return <IconButton minimal disabled={disabled} icon='arrow-right' title='Join Game' onClick={onClick}/>;
+  return <Button minimal disabled={disabled} icon='arrow-right' title='Join Game' onClick={onClick}/>;
 };
 
 const mapStateToProps = (state: GlobalState) => ({

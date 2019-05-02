@@ -8,6 +8,6 @@ type PlayerCountProps = {
 }
 
 export const PlayerCount = ({nbPlayers}: PlayerCountProps) => <div title='Number of players'>
-  <Icon icon="people" title={false} />
-  <span className='playerCount'> {nbPlayers}</span>
+  <Icon className="playerCountIcon" icon="people" title={false} />
+  <span className="playerCount"> {nbPlayers}</span>
 </div>;
