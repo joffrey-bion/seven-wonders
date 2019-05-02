@@ -35,7 +35,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test:oneshot": "cross-env CI=true react-scripts test --env=jsdom",
+    "test:oneshot": "cross-env CI=true react-scripts test --env=jsdom --passWithNoTests",
     "eject": "react-scripts eject",
     "prettier": "prettier-eslint --print-width 120 --write '{src,__{tests,mocks}__}/**/*.js'",
     "flow": "flow"
