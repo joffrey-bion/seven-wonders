@@ -5,7 +5,7 @@ import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import type { ApiLobby } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions as gameActions, types } from '../redux/actions/lobby';
+import { actions as gameActions, REQUEST_CREATE_GAME, REQUEST_JOIN_GAME } from '../redux/actions/lobby';
 
 function* watchGames(session: SevenWondersSession): SagaIterator {
   const gamesChannel = yield eventChannel(session.watchGames());
@@ -33,7 +33,7 @@ function* watchLobbyJoined(session: SevenWondersSession): SagaIterator {
 
 function* createGame(session: SevenWondersSession): SagaIterator {
   while (true) {
-    const { gameName } = yield take(types.REQUEST_CREATE_GAME);
+    const { gameName } = yield take(REQUEST_CREATE_GAME);
     // $FlowFixMe
     yield apply(session, session.createGame, [gameName]);
   }
@@ -41,7 +41,7 @@ function* createGame(session: SevenWondersSession): SagaIterator {
 
 function* joinGame(session: SevenWondersSession): SagaIterator {
   while (true) {
-    const { gameId } = yield take(types.REQUEST_JOIN_GAME);
+    const { gameId } = yield take(REQUEST_JOIN_GAME);
     // $FlowFixMe
     yield apply(session, session.joinGame, [gameId]);
   }

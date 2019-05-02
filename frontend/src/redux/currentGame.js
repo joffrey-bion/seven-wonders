@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import type { ApiPlayerTurnInfo, ApiTable } from '../api/model';
 import type { GlobalState } from '../reducers';
 import type { Action } from './actions/all';
-import { types } from './actions/game';
+import { TABLE_UPDATE_RECEIVED, TURN_INFO_RECEIVED } from './actions/game';
 
 export type CurrentGameState = {
   turnInfo: ApiPlayerTurnInfo | null;
@@ -19,9 +19,9 @@ export function createCurrentGameReducer() {
 
 const turnInfoReducer = (state: ApiPlayerTurnInfo | null = null, action: Action) => {
   switch (action.type) {
-    case types.TURN_INFO_RECEIVED:
+    case TURN_INFO_RECEIVED:
       return action.turnInfo;
-    case types.TABLE_UPDATE_RECEIVED:
+    case TABLE_UPDATE_RECEIVED:
       return null;
     default:
       return state;
@@ -30,9 +30,9 @@ const turnInfoReducer = (state: ApiPlayerTurnInfo | null = null, action: Action)
 
 const tableUpdatesReducer = (state: ApiTable | null = null, action: Action) => {
   switch (action.type) {
-    case types.TURN_INFO_RECEIVED:
+    case TURN_INFO_RECEIVED:
       return action.turnInfo.table;
-    case types.TABLE_UPDATE_RECEIVED:
+    case TABLE_UPDATE_RECEIVED:
       return action.table;
     default:
       return state;

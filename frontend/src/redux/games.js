@@ -4,7 +4,7 @@ import { combineReducers } from 'redux';
 import type { ApiLobby } from '../api/model';
 import type { GlobalState } from '../reducers';
 import type { Action } from './actions/all';
-import { types } from './actions/lobby';
+import { ENTER_LOBBY, UPDATE_GAMES } from './actions/lobby';
 
 export type GamesState = {
   all: Map<string, ApiLobby>,
@@ -20,7 +20,7 @@ export const createGamesReducer = () => {
 
 export const allGamesReducer = (state: Map<string, ApiLobby> = Map(), action: Action) => {
   switch (action.type) {
-    case types.UPDATE_GAMES:
+    case UPDATE_GAMES:
       let newGames = {};
       action.games.forEach(g => newGames[g.id] = g);
       return state.merge(Map(newGames));
@@ -31,7 +31,7 @@ export const allGamesReducer = (state: Map<string, ApiLobby> = Map(), action: Ac
 
 export const currentGameIdReducer = (state: string | void = null, action: Action) => {
   switch (action.type) {
-    case types.ENTER_LOBBY:
+    case ENTER_LOBBY:
       return `${action.gameId}`;
     default:
       return state;

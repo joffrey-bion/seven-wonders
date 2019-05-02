@@ -2,9 +2,8 @@ import { eventChannel } from 'redux-saga';
 import { apply, call, put, take } from 'redux-saga/effects';
 import type { ApiPlayerTurnInfo, ApiPreparedCard, ApiTable } from '../api/model';
 import { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions } from '../redux/actions/game';
-import { types } from '../redux/actions/game';
-import { types as gameTypes } from '../redux/actions/lobby';
+import { actions, REQUEST_PREPARE_MOVE, REQUEST_SAY_READY } from '../redux/actions/game';
+import { ENTER_GAME } from '../redux/actions/lobby';
 
 function* watchPlayerReady(session: SevenWondersSession, gameId: number) {
   const channel = yield eventChannel(session.watchPlayerReady(gameId));
@@ -44,14 +43,14 @@ function* watchPreparedCards(session: SevenWondersSession, gameId: number) {
 
 function* sayReady(session: SevenWondersSession) {
   while (true) {
-    yield take(types.REQUEST_SAY_READY);
+    yield take(REQUEST_SAY_READY);
     yield apply(session, session.sayReady);
   }
 }
 
 function* prepareMove(session: SevenWondersSession) {
   while (true) {
-    let action = yield take(types.REQUEST_PREPARE_MOVE);
+    let action = yield take(REQUEST_PREPARE_MOVE);
     yield apply(session, session.prepareMove, [action.move]);
   }
 }
@@ -69,7 +68,7 @@ function* watchTurnInfo(session: SevenWondersSession) {
 }
 
 export function* gameSaga(session: SevenWondersSession) {
-  const { gameId } = yield take(gameTypes.ENTER_GAME);
+  const { gameId } = yield take(ENTER_GAME);
   console.log('Entered game!', gameId);
   yield [
     call(watchPlayerReady, session, gameId),

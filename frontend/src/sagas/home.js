@@ -5,12 +5,11 @@ import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import type { ApiPlayer } from '../api/model';
 import type { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions } from '../redux/actions/user';
-import { types } from '../redux/actions/user';
+import { actions, REQUEST_CHOOSE_USERNAME } from '../redux/actions/user';
 
 function* sendUsername(session: SevenWondersSession): SagaIterator {
   while (true) {
-    const { username } = yield take(types.REQUEST_CHOOSE_USERNAME);
+    const { username } = yield take(REQUEST_CHOOSE_USERNAME);
     // $FlowFixMe
     yield apply(session, session.chooseName, [username]);
   }

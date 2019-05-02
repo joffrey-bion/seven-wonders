@@ -4,7 +4,7 @@ import type { Channel, SagaIterator } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import { SevenWondersSession } from '../api/sevenWondersApi';
-import { actions as gameActions, types } from '../redux/actions/lobby';
+import { actions as gameActions, ENTER_LOBBY, REQUEST_START_GAME } from '../redux/actions/lobby';
 
 function* watchLobbyUpdates(session: SevenWondersSession, lobbyId: number): SagaIterator {
   const lobbyUpdatesChannel: Channel = yield eventChannel(session.watchLobbyUpdated(lobbyId));
@@ -31,13 +31,13 @@ function* watchGameStart(session: SevenWondersSession, lobbyId: number): SagaIte
 
 function* startGame(session: SevenWondersSession): SagaIterator {
   while (true) {
-    yield take(types.REQUEST_START_GAME);
+    yield take(REQUEST_START_GAME);
     yield apply(session, session.startGame, []);
   }
 }
 
 export function* lobbySaga(session: SevenWondersSession): SagaIterator {
-  const { gameId } = yield take(types.ENTER_LOBBY);
+  const { gameId } = yield take(ENTER_LOBBY);
   yield all([
     call(watchLobbyUpdates, session, gameId),
     call(watchGameStart, session, gameId),

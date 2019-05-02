@@ -1,7 +1,7 @@
 import { ApiPlayer } from '../api/model';
 import type { GlobalState } from '../reducers';
 import type { Action } from './actions/all';
-import { types } from './actions/user';
+import { SET_CURRENT_PLAYER } from './actions/user';
 import { getCurrentGame } from './games';
 
 export type User = {
@@ -11,7 +11,7 @@ export type User = {
 
 export const currentUserReducer = (state: ?User = null, action: Action) => {
   switch (action.type) {
-    case types.SET_CURRENT_PLAYER:
+    case SET_CURRENT_PLAYER:
       return {
         username: action.player.username,
         displayName: action.player.displayName
