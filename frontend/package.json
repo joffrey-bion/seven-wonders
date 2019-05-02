@@ -12,7 +12,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.15.1",
     "@blueprintjs/icons": "^3.8.0",
-    "history": "^4.7.2",
+    "history": "^4.9.0",
     "http-proxy-middleware": "^0.19.1",
     "immutable": "^3.8.1",
     "normalizr": "^3.2.3",
