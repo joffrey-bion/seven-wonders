@@ -1,5 +1,4 @@
-// @flow
-import type {
+import {
   ApiError,
   ApiLobby,
   ApiPlayer,
@@ -9,7 +8,7 @@ import type {
   ApiSettings,
   ApiTable,
 } from './model';
-import type { JsonStompClient, SubscribeFn } from './websocket';
+import { JsonStompClient, SubscribeFn } from './websocket';
 import { createJsonStompClient } from './websocket';
 
 const WS_URL = '/seven-wonders-websocket';

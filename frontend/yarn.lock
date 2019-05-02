@@ -1217,6 +1217,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
+"@types/sockjs-client@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@types/sockjs-client/-/sockjs-client-1.1.1.tgz#1ef133b5a79d51447a93ce16164706c0164b5548"
+
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
