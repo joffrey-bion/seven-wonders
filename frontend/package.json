@@ -12,6 +12,12 @@
   "dependencies": {
     "@blueprintjs/core": "^3.15.1",
     "@blueprintjs/icons": "^3.8.0",
+    "@types/jest": "^24.0.12",
+    "@types/node": "^11.13.8",
+    "@types/react": "^16.8.15",
+    "@types/react-dom": "^16.8.4",
+    "@types/react-redux": "^7.0.8",
+    "@types/react-router-redux": "^5.0.18",
     "history": "^4.9.0",
     "http-proxy-middleware": "^0.19.1",
     "immutable": "^3.8.1",
@@ -26,6 +32,7 @@
     "redux-saga": "^0.16.0",
     "reflexbox": "^3.0.1",
     "sockjs-client": "^1.1.4",
+    "typescript": "^3.4.5",
     "webstomp-client": "^1.0.6"
   },
   "scripts": {
