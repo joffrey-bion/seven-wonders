@@ -4,9 +4,9 @@
   "private": true,
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
-    "cross-env": "^5.1.6",
-    "flow-bin": "^0.74.0",
-    "flow-typed": "^2.4.0",
+    "cross-env": "^5.2.0",
+    "flow-bin": "^0.94.0",
+    "flow-typed": "^2.5.1",
     "prettier-eslint-cli": "^4.7.1",
     "react-scripts": "3.0.0"
   },
