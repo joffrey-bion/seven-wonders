@@ -1,16 +1,16 @@
 // @flow
 import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
-import type { ApiPlayer } from './api/model';
-import type { CurrentGameState } from './redux/currentGame';
+import { ApiPlayer } from './api/model';
+import { CurrentGameState } from './redux/currentGame';
 import { createCurrentGameReducer } from './redux/currentGame';
-import type { GamesState } from './redux/games';
+import { GamesState } from './redux/games';
 import { createGamesReducer } from './redux/games';
 import { currentUserReducer } from './redux/user';
 
 export type GlobalState = {
   currentGame: CurrentGameState;
-  currentUser: ApiPlayer;
+  currentUser: ApiPlayer | null;
   games: GamesState;
   routing: any;
 }

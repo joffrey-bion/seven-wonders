@@ -1,8 +1,7 @@
-// @flow
 import { combineReducers } from 'redux';
-import type { ApiPlayerTurnInfo, ApiTable } from '../api/model';
-import type { GlobalState } from '../reducers';
-import type { Action } from './actions/all';
+import { ApiPlayerTurnInfo, ApiTable } from '../api/model';
+import { GlobalState } from '../reducers';
+import { Action } from './actions/all';
 import { TABLE_UPDATE_RECEIVED, TURN_INFO_RECEIVED } from './actions/game';
 
 export type CurrentGameState = {
@@ -39,4 +38,4 @@ const tableUpdatesReducer = (state: ApiTable | null = null, action: Action) => {
   }
 };
 
-export const getCurrentTurnInfo = (state: GlobalState): ApiPlayerTurnInfo => state.currentGame.turnInfo;
+export const getCurrentTurnInfo = (state: GlobalState): ApiPlayerTurnInfo | null => state.currentGame.turnInfo;
