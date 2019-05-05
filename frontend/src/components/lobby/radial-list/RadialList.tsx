@@ -1,13 +1,12 @@
-//@flow
-import * as React from 'react';
-import type { CartesianCoords, RadialConfig } from './radial-math';
+import React, { ReactNode } from 'react';
+import { CartesianCoords, RadialConfig } from './radial-math';
 import { offsetsFromCenter, CLOCKWISE, COUNTERCLOCKWISE } from './radial-math';
 import './RadialList.css';
 import { RadialListItem } from './RadialListItem';
 
 type RadialListProps = {
-  items: Array<React.Node>,
-  centerElement?: React.Node,
+  items: Array<ReactNode>,
+  centerElement?: ReactNode,
   radius?: number, // 120px by default
   offsetDegrees?: number, // defaults to 0 = 12 o'clock
   arc?: number, // defaults to 360 (full circle)
@@ -32,7 +31,7 @@ export const RadialList = ({items, centerElement, radius = 120, offsetDegrees = 
 };
 
 type RadialListItemsProps = {
-  items: Array<React.Node>,
+  items: Array<React.ReactNode>,
   radialConfig: RadialConfig,
 };
 
@@ -54,7 +53,7 @@ const RadialListItems = ({items, radialConfig}: RadialListItemsProps) => {
 };
 
 type RadialListCenterProps = {
-  centerElement?: React.Node,
+  centerElement?: ReactNode,
 };
 
 const RadialListCenter = ({centerElement}: RadialListCenterProps) => {

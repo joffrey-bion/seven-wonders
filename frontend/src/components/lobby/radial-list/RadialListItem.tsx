@@ -1,10 +1,10 @@
-//@flow
 import * as React from 'react';
-import type { CartesianCoords } from './radial-math';
+import { ReactNode } from 'react';
+import { CartesianCoords } from './radial-math';
 import './RadialListItem.css';
 
 type RadialListItemProps = {
-  item: React.Node,
+  item: ReactNode,
   offsets: CartesianCoords,
 };
 
