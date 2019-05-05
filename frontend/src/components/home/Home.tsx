@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { Flex } from 'reflexbox';
 import { ChooseNameForm } from './ChooseNameForm';

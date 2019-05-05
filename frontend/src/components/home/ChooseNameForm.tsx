@@ -1,6 +1,5 @@
-// @flow
 import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
-import React, { Component } from 'react';
+import React, { ChangeEvent, Component, SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/actions/user';
 
@@ -11,7 +10,7 @@ type ChooseNameFormPresenterProps = {
 class ChooseNameFormPresenter extends Component<ChooseNameFormPresenterProps> {
   _username = '';
 
-  play = e => {
+  play = (e: SyntheticEvent<any>) => {
     e.preventDefault();
     if (this._username !== undefined) {
       this.props.chooseUsername(this._username);
@@ -24,7 +23,7 @@ class ChooseNameFormPresenter extends Component<ChooseNameFormPresenterProps> {
           <InputGroup
             className={Classes.LARGE}
             placeholder="Username"
-            onChange={e => (this._username = e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => (this._username = e.target.value)}
             rightElement={this.renderSubmit()}
           />
         </form>
