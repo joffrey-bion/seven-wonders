@@ -1,7 +1,8 @@
 // @flow
 import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware } from 'react-router-redux';
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 import type { GlobalState } from './reducers';
 import { createReducer } from './reducers';
@@ -16,13 +17,7 @@ export function configureStore(initialState: GlobalState = {}) {
 
   const enhancers = [applyMiddleware(...middlewares)];
 
-  const composeEnhancers = process.env.NODE_ENV !== 'production' &&
-    typeof window === 'object' &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    : compose;
-
-  const store = createStore(createReducer(), initialState, composeEnhancers(...enhancers));
+  const store = createStore(createReducer(), initialState, composeWithDevTools(...enhancers));
 
   sagaMiddleware.run(rootSaga);
 
