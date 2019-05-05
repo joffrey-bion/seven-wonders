@@ -1,14 +1,13 @@
-// @flow
 import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
-import type { GlobalState } from './reducers';
+import { GlobalState } from './reducers';
 import { createReducer } from './reducers';
 import { rootSaga } from './sagas';
 
-export function configureStore(initialState: GlobalState = {}) {
+export function configureStore(initialState: GlobalState) {
   const sagaMiddleware = createSagaMiddleware();
 
   const history = createHistory();
