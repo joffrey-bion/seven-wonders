@@ -1,13 +1,11 @@
-// @flow
 import { push } from 'react-router-redux';
-import type { Channel, SagaIterator } from 'redux-saga';
-import { eventChannel } from 'redux-saga';
+import { Channel, eventChannel, SagaIterator } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
 import { SevenWondersSession } from '../api/sevenWondersApi';
 import { actions as gameActions, ENTER_LOBBY, REQUEST_START_GAME } from '../redux/actions/lobby';
 
-function* watchLobbyUpdates(session: SevenWondersSession, lobbyId: number): SagaIterator {
-  const lobbyUpdatesChannel: Channel = yield eventChannel(session.watchLobbyUpdated(lobbyId));
+function* watchLobbyUpdates(session: SevenWondersSession, lobbyId: number): any {
+  const lobbyUpdatesChannel: Channel<Object> = yield eventChannel(session.watchLobbyUpdated(lobbyId));
   try {
     while (true) {
       const lobby = yield take(lobbyUpdatesChannel);
@@ -18,7 +16,7 @@ function* watchLobbyUpdates(session: SevenWondersSession, lobbyId: number): Saga
   }
 }
 
-function* watchGameStart(session: SevenWondersSession, lobbyId: number): SagaIterator {
+function* watchGameStart(session: SevenWondersSession, lobbyId: number): any {
   const gameStartedChannel = yield eventChannel(session.watchGameStarted(lobbyId));
   try {
     yield take(gameStartedChannel);
@@ -32,7 +30,7 @@ function* watchGameStart(session: SevenWondersSession, lobbyId: number): SagaIte
 function* startGame(session: SevenWondersSession): SagaIterator {
   while (true) {
     yield take(REQUEST_START_GAME);
-    yield apply(session, session.startGame, []);
+    yield apply(session, session.startGame);
   }
 }
 

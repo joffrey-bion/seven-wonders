@@ -1,5 +1,4 @@
-// @flow
-import type { SagaIterator } from 'redux-saga';
+import { SagaIterator } from 'redux-saga';
 import { call, fork } from 'redux-saga/effects';
 import { connectToGame, SevenWondersSession } from './api/sevenWondersApi';
 import { errorHandlingSaga } from './sagas/errors';
@@ -9,7 +8,7 @@ import { homeSaga } from './sagas/home';
 import { lobbySaga } from './sagas/lobby';
 
 export function* rootSaga(): SagaIterator {
-  let sevenWondersSession: SevenWondersSession | void;
+  let sevenWondersSession: SevenWondersSession;
   try {
     sevenWondersSession = yield call(connectToGame);
   } catch (error) {

@@ -1,13 +1,11 @@
-// @flow
 import { push } from 'react-router-redux';
-import type { SagaIterator } from 'redux-saga';
-import { eventChannel } from 'redux-saga';
+import { eventChannel, SagaIterator } from 'redux-saga';
 import { all, apply, call, put, take } from 'redux-saga/effects';
-import type { ApiLobby } from '../api/model';
-import type { SevenWondersSession } from '../api/sevenWondersApi';
+import { ApiLobby } from '../api/model';
+import { SevenWondersSession } from '../api/sevenWondersApi';
 import { actions as gameActions, REQUEST_CREATE_GAME, REQUEST_JOIN_GAME } from '../redux/actions/lobby';
 
-function* watchGames(session: SevenWondersSession): SagaIterator {
+function* watchGames(session: SevenWondersSession): any {
   const gamesChannel = yield eventChannel(session.watchGames());
   try {
     while (true) {
@@ -19,7 +17,7 @@ function* watchGames(session: SevenWondersSession): SagaIterator {
   }
 }
 
-function* watchLobbyJoined(session: SevenWondersSession): SagaIterator {
+function* watchLobbyJoined(session: SevenWondersSession): any {
   const joinedLobbyChannel = yield eventChannel(session.watchLobbyJoined());
   try {
     const joinedLobby: ApiLobby = yield take(joinedLobbyChannel);
