@@ -1,17 +1,16 @@
-//@flow
 import { Classes, Icon } from '@blueprintjs/core'
 import { List } from 'immutable';
 import * as React from 'react';
 import { Flex } from 'reflexbox';
 import { ApiPlayer } from '../../api/model';
 
-type PlayerListProps = {
-  players: List<ApiPlayer>,
-  owner: string,
-  currentPlayer: ApiPlayer,
+type PlayerListItemProps = {
+  player: ApiPlayer,
+  isOwner: boolean,
+  isUser: boolean,
 };
 
-const PlayerListItem = ({player, isOwner, isUser}) => (
+const PlayerListItem = ({player, isOwner, isUser}: PlayerListItemProps) => (
   <tr>
     <td>
       <Flex align='center'>
@@ -24,10 +23,16 @@ const PlayerListItem = ({player, isOwner, isUser}) => (
   </tr>
 );
 
+type PlayerListProps = {
+  players: List<ApiPlayer>,
+  owner: string,
+  currentPlayer: ApiPlayer,
+};
+
 export const PlayerList = ({players, owner, currentPlayer}: PlayerListProps) => (
   <table className={Classes.HTML_TABLE}>
     <tbody>
-      {players.map(player => <PlayerListItem key={player.username}
+      {players.map((player: ApiPlayer) => <PlayerListItem key={player.username}
                                              player={player}
                                              isOwner={player.username === owner}
                                              isUser={player.username === currentPlayer.username}/>)}

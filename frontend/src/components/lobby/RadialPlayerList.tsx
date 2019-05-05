@@ -1,19 +1,19 @@
-//@flow
-import { Icon } from '@blueprintjs/core'
+import { Icon, IconName, Intent } from '@blueprintjs/core';
 import { List } from 'immutable';
 import * as React from 'react';
+import { ReactNode } from 'react';
 import { Flex } from 'reflexbox';
 import { ApiPlayer } from '../../api/model';
 import { RadialList } from './radial-list/RadialList';
 import roundTable from './round-table.png';
 
-type RadialPlayerListProps = {
-  players: List<ApiPlayer>
+type PlayerItemProps = {
+  player: ApiPlayer
 };
 
-const PlayerItem = ({player}) => (
+const PlayerItem = ({player}: PlayerItemProps) => (
   <Flex column align='center'>
-    <UserIcon isOwner={player.gameOwner} isUser={player.user} title={player.gameOwner ? 'Game owner' : false}/>
+    <UserIcon isOwner={player.gameOwner} isUser={player.user} title={player.gameOwner ? 'Game owner' : null}/>
     <h5 style={{margin: 0}}>{player.displayName}</h5>
   </Flex>
 );
@@ -25,10 +25,20 @@ const PlayerPlaceholder = () => (
   </Flex>
 );
 
-const UserIcon = ({isUser, isOwner, title}) => {
-  const icon = isOwner ? 'badge' : 'user';
-  const intent = isUser ? 'warning' : 'none';
+type UserIconProps = {
+  isUser: boolean,
+  isOwner: boolean,
+  title: string | null,
+};
+
+const UserIcon = ({isUser, isOwner, title}: UserIconProps) => {
+  const icon: IconName = isOwner ? 'badge' : 'user';
+  const intent: Intent = isUser ? Intent.WARNING : Intent.NONE;
   return <Icon icon={icon} iconSize={50} intent={intent} title={title}/>;
+};
+
+type RadialPlayerListProps = {
+  players: List<ApiPlayer>
 };
 
 export const RadialPlayerList = ({players}: RadialPlayerListProps) => {
@@ -43,14 +53,14 @@ export const RadialPlayerList = ({players}: RadialPlayerListProps) => {
                      itemHeight={100}/>;
 };
 
-function placeUserFirst(players: Array<ApiPlayer>): Array<ApiPlayer> {
+function placeUserFirst(players: ApiPlayer[]): ApiPlayer[] {
   while (!players[0].user) {
-    players.push(players.shift());
+    players.push(players.shift()!);
   }
   return players;
 }
 
-function completeWithPlaceholders(playerItems: Array<React.Node>): Array<React.Node> {
+function completeWithPlaceholders(playerItems: Array<ReactNode>): Array<ReactNode> {
   while (playerItems.length < 3) {
     playerItems.push(<PlayerPlaceholder/>);
   }

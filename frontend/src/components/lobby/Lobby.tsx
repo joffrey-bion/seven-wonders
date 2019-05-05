@@ -1,26 +1,33 @@
-//@flow
 import { Button, Classes, Intent } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { ApiLobby, ApiPlayer } from '../../api/model';
-import type { GlobalState } from '../../reducers';
+import { ApiLobby, ApiPlayer } from '../../api/model';
+import { GlobalState } from '../../reducers';
 import { actions } from '../../redux/actions/lobby';
 import { getCurrentGame } from '../../redux/games';
 import { getCurrentPlayer } from '../../redux/user';
 import { RadialPlayerList } from './RadialPlayerList';
 
-export type LobbyProps = {
-  currentGame: ApiLobby,
-  currentPlayer: ApiPlayer,
+export type LobbyStateProps = {
+  currentGame: ApiLobby | null,
+  currentPlayer: ApiPlayer | null,
   players: List<ApiPlayer>,
+}
+
+export type LobbyDispatchProps = {
   startGame: () => void,
 }
+
+export type LobbyProps = LobbyStateProps & LobbyDispatchProps
 
 class LobbyPresenter extends Component<LobbyProps> {
 
   render() {
     const {currentGame, currentPlayer, players, startGame} = this.props;
+    if (!currentGame || !currentPlayer) {
+      return <div>Error: no current game.</div>
+    }
     return (
       <div>
         <h2>{currentGame.name + ' — Lobby'}</h2>
@@ -32,15 +39,15 @@ class LobbyPresenter extends Component<LobbyProps> {
   }
 }
 
-const mapStateToProps = (state: GlobalState) => {
+function mapStateToProps(state: GlobalState): LobbyStateProps {
   const game = getCurrentGame(state);
   console.info(game);
   return {
     currentGame: game,
     currentPlayer: getCurrentPlayer(state),
-    players: game ? new List(game.players) : new List(),
+    players: game ? List(game.players) : List(),
   };
-};
+}
 
 const mapDispatchToProps = {
   startGame: actions.requestStartGame,
