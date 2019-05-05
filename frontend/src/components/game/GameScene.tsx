@@ -2,8 +2,8 @@ import { Button, Classes, Intent, NonIdealState } from '@blueprintjs/core';
 import { List } from 'immutable';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import type { ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo } from '../../api/model';
-import type { GlobalState } from '../../reducers';
+import { ApiPlayer, ApiPlayerMove, ApiPlayerTurnInfo } from '../../api/model';
+import { GlobalState } from '../../reducers';
 import { actions } from '../../redux/actions/game';
 import { getCurrentTurnInfo } from '../../redux/currentGame';
 import { getCurrentGame } from '../../redux/games';
@@ -12,12 +12,17 @@ import './GameScene.css'
 import { Hand } from './Hand';
 import { ProductionBar } from './ProductionBar';
 
-type GameSceneProps = {
+type GameSceneStateProps = {
   players: List<ApiPlayer>,
-  turnInfo: ApiPlayerTurnInfo,
+  turnInfo: ApiPlayerTurnInfo | null,
+}
+
+type GameSceneDispatchProps = {
   sayReady: () => void,
   prepareMove: (move: ApiPlayerMove) => void,
 }
+
+type GameSceneProps = GameSceneStateProps & GameSceneDispatchProps
 
 class GameScenePresenter extends Component<GameSceneProps> {
 
@@ -25,13 +30,12 @@ class GameScenePresenter extends Component<GameSceneProps> {
     return (
       <div className='gameSceneRoot fullscreen'>
         {!this.props.turnInfo && <GamePreStart onReadyClicked={this.props.sayReady}/>}
-        {this.props.turnInfo && this.turnInfoScene()}
+        {this.props.turnInfo && this.turnInfoScene(this.props.turnInfo)}
       </div>
     );
   }
 
-  turnInfoScene() {
-    let turnInfo = this.props.turnInfo;
+  turnInfoScene(turnInfo: ApiPlayerTurnInfo) {
     let board = turnInfo.table.boards[turnInfo.playerIndex];
     return <div>
       <p>{turnInfo.message}</p>
@@ -44,25 +48,30 @@ class GameScenePresenter extends Component<GameSceneProps> {
   }
 }
 
-const GamePreStart = ({onReadyClicked}) => <NonIdealState
+type GamePreStartProps = {
+  onReadyClicked: () => void
+}
+const GamePreStart = ({onReadyClicked}: GamePreStartProps) => <NonIdealState
         description={<p>Click "ready" when you are</p>}
         action={<Button text="READY" className={Classes.LARGE} intent={Intent.PRIMARY} icon='play'
-                        onClick={onReadyClicked}/>}
+                        onClick={() => onReadyClicked()}/>}
 />;
 
-const mapStateToProps: (state: GlobalState) => GameSceneProps = state => {
+function mapStateToProps(state: GlobalState): GameSceneStateProps {
   const game = getCurrentGame(state);
   console.info(game);
 
   return {
-    players: game ? new List(game.players) : new List(),
+    players: game ? List(game.players) : List(),
     turnInfo: getCurrentTurnInfo(state),
   };
-};
+}
 
-const mapDispatchToProps = {
-  sayReady: actions.sayReady,
-  prepareMove: actions.prepareMove,
-};
+function mapDispatchToProps(): GameSceneDispatchProps {
+  return {
+    sayReady: actions.sayReady,
+    prepareMove: actions.prepareMove,
+  }
+}
 
 export const GameScene = connect(mapStateToProps, mapDispatchToProps)(GameScenePresenter);

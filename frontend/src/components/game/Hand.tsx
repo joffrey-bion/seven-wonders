@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import React from 'react';
-import type { ApiHandCard, ApiPlayerMove } from '../../api/model';
+import { ApiHandCard, ApiPlayerMove } from '../../api/model';
 import './Hand.css'
 import { CardImage } from './CardImage';
 
@@ -30,7 +30,9 @@ const HandCard = ({card, wonderUpgradable, prepareMove}: HandCardProps) => {
   </div>
 };
 
-const ActionButtons = ({card, wonderUpgradable, prepareMove}) => <ButtonGroup className="action-buttons">
+type ActionButtonsProps = HandCardProps
+
+const ActionButtons = ({card, wonderUpgradable, prepareMove}: ActionButtonsProps) => <ButtonGroup className="action-buttons">
   <Button title="PLAY" className={Classes.LARGE} intent={Intent.SUCCESS} icon='play'
           disabled={!card.playability.playable}
           onClick={() => prepareMove({type: 'PLAY', cardName: card.name, boughtResources: []})}/>

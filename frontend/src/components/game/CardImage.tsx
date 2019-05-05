@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ApiCard } from '../../api/model';
+import { ApiCard } from '../../api/model';
 import './CardImage.css'
 
 type CardImageProps = {

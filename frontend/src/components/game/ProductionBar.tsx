@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ApiCountedResource, ApiProduction, ApiResourceType } from '../../api/model';
+import { ApiCountedResource, ApiProduction, ApiResourceType } from '../../api/model';
 import './ProductionBar.css'
 
 type ProductionBarProps = {
@@ -54,9 +54,9 @@ const ResourceChoice = ({types}: ResourceChoiceProps) => {
   </div>
 };
 
-function intersperce(array, separator) {
-  let result = array.reduce((acc, elt) => acc.concat(elt, separator), []);
-  return result.slice(0, -1);
+function intersperce<T>(array: T[], separator: T): T[] {
+  let result = array.reduce((acc: T[], elt: T) => acc.concat(elt, separator), []);
+  return result.slice(0, -1); // remove extra separator at the end
 }
 
 type TokenWithCountProps = {
@@ -78,7 +78,7 @@ const TokenImage = ({tokenName}: TokenImageProps) => {
   return <img src={getTokenImagePath(tokenName)} title={tokenName} alt={tokenName} className="token-img"/>
 };
 
-function getTokenImagePath(tokenName: number): string {
+function getTokenImagePath(tokenName: string): string {
   return `/images/tokens/${tokenName}.png`;
 }
 

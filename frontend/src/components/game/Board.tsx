@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ApiBoard, ApiTableCard, ApiWonder } from '../../api/model';
+import { ApiBoard, ApiTableCard, ApiWonder } from '../../api/model';
 import './Board.css'
 import { CardImage } from './CardImage';
 
