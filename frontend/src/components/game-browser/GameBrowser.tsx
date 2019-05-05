@@ -1,6 +1,5 @@
-// @flow
 import { Button, Classes, InputGroup, Intent } from '@blueprintjs/core';
-import React, { Component } from 'react';
+import React, { ChangeEvent, Component, SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
 import { Flex } from 'reflexbox';
 import { actions } from '../../redux/actions/lobby';
@@ -15,7 +14,7 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
 
   _gameName: string | void = undefined;
 
-  createGame = (e: SyntheticEvent<*>): void => {
+  createGame = (e: SyntheticEvent<any>): void => {
     e.preventDefault();
     if (this._gameName !== undefined) {
       this.props.createGame(this._gameName);
@@ -30,8 +29,8 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
             <InputGroup
                     placeholder="Game name"
                     name="game_name"
-                    onChange={(e: SyntheticInputEvent<*>) => (this._gameName = e.target.value)}
-                    rightElement={<CreateGameButton onClick={this.createGame}/>}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => (this._gameName = e.target.value)}
+                    rightElement={<CreateGameButton createGame={this.createGame}/>}
             />
           </form>
           <PlayerInfo />
@@ -42,8 +41,12 @@ class GameBrowserPresenter extends Component<GameBrowserProps> {
   }
 }
 
-const CreateGameButton = ({onClick}) => (
-  <Button className={Classes.MINIMAL} intent={Intent.PRIMARY} icon='add' onClick={onClick} />
+type CreateGameButtonProps = {
+  createGame: (e: SyntheticEvent<any>) => void
+}
+
+const CreateGameButton = ({createGame}: CreateGameButtonProps) => (
+  <Button className={Classes.MINIMAL} intent={Intent.PRIMARY} icon='add' onClick={createGame} />
 );
 
 const mapDispatchToProps = {

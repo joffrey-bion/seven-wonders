@@ -1,13 +1,12 @@
-// @flow
 import { Text } from '@blueprintjs/core';
 import React from 'react';
 import { connect } from 'react-redux';
-import type { GlobalState } from '../../reducers';
-import type { User } from '../../redux/user';
+import { GlobalState } from '../../reducers';
+import { User } from '../../redux/user';
 import { getCurrentUser } from '../../redux/user';
 
 type PlayerInfoProps = {
-  user: ?User,
+  user: User | null,
 }
 
 const PlayerInfoPresenter = ({user}: PlayerInfoProps) => (

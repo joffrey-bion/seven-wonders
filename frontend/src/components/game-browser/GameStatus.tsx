@@ -1,7 +1,7 @@
-//@flow
 import { Tag } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 import * as React from 'react';
-import type { ApiGameState } from '../../api/model';
+import { ApiGameState } from '../../api/model';
 
 type GameStatusProps = {
   state: ApiGameState,
@@ -12,6 +12,6 @@ export const GameStatus = ({state}: GameStatusProps) => (
 );
 
 const statusIntents = {
-  'LOBBY': 'success',
-  'PLAYING': 'warning',
+  'LOBBY': Intent.SUCCESS,
+  'PLAYING': Intent.WARNING,
 };
