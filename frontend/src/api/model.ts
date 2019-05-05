@@ -11,8 +11,8 @@ export type ApiPlayer = {
   username: string,
   displayName: string,
   index: number,
-  gameOwner: Boolean,
-  user: Boolean,
+  gameOwner: boolean,
+  user: boolean,
 };
 
 export type ApiWonderSidePickMethod = "EACH_RANDOM" | "ALL_A" | "ALL_B" | "SAME_RANDOM_FOR_ALL";
