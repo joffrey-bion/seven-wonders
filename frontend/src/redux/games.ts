@@ -10,6 +10,11 @@ export type GamesState = {
   current: string | null
 };
 
+export const EMPTY_GAMES: GamesState = {
+  all: Map(),
+  current: null,
+};
+
 export const createGamesReducer = () => {
   return combineReducers({
     all: allGamesReducer,

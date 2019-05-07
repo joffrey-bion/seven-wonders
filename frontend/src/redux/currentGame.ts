@@ -9,6 +9,11 @@ export type CurrentGameState = {
   table: ApiTable | null;
 }
 
+export const EMPTY_CURRENT_GAME: CurrentGameState = {
+  turnInfo: null,
+  table: null,
+};
+
 export function createCurrentGameReducer() {
   return combineReducers({
     turnInfo: turnInfoReducer,

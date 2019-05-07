@@ -1,4 +1,3 @@
-// @flow
 import '@blueprintjs/core/lib/css/blueprint.css';
 import 'babel-polyfill';
 import React from 'react';
@@ -6,10 +5,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { Application } from './components/Application';
+import { INITIAL_STATE } from './reducers';
 import { configureStore } from './store';
 
-const initialState = {};
-const { store, history } = configureStore(initialState);
+const { store, history } = configureStore(INITIAL_STATE);
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
