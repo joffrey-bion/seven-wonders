@@ -1,6 +1,20 @@
 # Technical decisions and issues log
 
-## 2018.07.05-10 Kotlin Migration of the Backend
+## 2019.05.02-07 Frontend migration to TypeScript
+[@joffrey-bion][1] — :key: *Frontend, TypeScript*
+
+Flow is nice, but doesn't give me the safety I expect. In its nature, Flow is a type checker aside from the build of 
+the project. This means that it is possible to build the project successfully even with type errors in it, depending on how it is 
+configured.
+
+I also wasn't too happy about the performance of the IDE integration of Flow. Maybe I didn't put much effort into 
+configuring things properly, but I did try multiple settings with more or less safety/performance. The overall 
+experience I had was not that great in this respect.
+
+TypeScript came and saved the day. During the migration, it spotted several places that Flow didn't point out and 
+where the types were incorrect. Also, I could clean up a bit the types of the redux actions and their creators.
+
+## 2018.07.05-10 Backend migration to Kotlin
 [@joffrey-bion][1] — :key: *Backend, Kotlin*
 
 Kotlin really improves on Java on multiple aspects:
