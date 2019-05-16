@@ -1,11 +1,10 @@
 package org.luxons.sevenwonders.game
 
-import org.junit.Test
 import org.luxons.sevenwonders.game.api.Action
-import org.luxons.sevenwonders.game.cards.HandCard
 import org.luxons.sevenwonders.game.api.PlayedMove
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
+import org.luxons.sevenwonders.game.cards.HandCard
 import org.luxons.sevenwonders.game.cards.TableCard
 import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.LAST_AGE
@@ -13,6 +12,7 @@ import org.luxons.sevenwonders.game.moves.MoveType
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

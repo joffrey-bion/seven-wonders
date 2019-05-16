@@ -2,14 +2,10 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     id("org.springframework.boot") version "2.1.3.RELEASE"
-    id("org.jlleitschuh.gradle.ktlint") version "7.1.0"
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 apply(plugin = "io.spring.dependency-management")
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
 
 dependencies {
     compile(project(":sw-common-model"))

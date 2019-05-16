@@ -18,6 +18,7 @@ import org.luxons.sevenwonders.game.effects.Effect
 import org.luxons.sevenwonders.game.effects.ScienceProgress
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.moves.MoveType
+import org.luxons.sevenwonders.game.moves.resolve
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.Provider
 import org.luxons.sevenwonders.game.resources.ResourceTransaction
