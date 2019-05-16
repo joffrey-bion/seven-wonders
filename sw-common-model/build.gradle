@@ -5,7 +5,6 @@ plugins {
 kotlin {
     jvm()
     js()
-    mingwX64("mingw")
     sourceSets {
         commonMain {
             dependencies {
@@ -38,10 +37,6 @@ kotlin {
             dependencies {
                 implementation kotlin('test-js')
             }
-        }
-        mingwMain {
-        }
-        mingwTest {
         }
     }
 }

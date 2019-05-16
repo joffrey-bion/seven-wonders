@@ -1,6 +1,6 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jetbrains.kotlin.plugin.spring")
+    kotlin("jvm")
+    kotlin("plugin.spring")
     id("org.springframework.boot") version "2.1.3.RELEASE"
     id("org.jlleitschuh.gradle.ktlint") version "7.1.0"
 }
@@ -12,8 +12,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 dependencies {
-    compile(project(":game-model"))
-    compile(project(":game-engine"))
+    compile(project(":sw-common-model"))
+    compile(project(":sw-engine"))
     compile(kotlin("stdlib-jdk8"))
     compile(kotlin("reflect")) // required by Spring 5
 
@@ -39,10 +39,10 @@ dependencies {
 
 // packages the frontend app within the jar
 tasks.bootJar {
-    from("../frontend/build") {
+    from("../sw-ui/build") {
         into("static")
     }
 }
 
 // make sure we build the frontend before creating the jar
-tasks.bootJar.get().dependsOn(":frontend:assemble")
+tasks.bootJar.get().dependsOn(":sw-ui:assemble")
