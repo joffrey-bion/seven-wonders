@@ -1,15 +1,15 @@
 package org.luxons.sevenwonders.game
 
 import org.luxons.sevenwonders.game.api.CustomizableSettings
+import org.luxons.sevenwonders.game.api.WonderSide
 import org.luxons.sevenwonders.game.api.WonderSidePickMethod
-import org.luxons.sevenwonders.game.data.definitions.WonderSide
-import java.util.Random
+import kotlin.random.Random
 
 internal class Settings(
     val nbPlayers: Int,
     customSettings: CustomizableSettings = CustomizableSettings()
 ) {
-    val random: Random = customSettings.randomSeedForTests?.let { Random(it) } ?: Random()
+    val random: Random = customSettings.randomSeedForTests?.let { Random(it) } ?: Random
     val timeLimitInSeconds: Int = customSettings.timeLimitInSeconds
     val initialGold: Int = customSettings.initialGold
     val discardedCardGold: Int = customSettings.discardedCardGold

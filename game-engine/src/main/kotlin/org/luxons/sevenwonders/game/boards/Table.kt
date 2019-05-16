@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.game.boards
 
+import org.luxons.sevenwonders.game.api.Age
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.Color
 import org.luxons.sevenwonders.game.cards.HandRotationDirection
-import org.luxons.sevenwonders.game.data.Age
 import org.luxons.sevenwonders.game.moves.Move
 
 /**

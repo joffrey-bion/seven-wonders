@@ -1,5 +1,18 @@
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlin-multiplatform") {
+                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
+            }
+        }
+    }
+}
+
 rootProject.name = "seven-wonders"
 
 include 'frontend'
 include 'backend'
 include 'game-engine'
+include 'game-model'
+
+enableFeaturePreview('GRADLE_METADATA')

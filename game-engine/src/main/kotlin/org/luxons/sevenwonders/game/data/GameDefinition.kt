@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.luxons.sevenwonders.game.Game
 import org.luxons.sevenwonders.game.Settings
+import org.luxons.sevenwonders.game.api.Age
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.data.definitions.DecksDefinition
@@ -24,8 +25,6 @@ import org.luxons.sevenwonders.game.effects.ScienceProgress
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
-
-typealias Age = Int
 
 internal const val LAST_AGE: Age = 3
 

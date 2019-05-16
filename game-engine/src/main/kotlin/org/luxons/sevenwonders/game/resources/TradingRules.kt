@@ -17,7 +17,7 @@ class TradingRules internal constructor(private val defaultCost: Int) {
 
     internal fun computeCost(transactions: ResourceTransactions): Int = transactions.map { computeCost(it) }.sum()
 
-    internal fun computeCost(transact: ResourceTransaction) = computeCost(transact.resources, transact.provider)
+    internal fun computeCost(transact: ResourceTransaction) = computeCost(transact.asResources(), transact.provider)
 
     private fun computeCost(resources: Resources, provider: Provider): Int =
         resources.quantities.map { (type, qty) -> getCost(type, provider) * qty }.sum()

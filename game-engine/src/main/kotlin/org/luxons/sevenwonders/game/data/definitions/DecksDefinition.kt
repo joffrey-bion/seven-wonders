@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.data.definitions
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Decks
-import java.util.Random
+import kotlin.random.Random
 
 internal class DeckDefinition(
     val cards: List<CardDefinition>,

@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.boards
 
-import org.luxons.sevenwonders.game.data.Age
+import org.luxons.sevenwonders.game.api.Age
 
 internal class Military(
     private val lostPointsPerDefeat: Int,

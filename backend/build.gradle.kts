@@ -12,6 +12,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 dependencies {
+    compile(project(":game-model"))
     compile(project(":game-engine"))
     compile(kotlin("stdlib-jdk8"))
     compile(kotlin("reflect")) // required by Spring 5

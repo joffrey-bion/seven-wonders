@@ -6,8 +6,6 @@ import org.luxons.sevenwonders.game.effects.Effect
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.noTransactions
 
-data class CardBack(val image: String)
-
 internal data class Card(
     val name: String,
     val color: Color,
@@ -19,9 +17,9 @@ internal data class Card(
     val back: CardBack
 ) {
     fun computePlayabilityBy(player: Player): CardPlayability = when {
-        isAlreadyOnBoard(player.board) -> CardPlayability.incompatibleWithBoard() // cannot play twice the same card
-        isParentOnBoard(player.board) -> CardPlayability.chainable()
-        else -> CardPlayability.requirementDependent(requirements.assess(player))
+        isAlreadyOnBoard(player.board) -> Playability.incompatibleWithBoard() // cannot play twice the same card
+        isParentOnBoard(player.board) -> Playability.chainable()
+        else -> Playability.requirementDependent(requirements.assess(player))
     }
 
     fun isPlayableOnBoardWith(board: Board, transactions: ResourceTransactions) =
@@ -41,46 +39,26 @@ internal data class Card(
     }
 }
 
-enum class Color(val isResource: Boolean) {
-    BROWN(true),
-    GREY(true),
-    YELLOW(false),
-    BLUE(false),
-    GREEN(false),
-    RED(false),
-    PURPLE(false)
-}
+private object Playability {
 
-data class CardPlayability(
-    val isPlayable: Boolean,
-    val isChainable: Boolean = false,
-    val minPrice: Int = Int.MAX_VALUE,
-    val cheapestTransactions: Set<ResourceTransactions> = emptySet(),
-    val playabilityLevel: PlayabilityLevel
-) {
-    val isFree: Boolean = minPrice == 0
+    internal fun incompatibleWithBoard(): CardPlayability = CardPlayability(
+        isPlayable = false,
+        playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
+    )
 
-    companion object {
+    internal fun chainable(): CardPlayability = CardPlayability(
+        isPlayable = true,
+        isChainable = true,
+        minPrice = 0,
+        cheapestTransactions = setOf(noTransactions()),
+        playabilityLevel = PlayabilityLevel.CHAINABLE
+    )
 
-        internal fun incompatibleWithBoard(): CardPlayability = CardPlayability(
-            isPlayable = false,
-            playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
-        )
-
-        internal fun chainable(): CardPlayability = CardPlayability(
-            isPlayable = true,
-            isChainable = true,
-            minPrice = 0,
-            cheapestTransactions = setOf(noTransactions()),
-            playabilityLevel = PlayabilityLevel.CHAINABLE
-        )
-
-        internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability = CardPlayability(
-            isPlayable = satisfaction.satisfied,
-            isChainable = false,
-            minPrice = satisfaction.minPrice,
-            cheapestTransactions = satisfaction.cheapestTransactions,
-            playabilityLevel = satisfaction.level
-        )
-    }
+    internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability = CardPlayability(
+        isPlayable = satisfaction.satisfied,
+        isChainable = false,
+        minPrice = satisfaction.minPrice,
+        cheapestTransactions = satisfaction.cheapestTransactions,
+        playabilityLevel = satisfaction.level
+    )
 }

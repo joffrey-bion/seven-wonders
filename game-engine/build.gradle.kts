@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":game-model"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.github.salomonbrys.kotson:kotson:2.5.0")
     testImplementation(kotlin("test"))

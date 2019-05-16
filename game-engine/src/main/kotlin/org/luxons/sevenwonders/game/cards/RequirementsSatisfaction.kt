@@ -3,19 +3,6 @@ package org.luxons.sevenwonders.game.cards
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.noTransactions
 
-enum class PlayabilityLevel {
-    CHAINABLE,
-    NO_REQUIREMENTS,
-    ENOUGH_RESOURCES,
-    ENOUGH_GOLD,
-    ENOUGH_GOLD_AND_RES,
-    REQUIRES_HELP,
-    MISSING_REQUIRED_GOLD,
-    MISSING_GOLD_FOR_RES,
-    UNAVAILABLE_RESOURCES,
-    INCOMPATIBLE_WITH_BOARD
-}
-
 internal data class RequirementsSatisfaction(
     val satisfied: Boolean,
     val level: PlayabilityLevel,

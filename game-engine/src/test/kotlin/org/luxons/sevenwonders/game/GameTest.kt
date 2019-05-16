@@ -2,11 +2,11 @@ package org.luxons.sevenwonders.game
 
 import org.junit.Test
 import org.luxons.sevenwonders.game.api.Action
-import org.luxons.sevenwonders.game.api.HandCard
+import org.luxons.sevenwonders.game.cards.HandCard
 import org.luxons.sevenwonders.game.api.PlayedMove
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
-import org.luxons.sevenwonders.game.api.TableCard
+import org.luxons.sevenwonders.game.cards.TableCard
 import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.LAST_AGE
 import org.luxons.sevenwonders.game.moves.MoveType
@@ -110,5 +110,14 @@ class GameTest {
     )
 
     private fun HandCard.toPlayedCard(): TableCard =
-        TableCard(name, color, requirements, chainParent, chainChildren, image, back, true)
+        TableCard(
+            name,
+            color,
+            requirements,
+            chainParent,
+            chainChildren,
+            image,
+            back,
+            true
+        )
 }

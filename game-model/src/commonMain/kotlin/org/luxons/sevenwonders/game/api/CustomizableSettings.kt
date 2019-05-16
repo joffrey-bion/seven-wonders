@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.game.api
 
-import org.luxons.sevenwonders.game.data.definitions.WonderSide
-import java.util.Random
+import kotlin.random.Random
 
 data class CustomizableSettings(
     val randomSeedForTests: Long? = null,
@@ -14,6 +13,11 @@ data class CustomizableSettings(
     val lostPointsPerDefeat: Int = 1,
     val wonPointsPerVictoryPerAge: Map<Int, Int> = mapOf(1 to 1, 2 to 3, 3 to 5)
 )
+
+enum class WonderSide {
+    A,
+    B
+}
 
 enum class WonderSidePickMethod {
     ALL_A {
