@@ -14,5 +14,3 @@ include 'frontend'
 include 'backend'
 include 'game-engine'
 include 'game-model'
-
-enableFeaturePreview('GRADLE_METADATA')
