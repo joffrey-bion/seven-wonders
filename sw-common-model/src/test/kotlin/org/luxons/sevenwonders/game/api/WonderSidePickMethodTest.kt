@@ -1,26 +1,20 @@
-package org.luxons.sevenwonders.game.data.definitions
+package org.luxons.sevenwonders.game.api
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.experimental.theories.DataPoints
-import org.junit.experimental.theories.Theories
-import org.junit.experimental.theories.Theory
-import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.api.WonderSidePickMethod
-import java.util.Random
+import kotlin.random.Random
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@RunWith(Theories::class)
 class WonderSidePickMethodTest {
 
     private lateinit var random: Random
 
     private lateinit var random2: Random
 
-    @Before
+    @BeforeTest
     fun setUp() {
-        random = Random(123) // starts with TRUE
-        random2 = Random(123456) // starts with FALSE
+        random = Random(421) // starts with TRUE
+        random2 = Random(42) // starts with FALSE
     }
 
     @Test
@@ -46,6 +40,8 @@ class WonderSidePickMethodTest {
         var side = WonderSidePickMethod.EACH_RANDOM.pickSide(random, null)
         assertEquals(WonderSide.A, side)
         side = WonderSidePickMethod.EACH_RANDOM.pickSide(random, side)
+        assertEquals(WonderSide.A, side)
+        side = WonderSidePickMethod.EACH_RANDOM.pickSide(random, side)
         assertEquals(WonderSide.B, side)
         side = WonderSidePickMethod.EACH_RANDOM.pickSide(random, side)
         assertEquals(WonderSide.A, side)
@@ -53,8 +49,6 @@ class WonderSidePickMethodTest {
         assertEquals(WonderSide.B, side)
         side = WonderSidePickMethod.EACH_RANDOM.pickSide(random, side)
         assertEquals(WonderSide.B, side)
-        side = WonderSidePickMethod.EACH_RANDOM.pickSide(random, side)
-        assertEquals(WonderSide.A, side)
     }
 
     @Test
@@ -62,23 +56,26 @@ class WonderSidePickMethodTest {
         var side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, null)
         assertEquals(WonderSide.B, side)
         side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
-        assertEquals(WonderSide.A, side)
-        side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
-        assertEquals(WonderSide.A, side)
-        side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
         assertEquals(WonderSide.B, side)
+        side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
+        assertEquals(WonderSide.A, side)
+        side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
+        assertEquals(WonderSide.A, side)
         side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
         assertEquals(WonderSide.B, side)
         side = WonderSidePickMethod.EACH_RANDOM.pickSide(random2, side)
         assertEquals(WonderSide.B, side)
     }
 
-    @Theory
-    fun pick_allSameRandom_sameAsFirst(firstSide: WonderSide) {
-        var side = firstSide
+    @Test
+    fun pick_allSameRandom_sameAsFirst() {
         repeat(10) {
-            side = WonderSidePickMethod.SAME_RANDOM_FOR_ALL.pickSide(random, side)
-            assertEquals(firstSide, side)
+            val side = WonderSidePickMethod.SAME_RANDOM_FOR_ALL.pickSide(random, WonderSide.A)
+            assertEquals(WonderSide.A, side)
+        }
+        repeat(10) {
+            val side = WonderSidePickMethod.SAME_RANDOM_FOR_ALL.pickSide(random, WonderSide.B)
+            assertEquals(WonderSide.B, side)
         }
     }
 
@@ -86,11 +83,5 @@ class WonderSidePickMethodTest {
     fun pick_allSameRandom_firstIsRandom() {
         assertEquals(WonderSide.A, WonderSidePickMethod.SAME_RANDOM_FOR_ALL.pickSide(random, null))
         assertEquals(WonderSide.B, WonderSidePickMethod.SAME_RANDOM_FOR_ALL.pickSide(random2, null))
-    }
-
-    companion object {
-
-        @DataPoints
-        fun sides(): Array<WonderSide> = WonderSide.values()
     }
 }
