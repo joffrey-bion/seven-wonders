@@ -18,7 +18,7 @@ import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.moves.resolve
 import org.luxons.sevenwonders.game.score.ScoreBoard
-import org.luxons.sevenwonders.game.api.Table as ApiTable
+import org.luxons.sevenwonders.game.api.ApiTable as ApiTable
 
 class Game internal constructor(
     val id: Long,

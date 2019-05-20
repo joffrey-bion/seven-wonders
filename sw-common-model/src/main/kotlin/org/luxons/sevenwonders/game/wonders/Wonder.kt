@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.wonders
 
-import org.luxons.sevenwonders.game.api.ApiRequirements
+import org.luxons.sevenwonders.game.boards.ApiRequirements
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.game.cards.PlayabilityLevel
 import org.luxons.sevenwonders.game.resources.ResourceTransactions

@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.game.test
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
-import org.luxons.sevenwonders.game.api.ApiCountedResource
+import org.luxons.sevenwonders.game.resources.CountedResource
 import org.luxons.sevenwonders.game.api.CustomizableSettings
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.boards.Board
@@ -75,7 +75,7 @@ internal fun createTransactions(provider: Provider, vararg resources: ResourceTy
 internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions = transactions.toSet()
 
 internal fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction =
-    ResourceTransaction(provider, resources.map { ApiCountedResource(1, it) })
+    ResourceTransaction(provider, resources.map { CountedResource(1, it) })
 
 internal fun createRequirements(vararg types: ResourceType): Requirements = Requirements(resources = resourcesOf(*types))
 

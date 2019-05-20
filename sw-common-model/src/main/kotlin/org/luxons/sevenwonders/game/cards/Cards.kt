@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.luxons.sevenwonders.game.api.ApiRequirements
+import org.luxons.sevenwonders.game.boards.ApiRequirements
 import org.luxons.sevenwonders.game.resources.ResourceTransactions
 
 data class TableCard(

@@ -1,6 +1,11 @@
 package org.luxons.sevenwonders.game.api
 
 import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.boards.ApiBoard
+import org.luxons.sevenwonders.game.boards.ApiMilitary
+import org.luxons.sevenwonders.game.boards.ApiProduction
+import org.luxons.sevenwonders.game.boards.ApiRequirements
+import org.luxons.sevenwonders.game.boards.ApiScience
 import org.luxons.sevenwonders.game.boards.Military
 import org.luxons.sevenwonders.game.boards.Science
 import org.luxons.sevenwonders.game.boards.ScienceType
@@ -8,6 +13,7 @@ import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.cards.TableCard
 import org.luxons.sevenwonders.game.moves.Move
 import org.luxons.sevenwonders.game.moves.MoveType
+import org.luxons.sevenwonders.game.resources.CountedResource
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.Resources
 import org.luxons.sevenwonders.game.wonders.ApiWonder
@@ -16,16 +22,17 @@ import org.luxons.sevenwonders.game.boards.Board as InternalBoard
 import org.luxons.sevenwonders.game.wonders.Wonder as InternalWonder
 import org.luxons.sevenwonders.game.wonders.WonderStage as InternalWonderStage
 
-internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): Board = Board(
-    playerIndex = playerIndex,
-    wonder = wonder.toApiWonder(player, lastMove),
-    production = production.toApiProduction(),
-    publicProduction = publicProduction.toApiProduction(),
-    science = science.toApiScience(),
-    military = military.toApiMilitary(),
-    playedCards = getPlayedCards().map { it.toTableCard(lastMove) }.toColumns(),
-    gold = gold
-)
+internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): ApiBoard =
+    ApiBoard(
+        playerIndex = playerIndex,
+        wonder = wonder.toApiWonder(player, lastMove),
+        production = production.toApiProduction(),
+        publicProduction = publicProduction.toApiProduction(),
+        science = science.toApiScience(),
+        military = military.toApiMilitary(),
+        playedCards = getPlayedCards().map { it.toTableCard(lastMove) }.toColumns(),
+        gold = gold
+    )
 
 internal fun List<TableCard>.toColumns(): List<List<TableCard>> {
     val cardsByColor = this.groupBy { it.color }
@@ -58,24 +65,26 @@ internal fun InternalWonderStage.toApiWonderStage(
     builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage
 )
 
-internal fun Production.toApiProduction(): ApiProduction = ApiProduction(
-        fixedResources = getFixedResources().toCountedResourcesList(),
-        alternativeResources = getAlternativeResources()
-)
+internal fun Production.toApiProduction(): ApiProduction =
+    ApiProduction(
+        fixedResources = getFixedResources().toCountedResourcesList(), alternativeResources = getAlternativeResources()
+    )
 
-internal fun Requirements.toApiRequirements(): ApiRequirements = ApiRequirements(
-        gold = gold,
-        resources = resources.toCountedResourcesList()
-)
+internal fun Requirements.toApiRequirements(): ApiRequirements =
+    ApiRequirements(
+        gold = gold, resources = resources.toCountedResourcesList()
+    )
 
-internal fun Resources.toCountedResourcesList(): List<ApiCountedResource> =
-        quantities.map { (type, count) -> ApiCountedResource(count, type) }.sortedBy { it.type }
+internal fun Resources.toCountedResourcesList(): List<CountedResource> =
+        quantities.map { (type, count) -> CountedResource(count, type) }.sortedBy { it.type }
 
-internal fun Military.toApiMilitary(): ApiMilitary = ApiMilitary(nbShields, totalPoints, nbDefeatTokens)
+internal fun Military.toApiMilitary(): ApiMilitary =
+    ApiMilitary(nbShields, totalPoints, nbDefeatTokens)
 
-internal fun Science.toApiScience(): ApiScience = ApiScience(
-    jokers = jokers,
-    nbWheels = getQuantity(ScienceType.WHEEL),
-    nbCompasses = getQuantity(ScienceType.COMPASS),
-    nbTablets = getQuantity(ScienceType.TABLET)
-)
+internal fun Science.toApiScience(): ApiScience =
+    ApiScience(
+        jokers = jokers,
+        nbWheels = getQuantity(ScienceType.WHEEL),
+        nbCompasses = getQuantity(ScienceType.COMPASS),
+        nbTablets = getQuantity(ScienceType.TABLET)
+    )

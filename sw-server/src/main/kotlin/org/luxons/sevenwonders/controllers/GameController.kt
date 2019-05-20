@@ -5,7 +5,7 @@ import org.luxons.sevenwonders.actions.PrepareMoveAction
 import org.luxons.sevenwonders.api.PlayerDTO
 import org.luxons.sevenwonders.api.toDTO
 import org.luxons.sevenwonders.game.Game
-import org.luxons.sevenwonders.game.api.Table
+import org.luxons.sevenwonders.game.api.ApiTable
 import org.luxons.sevenwonders.game.cards.CardBack
 import org.luxons.sevenwonders.lobby.Player
 import org.luxons.sevenwonders.repositories.PlayerRepository
@@ -88,7 +88,7 @@ class GameController @Autowired constructor(
         }
     }
 
-    private fun sendPlayedMoves(gameId: Long, table: Table) =
+    private fun sendPlayedMoves(gameId: Long, table: ApiTable) =
         template.convertAndSend("/topic/game/$gameId/tableUpdates", table)
 
     private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) =

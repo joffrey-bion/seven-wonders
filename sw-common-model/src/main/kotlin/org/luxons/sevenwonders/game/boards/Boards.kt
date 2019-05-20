@@ -1,10 +1,11 @@
-package org.luxons.sevenwonders.game.api
+package org.luxons.sevenwonders.game.boards
 
 import org.luxons.sevenwonders.game.cards.TableCard
+import org.luxons.sevenwonders.game.resources.CountedResource
 import org.luxons.sevenwonders.game.resources.ResourceType
 import org.luxons.sevenwonders.game.wonders.ApiWonder
 
-data class Board(
+data class ApiBoard(
     val playerIndex: Int,
     val wonder: ApiWonder,
     val production: ApiProduction,
@@ -17,17 +18,12 @@ data class Board(
 
 data class ApiRequirements(
     val gold: Int = 0,
-    val resources: List<ApiCountedResource> = emptyList()
+    val resources: List<CountedResource> = emptyList()
 )
 
 data class ApiProduction(
-    val fixedResources: List<ApiCountedResource>,
+    val fixedResources: List<CountedResource>,
     val alternativeResources: Set<Set<ResourceType>>
-)
-
-data class ApiCountedResource(
-    val count: Int,
-    val type: ResourceType
 )
 
 data class ApiMilitary(

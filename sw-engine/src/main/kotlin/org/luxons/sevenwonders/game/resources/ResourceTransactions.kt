@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.game.resources
 
 import org.luxons.sevenwonders.game.Player
-import org.luxons.sevenwonders.game.api.ApiCountedResource
 import org.luxons.sevenwonders.game.api.toCountedResourcesList
 
 fun Map<Provider, Resources>.toTransactions(): ResourceTransactions =
@@ -13,9 +12,9 @@ fun ResourceTransactions.asResources(): Resources = flatMap { it.resources }.asR
 
 fun ResourceTransaction.asResources(): Resources = resources.asResources()
 
-fun List<ApiCountedResource>.asResources(): Resources = map { it.asResources() }.merge()
+fun List<CountedResource>.asResources(): Resources = map { it.asResources() }.merge()
 
-fun ApiCountedResource.asResources(): Resources = resourcesOf(type to count)
+fun CountedResource.asResources(): Resources = resourcesOf(type to count)
 
 internal fun ResourceTransactions.execute(player: Player) = forEach { it.execute(player) }
 
