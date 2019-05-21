@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game.cards
+package org.luxons.sevenwonders.game.api.cards
 
 enum class HandRotationDirection {
     LEFT,

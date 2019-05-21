@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.cards
 
 import org.junit.Test
+import org.luxons.sevenwonders.game.api.cards.HandRotationDirection
 import kotlin.test.assertEquals
 
 class HandRotationDirectionTest {

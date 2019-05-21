@@ -1,5 +1,10 @@
 package org.luxons.sevenwonders.game.resources
 
+import org.luxons.sevenwonders.game.api.resources.Provider
+import org.luxons.sevenwonders.game.api.resources.ResourceTransaction
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+
 class TradingRules internal constructor(private val defaultCost: Int) {
 
     private val costs: MutableMap<ResourceType, MutableMap<Provider, Int>> = mutableMapOf()

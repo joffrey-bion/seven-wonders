@@ -1,10 +1,10 @@
-package org.luxons.sevenwonders.game.wonders
+package org.luxons.sevenwonders.game.api.wonders
 
-import org.luxons.sevenwonders.game.boards.ApiRequirements
-import org.luxons.sevenwonders.game.cards.CardBack
-import org.luxons.sevenwonders.game.cards.PlayabilityLevel
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.boards.ApiRequirements
+import org.luxons.sevenwonders.game.api.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.PlayabilityLevel
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 
 data class ApiWonder(
     val name: String,

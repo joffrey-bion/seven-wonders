@@ -1,8 +1,10 @@
 package org.luxons.sevenwonders.game.resources
 
 import org.junit.Test
-import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
-import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
+import org.luxons.sevenwonders.game.api.resources.Provider
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.game.api.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.game.test.createTransaction
 import kotlin.test.assertEquals
 

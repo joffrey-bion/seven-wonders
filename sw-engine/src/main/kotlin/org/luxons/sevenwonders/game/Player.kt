@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game
 
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.api.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.cards.Card
 

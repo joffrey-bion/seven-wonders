@@ -2,12 +2,13 @@ package org.luxons.sevenwonders.game.cards
 
 import org.junit.Test
 import org.luxons.sevenwonders.game.SimplePlayer
+import org.luxons.sevenwonders.game.api.cards.Color
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.resources.Production
-import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.resources.noTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCard
 import org.luxons.sevenwonders.game.test.testSettings
 import org.luxons.sevenwonders.game.wonders.Wonder

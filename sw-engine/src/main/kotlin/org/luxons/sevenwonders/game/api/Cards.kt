@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.game.api
 
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.cards.HandCard
-import org.luxons.sevenwonders.game.cards.TableCard
+import org.luxons.sevenwonders.game.api.cards.HandCard
+import org.luxons.sevenwonders.game.api.cards.TableCard
 import org.luxons.sevenwonders.game.moves.Move
 
 internal fun Card.toTableCard(lastMove: Move? = null): TableCard =

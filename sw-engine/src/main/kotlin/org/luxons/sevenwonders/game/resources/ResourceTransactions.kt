@@ -1,11 +1,20 @@
 package org.luxons.sevenwonders.game.resources
 
 import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.api.resources.CountedResource
+import org.luxons.sevenwonders.game.api.resources.Provider
+import org.luxons.sevenwonders.game.api.resources.ResourceTransaction
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.api.toCountedResourcesList
 
 fun Map<Provider, Resources>.toTransactions(): ResourceTransactions =
     filterValues { !it.isEmpty() }
-        .map { (p, res) -> ResourceTransaction(p, res.toCountedResourcesList()) }
+        .map { (p, res) ->
+            ResourceTransaction(
+                p,
+                res.toCountedResourcesList()
+            )
+        }
         .toSet()
 
 fun ResourceTransactions.asResources(): Resources = flatMap { it.resources }.asResources()

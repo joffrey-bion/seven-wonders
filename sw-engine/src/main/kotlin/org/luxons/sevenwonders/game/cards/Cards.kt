@@ -1,10 +1,14 @@
 package org.luxons.sevenwonders.game.cards
 
 import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.api.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.CardPlayability
+import org.luxons.sevenwonders.game.api.cards.Color
+import org.luxons.sevenwonders.game.api.cards.PlayabilityLevel
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.effects.Effect
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.noTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.noTransactions
 
 internal data class Card(
     val name: String,
@@ -41,24 +45,27 @@ internal data class Card(
 
 private object Playability {
 
-    internal fun incompatibleWithBoard(): CardPlayability = CardPlayability(
-        isPlayable = false,
-        playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
-    )
+    internal fun incompatibleWithBoard(): CardPlayability =
+        CardPlayability(
+            isPlayable = false,
+            playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
+        )
 
-    internal fun chainable(): CardPlayability = CardPlayability(
-        isPlayable = true,
-        isChainable = true,
-        minPrice = 0,
-        cheapestTransactions = setOf(noTransactions()),
-        playabilityLevel = PlayabilityLevel.CHAINABLE
-    )
+    internal fun chainable(): CardPlayability =
+        CardPlayability(
+            isPlayable = true,
+            isChainable = true,
+            minPrice = 0,
+            cheapestTransactions = setOf(noTransactions()),
+            playabilityLevel = PlayabilityLevel.CHAINABLE
+        )
 
-    internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability = CardPlayability(
-        isPlayable = satisfaction.satisfied,
-        isChainable = false,
-        minPrice = satisfaction.minPrice,
-        cheapestTransactions = satisfaction.cheapestTransactions,
-        playabilityLevel = satisfaction.level
-    )
+    internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability =
+        CardPlayability(
+            isPlayable = satisfaction.satisfied,
+            isChainable = false,
+            minPrice = satisfaction.minPrice,
+            cheapestTransactions = satisfaction.cheapestTransactions,
+            playabilityLevel = satisfaction.level
+        )
 }

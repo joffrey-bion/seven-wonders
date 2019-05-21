@@ -1,23 +1,22 @@
 package org.luxons.sevenwonders.game.api
 
 import org.luxons.sevenwonders.game.Player
-import org.luxons.sevenwonders.game.boards.ApiBoard
-import org.luxons.sevenwonders.game.boards.ApiMilitary
-import org.luxons.sevenwonders.game.boards.ApiProduction
-import org.luxons.sevenwonders.game.boards.ApiRequirements
-import org.luxons.sevenwonders.game.boards.ApiScience
+import org.luxons.sevenwonders.game.api.boards.ApiBoard
+import org.luxons.sevenwonders.game.api.boards.ApiMilitary
+import org.luxons.sevenwonders.game.api.boards.ApiProduction
+import org.luxons.sevenwonders.game.api.boards.ApiRequirements
+import org.luxons.sevenwonders.game.api.boards.ApiScience
 import org.luxons.sevenwonders.game.boards.Military
 import org.luxons.sevenwonders.game.boards.Science
 import org.luxons.sevenwonders.game.boards.ScienceType
 import org.luxons.sevenwonders.game.cards.Requirements
-import org.luxons.sevenwonders.game.cards.TableCard
+import org.luxons.sevenwonders.game.api.cards.TableCard
 import org.luxons.sevenwonders.game.moves.Move
-import org.luxons.sevenwonders.game.moves.MoveType
-import org.luxons.sevenwonders.game.resources.CountedResource
+import org.luxons.sevenwonders.game.api.resources.CountedResource
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.Resources
-import org.luxons.sevenwonders.game.wonders.ApiWonder
-import org.luxons.sevenwonders.game.wonders.ApiWonderStage
+import org.luxons.sevenwonders.game.api.wonders.ApiWonder
+import org.luxons.sevenwonders.game.api.wonders.ApiWonderStage
 import org.luxons.sevenwonders.game.boards.Board as InternalBoard
 import org.luxons.sevenwonders.game.wonders.Wonder as InternalWonder
 import org.luxons.sevenwonders.game.wonders.WonderStage as InternalWonderStage

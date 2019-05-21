@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game.data.definitions
 
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Decks
 import kotlin.random.Random
 
@@ -9,7 +9,10 @@ internal class DeckDefinition(
     val cards: List<CardDefinition>,
     val backImage: String
 ) {
-    fun create(nbPlayers: Int): List<Card> = cards.flatMap { it.create(CardBack(backImage), nbPlayers) }
+    fun create(nbPlayers: Int): List<Card> = cards.flatMap { it.create(
+        CardBack(
+            backImage
+        ), nbPlayers) }
 }
 
 internal class DecksDefinition(

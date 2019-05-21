@@ -7,10 +7,10 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.SimplePlayer
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.api.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.boards.Table
-import org.luxons.sevenwonders.game.cards.CardBack
-import org.luxons.sevenwonders.game.cards.Color
+import org.luxons.sevenwonders.game.api.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.Color
 import org.luxons.sevenwonders.game.test.addCards
 import org.luxons.sevenwonders.game.test.testTable
 import kotlin.test.assertEquals

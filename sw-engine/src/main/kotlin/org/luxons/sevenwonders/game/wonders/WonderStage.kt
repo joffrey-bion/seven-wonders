@@ -2,10 +2,10 @@ package org.luxons.sevenwonders.game.wonders
 
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Requirements
 import org.luxons.sevenwonders.game.effects.Effect
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
 
 internal class WonderStage(
     val requirements: Requirements,

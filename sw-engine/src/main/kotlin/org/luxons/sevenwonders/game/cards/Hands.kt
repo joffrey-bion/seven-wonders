@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.game.cards
 
 import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.api.cards.HandCard
+import org.luxons.sevenwonders.game.api.cards.HandRotationDirection
 import org.luxons.sevenwonders.game.api.toHandCard
 
 internal class Hands(private val hands: List<List<Card>>) {

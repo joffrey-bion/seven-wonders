@@ -5,7 +5,7 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.boards.ScienceType
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.test.createScience
 import org.luxons.sevenwonders.game.test.createScienceProgress
 import org.luxons.sevenwonders.game.test.testBoard

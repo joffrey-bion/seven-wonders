@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.game.effects
 
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
-import org.luxons.sevenwonders.game.cards.Color
+import org.luxons.sevenwonders.game.api.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.api.cards.Color
 
 enum class BoardElementType {
     CARD,

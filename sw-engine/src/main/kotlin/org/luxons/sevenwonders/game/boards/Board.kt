@@ -4,7 +4,7 @@ import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.Age
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.cards.Color
+import org.luxons.sevenwonders.game.api.cards.Color
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.resources.Production
 import org.luxons.sevenwonders.game.resources.TradingRules

@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import java.lang.reflect.Type
 
 internal class ResourceTypesSerializer : JsonSerializer<List<ResourceType>>, JsonDeserializer<List<ResourceType>> {

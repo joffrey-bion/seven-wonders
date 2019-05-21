@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.game.resources
 
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import java.util.EnumSet
 
 data class Production internal constructor(

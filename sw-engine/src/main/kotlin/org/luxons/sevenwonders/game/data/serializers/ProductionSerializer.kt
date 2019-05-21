@@ -8,7 +8,7 @@ import com.google.gson.JsonParseException
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import org.luxons.sevenwonders.game.resources.Production
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
 import java.lang.reflect.Type
 

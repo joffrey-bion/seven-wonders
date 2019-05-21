@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.game.resources
 
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+
 fun emptyResources(): Resources = MutableResources()
 
 fun resourcesOf(singleResource: ResourceType): Resources = mapOf(singleResource to 1).toMutableResources()

@@ -1,7 +1,8 @@
 package org.luxons.sevenwonders.game.cards
 
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.noTransactions
+import org.luxons.sevenwonders.game.api.cards.PlayabilityLevel
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.noTransactions
 
 internal data class RequirementsSatisfaction(
     val satisfied: Boolean,

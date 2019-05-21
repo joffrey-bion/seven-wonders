@@ -3,8 +3,9 @@ package org.luxons.sevenwonders.game.moves
 import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.PlayerMove
+import org.luxons.sevenwonders.game.api.MoveType
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
 
 internal abstract class Move(
     val move: PlayerMove,

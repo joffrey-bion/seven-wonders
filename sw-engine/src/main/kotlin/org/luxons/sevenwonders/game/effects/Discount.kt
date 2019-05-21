@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.game.effects
 
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.resources.Provider
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.Provider
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 
 internal data class Discount(
     val resourceTypes: List<ResourceType> = emptyList(),

@@ -1,9 +1,9 @@
-package org.luxons.sevenwonders.game.boards
+package org.luxons.sevenwonders.game.api.boards
 
-import org.luxons.sevenwonders.game.cards.TableCard
-import org.luxons.sevenwonders.game.resources.CountedResource
-import org.luxons.sevenwonders.game.resources.ResourceType
-import org.luxons.sevenwonders.game.wonders.ApiWonder
+import org.luxons.sevenwonders.game.api.cards.TableCard
+import org.luxons.sevenwonders.game.api.resources.CountedResource
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+import org.luxons.sevenwonders.game.api.wonders.ApiWonder
 
 data class ApiBoard(
     val playerIndex: Int,

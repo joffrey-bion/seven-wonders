@@ -6,7 +6,7 @@ import org.luxons.sevenwonders.api.PlayerDTO
 import org.luxons.sevenwonders.api.toDTO
 import org.luxons.sevenwonders.game.Game
 import org.luxons.sevenwonders.game.api.ApiTable
-import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.CardBack
 import org.luxons.sevenwonders.lobby.Player
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.slf4j.LoggerFactory

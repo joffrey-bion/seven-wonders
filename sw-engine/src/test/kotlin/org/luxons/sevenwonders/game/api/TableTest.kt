@@ -5,7 +5,7 @@ import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.api.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.test.createGuildCards
 import org.luxons.sevenwonders.game.test.testTable
 import kotlin.test.assertEquals

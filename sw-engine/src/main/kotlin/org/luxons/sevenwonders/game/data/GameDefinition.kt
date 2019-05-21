@@ -23,7 +23,7 @@ import org.luxons.sevenwonders.game.effects.ProductionIncrease
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.effects.ScienceProgress
 import org.luxons.sevenwonders.game.resources.Production
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
 
 internal const val LAST_AGE: Age = 3

@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.game.data.definitions
 
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.cards.CardBack
-import org.luxons.sevenwonders.game.cards.Color
+import org.luxons.sevenwonders.game.api.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.Color
 import org.luxons.sevenwonders.game.cards.Requirements
 
 internal class CardDefinition(

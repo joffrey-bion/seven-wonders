@@ -3,9 +3,9 @@ package org.luxons.sevenwonders.game.moves
 import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
 import org.luxons.sevenwonders.game.api.PlayerMove
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.api.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.cards.Color
+import org.luxons.sevenwonders.game.api.cards.Color
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 
 internal class CopyGuildMove(move: PlayerMove, card: Card, player: PlayerContext) : Move(move, card, player) {

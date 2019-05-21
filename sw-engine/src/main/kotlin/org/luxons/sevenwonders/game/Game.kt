@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game
 
 import org.luxons.sevenwonders.game.api.Action
-import org.luxons.sevenwonders.game.cards.HandCard
+import org.luxons.sevenwonders.game.api.cards.HandCard
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
 import org.luxons.sevenwonders.game.api.toApiTable
@@ -10,7 +10,7 @@ import org.luxons.sevenwonders.game.api.toTableCard
 import org.luxons.sevenwonders.game.boards.Board
 import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.cards.Card
-import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.CardBack
 import org.luxons.sevenwonders.game.cards.Decks
 import org.luxons.sevenwonders.game.cards.Hands
 import org.luxons.sevenwonders.game.data.LAST_AGE

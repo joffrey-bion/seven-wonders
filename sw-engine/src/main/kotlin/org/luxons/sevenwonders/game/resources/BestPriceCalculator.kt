@@ -1,6 +1,9 @@
 package org.luxons.sevenwonders.game.resources
 
 import org.luxons.sevenwonders.game.Player
+import org.luxons.sevenwonders.game.api.resources.Provider
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import java.util.EnumSet
 
 internal fun bestSolution(resources: Resources, player: Player): TransactionPlan =

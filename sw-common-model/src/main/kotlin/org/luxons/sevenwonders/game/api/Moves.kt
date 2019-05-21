@@ -1,11 +1,10 @@
 package org.luxons.sevenwonders.game.api
 
-import org.luxons.sevenwonders.game.cards.HandCard
-import org.luxons.sevenwonders.game.cards.TableCard
-import org.luxons.sevenwonders.game.moves.MoveType
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.noTransactions
-import org.luxons.sevenwonders.game.wonders.WonderBuildability
+import org.luxons.sevenwonders.game.api.cards.HandCard
+import org.luxons.sevenwonders.game.api.cards.TableCard
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.noTransactions
+import org.luxons.sevenwonders.game.api.wonders.WonderBuildability
 
 enum class Action(val message: String) {
     PLAY("Pick the card you want to play or discard."),
@@ -28,8 +27,23 @@ data class PlayerTurnInfo(
     val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
 }
 
+data class PlayedMove(
+    val playerIndex: Int,
+    val type: MoveType,
+    val card: TableCard,
+    val transactions: ResourceTransactions
+)
+
 data class PlayerMove(
     val type: MoveType,
     val cardName: String,
     val transactions: ResourceTransactions = noTransactions()
 )
+
+enum class MoveType {
+    PLAY,
+    PLAY_FREE,
+    UPGRADE_WONDER,
+    DISCARD,
+    COPY_GUILD;
+}

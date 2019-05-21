@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.game.cards
 
 import org.junit.Test
+import org.luxons.sevenwonders.game.api.cards.CardBack
 import kotlin.test.assertEquals
 
 class CardBackTest {

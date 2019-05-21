@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game.api
 
-import org.luxons.sevenwonders.game.cards.Color
-import org.luxons.sevenwonders.game.cards.TableCard
+import org.luxons.sevenwonders.game.api.cards.Color
+import org.luxons.sevenwonders.game.api.cards.TableCard
 import org.luxons.sevenwonders.game.test.testCard
 import kotlin.test.Test
 import kotlin.test.assertEquals

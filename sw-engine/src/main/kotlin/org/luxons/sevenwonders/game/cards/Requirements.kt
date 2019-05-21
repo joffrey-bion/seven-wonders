@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.cards
 
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
 import org.luxons.sevenwonders.game.resources.Resources
 import org.luxons.sevenwonders.game.resources.asResources
 import org.luxons.sevenwonders.game.resources.bestSolution

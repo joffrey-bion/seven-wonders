@@ -5,7 +5,7 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.SimplePlayer
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.resourcesOf
 import org.luxons.sevenwonders.game.test.fixedProduction
 import org.luxons.sevenwonders.game.test.testBoard

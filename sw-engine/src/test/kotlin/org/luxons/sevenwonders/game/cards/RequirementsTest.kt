@@ -8,10 +8,10 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.SimplePlayer
 import org.luxons.sevenwonders.game.boards.Table
-import org.luxons.sevenwonders.game.resources.Provider
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.Provider
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.emptyResources
-import org.luxons.sevenwonders.game.resources.noTransactions
+import org.luxons.sevenwonders.game.api.resources.noTransactions
 import org.luxons.sevenwonders.game.test.createRequirements
 import org.luxons.sevenwonders.game.test.createTransactions
 import org.luxons.sevenwonders.game.test.singleBoardPlayer
@@ -43,7 +43,9 @@ class RequirementsTest {
         val board = testBoard(ResourceType.CLAY, boardGold)
         val player = singleBoardPlayer(board)
 
-        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, noTransactions()))
+        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board,
+            noTransactions()
+        ))
 
         val satisfaction = requirements.assess(player)
         if (boardGold >= requiredGold) {
@@ -64,7 +66,9 @@ class RequirementsTest {
         val board = testBoard(initialResource, 0)
         val player = singleBoardPlayer(board)
 
-        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
+        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board,
+            noTransactions()
+        ))
 
         if (initialResource == requiredResource) {
             val satisfaction = requirements.assess(player)
@@ -86,7 +90,9 @@ class RequirementsTest {
         board.production.addFixedResource(producedResource, 1)
         val player = singleBoardPlayer(board)
 
-        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
+        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board,
+            noTransactions()
+        ))
 
         if (producedResource == requiredResource) {
             val satisfaction = requirements.assess(player)

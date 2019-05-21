@@ -4,13 +4,13 @@ import org.luxons.sevenwonders.game.api.Action
 import org.luxons.sevenwonders.game.api.PlayedMove
 import org.luxons.sevenwonders.game.api.PlayerMove
 import org.luxons.sevenwonders.game.api.PlayerTurnInfo
-import org.luxons.sevenwonders.game.cards.HandCard
-import org.luxons.sevenwonders.game.cards.TableCard
+import org.luxons.sevenwonders.game.api.cards.HandCard
+import org.luxons.sevenwonders.game.api.cards.TableCard
 import org.luxons.sevenwonders.game.data.GameDefinition
 import org.luxons.sevenwonders.game.data.LAST_AGE
-import org.luxons.sevenwonders.game.moves.MoveType
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.noTransactions
+import org.luxons.sevenwonders.game.api.MoveType
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.noTransactions
 import org.luxons.sevenwonders.game.test.testCustomizableSettings
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -80,7 +80,9 @@ class GameTest {
         return if (playableCard != null) {
             planMove(turnInfo, MoveType.PLAY, playableCard, playableCard.playability.cheapestTransactions.first())
         } else {
-            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand.first(), noTransactions())
+            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand.first(),
+                noTransactions()
+            )
         }
     }
 
@@ -92,7 +94,9 @@ class GameTest {
         return MoveExpectation(
             turnInfo.playerIndex,
             PlayerMove(MoveType.COPY_GUILD, neighbourGuilds.first().name),
-            PlayedMove(turnInfo.playerIndex, MoveType.COPY_GUILD, neighbourGuilds.first(), noTransactions())
+            PlayedMove(turnInfo.playerIndex, MoveType.COPY_GUILD, neighbourGuilds.first(),
+                noTransactions()
+            )
         )
     }
 
@@ -111,13 +115,6 @@ class GameTest {
 
     private fun HandCard.toPlayedCard(): TableCard =
         TableCard(
-            name,
-            color,
-            requirements,
-            chainParent,
-            chainChildren,
-            image,
-            back,
-            true
+            name, color, requirements, chainParent, chainChildren, image, back, true
         )
 }

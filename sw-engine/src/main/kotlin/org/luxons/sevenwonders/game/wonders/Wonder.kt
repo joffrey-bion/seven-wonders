@@ -2,11 +2,12 @@ package org.luxons.sevenwonders.game.wonders
 
 import org.luxons.sevenwonders.game.Player
 import org.luxons.sevenwonders.game.boards.Board
-import org.luxons.sevenwonders.game.cards.CardBack
-import org.luxons.sevenwonders.game.cards.PlayabilityLevel
+import org.luxons.sevenwonders.game.api.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.PlayabilityLevel
 import org.luxons.sevenwonders.game.cards.RequirementsSatisfaction
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+import org.luxons.sevenwonders.game.api.wonders.WonderBuildability
 
 internal class Wonder(
     val name: String,
@@ -53,10 +54,11 @@ private object Buildability {
         isBuildable = false, playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
     )
 
-    internal fun requirementDependent(satisfaction: RequirementsSatisfaction) = WonderBuildability(
-        isBuildable = satisfaction.satisfied,
-        minPrice = satisfaction.minPrice,
-        cheapestTransactions = satisfaction.cheapestTransactions,
-        playabilityLevel = satisfaction.level
-    )
+    internal fun requirementDependent(satisfaction: RequirementsSatisfaction) =
+        WonderBuildability(
+            isBuildable = satisfaction.satisfied,
+            minPrice = satisfaction.minPrice,
+            cheapestTransactions = satisfaction.cheapestTransactions,
+            playabilityLevel = satisfaction.level
+        )
 }

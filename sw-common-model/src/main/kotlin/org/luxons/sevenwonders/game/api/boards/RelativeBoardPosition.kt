@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.game.boards
+package org.luxons.sevenwonders.game.api.boards
 
 enum class RelativeBoardPosition(private val offset: Int) {
     LEFT(-1),

@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.game.data.definitions
 
 import org.luxons.sevenwonders.game.api.WonderSide
 import org.luxons.sevenwonders.game.cards.Requirements
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.wonders.Wonder
 import org.luxons.sevenwonders.game.wonders.WonderStage
 

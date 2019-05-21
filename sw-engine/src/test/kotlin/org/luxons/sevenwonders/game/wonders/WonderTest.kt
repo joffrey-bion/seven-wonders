@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.game.wonders
 
 import org.junit.Test
-import org.luxons.sevenwonders.game.cards.CardBack
+import org.luxons.sevenwonders.game.api.cards.CardBack
 import org.luxons.sevenwonders.game.test.testWonder
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

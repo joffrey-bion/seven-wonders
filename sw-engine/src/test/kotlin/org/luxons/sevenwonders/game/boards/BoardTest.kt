@@ -9,11 +9,11 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.game.boards.Board.InsufficientFundsException
-import org.luxons.sevenwonders.game.cards.Color
+import org.luxons.sevenwonders.game.api.cards.Color
 import org.luxons.sevenwonders.game.effects.RawPointsIncrease
 import org.luxons.sevenwonders.game.effects.SpecialAbility
 import org.luxons.sevenwonders.game.effects.SpecialAbilityActivation
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.resourcesOf
 import org.luxons.sevenwonders.game.score.ScoreCategory
 import org.luxons.sevenwonders.game.test.addCards

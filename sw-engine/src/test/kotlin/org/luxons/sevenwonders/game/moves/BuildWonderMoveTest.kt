@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.game.moves
 import org.junit.Test
 import org.luxons.sevenwonders.game.PlayerContext
 import org.luxons.sevenwonders.game.Settings
+import org.luxons.sevenwonders.game.api.MoveType
 import org.luxons.sevenwonders.game.boards.Table
 import org.luxons.sevenwonders.game.cards.Card
 import org.luxons.sevenwonders.game.test.createMove

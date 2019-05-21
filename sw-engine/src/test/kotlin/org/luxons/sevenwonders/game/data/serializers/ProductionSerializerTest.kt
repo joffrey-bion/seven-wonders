@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.game.resources.MutableResources
 import org.luxons.sevenwonders.game.resources.Production
-import org.luxons.sevenwonders.game.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType
 import org.luxons.sevenwonders.game.resources.Resources
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

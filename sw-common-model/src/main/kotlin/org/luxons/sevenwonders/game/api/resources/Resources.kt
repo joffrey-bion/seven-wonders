@@ -1,6 +1,6 @@
-package org.luxons.sevenwonders.game.resources
+package org.luxons.sevenwonders.game.api.resources
 
-import org.luxons.sevenwonders.game.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.game.api.boards.RelativeBoardPosition
 
 enum class ResourceType(val symbol: Char) {
     WOOD('W'),

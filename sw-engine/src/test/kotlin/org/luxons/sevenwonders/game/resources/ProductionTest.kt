@@ -2,13 +2,14 @@ package org.luxons.sevenwonders.game.resources
 
 import org.junit.Before
 import org.junit.Test
-import org.luxons.sevenwonders.game.resources.ResourceType.CLAY
-import org.luxons.sevenwonders.game.resources.ResourceType.GLASS
-import org.luxons.sevenwonders.game.resources.ResourceType.LOOM
-import org.luxons.sevenwonders.game.resources.ResourceType.ORE
-import org.luxons.sevenwonders.game.resources.ResourceType.PAPYRUS
-import org.luxons.sevenwonders.game.resources.ResourceType.STONE
-import org.luxons.sevenwonders.game.resources.ResourceType.WOOD
+import org.luxons.sevenwonders.game.api.resources.ResourceType
+import org.luxons.sevenwonders.game.api.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.game.api.resources.ResourceType.GLASS
+import org.luxons.sevenwonders.game.api.resources.ResourceType.LOOM
+import org.luxons.sevenwonders.game.api.resources.ResourceType.ORE
+import org.luxons.sevenwonders.game.api.resources.ResourceType.PAPYRUS
+import org.luxons.sevenwonders.game.api.resources.ResourceType.STONE
+import org.luxons.sevenwonders.game.api.resources.ResourceType.WOOD
 import java.util.EnumSet
 import java.util.HashSet
 import kotlin.test.assertEquals

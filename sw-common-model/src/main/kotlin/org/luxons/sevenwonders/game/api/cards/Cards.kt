@@ -1,7 +1,7 @@
-package org.luxons.sevenwonders.game.cards
+package org.luxons.sevenwonders.game.api.cards
 
-import org.luxons.sevenwonders.game.boards.ApiRequirements
-import org.luxons.sevenwonders.game.resources.ResourceTransactions
+import org.luxons.sevenwonders.game.api.boards.ApiRequirements
+import org.luxons.sevenwonders.game.api.resources.ResourceTransactions
 
 data class TableCard(
     val name: String,
