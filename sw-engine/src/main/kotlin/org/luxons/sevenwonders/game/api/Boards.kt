@@ -75,7 +75,9 @@ internal fun Requirements.toApiRequirements(): ApiRequirements =
     )
 
 internal fun Resources.toCountedResourcesList(): List<CountedResource> =
-        quantities.map { (type, count) -> CountedResource(count, type) }.sortedBy { it.type }
+        quantities.filterValues { it > 0 }
+            .map { (type, count) -> CountedResource(count, type) }
+            .sortedBy { it.type }
 
 internal fun Military.toApiMilitary(): ApiMilitary =
     ApiMilitary(nbShields, totalPoints, nbDefeatTokens)

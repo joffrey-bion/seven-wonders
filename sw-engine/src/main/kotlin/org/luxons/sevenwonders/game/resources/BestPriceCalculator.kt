@@ -119,6 +119,7 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
             bestSolutions.clear()
         }
         // avoid mutating the resources from the transactions
-        bestSolutions.add(boughtResources.mapValues { (_, res) -> res.copy() }.toTransactions())
+        val transactionSet = boughtResources.mapValues { (_, res) -> res.copy() }.toTransactions()
+        bestSolutions.add(transactionSet)
     }
 }

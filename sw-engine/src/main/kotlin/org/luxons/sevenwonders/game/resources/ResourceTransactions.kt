@@ -9,12 +9,7 @@ import org.luxons.sevenwonders.game.api.toCountedResourcesList
 
 fun Map<Provider, Resources>.toTransactions(): ResourceTransactions =
     filterValues { !it.isEmpty() }
-        .map { (p, res) ->
-            ResourceTransaction(
-                p,
-                res.toCountedResourcesList()
-            )
-        }
+        .map { (p, res) -> ResourceTransaction(p, res.toCountedResourcesList()) }
         .toSet()
 
 fun ResourceTransactions.asResources(): Resources = flatMap { it.resources }.asResources()
