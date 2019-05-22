@@ -4,9 +4,9 @@ import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.actions.PrepareMoveAction
 import org.luxons.sevenwonders.api.PlayerDTO
 import org.luxons.sevenwonders.api.toDTO
-import org.luxons.sevenwonders.game.Game
-import org.luxons.sevenwonders.game.api.ApiTable
-import org.luxons.sevenwonders.game.api.cards.CardBack
+import org.luxons.sevenwonders.engine.Game
+import org.luxons.sevenwonders.model.ApiTable
+import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.lobby.Player
 import org.luxons.sevenwonders.repositories.PlayerRepository
 import org.slf4j.LoggerFactory

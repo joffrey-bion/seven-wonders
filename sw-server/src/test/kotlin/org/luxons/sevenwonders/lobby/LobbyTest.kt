@@ -8,8 +8,8 @@ import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.game.api.CustomizableSettings
-import org.luxons.sevenwonders.game.data.GameDefinition
+import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.lobby.Lobby.GameAlreadyStartedException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerListMismatchException
 import org.luxons.sevenwonders.lobby.Lobby.PlayerNameAlreadyUsedException

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.hildan.jackstomp.JackstompClient
 import org.luxons.sevenwonders.config.SEVEN_WONDERS_WS_ENDPOINT
-import org.luxons.sevenwonders.game.resources.MutableResources
-import org.luxons.sevenwonders.game.resources.Resources
+import org.luxons.sevenwonders.engine.resources.MutableResources
+import org.luxons.sevenwonders.engine.resources.Resources
 import org.springframework.messaging.converter.MappingJackson2MessageConverter
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeoutException

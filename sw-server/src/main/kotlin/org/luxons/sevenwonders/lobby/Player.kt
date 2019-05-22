@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.lobby
 
 import org.luxons.sevenwonders.errors.ApiMisuseException
-import org.luxons.sevenwonders.game.Game
+import org.luxons.sevenwonders.engine.Game
 
 class Player(
     val username: String,

@@ -4,8 +4,8 @@ import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.actions.UpdateSettingsAction
-import org.luxons.sevenwonders.game.api.CustomizableSettings
-import org.luxons.sevenwonders.game.api.WonderSidePickMethod.ALL_A
+import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.WonderSidePickMethod.ALL_A
 import org.luxons.sevenwonders.lobby.Lobby
 import org.luxons.sevenwonders.lobby.Player
 import org.luxons.sevenwonders.lobby.PlayerIsNotOwnerException

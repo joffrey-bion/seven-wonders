@@ -8,7 +8,7 @@ import org.luxons.sevenwonders.actions.JoinGameAction
 import org.luxons.sevenwonders.api.LobbyDTO
 import org.luxons.sevenwonders.api.PlayerDTO
 import org.luxons.sevenwonders.errors.ErrorDTO
-import org.luxons.sevenwonders.game.api.PlayerTurnInfo
+import org.luxons.sevenwonders.model.PlayerTurnInfo
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue

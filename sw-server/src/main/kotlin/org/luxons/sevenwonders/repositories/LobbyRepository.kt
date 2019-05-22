@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.repositories
 
-import org.luxons.sevenwonders.game.data.GameDefinition
+import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.lobby.Lobby
 import org.luxons.sevenwonders.lobby.Player
 import org.springframework.beans.factory.annotation.Autowired

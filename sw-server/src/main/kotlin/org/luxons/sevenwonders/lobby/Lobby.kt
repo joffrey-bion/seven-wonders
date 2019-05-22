@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.lobby
 
-import org.luxons.sevenwonders.game.Game
-import org.luxons.sevenwonders.game.api.CustomizableSettings
-import org.luxons.sevenwonders.game.data.GameDefinition
+import org.luxons.sevenwonders.engine.Game
+import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.engine.data.GameDefinition
 
 enum class State {
     LOBBY, PLAYING
@@ -16,7 +16,8 @@ class Lobby(
 ) {
     private val players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
 
-    var settings: CustomizableSettings = CustomizableSettings()
+    var settings: CustomizableSettings =
+        CustomizableSettings()
 
     var state = State.LOBBY
         private set
