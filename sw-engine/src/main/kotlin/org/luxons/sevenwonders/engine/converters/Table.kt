@@ -1,12 +1,12 @@
 package org.luxons.sevenwonders.engine.converters
 
 import org.luxons.sevenwonders.engine.SimplePlayer
-import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.moves.Move
-import org.luxons.sevenwonders.model.ApiTable
 import org.luxons.sevenwonders.model.PlayedMove
+import org.luxons.sevenwonders.engine.boards.Table
+import org.luxons.sevenwonders.model.GameState
 
-internal fun Table.toApiTable(): ApiTable = ApiTable(
+internal fun Table.toGameState(): GameState = GameState(
     boards = boards.mapIndexed { i, b -> b.toApiBoard(SimplePlayer(i, this), lastPlayedMoves.getOrNull(i)) },
     currentAge = currentAge,
     handRotationDirection = handRotationDirection,

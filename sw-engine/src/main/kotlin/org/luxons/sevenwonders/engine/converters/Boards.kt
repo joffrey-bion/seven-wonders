@@ -1,26 +1,26 @@
 package org.luxons.sevenwonders.engine.converters
 
 import org.luxons.sevenwonders.engine.Player
-import org.luxons.sevenwonders.engine.boards.Military
-import org.luxons.sevenwonders.engine.boards.Science
 import org.luxons.sevenwonders.engine.boards.ScienceType
-import org.luxons.sevenwonders.engine.cards.Requirements
 import org.luxons.sevenwonders.engine.moves.Move
-import org.luxons.sevenwonders.engine.resources.Production
 import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.model.MoveType
-import org.luxons.sevenwonders.model.boards.ApiBoard
-import org.luxons.sevenwonders.model.boards.ApiMilitary
-import org.luxons.sevenwonders.model.boards.ApiProduction
-import org.luxons.sevenwonders.model.boards.ApiRequirements
-import org.luxons.sevenwonders.model.boards.ApiScience
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.resources.CountedResource
-import org.luxons.sevenwonders.model.wonders.ApiWonder
-import org.luxons.sevenwonders.model.wonders.ApiWonderStage
 import org.luxons.sevenwonders.engine.boards.Board as InternalBoard
+import org.luxons.sevenwonders.engine.boards.Military as InternalMilitary
+import org.luxons.sevenwonders.engine.boards.Science as InternalScience
+import org.luxons.sevenwonders.engine.cards.Requirements as InternalRequirements
+import org.luxons.sevenwonders.engine.resources.Production as InternalProduction
 import org.luxons.sevenwonders.engine.wonders.Wonder as InternalWonder
 import org.luxons.sevenwonders.engine.wonders.WonderStage as InternalWonderStage
+import org.luxons.sevenwonders.model.boards.Board as ApiBoard
+import org.luxons.sevenwonders.model.boards.Military as ApiMilitary
+import org.luxons.sevenwonders.model.boards.Production as ApiProduction
+import org.luxons.sevenwonders.model.boards.Requirements as ApiRequirements
+import org.luxons.sevenwonders.model.boards.Science as ApiScience
+import org.luxons.sevenwonders.model.wonders.ApiWonder as ApiWonder
+import org.luxons.sevenwonders.model.wonders.ApiWonderStage as ApiWonderStage
 
 internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): ApiBoard =
     ApiBoard(
@@ -45,34 +45,33 @@ internal fun List<TableCard>.toColumns(): List<List<TableCard>> {
     return listOf(resourceCardsCol) + otherColsSorted
 }
 
-internal fun InternalWonder.toApiWonder(player: Player, lastMove: Move?): ApiWonder =
-    ApiWonder(
-        name = name,
-        initialResource = initialResource,
-        stages = stages.map { it.toApiWonderStage(lastBuiltStage == it, lastMove) },
-        image = image,
-        nbBuiltStages = nbBuiltStages,
-        buildability = computeBuildabilityBy(player)
-    )
-
-internal fun InternalWonderStage.toApiWonderStage(
-    isLastBuiltStage: Boolean,
-    lastMove: Move?
-): ApiWonderStage = ApiWonderStage(
-    cardBack = cardBack,
-    isBuilt = isBuilt,
-    requirements = requirements.toApiRequirements(),
-    builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage
+internal fun InternalWonder.toApiWonder(player: Player, lastMove: Move?): ApiWonder = ApiWonder(
+    name = name,
+    initialResource = initialResource,
+    stages = stages.map { it.toApiWonderStage(lastBuiltStage == it, lastMove) },
+    image = image,
+    nbBuiltStages = nbBuiltStages,
+    buildability = computeBuildabilityBy(player)
 )
 
-internal fun Production.toApiProduction(): ApiProduction =
-    ApiProduction(
-        fixedResources = getFixedResources().toCountedResourcesList(), alternativeResources = getAlternativeResources()
+internal fun InternalWonderStage.toApiWonderStage(isLastBuiltStage: Boolean, lastMove: Move?): ApiWonderStage =
+    ApiWonderStage(
+        cardBack = cardBack,
+        isBuilt = isBuilt,
+        requirements = requirements.toApiRequirements(),
+        builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage
     )
 
-internal fun Requirements.toApiRequirements(): ApiRequirements =
+internal fun InternalProduction.toApiProduction(): ApiProduction =
+    ApiProduction(
+        fixedResources = getFixedResources().toCountedResourcesList(),
+        alternativeResources = getAlternativeResources()
+    )
+
+internal fun InternalRequirements.toApiRequirements(): ApiRequirements =
     ApiRequirements(
-        gold = gold, resources = resources.toCountedResourcesList()
+        gold = gold,
+        resources = resources.toCountedResourcesList()
     )
 
 internal fun Resources.toCountedResourcesList(): List<CountedResource> =
@@ -80,10 +79,9 @@ internal fun Resources.toCountedResourcesList(): List<CountedResource> =
             .map { (type, count) -> CountedResource(count, type) }
             .sortedBy { it.type }
 
-internal fun Military.toApiMilitary(): ApiMilitary =
-    ApiMilitary(nbShields, totalPoints, nbDefeatTokens)
+internal fun InternalMilitary.toApiMilitary(): ApiMilitary = ApiMilitary(nbShields, totalPoints, nbDefeatTokens)
 
-internal fun Science.toApiScience(): ApiScience =
+internal fun InternalScience.toApiScience(): ApiScience =
     ApiScience(
         jokers = jokers,
         nbWheels = getQuantity(ScienceType.WHEEL),

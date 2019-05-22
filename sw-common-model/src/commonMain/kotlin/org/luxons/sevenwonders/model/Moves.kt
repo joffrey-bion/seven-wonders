@@ -16,7 +16,7 @@ enum class Action(val message: String) {
 
 data class PlayerTurnInfo(
     val playerIndex: Int,
-    val table: ApiTable,
+    val table: GameState,
     val action: Action,
     val hand: List<HandCard>,
     val preparedMove: PlayedMove?,

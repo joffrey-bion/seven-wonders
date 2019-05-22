@@ -1,12 +1,12 @@
 package org.luxons.sevenwonders.model.cards
 
-import org.luxons.sevenwonders.model.boards.ApiRequirements
+import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
 data class TableCard(
     val name: String,
     val color: Color,
-    val requirements: ApiRequirements,
+    val requirements: Requirements,
     val chainParent: String?,
     val chainChildren: List<String>,
     val image: String,
@@ -21,7 +21,7 @@ data class TableCard(
 data class HandCard(
     val name: String,
     val color: Color,
-    val requirements: ApiRequirements,
+    val requirements: Requirements,
     val chainParent: String?,
     val chainChildren: List<String>,
     val image: String,

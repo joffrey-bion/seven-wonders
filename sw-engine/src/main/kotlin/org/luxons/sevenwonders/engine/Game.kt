@@ -5,7 +5,7 @@ import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.cards.Decks
 import org.luxons.sevenwonders.engine.cards.Hands
-import org.luxons.sevenwonders.engine.converters.toApiTable
+import org.luxons.sevenwonders.engine.converters.toGameState
 import org.luxons.sevenwonders.engine.converters.toPlayedMove
 import org.luxons.sevenwonders.engine.converters.toTableCard
 import org.luxons.sevenwonders.engine.data.LAST_AGE
@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.moves.resolve
 import org.luxons.sevenwonders.engine.score.ScoreBoard
 import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.ApiTable
+import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.cards.CardBack
@@ -54,7 +54,7 @@ class Game internal constructor(
 
         return PlayerTurnInfo(
             playerIndex = player.index,
-            table = table.toApiTable(),
+            table = table.toGameState(),
             action = action,
             hand = hand,
             preparedMove = preparedMoves[player.index]?.toPlayedMove(),
@@ -107,7 +107,7 @@ class Game internal constructor(
      * had not prepared their moves (unless these players had nothing to do). To avoid this, please check if everyone
      * is ready using [allPlayersPreparedTheirMove].
      */
-    fun playTurn(): ApiTable {
+    fun playTurn(): GameState {
         makeMoves()
         if (endOfAgeReached()) {
             executeEndOfAgeEvents()
@@ -118,7 +118,7 @@ class Game internal constructor(
             rotateHandsIfRelevant()
             startNewTurn()
         }
-        return table.toApiTable()
+        return table.toGameState()
     }
 
     private fun makeMoves() {

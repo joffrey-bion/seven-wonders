@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.model.wonders
 
-import org.luxons.sevenwonders.model.boards.ApiRequirements
+import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.PlayabilityLevel
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
@@ -18,7 +18,7 @@ data class ApiWonder(
 data class ApiWonderStage(
     val cardBack: CardBack?,
     val isBuilt: Boolean,
-    val requirements: ApiRequirements,
+    val requirements: Requirements,
     val builtDuringLastMove: Boolean
 )
 
