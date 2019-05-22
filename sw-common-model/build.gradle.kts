@@ -7,7 +7,7 @@ kotlin {
     jvm()
     js()
     sourceSets {
-        val commonMain by getting  {
+        val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
             }
