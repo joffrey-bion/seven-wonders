@@ -4,6 +4,17 @@ plugins {
 
 apply plugin: 'base'
 
+// Fix for "Could not find org.nodejs:node:10.15.3"
+// Gradle node plugin + Gradle metadata seems to need this fix
+// https://github.com/JetBrains/kotlin-native/issues/1612
+repositories.whenObjectAdded {
+    if (it instanceof IvyArtifactRepository) {
+        metadataSources {
+            artifact()
+        }
+    }
+}
+
 buildDir = 'build'
 
 node {

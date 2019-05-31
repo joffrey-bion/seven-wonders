@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.model.cards
 
+import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
@@ -27,6 +28,11 @@ data class HandCard(
     val image: String,
     val back: CardBack,
     val playability: CardPlayability
+)
+
+class PreparedCard(
+    val player: PlayerDTO,
+    val cardBack: CardBack
 )
 
 data class CardBack(val image: String)

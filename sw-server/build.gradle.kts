@@ -28,9 +28,11 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
+    testImplementation(project(":sw-client"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.hildan.jackstomp:jackstomp:2.0.0")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M1")
 }
 
 // packages the frontend app within the jar
