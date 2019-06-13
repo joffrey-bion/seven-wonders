@@ -29,7 +29,7 @@ class WebSocketConfig @Autowired constructor(private val topicSubscriptionInterc
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint(SEVEN_WONDERS_WS_ENDPOINT)
             .setHandshakeHandler(handshakeHandler())
-            .setAllowedOrigins("http://localhost:3000") // to allow frontend server proxy requests in dev mode
+            .setAllowedOrigins("*") // to allow any client to use the API
             .withSockJS()
     }
 
