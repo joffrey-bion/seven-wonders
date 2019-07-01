@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.3.31"
+    val kotlinVersion = "1.3.40"
     kotlin("jvm") version kotlinVersion apply false
     kotlin("multiplatform") version kotlinVersion apply false
     kotlin("plugin.spring") version kotlinVersion apply false
