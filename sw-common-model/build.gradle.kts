@@ -5,7 +5,9 @@ plugins {
 
 kotlin {
     jvm()
-    js()
+    js {
+        browser() // necessary for local dependency from JS UI module
+    }
     sourceSets {
         val commonMain by getting {
             dependencies {
