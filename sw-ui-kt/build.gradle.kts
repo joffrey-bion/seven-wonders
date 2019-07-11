@@ -19,12 +19,17 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(project(":sw-client"))
 
-                implementation("org.jetbrains:kotlin-react:16.6.0-pre.78-kotlin-1.3.41")
-                implementation(npm("react", "16.8.3"))
-                implementation("org.jetbrains:kotlin-react-dom:16.6.0-pre.78-kotlin-1.3.41")
-                implementation(npm("react-dom", "16.8.3"))
+                implementation("org.jetbrains:kotlin-react:16.8.6-pre.80-kotlin-1.3.41")
+                implementation(npm("react", "16.8.6"))
+
+                implementation("org.jetbrains:kotlin-react-dom:16.8.6-pre.80-kotlin-1.3.41")
+                implementation(npm("react-dom", "16.8.6"))
+
+                implementation("org.jetbrains:kotlin-react-redux:5.0.7-pre.80-kotlin-1.3.41")
+                implementation(npm("react-redux", "5.0.7"))
+                implementation(npm("redux", "4.0.4"))
+
                 // implementation(npm("@blueprintjs/core", "3.15.1"))
-                // implementation(npm("react-redux", "5.0.7"))
             }
         }
     }
@@ -34,10 +39,13 @@ val staticFilesBuildDir = "${project.buildDir.path}/static"
 val staticFilesSrcDir = "$projectDir/src/main/web"
 
 tasks {
-    "compileKotlinJs"(KotlinJsCompile::class)  {
+    compileKotlinJs {
         kotlinOptions.metaInfo = true
         kotlinOptions.outputFile = "${project.buildDir.path}/js/${project.name}.js"
         kotlinOptions.sourceMap = true
+
+        // non-plain module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
+        // because the Kotlin wrapper didn't specify @JsNonModule
         kotlinOptions.moduleKind = "commonjs"
         kotlinOptions.main = "call"
     }
