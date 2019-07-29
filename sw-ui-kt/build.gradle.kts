@@ -29,6 +29,9 @@ kotlin {
                 implementation(npm("react-redux", "5.0.7"))
                 implementation(npm("redux", "4.0.4"))
 
+                // seems to be required by "kotlin-extensions" JS lib
+                implementation(npm("core-js", "3.1.4"))
+
                 // implementation(npm("@blueprintjs/core", "3.15.1"))
             }
         }
@@ -41,9 +44,7 @@ val staticFilesSrcDir = "$projectDir/src/main/web"
 tasks {
     compileKotlinJs {
         kotlinOptions.metaInfo = true
-        kotlinOptions.outputFile = "${project.buildDir.path}/js/${project.name}.js"
         kotlinOptions.sourceMap = true
-
         // non-plain module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
         // because the Kotlin wrapper didn't specify @JsNonModule
         kotlinOptions.moduleKind = "commonjs"
