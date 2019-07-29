@@ -19,14 +19,16 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(project(":sw-client"))
 
-                implementation("org.jetbrains:kotlin-react:16.8.6-pre.80-kotlin-1.3.41")
-                implementation(npm("react", "16.8.6"))
+                val kotlinWrappersVersion = "pre.80-kotlin-1.3.41"
+                val reactVersion = "16.8.6"
+                implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
+                implementation(npm("react", reactVersion))
+                implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
+                implementation(npm("react-dom", reactVersion))
 
-                implementation("org.jetbrains:kotlin-react-dom:16.8.6-pre.80-kotlin-1.3.41")
-                implementation(npm("react-dom", "16.8.6"))
-
-                implementation("org.jetbrains:kotlin-react-redux:5.0.7-pre.80-kotlin-1.3.41")
-                implementation(npm("react-redux", "5.0.7"))
+                val reactReduxVersion = "5.0.7"
+                implementation("org.jetbrains:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
+                implementation(npm("react-redux", reactReduxVersion))
                 implementation(npm("redux", "4.0.4"))
 
                 // seems to be required by "kotlin-extensions" JS lib
