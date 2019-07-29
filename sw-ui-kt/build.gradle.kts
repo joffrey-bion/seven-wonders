@@ -34,6 +34,10 @@ kotlin {
                 implementation("org.jetbrains:kotlin-react-router-dom:4.3.1-$kotlinWrappersVersion")
                 implementation(npm("react-router-dom", "4.3.1"))
 
+                implementation("org.jetbrains:kotlin-styled:1.0.0-$kotlinWrappersVersion")
+                implementation(npm("styled-components", "3.4.9"))
+                implementation(npm("inline-style-prefixer", "5.1.0"))
+
                 // seems to be required by "kotlin-extensions" JS lib
                 implementation(npm("core-js", "3.1.4"))
 
