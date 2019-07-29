@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui
 
+import org.luxons.sevenwonders.ui.components.application
 import org.luxons.sevenwonders.ui.redux.configureStore
 import org.w3c.dom.Element
 import react.RBuilder
@@ -23,16 +24,7 @@ private fun initializeAndRender(rootElement: Element) {
     val store = configureStore()
     render(rootElement) {
         provider(store) {
-            app()
+            application()
         }
-    }
-}
-
-fun RBuilder.app() = div {
-    h1 {
-        +"Seven Wonders"
-    }
-    p {
-        +"Great app!"
     }
 }

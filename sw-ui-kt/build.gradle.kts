@@ -31,6 +31,9 @@ kotlin {
                 implementation(npm("react-redux", reactReduxVersion))
                 implementation(npm("redux", "4.0.4"))
 
+                implementation("org.jetbrains:kotlin-react-router-dom:4.3.1-$kotlinWrappersVersion")
+                implementation(npm("react-router-dom", "4.3.1"))
+
                 // seems to be required by "kotlin-extensions" JS lib
                 implementation(npm("core-js", "3.1.4"))
 
