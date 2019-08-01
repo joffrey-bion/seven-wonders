@@ -16,7 +16,5 @@ fun RBuilder.home() = styledDiv {
 
     img(src = LOGO, alt = "Seven Wonders") {}
 
-    p {
-        +"Great app!"
-    }
+    chooseNameForm {}
 }
