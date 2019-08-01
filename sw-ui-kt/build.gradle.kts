@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfigWriter
 
 plugins {
     kotlin("js")
@@ -12,14 +11,7 @@ repositories {
 
 kotlin {
     target {
-        browser {
-            runTask {
-                finalizedBy("copyStatic")
-                devServer = KotlinWebpackConfigWriter.DevServer(
-                    contentBase = listOf(destinationDirectory!!.absolutePath)
-                )
-            }
-        }
+        browser()
     }
     sourceSets {
         main {
@@ -46,8 +38,6 @@ kotlin {
     }
 }
 
-val staticFilesSrcDir = "$projectDir/src/main/web"
-
 tasks {
     compileKotlinJs {
         kotlinOptions.metaInfo = true
@@ -58,10 +48,7 @@ tasks {
         kotlinOptions.main = "call"
     }
 
-    register<Copy>("copyStatic") {
-        dependsOn("assemble")
-        from(staticFilesSrcDir)
-
+    "processResources"(ProcessResources::class) {
         val webpack = project.tasks.withType(KotlinWebpack::class).first()
         into(webpack.destinationDirectory!!)
 
@@ -71,9 +58,5 @@ tasks {
         filesMatching("*.html") {
             expand("bundle" to bundleFile, "publicPath" to publicPath)
         }
-    }
-
-    build {
-        dependsOn("copyStatic")
     }
 }
