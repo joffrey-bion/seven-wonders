@@ -43,7 +43,12 @@ kotlin {
                 // seems to be required by "kotlin-extensions" JS lib
                 implementation(npm("core-js", "3.1.4"))
 
-                // implementation(npm("@blueprintjs/core", "3.15.1"))
+                implementation(npm("@blueprintjs/core", "3.15.1"))
+            }
+        }
+        test {
+            dependencies {
+                implementation(kotlin("test-js"))
             }
         }
     }

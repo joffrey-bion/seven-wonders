@@ -94,10 +94,8 @@ class SevenWondersSession(private val stompSession: KrossbowSession) {
     suspend fun watchGameStart(gameId: Long): SevenWondersSubscription<Unit> =
         stompSession.subscribe<Unit>("/topic/lobby/$gameId/started").ignoreHeaders()
 
-    suspend fun startGame(gameId: Long) {
-        val sendDestination = "/app/lobby/startGame"
-        val receiveDestination = "/topic/lobby/$gameId/started"
-        stompSession.request<Unit>(sendDestination, receiveDestination)
+    suspend fun startGame() {
+        stompSession.send("/app/lobby/startGame")
     }
 
     suspend fun watchPlayerReady(gameId: Long): SevenWondersSubscription<String> =

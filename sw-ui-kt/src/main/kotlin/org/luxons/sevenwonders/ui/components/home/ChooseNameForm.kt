@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.ui.components.home
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
-import org.luxons.sevenwonders.ui.redux.ChooseUserName
+import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import react.RBuilder
 import react.RClass
@@ -37,5 +37,5 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
 }
 
 val chooseNameForm: RClass<RProps> = connectDispatch(ChooseNameForm::class) { dispatch, _ ->
-    chooseUsername = { name -> dispatch(ChooseUserName(name)) }
+    chooseUsername = { name -> dispatch(RequestChooseName(name)) }
 }

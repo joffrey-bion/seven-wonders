@@ -69,7 +69,7 @@ class SevenWondersTest {
             val outsiderSession = newPlayer("Outsider")
             val (started) = outsiderSession.watchGameStart(lobby.id)
 
-            ownerSession.startGame(lobby.id)
+            ownerSession.startGame()
             val nothing = withTimeoutOrNull(30) { started.receive() }
             assertNull(nothing)
             disconnect(ownerSession, session1, session2, outsiderSession)
@@ -126,7 +126,14 @@ class SevenWondersTest {
         val session3 = newPlayer("Player3")
         session3.joinGame(lobby.id)
 
-        session1.startGame(lobby.id)
+        val (gameStart1) = session1.watchGameStart(lobby.id)
+        val (gameStart2) = session2.watchGameStart(lobby.id)
+        val (gameStart3) = session3.watchGameStart(lobby.id)
+        session1.startGame()
+
+        withTimeout(500) { gameStart1.receive() }
+        withTimeout(500) { gameStart2.receive() }
+        withTimeout(500) { gameStart3.receive() }
 
         val (turns1) = session1.watchTurns()
         val (turns2) = session2.watchTurns()
@@ -134,9 +141,9 @@ class SevenWondersTest {
         session1.sayReady()
         session2.sayReady()
         session3.sayReady()
-        val turn1 = turns1.receive()
-        val turn2 = turns2.receive()
-        val turn3 = turns3.receive()
+        val turn1 = withTimeout(500) { turns1.receive() }
+        val turn2 = withTimeout(500) { turns2.receive() }
+        val turn3 = withTimeout(500) { turns3.receive() }
         assertNotNull(turn1)
         assertNotNull(turn2)
         assertNotNull(turn3)
