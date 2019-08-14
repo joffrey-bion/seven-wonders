@@ -31,11 +31,12 @@ kotlin {
                 implementation(npm("react-redux", reactReduxVersion))
                 implementation(npm("redux", "4.0.4"))
 
-                implementation("org.jetbrains:kotlin-react-router-dom:4.3.1-$kotlinWrappersVersion")
-                implementation(npm("react-router-dom", "4.3.1"))
+                val reactRouterDomVersion = "4.3.1"
+                implementation("org.jetbrains:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
+                implementation(npm("react-router-dom", reactRouterDomVersion))
 
                 implementation("org.jetbrains:kotlin-styled:1.0.0-$kotlinWrappersVersion")
-                implementation(npm("styled-components", "3.4.9"))
+                implementation(npm("styled-components", "4.3.2"))
                 implementation(npm("inline-style-prefixer", "5.1.0"))
 
                 // seems to be required by "kotlin-extensions" JS lib
@@ -51,10 +52,15 @@ tasks {
     compileKotlinJs {
         kotlinOptions.metaInfo = true
         kotlinOptions.sourceMap = true
-        // non-plain module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
+        // commonjs module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
         // because the Kotlin wrapper didn't specify @JsNonModule
         kotlinOptions.moduleKind = "commonjs"
         kotlinOptions.main = "call"
+    }
+    compileTestKotlinJs {
+        // commonjs module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
+        // because the Kotlin wrapper didn't specify @JsNonModule
+        kotlinOptions.moduleKind = "commonjs"
     }
 
     "processResources"(ProcessResources::class) {
