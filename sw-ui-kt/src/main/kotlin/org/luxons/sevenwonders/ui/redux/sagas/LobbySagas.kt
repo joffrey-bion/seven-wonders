@@ -1,33 +1,39 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
 import org.luxons.sevenwonders.ui.redux.RequestStartGameAction
-import org.luxons.sevenwonders.ui.redux.SwState
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
-import redux.RAction
-import redux.WrapperAction
 
-fun lobbySaga(session: SevenWondersSession, lobbyId: Long) = saga<SwState, RAction, WrapperAction> {
-    fork(watchLobbyUpdates(session, lobbyId))
-    fork(watchGameStart(session, lobbyId))
-    fork(startGame(session))
+suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession, lobbyId: Long) {
+    coroutineScope {
+        launch { watchLobbyUpdates(session, lobbyId) }
+        launch { handleGameStart(session, lobbyId) }
+        launch { watchStartGame(session) }
+    }
 }
 
-private fun watchLobbyUpdates(session: SevenWondersSession, lobbyId: Long) = saga<SwState, RAction, WrapperAction> {
+private suspend fun SwSagaContext.watchLobbyUpdates(session: SevenWondersSession, lobbyId: Long) {
     val lobbyUpdates = session.watchLobbyUpdates(lobbyId)
     for (lobby in lobbyUpdates.messages) {
         dispatch(UpdateLobbyAction(lobby))
     }
 }
 
-private fun watchGameStart(session: SevenWondersSession, lobbyId: Long) = saga<SwState, RAction, WrapperAction> {
+private suspend fun SwSagaContext.handleGameStart(session: SevenWondersSession, lobbyId: Long) {
     val gameStartSubscription = session.watchGameStart(lobbyId)
     gameStartSubscription.messages.receive()
     dispatch(EnterGameAction(lobbyId))
-    // TODO push /game/{lobby.id}
+
+    coroutineScope {
+        launch { gameSaga(session, lobbyId) }
+
+        // TODO push /game/{lobby.id}
+    }
 }
 
-private fun startGame(session: SevenWondersSession) = actionHandlerSaga<SwState, RAction, WrapperAction, RequestStartGameAction> {
+private suspend fun SwSagaContext.watchStartGame(session: SevenWondersSession) = onEach<RequestStartGameAction> {
     session.startGame()
 }

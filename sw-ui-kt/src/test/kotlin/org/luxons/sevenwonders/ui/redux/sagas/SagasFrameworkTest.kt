@@ -47,10 +47,9 @@ class SagaContextTest {
 
         val redux = configureTestStore(State("initial"))
 
-        val saga = saga<State, RAction, WrapperAction> {
+        redux.sagas.runSaga {
             dispatch(UpdateData("Bob"))
         }
-        redux.sagas.runSaga(saga)
 
         assertEquals(State("Bob"), redux.store.getState(), "state is not as expected")
     }
@@ -59,16 +58,15 @@ class SagaContextTest {
     fun next(): dynamic = GlobalScope.promise {
         val redux = configureTestStore(State("initial"))
 
-        val saga = saga<State, RAction, WrapperAction> {
+        val job = redux.sagas.launchSaga(this) {
             val action = next<SideEffectAction>()
             dispatch(UpdateData("effect-${action.data}"))
         }
-        redux.sagas.startSaga(saga)
 
         assertEquals(State("initial"), redux.store.getState())
 
         redux.store.dispatch(SideEffectAction("data"))
-        delay(50)
+        job.join()
         assertEquals(State("effect-data"), redux.store.getState())
     }
 
@@ -77,12 +75,11 @@ class SagaContextTest {
 
         val redux = configureTestStore(State("initial"))
 
-        val saga = saga<State, RAction, WrapperAction> {
+        val job = redux.sagas.launchSaga(this) {
             onEach<SideEffectAction> {
                 dispatch(UpdateData("effect-${it.data}"))
             }
         }
-        val job = redux.sagas.startSaga(saga)
 
         assertEquals(State("initial"), redux.store.getState())
 

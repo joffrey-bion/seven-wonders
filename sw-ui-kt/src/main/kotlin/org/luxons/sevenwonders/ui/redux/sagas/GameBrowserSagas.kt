@@ -1,28 +1,29 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.ui.redux.EnterLobbyAction
 import org.luxons.sevenwonders.ui.redux.RequestCreateGameAction
 import org.luxons.sevenwonders.ui.redux.RequestJoinGameAction
-import org.luxons.sevenwonders.ui.redux.SwState
 import org.luxons.sevenwonders.ui.redux.UpdateGameListAction
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
-import redux.RAction
-import redux.WrapperAction
+import kotlin.coroutines.coroutineContext
 
-fun gameBrowserSaga(session: SevenWondersSession) = saga<SwState, RAction, WrapperAction> {
-    val watchGamesJob = fork(watchGames(session))
-    val watchCreateGameJob = fork(watchCreateGame(session))
-    val watchJoinGameJob = fork(watchJoinGame(session))
+suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
+    coroutineScope {
+        launch { watchGames(session) }
+        launch { watchCreateGame(session) }
+        launch { watchJoinGame(session) }
+    }
 }
 
-private fun watchGames(session: SevenWondersSession) = saga<SwState, RAction, WrapperAction> {
+private suspend fun SwSagaContext.watchGames(session: SevenWondersSession) {
     val gamesSubscription = session.watchGames()
     for (lobbies in gamesSubscription.messages) {
-        if (!isActive) {
+        if (!coroutineContext.isActive) {
             gamesSubscription.unsubscribe()
             break
         }
@@ -30,23 +31,26 @@ private fun watchGames(session: SevenWondersSession) = saga<SwState, RAction, Wr
     }
 }
 
-private fun watchCreateGame(session: SevenWondersSession) =
-        actionHandlerSaga<SwState, RAction, WrapperAction, RequestCreateGameAction> {
+private suspend fun SwSagaContext.watchCreateGame(session: SevenWondersSession) =
+        onEach<RequestCreateGameAction> {
             val lobby = session.createGame(it.gameName)
             handleGameJoined(session, lobby)
         }
 
-private fun watchJoinGame(session: SevenWondersSession) = actionHandlerSaga<SwState, RAction, WrapperAction, RequestJoinGameAction> {
-    val lobby = session.joinGame(it.gameId)
-    handleGameJoined(session, lobby)
-}
+private suspend fun SwSagaContext.watchJoinGame(session: SevenWondersSession) =
+        onEach<RequestJoinGameAction> {
+            val lobby = session.joinGame(it.gameId)
+            handleGameJoined(session, lobby)
+        }
 
-private fun SagaContext<SwState, RAction, WrapperAction>.handleGameJoined(
+private suspend fun SwSagaContext.handleGameJoined(
     session: SevenWondersSession,
     lobby: LobbyDTO
 ) {
     dispatch(UpdateLobbyAction(lobby))
     dispatch(EnterLobbyAction(lobby.id))
-    fork(lobbySaga(session, lobby.id))
-    // TODO push /lobby/{lobby.id}
+    coroutineScope {
+        launch { lobbySaga(session, lobby.id) }
+        // TODO push /lobby/{lobby.id}
+    }
 }

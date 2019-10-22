@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.ui
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.promise
 import org.luxons.sevenwonders.ui.components.application
 import org.luxons.sevenwonders.ui.redux.SwState
 import org.luxons.sevenwonders.ui.redux.configureStore
@@ -38,6 +40,10 @@ private fun initializeAndRender(rootElement: Element) {
 private fun initRedux(): Store<SwState, RAction, WrapperAction> {
     val sagaManager = SagaManager<SwState, RAction, WrapperAction>()
     val store = configureStore(sagaManager = sagaManager)
-    sagaManager.startSaga(rootSaga())
+    GlobalScope.promise {
+        sagaManager.launchSaga(this) {
+            rootSaga()
+        }
+    }
     return store
 }
