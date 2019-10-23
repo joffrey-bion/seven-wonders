@@ -16,9 +16,13 @@ private interface ChooseNameFormProps: RProps {
     var chooseUsername: (String) -> Unit
 }
 
-private data class ChooseNameFormState(val username: String): RState
+private data class ChooseNameFormState(var username: String = ""): RState
 
 private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameFormProps, ChooseNameFormState>(props) {
+
+    override fun ChooseNameFormState.init(props: ChooseNameFormProps) {
+        username = ""
+    }
 
     override fun RBuilder.render() {
         form {
