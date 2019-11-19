@@ -76,7 +76,7 @@ class SagaContext<S, A : RAction, R>(
     }
 
     /**
-     * Starts a concurrent coroutine that executes [handle] on every action dispatched.
+     * Executes [handle] on every action dispatched. This runs forever until the current coroutine is cancelled.
      */
     suspend fun onEach(handle: suspend SagaContext<S, A, R>.(A) -> Unit) {
         val channel = actions.openSubscription()
@@ -90,7 +90,8 @@ class SagaContext<S, A : RAction, R>(
     }
 
     /**
-     * Starts a concurrent coroutine that executes [handle] on every action dispatched of the type [T].
+     * Executes [handle] on every action dispatched of the type [T]. This runs forever until the current coroutine is
+     * cancelled.
      */
     suspend inline fun <reified T : A> onEach(
         crossinline handle: suspend SagaContext<S, A, R>.(T) -> Unit
