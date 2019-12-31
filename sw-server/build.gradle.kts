@@ -37,10 +37,10 @@ dependencies {
 
 // packages the frontend app within the jar
 tasks.bootJar {
-    from("../sw-ui/build") {
+    from("../sw-ui-kt/build/processedResources/Js/main") {
         into("static")
     }
 }
 
 // make sure we build the frontend before creating the jar
-tasks.bootJar.get().dependsOn(":sw-ui:assemble")
+tasks.bootJar.get().dependsOn(":sw-ui-kt:assemble")
