@@ -10,8 +10,6 @@ plugins {
 subprojects {
     repositories {
         jcenter()
-        // keep this as long as the Gradle plugin is used in EAP version
-        maven(url = "https://dl.bintray.com/kotlin/kotlin-eap")
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

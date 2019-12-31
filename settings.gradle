@@ -1,12 +1,3 @@
-pluginManagement {
-    // keep this as long as the Gradle plugin is used in EAP version
-    repositories {
-        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
-        gradlePluginPortal()
-        jcenter()
-    }
-}
-
 rootProject.name = "seven-wonders"
 
 include 'sw-common-model'
