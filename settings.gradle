@@ -15,5 +15,3 @@ include 'sw-server'
 include 'sw-client'
 include 'sw-ui'
 include 'sw-ui-kt'
-
-enableFeaturePreview("GRADLE_METADATA")
