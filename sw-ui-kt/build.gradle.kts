@@ -44,6 +44,7 @@ kotlin {
                 implementation(npm("core-js", "3.1.4"))
 
                 implementation(npm("@blueprintjs/core", "3.15.1"))
+//                implementation(npm("webstomp-client"))
             }
         }
         test {
@@ -73,7 +74,7 @@ tasks {
         val webpack = project.tasks.withType(KotlinWebpack::class).first()
         into(webpack.destinationDirectory!!)
 
-        val bundleFile = webpack.archiveFile.name
+        val bundleFile = webpack.outputFileName
         val publicPath = "./" // TODO get public path from webpack config
 
         filesMatching("*.html") {
