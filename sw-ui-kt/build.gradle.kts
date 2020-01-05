@@ -14,6 +14,7 @@ val kotlinWrappersVersion = "pre.85-kotlin-1.3.50"
 kotlin {
     target {
         browser()
+        useCommonJs()
     }
     sourceSets {
         main {
@@ -56,20 +57,6 @@ kotlin {
 }
 
 tasks {
-    compileKotlinJs {
-        kotlinOptions.metaInfo = true
-        kotlinOptions.sourceMap = true
-        // commonjs module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
-        // because the Kotlin wrapper didn't specify @JsNonModule
-        kotlinOptions.moduleKind = "commonjs"
-        kotlinOptions.main = "call"
-    }
-    compileTestKotlinJs {
-        // commonjs module kind is necessary to use top-level declarations from UMD modules (e.g. react-redux)
-        // because the Kotlin wrapper didn't specify @JsNonModule
-        kotlinOptions.moduleKind = "commonjs"
-    }
-
     "processResources"(ProcessResources::class) {
         val webpack = project.tasks.withType(KotlinWebpack::class).first()
         into(webpack.destinationDirectory!!)
