@@ -3,7 +3,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 
-val krossbowVersion = "0.3.1"
+val krossbowVersion = "0.4.1"
 
 kotlin {
     jvm()
@@ -40,6 +40,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-js"))
                 implementation("org.hildan.krossbow:krossbow-client-js:$krossbowVersion")
+                implementation(npm("webstomp-client")) // required by krossbow
             }
         }
         val jsTest by getting {

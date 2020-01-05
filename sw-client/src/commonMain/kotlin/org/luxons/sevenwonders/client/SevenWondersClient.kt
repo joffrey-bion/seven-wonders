@@ -3,8 +3,8 @@ package org.luxons.sevenwonders.client
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.map
 import org.hildan.krossbow.client.KrossbowClient
-import org.hildan.krossbow.engines.KrossbowSession
-import org.hildan.krossbow.engines.KrossbowSubscription
+import org.hildan.krossbow.client.KrossbowSession
+import org.hildan.krossbow.client.KrossbowSubscription
 import org.luxons.sevenwonders.model.CustomizableSettings
 import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.PlayerTurnInfo
@@ -29,12 +29,12 @@ class SevenWondersClient {
     }
 }
 
-suspend inline fun <reified T : Any> KrossbowSession.request(
+suspend inline fun <reified T : Any, reified U : Any> KrossbowSession.request(
     sendDestination: String,
     receiveDestination: String,
-    payload: Any? = null
-): T {
-    val sub = subscribe<T>(receiveDestination)
+    payload: T? = null
+): U {
+    val sub = subscribe<U>(receiveDestination)
     send(sendDestination, payload)
     val msg = sub.messages.receive()
     sub.unsubscribe()
