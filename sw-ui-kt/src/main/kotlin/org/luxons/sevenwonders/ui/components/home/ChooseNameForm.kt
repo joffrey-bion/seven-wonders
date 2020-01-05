@@ -5,6 +5,7 @@ import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
+import org.w3c.dom.HTMLInputElement
 import react.RBuilder
 import react.RClass
 import react.RComponent
@@ -31,8 +32,9 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
             input(type = InputType.text) {
                 attrs {
                     value = state.username
-                    onChangeFunction = {
-                        setState(transformState = { ChooseNameFormState(value) })
+                    onChangeFunction = { e ->
+                        val input = e.currentTarget as HTMLInputElement
+                        setState(transformState = { ChooseNameFormState(input.value) })
                     }
                 }
             }
