@@ -13,7 +13,7 @@ typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 
 suspend fun SwSagaContext.rootSaga() {
     val action = next<RequestChooseName>()
-    val session = SevenWondersClient().connect("ws://localhost:8000")
+    val session = SevenWondersClient().connect("http://localhost:8000")
 
     coroutineScope {
         launch { gameBrowserSaga(session) }
