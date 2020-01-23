@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.model.resources
 
+import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 
 enum class ResourceType(val symbol: Char) {
@@ -27,16 +28,19 @@ enum class ResourceType(val symbol: Char) {
     }
 }
 
+@Serializable
 data class CountedResource(
     val count: Int,
     val type: ResourceType
 )
 
+@Serializable
 enum class Provider(val boardPosition: RelativeBoardPosition) {
     LEFT_PLAYER(RelativeBoardPosition.LEFT),
     RIGHT_PLAYER(RelativeBoardPosition.RIGHT)
 }
 
+@Serializable
 data class ResourceTransaction(val provider: Provider, val resources: List<CountedResource>)
 
 typealias ResourceTransactions = Collection<ResourceTransaction>

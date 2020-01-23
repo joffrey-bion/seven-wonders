@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm") version kotlinVersion apply false
     kotlin("multiplatform") version kotlinVersion apply false
     kotlin("plugin.spring") version kotlinVersion apply false
+    id("org.jetbrains.kotlin.plugin.serialization") version kotlinVersion apply false
     id("org.jlleitschuh.gradle.ktlint") version "9.1.1" apply false
 }
 

@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.model
 
+import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
@@ -14,6 +15,7 @@ enum class Action(val message: String) {
     WAIT("Please wait for other players to perform extra actions.")
 }
 
+@Serializable
 data class PlayerTurnInfo(
     val playerIndex: Int,
     val table: GameState,
@@ -27,6 +29,7 @@ data class PlayerTurnInfo(
     val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
 }
 
+@Serializable
 data class PlayedMove(
     val playerIndex: Int,
     val type: MoveType,
@@ -34,6 +37,7 @@ data class PlayedMove(
     val transactions: ResourceTransactions
 )
 
+@Serializable
 data class PlayerMove(
     val type: MoveType,
     val cardName: String,

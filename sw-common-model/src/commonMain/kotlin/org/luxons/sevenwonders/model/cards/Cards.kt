@@ -1,9 +1,11 @@
 package org.luxons.sevenwonders.model.cards
 
+import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
+@Serializable
 data class TableCard(
     val name: String,
     val color: Color,
@@ -19,6 +21,7 @@ data class TableCard(
  * A card with contextual information relative to the hand it is sitting in. The extra information is especially useful
  * because it frees the client from a painful business logic implementation.
  */
+@Serializable
 data class HandCard(
     val name: String,
     val color: Color,
@@ -30,11 +33,13 @@ data class HandCard(
     val playability: CardPlayability
 )
 
-class PreparedCard(
+@Serializable
+data class PreparedCard(
     val player: PlayerDTO,
     val cardBack: CardBack
 )
 
+@Serializable
 data class CardBack(val image: String)
 
 enum class PlayabilityLevel {
@@ -60,6 +65,7 @@ enum class Color(val isResource: Boolean) {
     PURPLE(false)
 }
 
+@Serializable
 data class CardPlayability(
     val isPlayable: Boolean,
     val isChainable: Boolean = false,

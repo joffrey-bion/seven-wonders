@@ -1,11 +1,14 @@
 package org.luxons.sevenwonders.model.api
 
+import kotlinx.serialization.Serializable
+
 const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
 
 enum class State {
     LOBBY, PLAYING
 }
 
+@Serializable
 data class LobbyDTO(
     val id: Long,
     val name: String,
@@ -14,6 +17,7 @@ data class LobbyDTO(
     val state: State
 )
 
+@Serializable
 data class PlayerDTO(
     val username: String,
     val displayName: String,

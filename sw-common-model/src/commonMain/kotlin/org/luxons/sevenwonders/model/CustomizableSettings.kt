@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.model
 
+import kotlinx.serialization.Serializable
 import kotlin.random.Random
 
+@Serializable
 data class CustomizableSettings(
     val randomSeedForTests: Long? = null,
     val timeLimitInSeconds: Int = 45,
