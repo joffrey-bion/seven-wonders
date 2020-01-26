@@ -8,21 +8,21 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 dependencies {
-    compile(project(":sw-common-model"))
-    compile(project(":sw-engine"))
-    compile(kotlin("stdlib-jdk8"))
-    compile(kotlin("reflect")) // required by Spring 5
+    implementation(project(":sw-common-model"))
+    implementation(project(":sw-engine"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect")) // required by Spring 5
 
-    compile("org.springframework.boot:spring-boot-starter-websocket")
-    compile("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     // required by spring security when using websockets
-    compile("org.springframework.security:spring-security-messaging")
+    implementation("org.springframework.security:spring-security-messaging")
 
-    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    compile("ch.qos.logback:logback-classic:1.1.8")
-    compile("org.hildan.livedoc:livedoc-springboot:4.3.2")
-    compile("org.hildan.livedoc:livedoc-ui-webjar:4.3.2")
+    implementation("ch.qos.logback:logback-classic:1.1.8")
+    implementation("org.hildan.livedoc:livedoc-springboot:4.3.2")
+    implementation("org.hildan.livedoc:livedoc-ui-webjar:4.3.2")
 
     annotationProcessor("org.hildan.livedoc:livedoc-javadoc-processor:4.3.2")
 
