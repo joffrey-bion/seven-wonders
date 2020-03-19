@@ -9,7 +9,7 @@ repositories {
     maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
 }
 
-val kotlinWrappersVersion = "pre.85-kotlin-1.3.50"
+val kotlinWrappersVersion = "pre.93-kotlin-1.3.70"
 
 kotlin {
     target {
@@ -22,7 +22,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(project(":sw-client"))
 
-                val reactVersion = "16.8.6"
+                val reactVersion = "16.13.0"
                 implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react", reactVersion))
                 implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
@@ -45,7 +45,6 @@ kotlin {
                 implementation(npm("core-js", "3.1.4"))
 
                 implementation(npm("@blueprintjs/core", "3.15.1"))
-//                implementation(npm("webstomp-client"))
             }
         }
         test {
