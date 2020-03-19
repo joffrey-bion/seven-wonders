@@ -67,7 +67,7 @@ class SevenWondersTest {
             session2.joinGame(lobby.id)
 
             val outsiderSession = newPlayer("Outsider")
-            val (started) = outsiderSession.watchGameStart(lobby.id)
+            val started = outsiderSession.watchGameStart(lobby.id).messages
 
             ownerSession.startGame()
             val nothing = withTimeoutOrNull(30) { started.receive() }
@@ -94,7 +94,7 @@ class SevenWondersTest {
     fun createGame_seenByConnectedPlayers() {
         runBlocking {
             val otherSession = newPlayer("OtherPlayer")
-            val (games) = otherSession.watchGames()
+            val games = otherSession.watchGames().messages
 
             var receivedLobbies = withTimeout(500) { games.receive() }
             assertNotNull(receivedLobbies)
@@ -126,18 +126,18 @@ class SevenWondersTest {
         val session3 = newPlayer("Player3")
         session3.joinGame(lobby.id)
 
-        val (gameStart1) = session1.watchGameStart(lobby.id)
-        val (gameStart2) = session2.watchGameStart(lobby.id)
-        val (gameStart3) = session3.watchGameStart(lobby.id)
+        val gameStart1 = session1.watchGameStart(lobby.id).messages
+        val gameStart2 = session2.watchGameStart(lobby.id).messages
+        val gameStart3 = session3.watchGameStart(lobby.id).messages
         session1.startGame()
 
         withTimeout(500) { gameStart1.receive() }
         withTimeout(500) { gameStart2.receive() }
         withTimeout(500) { gameStart3.receive() }
 
-        val (turns1) = session1.watchTurns()
-        val (turns2) = session2.watchTurns()
-        val (turns3) = session3.watchTurns()
+        val turns1 = session1.watchTurns().messages
+        val turns2 = session2.watchTurns().messages
+        val turns3 = session3.watchTurns().messages
         session1.sayReady()
         session2.sayReady()
         session3.sayReady()

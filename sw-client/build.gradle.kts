@@ -3,7 +3,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 
-val krossbowVersion = "0.4.1"
+val krossbowVersion = "0.10.2"
 
 kotlin {
     jvm()
@@ -15,7 +15,7 @@ kotlin {
             dependencies {
                 api(project(":sw-common-model"))
                 implementation(kotlin("stdlib-common"))
-                implementation("org.hildan.krossbow:krossbow-client-metadata:$krossbowVersion")
+                api("org.hildan.krossbow:krossbow-stomp-kxserialization:$krossbowVersion")
             }
         }
         val commonTest by getting {
@@ -27,7 +27,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
-                implementation("org.hildan.krossbow:krossbow-client-jvm:$krossbowVersion")
+                api("org.hildan.krossbow:krossbow-stomp-kxserialization-jvm:$krossbowVersion")
             }
         }
         val jvmTest by getting {
@@ -39,8 +39,8 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation("org.hildan.krossbow:krossbow-client-js:$krossbowVersion")
-                implementation(npm("webstomp-client")) // required by krossbow
+                api("org.hildan.krossbow:krossbow-stomp-kxserialization-js:$krossbowVersion")
+                implementation(npm("text-encoding", "0.7.0")) // required by krossbow, because required by kotlinx-io
             }
         }
         val jsTest by getting {

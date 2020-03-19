@@ -30,7 +30,6 @@ class WebSocketConfig @Autowired constructor(private val topicSubscriptionInterc
         registry.addEndpoint(SEVEN_WONDERS_WS_ENDPOINT)
             .setHandshakeHandler(handshakeHandler())
             .setAllowedOrigins("*") // to allow any client to use the API
-            .withSockJS()
     }
 
     @Bean

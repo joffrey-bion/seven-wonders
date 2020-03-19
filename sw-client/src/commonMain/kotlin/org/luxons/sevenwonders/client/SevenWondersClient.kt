@@ -1,10 +1,16 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.map
-import org.hildan.krossbow.client.KrossbowClient
-import org.hildan.krossbow.client.KrossbowSession
-import org.hildan.krossbow.client.KrossbowSubscription
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.list
+import kotlinx.serialization.serializer
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.stomp.StompSubscription
+import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization
+import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
+import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
+import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
+import org.hildan.krossbow.stomp.sendEmptyMsg
+import org.hildan.krossbow.stomp.subscribeEmptyMsg
 import org.luxons.sevenwonders.model.CustomizableSettings
 import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.PlayerTurnInfo
@@ -21,50 +27,41 @@ import org.luxons.sevenwonders.model.cards.PreparedCard
 
 class SevenWondersClient {
 
-    private val stompClient = KrossbowClient()
+    private val stompClient = StompClient()
 
-    suspend fun connect(serverUrl: String): SevenWondersSession {
-        val session = stompClient.connect("$serverUrl$SEVEN_WONDERS_WS_ENDPOINT")
+    suspend fun connect(serverHost: String): SevenWondersSession {
+        val session = stompClient.connect("ws://$serverHost$SEVEN_WONDERS_WS_ENDPOINT").withJsonConversions()
         return SevenWondersSession(session)
     }
 }
 
-suspend inline fun <reified T : Any, reified U : Any> KrossbowSession.request(
+@OptIn(ImplicitReflectionSerializer::class)
+suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKxSerialization.request(
     sendDestination: String,
     receiveDestination: String,
     payload: T? = null
 ): U {
     val sub = subscribe<U>(receiveDestination)
-    send(sendDestination, payload)
+    convertAndSend(sendDestination, payload)
     val msg = sub.messages.receive()
     sub.unsubscribe()
-    return msg.payload
+    return msg
 }
 
-data class SevenWondersSubscription<T : Any>(
-    val messages: ReceiveChannel<T>,
-    val unsubscribe: suspend () -> Unit
-)
-
-private fun <T : Any> KrossbowSubscription<T>.ignoreHeaders() = SevenWondersSubscription(
-    messages = messages.map { it.payload },
-    unsubscribe = { unsubscribe() }
-)
-
-class SevenWondersSession(private val stompSession: KrossbowSession) {
+class SevenWondersSession(private val stompSession: StompSessionWithKxSerialization) {
 
     suspend fun disconnect() = stompSession.disconnect()
 
-    suspend fun watchErrors(): KrossbowSubscription<ErrorDTO> =
-        stompSession.subscribe("/user/queue/errors")
+    suspend fun watchErrors(): StompSubscription<ErrorDTO> =
+        stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
     suspend fun chooseName(displayName: String): PlayerDTO {
         val action = ChooseNameAction(displayName)
         return stompSession.request("/app/chooseName", "/user/queue/nameChoice", action)
     }
 
-    suspend fun watchGames(): SevenWondersSubscription<Array<LobbyDTO>> =
-        stompSession.subscribe<Array<LobbyDTO>>("/topic/games").ignoreHeaders()
+    suspend fun watchGames(): StompSubscription<List<LobbyDTO>> =
+        stompSession.subscribe("/topic/games", LobbyDTO.serializer().list)
 
     suspend fun createGame(gameName: String): LobbyDTO {
         val action = CreateGameAction(gameName)
@@ -77,40 +74,40 @@ class SevenWondersSession(private val stompSession: KrossbowSession) {
     }
 
     suspend fun leaveGame() {
-        stompSession.send("/app/lobby/leave")
+        stompSession.sendEmptyMsg("/app/lobby/leave")
     }
 
     suspend fun reorderPlayers(players: List<String>) {
-        stompSession.send("/app/lobby/reorderPlayers", ReorderPlayersAction(players))
+        stompSession.convertAndSend("/app/lobby/reorderPlayers", ReorderPlayersAction(players), ReorderPlayersAction.serializer())
     }
 
     suspend fun updateSettings(settings: CustomizableSettings) {
-        stompSession.send("/app/lobby/reorderPlayers", UpdateSettingsAction(settings))
+        stompSession.convertAndSend("/app/lobby/reorderPlayers", UpdateSettingsAction(settings), UpdateSettingsAction.serializer())
     }
 
-    suspend fun watchLobbyUpdates(gameId: Long): SevenWondersSubscription<LobbyDTO> =
-        stompSession.subscribe<LobbyDTO>("/topic/lobby/$gameId/updated").ignoreHeaders()
+    suspend fun watchLobbyUpdates(gameId: Long): StompSubscription<LobbyDTO> =
+        stompSession.subscribe("/topic/lobby/$gameId/updated", LobbyDTO.serializer())
 
-    suspend fun watchGameStart(gameId: Long): SevenWondersSubscription<Unit> =
-        stompSession.subscribe<Unit>("/topic/lobby/$gameId/started").ignoreHeaders()
+    suspend fun watchGameStart(gameId: Long): StompSubscription<Unit> =
+        stompSession.subscribeEmptyMsg("/topic/lobby/$gameId/started")
 
     suspend fun startGame() {
-        stompSession.send("/app/lobby/startGame")
+        stompSession.sendEmptyMsg("/app/lobby/startGame")
     }
 
-    suspend fun watchPlayerReady(gameId: Long): SevenWondersSubscription<String> =
-            stompSession.subscribe<String>("/topic/game/$gameId/playerReady").ignoreHeaders()
+    suspend fun watchPlayerReady(gameId: Long): StompSubscription<String> =
+            stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
 
-    suspend fun watchTableUpdates(gameId: Long): SevenWondersSubscription<GameState> =
-            stompSession.subscribe<GameState>("/topic/game/$gameId/tableUpdates").ignoreHeaders()
+    suspend fun watchTableUpdates(gameId: Long): StompSubscription<GameState> =
+            stompSession.subscribe("/topic/game/$gameId/tableUpdates", GameState.serializer())
 
-    suspend fun watchPreparedCards(gameId: Long): SevenWondersSubscription<PreparedCard> =
-            stompSession.subscribe<PreparedCard>("/topic/game/$gameId/prepared").ignoreHeaders()
+    suspend fun watchPreparedCards(gameId: Long): StompSubscription<PreparedCard> =
+            stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
 
-    suspend fun watchTurns(): SevenWondersSubscription<PlayerTurnInfo> =
-            stompSession.subscribe<PlayerTurnInfo>("/user/queue/game/turn").ignoreHeaders()
+    suspend fun watchTurns(): StompSubscription<PlayerTurnInfo> =
+            stompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo.serializer())
 
     suspend fun sayReady() {
-        stompSession.send("/app/game/sayReady")
+        stompSession.sendEmptyMsg("/app/game/sayReady")
     }
 }
