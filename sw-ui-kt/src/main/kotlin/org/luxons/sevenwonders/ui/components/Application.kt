@@ -10,12 +10,17 @@ import react.router.dom.switch
 
 import org.luxons.sevenwonders.ui.components.home.home
 import org.luxons.sevenwonders.ui.components.lobby.lobby
+import react.RProps
+
+interface IdProps : RProps {
+    val id: Long
+}
 
 fun RBuilder.application() = hashRouter {
     switch {
-        route("/game") { gameScene() }
         route("/games") { gameBrowser() }
-        route("/lobby") { lobby() }
+        route<IdProps>("/game/:id") { props -> gameScene(props.match.params.id) }
+        route<IdProps>("/lobby/:id") { props -> lobby(props.match.params.id) }
         route("/", exact = true) { home() }
         redirect(from = "*", to = "/")
     }

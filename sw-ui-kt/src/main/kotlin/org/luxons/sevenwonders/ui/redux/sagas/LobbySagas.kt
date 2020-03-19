@@ -6,6 +6,7 @@ import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
 import org.luxons.sevenwonders.ui.redux.RequestStartGameAction
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
+import org.luxons.sevenwonders.ui.router.Router
 
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession, lobbyId: Long) {
     coroutineScope {
@@ -29,8 +30,7 @@ private suspend fun SwSagaContext.handleGameStart(session: SevenWondersSession, 
 
     coroutineScope {
         launch { gameSaga(session, lobbyId) }
-
-        // TODO push /game/{lobby.id}
+        Router.game(lobbyId)
     }
 }
 

@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.ui.redux.RequestCreateGameAction
 import org.luxons.sevenwonders.ui.redux.RequestJoinGameAction
 import org.luxons.sevenwonders.ui.redux.UpdateGameListAction
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
+import org.luxons.sevenwonders.ui.router.Router
 import kotlin.coroutines.coroutineContext
 
 suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
@@ -51,6 +52,6 @@ private suspend fun SwSagaContext.handleGameJoined(
     dispatch(EnterLobbyAction(lobby.id))
     coroutineScope {
         launch { lobbySaga(session, lobby.id) }
-        // TODO push /lobby/{lobby.id}
+        Router.lobby(lobby.id)
     }
 }

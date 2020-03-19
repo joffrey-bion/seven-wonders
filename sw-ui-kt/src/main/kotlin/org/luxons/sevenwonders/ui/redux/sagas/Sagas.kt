@@ -6,6 +6,7 @@ import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.SetCurrentPlayerAction
 import org.luxons.sevenwonders.ui.redux.SwState
+import org.luxons.sevenwonders.ui.router.Router
 import redux.RAction
 import redux.WrapperAction
 
@@ -21,6 +22,6 @@ suspend fun SwSagaContext.rootSaga() {
 
         val player = session.chooseName(action.playerName)
         dispatch(SetCurrentPlayerAction(player))
-        // push /games
+        Router.games()
     }
 }
