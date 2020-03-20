@@ -9,11 +9,7 @@ import redux.compose
 import redux.createStore
 import redux.rEnhancer
 
-data class SwState(
-    val playerName: String
-)
-
-val INITIAL_STATE = SwState("Bob")
+val INITIAL_STATE = SwState()
 
 fun configureStore(
     sagaManager: SagaManager<SwState, RAction, WrapperAction>,

@@ -5,4 +5,6 @@ import react.dom.*
 
 fun RBuilder.gameBrowser() = div {
     h1 { +"Games" }
+    createGameForm {}
+    gameList {}
 }
