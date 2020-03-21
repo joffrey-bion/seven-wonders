@@ -52,6 +52,6 @@ private suspend fun SwSagaContext.handleGameJoined(
     dispatch(EnterLobbyAction(lobby.id))
     coroutineScope {
         launch { lobbySaga(session, lobby.id) }
-        Router.lobby(lobby.id)
+        Router.lobby()
     }
 }

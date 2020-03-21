@@ -20,7 +20,7 @@ fun RBuilder.application() = hashRouter {
     switch {
         route("/games") { gameBrowser() }
         route<IdProps>("/game/:id") { props -> gameScene(props.match.params.id) }
-        route<IdProps>("/lobby/:id") { props -> lobby(props.match.params.id) }
+        route<IdProps>("/lobby") { lobby() }
         route("/", exact = true) { home() }
         redirect(from = "*", to = "/")
     }

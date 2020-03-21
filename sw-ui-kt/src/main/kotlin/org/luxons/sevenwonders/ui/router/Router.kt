@@ -12,8 +12,8 @@ object Router {
         push("/game/$id")
     }
 
-    fun lobby(id: Long) {
-        push("/lobby/$id")
+    fun lobby() {
+        push("/lobby")
     }
 
     private fun push(path: String) {
