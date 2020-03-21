@@ -1,6 +1,9 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
+import kotlinx.css.VerticalAlign
+import kotlinx.css.verticalAlign
 import kotlinx.html.js.onClickFunction
+import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.ui.redux.RequestJoinGameAction
@@ -10,6 +13,8 @@ import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.*
+import styled.css
+import styled.styledSpan
 
 interface GameListStateProps : RProps {
     var games: List<LobbyDTO>
@@ -29,7 +34,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
                 gameListHeaderRow()
             }
             tbody {
-                props.games.map {
+                props.games.forEach {
                     gameListItemRow(it, props.joinGame)
                 }
             }
@@ -45,6 +50,9 @@ private fun RBuilder.gameListHeaderRow() = tr {
 }
 
 private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) = tr {
+    attrs {
+        key = lobby.id.toString()
+    }
     th { +lobby.name }
     th { gameStatus(lobby.state) }
     th { playerCount(lobby.players.size) }
@@ -52,14 +60,37 @@ private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) 
 }
 
 private fun RBuilder.gameStatus(state: State) {
+    // TODO
+    // <Tag minimal intent={statusIntents[state]}>{state}</Tag>
+    // const statusIntents = {
+    //   'LOBBY': Intent.SUCCESS,
+    //   'PLAYING': Intent.WARNING,
+    // };
     span {
         +state.toString()
     }
 }
 
 private fun RBuilder.playerCount(nPlayers: Int) {
-    span {
-        +nPlayers.toString()
+    //<div title='Number of players'>
+    //  <Icon className="playerCountIcon" icon="people" title={false} />
+    //  <span className="playerCount"> {nbPlayers}</span>
+    //</div>;
+
+    // CSS:
+    // .playerCountIcon, .playerCount {
+    //    vertical-align: middle;
+    // }
+    div {
+        attrs {
+            title = "Number of players"
+        }
+        styledSpan {
+            css {
+              verticalAlign = VerticalAlign.middle
+            }
+            +nPlayers.toString()
+        }
     }
 }
 
