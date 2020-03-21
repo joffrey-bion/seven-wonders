@@ -29,6 +29,16 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
         form {
             attrs.onSubmitFunction = { props.chooseUsername(state.username) }
 
+            // TODO <InputGroup
+            //    className={Classes.LARGE}
+            //    placeholder="Username"
+            //    onChange={(e: ChangeEvent<HTMLInputElement>) => (this._username = e.target.value)}
+            //    rightElement={this.renderSubmit()}
+            //  />
+            //  Where:
+            //  renderSubmit = () => (
+            //    <Button className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} icon="arrow-right" />
+            //  );
             input(type = InputType.text) {
                 attrs {
                     value = state.username

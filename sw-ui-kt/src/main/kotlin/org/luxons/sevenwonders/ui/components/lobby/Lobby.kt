@@ -36,7 +36,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(props.players)
             if (currentPlayer.isGameOwner) {
-                // <Button text="START"
+                // TODO <Button text="START"
                 //         className={Classes.LARGE}
                 //         intent={Intent.PRIMARY}
                 //         icon='play'

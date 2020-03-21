@@ -94,9 +94,9 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
 
 private fun RBuilder.userIcon(isUser: Boolean, isOwner: Boolean, title: String?): ReactElement {
     // TODO
-    // const icon: IconName = isOwner ? 'badge' : 'user';
-    // const intent: Intent = isUser ? Intent.WARNING : Intent.NONE;
-    // return <Icon icon={icon} iconSize={50} intent={intent} title={title}/>;
+    //  const icon: IconName = isOwner ? 'badge' : 'user';
+    //  const intent: Intent = isUser ? Intent.WARNING : Intent.NONE;
+    //  return <Icon icon={icon} iconSize={50} intent={intent} title={title}/>;
     val owner = if (isOwner) "(owner)" else ""
     val user = if (isUser) "(me)" else ""
     val hint = listOf(owner, user).joinToString(" ")
