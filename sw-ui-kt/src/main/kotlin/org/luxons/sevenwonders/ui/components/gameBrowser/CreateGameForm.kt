@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.components.gameBrowser
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpInputGroup
+import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.utils.createElement
 import kotlinx.css.Display
 import kotlinx.css.FlexDirection
@@ -57,9 +58,7 @@ private class CreateGameForm(props: CreateGameFormProps): RComponent<CreateGameF
                     rightElement = createGameButton()
                 )
             }
-            // TODO
-            div { +"PLAYER INFO HERE" }
-            //playerInfo()
+            playerInfo()
         }
     }
 
