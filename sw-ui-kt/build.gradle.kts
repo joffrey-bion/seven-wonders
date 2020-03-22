@@ -44,7 +44,8 @@ kotlin {
                 // seems to be required by "kotlin-extensions" JS lib
                 implementation(npm("core-js", "3.1.4"))
 
-                implementation(npm("@blueprintjs/core", "3.15.1"))
+                implementation(npm("@blueprintjs/core", "3.24.0"))
+                implementation(npm("@blueprintjs/icons", "3.14.0"))
             }
         }
         test {

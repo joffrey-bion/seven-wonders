@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.ui.components.home
 
-import kotlinx.html.InputType
-import kotlinx.html.js.onChangeFunction
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
+import com.palantir.blueprintjs.inputGroup
+import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.utils.createElement
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
@@ -11,6 +13,7 @@ import react.RClass
 import react.RComponent
 import react.RProps
 import react.RState
+import react.ReactElement
 import react.dom.*
 
 private interface ChooseNameFormProps: RProps {
@@ -28,27 +31,25 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
     override fun RBuilder.render() {
         form {
             attrs.onSubmitFunction = { props.chooseUsername(state.username) }
-
-            // TODO <InputGroup
-            //    className={Classes.LARGE}
-            //    placeholder="Username"
-            //    onChange={(e: ChangeEvent<HTMLInputElement>) => (this._username = e.target.value)}
-            //    rightElement={this.renderSubmit()}
-            //  />
-            //  Where:
-            //  renderSubmit = () => (
-            //    <Button className={Classes.MINIMAL} onClick={this.play} intent={Intent.PRIMARY} icon="arrow-right" />
-            //  );
-            input(type = InputType.text) {
-                attrs {
-                    value = state.username
-                    onChangeFunction = { e ->
-                        val input = e.currentTarget as HTMLInputElement
-                        setState(transformState = { ChooseNameFormState(input.value) })
-                    }
+            inputGroup(
+                large = true,
+                placeholder = "Username",
+                rightElement = submitButton(),
+                onChange = { e ->
+                    val input = e.currentTarget as HTMLInputElement
+                    setState(transformState = { ChooseNameFormState(input.value) })
                 }
-            }
+            )
         }
+    }
+
+    private fun submitButton(): ReactElement = createElement {
+        bpButton(
+            minimal = true,
+            icon = "arrow-right",
+            intent = Intent.PRIMARY,
+            onClick = { props.chooseUsername(state.username) }
+        )
     }
 }
 

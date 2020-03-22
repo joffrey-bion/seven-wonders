@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import kotlinx.html.js.onClickFunction
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.RequestStartGameAction
@@ -36,19 +37,13 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(props.players)
             if (currentPlayer.isGameOwner) {
-                // TODO <Button text="START"
-                //         className={Classes.LARGE}
-                //         intent={Intent.PRIMARY}
-                //         icon='play'
-                //         onClick={startGame}
-                //         disabled={players.size < 3}/>
-                button {
-                    attrs {
-                        onClickFunction = { props.startGame() }
-                        disabled = props.players.size < 3
-                    }
-                    +"START"
-                }
+                bpButton(
+                    large = true,
+                    intent = Intent.PRIMARY,
+                    icon = "play",
+                    disabled = props.players.size < 3,
+                    onClick = { props.startGame() }
+                )
             }
         }
     }
