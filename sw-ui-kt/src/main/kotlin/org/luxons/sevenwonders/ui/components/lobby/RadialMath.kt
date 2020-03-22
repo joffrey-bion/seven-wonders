@@ -41,7 +41,7 @@ data class RadialConfig(
     val diameter: Int = radius * 2
 }
 
-private const val DEFAULT_START = 90; // Up
+private const val DEFAULT_START = 90 // Up
 
 fun offsetsFromCenter(nbItems: Int, radialConfig: RadialConfig = RadialConfig()): List<CartesianCoords> =
         (0 until nbItems).map { itemCartesianOffsets(it, nbItems, radialConfig) }
