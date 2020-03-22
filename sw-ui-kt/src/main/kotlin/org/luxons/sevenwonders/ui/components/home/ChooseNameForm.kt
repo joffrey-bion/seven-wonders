@@ -8,6 +8,7 @@ import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.Event
 import react.RBuilder
 import react.RClass
 import react.RComponent
@@ -30,7 +31,7 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
 
     override fun RBuilder.render() {
         form {
-            attrs.onSubmitFunction = { props.chooseUsername(state.username) }
+            attrs.onSubmitFunction = { e -> chooseUsername(e) }
             inputGroup(
                 large = true,
                 placeholder = "Username",
@@ -48,8 +49,13 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
             minimal = true,
             icon = "arrow-right",
             intent = Intent.PRIMARY,
-            onClick = { props.chooseUsername(state.username) }
+            onClick = { e -> chooseUsername(e) }
         )
+    }
+
+    private fun chooseUsername(e: Event) {
+        e.preventDefault()
+        props.chooseUsername(state.username)
     }
 }
 
