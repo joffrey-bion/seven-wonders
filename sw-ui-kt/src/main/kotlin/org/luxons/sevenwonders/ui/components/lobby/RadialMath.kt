@@ -25,30 +25,33 @@ private fun PolarCoords.toCartesian() = CartesianCoords(
     y = radius.toDouble().yProjection(angleDeg.toRadians())
 )
 
+// Y-axis is pointing down in the browser, so the directions need to be reversed
+// (positive angles are now clockwise)
 enum class Direction(private val value: Int) {
-    CLOCKWISE(-1),
-    COUNTERCLOCKWISE(1);
+    CLOCKWISE(1),
+    COUNTERCLOCKWISE(-1);
 
     fun toOrientedDegrees(deg: Int) = value * deg
 }
 
 data class RadialConfig(
     val radius: Int = 120,
-    val arcDegrees: Int = 360, // full circle
-    val offsetDegrees: Int = 0, // 12 o'clock
+    val spreadArcDegrees: Int = 360, // full circle
+    val firstItemAngleDegrees: Int = 0, // 12 o'clock
     val direction: Direction = Direction.CLOCKWISE
 ) {
     val diameter: Int = radius * 2
 }
 
-private const val DEFAULT_START = 90 // Up
+private const val DEFAULT_START = -90 // Up, because Y-axis is reversed
 
-fun offsetsFromCenter(nbItems: Int, radialConfig: RadialConfig = RadialConfig()): List<CartesianCoords> =
-        (0 until nbItems).map { itemCartesianOffsets(it, nbItems, radialConfig) }
+fun offsetsFromCenter(nbItems: Int, radialConfig: RadialConfig = RadialConfig()): List<CartesianCoords> {
+    val startAngle = DEFAULT_START + radialConfig.direction.toOrientedDegrees(radialConfig.firstItemAngleDegrees)
+    val angleStep = radialConfig.spreadArcDegrees / nbItems
+    return List(nbItems) { itemCartesianOffsets(startAngle, angleStep, it, radialConfig) }
+}
 
-private fun itemCartesianOffsets(index: Int, nbItems: Int, config: RadialConfig): CartesianCoords {
-    val startAngle = DEFAULT_START + config.direction.toOrientedDegrees(config.offsetDegrees)
-    val angleStep = config.arcDegrees / nbItems
+private fun itemCartesianOffsets(startAngle: Int, angleStep: Int, index: Int, config: RadialConfig): CartesianCoords {
     val itemAngle = startAngle + config.direction.toOrientedDegrees(angleStep) * index
     return PolarCoords(config.radius, itemAngle).toCartesian()
 }

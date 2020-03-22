@@ -34,7 +34,7 @@ fun RBuilder.radialPlayerList(players: List<PlayerDTO>): ReactElement {
         itemHeight = 100,
         options = RadialConfig(
             radius = 175,
-            offsetDegrees = 180
+            firstItemAngleDegrees = 180 // self at the bottom
         )
     )
 }
