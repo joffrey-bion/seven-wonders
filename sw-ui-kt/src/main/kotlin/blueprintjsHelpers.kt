@@ -1,21 +1,21 @@
 package com.palantir.blueprintjs
 
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import react.RBuilder
-import react.RElementBuilder
 import react.RHandler
 import react.ReactElement
 
 typealias IconName = String
 
-fun RBuilder.icon(
+fun RBuilder.bpIcon(
     name: IconName,
     size: Int = Icon.SIZE_STANDARD,
     intent: Intent = Intent.NONE,
     title: String? = null,
-    alt: String? = null
+    alt: String? = null,
+    className: String? = null,
+    block: RHandler<IIconProps> = {}
 ): ReactElement = child(Icon::class) {
     attrs {
         this.icon = name
@@ -23,13 +23,16 @@ fun RBuilder.icon(
         this.htmlTitle = title
         this.intent = intent
         this.title = alt
+        this.className = className
     }
+    block()
 }
 
 fun RBuilder.bpButton(
     minimal: Boolean = false,
     large: Boolean = false,
     disabled: Boolean = false,
+    title: String? = null,
     icon: IconName? = null,
     rightIcon: IconName? = null,
     intent: Intent = Intent.NONE,
@@ -37,6 +40,7 @@ fun RBuilder.bpButton(
     block: RHandler<IButtonProps> = {}
 ): ReactElement = child(Button::class) {
     attrs {
+        this.title = title
         this.minimal = minimal
         this.large = large
         this.disabled = disabled
@@ -48,7 +52,7 @@ fun RBuilder.bpButton(
     block()
 }
 
-fun RBuilder.inputGroup(
+fun RBuilder.bpInputGroup(
     large: Boolean = false,
     placeholder: String = "",
     rightElement: ReactElement? = null,
@@ -62,22 +66,16 @@ fun RBuilder.inputGroup(
     }
 }
 
-data class ButtonProps(
-    override var className: String? = null,
-    override var intent: Intent? = Intent.NONE,
-    override var disabled: Boolean? = false,
-    override var icon: IconName? = null,
-    override var onClick: ((event: MouseEvent) -> Unit)? = null,
-    override var text: String? = null,
-    override var active: Boolean? = true,
-    override var alignText: Alignment? = null,
-    override var elementRef: ((ref: HTMLElement?) -> Any)? = null,
-    override var fill: Boolean? = null,
-    override var large: Boolean? = null,
-    override var loading: Boolean? = null,
-    override var minimal: Boolean? = null,
-    override var outlined: Boolean? = null,
-    override var rightIcon: IconName? = null,
-    override var small: Boolean? = null,
-    override var type: String? = null
-) : IButtonProps
+fun RBuilder.bpTag(
+    intent: Intent? = null,
+    minimal: Boolean? = null,
+    active: Boolean? = null,
+    block: RHandler<ITagProps> = {}
+): ReactElement = child(Tag::class) {
+    attrs {
+        this.intent = intent
+        this.minimal = minimal
+        this.active = active
+    }
+    block()
+}

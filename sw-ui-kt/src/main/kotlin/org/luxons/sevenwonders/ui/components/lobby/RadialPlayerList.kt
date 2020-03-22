@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.ui.components.lobby
 
 import com.palantir.blueprintjs.IconName
 import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.icon
+import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.Align
 import kotlinx.css.Display
 import kotlinx.css.FlexDirection
@@ -104,5 +104,5 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
 private fun RBuilder.userIcon(isUser: Boolean, isOwner: Boolean, title: String?): ReactElement {
     val iconName: IconName = if (isOwner) "badge" else "user"
     val intent: Intent = if (isUser) Intent.WARNING else Intent.NONE
-    return icon(name = iconName, intent = intent, size = 50, title = title)
+    return bpIcon(name = iconName, intent = intent, size = 50, title = title)
 }

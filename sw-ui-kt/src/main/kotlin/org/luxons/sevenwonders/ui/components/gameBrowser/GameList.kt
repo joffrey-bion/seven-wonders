@@ -1,8 +1,19 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
+import com.palantir.blueprintjs.Classes
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
+import com.palantir.blueprintjs.bpIcon
+import com.palantir.blueprintjs.bpTag
+import kotlinx.css.Align
+import kotlinx.css.Display
+import kotlinx.css.FlexDirection
 import kotlinx.css.VerticalAlign
+import kotlinx.css.alignItems
+import kotlinx.css.display
+import kotlinx.css.flexDirection
 import kotlinx.css.verticalAlign
-import kotlinx.html.js.onClickFunction
+import kotlinx.html.classes
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.State
@@ -14,7 +25,9 @@ import react.RProps
 import react.RState
 import react.dom.*
 import styled.css
+import styled.styledDiv
 import styled.styledSpan
+import styled.styledTr
 
 interface GameListStateProps : RProps {
     var games: List<LobbyDTO>
@@ -30,6 +43,9 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
 
     override fun RBuilder.render() {
         table {
+            attrs {
+                classes = setOf(Classes.HTML_TABLE)
+            }
             thead {
                 gameListHeaderRow()
             }
@@ -49,58 +65,54 @@ private fun RBuilder.gameListHeaderRow() = tr {
     th { +"Join" }
 }
 
-private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) = tr {
+private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) = styledTr {
+    css {
+        verticalAlign = VerticalAlign.middle
+    }
     attrs {
         key = lobby.id.toString()
     }
-    th { +lobby.name }
-    th { gameStatus(lobby.state) }
-    th { playerCount(lobby.players.size) }
-    th { joinButton(lobby, joinGame) }
+    td { +lobby.name }
+    td { gameStatus(lobby.state) }
+    td { playerCount(lobby.players.size) }
+    td { joinButton(lobby, joinGame) }
 }
 
 private fun RBuilder.gameStatus(state: State) {
-    // TODO
-    // <Tag minimal intent={statusIntents[state]}>{state}</Tag>
-    // const statusIntents = {
-    //   'LOBBY': Intent.SUCCESS,
-    //   'PLAYING': Intent.WARNING,
-    // };
-    span {
+    val intent = when(state) {
+        State.LOBBY -> Intent.SUCCESS
+        State.PLAYING -> Intent.WARNING
+    }
+    bpTag(minimal = true, intent = intent) {
         +state.toString()
     }
 }
 
 private fun RBuilder.playerCount(nPlayers: Int) {
-    //<div title='Number of players'>
-    //  <Icon className="playerCountIcon" icon="people" title={false} />
-    //  <span className="playerCount"> {nbPlayers}</span>
-    //</div>;
-
-    // CSS:
-    // .playerCountIcon, .playerCount {
-    //    vertical-align: middle;
-    // }
-    div {
+    styledDiv {
+        css {
+            display = Display.flex
+            flexDirection = FlexDirection.row
+            alignItems = Align.center
+        }
         attrs {
             title = "Number of players"
         }
+        bpIcon(name = "people", title = null)
         styledSpan {
-            css {
-              verticalAlign = VerticalAlign.middle
-            }
             +nPlayers.toString()
         }
     }
 }
 
 private fun RBuilder.joinButton(lobby: LobbyDTO, joinGame: (Long) -> Unit) {
-    button {
-        attrs {
-            disabled = lobby.state != State.LOBBY
-            onClickFunction = { joinGame(lobby.id) }
-        }
-    }
+    bpButton(
+        minimal = true,
+        title = "Join Game",
+        icon = "arrow-right",
+        disabled = lobby.state != State.LOBBY,
+        onClick = { joinGame(lobby.id) }
+    )
 }
 
 val gameList = connect<GameListStateProps, GameListDispatchProps, GameListProps>(

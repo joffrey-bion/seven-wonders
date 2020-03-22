@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.ui.components.home
 
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.inputGroup
+import com.palantir.blueprintjs.bpInputGroup
 import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.utils.createElement
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
@@ -32,7 +32,7 @@ private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameF
     override fun RBuilder.render() {
         form {
             attrs.onSubmitFunction = { e -> chooseUsername(e) }
-            inputGroup(
+            bpInputGroup(
                 large = true,
                 placeholder = "Username",
                 rightElement = submitButton(),
