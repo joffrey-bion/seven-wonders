@@ -21,8 +21,8 @@ import styled.styledH5
 
 fun RBuilder.radialPlayerList(players: List<PlayerDTO>): ReactElement {
     val playerItemBuilders = players
-        .withUserFirst()
         .growTo(targetSize = 3)
+        .withUserFirst()
         .map { p -> p.elementBuilder() }
 
     val tableImgBuilder: ElementBuilder = { roundTableImg() }
@@ -48,11 +48,13 @@ private fun RBuilder.roundTableImg(): ReactElement = img {
     }
 }
 
-private fun List<PlayerDTO>.withUserFirst(): List<PlayerDTO> {
+private fun List<PlayerDTO?>.withUserFirst(): List<PlayerDTO?> {
     val nonUsersBeginning = takeWhile { !it.isUser }
     val userToEnd = subList(nonUsersBeginning.size, size)
     return userToEnd + nonUsersBeginning
 }
+
+private val PlayerDTO?.isUser: Boolean get() = this?.isUser ?: false
 
 private fun <T> List<T>.growTo(targetSize: Int): List<T?> {
     if (size >= targetSize) return this
