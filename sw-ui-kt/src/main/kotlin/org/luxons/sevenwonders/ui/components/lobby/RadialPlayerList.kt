@@ -4,8 +4,10 @@ import com.palantir.blueprintjs.IconName
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.icon
 import kotlinx.css.Align
+import kotlinx.css.Display
 import kotlinx.css.FlexDirection
-import kotlinx.css.alignContent
+import kotlinx.css.alignItems
+import kotlinx.css.display
 import kotlinx.css.flexDirection
 import kotlinx.css.margin
 import kotlinx.css.opacity
@@ -67,8 +69,9 @@ private fun PlayerDTO?.elementBuilder(): ElementBuilder {
 
 private fun RBuilder.playerItem(player: PlayerDTO): ReactElement = styledDiv {
     css {
+        display = Display.flex
         flexDirection = FlexDirection.column
-        alignContent = Align.center
+        alignItems = Align.center
     }
     val title = if (player.isGameOwner) "Game owner" else null
     userIcon(isUser = player.isUser, isOwner = player.isGameOwner, title = title)
@@ -82,8 +85,9 @@ private fun RBuilder.playerItem(player: PlayerDTO): ReactElement = styledDiv {
 
 private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
     css {
+        display = Display.flex
         flexDirection = FlexDirection.column
-        alignContent = Align.center
+        alignItems = Align.center
         opacity = 0.3
     }
     userIcon(isUser = false, isOwner = false, title = "Waiting for player...")
