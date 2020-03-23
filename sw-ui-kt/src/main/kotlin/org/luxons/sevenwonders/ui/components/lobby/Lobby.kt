@@ -51,7 +51,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
 
 fun RBuilder.lobby() = lobby {}
 
-val lobby = connect<LobbyStateProps, LobbyDispatchProps, LobbyProps>(
+private val lobby = connect<LobbyStateProps, LobbyDispatchProps, LobbyProps>(
     clazz = LobbyPresenter::class,
     mapStateToProps = { state, _ ->
         currentGame = state.lobby
