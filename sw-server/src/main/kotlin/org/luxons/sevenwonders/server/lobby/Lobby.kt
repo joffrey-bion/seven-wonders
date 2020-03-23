@@ -57,6 +57,8 @@ class Lobby(
         return game
     }
 
+    fun canBeStarted(): Boolean = hasEnoughPlayers()
+
     private fun hasEnoughPlayers(): Boolean = players.size >= gameDefinition.minPlayers
 
     @Synchronized

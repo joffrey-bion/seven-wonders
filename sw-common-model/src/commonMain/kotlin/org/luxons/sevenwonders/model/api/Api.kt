@@ -14,7 +14,8 @@ data class LobbyDTO(
     val name: String,
     val owner: String,
     val players: List<PlayerDTO>,
-    val state: State
+    val state: State,
+    val canBeStarted: Boolean
 )
 
 @Serializable
