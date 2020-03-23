@@ -31,6 +31,6 @@ fun RBuilder.playerInfo() = playerInfo {}
 private val playerInfo = connectState(
     clazz = PlayerInfoPresenter::class,
     mapStateToProps = { state, _ ->
-        currentPlayer = state.player
+        currentPlayer = state.currentPlayer
     }
 )

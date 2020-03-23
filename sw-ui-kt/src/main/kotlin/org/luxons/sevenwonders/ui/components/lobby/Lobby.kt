@@ -15,7 +15,6 @@ import react.dom.*
 interface LobbyStateProps : RProps {
     var currentGame: LobbyDTO?
     var currentPlayer: PlayerDTO?
-    var players: List<PlayerDTO>
 }
 
 interface LobbyDispatchProps : RProps {
@@ -35,7 +34,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
         div {
             h2 { +"${currentGame.name} — Lobby" }
-            radialPlayerList(props.players)
+            radialPlayerList(currentGame.players)
             if (currentPlayer.isGameOwner) {
                 bpButton(
                     large = true,
@@ -43,7 +42,9 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
                     icon = "play",
                     disabled = !currentGame.canBeStarted,
                     onClick = { props.startGame() }
-                )
+                ) {
+                    + "START"
+                }
             }
         }
     }
@@ -54,9 +55,8 @@ fun RBuilder.lobby() = lobby {}
 private val lobby = connect<LobbyStateProps, LobbyDispatchProps, LobbyProps>(
     clazz = LobbyPresenter::class,
     mapStateToProps = { state, _ ->
-        currentGame = state.lobby
-        currentPlayer = state.player
-        players = state.lobby?.players ?: emptyList()
+        currentGame = state.currentLobby
+        currentPlayer = state.currentPlayer
     },
     mapDispatchToProps = { dispatch, _ ->
         startGame = { dispatch(RequestStartGameAction()) }
