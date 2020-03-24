@@ -79,3 +79,21 @@ fun RBuilder.bpTag(
     }
     block()
 }
+
+fun RBuilder.bpNonIdealState(
+    icon: IconName? = null,
+    title: ReactElement? = null,
+    description: ReactElement? = null,
+    action: ReactElement? = null,
+    children: ReactElement? = null,
+    block: RHandler<INonIdealStateProps> = {}
+): ReactElement = child(NonIdealState::class) {
+    attrs {
+        this.icon = icon
+        this.title = title
+        this.description = description
+        this.action = action
+        this.children = children
+    }
+    block()
+}
