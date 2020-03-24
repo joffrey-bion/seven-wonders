@@ -108,9 +108,9 @@ private fun RBuilder.playerCount(nPlayers: Int) {
 private fun RBuilder.joinButton(lobby: LobbyDTO, joinGame: (Long) -> Unit) {
     bpButton(
         minimal = true,
-        title = "Join Game",
+        title = lobby.joinAction.tooltip,
         icon = "arrow-right",
-        disabled = lobby.state != State.LOBBY,
+        disabled = !lobby.joinAction.canDo,
         onClick = { joinGame(lobby.id) }
     )
 }

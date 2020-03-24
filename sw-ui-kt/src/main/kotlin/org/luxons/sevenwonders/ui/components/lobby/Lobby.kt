@@ -40,7 +40,8 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
                     large = true,
                     intent = Intent.PRIMARY,
                     icon = "play",
-                    disabled = !currentGame.canBeStarted,
+                    title = currentGame.startAction.tooltip,
+                    disabled = !currentGame.startAction.canDo,
                     onClick = { props.startGame() }
                 ) {
                     + "START"

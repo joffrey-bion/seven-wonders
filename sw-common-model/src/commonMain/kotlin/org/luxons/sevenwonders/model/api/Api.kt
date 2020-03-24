@@ -15,7 +15,14 @@ data class LobbyDTO(
     val owner: String,
     val players: List<PlayerDTO>,
     val state: State,
-    val canBeStarted: Boolean
+    val joinAction: Actionability,
+    val startAction: Actionability
+)
+
+@Serializable
+data class Actionability(
+    val canDo: Boolean,
+    val tooltip: String
 )
 
 @Serializable

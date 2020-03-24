@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.server.lobby
 import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.api.Actionability
 import org.luxons.sevenwonders.model.api.State
 
 class Lobby(
@@ -40,11 +41,24 @@ class Lobby(
         players.add(player)
     }
 
+    fun joinability(userDisplayName: String): Actionability = when {
+        hasStarted() -> Actionability(false, "Cannot join: the game has already started")
+        maxPlayersReached() -> Actionability(
+            false,
+            "Cannot join: the game is full (${gameDefinition.maxPlayers} players max)"
+        )
+        playerNameAlreadyUsed(userDisplayName) -> Actionability(
+            false,
+            "Cannot join: already a player named '$userDisplayName' in this game"
+        )
+        else -> Actionability(true, "Join game")
+    }
+
     private fun hasStarted(): Boolean = state != State.LOBBY
 
     private fun maxPlayersReached(): Boolean = players.size >= gameDefinition.maxPlayers
 
-    private fun playerNameAlreadyUsed(name: String?): Boolean = players.any { it.displayName == name }
+    private fun playerNameAlreadyUsed(name: String): Boolean = players.any { it.displayName == name }
 
     @Synchronized
     fun startGame(): Game {
@@ -57,7 +71,12 @@ class Lobby(
         return game
     }
 
-    fun canBeStarted(): Boolean = hasEnoughPlayers()
+    fun startability(username: String): Actionability = when {
+        !hasEnoughPlayers() -> Actionability(false, "Cannot start: min ${gameDefinition.minPlayers} players required"
+        )
+        owner.username != username -> Actionability(false, "Cannot start the game: only the owner can")
+        else -> Actionability(true, "Start game")
+    }
 
     private fun hasEnoughPlayers(): Boolean = players.size >= gameDefinition.minPlayers
 

@@ -30,7 +30,6 @@ class GameBrowserController @Autowired constructor(
     private val playerRepository: PlayerRepository,
     private val template: SimpMessagingTemplate
 ) {
-
     /**
      * Gets the created or updated games. The list of existing games is received on this topic at once upon
      * subscription, and then each time the list changes.
@@ -42,7 +41,8 @@ class GameBrowserController @Autowired constructor(
     @SubscribeMapping("/games") // prefix /topic not shown
     fun listGames(principal: Principal): Collection<LobbyDTO> {
         logger.info("Player '{}' subscribed to /topic/games", principal.name)
-        return lobbyRepository.list().map { it.toDTO(principal.name) }
+        val player = playerRepository.find(principal.name)
+        return lobbyRepository.list().map { it.toDTO(player) }
     }
 
     /**
@@ -58,15 +58,13 @@ class GameBrowserController @Autowired constructor(
     fun createGame(@Validated action: CreateGameAction, principal: Principal): LobbyDTO {
         checkThatUserIsNotInAGame(principal, "cannot create another game")
 
-        val gameOwner = playerRepository.find(principal.name)
-        val lobby = lobbyRepository.create(action.gameName, gameOwner)
+        val player = playerRepository.find(principal.name)
+        val lobby = lobbyRepository.create(action.gameName, owner = player)
 
-        logger.info(
-            "Game '{}' ({}) created by {} ({})", lobby.name, lobby.id, gameOwner.displayName, gameOwner.username
-        )
+        logger.info("Game '{}' ({}) created by {} ({})", lobby.name, lobby.id, player.displayName, player.username)
 
         // notify everyone that a new game exists
-        val lobbyDto = lobby.toDTO(principal.name)
+        val lobbyDto = lobby.toDTO(player)
         template.convertAndSend("/topic/games", listOf(lobbyDto))
         return lobbyDto
     }
@@ -85,13 +83,11 @@ class GameBrowserController @Autowired constructor(
         checkThatUserIsNotInAGame(principal, "cannot join another game")
 
         val lobby = lobbyRepository.find(action.gameId)
-        val newPlayer = playerRepository.find(principal.name)
-        lobby.addPlayer(newPlayer)
+        val player = playerRepository.find(principal.name)
+        lobby.addPlayer(player)
 
-        logger.info(
-            "Player '{}' ({}) joined game {}", newPlayer.displayName, newPlayer.username, lobby.name
-        )
-        val lobbyDTO = lobby.toDTO(principal.name)
+        logger.info("Player '{}' ({}) joined game {}", player.displayName, player.username, lobby.name)
+        val lobbyDTO = lobby.toDTO(player)
         lobbyController.sendLobbyUpdateToPlayers(lobbyDTO)
         return lobbyDTO
     }

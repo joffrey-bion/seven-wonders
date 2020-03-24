@@ -44,7 +44,7 @@ class LobbyController @Autowired constructor(
         }
 
         logger.info("Player {} left game '{}'", player, lobby.name)
-        sendLobbyUpdateToPlayers(lobby.toDTO(principal.name))
+        sendLobbyUpdateToPlayers(lobby.toDTO(principal.player))
     }
 
     /**
@@ -61,7 +61,7 @@ class LobbyController @Autowired constructor(
         lobby.reorderPlayers(action.orderedPlayers)
 
         logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
-        sendLobbyUpdateToPlayers(lobby.toDTO(principal.name))
+        sendLobbyUpdateToPlayers(lobby.toDTO(principal.player))
     }
 
     /**
@@ -78,7 +78,7 @@ class LobbyController @Autowired constructor(
         lobby.settings = action.settings
 
         logger.info("Updated settings of game '{}'", lobby.name)
-        sendLobbyUpdateToPlayers(lobby.toDTO(principal.name))
+        sendLobbyUpdateToPlayers(lobby.toDTO(principal.player))
     }
 
     internal fun sendLobbyUpdateToPlayers(lobby: LobbyDTO) {
