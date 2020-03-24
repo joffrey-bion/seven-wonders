@@ -18,7 +18,7 @@ import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.ui.redux.RequestJoinGameAction
-import org.luxons.sevenwonders.ui.redux.connect
+import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
 import react.RBuilder
 import react.RComponent
 import react.RProps
@@ -115,7 +115,7 @@ private fun RBuilder.joinButton(lobby: LobbyDTO, joinGame: (Long) -> Unit) {
     )
 }
 
-val gameList = connect<GameListStateProps, GameListDispatchProps, GameListProps>(
+val gameList = connectStateAndDispatch<GameListStateProps, GameListDispatchProps, GameListProps>(
     clazz = GameListPresenter::class,
     mapStateToProps = { state, _ ->
         games = state.games

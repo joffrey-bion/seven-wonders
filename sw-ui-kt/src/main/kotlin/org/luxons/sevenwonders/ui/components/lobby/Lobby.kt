@@ -5,7 +5,7 @@ import com.palantir.blueprintjs.bpButton
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.RequestStartGameAction
-import org.luxons.sevenwonders.ui.redux.connect
+import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
 import react.RBuilder
 import react.RComponent
 import react.RProps
@@ -52,7 +52,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
 
 fun RBuilder.lobby() = lobby {}
 
-private val lobby = connect<LobbyStateProps, LobbyDispatchProps, LobbyProps>(
+private val lobby = connectStateAndDispatch<LobbyStateProps, LobbyDispatchProps, LobbyProps>(
     clazz = LobbyPresenter::class,
     mapStateToProps = { state, _ ->
         currentGame = state.currentLobby

@@ -26,8 +26,7 @@ inline fun <reified SP : RProps> connectState(
     return connect.invoke(clazz.js.unsafeCast<RClass<SP>>())
 }
 
-
-inline fun <reified SP : RProps, reified DP : RProps, reified P : RProps> connect(
+inline fun <reified SP : RProps, reified DP : RProps, reified P : RProps> connectStateAndDispatch(
     clazz: KClass<out RComponent<P, out RState>>,
     noinline mapStateToProps: SP.(SwState, RProps) -> Unit,
     noinline mapDispatchToProps: DP.((RAction) -> WrapperAction, RProps) -> Unit
