@@ -15,7 +15,7 @@ import redux.MiddlewareApi
 import redux.RAction
 import kotlin.coroutines.coroutineContext
 
-@UseExperimental(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class SagaManager<S, A : RAction, R>(
     private val monitor: ((A) -> Unit)? = null
 ) {
@@ -64,7 +64,7 @@ class SagaManager<S, A : RAction, R>(
     }
 }
 
-@UseExperimental(FlowPreview::class, ExperimentalCoroutinesApi::class)
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class SagaContext<S, A : RAction, R>(
     private val reduxApi: MiddlewareApi<S, A, R>, private val actions: BroadcastChannel<A>
 ) {
