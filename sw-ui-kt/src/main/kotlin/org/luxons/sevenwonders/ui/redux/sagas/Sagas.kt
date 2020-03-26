@@ -1,7 +1,5 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.SetCurrentPlayerAction
@@ -17,11 +15,11 @@ suspend fun SwSagaContext.rootSaga() {
     val session = SevenWondersClient().connect("localhost:8000")
     console.info("Connected to Seven Wonders web socket API")
 
-    coroutineScope {
-        launch { gameBrowserSaga(session) }
+    val player = session.chooseName(action.playerName)
+    dispatch(SetCurrentPlayerAction(player))
 
-        val player = session.chooseName(action.playerName)
-        dispatch(SetCurrentPlayerAction(player))
-        Router.games()
-    }
+    Router.games()
+    gameBrowserSaga(session)
+    Router.lobby()
+    lobbySaga(session)
 }

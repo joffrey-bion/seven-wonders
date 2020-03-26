@@ -13,7 +13,7 @@ data class UpdateGameListAction(val games: List<LobbyDTO>): RAction
 
 data class UpdateLobbyAction(val lobby: LobbyDTO): RAction
 
-data class EnterLobbyAction(val gameId: Long): RAction
+data class EnterLobbyAction(val lobby: LobbyDTO): RAction
 
 data class UpdatePlayers(val players: Map<String, PlayerDTO>): RAction
 
