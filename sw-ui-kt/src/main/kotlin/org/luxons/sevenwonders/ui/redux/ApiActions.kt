@@ -6,14 +6,16 @@ import redux.RAction
 
 data class RequestChooseName(val playerName: String): RAction
 
-data class RequestCreateGameAction(val gameName: String): RAction
+data class RequestCreateGame(val gameName: String): RAction
 
-data class RequestJoinGameAction(val gameId: Long): RAction
+data class RequestJoinGame(val gameId: Long): RAction
 
 data class RequestReorderPlayers(val orderedPlayers: List<String>): RAction
 
 data class RequestUpdateSettings(val settings: CustomizableSettings): RAction
 
-class RequestStartGameAction: RAction
+class RequestStartGame: RAction
 
-data class PrepareMove(val move: PlayerMove): RAction
+class RequestSayReady: RAction
+
+data class RequestPrepareMove(val move: PlayerMove): RAction

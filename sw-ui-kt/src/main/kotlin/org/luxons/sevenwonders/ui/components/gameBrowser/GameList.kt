@@ -17,7 +17,7 @@ import kotlinx.html.classes
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.State
-import org.luxons.sevenwonders.ui.redux.RequestJoinGameAction
+import org.luxons.sevenwonders.ui.redux.RequestJoinGame
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
 import react.RBuilder
 import react.RComponent
@@ -121,6 +121,6 @@ val gameList = connectStateAndDispatch<GameListStateProps, GameListDispatchProps
         games = state.games
     },
     mapDispatchToProps = { dispatch, _ ->
-        joinGame = { gameId -> dispatch(RequestJoinGameAction(gameId = gameId)) }
+        joinGame = { gameId -> dispatch(RequestJoinGame(gameId = gameId)) }
     }
 )

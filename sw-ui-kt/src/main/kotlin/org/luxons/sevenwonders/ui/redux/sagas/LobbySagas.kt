@@ -6,7 +6,7 @@ import org.hildan.krossbow.stomp.StompSubscription
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
-import org.luxons.sevenwonders.ui.redux.RequestStartGameAction
+import org.luxons.sevenwonders.ui.redux.RequestStartGame
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
@@ -36,6 +36,6 @@ private suspend fun SwSagaContext.awaitGameStart(session: SevenWondersSession, l
 }
 
 private suspend fun SwSagaContext.awaitStartGame(session: SevenWondersSession) {
-    next<RequestStartGameAction>()
+    next<RequestStartGame>()
     session.startGame()
 }

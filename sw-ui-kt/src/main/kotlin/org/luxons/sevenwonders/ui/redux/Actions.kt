@@ -21,8 +21,6 @@ data class EnterGameAction(val gameId: Long): RAction
 
 data class TurnInfoEvent(val players: Map<String, PlayerDTO>): RAction
 
-data class PrepareMoveAction(val move: PlayerMove): RAction
-
 data class PreparedCardEvent(val card: PreparedCard): RAction
 
 data class PlayerReadyEvent(val username: String): RAction

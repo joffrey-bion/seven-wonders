@@ -12,7 +12,7 @@ import kotlinx.css.display
 import kotlinx.css.flexDirection
 import kotlinx.css.justifyContent
 import kotlinx.html.js.onSubmitFunction
-import org.luxons.sevenwonders.ui.redux.RequestCreateGameAction
+import org.luxons.sevenwonders.ui.redux.RequestCreateGame
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
@@ -73,5 +73,5 @@ private class CreateGameForm(props: CreateGameFormProps): RComponent<CreateGameF
 }
 
 val createGameForm: RClass<RProps> = connectDispatch(CreateGameForm::class) { dispatch, _ ->
-    createGame = { name -> dispatch(RequestCreateGameAction(name)) }
+    createGame = { name -> dispatch(RequestCreateGame(name)) }
 }
