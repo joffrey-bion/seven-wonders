@@ -14,7 +14,7 @@ import org.luxons.sevenwonders.ui.router.Route
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
     val lobbyId = getState().currentLobbyId ?: error("Lobby saga run without a current lobby")
     coroutineScope {
-        val lobbyUpdatesSubscription = session.watchLobbyUpdates(lobbyId)
+        val lobbyUpdatesSubscription = session.watchLobbyUpdates()
         launch { watchLobbyUpdates(lobbyUpdatesSubscription) }
         val startGameJob = launch { awaitStartGame(session) }
 

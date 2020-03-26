@@ -88,7 +88,7 @@ class GameBrowserController @Autowired constructor(
 
         logger.info("Player '{}' ({}) joined game {}", player.displayName, player.username, lobby.name)
         val lobbyDTO = lobby.toDTO(player)
-        lobbyController.sendLobbyUpdateToPlayers(lobbyDTO)
+        lobbyController.sendLobbyUpdateToPlayers(lobby, player)
         return lobbyDTO
     }
 

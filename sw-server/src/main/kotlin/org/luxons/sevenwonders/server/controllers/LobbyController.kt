@@ -1,10 +1,10 @@
 package org.luxons.sevenwonders.server.controllers
 
 import org.hildan.livedoc.core.annotations.Api
-import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
 import org.luxons.sevenwonders.server.api.toDTO
+import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
@@ -37,14 +37,15 @@ class LobbyController @Autowired constructor(
      */
     @MessageMapping("/lobby/leave")
     fun leave(principal: Principal) {
-        val lobby = principal.player.lobby
-        val player = lobby.removePlayer(principal.name)
+        val player = principal.player
+        val lobby = player.lobby
+        lobby.removePlayer(principal.name)
         if (lobby.getPlayers().isEmpty()) {
             lobbyRepository.remove(lobby.id)
         }
 
         logger.info("Player {} left game '{}'", player, lobby.name)
-        sendLobbyUpdateToPlayers(lobby.toDTO(principal.player))
+        sendLobbyUpdateToPlayers(lobby, player)
     }
 
     /**
@@ -61,7 +62,7 @@ class LobbyController @Autowired constructor(
         lobby.reorderPlayers(action.orderedPlayers)
 
         logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
-        sendLobbyUpdateToPlayers(lobby.toDTO(principal.player))
+        sendLobbyUpdateToPlayers(lobby, principal.player)
     }
 
     /**
@@ -74,16 +75,19 @@ class LobbyController @Autowired constructor(
      */
     @MessageMapping("/lobby/updateSettings")
     fun updateSettings(@Validated action: UpdateSettingsAction, principal: Principal) {
-        val lobby = principal.player.ownedLobby
+        val player = principal.player
+        val lobby = player.ownedLobby
         lobby.settings = action.settings
 
         logger.info("Updated settings of game '{}'", lobby.name)
-        sendLobbyUpdateToPlayers(lobby.toDTO(principal.player))
+        sendLobbyUpdateToPlayers(lobby, player)
     }
 
-    internal fun sendLobbyUpdateToPlayers(lobby: LobbyDTO) {
-        template.convertAndSend("/topic/lobby/" + lobby.id + "/updated", lobby)
-        template.convertAndSend("/topic/games", listOf(lobby))
+    internal fun sendLobbyUpdateToPlayers(lobby: Lobby, player: Player) {
+        lobby.getPlayers().forEach {
+            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobby.toDTO(it))
+        }
+        template.convertAndSend("/topic/games", listOf(lobby.toDTO(player)))
     }
 
     /**
