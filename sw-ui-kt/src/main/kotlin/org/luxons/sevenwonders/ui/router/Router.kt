@@ -8,8 +8,8 @@ object Router {
         push("/games")
     }
 
-    fun game(id: Long) {
-        push("/game/$id")
+    fun game() {
+        push("/game")
     }
 
     fun lobby() {

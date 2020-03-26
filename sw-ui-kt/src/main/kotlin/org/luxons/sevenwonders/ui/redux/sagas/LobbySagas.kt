@@ -29,8 +29,8 @@ private suspend fun SwSagaContext.handleGameStart(session: SevenWondersSession, 
     dispatch(EnterGameAction(lobbyId))
 
     coroutineScope {
-        launch { gameSaga(session, lobbyId) }
-        Router.game(lobbyId)
+        launch { gameSaga(session) }
+        Router.game()
     }
 }
 
