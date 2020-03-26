@@ -7,6 +7,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.promise
@@ -66,13 +67,28 @@ class SagaManager<S, A : RAction, R>(
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class SagaContext<S, A : RAction, R>(
-    private val reduxApi: MiddlewareApi<S, A, R>, private val actions: BroadcastChannel<A>
+    private val reduxApi: MiddlewareApi<S, A, R>,
+    private val actions: BroadcastChannel<A>
 ) {
+    /**
+     * Gets the current redux state.
+     */
+    fun getState(): S = reduxApi.getState()
+
     /**
      * Dispatches the given redux [action].
      */
     fun dispatch(action: A) {
         reduxApi.dispatch(action)
+    }
+
+    /**
+     * Dispatches an action given by [createAction] for each message received in [channel].
+     */
+    suspend fun <T> dispatchAll(channel: ReceiveChannel<T>, createAction: (T) -> A) {
+        for (msg in channel) {
+            reduxApi.dispatch(createAction(msg))
+        }
     }
 
     /**
