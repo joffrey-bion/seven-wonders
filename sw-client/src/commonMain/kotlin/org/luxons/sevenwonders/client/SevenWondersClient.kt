@@ -13,6 +13,7 @@ import org.hildan.krossbow.stomp.sendEmptyMsg
 import org.hildan.krossbow.stomp.subscribeEmptyMsg
 import org.luxons.sevenwonders.model.CustomizableSettings
 import org.luxons.sevenwonders.model.GameState
+import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
@@ -20,6 +21,7 @@ import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
+import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
@@ -112,5 +114,9 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
 
     suspend fun sayReady() {
         stompSession.sendEmptyMsg("/app/game/sayReady")
+    }
+
+    suspend fun prepareMove(move: PlayerMove) {
+        stompSession.convertAndSend("/app/game/prepareMove", PrepareMoveAction(move), PrepareMoveAction.serializer())
     }
 }
