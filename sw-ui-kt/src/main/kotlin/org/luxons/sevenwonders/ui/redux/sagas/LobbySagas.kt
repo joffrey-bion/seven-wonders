@@ -2,38 +2,40 @@ package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import org.hildan.krossbow.stomp.StompSubscription
 import org.luxons.sevenwonders.client.SevenWondersSession
+import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
 import org.luxons.sevenwonders.ui.redux.RequestStartGameAction
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
-import org.luxons.sevenwonders.ui.router.Router
+import org.luxons.sevenwonders.ui.router.Navigate
+import org.luxons.sevenwonders.ui.router.Route
 
-suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession, lobbyId: Long) {
+suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
+    val lobbyId = getState().currentLobbyId ?: error("Lobby saga run without a current lobby")
     coroutineScope {
-        launch { watchLobbyUpdates(session, lobbyId) }
-        launch { handleGameStart(session, lobbyId) }
-        launch { watchStartGame(session) }
+        val lobbyUpdatesSubscription = session.watchLobbyUpdates(lobbyId)
+        launch { watchLobbyUpdates(lobbyUpdatesSubscription) }
+        val startGameJob = launch { awaitStartGame(session) }
+
+        awaitGameStart(session, lobbyId)
+
+        lobbyUpdatesSubscription.unsubscribe()
+        startGameJob.cancel()
+        dispatch(Navigate(Route.GAME))
     }
 }
 
-private suspend fun SwSagaContext.watchLobbyUpdates(session: SevenWondersSession, lobbyId: Long) {
-    val lobbyUpdates = session.watchLobbyUpdates(lobbyId)
-    for (lobby in lobbyUpdates.messages) {
-        dispatch(UpdateLobbyAction(lobby))
-    }
+private suspend fun SwSagaContext.watchLobbyUpdates(lobbyUpdatesSubscription: StompSubscription<LobbyDTO>) {
+    dispatchAll(lobbyUpdatesSubscription.messages) { UpdateLobbyAction(it) }
 }
 
-private suspend fun SwSagaContext.handleGameStart(session: SevenWondersSession, lobbyId: Long) {
-    val gameStartSubscription = session.watchGameStart(lobbyId)
-    gameStartSubscription.messages.receive()
+private suspend fun SwSagaContext.awaitGameStart(session: SevenWondersSession, lobbyId: Long) {
+    session.awaitGameStart(lobbyId)
     dispatch(EnterGameAction(lobbyId))
-
-    coroutineScope {
-        launch { gameSaga(session) }
-        Router.game()
-    }
 }
 
-private suspend fun SwSagaContext.watchStartGame(session: SevenWondersSession) = onEach<RequestStartGameAction> {
+private suspend fun SwSagaContext.awaitStartGame(session: SevenWondersSession) {
+    next<RequestStartGameAction>()
     session.startGame()
 }

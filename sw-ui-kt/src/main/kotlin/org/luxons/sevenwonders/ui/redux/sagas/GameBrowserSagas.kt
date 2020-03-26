@@ -10,6 +10,8 @@ import org.luxons.sevenwonders.ui.redux.EnterLobbyAction
 import org.luxons.sevenwonders.ui.redux.RequestCreateGameAction
 import org.luxons.sevenwonders.ui.redux.RequestJoinGameAction
 import org.luxons.sevenwonders.ui.redux.UpdateGameListAction
+import org.luxons.sevenwonders.ui.router.Navigate
+import org.luxons.sevenwonders.ui.router.Route
 
 suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
     GameBrowserSaga(session, this).run()
@@ -26,6 +28,7 @@ private class GameBrowserSaga(
             val lobby = awaitCreateOrJoinGame()
             gamesSubscription.unsubscribe()
             sagaContext.dispatch(EnterLobbyAction(lobby))
+            sagaContext.dispatch(Navigate(Route.LOBBY))
         }
     }
 

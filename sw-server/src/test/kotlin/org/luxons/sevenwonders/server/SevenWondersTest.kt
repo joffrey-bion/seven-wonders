@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server
 
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
@@ -67,10 +68,10 @@ class SevenWondersTest {
             session2.joinGame(lobby.id)
 
             val outsiderSession = newPlayer("Outsider")
-            val started = outsiderSession.watchGameStart(lobby.id).messages
+            val started = launch { outsiderSession.awaitGameStart(lobby.id) }
 
             ownerSession.startGame()
-            val nothing = withTimeoutOrNull(30) { started.receive() }
+            val nothing = withTimeoutOrNull(30) { started.join() }
             assertNull(nothing)
             disconnect(ownerSession, session1, session2, outsiderSession)
         }
@@ -126,14 +127,14 @@ class SevenWondersTest {
         val session3 = newPlayer("Player3")
         session3.joinGame(lobby.id)
 
-        val gameStart1 = session1.watchGameStart(lobby.id).messages
-        val gameStart2 = session2.watchGameStart(lobby.id).messages
-        val gameStart3 = session3.watchGameStart(lobby.id).messages
+        val gameStart1 = launch { session1.awaitGameStart(lobby.id) }
+        val gameStart2 = launch { session2.awaitGameStart(lobby.id) }
+        val gameStart3 = launch { session3.awaitGameStart(lobby.id) }
         session1.startGame()
 
-        withTimeout(500) { gameStart1.receive() }
-        withTimeout(500) { gameStart2.receive() }
-        withTimeout(500) { gameStart3.receive() }
+        withTimeout(500) { gameStart1.join() }
+        withTimeout(500) { gameStart2.join() }
+        withTimeout(500) { gameStart3.join() }
 
         val turns1 = session1.watchTurns().messages
         val turns2 = session2.watchTurns().messages
