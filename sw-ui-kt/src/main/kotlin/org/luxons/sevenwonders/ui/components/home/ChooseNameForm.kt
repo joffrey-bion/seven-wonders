@@ -3,10 +3,10 @@ package org.luxons.sevenwonders.ui.components.home
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpInputGroup
-import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.utils.createElement
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
+import org.luxons.sevenwonders.ui.utils.createElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import react.RBuilder

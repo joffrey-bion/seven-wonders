@@ -1,4 +1,4 @@
-package com.palantir.blueprintjs.org.luxons.sevenwonders.ui.utils
+package org.luxons.sevenwonders.ui.utils
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

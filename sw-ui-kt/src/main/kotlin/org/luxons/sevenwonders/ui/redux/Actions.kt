@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.ui.redux
 
 import org.luxons.sevenwonders.model.GameState
-import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
@@ -19,7 +19,7 @@ data class UpdatePlayers(val players: Map<String, PlayerDTO>): RAction
 
 data class EnterGameAction(val gameId: Long): RAction
 
-data class TurnInfoEvent(val players: Map<String, PlayerDTO>): RAction
+data class TurnInfoEvent(val turnInfo: PlayerTurnInfo): RAction
 
 data class PreparedCardEvent(val card: PreparedCard): RAction
 

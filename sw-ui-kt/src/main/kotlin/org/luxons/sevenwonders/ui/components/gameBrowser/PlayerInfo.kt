@@ -1,4 +1,4 @@
-package com.palantir.blueprintjs.org.luxons.sevenwonders.ui.components.gameBrowser
+package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.connectState

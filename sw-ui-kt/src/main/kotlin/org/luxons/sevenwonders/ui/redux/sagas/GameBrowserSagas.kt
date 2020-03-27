@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.utils.awaitFirst
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.hildan.krossbow.stomp.StompSubscription
@@ -12,6 +11,7 @@ import org.luxons.sevenwonders.ui.redux.RequestJoinGame
 import org.luxons.sevenwonders.ui.redux.UpdateGameListAction
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
+import org.luxons.sevenwonders.ui.utils.awaitFirst
 
 suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
     GameBrowserSaga(session, this).run()
