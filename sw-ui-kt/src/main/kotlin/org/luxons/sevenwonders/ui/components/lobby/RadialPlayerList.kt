@@ -49,12 +49,12 @@ private fun RBuilder.roundTableImg(): ReactElement = img {
 }
 
 private fun List<PlayerDTO?>.withUserFirst(): List<PlayerDTO?> {
-    val nonUsersBeginning = takeWhile { !it.isUser }
+    val nonUsersBeginning = takeWhile { !it.isMe }
     val userToEnd = subList(nonUsersBeginning.size, size)
     return userToEnd + nonUsersBeginning
 }
 
-private val PlayerDTO?.isUser: Boolean get() = this?.isUser ?: false
+private val PlayerDTO?.isMe: Boolean get() = this?.isMe ?: false
 
 private fun <T> List<T>.growTo(targetSize: Int): List<T?> {
     if (size >= targetSize) return this
@@ -76,7 +76,7 @@ private fun RBuilder.playerItem(player: PlayerDTO): ReactElement = styledDiv {
         alignItems = Align.center
     }
     val title = if (player.isGameOwner) "Game owner" else null
-    userIcon(isUser = player.isUser, isOwner = player.isGameOwner, title = title)
+    userIcon(isMe = player.isMe, isOwner = player.isGameOwner, title = title)
     styledH5 {
         css {
            margin = "0"
@@ -92,7 +92,7 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
         alignItems = Align.center
         opacity = 0.3
     }
-    userIcon(isUser = false, isOwner = false, title = "Waiting for player...")
+    userIcon(isMe = false, isOwner = false, title = "Waiting for player...")
     styledH5 {
         css {
            margin = "0"
@@ -101,8 +101,8 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
     }
 }
 
-private fun RBuilder.userIcon(isUser: Boolean, isOwner: Boolean, title: String?): ReactElement {
+private fun RBuilder.userIcon(isMe: Boolean, isOwner: Boolean, title: String?): ReactElement {
     val iconName: IconName = if (isOwner) "badge" else "user"
-    val intent: Intent = if (isUser) Intent.WARNING else Intent.NONE
+    val intent: Intent = if (isMe) Intent.WARNING else Intent.NONE
     return bpIcon(name = iconName, intent = intent, size = 50, title = title)
 }

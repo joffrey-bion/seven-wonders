@@ -31,5 +31,5 @@ data class PlayerDTO(
     val displayName: String,
     val index: Int,
     val isGameOwner: Boolean,
-    val isUser: Boolean
+    val isMe: Boolean
 )
