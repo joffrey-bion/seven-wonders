@@ -13,9 +13,6 @@ import org.luxons.sevenwonders.ui.redux.TurnInfoEvent
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     val lobby = getState().currentLobby ?: error("Game saga run without a current game")
-    if (lobby.state != State.PLAYING) {
-        error("Game saga run but the game hasn't started")
-    }
     coroutineScope {
         val playerReadySub = session.watchPlayerReady(lobby.id)
         val preparedCardsSub = session.watchPreparedCards(lobby.id)
