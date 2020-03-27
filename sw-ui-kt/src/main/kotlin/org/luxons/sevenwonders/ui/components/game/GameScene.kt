@@ -80,18 +80,18 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     }
 
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
-        val bd = turnInfo.table.boards[turnInfo.playerIndex];
+        val board = turnInfo.table.boards[turnInfo.playerIndex]
         div {
             p { + turnInfo.message }
-//            boardComponent(board = bd)
+            boardComponent(board = board)
 //            handComponent(
 //                cards = turnInfo.hand,
 //                wonderUpgradable = turnInfo.wonderBuildability.isBuildable,
 //                prepareMove = props.prepareMove
 //            )
             productionBar(
-                gold = bd.gold,
-                production = bd.production
+                gold = board.gold,
+                production = board.production
             )
         }
     }
