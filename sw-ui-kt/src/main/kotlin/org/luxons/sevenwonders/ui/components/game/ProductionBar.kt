@@ -131,7 +131,6 @@ private fun getTokenName(resourceType: ResourceType)= "resources/${resourceType.
 
 private fun CSSBuilder.productionBarStyle() {
     alignItems = Align.center
-    //    background = "lightgray"
     background = "linear-gradient(#eaeaea, #888 7%)"
     bottom = 0.px
     borderTop(width = 1.px, color = Color("#8b8b8b"), style = BorderStyle.solid)
