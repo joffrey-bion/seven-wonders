@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.client
 
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.list
-import kotlinx.serialization.serializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.builtins.list
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.StompSubscription
 import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization

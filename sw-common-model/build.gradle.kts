@@ -4,7 +4,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 
-val kotlinSerialization = "0.14.0"
+val kotlinSerialization = "0.20.0"
 
 kotlin {
     jvm()
@@ -15,7 +15,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerialization")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerialization")
             }
         }
         val commonTest by getting {
@@ -27,7 +27,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerialization")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerialization")
             }
         }
         val jvmTest by getting {
@@ -39,7 +39,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js"))
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinSerialization")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinSerialization")
             }
         }
         val jsTest by getting {
