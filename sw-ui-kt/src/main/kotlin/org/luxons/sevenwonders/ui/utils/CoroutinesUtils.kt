@@ -4,10 +4,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.selects.select
 
-suspend inline fun <R> awaitFirst(
-    crossinline f1: suspend () -> R,
-    crossinline f2: suspend () -> R
-): R = coroutineScope {
+// Cannot inline or it crashes for some reason
+suspend fun <R> awaitFirst(f1: suspend () -> R, f2: suspend () -> R): R = coroutineScope {
     val deferred1 = async { f1() }
     val deferred2 = async { f2() }
     select<R> {
