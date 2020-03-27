@@ -1,13 +1,13 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.list
 import kotlinx.serialization.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.StompSubscription
 import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization
 import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
-import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
 import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
 import org.hildan.krossbow.stomp.subscribeEmptyMsg
@@ -37,14 +37,15 @@ class SevenWondersClient {
     }
 }
 
-@OptIn(ImplicitReflectionSerializer::class)
-suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKxSerialization.request(
+private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKxSerialization.request(
     sendDestination: String,
     receiveDestination: String,
-    payload: T? = null
+    payload: T? = null,
+    serializer: SerializationStrategy<T>,
+    deserializer: DeserializationStrategy<U>
 ): U {
-    val sub = subscribe<U>(receiveDestination)
-    convertAndSend(sendDestination, payload)
+    val sub = subscribe(receiveDestination, deserializer)
+    convertAndSend(sendDestination, payload, serializer)
     val msg = sub.messages.receive()
     sub.unsubscribe()
     return msg
@@ -57,23 +58,32 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun watchErrors(): StompSubscription<ErrorDTO> =
         stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
-    suspend fun chooseName(displayName: String): PlayerDTO {
-        val action = ChooseNameAction(displayName)
-        return stompSession.request("/app/chooseName", "/user/queue/nameChoice", action)
-    }
+    suspend fun chooseName(displayName: String): PlayerDTO = stompSession.request(
+        sendDestination = "/app/chooseName",
+        receiveDestination = "/user/queue/nameChoice",
+        payload = ChooseNameAction(displayName),
+        serializer = ChooseNameAction.serializer(),
+        deserializer = PlayerDTO.serializer()
+    )
 
     suspend fun watchGames(): StompSubscription<List<LobbyDTO>> =
         stompSession.subscribe("/topic/games", LobbyDTO.serializer().list)
 
-    suspend fun createGame(gameName: String): LobbyDTO {
-        val action = CreateGameAction(gameName)
-        return stompSession.request("/app/lobby/create", "/user/queue/lobby/joined", action)
-    }
+    suspend fun createGame(gameName: String): LobbyDTO = stompSession.request(
+        sendDestination = "/app/lobby/create",
+        receiveDestination = "/user/queue/lobby/joined",
+        payload = CreateGameAction(gameName),
+        serializer = CreateGameAction.serializer(),
+        deserializer = LobbyDTO.serializer()
+    )
 
-    suspend fun joinGame(gameId: Long): LobbyDTO {
-        val action = JoinGameAction(gameId)
-        return stompSession.request("/app/lobby/join", "/user/queue/lobby/joined", action)
-    }
+    suspend fun joinGame(gameId: Long): LobbyDTO = stompSession.request(
+        sendDestination = "/app/lobby/join",
+        receiveDestination = "/user/queue/lobby/joined",
+        payload = JoinGameAction(gameId),
+        serializer = JoinGameAction.serializer(),
+        deserializer = LobbyDTO.serializer()
+    )
 
     suspend fun leaveGame() {
         stompSession.sendEmptyMsg("/app/lobby/leave")
