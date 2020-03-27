@@ -31,7 +31,7 @@ class SevenWondersTest {
     @Before
     fun setUpClientAndUrl() {
         client = SevenWondersClient()
-        serverUrl = "ws://localhost:$randomServerPort"
+        serverUrl = "localhost:$randomServerPort"
     }
 
     private suspend fun disconnect(vararg sessions: SevenWondersSession) {
