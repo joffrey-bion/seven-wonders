@@ -15,7 +15,7 @@ kotlin {
             dependencies {
                 api(project(":sw-common-model"))
                 implementation(kotlin("stdlib-common"))
-                api("org.hildan.krossbow:krossbow-stomp-kxserialization:$krossbowVersion")
+                api("org.hildan.krossbow:krossbow-stomp-kxserialization-metadata:$krossbowVersion")
             }
         }
         val commonTest by getting {
