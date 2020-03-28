@@ -182,6 +182,6 @@ class Game internal constructor(
      */
     fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computeScore(players[it.playerIndex]) })
 
-    private class MissingPreparedMoveException internal constructor(playerIndex: Int) :
+    private class MissingPreparedMoveException(playerIndex: Int) :
         IllegalStateException("Player $playerIndex has not prepared his move")
 }
