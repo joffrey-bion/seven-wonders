@@ -7,7 +7,6 @@ import org.luxons.sevenwonders.ui.redux.PlayerReadyEvent
 import org.luxons.sevenwonders.ui.redux.PreparedCardEvent
 import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
 import org.luxons.sevenwonders.ui.redux.RequestSayReady
-import org.luxons.sevenwonders.ui.redux.TableUpdateEvent
 import org.luxons.sevenwonders.ui.redux.TurnInfoEvent
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
@@ -15,13 +14,11 @@ suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     coroutineScope {
         val playerReadySub = session.watchPlayerReady(lobby.id)
         val preparedCardsSub = session.watchPreparedCards(lobby.id)
-        val tableUpdatesSub = session.watchTableUpdates(lobby.id)
         val turnInfoSub = session.watchTurns()
         val sayReadyJob = launch { onEach<RequestSayReady> { session.sayReady() } }
         val prepareMoveJob = launch { onEach<RequestPrepareMove> { session.prepareMove(it.move) } }
         launch { dispatchAll(playerReadySub.messages) { PlayerReadyEvent(it) } }
         launch { dispatchAll(preparedCardsSub.messages) { PreparedCardEvent(it) } }
-        launch { dispatchAll(tableUpdatesSub.messages) { TableUpdateEvent(it) } }
         launch { dispatchAll(turnInfoSub.messages) { TurnInfoEvent(it) } }
         // TODO await game end
         // TODO unsubscribe all subs, cancel all jobs

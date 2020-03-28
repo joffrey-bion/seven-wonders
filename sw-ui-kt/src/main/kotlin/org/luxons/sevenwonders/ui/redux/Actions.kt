@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
@@ -24,5 +23,3 @@ data class TurnInfoEvent(val turnInfo: PlayerTurnInfo): RAction
 data class PreparedCardEvent(val card: PreparedCard): RAction
 
 data class PlayerReadyEvent(val username: String): RAction
-
-data class TableUpdateEvent(val table: GameState): RAction

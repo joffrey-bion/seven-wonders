@@ -2,7 +2,8 @@ package org.luxons.sevenwonders.server.controllers
 
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.engine.Game
-import org.luxons.sevenwonders.model.GameState
+import org.luxons.sevenwonders.model.Action
+import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.server.api.toDTO
@@ -40,8 +41,7 @@ class GameController @Autowired constructor(
         val game = player.game
         logger.info("Game {}: player {} is ready for the next turn", game.id, player)
 
-        val lobby = player.lobby
-        val players = lobby.getPlayers()
+        val players = player.lobby.getPlayers()
 
         sendPlayerReady(game.id, player)
 
@@ -49,19 +49,9 @@ class GameController @Autowired constructor(
         if (allReady) {
             logger.info("Game {}: all players ready, sending turn info", game.id)
             players.forEach { it.isReady = false }
-            sendTurnInfo(players, game)
+            sendTurnInfo(players, game, false)
         }
     }
-
-    private fun sendTurnInfo(players: List<Player>, game: Game) {
-        for (turnInfo in game.getCurrentTurnInfo()) {
-            val player = players[turnInfo.playerIndex]
-            template.convertAndSendToUser(player.username, "/queue/game/turn", turnInfo)
-        }
-    }
-
-    private fun sendPlayerReady(gameId: Long, player: Player) =
-        template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
 
     /**
      * Prepares the player's next move. When all players have prepared their moves, all moves are executed.
@@ -82,16 +72,28 @@ class GameController @Autowired constructor(
 
         if (game.allPlayersPreparedTheirMove()) {
             logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
-            val table = game.playTurn()
-            sendPlayedMoves(game.id, table)
+            game.playTurn()
+            sendTurnInfo(player.lobby.getPlayers(), game, true)
         }
     }
 
-    private fun sendPlayedMoves(gameId: Long, gameState: GameState) =
-        template.convertAndSend("/topic/game/$gameId/tableUpdates", gameState)
+    private fun sendPlayerReady(gameId: Long, player: Player) =
+            template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
 
     private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) =
-        template.convertAndSend("/topic/game/$gameId/prepared", preparedCard)
+            template.convertAndSend("/topic/game/$gameId/prepared", preparedCard)
+
+    private fun sendTurnInfo(players: List<Player>, game: Game, hideHands: Boolean) {
+        val turns = game.getCurrentTurnInfo()
+        val turnsToSend = if (hideHands) turns.hideHandsAndWaitForReadiness() else turns
+        for (turnInfo in turnsToSend) {
+            val player = players[turnInfo.playerIndex]
+            template.convertAndSendToUser(player.username, "/queue/game/turn", turnInfo)
+        }
+    }
+
+    private fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() =
+            map { it.copy(action = Action.SAY_READY, hand = null) }
 
     companion object {
         private val logger = LoggerFactory.getLogger(GameController::class.java)

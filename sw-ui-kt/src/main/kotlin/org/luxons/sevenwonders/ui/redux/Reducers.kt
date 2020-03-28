@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
@@ -11,8 +10,7 @@ data class SwState(
     val gamesById: Map<Long, LobbyDTO> = emptyMap(),
     val currentPlayerUsername: String? = null,
     val currentLobbyId: Long? = null,
-    val currentTurnInfo: PlayerTurnInfo? = null,
-    val currentTable: GameState? = null
+    val currentTurnInfo: PlayerTurnInfo? = null
 ) {
     val games: List<LobbyDTO> = gamesById.values.toList()
     val currentLobby: LobbyDTO? = currentLobbyId?.let { gamesById[it] }
@@ -24,14 +22,15 @@ fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
     gamesById = gamesReducer(state.gamesById, action),
     currentPlayerUsername = currentPlayerReducer(state.currentPlayerUsername, action),
     currentLobbyId = currentLobbyReducer(state.currentLobbyId, action),
-    currentTurnInfo = currentTurnInfoReducer(state.currentTurnInfo, action),
-    currentTable = currentTableReducer(state.currentTable, action)
+    currentTurnInfo = currentTurnInfoReducer(state.currentTurnInfo, action)
 )
 
 private fun playersReducer(playersByUsername: Map<String, PlayerDTO>, action: RAction): Map<String, PlayerDTO> = when (action) {
     is UpdatePlayers -> playersByUsername + action.players
     is UpdateLobbyAction -> playersByUsername + action.lobby.players.associateBy { it.username }
     is SetCurrentPlayerAction -> playersByUsername + (action.player.username to action.player)
+    is PlayerReadyEvent -> playersByUsername + (action.username to playersByUsername.getValue(action.username)
+        .copy(isReady = true))
     else -> playersByUsername
 }
 
@@ -39,6 +38,15 @@ private fun gamesReducer(games: Map<Long, LobbyDTO>, action: RAction): Map<Long,
     is UpdateGameListAction -> action.games.associateBy { it.id } // replaces because should remove deleted games
     is EnterLobbyAction -> games + (action.lobby.id to action.lobby)
     is UpdateLobbyAction -> games + (action.lobby.id to action.lobby)
+    is PlayerReadyEvent -> games.mapValues { (_, l) ->
+        if (l.players.any { it.username == action.username }) {
+            l.copy(players = l.players.map { p ->
+                if (p.username == action.username) p.copy(isReady = true) else p
+            })
+        } else {
+            l
+        }
+    }
     else -> games
 }
 
@@ -54,12 +62,5 @@ private fun currentLobbyReducer(currentLobbyId: Long?, action: RAction): Long? =
 
 private fun currentTurnInfoReducer(currentTurnInfo: PlayerTurnInfo?, action: RAction): PlayerTurnInfo? = when (action) {
     is TurnInfoEvent -> action.turnInfo
-    is TableUpdateEvent -> null
     else -> currentTurnInfo
-}
-
-private fun currentTableReducer(currentTable: GameState?, action: RAction): GameState? = when (action) {
-    is TurnInfoEvent -> action.turnInfo.table
-    is TableUpdateEvent -> action.table
-    else -> currentTable
 }

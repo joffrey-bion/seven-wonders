@@ -13,4 +13,4 @@ fun Lobby.toDTO(currentPlayer: Player): LobbyDTO {
 }
 
 fun Player.toDTO(currentUser: String) =
-    PlayerDTO(username, displayName, index, isGameOwner, username === currentUser)
+    PlayerDTO(username, displayName, index, isGameOwner, username === currentUser, isReady)

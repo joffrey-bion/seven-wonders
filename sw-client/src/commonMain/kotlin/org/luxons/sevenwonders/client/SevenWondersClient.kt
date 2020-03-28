@@ -113,9 +113,6 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun watchPlayerReady(gameId: Long): StompSubscription<String> =
             stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
 
-    suspend fun watchTableUpdates(gameId: Long): StompSubscription<GameState> =
-            stompSession.subscribe("/topic/game/$gameId/tableUpdates", GameState.serializer())
-
     suspend fun watchPreparedCards(gameId: Long): StompSubscription<PreparedCard> =
             stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
 
