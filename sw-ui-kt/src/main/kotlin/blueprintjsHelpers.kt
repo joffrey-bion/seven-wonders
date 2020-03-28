@@ -36,7 +36,7 @@ fun RBuilder.bpButton(
     icon: IconName? = null,
     rightIcon: IconName? = null,
     intent: Intent = Intent.NONE,
-    onClick: ((event: MouseEvent) -> Unit)?,
+    onClick: ((event: MouseEvent) -> Unit)? = {},
     block: RHandler<IButtonProps> = {}
 ): ReactElement = child(Button::class) {
     attrs {
@@ -53,8 +53,14 @@ fun RBuilder.bpButton(
 }
 
 fun RBuilder.bpButtonGroup(
+    large: Boolean = false,
+    minimal: Boolean = false,
     block: RHandler<IButtonGroupProps> = {}
 ): ReactElement = child(ButtonGroup::class) {
+    attrs {
+        this.large = large
+        this.minimal = minimal
+    }
     block()
 }
 
