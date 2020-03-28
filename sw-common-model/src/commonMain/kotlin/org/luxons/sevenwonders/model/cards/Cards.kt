@@ -5,17 +5,27 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
+interface Card {
+    val name: String
+    val color: Color
+    val requirements: Requirements
+    val chainParent: String?
+    val chainChildren: List<String>
+    val image: String
+    val back: CardBack
+}
+
 @Serializable
 data class TableCard(
-    val name: String,
-    val color: Color,
-    val requirements: Requirements,
-    val chainParent: String?,
-    val chainChildren: List<String>,
-    val image: String,
-    val back: CardBack,
+    override val name: String,
+    override val color: Color,
+    override val requirements: Requirements,
+    override val chainParent: String?,
+    override val chainChildren: List<String>,
+    override val image: String,
+    override val back: CardBack,
     val playedDuringLastMove: Boolean
-)
+) : Card
 
 /**
  * A card with contextual information relative to the hand it is sitting in. The extra information is especially useful
@@ -23,15 +33,15 @@ data class TableCard(
  */
 @Serializable
 data class HandCard(
-    val name: String,
-    val color: Color,
-    val requirements: Requirements,
-    val chainParent: String?,
-    val chainChildren: List<String>,
-    val image: String,
-    val back: CardBack,
+    override val name: String,
+    override val color: Color,
+    override val requirements: Requirements,
+    override val chainParent: String?,
+    override val chainChildren: List<String>,
+    override val image: String,
+    override val back: CardBack,
     val playability: CardPlayability
-)
+) : Card
 
 @Serializable
 data class PreparedCard(

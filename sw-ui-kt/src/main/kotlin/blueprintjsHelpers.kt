@@ -52,6 +52,12 @@ fun RBuilder.bpButton(
     block()
 }
 
+fun RBuilder.bpButtonGroup(
+    block: RHandler<IButtonGroupProps> = {}
+): ReactElement = child(ButtonGroup::class) {
+    block()
+}
+
 fun RBuilder.bpInputGroup(
     large: Boolean = false,
     placeholder: String = "",

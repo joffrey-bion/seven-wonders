@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpNonIdealState
+import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.components.game.handComponent
 import kotlinx.css.CSSBuilder
 import kotlinx.css.Overflow
 import kotlinx.css.Position
@@ -84,11 +85,11 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         div {
             p { + turnInfo.message }
             boardComponent(board = board)
-//            handComponent(
-//                cards = turnInfo.hand,
-//                wonderUpgradable = turnInfo.wonderBuildability.isBuildable,
-//                prepareMove = props.prepareMove
-//            )
+            handComponent(
+                cards = turnInfo.hand,
+                wonderUpgradable = turnInfo.wonderBuildability.isBuildable,
+                prepareMove = props.prepareMove
+            )
             productionBar(
                 gold = board.gold,
                 production = board.production
