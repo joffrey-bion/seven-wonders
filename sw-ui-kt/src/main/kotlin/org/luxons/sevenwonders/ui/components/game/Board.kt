@@ -92,7 +92,8 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
             }
         }
         block()
-        cardImage(card = card) {
+        val highlightColor = if (card.playedDuringLastMove) Color.gold else null
+        cardImage(card = card, highlightColor = highlightColor) {
             css {
                 maxWidth = 10.vw
                 maxHeight = 25.vh
