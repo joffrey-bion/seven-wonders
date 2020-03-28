@@ -54,6 +54,7 @@ private fun currentLobbyReducer(currentLobbyId: Long?, action: RAction): Long? =
 
 private fun currentTurnInfoReducer(currentTurnInfo: PlayerTurnInfo?, action: RAction): PlayerTurnInfo? = when (action) {
     is TurnInfoEvent -> action.turnInfo
+    is TableUpdateEvent -> null
     else -> currentTurnInfo
 }
 
