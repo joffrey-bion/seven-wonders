@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.ui.redux.sagas
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.ui.redux.PlayerReadyEvent
 import org.luxons.sevenwonders.ui.redux.PreparedCardEvent
 import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
@@ -27,5 +26,6 @@ suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
         // TODO await game end
         // TODO unsubscribe all subs, cancel all jobs
     }
+    console.log("End of game saga")
 }
 
