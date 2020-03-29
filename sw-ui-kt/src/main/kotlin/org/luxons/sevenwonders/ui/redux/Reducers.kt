@@ -3,61 +3,46 @@ package org.luxons.sevenwonders.ui.redux
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
+import org.luxons.sevenwonders.model.api.State
 import redux.RAction
 
 data class SwState(
-    val playersByUsername: Map<String, PlayerDTO> = emptyMap(),
+    val currentPlayer: PlayerDTO? = null,
+    // they must be by ID to support updates to a sublist
     val gamesById: Map<Long, LobbyDTO> = emptyMap(),
     val currentPlayerUsername: String? = null,
-    val currentLobbyId: Long? = null,
+    val currentLobby: LobbyDTO? = null,
     val currentTurnInfo: PlayerTurnInfo? = null
 ) {
     val games: List<LobbyDTO> = gamesById.values.toList()
-    val currentLobby: LobbyDTO? = currentLobbyId?.let { gamesById[it] }
-    val currentPlayer: PlayerDTO? = currentPlayerUsername?.let { playersByUsername[it] }
 }
 
 fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
-    playersByUsername = playersReducer(state.playersByUsername, action),
     gamesById = gamesReducer(state.gamesById, action),
-    currentPlayerUsername = currentPlayerReducer(state.currentPlayerUsername, action),
-    currentLobbyId = currentLobbyReducer(state.currentLobbyId, action),
+    currentPlayer = currentPlayerReducer(state.currentPlayer, action),
+    currentLobby = currentLobbyReducer(state.currentLobby, action),
     currentTurnInfo = currentTurnInfoReducer(state.currentTurnInfo, action)
 )
 
-private fun playersReducer(playersByUsername: Map<String, PlayerDTO>, action: RAction): Map<String, PlayerDTO> = when (action) {
-    is UpdatePlayers -> playersByUsername + action.players
-    is UpdateLobbyAction -> playersByUsername + action.lobby.players.associateBy { it.username }
-    is SetCurrentPlayerAction -> playersByUsername + (action.player.username to action.player)
-    is PlayerReadyEvent -> playersByUsername + (action.username to playersByUsername.getValue(action.username)
-        .copy(isReady = true))
-    else -> playersByUsername
-}
-
 private fun gamesReducer(games: Map<Long, LobbyDTO>, action: RAction): Map<Long, LobbyDTO> = when (action) {
-    is UpdateGameListAction -> action.games.associateBy { it.id } // replaces because should remove deleted games
-    is EnterLobbyAction -> games + (action.lobby.id to action.lobby)
-    is UpdateLobbyAction -> games + (action.lobby.id to action.lobby)
-    is PlayerReadyEvent -> games.mapValues { (_, l) ->
-        if (l.players.any { it.username == action.username }) {
-            l.copy(players = l.players.map { p ->
-                if (p.username == action.username) p.copy(isReady = true) else p
-            })
-        } else {
-            l
-        }
-    }
+    is UpdateGameListAction -> (games + action.games.associateBy { it.id }).filterValues { it.state != State.FINISHED }
     else -> games
 }
 
-private fun currentPlayerReducer(username: String?, action: RAction): String? = when (action) {
-    is SetCurrentPlayerAction -> action.player.username
-    else -> username
+private fun currentPlayerReducer(currentPlayer: PlayerDTO?, action: RAction): PlayerDTO? = when (action) {
+    is SetCurrentPlayerAction -> action.player
+    else -> currentPlayer
 }
 
-private fun currentLobbyReducer(currentLobbyId: Long?, action: RAction): Long? = when (action) {
-    is EnterLobbyAction -> action.lobby.id
-    else -> currentLobbyId
+private fun currentLobbyReducer(currentLobby: LobbyDTO?, action: RAction): LobbyDTO? = when (action) {
+    is EnterLobbyAction -> action.lobby
+    is UpdateLobbyAction -> action.lobby
+    is PlayerReadyEvent -> currentLobby?.let { l ->
+        l.copy(players = l.players.map { p ->
+            if (p.username == action.username) p.copy(isReady = true) else p
+        })
+    }
+    else -> currentLobby
 }
 
 private fun currentTurnInfoReducer(currentTurnInfo: PlayerTurnInfo?, action: RAction): PlayerTurnInfo? = when (action) {

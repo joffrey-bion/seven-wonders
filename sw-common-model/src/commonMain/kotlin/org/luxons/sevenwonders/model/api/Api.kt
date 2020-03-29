@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
 
 enum class State {
-    LOBBY, PLAYING
+    LOBBY, PLAYING, FINISHED
 }
 
 @Serializable

@@ -82,6 +82,7 @@ private fun RBuilder.gameStatus(state: State) {
     val intent = when(state) {
         State.LOBBY -> Intent.SUCCESS
         State.PLAYING -> Intent.WARNING
+        State.FINISHED -> Intent.DANGER
     }
     bpTag(minimal = true, intent = intent) {
         +state.toString()
