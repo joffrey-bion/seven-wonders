@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
@@ -22,6 +23,7 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
     launch {
         errorSaga(session)
     }
+    yield() // ensures the error saga starts
 
     val player = session.chooseName(action.playerName)
     dispatch(SetCurrentPlayerAction(player))
