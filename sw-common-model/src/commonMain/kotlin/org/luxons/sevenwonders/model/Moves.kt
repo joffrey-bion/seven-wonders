@@ -19,7 +19,7 @@ enum class Action(val message: String) {
 @Serializable
 data class PlayerTurnInfo(
     val playerIndex: Int,
-    val table: GameState,
+    val table: TableState,
     val action: Action,
     val hand: List<HandCard>?,
     val preparedMove: PlayedMove?,

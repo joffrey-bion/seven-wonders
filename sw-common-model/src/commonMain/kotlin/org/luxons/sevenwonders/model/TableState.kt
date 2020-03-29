@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.model.cards.HandRotationDirection
 typealias Age = Int
 
 @Serializable
-data class GameState(
+data class TableState(
     val boards: List<Board>,
     val currentAge: Age,
     val handRotationDirection: HandRotationDirection,
