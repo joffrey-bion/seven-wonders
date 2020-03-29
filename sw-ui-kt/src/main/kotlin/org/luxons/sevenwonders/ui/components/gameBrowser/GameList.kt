@@ -15,6 +15,7 @@ import kotlinx.css.flexDirection
 import kotlinx.css.verticalAlign
 import kotlinx.html.classes
 import kotlinx.html.title
+import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.ui.redux.RequestJoinGame
@@ -30,6 +31,7 @@ import styled.styledSpan
 import styled.styledTr
 
 interface GameListStateProps : RProps {
+    var connectedPlayer: ConnectedPlayer
     var games: List<LobbyDTO>
 }
 
@@ -56,69 +58,73 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
             }
         }
     }
-}
 
-private fun RBuilder.gameListHeaderRow() = tr {
-    th { +"Name" }
-    th { +"Status" }
-    th { +"Nb Players" }
-    th { +"Join" }
-}
+    private fun RBuilder.gameListHeaderRow() = tr {
+        th { +"Name" }
+        th { +"Status" }
+        th { +"Nb Players" }
+        th { +"Join" }
+    }
 
-private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) = styledTr {
-    css {
-        verticalAlign = VerticalAlign.middle
-    }
-    attrs {
-        key = lobby.id.toString()
-    }
-    td { +lobby.name }
-    td { gameStatus(lobby.state) }
-    td { playerCount(lobby.players.size) }
-    td { joinButton(lobby, joinGame) }
-}
-
-private fun RBuilder.gameStatus(state: State) {
-    val intent = when(state) {
-        State.LOBBY -> Intent.SUCCESS
-        State.PLAYING -> Intent.WARNING
-        State.FINISHED -> Intent.DANGER
-    }
-    bpTag(minimal = true, intent = intent) {
-        +state.toString()
-    }
-}
-
-private fun RBuilder.playerCount(nPlayers: Int) {
-    styledDiv {
+    private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) = styledTr {
         css {
-            display = Display.flex
-            flexDirection = FlexDirection.row
-            alignItems = Align.center
+            verticalAlign = VerticalAlign.middle
         }
         attrs {
-            title = "Number of players"
+            key = lobby.id.toString()
         }
-        bpIcon(name = "people", title = null)
-        styledSpan {
-            +nPlayers.toString()
+        td { +lobby.name }
+        td { gameStatus(lobby.state) }
+        td { playerCount(lobby.players.size) }
+        td { joinButton(lobby) }
+    }
+
+    private fun RBuilder.gameStatus(state: State) {
+        val intent = when(state) {
+            State.LOBBY -> Intent.SUCCESS
+            State.PLAYING -> Intent.WARNING
+            State.FINISHED -> Intent.DANGER
         }
+        bpTag(minimal = true, intent = intent) {
+            +state.toString()
+        }
+    }
+
+    private fun RBuilder.playerCount(nPlayers: Int) {
+        styledDiv {
+            css {
+                display = Display.flex
+                flexDirection = FlexDirection.row
+                alignItems = Align.center
+            }
+            attrs {
+                title = "Number of players"
+            }
+            bpIcon(name = "people", title = null)
+            styledSpan {
+                +nPlayers.toString()
+            }
+        }
+    }
+
+    private fun RBuilder.joinButton(lobby: LobbyDTO) {
+        val joinability = lobby.joinability(props.connectedPlayer.displayName)
+        bpButton(
+            minimal = true,
+            title = joinability.tooltip,
+            icon = "arrow-right",
+            disabled = !joinability.canDo,
+            onClick = { props.joinGame(lobby.id) }
+        )
     }
 }
 
-private fun RBuilder.joinButton(lobby: LobbyDTO, joinGame: (Long) -> Unit) {
-    bpButton(
-        minimal = true,
-        title = lobby.joinAction.tooltip,
-        icon = "arrow-right",
-        disabled = !lobby.joinAction.canDo,
-        onClick = { joinGame(lobby.id) }
-    )
-}
+fun RBuilder.gameList() = gameList {}
 
-val gameList = connectStateAndDispatch<GameListStateProps, GameListDispatchProps, GameListProps>(
+private val gameList = connectStateAndDispatch<GameListStateProps, GameListDispatchProps, GameListProps>(
     clazz = GameListPresenter::class,
     mapStateToProps = { state, _ ->
+        connectedPlayer = state.connectedPlayer ?: error("there should be a connected player")
         games = state.games
     },
     mapDispatchToProps = { dispatch, _ ->

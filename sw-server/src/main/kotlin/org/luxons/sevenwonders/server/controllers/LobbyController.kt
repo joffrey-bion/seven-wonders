@@ -45,7 +45,7 @@ class LobbyController @Autowired constructor(
         }
 
         logger.info("Player {} left game '{}'", player, lobby.name)
-        sendLobbyUpdateToPlayers(lobby, player)
+        sendLobbyUpdateToPlayers(lobby)
     }
 
     /**
@@ -62,7 +62,7 @@ class LobbyController @Autowired constructor(
         lobby.reorderPlayers(action.orderedPlayers)
 
         logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
-        sendLobbyUpdateToPlayers(lobby, principal.player)
+        sendLobbyUpdateToPlayers(lobby)
     }
 
     /**
@@ -75,19 +75,18 @@ class LobbyController @Autowired constructor(
      */
     @MessageMapping("/lobby/updateSettings")
     fun updateSettings(@Validated action: UpdateSettingsAction, principal: Principal) {
-        val player = principal.player
-        val lobby = player.ownedLobby
+        val lobby = principal.player.ownedLobby
         lobby.settings = action.settings
 
         logger.info("Updated settings of game '{}'", lobby.name)
-        sendLobbyUpdateToPlayers(lobby, player)
+        sendLobbyUpdateToPlayers(lobby)
     }
 
-    internal fun sendLobbyUpdateToPlayers(lobby: Lobby, player: Player) {
+    internal fun sendLobbyUpdateToPlayers(lobby: Lobby) {
         lobby.getPlayers().forEach {
-            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobby.toDTO(it))
+            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobby.toDTO())
         }
-        template.convertAndSend("/topic/games", listOf(lobby.toDTO(player)))
+        template.convertAndSend("/topic/games", listOf(lobby.toDTO()))
     }
 
     /**

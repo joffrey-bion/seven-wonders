@@ -42,7 +42,7 @@ class GameBrowserController @Autowired constructor(
     fun listGames(principal: Principal): Collection<LobbyDTO> {
         logger.info("Player '{}' subscribed to /topic/games", principal.name)
         val player = playerRepository.find(principal.name)
-        return lobbyRepository.list().map { it.toDTO(player) }
+        return lobbyRepository.list().map { it.toDTO() }
     }
 
     /**
@@ -64,7 +64,7 @@ class GameBrowserController @Autowired constructor(
         logger.info("Game '{}' ({}) created by {} ({})", lobby.name, lobby.id, player.displayName, player.username)
 
         // notify everyone that a new game exists
-        val lobbyDto = lobby.toDTO(player)
+        val lobbyDto = lobby.toDTO()
         template.convertAndSend("/topic/games", listOf(lobbyDto))
         return lobbyDto
     }
@@ -87,8 +87,8 @@ class GameBrowserController @Autowired constructor(
         lobby.addPlayer(player)
 
         logger.info("Player '{}' ({}) joined game {}", player.displayName, player.username, lobby.name)
-        val lobbyDTO = lobby.toDTO(player)
-        lobbyController.sendLobbyUpdateToPlayers(lobby, player)
+        val lobbyDTO = lobby.toDTO()
+        lobbyController.sendLobbyUpdateToPlayers(lobby)
         return lobbyDTO
     }
 

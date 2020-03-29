@@ -34,14 +34,15 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
         div {
             h2 { +"${currentGame.name} — Lobby" }
-            radialPlayerList(currentGame.players)
+            radialPlayerList(currentGame.players, currentPlayer)
             if (currentPlayer.isGameOwner) {
+                val startability = currentGame.startability(currentPlayer.username)
                 bpButton(
                     large = true,
                     intent = Intent.PRIMARY,
                     icon = "play",
-                    title = currentGame.startAction.tooltip,
-                    disabled = !currentGame.startAction.canDo,
+                    title = startability.tooltip,
+                    disabled = !startability.canDo,
                     onClick = { props.startGame() }
                 ) {
                     + "START"

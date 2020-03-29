@@ -66,7 +66,7 @@ class GameController @Autowired constructor(
         val player = principal.player
         val game = player.game
         val preparedCardBack = game.prepareMove(player.index, action.move)
-        val preparedCard = PreparedCard(player.toDTO(principal.name), preparedCardBack)
+        val preparedCard = PreparedCard(player.toDTO(), preparedCardBack)
         logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
         sendPreparedCard(game.id, preparedCard)
 

@@ -1,12 +1,12 @@
 package org.luxons.sevenwonders.ui.redux
 
 import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
-import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import redux.RAction
 
-data class SetCurrentPlayerAction(val player: PlayerDTO): RAction
+data class SetCurrentPlayerAction(val player: ConnectedPlayer): RAction
 
 data class UpdateGameListAction(val games: List<LobbyDTO>): RAction
 

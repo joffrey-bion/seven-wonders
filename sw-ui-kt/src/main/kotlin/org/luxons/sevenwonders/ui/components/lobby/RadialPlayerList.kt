@@ -19,11 +19,11 @@ import styled.css
 import styled.styledDiv
 import styled.styledH5
 
-fun RBuilder.radialPlayerList(players: List<PlayerDTO>): ReactElement {
+fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
     val playerItemBuilders = players
         .growTo(targetSize = 3)
-        .withUserFirst()
-        .map { p -> p.elementBuilder() }
+        .withUserFirst(currentPlayer)
+        .map { p -> p.elementBuilder(p?.username == currentPlayer.username) }
 
     val tableImgBuilder: ElementBuilder = { roundTableImg() }
 
@@ -48,35 +48,33 @@ private fun RBuilder.roundTableImg(): ReactElement = img {
     }
 }
 
-private fun List<PlayerDTO?>.withUserFirst(): List<PlayerDTO?> {
-    val nonUsersBeginning = takeWhile { !it.isMe }
+private fun List<PlayerDTO?>.withUserFirst(me: PlayerDTO): List<PlayerDTO?> {
+    val nonUsersBeginning = takeWhile { it?.username != me.username }
     val userToEnd = subList(nonUsersBeginning.size, size)
     return userToEnd + nonUsersBeginning
 }
-
-private val PlayerDTO?.isMe: Boolean get() = this?.isMe ?: false
 
 private fun <T> List<T>.growTo(targetSize: Int): List<T?> {
     if (size >= targetSize) return this
     return this + List(targetSize - size) { null }
 }
 
-private fun PlayerDTO?.elementBuilder(): ElementBuilder {
+private fun PlayerDTO?.elementBuilder(isMe: Boolean): ElementBuilder {
     if (this == null) {
         return { playerPlaceholder() }
     } else {
-        return { playerItem(this@elementBuilder) }
+        return { playerItem(this@elementBuilder, isMe) }
     }
 }
 
-private fun RBuilder.playerItem(player: PlayerDTO): ReactElement = styledDiv {
+private fun RBuilder.playerItem(player: PlayerDTO, isMe: Boolean): ReactElement = styledDiv {
     css {
         display = Display.flex
         flexDirection = FlexDirection.column
         alignItems = Align.center
     }
     val title = if (player.isGameOwner) "Game owner" else null
-    userIcon(isMe = player.isMe, isOwner = player.isGameOwner, title = title)
+    userIcon(isMe = isMe, isOwner = player.isGameOwner, title = title)
     styledH5 {
         css {
            margin = "0"

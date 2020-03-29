@@ -50,7 +50,7 @@ class GameTest {
         assertEquals(nbPlayers, turnInfos.size)
         turnInfos.forEach {
             assertEquals(ageToCheck, it.currentAge)
-            assertEquals(handSize, it.hand.size)
+            assertEquals(handSize, it.hand?.size)
         }
 
         val moveExpectations = turnInfos.mapNotNull { it.firstAvailableMove() }
@@ -67,20 +67,20 @@ class GameTest {
     private fun PlayerTurnInfo.firstAvailableMove(): MoveExpectation? = when (action) {
         Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> createPlayCardMove(this)
         Action.PICK_NEIGHBOR_GUILD -> createPickGuildMove(this)
-        Action.WAIT -> null
+        Action.WAIT, Action.SAY_READY -> null
     }
 
     private fun createPlayCardMove(turnInfo: PlayerTurnInfo): MoveExpectation {
         val wonderBuildability = turnInfo.wonderBuildability
         if (wonderBuildability.isBuildable) {
             val transactions = wonderBuildability.cheapestTransactions.first()
-            return planMove(turnInfo, MoveType.UPGRADE_WONDER, turnInfo.hand.first(), transactions)
+            return planMove(turnInfo, MoveType.UPGRADE_WONDER, turnInfo.hand!!.first(), transactions)
         }
-        val playableCard = turnInfo.hand.firstOrNull { it.playability.isPlayable }
+        val playableCard = turnInfo.hand!!.firstOrNull { it.playability.isPlayable }
         return if (playableCard != null) {
             planMove(turnInfo, MoveType.PLAY, playableCard, playableCard.playability.cheapestTransactions.first())
         } else {
-            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand.first(),
+            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand!!.first(),
                 noTransactions()
             )
         }

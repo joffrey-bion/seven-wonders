@@ -2,8 +2,8 @@ package org.luxons.sevenwonders.client
 
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.builtins.list
+import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.StompSubscription
 import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization
@@ -12,11 +12,10 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
 import org.hildan.krossbow.stomp.subscribeEmptyMsg
 import org.luxons.sevenwonders.model.CustomizableSettings
-import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
-import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
@@ -58,12 +57,12 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun watchErrors(): StompSubscription<ErrorDTO> =
         stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
-    suspend fun chooseName(displayName: String): PlayerDTO = stompSession.request(
+    suspend fun chooseName(displayName: String): ConnectedPlayer = stompSession.request(
         sendDestination = "/app/chooseName",
         receiveDestination = "/user/queue/nameChoice",
         payload = ChooseNameAction(displayName),
         serializer = ChooseNameAction.serializer(),
-        deserializer = PlayerDTO.serializer()
+        deserializer = ConnectedPlayer.serializer()
     )
 
     suspend fun watchGames(): StompSubscription<List<LobbyDTO>> =
