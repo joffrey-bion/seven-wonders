@@ -30,6 +30,10 @@ data class PlayerTurnInfo(
     val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
 }
 
+// TODO move to server code
+fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() =
+        map { it.copy(action = Action.SAY_READY, hand = null) }
+
 @Serializable
 data class PlayedMove(
     val playerIndex: Int,

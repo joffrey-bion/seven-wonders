@@ -6,6 +6,7 @@ import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
+import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
@@ -91,9 +92,6 @@ class GameController @Autowired constructor(
             template.convertAndSendToUser(player.username, "/queue/game/turn", turnInfo)
         }
     }
-
-    private fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() =
-            map { it.copy(action = Action.SAY_READY, hand = null) }
 
     companion object {
         private val logger = LoggerFactory.getLogger(GameController::class.java)

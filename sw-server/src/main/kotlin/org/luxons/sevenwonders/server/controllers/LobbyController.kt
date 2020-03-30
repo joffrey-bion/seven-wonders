@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.server.controllers
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
+import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
@@ -101,7 +102,10 @@ class LobbyController @Autowired constructor(
         val game = lobby.startGame()
 
         logger.info("Game {} successfully started", game.id)
-        template.convertAndSend("/topic/lobby/" + lobby.id + "/started", Unit)
+        game.getCurrentTurnInfo().hideHandsAndWaitForReadiness().forEach {
+            val player = lobby.getPlayers()[it.playerIndex]
+            template.convertAndSendToUser(player.username, "/queue/lobby/" + lobby.id + "/started", it)
+        }
     }
 
     companion object {

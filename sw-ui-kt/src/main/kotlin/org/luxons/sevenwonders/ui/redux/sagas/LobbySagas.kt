@@ -31,8 +31,9 @@ private suspend fun SwSagaContext.watchLobbyUpdates(lobbyUpdatesSubscription: St
 }
 
 private suspend fun SwSagaContext.awaitGameStart(session: SevenWondersSession, lobbyId: Long) {
-    session.awaitGameStart(lobbyId)
-    dispatch(EnterGameAction(lobbyId))
+    val turnInfo = session.awaitGameStart(lobbyId)
+    val lobby = getState().currentLobby!!
+    dispatch(EnterGameAction(lobby, turnInfo))
 }
 
 private suspend fun SwSagaContext.awaitStartGame(session: SevenWondersSession) {

@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpButtonGroup
-import com.palantir.blueprintjs.bpNonIdealState
 import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.components.game.handComponent
 import kotlinx.css.CSSBuilder
 import kotlinx.css.Overflow
@@ -65,22 +64,11 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             val turnInfo = props.turnInfo
             if (turnInfo == null) {
-                gamePreStart()
+                p { +"Error: no turn info data"}
             } else {
                 turnInfoScene(turnInfo)
             }
         }
-    }
-
-    private fun RBuilder.gamePreStart() {
-        bpNonIdealState(
-            description = createElement {
-                p { +"Click 'ready' when you are"}
-            },
-            action = createElement {
-                sayReadyButton()
-            }
-        )
     }
 
     private fun RBuilder.sayReadyButton(block: StyledDOMBuilder<DIV>.() -> Unit = {}): ReactElement {
@@ -128,7 +116,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 sayReadyButton {
                     css {
                         position = Position.absolute
-                        bottom = 4.rem
+                        bottom = 6.rem
                         left = 50.pct
                         transform { translate(tx = (-50).pct) }
                     }
@@ -150,8 +138,8 @@ private val gameScene: RClass<GameSceneProps> = connectStateAndDispatch<GameScen
     },
     mapStateToProps = { state, _ ->
         playerIsReady = state.currentPlayer?.isReady == true
-        players = state.currentLobby?.players ?: emptyList()
-        turnInfo = state.currentTurnInfo
+        players = state.gameState?.players ?: emptyList()
+        turnInfo = state.gameState?.turnInfo
     }
 )
 

@@ -14,7 +14,7 @@ data class UpdateLobbyAction(val lobby: LobbyDTO): RAction
 
 data class EnterLobbyAction(val lobby: LobbyDTO): RAction
 
-data class EnterGameAction(val gameId: Long): RAction
+data class EnterGameAction(val lobby: LobbyDTO, val turnInfo: PlayerTurnInfo): RAction
 
 data class TurnInfoEvent(val turnInfo: PlayerTurnInfo): RAction
 

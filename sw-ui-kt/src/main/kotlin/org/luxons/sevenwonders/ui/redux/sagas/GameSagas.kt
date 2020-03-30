@@ -10,10 +10,10 @@ import org.luxons.sevenwonders.ui.redux.RequestSayReady
 import org.luxons.sevenwonders.ui.redux.TurnInfoEvent
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
-    val lobby = getState().currentLobby ?: error("Game saga run without a current game")
+    val game = getState().gameState ?: error("Game saga run without a current game")
     coroutineScope {
-        val playerReadySub = session.watchPlayerReady(lobby.id)
-        val preparedCardsSub = session.watchPreparedCards(lobby.id)
+        val playerReadySub = session.watchPlayerReady(game.id)
+        val preparedCardsSub = session.watchPreparedCards(game.id)
         val turnInfoSub = session.watchTurns()
         val sayReadyJob = launch { onEach<RequestSayReady> { session.sayReady() } }
         val prepareMoveJob = launch { onEach<RequestPrepareMove> { session.prepareMove(it.move) } }

@@ -99,10 +99,11 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun watchLobbyUpdates(): StompSubscription<LobbyDTO> =
         stompSession.subscribe("/user/queue/lobby/updated", LobbyDTO.serializer())
 
-    suspend fun awaitGameStart(gameId: Long) {
-        val gameStartSubscription = stompSession.subscribeEmptyMsg("/topic/lobby/$gameId/started")
-        gameStartSubscription.messages.receive()
+    suspend fun awaitGameStart(gameId: Long): PlayerTurnInfo {
+        val gameStartSubscription = stompSession.subscribe("/user/queue/lobby/$gameId/started", PlayerTurnInfo.serializer())
+        val turnInfo = gameStartSubscription.messages.receive()
         gameStartSubscription.unsubscribe()
+        return turnInfo
     }
 
     suspend fun startGame() {
