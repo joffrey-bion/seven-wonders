@@ -21,7 +21,7 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
     console.info("Connected to Seven Wonders web socket API")
 
     launch {
-        errorSaga(session)
+        serverErrorSaga(session)
     }
     yield() // ensures the error saga starts
 
@@ -38,7 +38,7 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
     }
 }
 
-private suspend fun errorSaga(session: SevenWondersSession) {
+private suspend fun serverErrorSaga(session: SevenWondersSession) {
     val errorsSub = session.watchErrors()
     for (err in errorsSub.messages) {
         // TODO use blueprintjs toaster
