@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -8,13 +7,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.promise
 import redux.Middleware
 import redux.MiddlewareApi
 import redux.RAction
-import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SagaManager<S, A : RAction, R>(
@@ -43,7 +39,7 @@ class SagaManager<S, A : RAction, R>(
     }
 
     private fun handleAction(action: A) {
-        GlobalScope.promise { actions.send(action) }
+        GlobalScope.launch { actions.send(action) }
     }
 
     fun launchSaga(coroutineScope: CoroutineScope, saga: suspend SagaContext<S, A, R>.() -> Unit): Job {
@@ -96,12 +92,12 @@ class SagaContext<S, A : RAction, R>(
      */
     suspend fun onEach(handle: suspend SagaContext<S, A, R>.(A) -> Unit) {
         val channel = actions.openSubscription()
-        for (a in channel) {
-            if (!coroutineContext.isActive) {
-                channel.cancel()
-                break
+        try {
+            for (a in channel) {
+                handle(a)
             }
-            handle(a)
+        } finally {
+            channel.cancel()
         }
     }
 
@@ -122,17 +118,16 @@ class SagaContext<S, A : RAction, R>(
      */
     suspend fun next(predicate: (A) -> Boolean): A {
         val channel = actions.openSubscription()
-        for (a in channel) {
-            if (!coroutineContext.isActive) {
-                channel.cancel()
-                throw CancellationException("The expected action was not received before cancellation")
+        try {
+            for (a in channel) {
+                if (predicate(a)) {
+                    return a
+                }
             }
-            if (predicate(a)) {
-                channel.cancel()
-                return a
-            }
+        } finally {
+            channel.cancel()
         }
-        throw IllegalStateException("Actions channel closed before receiving a matching action")
+        error("Actions channel closed before receiving a matching action")
     }
 
     /**
