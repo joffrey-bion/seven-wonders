@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui.redux
 
+import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
@@ -24,15 +25,16 @@ data class SwState(
 data class GameState(
     val id: Long,
     val players: List<PlayerDTO>,
-    val preparedCardsByUsername: Map<String, PreparedCard>,
-    val turnInfo: PlayerTurnInfo?
+    val turnInfo: PlayerTurnInfo?,
+    val preparedCardsByUsername: Map<String, PreparedCard> = emptyMap(),
+    val currentPreparedMove: PlayerMove? = null
 )
 
 fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
     gamesById = gamesReducer(state.gamesById, action),
     connectedPlayer = currentPlayerReducer(state.connectedPlayer, action),
     currentLobby = currentLobbyReducer(state.currentLobby, action),
-    gameState = currentTurnInfoReducer(state.gameState, action)
+    gameState = gameStateReducer(state.gameState, action)
 )
 
 private fun gamesReducer(games: Map<Long, LobbyDTO>, action: RAction): Map<Long, LobbyDTO> = when (action) {
@@ -56,13 +58,13 @@ private fun currentLobbyReducer(currentLobby: LobbyDTO?, action: RAction): Lobby
     else -> currentLobby
 }
 
-private fun currentTurnInfoReducer(gameState: GameState?, action: RAction): GameState? = when (action) {
+private fun gameStateReducer(gameState: GameState?, action: RAction): GameState? = when (action) {
     is EnterGameAction -> GameState(
         id = action.lobby.id,
         players = action.lobby.players,
-        preparedCardsByUsername = emptyMap(),
         turnInfo = action.turnInfo
     )
+    is PreparedMoveEvent -> gameState?.copy(currentPreparedMove = action.move)
     is PreparedCardEvent -> gameState?.copy(
         preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.player.username to action.card)
     )

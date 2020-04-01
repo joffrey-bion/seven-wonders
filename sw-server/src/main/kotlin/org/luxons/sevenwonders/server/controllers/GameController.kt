@@ -2,8 +2,7 @@ package org.luxons.sevenwonders.server.controllers
 
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.engine.Game
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
@@ -14,6 +13,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.messaging.simp.annotation.SendToUser
 import org.springframework.stereotype.Controller
 import java.security.Principal
 
@@ -63,7 +63,8 @@ class GameController @Autowired constructor(
      * the connected user's information
      */
     @MessageMapping("/game/prepareMove")
-    fun prepareMove(action: PrepareMoveAction, principal: Principal) {
+    @SendToUser("/queue/game/preparedMove")
+    fun prepareMove(action: PrepareMoveAction, principal: Principal): PlayerMove {
         val player = principal.player
         val game = player.game
         val preparedCardBack = game.prepareMove(player.index, action.move)
@@ -76,6 +77,7 @@ class GameController @Autowired constructor(
             game.playTurn()
             sendTurnInfo(player.lobby.getPlayers(), game, true)
         }
+        return action.move
     }
 
     private fun sendPlayerReady(gameId: Long, player: Player) =

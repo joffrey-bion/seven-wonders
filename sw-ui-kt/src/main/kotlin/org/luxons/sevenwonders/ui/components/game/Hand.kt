@@ -38,6 +38,7 @@ import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.ui.components.game.cardImage
 import react.RBuilder
 import styled.StyledDOMBuilder
@@ -47,14 +48,19 @@ import styled.styledDiv
 fun RBuilder.handComponent(
     cards: List<HandCard>,
     wonderUpgradable: Boolean,
+    preparedMove: PlayerMove?,
     prepareMove: (PlayerMove) -> Unit
 ) {
     styledDiv {
         css {
             handStyle()
         }
-        cards.forEachIndexed { index, c ->
-            handCard(card = c, wonderUpgradable = wonderUpgradable, prepareMove = prepareMove) {
+        cards.filter { it.name != preparedMove?.cardName }.forEachIndexed { index, c ->
+            handCard(
+                card = c,
+                wonderUpgradable = wonderUpgradable,
+                prepareMove = prepareMove
+            ) {
                 attrs {
                     key = index.toString()
                 }

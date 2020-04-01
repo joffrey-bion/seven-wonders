@@ -10,7 +10,6 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxS
 import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
 import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
-import org.hildan.krossbow.stomp.subscribeEmptyMsg
 import org.luxons.sevenwonders.model.CustomizableSettings
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
@@ -123,7 +122,11 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         stompSession.sendEmptyMsg("/app/game/sayReady")
     }
 
-    suspend fun prepareMove(move: PlayerMove) {
-        stompSession.convertAndSend("/app/game/prepareMove", PrepareMoveAction(move), PrepareMoveAction.serializer())
-    }
+    suspend fun prepareMove(move: PlayerMove): PlayerMove = stompSession.request(
+        sendDestination = "/app/game/prepareMove",
+        receiveDestination = "/user/queue/game/preparedMove",
+        payload = PrepareMoveAction(move),
+        serializer = PrepareMoveAction.serializer(),
+        deserializer = PlayerMove.serializer()
+    )
 }

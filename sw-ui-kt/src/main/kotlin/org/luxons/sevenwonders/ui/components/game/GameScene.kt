@@ -25,10 +25,10 @@ import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
+import org.luxons.sevenwonders.ui.redux.GameState
 import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
 import org.luxons.sevenwonders.ui.redux.RequestSayReady
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
-import org.luxons.sevenwonders.ui.utils.createElement
 import react.RBuilder
 import react.RClass
 import react.RComponent
@@ -43,7 +43,8 @@ import styled.styledDiv
 interface GameSceneStateProps: RProps {
     var playerIsReady: Boolean
     var players: List<PlayerDTO>
-    var turnInfo: PlayerTurnInfo?
+    var gameState: GameState?
+    var preparedMove: PlayerMove?
 }
 
 interface GameSceneDispatchProps: RProps {
@@ -62,7 +63,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 backgroundSize = "cover"
                 fullScreen()
             }
-            val turnInfo = props.turnInfo
+            val turnInfo = props.gameState?.turnInfo
             if (turnInfo == null) {
                 p { +"Error: no turn info data"}
             } else {
@@ -109,6 +110,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 handComponent(
                     cards = hand,
                     wonderUpgradable = turnInfo.wonderBuildability.isBuildable,
+                    preparedMove = props.preparedMove,
                     prepareMove = props.prepareMove
                 )
             }
@@ -139,7 +141,8 @@ private val gameScene: RClass<GameSceneProps> = connectStateAndDispatch<GameScen
     mapStateToProps = { state, _ ->
         playerIsReady = state.currentPlayer?.isReady == true
         players = state.gameState?.players ?: emptyList()
-        turnInfo = state.gameState?.turnInfo
+        gameState = state.gameState
+        preparedMove = state.gameState?.currentPreparedMove
     }
 )
 
