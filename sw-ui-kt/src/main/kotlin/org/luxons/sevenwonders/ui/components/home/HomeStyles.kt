@@ -19,10 +19,10 @@ object HomeStyles : StyleSheet("HomeStyles", isStatic = true) {
 
     val fullscreen by css {
         position = Position.fixed
-        top = LinearDimension("0")
-        left = LinearDimension("0")
-        bottom = LinearDimension("0")
-        right = LinearDimension("0")
+        top = 0.px
+        left = 0.px
+        bottom = 0.px
+        right = 0.px
         overflow = Overflow.hidden
     }
 }
