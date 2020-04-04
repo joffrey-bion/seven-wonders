@@ -30,6 +30,7 @@ fun RBuilder.bpIcon(
 
 fun RBuilder.bpButton(
     minimal: Boolean = false,
+    small: Boolean = false,
     large: Boolean = false,
     disabled: Boolean = false,
     title: String? = null,
@@ -42,6 +43,7 @@ fun RBuilder.bpButton(
     attrs {
         this.title = title
         this.minimal = minimal
+        this.small = small
         this.large = large
         this.disabled = disabled
         this.icon = icon
@@ -106,6 +108,30 @@ fun RBuilder.bpNonIdealState(
         this.description = description
         this.action = action
         this.children = children
+    }
+    block()
+}
+
+fun RBuilder.bpOverlay(
+    isOpen: Boolean,
+    autoFocus: Boolean = true,
+    enforceFocus: Boolean = true,
+    usePortal: Boolean = true,
+    hasBackdrop: Boolean = true,
+    canEscapeKeyClose: Boolean = true,
+    canOutsideClickClose: Boolean = true,
+    onClose: () -> Unit = {},
+    block: RHandler<IOverlayProps> = {}
+): ReactElement = child(Overlay::class) {
+    attrs {
+        this.isOpen = isOpen
+        this.autoFocus = autoFocus
+        this.enforceFocus = enforceFocus
+        this.usePortal = usePortal
+        this.hasBackdrop = hasBackdrop
+        this.canEscapeKeyClose = canEscapeKeyClose
+        this.canOutsideClickClose = canOutsideClickClose
+        this.onClose = { onClose() }
     }
     block()
 }
