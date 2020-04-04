@@ -80,6 +80,16 @@ class GameController @Autowired constructor(
         return action.move
     }
 
+    @MessageMapping("/game/unprepareMove")
+    fun unprepareMove(principal: Principal) {
+        val player = principal.player
+        val game = player.game
+        game.unprepareMove(player.index)
+        val preparedCard = PreparedCard(player.toDTO(), null)
+        logger.info("Game {}: player {} unprepared his move", game.id, principal.name)
+        sendPreparedCard(game.id, preparedCard)
+    }
+
     private fun sendPlayerReady(gameId: Long, player: Player) =
             template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
 

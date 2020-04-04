@@ -93,6 +93,10 @@ class Game internal constructor(
         return card.back
     }
 
+    fun unprepareMove(playerIndex: Int) {
+        preparedMoves.remove(playerIndex)
+    }
+
     /**
      * Returns true if all players that had to do something have [prepared their move][prepareMove]. This means we are
      * ready to [play the current turn][playTurn].

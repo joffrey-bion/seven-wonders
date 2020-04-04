@@ -129,4 +129,8 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         serializer = PrepareMoveAction.serializer(),
         deserializer = PlayerMove.serializer()
     )
+
+    suspend fun unprepareMove() {
+        stompSession.sendEmptyMsg("/app/game/unprepareMove")
+    }
 }

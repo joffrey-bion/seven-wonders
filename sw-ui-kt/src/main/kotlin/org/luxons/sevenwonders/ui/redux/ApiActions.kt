@@ -19,3 +19,5 @@ class RequestStartGame: RAction
 class RequestSayReady: RAction
 
 data class RequestPrepareMove(val move: PlayerMove): RAction
+
+class RequestUnprepareMove: RAction

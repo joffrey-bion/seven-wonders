@@ -6,7 +6,8 @@ import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.State
-import org.luxons.sevenwonders.model.cards.PreparedCard
+import org.luxons.sevenwonders.model.cards.CardBack
+import org.luxons.sevenwonders.model.cards.HandCard
 import redux.RAction
 
 data class SwState(
@@ -26,9 +27,12 @@ data class GameState(
     val id: Long,
     val players: List<PlayerDTO>,
     val turnInfo: PlayerTurnInfo?,
-    val preparedCardsByUsername: Map<String, PreparedCard> = emptyMap(),
+    val preparedCardsByUsername: Map<String, CardBack?> = emptyMap(),
     val currentPreparedMove: PlayerMove? = null
-)
+) {
+    val currentPreparedCard: HandCard?
+        get() = turnInfo?.hand?.firstOrNull { it.name == currentPreparedMove?.cardName }
+}
 
 fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
     gamesById = gamesReducer(state.gamesById, action),
@@ -65,8 +69,9 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
         turnInfo = action.turnInfo
     )
     is PreparedMoveEvent -> gameState?.copy(currentPreparedMove = action.move)
+    is RequestUnprepareMove -> gameState?.copy(currentPreparedMove = null)
     is PreparedCardEvent -> gameState?.copy(
-        preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.player.username to action.card)
+        preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.player.username to action.card.cardBack)
     )
     is PlayerReadyEvent -> gameState?.copy(players = gameState.players.map { p ->
         if (p.username == action.username) p.copy(isReady = true) else p
