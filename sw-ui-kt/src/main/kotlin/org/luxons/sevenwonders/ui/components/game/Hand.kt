@@ -1,4 +1,4 @@
-package com.palantir.blueprintjs.org.luxons.sevenwonders.ui.components.game
+package org.luxons.sevenwonders.ui.components.game
 
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton

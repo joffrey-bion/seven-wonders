@@ -8,6 +8,7 @@ import org.luxons.sevenwonders.ui.redux.PreparedCardEvent
 import org.luxons.sevenwonders.ui.redux.PreparedMoveEvent
 import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
 import org.luxons.sevenwonders.ui.redux.RequestSayReady
+import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
 import org.luxons.sevenwonders.ui.redux.TurnInfoEvent
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
@@ -17,6 +18,7 @@ suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
         val preparedCardsSub = session.watchPreparedCards(game.id)
         val turnInfoSub = session.watchTurns()
         val sayReadyJob = launch { onEach<RequestSayReady> { session.sayReady() } }
+        val unprepareJob = launch { onEach<RequestUnprepareMove> { session.unprepareMove() } }
         val prepareMoveJob = launch {
             onEach<RequestPrepareMove> {
                 val move = session.prepareMove(it.move)

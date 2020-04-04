@@ -3,15 +3,12 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpButtonGroup
-import com.palantir.blueprintjs.org.luxons.sevenwonders.ui.components.game.handComponent
-import kotlinx.css.CSSBuilder
-import kotlinx.css.Overflow
+import com.palantir.blueprintjs.bpOverlay
 import kotlinx.css.Position
 import kotlinx.css.background
 import kotlinx.css.backgroundSize
 import kotlinx.css.bottom
 import kotlinx.css.left
-import kotlinx.css.overflow
 import kotlinx.css.pct
 import kotlinx.css.position
 import kotlinx.css.properties.transform
@@ -25,9 +22,12 @@ import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
+import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.GameState
 import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
 import org.luxons.sevenwonders.ui.redux.RequestSayReady
+import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
 import react.RBuilder
 import react.RClass
@@ -45,11 +45,13 @@ interface GameSceneStateProps: RProps {
     var players: List<PlayerDTO>
     var gameState: GameState?
     var preparedMove: PlayerMove?
+    var preparedCard: HandCard?
 }
 
 interface GameSceneDispatchProps: RProps {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
+    var unprepareMove: () -> Unit
 }
 
 interface GameSceneProps : GameSceneStateProps, GameSceneDispatchProps
@@ -61,7 +63,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             css {
                 background = "url('images/background-papyrus3.jpg')"
                 backgroundSize = "cover"
-                fullScreen()
+                +GlobalStyles.fullscreen
             }
             val turnInfo = props.gameState?.turnInfo
             if (turnInfo == null) {
@@ -114,6 +116,28 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     prepareMove = props.prepareMove
                 )
             }
+            val card = props.preparedCard
+            if (card != null) {
+                bpOverlay(isOpen = true, onClose = props.unprepareMove) {
+                    styledDiv {
+                        css { +GlobalStyles.fixedCenter }
+                        cardImage(card)
+                        styledDiv {
+                            css {
+                                position = Position.absolute
+                                top = 0.px
+                                right = 0.px
+                            }
+                            bpButton(
+                                icon = "cross",
+                                title = "Cancel prepared move",
+                                small = true,
+                                intent = Intent.DANGER, onClick = { props.unprepareMove() }
+                            )
+                        }
+                    }
+                }
+            }
             if (turnInfo.action == Action.SAY_READY) {
                 sayReadyButton {
                     css {
@@ -136,6 +160,7 @@ private val gameScene: RClass<GameSceneProps> = connectStateAndDispatch<GameScen
     clazz = GameScene::class,
     mapDispatchToProps = { dispatch, _ ->
         prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
+        unprepareMove = { dispatch(RequestUnprepareMove()) }
         sayReady = { dispatch(RequestSayReady()) }
     },
     mapStateToProps = { state, _ ->
@@ -143,14 +168,7 @@ private val gameScene: RClass<GameSceneProps> = connectStateAndDispatch<GameScen
         players = state.gameState?.players ?: emptyList()
         gameState = state.gameState
         preparedMove = state.gameState?.currentPreparedMove
+        preparedCard = state.gameState?.currentPreparedCard
     }
 )
 
-private fun CSSBuilder.fullScreen() {
-    position = Position.fixed
-    top = 0.px
-    left = 0.px
-    bottom = 0.px
-    right = 0.px
-    overflow = Overflow.hidden
-}
