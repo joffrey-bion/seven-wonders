@@ -74,10 +74,16 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun RBuilder.sayReadyButton(block: StyledDOMBuilder<DIV>.() -> Unit = {}): ReactElement {
+    private fun RBuilder.sayReadyButton(): ReactElement {
         val isReady = props.playerIsReady
         val intent = if (isReady) Intent.SUCCESS else Intent.PRIMARY
         return styledDiv {
+            css {
+                position = Position.absolute
+                bottom = 6.rem
+                left = 50.pct
+                transform { translate(tx = (-50).pct) }
+            }
             bpButtonGroup {
                 bpButton(
                     large = true,
@@ -88,6 +94,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 ) {
                     +"READY"
                 }
+                // not really a button, but nice for style
                 bpButton(
                     large = true,
                     icon = "people",
@@ -97,7 +104,6 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     +"${props.players.count { it.isReady }}/${props.players.size}"
                 }
             }
-            block()
         }
     }
 
@@ -118,37 +124,35 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             val card = props.preparedCard
             if (card != null) {
-                bpOverlay(isOpen = true, onClose = props.unprepareMove) {
-                    styledDiv {
-                        css { +GlobalStyles.fixedCenter }
-                        cardImage(card)
-                        styledDiv {
-                            css {
-                                position = Position.absolute
-                                top = 0.px
-                                right = 0.px
-                            }
-                            bpButton(
-                                icon = "cross",
-                                title = "Cancel prepared move",
-                                small = true,
-                                intent = Intent.DANGER, onClick = { props.unprepareMove() }
-                            )
-                        }
-                    }
-                }
+                preparedMove(card)
             }
             if (turnInfo.action == Action.SAY_READY) {
-                sayReadyButton {
-                    css {
-                        position = Position.absolute
-                        bottom = 6.rem
-                        left = 50.pct
-                        transform { translate(tx = (-50).pct) }
-                    }
-                }
+                sayReadyButton()
             }
             productionBar(gold = board.gold, production = board.production)
+        }
+    }
+
+    private fun RBuilder.preparedMove(card: HandCard) {
+        bpOverlay(isOpen = true, onClose = props.unprepareMove) {
+            styledDiv {
+                css { +GlobalStyles.fixedCenter }
+                cardImage(card)
+                styledDiv {
+                    css {
+                        position = Position.absolute
+                        top = 0.px
+                        right = 0.px
+                    }
+                    bpButton(
+                        icon = "cross",
+                        title = "Cancel prepared move",
+                        small = true,
+                        intent = Intent.DANGER,
+                        onClick = { props.unprepareMove() }
+                    )
+                }
+            }
         }
     }
 }
