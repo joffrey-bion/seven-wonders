@@ -6,10 +6,12 @@ import org.hildan.krossbow.stomp.StompSubscription
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
+import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
 import org.luxons.sevenwonders.ui.redux.RequestStartGame
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
+import org.luxons.sevenwonders.ui.utils.awaitFirst
 
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
     val lobby = getState().currentLobby ?: error("Lobby saga run without a current lobby")
@@ -18,11 +20,20 @@ suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
         launch { watchLobbyUpdates(lobbyUpdatesSubscription) }
         val startGameJob = launch { awaitStartGame(session) }
 
-        awaitGameStart(session, lobby.id)
-
-        lobbyUpdatesSubscription.unsubscribe()
-        startGameJob.cancel()
-        dispatch(Navigate(Route.GAME))
+        awaitFirst(
+            {
+                awaitLeaveLobby(session)
+                lobbyUpdatesSubscription.unsubscribe()
+                startGameJob.cancel()
+                dispatch(Navigate(Route.GAME_BROWSER))
+            },
+            {
+                awaitGameStart(session, lobby.id)
+                lobbyUpdatesSubscription.unsubscribe()
+                startGameJob.cancel()
+                dispatch(Navigate(Route.GAME))
+            }
+        )
     }
 }
 
@@ -39,4 +50,9 @@ private suspend fun SwSagaContext.awaitGameStart(session: SevenWondersSession, l
 private suspend fun SwSagaContext.awaitStartGame(session: SevenWondersSession) {
     next<RequestStartGame>()
     session.startGame()
+}
+
+private suspend fun SwSagaContext.awaitLeaveLobby(session: SevenWondersSession) {
+    next<RequestLeaveLobby>()
+    session.leaveLobby()
 }

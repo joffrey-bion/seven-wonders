@@ -33,8 +33,7 @@ class LobbyController @Autowired constructor(
     /**
      * Leaves the current lobby.
      *
-     * @param principal
-     * the connected user's information
+     * @param principal the connected user's information
      */
     @MessageMapping("/lobby/leave")
     fun leave(principal: Principal) {
@@ -52,10 +51,8 @@ class LobbyController @Autowired constructor(
     /**
      * Reorders the players in the current lobby. This can only be done by the lobby's owner.
      *
-     * @param action
-     * the action to reorder the players
-     * @param principal
-     * the connected user's information
+     * @param action the action to reorder the players
+     * @param principal the connected user's information
      */
     @MessageMapping("/lobby/reorderPlayers")
     fun reorderPlayers(@Validated action: ReorderPlayersAction, principal: Principal) {
@@ -69,10 +66,8 @@ class LobbyController @Autowired constructor(
     /**
      * Updates the game settings. This can only be done by the lobby's owner.
      *
-     * @param action
-     * the action to update the settings
-     * @param principal
-     * the connected user's information
+     * @param action the action to update the settings
+     * @param principal the connected user's information
      */
     @MessageMapping("/lobby/updateSettings")
     fun updateSettings(@Validated action: UpdateSettingsAction, principal: Principal) {
@@ -93,8 +88,7 @@ class LobbyController @Autowired constructor(
     /**
      * Starts the game.
      *
-     * @param principal
-     * the connected user's information
+     * @param principal the connected user's information
      */
     @MessageMapping("/lobby/startGame")
     fun startGame(principal: Principal) {

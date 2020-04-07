@@ -83,7 +83,7 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         deserializer = LobbyDTO.serializer()
     )
 
-    suspend fun leaveGame() {
+    suspend fun leaveLobby() {
         stompSession.sendEmptyMsg("/app/lobby/leave")
     }
 
