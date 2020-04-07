@@ -1,5 +1,33 @@
 # Technical decisions and issues log
 
+## 2019.07-2020.04 Full Kotlin migration
+[@joffrey-bion][1] — :key: *Frontend, Kotlin*
+
+Synchronizing backend and frontend when making changes to the API is a pain.
+Model classes need to be written and modified twice to be kept in sync.
+Moreover, a Java client also needs to be maintained to run integration tests
+for the server.
+
+This is why I decided to leverage Kotlin multiplatform capabilities to define
+a reusable common model and client.
+It took some time because Kotlin itself changed a lot during the past year.
+
+Also, there was no existing solution for a multiplatform STOMP client, so I
+ended up building [Krossbow](https://github.com/joffrey-bion/krossbow).
+This took a bit of time too.
+
+Once a common client and model was defined, there is the problem of the local
+project dependencies.
+Using a TypeScript/React frontend built with npm, it wasn't possible to depend
+on a local gradle subproject.
+That's why it was time to try out Kotlin React.
+
+Kotlin React is easy to use in itself, but using React component libraries 
+from Kotlin is quite tedious at the time.
+Dukat, the TypeScript to Kotlin externals conversion tool, doesn't work 
+reliably and doesn't work at all for React stuff, so the declarations have to 
+be written manually.
+
 ## 2019.05.02-07 Frontend migration to TypeScript
 [@joffrey-bion][1] — :key: *Frontend, TypeScript*
 
