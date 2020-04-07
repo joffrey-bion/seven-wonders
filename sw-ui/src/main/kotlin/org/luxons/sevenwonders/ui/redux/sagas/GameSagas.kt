@@ -33,4 +33,3 @@ suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     }
     console.log("End of game saga")
 }
-

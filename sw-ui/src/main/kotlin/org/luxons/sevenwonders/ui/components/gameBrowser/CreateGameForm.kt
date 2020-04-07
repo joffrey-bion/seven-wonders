@@ -3,12 +3,7 @@ package org.luxons.sevenwonders.ui.components.gameBrowser
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpInputGroup
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.JustifyContent
-import kotlinx.css.display
-import kotlinx.css.flexDirection
-import kotlinx.css.justifyContent
+import kotlinx.css.*
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestCreateGame
 import org.luxons.sevenwonders.ui.redux.connectDispatch
@@ -24,13 +19,13 @@ import react.dom.*
 import styled.css
 import styled.styledDiv
 
-private interface CreateGameFormProps: RProps {
+private interface CreateGameFormProps : RProps {
     var createGame: (String) -> Unit
 }
 
-private data class CreateGameFormState(var gameName: String = ""): RState
+private data class CreateGameFormState(var gameName: String = "") : RState
 
-private class CreateGameForm(props: CreateGameFormProps): RComponent<CreateGameFormProps, CreateGameFormState>(props) {
+private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGameFormProps, CreateGameFormState>(props) {
 
     override fun CreateGameFormState.init(props: CreateGameFormProps) {
         gameName = ""

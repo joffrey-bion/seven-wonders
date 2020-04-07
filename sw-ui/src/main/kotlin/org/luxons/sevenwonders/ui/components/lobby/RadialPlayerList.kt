@@ -3,14 +3,7 @@ package org.luxons.sevenwonders.ui.components.lobby
 import com.palantir.blueprintjs.IconName
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpIcon
-import kotlinx.css.Align
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.alignItems
-import kotlinx.css.display
-import kotlinx.css.flexDirection
-import kotlinx.css.margin
-import kotlinx.css.opacity
+import kotlinx.css.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import react.RBuilder
 import react.ReactElement
@@ -77,7 +70,7 @@ private fun RBuilder.playerItem(player: PlayerDTO, isMe: Boolean): ReactElement 
     userIcon(isMe = isMe, isOwner = player.isGameOwner, title = title)
     styledH5 {
         css {
-           margin = "0"
+            margin = "0"
         }
         +player.displayName
     }
@@ -93,7 +86,7 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
     userIcon(isMe = false, isOwner = false, title = "Waiting for player...")
     styledH5 {
         css {
-           margin = "0"
+            margin = "0"
         }
         +"?"
     }

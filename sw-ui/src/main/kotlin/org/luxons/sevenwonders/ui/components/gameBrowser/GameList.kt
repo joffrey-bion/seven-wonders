@@ -5,14 +5,7 @@ import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpIcon
 import com.palantir.blueprintjs.bpTag
-import kotlinx.css.Align
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.VerticalAlign
-import kotlinx.css.alignItems
-import kotlinx.css.display
-import kotlinx.css.flexDirection
-import kotlinx.css.verticalAlign
+import kotlinx.css.*
 import kotlinx.html.classes
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
@@ -35,7 +28,7 @@ interface GameListStateProps : RProps {
     var games: List<LobbyDTO>
 }
 
-interface GameListDispatchProps: RProps {
+interface GameListDispatchProps : RProps {
     var joinGame: (Long) -> Unit
 }
 
@@ -53,7 +46,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
             }
             tbody {
                 props.games.forEach {
-                    gameListItemRow(it, props.joinGame)
+                    gameListItemRow(it)
                 }
             }
         }
@@ -66,7 +59,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         th { +"Join" }
     }
 
-    private fun RBuilder.gameListItemRow(lobby: LobbyDTO, joinGame: (Long) -> Unit) = styledTr {
+    private fun RBuilder.gameListItemRow(lobby: LobbyDTO) = styledTr {
         css {
             verticalAlign = VerticalAlign.middle
         }
@@ -80,7 +73,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
     }
 
     private fun RBuilder.gameStatus(state: State) {
-        val intent = when(state) {
+        val intent = when (state) {
             State.LOBBY -> Intent.SUCCESS
             State.PLAYING -> Intent.WARNING
             State.FINISHED -> Intent.DANGER

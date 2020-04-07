@@ -7,20 +7,20 @@ import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import redux.RAction
 
-data class SetCurrentPlayerAction(val player: ConnectedPlayer): RAction
+data class SetCurrentPlayerAction(val player: ConnectedPlayer) : RAction
 
-data class UpdateGameListAction(val games: List<LobbyDTO>): RAction
+data class UpdateGameListAction(val games: List<LobbyDTO>) : RAction
 
-data class UpdateLobbyAction(val lobby: LobbyDTO): RAction
+data class UpdateLobbyAction(val lobby: LobbyDTO) : RAction
 
-data class EnterLobbyAction(val lobby: LobbyDTO): RAction
+data class EnterLobbyAction(val lobby: LobbyDTO) : RAction
 
-data class EnterGameAction(val lobby: LobbyDTO, val turnInfo: PlayerTurnInfo): RAction
+data class EnterGameAction(val lobby: LobbyDTO, val turnInfo: PlayerTurnInfo) : RAction
 
-data class TurnInfoEvent(val turnInfo: PlayerTurnInfo): RAction
+data class TurnInfoEvent(val turnInfo: PlayerTurnInfo) : RAction
 
-data class PreparedMoveEvent(val move: PlayerMove): RAction
+data class PreparedMoveEvent(val move: PlayerMove) : RAction
 
-data class PreparedCardEvent(val card: PreparedCard): RAction
+data class PreparedCardEvent(val card: PreparedCard) : RAction
 
-data class PlayerReadyEvent(val username: String): RAction
+data class PlayerReadyEvent(val username: String) : RAction

@@ -17,13 +17,13 @@ import react.RState
 import react.ReactElement
 import react.dom.*
 
-private interface ChooseNameFormProps: RProps {
+private interface ChooseNameFormProps : RProps {
     var chooseUsername: (String) -> Unit
 }
 
-private data class ChooseNameFormState(var username: String = ""): RState
+private data class ChooseNameFormState(var username: String = "") : RState
 
-private class ChooseNameForm(props: ChooseNameFormProps): RComponent<ChooseNameFormProps, ChooseNameFormState>(props) {
+private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseNameFormProps, ChooseNameFormState>(props) {
 
     override fun ChooseNameFormState.init(props: ChooseNameFormProps) {
         username = ""

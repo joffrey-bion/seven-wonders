@@ -38,8 +38,6 @@ import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.cards.PreparedCard
-import org.luxons.sevenwonders.ui.components.game.cardImage
 import react.RBuilder
 import styled.StyledDOMBuilder
 import styled.css

@@ -4,20 +4,8 @@ import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpButtonGroup
 import com.palantir.blueprintjs.bpOverlay
-import kotlinx.css.Position
-import kotlinx.css.background
-import kotlinx.css.backgroundSize
-import kotlinx.css.bottom
-import kotlinx.css.left
-import kotlinx.css.pct
-import kotlinx.css.position
-import kotlinx.css.properties.transform
-import kotlinx.css.properties.translate
-import kotlinx.css.px
-import kotlinx.css.rem
-import kotlinx.css.right
-import kotlinx.css.top
-import kotlinx.html.DIV
+import kotlinx.css.*
+import kotlinx.css.properties.*
 import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
@@ -36,11 +24,10 @@ import react.RProps
 import react.RState
 import react.ReactElement
 import react.dom.*
-import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
 
-interface GameSceneStateProps: RProps {
+interface GameSceneStateProps : RProps {
     var playerIsReady: Boolean
     var players: List<PlayerDTO>
     var gameState: GameState?
@@ -48,7 +35,7 @@ interface GameSceneStateProps: RProps {
     var preparedCard: HandCard?
 }
 
-interface GameSceneDispatchProps: RProps {
+interface GameSceneDispatchProps : RProps {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
     var unprepareMove: () -> Unit
@@ -67,7 +54,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             val turnInfo = props.gameState?.turnInfo
             if (turnInfo == null) {
-                p { +"Error: no turn info data"}
+                p { +"Error: no turn info data" }
             } else {
                 turnInfoScene(turnInfo)
             }
@@ -111,7 +98,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         val board = turnInfo.table.boards[turnInfo.playerIndex]
         div {
             // TODO use blueprint's Callout component without header and primary intent
-            p { + turnInfo.message }
+            p { +turnInfo.message }
             boardComponent(board = board)
             val hand = turnInfo.hand
             if (hand != null) {
@@ -159,20 +146,19 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
 
 fun RBuilder.gameScene() = gameScene {}
 
-private val gameScene: RClass<GameSceneProps> = connectStateAndDispatch<GameSceneStateProps, GameSceneDispatchProps,
-        GameSceneProps>(
-    clazz = GameScene::class,
-    mapDispatchToProps = { dispatch, _ ->
-        prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
-        unprepareMove = { dispatch(RequestUnprepareMove()) }
-        sayReady = { dispatch(RequestSayReady()) }
-    },
-    mapStateToProps = { state, _ ->
-        playerIsReady = state.currentPlayer?.isReady == true
-        players = state.gameState?.players ?: emptyList()
-        gameState = state.gameState
-        preparedMove = state.gameState?.currentPreparedMove
-        preparedCard = state.gameState?.currentPreparedCard
-    }
-)
-
+private val gameScene: RClass<GameSceneProps> =
+        connectStateAndDispatch<GameSceneStateProps, GameSceneDispatchProps, GameSceneProps>(
+            clazz = GameScene::class,
+            mapDispatchToProps = { dispatch, _ ->
+                prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
+                unprepareMove = { dispatch(RequestUnprepareMove()) }
+                sayReady = { dispatch(RequestSayReady()) }
+            },
+            mapStateToProps = { state, _ ->
+                playerIsReady = state.currentPlayer?.isReady == true
+                players = state.gameState?.players ?: emptyList()
+                gameState = state.gameState
+                preparedMove = state.gameState?.currentPreparedMove
+                preparedCard = state.gameState?.currentPreparedCard
+            }
+        )

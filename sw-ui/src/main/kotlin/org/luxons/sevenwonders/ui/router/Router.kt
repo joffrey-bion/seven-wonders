@@ -14,7 +14,7 @@ enum class Route(val path: String) {
     GAME("/game"),
 }
 
-data class Navigate(val route: Route): RAction
+data class Navigate(val route: Route) : RAction
 
 suspend fun SwSagaContext.routerSaga(
     startRoute: Route,

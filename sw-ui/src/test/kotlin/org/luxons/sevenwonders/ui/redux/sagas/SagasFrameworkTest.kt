@@ -16,9 +16,9 @@ import kotlin.test.assertEquals
 
 private data class State(val data: String)
 
-private data class UpdateData(val newData: String): RAction
-private class DuplicateData: RAction
-private class SideEffectAction(val data: String): RAction
+private data class UpdateData(val newData: String) : RAction
+private class DuplicateData : RAction
+private class SideEffectAction(val data: String) : RAction
 
 private fun reduce(state: State, action: RAction): State = when (action) {
     is UpdateData -> State(action.newData)

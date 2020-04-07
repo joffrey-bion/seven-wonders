@@ -27,6 +27,7 @@ import kotlinx.css.vw
 import kotlinx.css.width
 import kotlinx.css.zIndex
 import kotlinx.html.DIV
+import kotlinx.html.IMG
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.boards.Production
 import org.luxons.sevenwonders.model.resources.CountedResource
@@ -113,7 +114,7 @@ private fun RBuilder.tokenWithCount(tokenName: String, count: Int, block: Styled
     }
 }
 
-private fun RBuilder.tokenImage(tokenName: String, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
+private fun RBuilder.tokenImage(tokenName: String, block: StyledDOMBuilder<IMG>.() -> Unit = {}) {
     styledImg(src = getTokenImagePath(tokenName)) {
         css {
             tokenImageStyle()
@@ -122,12 +123,13 @@ private fun RBuilder.tokenImage(tokenName: String, block: StyledDOMBuilder<DIV>.
             this.title = tokenName
             this.alt = tokenName
         }
+        block()
     }
 }
 
-private fun getTokenImagePath(tokenName: String)= "/images/tokens/${tokenName}.png"
+private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.png"
 
-private fun getTokenName(resourceType: ResourceType)= "resources/${resourceType.toString().toLowerCase()}"
+private fun getTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().toLowerCase()}"
 
 private fun CSSBuilder.productionBarStyle() {
     alignItems = Align.center

@@ -16,4 +16,3 @@ fun Lobby.toDTO(): LobbyDTO = LobbyDTO(
 )
 
 fun Player.toDTO() = PlayerDTO(username, displayName, index, isGameOwner, isReady)
-

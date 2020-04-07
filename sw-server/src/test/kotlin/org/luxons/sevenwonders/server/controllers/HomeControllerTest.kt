@@ -19,7 +19,5 @@ class HomeControllerTest {
 
         assertEquals("testuser", player.username)
         assertEquals("Test User", player.displayName)
-        assertEquals(false, player.isGameOwner)
-        assertEquals(true, player.isMe)
     }
 }

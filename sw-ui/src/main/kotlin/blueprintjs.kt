@@ -5,7 +5,10 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
-import react.*
+import react.PureComponent
+import react.RProps
+import react.RState
+import react.ReactElement
 
 /**
  * The four basic intents.
@@ -16,8 +19,8 @@ import react.*
 //    SUCCESS: "success";
 //    WARNING: "warning";
 //    DANGER: "danger";
-//};
-//export declare type Intent = typeof Intent[keyof typeof Intent];
+// };
+// export declare type Intent = typeof Intent[keyof typeof Intent];
 external enum class Intent {
     NONE,
     PRIMARY,
@@ -27,12 +30,12 @@ external enum class Intent {
 }
 
 /** Alignment along the horizontal axis. */
-//export declare const Alignment: {
+// export declare const Alignment: {
 //    CENTER: "center";
 //    LEFT: "left";
 //    RIGHT: "right";
-//};
-//export declare type Alignment = typeof Alignment[keyof typeof Alignment];
+// };
+// export declare type Alignment = typeof Alignment[keyof typeof Alignment];
 external enum class Alignment {
     CENTER,
     LEFT,
@@ -130,7 +133,7 @@ external interface IIconProps : IIntentProps, IProps {
      */
     var iconSize: Int?
     /** CSS style properties. */
-    //var style: CSSProperties? // TODO
+    // var style: CSSProperties? // TODO
     /**
      * HTML tag to use for the rendered element.
      * @default "span"
@@ -197,15 +200,14 @@ external interface IButtonProps : IActionProps {
      * Note that this prop has no effect on `AnchorButton`; it only affects `Button`.
      * @default "button"
      */
-    var type: String? //"submit" | "reset" | "button";
+    var type: String? // "submit" | "reset" | "button";
 }
 
 external interface IButtonState : RState {
     var isActive: Boolean
 }
 
-abstract external class AbstractButton : PureComponent<IButtonProps, IButtonState> {
-}
+abstract external class AbstractButton : PureComponent<IButtonProps, IButtonState>
 
 external class Button : AbstractButton {
     override fun render(): ReactElement
@@ -264,7 +266,7 @@ external interface IInputGroupProps : IControlledProps, IIntentProps, IProps {
      */
     var fill: Boolean?
     /** Ref handler that receives HTML `<input>` element backing this component. */
-    var inputRef: ((ref: HTMLInputElement?) -> Any)?;
+    var inputRef: ((ref: HTMLInputElement?) -> Any)?
     /**
      * Name of a Blueprint UI icon (or an icon element) to render on the left side of the input group,
      * before the user's cursor.
@@ -342,7 +344,7 @@ external interface ITagProps : IProps, IIntentProps {
      * Callback invoked when the tag is clicked.
      * Recommended when `interactive` is `true`.
      */
-    var onClick: ((e: MouseEvent) -> Unit)?;
+    var onClick: ((e: MouseEvent) -> Unit)?
     /**
      * Click handler for remove button.
      * The remove button will only be rendered if this prop is defined.
@@ -491,7 +493,7 @@ external interface IBackdropProps {
     /** CSS class names to apply to backdrop element. */
     var backdropClassName: String?
     /** HTML props for the backdrop element. */
-    var backdropProps: RProps? //React.HTMLProps<HTMLDivElement>?
+    var backdropProps: RProps? // React.HTMLProps<HTMLDivElement>?
     /**
      * Whether clicking outside the overlay element (either on backdrop when present or on document)
      * should invoke `onClose`.

@@ -24,13 +24,11 @@ subprojects {
     }
 
     afterEvaluate {
-        if (!project.name.startsWith("sw-ui")) {
-            // The import ordering expected by ktlint is alphabetical, which doesn't match IDEA's formatter.
-            // Since it is not configurable, we have to disable the rule.
-            // https://github.com/pinterest/ktlint/issues/527
-            extensions.configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-                disabledRules.set(setOf("import-ordering"))
-            }
+        // The import ordering expected by ktlint is alphabetical, which doesn't match IDEA's formatter.
+        // Since it is not configurable, we have to disable the rule.
+        // https://github.com/pinterest/ktlint/issues/527
+        extensions.configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+            disabledRules.set(setOf("import-ordering", "no-wildcard-imports"))
         }
     }
 }

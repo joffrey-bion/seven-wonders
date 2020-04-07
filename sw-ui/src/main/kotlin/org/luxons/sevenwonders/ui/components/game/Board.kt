@@ -108,7 +108,7 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder) {
             width = 100.vw
             textAlign = TextAlign.center
         }
-        styledImg(src="/images/wonders/${wonder.image}") {
+        styledImg(src = "/images/wonders/${wonder.image}") {
             css {
                 declarations["border-radius"] = "0.5%/1.5%"
                 boxShadow(color = Color.black, offsetX = 0.2.rem, offsetY = 0.2.rem, blurRadius = 0.5.rem)

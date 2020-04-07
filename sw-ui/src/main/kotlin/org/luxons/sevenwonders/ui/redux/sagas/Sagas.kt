@@ -29,12 +29,12 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
     dispatch(SetCurrentPlayerAction(player))
 
     routerSaga(Route.GAME_BROWSER) {
-       when (it) {
-           Route.HOME -> homeSaga(session)
-           Route.LOBBY -> lobbySaga(session)
-           Route.GAME_BROWSER -> gameBrowserSaga(session)
-           Route.GAME -> gameSaga(session)
-       }
+        when (it) {
+            Route.HOME -> homeSaga(session)
+            Route.LOBBY -> lobbySaga(session)
+            Route.GAME_BROWSER -> gameBrowserSaga(session)
+            Route.GAME -> gameSaga(session)
+        }
     }
 }
 
