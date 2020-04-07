@@ -41,7 +41,6 @@ class GameBrowserController @Autowired constructor(
     @SubscribeMapping("/games") // prefix /topic not shown
     fun listGames(principal: Principal): Collection<LobbyDTO> {
         logger.info("Player '{}' subscribed to /topic/games", principal.name)
-        val player = playerRepository.find(principal.name)
         return lobbyRepository.list().map { it.toDTO() }
     }
 

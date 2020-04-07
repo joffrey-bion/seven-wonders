@@ -73,6 +73,7 @@ class SevenWondersTest {
             ownerSession.startGame()
             val nothing = withTimeoutOrNull(30) { started.join() }
             assertNull(nothing)
+            started.cancel()
             disconnect(ownerSession, session1, session2, outsiderSession)
         }
     }
