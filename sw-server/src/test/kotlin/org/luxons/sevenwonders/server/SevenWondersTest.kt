@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.server
 
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Before
@@ -9,6 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
+import org.luxons.sevenwonders.server.test.runAsyncTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.web.server.LocalServerPort
@@ -41,15 +41,13 @@ class SevenWondersTest {
     }
 
     @Test
-    fun chooseName() {
-        runBlocking {
-            val session = client.connect(serverUrl)
-            val playerName = "Test User"
-            val player = session.chooseName(playerName)
-            assertNotNull(player)
-            assertEquals(playerName, player.displayName)
-            session.disconnect()
-        }
+    fun chooseName() = runAsyncTest {
+        val session = client.connect(serverUrl)
+        val playerName = "Test User"
+        val player = session.chooseName(playerName)
+        assertNotNull(player)
+        assertEquals(playerName, player.displayName)
+        session.disconnect()
     }
 
     private suspend fun newPlayer(name: String): SevenWondersSession = client.connect(serverUrl).apply {
@@ -57,68 +55,62 @@ class SevenWondersTest {
     }
 
     @Test
-    fun lobbySubscription_ignoredForOutsiders() {
-        runBlocking {
-            val ownerSession = newPlayer("GameOwner")
-            val session1 = newPlayer("Player1")
-            val session2 = newPlayer("Player2")
-            val gameName = "Test Game"
-            val lobby = ownerSession.createGame(gameName)
-            session1.joinGame(lobby.id)
-            session2.joinGame(lobby.id)
+    fun lobbySubscription_ignoredForOutsiders() = runAsyncTest {
+        val ownerSession = newPlayer("GameOwner")
+        val session1 = newPlayer("Player1")
+        val session2 = newPlayer("Player2")
+        val gameName = "Test Game"
+        val lobby = ownerSession.createGame(gameName)
+        session1.joinGame(lobby.id)
+        session2.joinGame(lobby.id)
 
-            val outsiderSession = newPlayer("Outsider")
-            val started = launch { outsiderSession.awaitGameStart(lobby.id) }
+        val outsiderSession = newPlayer("Outsider")
+        val started = launch { outsiderSession.awaitGameStart(lobby.id) }
 
-            ownerSession.startGame()
-            val nothing = withTimeoutOrNull(30) { started.join() }
-            assertNull(nothing)
-            started.cancel()
-            disconnect(ownerSession, session1, session2, outsiderSession)
-        }
+        ownerSession.startGame()
+        val nothing = withTimeoutOrNull(30) { started.join() }
+        assertNull(nothing)
+        started.cancel()
+        disconnect(ownerSession, session1, session2, outsiderSession)
     }
 
     @Test
-    fun createGame_success() {
-        runBlocking {
-            val ownerSession = newPlayer("GameOwner")
+    fun createGame_success() = runAsyncTest {
+        val ownerSession = newPlayer("GameOwner")
 
-            val gameName = "Test Game"
-            val lobby = ownerSession.createGame(gameName)
-            assertNotNull(lobby)
-            assertEquals(gameName, lobby.name)
+        val gameName = "Test Game"
+        val lobby = ownerSession.createGame(gameName)
+        assertNotNull(lobby)
+        assertEquals(gameName, lobby.name)
 
-            disconnect(ownerSession)
-        }
+        disconnect(ownerSession)
     }
 
     @Test
-    fun createGame_seenByConnectedPlayers() {
-        runBlocking {
-            val otherSession = newPlayer("OtherPlayer")
-            val games = otherSession.watchGames().messages
+    fun createGame_seenByConnectedPlayers() = runAsyncTest {
+        val otherSession = newPlayer("OtherPlayer")
+        val games = otherSession.watchGames().messages
 
-            var receivedLobbies = withTimeout(500) { games.receive() }
-            assertNotNull(receivedLobbies)
-            assertEquals(0, receivedLobbies.size)
+        var receivedLobbies = withTimeout(500) { games.receive() }
+        assertNotNull(receivedLobbies)
+        assertEquals(0, receivedLobbies.size)
 
-            val ownerSession = newPlayer("GameOwner")
-            val gameName = "Test Game"
-            val createdLobby = ownerSession.createGame(gameName)
+        val ownerSession = newPlayer("GameOwner")
+        val gameName = "Test Game"
+        val createdLobby = ownerSession.createGame(gameName)
 
-            receivedLobbies = withTimeout(500) { games.receive() }
-            assertNotNull(receivedLobbies)
-            assertEquals(1, receivedLobbies.size)
-            val receivedLobby = receivedLobbies[0]
-            assertEquals(createdLobby.id, receivedLobby.id)
-            assertEquals(createdLobby.name, receivedLobby.name)
+        receivedLobbies = withTimeout(500) { games.receive() }
+        assertNotNull(receivedLobbies)
+        assertEquals(1, receivedLobbies.size)
+        val receivedLobby = receivedLobbies[0]
+        assertEquals(createdLobby.id, receivedLobby.id)
+        assertEquals(createdLobby.name, receivedLobby.name)
 
-            disconnect(ownerSession, otherSession)
-        }
+        disconnect(ownerSession, otherSession)
     }
 
     @Test
-    fun startGame_3players() = runBlocking {
+    fun startGame_3players() = runAsyncTest {
         val session1 = newPlayer("Player1")
         val session2 = newPlayer("Player2")
 
@@ -132,10 +124,9 @@ class SevenWondersTest {
         val gameStart2 = launch { session2.awaitGameStart(lobby.id) }
         val gameStart3 = launch { session3.awaitGameStart(lobby.id) }
         session1.startGame()
-
-        withTimeout(500) { gameStart1.join() }
-        withTimeout(500) { gameStart2.join() }
-        withTimeout(500) { gameStart3.join() }
+        gameStart1.join()
+        gameStart2.join()
+        gameStart3.join()
 
         val turns1 = session1.watchTurns().messages
         val turns2 = session2.watchTurns().messages
@@ -143,9 +134,9 @@ class SevenWondersTest {
         session1.sayReady()
         session2.sayReady()
         session3.sayReady()
-        val turn1 = withTimeout(500) { turns1.receive() }
-        val turn2 = withTimeout(500) { turns2.receive() }
-        val turn3 = withTimeout(500) { turns3.receive() }
+        val turn1 = turns1.receive()
+        val turn2 = turns2.receive()
+        val turn3 = turns3.receive()
         assertNotNull(turn1)
         assertNotNull(turn2)
         assertNotNull(turn3)
