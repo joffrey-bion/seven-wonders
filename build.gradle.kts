@@ -10,8 +10,6 @@ plugins {
 
 subprojects {
     repositories {
-        // while jcenter sync is broken for krossbow
-        maven(url = "https://dl.bintray.com/joffrey-bion/maven")
         jcenter()
     }
 
