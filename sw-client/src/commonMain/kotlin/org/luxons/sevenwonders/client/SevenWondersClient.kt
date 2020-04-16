@@ -92,7 +92,7 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     }
 
     suspend fun updateSettings(settings: CustomizableSettings) {
-        stompSession.convertAndSend("/app/lobby/reorderPlayers", UpdateSettingsAction(settings), UpdateSettingsAction.serializer())
+        stompSession.convertAndSend("/app/lobby/updateSettings", UpdateSettingsAction(settings), UpdateSettingsAction.serializer())
     }
 
     suspend fun watchLobbyUpdates(): StompSubscription<LobbyDTO> =
