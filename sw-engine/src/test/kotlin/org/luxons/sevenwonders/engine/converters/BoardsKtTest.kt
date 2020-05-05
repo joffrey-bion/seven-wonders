@@ -1,7 +1,5 @@
-package org.luxons.sevenwonders.model
+package org.luxons.sevenwonders.engine.converters
 
-import org.luxons.sevenwonders.engine.converters.toColumns
-import org.luxons.sevenwonders.engine.converters.toTableCard
 import org.luxons.sevenwonders.engine.test.testCard
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.cards.TableCard

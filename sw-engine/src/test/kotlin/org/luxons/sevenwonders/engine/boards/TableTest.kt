@@ -1,4 +1,4 @@
-package org.luxons.sevenwonders.model
+package org.luxons.sevenwonders.engine.boards
 
 import org.junit.Assume.assumeTrue
 import org.junit.experimental.theories.DataPoints
