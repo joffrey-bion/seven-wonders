@@ -6,7 +6,8 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import redux.Middleware
 import redux.MiddlewareApi
@@ -79,13 +80,18 @@ class SagaContext<S, A : RAction, R>(
     }
 
     /**
-     * Dispatches an action given by [createAction] for each message received in [channel].
+     * Dispatches all actions from this flow.
      */
-    suspend fun <T> dispatchAll(channel: ReceiveChannel<T>, createAction: (T) -> A) {
-        for (msg in channel) {
-            reduxApi.dispatch(createAction(msg))
+    suspend fun Flow<A>.dispatchAll() {
+        collect {
+            reduxApi.dispatch(it)
         }
     }
+
+    /**
+     * Dispatches all actions from this flow in the provided [scope].
+     */
+    fun Flow<A>.dispatchAllIn(scope: CoroutineScope): Job = scope.launch { dispatchAll() }
 
     /**
      * Executes [handle] on every action dispatched. This runs forever until the current coroutine is cancelled.

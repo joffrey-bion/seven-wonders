@@ -1,13 +1,15 @@
 package org.luxons.sevenwonders.client
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
-import org.hildan.krossbow.stomp.StompSubscription
 import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization
 import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
+import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
 import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
 import org.luxons.sevenwonders.model.CustomizableSettings
@@ -44,17 +46,14 @@ private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKx
 ): U {
     val sub = subscribe(receiveDestination, deserializer)
     convertAndSend(sendDestination, payload, serializer)
-    val msg = sub.messages.receive()
-    sub.unsubscribe()
-    return msg
+    return sub.first()
 }
 
 class SevenWondersSession(private val stompSession: StompSessionWithKxSerialization) {
 
     suspend fun disconnect() = stompSession.disconnect()
 
-    suspend fun watchErrors(): StompSubscription<ErrorDTO> =
-        stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
+    fun watchErrors(): Flow<ErrorDTO> = stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
     suspend fun chooseName(displayName: String): ConnectedPlayer = stompSession.request(
         sendDestination = "/app/chooseName",
@@ -64,7 +63,7 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         deserializer = ConnectedPlayer.serializer()
     )
 
-    suspend fun watchGames(): StompSubscription<List<LobbyDTO>> =
+    fun watchGames(): Flow<List<LobbyDTO>> =
         stompSession.subscribe("/topic/games", LobbyDTO.serializer().list)
 
     suspend fun createGame(gameName: String): LobbyDTO = stompSession.request(
@@ -95,42 +94,46 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         stompSession.convertAndSend("/app/lobby/updateSettings", UpdateSettingsAction(settings), UpdateSettingsAction.serializer())
     }
 
-    suspend fun watchLobbyUpdates(): StompSubscription<LobbyDTO> =
+    fun watchLobbyUpdates(): Flow<LobbyDTO> =
         stompSession.subscribe("/user/queue/lobby/updated", LobbyDTO.serializer())
 
     suspend fun awaitGameStart(gameId: Long): PlayerTurnInfo {
-        val gameStartSubscription = stompSession.subscribe("/user/queue/lobby/$gameId/started", PlayerTurnInfo.serializer())
-        val turnInfo = gameStartSubscription.messages.receive()
-        gameStartSubscription.unsubscribe()
-        return turnInfo
+        val startEvents = stompSession.subscribe("/user/queue/lobby/$gameId/started", PlayerTurnInfo.serializer())
+        return startEvents.first()
     }
 
     suspend fun startGame() {
         stompSession.sendEmptyMsg("/app/lobby/startGame")
     }
 
-    suspend fun watchPlayerReady(gameId: Long): StompSubscription<String> =
+    fun watchPlayerReady(gameId: Long): Flow<String> =
             stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
 
-    suspend fun watchPreparedCards(gameId: Long): StompSubscription<PreparedCard> =
+    fun watchPreparedCards(gameId: Long): Flow<PreparedCard> =
             stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
 
-    suspend fun watchTurns(): StompSubscription<PlayerTurnInfo> =
+    fun watchTurns(): Flow<PlayerTurnInfo> =
             stompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo.serializer())
 
     suspend fun sayReady() {
         stompSession.sendEmptyMsg("/app/game/sayReady")
     }
 
-    suspend fun prepareMove(move: PlayerMove): PlayerMove = stompSession.request(
-        sendDestination = "/app/game/prepareMove",
-        receiveDestination = "/user/queue/game/preparedMove",
-        payload = PrepareMoveAction(move),
-        serializer = PrepareMoveAction.serializer(),
-        deserializer = PlayerMove.serializer()
-    )
+    fun watchOwnMoves(): Flow<PlayerMove> =
+        stompSession.subscribe(destination = "/user/queue/game/preparedMove", deserializer = PlayerMove.serializer())
+
+    suspend fun prepareMove(move: PlayerMove) {
+        stompSession.convertAndSend(
+            destination = "/app/game/prepareMove",
+            body = PrepareMoveAction(move),
+            serializer = PrepareMoveAction.serializer()
+        )
+    }
 
     suspend fun unprepareMove() {
         stompSession.sendEmptyMsg("/app/game/unprepareMove")
     }
+
+//    suspend fun watchGameEnd() {
+//    }
 }

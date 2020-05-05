@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.server
 
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
@@ -86,10 +88,11 @@ class SevenWondersTest {
         disconnect(ownerSession)
     }
 
+    @OptIn(FlowPreview::class)
     @Test
     fun createGame_seenByConnectedPlayers() = runAsyncTest {
         val otherSession = newPlayer("OtherPlayer")
-        val games = otherSession.watchGames().messages
+        val games = otherSession.watchGames().produceIn(this)
 
         var receivedLobbies = withTimeout(500) { games.receive() }
         assertNotNull(receivedLobbies)
@@ -109,6 +112,7 @@ class SevenWondersTest {
         disconnect(ownerSession, otherSession)
     }
 
+    @OptIn(FlowPreview::class)
     @Test
     fun startGame_3players() = runAsyncTest {
         val session1 = newPlayer("Player1")
@@ -120,27 +124,16 @@ class SevenWondersTest {
         val session3 = newPlayer("Player3")
         session3.joinGame(lobby.id)
 
-        val gameStart1 = launch { session1.awaitGameStart(lobby.id) }
-        val gameStart2 = launch { session2.awaitGameStart(lobby.id) }
-        val gameStart3 = launch { session3.awaitGameStart(lobby.id) }
+        listOf(session1, session2, session3).forEach { session ->
+            launch {
+                session.awaitGameStart(lobby.id)
+                val turns = session.watchTurns().produceIn(this)
+                session.sayReady()
+                val turn = turns.receive()
+                assertNotNull(turn)
+                session.disconnect()
+            }
+        }
         session1.startGame()
-        gameStart1.join()
-        gameStart2.join()
-        gameStart3.join()
-
-        val turns1 = session1.watchTurns().messages
-        val turns2 = session2.watchTurns().messages
-        val turns3 = session3.watchTurns().messages
-        session1.sayReady()
-        session2.sayReady()
-        session3.sayReady()
-        val turn1 = turns1.receive()
-        val turn2 = turns2.receive()
-        val turn3 = turns3.receive()
-        assertNotNull(turn1)
-        assertNotNull(turn2)
-        assertNotNull(turn3)
-
-        disconnect(session1, session2, session3)
     }
 }

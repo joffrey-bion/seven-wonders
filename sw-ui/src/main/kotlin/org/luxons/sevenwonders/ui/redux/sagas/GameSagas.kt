@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.PlayerReadyEvent
@@ -14,22 +15,16 @@ import org.luxons.sevenwonders.ui.redux.TurnInfoEvent
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     val game = getState().gameState ?: error("Game saga run without a current game")
     coroutineScope {
-        val playerReadySub = session.watchPlayerReady(game.id)
-        val preparedCardsSub = session.watchPreparedCards(game.id)
-        val turnInfoSub = session.watchTurns()
-        val sayReadyJob = launch { onEach<RequestSayReady> { session.sayReady() } }
-        val unprepareJob = launch { onEach<RequestUnprepareMove> { session.unprepareMove() } }
-        val prepareMoveJob = launch {
-            onEach<RequestPrepareMove> {
-                val move = session.prepareMove(it.move)
-                dispatch(PreparedMoveEvent(move))
-            }
-        }
-        launch { dispatchAll(playerReadySub.messages) { PlayerReadyEvent(it) } }
-        launch { dispatchAll(preparedCardsSub.messages) { PreparedCardEvent(it) } }
-        launch { dispatchAll(turnInfoSub.messages) { TurnInfoEvent(it) } }
-        // TODO await game end
-        // TODO unsubscribe all subs, cancel all jobs
+        session.watchPlayerReady(game.id).map { PlayerReadyEvent(it) }.dispatchAllIn(this)
+        session.watchPreparedCards(game.id).map { PreparedCardEvent(it) }.dispatchAllIn(this)
+        session.watchOwnMoves().map { PreparedMoveEvent(it) }.dispatchAllIn(this)
+        session.watchTurns().map { TurnInfoEvent(it) }.dispatchAllIn(this)
+
+        launch { onEach<RequestSayReady> { session.sayReady() } }
+        launch { onEach<RequestPrepareMove> { session.prepareMove(it.move) } }
+        launch { onEach<RequestUnprepareMove> { session.unprepareMove() } }
+
+        // TODO await game end and cancel this scope to unsubscribe everything
     }
     console.log("End of game saga")
 }

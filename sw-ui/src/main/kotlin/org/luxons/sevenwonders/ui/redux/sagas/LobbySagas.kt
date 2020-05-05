@@ -1,10 +1,9 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.hildan.krossbow.stomp.StompSubscription
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
 import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
 import org.luxons.sevenwonders.ui.redux.RequestStartGame
@@ -17,28 +16,26 @@ suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
     val lobby = getState().currentLobby ?: error("Lobby saga run without a current lobby")
     coroutineScope {
         val lobbyUpdatesSubscription = session.watchLobbyUpdates()
-        launch { watchLobbyUpdates(lobbyUpdatesSubscription) }
+            .map { UpdateLobbyAction(it) }
+            .dispatchAllIn(this)
+
         val startGameJob = launch { awaitStartGame(session) }
 
         awaitFirst(
             {
                 awaitLeaveLobby(session)
-                lobbyUpdatesSubscription.unsubscribe()
+                lobbyUpdatesSubscription.cancel()
                 startGameJob.cancel()
                 dispatch(Navigate(Route.GAME_BROWSER))
             },
             {
                 awaitGameStart(session, lobby.id)
-                lobbyUpdatesSubscription.unsubscribe()
+                lobbyUpdatesSubscription.cancel()
                 startGameJob.cancel()
                 dispatch(Navigate(Route.GAME))
             }
         )
     }
-}
-
-private suspend fun SwSagaContext.watchLobbyUpdates(lobbyUpdatesSubscription: StompSubscription<LobbyDTO>) {
-    dispatchAll(lobbyUpdatesSubscription.messages) { UpdateLobbyAction(it) }
 }
 
 private suspend fun SwSagaContext.awaitGameStart(session: SevenWondersSession, lobbyId: Long) {

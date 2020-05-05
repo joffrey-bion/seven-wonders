@@ -1,6 +1,9 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
@@ -38,8 +41,7 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
 }
 
 private suspend fun serverErrorSaga(session: SevenWondersSession) {
-    val errorsSub = session.watchErrors()
-    for (err in errorsSub.messages) {
+    session.watchErrors().collect { err ->
         // TODO use blueprintjs toaster
         console.error("${err.code}: ${err.message}")
         console.error(JSON.stringify(err))

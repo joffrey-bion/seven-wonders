@@ -1,8 +1,9 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.hildan.krossbow.stomp.StompSubscription
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.ui.redux.EnterLobbyAction
@@ -23,17 +24,18 @@ private class GameBrowserSaga(
 ) {
     suspend fun run() {
         coroutineScope {
-            val gamesSubscription = session.watchGames()
-            launch { dispatchGameUpdates(gamesSubscription) }
+            val gamesDispatch = launch { dispatchGameUpdates() }
             val lobby = awaitCreateOrJoinGame()
-            gamesSubscription.unsubscribe()
+            gamesDispatch.cancelAndJoin()
             sagaContext.dispatch(EnterLobbyAction(lobby))
             sagaContext.dispatch(Navigate(Route.LOBBY))
         }
     }
 
-    private suspend fun dispatchGameUpdates(gamesSubscription: StompSubscription<List<LobbyDTO>>) {
-        sagaContext.dispatchAll(gamesSubscription.messages) { UpdateGameListAction(it) }
+    private suspend fun dispatchGameUpdates() {
+        with(sagaContext) {
+            session.watchGames().map { UpdateGameListAction(it) }.dispatchAll()
+        }
     }
 
     private suspend fun awaitCreateOrJoinGame(): LobbyDTO = awaitFirst(this::awaitCreateGame, this::awaitJoinGame)
