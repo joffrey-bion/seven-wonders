@@ -7,11 +7,11 @@ import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.resources.Production
 import org.luxons.sevenwonders.engine.resources.TradingRules
 import org.luxons.sevenwonders.engine.resources.mutableResourcesOf
-import org.luxons.sevenwonders.engine.score.PlayerScore
-import org.luxons.sevenwonders.engine.score.ScoreCategory
 import org.luxons.sevenwonders.engine.wonders.Wonder
 import org.luxons.sevenwonders.model.Age
 import org.luxons.sevenwonders.model.cards.Color
+import org.luxons.sevenwonders.model.score.PlayerScore
+import org.luxons.sevenwonders.model.score.ScoreCategory
 
 internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
 

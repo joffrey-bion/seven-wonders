@@ -12,7 +12,7 @@ import org.luxons.sevenwonders.engine.data.LAST_AGE
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.moves.resolve
-import org.luxons.sevenwonders.engine.score.ScoreBoard
+import org.luxons.sevenwonders.model.score.ScoreBoard
 import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.TableState
 import org.luxons.sevenwonders.model.PlayerMove
@@ -184,7 +184,8 @@ class Game internal constructor(
     /**
      * Computes the score for all players.
      */
-    fun computeScore(): ScoreBoard = ScoreBoard(table.boards.map { it.computeScore(players[it.playerIndex]) })
+    fun computeScore(): ScoreBoard =
+        ScoreBoard(table.boards.map { it.computeScore(players[it.playerIndex]) }.sortedDescending())
 
     private class MissingPreparedMoveException(playerIndex: Int) :
         IllegalStateException("Player $playerIndex has not prepared his move")

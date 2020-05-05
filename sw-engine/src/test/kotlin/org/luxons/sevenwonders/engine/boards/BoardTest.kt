@@ -9,13 +9,10 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.boards.Board.InsufficientFundsException
-import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.engine.effects.RawPointsIncrease
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.effects.SpecialAbilityActivation
-import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.engine.resources.resourcesOf
-import org.luxons.sevenwonders.engine.score.ScoreCategory
 import org.luxons.sevenwonders.engine.test.addCards
 import org.luxons.sevenwonders.engine.test.getDifferentColorFrom
 import org.luxons.sevenwonders.engine.test.playCardWithEffect
@@ -24,6 +21,9 @@ import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.engine.test.testCard
 import org.luxons.sevenwonders.engine.test.testSettings
 import org.luxons.sevenwonders.engine.test.testWonder
+import org.luxons.sevenwonders.model.cards.Color
+import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.score.ScoreCategory
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
@@ -173,7 +173,7 @@ class BoardTest {
     }
 
     @Theory
-    fun computePoints_(@FromDataPoints("gold") gold: Int) {
+    fun computePoints_goldAndPoints(@FromDataPoints("gold") gold: Int) {
         assumeTrue(gold >= 0)
         val board = testBoard(initialGold = gold)
 

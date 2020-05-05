@@ -1,11 +1,15 @@
-package org.luxons.sevenwonders.engine.score
+package org.luxons.sevenwonders.model.score
 
-class ScoreBoard(scores: Collection<PlayerScore>) {
+import kotlinx.serialization.Serializable
 
-    val scores: Collection<PlayerScore> = scores.sortedDescending()
-}
+@Serializable
+class ScoreBoard(val scores: Collection<PlayerScore>)
 
-data class PlayerScore(val boardGold: Int, val pointsByCategory: Map<ScoreCategory, Int>) : Comparable<PlayerScore> {
+@Serializable
+data class PlayerScore(
+    val boardGold: Int,
+    val pointsByCategory: Map<ScoreCategory, Int>
+) : Comparable<PlayerScore> {
 
     val totalPoints = pointsByCategory.map { it.value }.sum()
 
