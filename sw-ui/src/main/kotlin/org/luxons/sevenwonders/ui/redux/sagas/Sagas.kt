@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
@@ -15,15 +14,15 @@ import redux.WrapperAction
 
 typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 
+@OptIn(ExperimentalCoroutinesApi::class)
 suspend fun SwSagaContext.rootSaga() = coroutineScope {
     val action = next<RequestChooseName>()
     val session = SevenWondersClient().connect("localhost:8000")
     console.info("Connected to Seven Wonders web socket API")
 
-    launch {
+    launch(start = CoroutineStart.UNDISPATCHED) {
         serverErrorSaga(session)
     }
-    yield() // ensures the error saga starts
 
     val player = session.chooseName(action.playerName)
     dispatch(SetCurrentPlayerAction(player))
