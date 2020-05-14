@@ -15,7 +15,9 @@ import org.luxons.sevenwonders.engine.test.testCustomizableSettings
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.test.fail
 
 class GameTest {
 
@@ -33,17 +35,25 @@ class GameTest {
 
         (1..LAST_AGE).forEach { playAge(nbPlayers, game, it) }
 
-        game.computeScore()
+        val turnInfos = game.getCurrentTurnInfo()
+        assertEquals(nbPlayers, turnInfos.size)
+        turnInfos.forEach {
+            assertEquals(Action.WATCH_SCORE, it.action)
+
+            val scoreBoard = it.scoreBoard
+            assertNotNull(scoreBoard)
+            assertEquals(nbPlayers, scoreBoard.scores.size)
+        }
     }
+
+    private fun createGame(nbPlayers: Int): Game =
+        GameDefinition.load().initGame(0, testCustomizableSettings(), nbPlayers)
 
     private fun playAge(nbPlayers: Int, game: Game, age: Int) {
         repeat(6) {
             playTurn(nbPlayers, game, age, 7 - it)
         }
     }
-
-    private fun createGame(nbPlayers: Int): Game =
-        GameDefinition.load().initGame(0, testCustomizableSettings(), nbPlayers)
 
     private fun playTurn(nbPlayers: Int, game: Game, ageToCheck: Int, handSize: Int) {
         val turnInfos = game.getCurrentTurnInfo()
@@ -68,6 +78,7 @@ class GameTest {
         Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> createPlayCardMove(this)
         Action.PICK_NEIGHBOR_GUILD -> createPickGuildMove(this)
         Action.WAIT, Action.SAY_READY -> null
+        Action.WATCH_SCORE -> fail("should not have WATCH_SCORE action before end of game")
     }
 
     private fun createPlayCardMove(turnInfo: PlayerTurnInfo): MoveExpectation {
@@ -80,11 +91,20 @@ class GameTest {
         return if (playableCard != null) {
             planMove(turnInfo, MoveType.PLAY, playableCard, playableCard.playability.cheapestTransactions.first())
         } else {
-            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand!!.first(),
-                noTransactions()
-            )
+            planMove(turnInfo, MoveType.DISCARD, turnInfo.hand!!.first(), noTransactions())
         }
     }
+
+    private fun planMove(
+        turnInfo: PlayerTurnInfo,
+        moveType: MoveType,
+        card: HandCard,
+        transactions: ResourceTransactions
+    ): MoveExpectation = MoveExpectation(
+        turnInfo.playerIndex,
+        PlayerMove(moveType, card.name, transactions),
+        PlayedMove(turnInfo.playerIndex, moveType, card.toPlayedCard(), transactions)
+    )
 
     private fun createPickGuildMove(turnInfo: PlayerTurnInfo): MoveExpectation {
         val neighbourGuilds = turnInfo.neighbourGuildCards
@@ -108,19 +128,6 @@ class GameTest {
 
     data class MoveExpectation(val playerIndex: Int, val moveToSend: PlayerMove, val expectedPlayedMove: PlayedMove)
 
-    private fun planMove(
-        turnInfo: PlayerTurnInfo,
-        moveType: MoveType,
-        card: HandCard,
-        transactions: ResourceTransactions
-    ): MoveExpectation = MoveExpectation(
-        turnInfo.playerIndex,
-        PlayerMove(moveType, card.name, transactions),
-        PlayedMove(turnInfo.playerIndex, moveType, card.toPlayedCard(), transactions)
-    )
-
     private fun HandCard.toPlayedCard(): TableCard =
-        TableCard(
-            name, color, requirements, chainParent, chainChildren, image, back, true
-        )
+        TableCard(name, color, requirements, chainParent, chainChildren, image, back, true)
 }

@@ -47,6 +47,19 @@ class Game internal constructor(
         currentTurnInfo = players.map { createPlayerTurnInfo(it) }
     }
 
+    private fun startEndGame() {
+        // some player may need to do additional stuff
+        startNewTurn()
+        val allDone = currentTurnInfo.all { it.action == Action.WAIT }
+        if (!allDone) {
+            return // we play the last turn like a normal one
+        }
+        val scoreBoard = computeScore()
+        currentTurnInfo = currentTurnInfo.map {
+            it.copy(action = Action.WATCH_SCORE, scoreBoard = scoreBoard)
+        }
+    }
+
     private fun createPlayerTurnInfo(player: Player): PlayerTurnInfo {
         val hand = hands.createHand(player)
         val action = determineAction(hand, player.board)
@@ -68,7 +81,10 @@ class Game internal constructor(
     fun getCurrentTurnInfo(): Collection<PlayerTurnInfo> = currentTurnInfo
 
     private fun determineAction(hand: List<HandCard>, board: Board): Action = when {
-        endOfGameReached() && board.hasSpecial(SpecialAbility.COPY_GUILD) -> determineCopyGuildAction(board)
+        endOfGameReached() -> when {
+            board.hasSpecial(SpecialAbility.COPY_GUILD) -> determineCopyGuildAction(board)
+            else -> Action.WAIT
+        }
         hand.size == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_LAST
         hand.size == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_2
         hand.isEmpty() -> Action.WAIT
@@ -115,7 +131,9 @@ class Game internal constructor(
         makeMoves()
         if (endOfAgeReached()) {
             executeEndOfAgeEvents()
-            if (!endOfGameReached()) {
+            if (endOfGameReached()) {
+                startEndGame()
+            } else {
                 startNewAge()
             }
         } else {
@@ -184,7 +202,7 @@ class Game internal constructor(
     /**
      * Computes the score for all players.
      */
-    fun computeScore(): ScoreBoard =
+    private fun computeScore(): ScoreBoard =
         ScoreBoard(table.boards.map { it.computeScore(players[it.playerIndex]) }.sortedDescending())
 
     private class MissingPreparedMoveException(playerIndex: Int) :
