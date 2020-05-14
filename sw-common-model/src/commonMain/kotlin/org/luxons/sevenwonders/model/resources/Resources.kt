@@ -14,7 +14,7 @@ enum class ResourceType(val symbol: Char) {
 
     companion object {
 
-        private val typesPerSymbol = values().map { it.symbol to it }.toMap()
+        private val typesPerSymbol = values().associateBy { it.symbol }
 
         fun fromSymbol(symbol: String): ResourceType {
             if (symbol.length != 1) {

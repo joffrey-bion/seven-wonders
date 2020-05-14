@@ -31,7 +31,7 @@ internal class ProductionSerializer : JsonSerializer<Production>, JsonDeserializ
         if (choices.size > 1) {
             throw IllegalArgumentException("Cannot serialize a production with more than one choice")
         }
-        val str = choices.flatMap { it }.map { it.symbol }.joinToString("/")
+        val str = choices.flatten().map { it.symbol }.joinToString("/")
         return context.serialize(str)
     }
 

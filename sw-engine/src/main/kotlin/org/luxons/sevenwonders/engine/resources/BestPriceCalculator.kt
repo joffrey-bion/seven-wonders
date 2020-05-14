@@ -4,6 +4,7 @@ import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.ResourceType
+import java.util.EnumMap
 import java.util.EnumSet
 
 internal fun bestSolution(resources: Resources, player: Player): TransactionPlan =
@@ -16,7 +17,7 @@ private class ResourcePool(
     private val rules: TradingRules,
     choices: Set<Set<ResourceType>>
 ) {
-    val choices: Set<MutableSet<ResourceType>> = choices.map { it.toMutableSet() }.toSet()
+    val choices: Set<MutableSet<ResourceType>> = choices.mapTo(HashSet()) { it.toMutableSet() }
 
     fun getCost(type: ResourceType): Int = if (provider == null) 0 else rules.getCost(type, provider)
 }
@@ -25,7 +26,7 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
 
     private val pools: List<ResourcePool>
     private val resourcesLeftToPay: MutableResources
-    private val boughtResources: MutableMap<Provider, MutableResources> = HashMap()
+    private val boughtResources: MutableMap<Provider, MutableResources> = EnumMap(Provider::class.java)
     private var pricePaid: Int = 0
 
     private var bestSolutions: MutableSet<ResourceTransactions> = mutableSetOf()

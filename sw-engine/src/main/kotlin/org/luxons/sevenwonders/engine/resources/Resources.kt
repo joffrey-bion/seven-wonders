@@ -39,7 +39,7 @@ interface Resources {
     val quantities: Map<ResourceType, Int>
 
     val size: Int
-        get() = quantities.map { it.value }.sum()
+        get() = quantities.values.sum()
 
     fun isEmpty(): Boolean = size == 0
 
@@ -56,7 +56,7 @@ interface Resources {
      * type.
      */
     operator fun minus(resources: Resources): Resources =
-        quantities.mapValues { (type, q) -> Math.max(0, q - resources[type]) }.toResources()
+        quantities.mapValues { (type, q) -> (q - resources[type]).coerceAtLeast(0) }.toResources()
 
     fun toList(): List<ResourceType> = quantities.flatMap { (type, quantity) -> List(quantity) { type } }
 
@@ -71,7 +71,7 @@ class MutableResources(
         quantities.merge(type, quantity) { x, y -> x + y }
     }
 
-    fun add(resources: Resources) = resources.quantities.forEach { type, quantity -> this.add(type, quantity) }
+    fun add(resources: Resources) = resources.quantities.forEach { (type, quantity) -> add(type, quantity) }
 
     fun remove(type: ResourceType, quantity: Int) {
         if (this[type] < quantity) {

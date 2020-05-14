@@ -5,7 +5,7 @@ import org.luxons.sevenwonders.model.resources.ResourceTransaction
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.ResourceType
 
-class TradingRules internal constructor(private val defaultCost: Int) {
+internal class TradingRules(private val defaultCost: Int) {
 
     private val costs: MutableMap<ResourceType, MutableMap<Provider, Int>> = mutableMapOf()
 
@@ -20,7 +20,7 @@ class TradingRules internal constructor(private val defaultCost: Int) {
         costs.computeIfAbsent(type) { mutableMapOf() }[provider] = cost
     }
 
-    internal fun computeCost(transactions: ResourceTransactions): Int = transactions.map { computeCost(it) }.sum()
+    internal fun computeCost(transactions: ResourceTransactions): Int = transactions.sumBy { computeCost(it) }
 
     internal fun computeCost(transact: ResourceTransaction) = computeCost(transact.asResources(), transact.provider)
 

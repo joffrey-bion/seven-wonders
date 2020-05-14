@@ -88,8 +88,7 @@ internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Setting
     private fun computePointsForCards(player: Player, color: Color): Int =
         playedCards.filter { it.color === color }
             .flatMap { it.effects }
-            .map { it.computePoints(player) }
-            .sum()
+            .sumBy { it.computePoints(player) }
 
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
 

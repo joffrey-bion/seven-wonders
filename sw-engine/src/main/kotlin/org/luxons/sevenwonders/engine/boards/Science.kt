@@ -24,7 +24,7 @@ internal class Science {
     }
 
     fun addAll(science: Science) {
-        science.quantities.forEach { type, quantity -> this.add(type, quantity) }
+        science.quantities.forEach { (type, quantity) -> this.add(type, quantity) }
         jokers += science.jokers
     }
 
@@ -42,14 +42,14 @@ internal class Science {
         var maxPoints = 0
         for (i in values.indices) {
             values[i]++
-            maxPoints = Math.max(maxPoints, computePoints(values, jokers - 1))
+            maxPoints = maxPoints.coerceAtLeast(computePoints(values, jokers - 1))
             values[i]--
         }
         return maxPoints
     }
 
     private fun computePointsNoJoker(values: List<Int>): Int {
-        val independentSquaresSum = values.map { i -> i * i }.sum()
+        val independentSquaresSum = values.sumBy { it * it }
         val nbGroupsOfAll = values.min() ?: 0
         return independentSquaresSum + nbGroupsOfAll * 7
     }

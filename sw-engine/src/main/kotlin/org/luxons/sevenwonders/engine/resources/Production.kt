@@ -26,7 +26,7 @@ data class Production internal constructor(
     }
 
     internal fun asChoices(): Set<Set<ResourceType>> {
-        val fixedAsChoices = fixedResources.toList().map { EnumSet.of(it) }.toSet()
+        val fixedAsChoices = fixedResources.toList().mapTo(HashSet()) { EnumSet.of(it) }
         return fixedAsChoices + alternativeResources
     }
 

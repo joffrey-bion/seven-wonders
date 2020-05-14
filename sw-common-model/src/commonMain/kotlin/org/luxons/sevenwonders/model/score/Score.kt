@@ -11,7 +11,7 @@ data class PlayerScore(
     val pointsByCategory: Map<ScoreCategory, Int>
 ) : Comparable<PlayerScore> {
 
-    val totalPoints = pointsByCategory.map { it.value }.sum()
+    val totalPoints = pointsByCategory.values.sum()
 
     override fun compareTo(other: PlayerScore) = compareValuesBy(this, other, { it.totalPoints }, { it.boardGold })
 }

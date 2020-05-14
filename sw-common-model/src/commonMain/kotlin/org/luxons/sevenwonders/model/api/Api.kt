@@ -20,10 +20,7 @@ data class LobbyDTO(
 ) {
     fun joinability(userDisplayName: String): Actionability = when {
         state != State.LOBBY -> Actionability(false, "Cannot join: the game has already started")
-        maxPlayersReached -> Actionability(
-            false,
-            "Cannot join: the game is full"
-        )
+        maxPlayersReached -> Actionability(false, "Cannot join: the game is full")
         playerNameAlreadyUsed(userDisplayName) -> Actionability(
             false,
             "Cannot join: already a player named '$userDisplayName' in this game"
@@ -32,10 +29,7 @@ data class LobbyDTO(
     }
 
     fun startability(username: String): Actionability = when {
-        !hasEnoughPlayers -> Actionability(
-            false,
-            "Cannot start the game, more players needed"
-        )
+        !hasEnoughPlayers -> Actionability(false, "Cannot start the game, more players needed")
         owner != username -> Actionability(false, "Cannot start the game: only the owner can")
         else -> Actionability(true, "Start game")
     }

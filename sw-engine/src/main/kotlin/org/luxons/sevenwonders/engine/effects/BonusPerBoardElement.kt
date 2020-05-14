@@ -25,8 +25,7 @@ internal data class BonusPerBoardElement(
 
     private fun nbMatchingElementsFor(player: Player): Int = boards
         .map(player::getBoard)
-        .map(::nbMatchingElementsIn)
-        .sum()
+        .sumBy { nbMatchingElementsIn(it) }
 
     private fun nbMatchingElementsIn(board: Board): Int = when (type) {
             BoardElementType.CARD -> board.getNbCardsOfColor(colors!!)

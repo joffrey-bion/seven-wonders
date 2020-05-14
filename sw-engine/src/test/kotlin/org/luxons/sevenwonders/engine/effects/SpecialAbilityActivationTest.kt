@@ -49,7 +49,7 @@ class SpecialAbilityActivationTest {
 
         player.board.copiedGuild = guildCard
 
-        val directPointsFromGuildCard = guildCard.effects.stream().mapToInt { e -> e.computePoints(player) }.sum()
+        val directPointsFromGuildCard = guildCard.effects.sumBy { it.computePoints(player) }
         assertEquals(directPointsFromGuildCard, effect.computePoints(player))
     }
 
