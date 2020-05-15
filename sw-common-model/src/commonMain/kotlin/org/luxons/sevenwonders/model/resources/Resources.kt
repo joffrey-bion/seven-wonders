@@ -43,6 +43,6 @@ enum class Provider(val boardPosition: RelativeBoardPosition) {
 @Serializable
 data class ResourceTransaction(val provider: Provider, val resources: List<CountedResource>)
 
-typealias ResourceTransactions = Collection<ResourceTransaction>
+typealias ResourceTransactions = Set<ResourceTransaction>
 
 fun noTransactions(): ResourceTransactions = emptySet()
