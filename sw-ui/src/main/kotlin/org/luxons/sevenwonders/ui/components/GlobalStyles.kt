@@ -33,4 +33,13 @@ object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
             translate((-50).pct, (-50).pct)
         }
     }
+
+    val centerInParent by css {
+        position = Position.absolute
+        left = 50.pct
+        top = 50.pct
+        transform {
+            translate((-50).pct, (-50).pct)
+        }
+    }
 }

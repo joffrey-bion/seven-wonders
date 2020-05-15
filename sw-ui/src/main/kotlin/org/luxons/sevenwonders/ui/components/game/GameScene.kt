@@ -6,7 +6,9 @@ import com.palantir.blueprintjs.bpButtonGroup
 import com.palantir.blueprintjs.bpOverlay
 import kotlinx.css.*
 import kotlinx.css.properties.*
+import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.Action
+import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
@@ -24,8 +26,10 @@ import react.RProps
 import react.RState
 import react.ReactElement
 import react.dom.*
+import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
+import styled.styledImg
 
 interface GameSceneStateProps : RProps {
     var playerIsReady: Boolean
@@ -110,8 +114,9 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 )
             }
             val card = props.preparedCard
-            if (card != null) {
-                preparedMove(card)
+            val move = props.preparedMove
+            if (card != null && move != null) {
+                preparedMove(card, move)
             }
             if (turnInfo.action == Action.SAY_READY) {
                 sayReadyButton()
@@ -120,11 +125,21 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun RBuilder.preparedMove(card: HandCard) {
+    private fun RBuilder.preparedMove(card: HandCard, move: PlayerMove) {
         bpOverlay(isOpen = true, onClose = props.unprepareMove) {
             styledDiv {
                 css { +GlobalStyles.fixedCenter }
-                cardImage(card)
+                cardImage(card, faceDown = move.type == MoveType.UPGRADE_WONDER) {
+                    if (move.type == MoveType.DISCARD) {
+                        css { discardedCardStyle() }
+                    }
+                }
+                if (move.type == MoveType.DISCARD) {
+                    discardText()
+                }
+                if (move.type == MoveType.UPGRADE_WONDER) {
+                    upgradeWonderSymbol()
+                }
                 styledDiv {
                     css {
                         position = Position.absolute
@@ -138,6 +153,40 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                         intent = Intent.DANGER,
                         onClick = { props.unprepareMove() }
                     )
+                }
+            }
+        }
+    }
+
+    private fun CSSBuilder.discardedCardStyle() {
+        filter = "brightness(60%) grayscale(50%)"
+    }
+
+    private fun StyledDOMBuilder<DIV>.discardText() {
+        styledDiv {
+            css {
+                +GlobalStyles.centerInParent
+                display = Display.flex
+                alignItems = Align.center
+                height = 3.rem
+                fontSize = 2.rem
+                color = Color.goldenrod
+                borderTop(2.px, BorderStyle.solid, Color.goldenrod)
+                borderBottom(2.px, BorderStyle.solid, Color.goldenrod)
+            }
+            +"DISCARD"
+        }
+    }
+
+    private fun StyledDOMBuilder<DIV>.upgradeWonderSymbol() {
+        styledImg(src = "/images/tokens/wonder-upgrade-bright.png") {
+            css {
+                width = 8.rem
+                position = Position.absolute
+                left = 10.pct
+                top = 50.pct
+                transform {
+                    translate((-50).pct, (-50).pct)
                 }
             }
         }
