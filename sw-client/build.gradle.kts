@@ -3,7 +3,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint")
 }
 
-val krossbowVersion = "0.20.1"
+val krossbowVersion = "0.20.2"
 
 kotlin {
     jvm()
