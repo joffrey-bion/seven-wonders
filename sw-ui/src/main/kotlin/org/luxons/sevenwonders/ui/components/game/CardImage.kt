@@ -4,7 +4,7 @@ import kotlinx.css.CSSBuilder
 import kotlinx.css.Color
 import kotlinx.css.borderRadius
 import kotlinx.css.pct
-import kotlinx.css.properties.boxShadow
+import kotlinx.css.properties.*
 import kotlinx.css.px
 import kotlinx.css.rem
 import kotlinx.html.IMG
@@ -15,19 +15,34 @@ import styled.StyledDOMBuilder
 import styled.css
 import styled.styledImg
 
-fun RBuilder.cardImage(card: Card, highlightColor: Color? = null, block: StyledDOMBuilder<IMG>.() -> Unit = {}) {
-    styledImg(src = "/images/cards/${card.image}") {
+fun RBuilder.cardImage(
+    card: Card,
+    faceDown: Boolean = false,
+    highlightColor: Color? = null,
+    block: StyledDOMBuilder<IMG>.() -> Unit = {}
+) {
+    styledImg(src = card.imageSrc(faceDown)) {
         css {
-            borderRadius = 5.pct
-            boxShadow(offsetX = 2.px, offsetY = 2.px, blurRadius = 5.px, color = Color.black)
-            highlightStyle(highlightColor)
+            cardImageStyle(highlightColor)
         }
         attrs {
             title = card.name
-            alt = "Card ${card.name}"
+            alt = if (faceDown) "Card back (${card.back.image})" else "Card ${card.name}"
         }
         block()
     }
+}
+
+private fun Card.imageSrc(faceDown: Boolean): String = if (faceDown) {
+    "/images/cards/back/${back.image}"
+} else {
+    "/images/cards/$image"
+}
+
+private fun CSSBuilder.cardImageStyle(highlightColor: Color?) {
+    borderRadius = 5.pct
+    boxShadow(offsetX = 2.px, offsetY = 2.px, blurRadius = 5.px, color = Color.black)
+    highlightStyle(highlightColor)
 }
 
 private fun CSSBuilder.highlightStyle(highlightColor: Color?) {
