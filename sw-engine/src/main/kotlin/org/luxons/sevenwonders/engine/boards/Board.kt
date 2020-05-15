@@ -73,6 +73,7 @@ internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Setting
     }
 
     fun computeScore(player: Player): PlayerScore = PlayerScore(
+        playerIndex = playerIndex,
         boardGold = gold,
         pointsByCategory = mapOf(
             ScoreCategory.CIVIL to computePointsForCards(player, Color.BLUE),

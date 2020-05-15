@@ -7,6 +7,7 @@ class ScoreBoard(val scores: Collection<PlayerScore>)
 
 @Serializable
 data class PlayerScore(
+    val playerIndex: Int,
     val boardGold: Int,
     val pointsByCategory: Map<ScoreCategory, Int>
 ) : Comparable<PlayerScore> {
