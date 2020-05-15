@@ -70,3 +70,14 @@ class UpdateSettingsAction(
      */
     val settings: CustomizableSettings
 )
+
+/**
+ * The action to add a bot to the game. Can only be called in the lobby by the owner of the game.
+ */
+@Serializable
+class AddBotAction(
+    /**
+     * The display name for the bot to add.
+     */
+    val botDisplayName: String
+)

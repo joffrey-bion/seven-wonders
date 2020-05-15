@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.EnterGameAction
+import org.luxons.sevenwonders.ui.redux.RequestAddBot
 import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
 import org.luxons.sevenwonders.ui.redux.RequestStartGame
 import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
@@ -19,6 +20,9 @@ suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
             .map { UpdateLobbyAction(it) }
             .dispatchAllIn(this)
 
+        launch {
+            onEach<RequestAddBot> { session.addBot(it.botDisplayName) }
+        }
         val startGameJob = launch { awaitStartGame(session) }
 
         awaitFirst(

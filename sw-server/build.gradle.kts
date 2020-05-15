@@ -10,8 +10,10 @@ apply(plugin = "io.spring.dependency-management")
 dependencies {
     implementation(project(":sw-common-model"))
     implementation(project(":sw-engine"))
+    implementation(project(":sw-bot"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect")) // required by Spring 5
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6")
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -32,7 +34,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.hildan.jackstomp:jackstomp:2.0.0")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
 }
 
 // packages the frontend app within the jar

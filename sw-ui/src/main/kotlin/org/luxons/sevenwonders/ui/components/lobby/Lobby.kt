@@ -4,6 +4,7 @@ import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
+import org.luxons.sevenwonders.ui.redux.RequestAddBot
 import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
 import org.luxons.sevenwonders.ui.redux.RequestStartGame
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
@@ -20,6 +21,7 @@ interface LobbyStateProps : RProps {
 
 interface LobbyDispatchProps : RProps {
     var startGame: () -> Unit
+    var addBot: (displayName: String) -> Unit
     var leaveLobby: () -> Unit
 }
 
@@ -39,6 +41,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             radialPlayerList(currentGame.players, currentPlayer)
             if (currentPlayer.isGameOwner) {
                 startButton(currentGame, currentPlayer)
+                addBotButton()
             } else {
                 leaveButton()
             }
@@ -57,6 +60,25 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         ) {
             +"START"
         }
+    }
+
+    private fun RBuilder.addBotButton() {
+        bpButton(
+            large = true,
+            intent = Intent.NONE,
+            icon = "plus",
+            rightIcon = "desktop",
+            title = "Add a bot to this game",
+            onClick = { addBot() }
+        ) {
+            +"ADD BOT"
+        }
+    }
+
+    private fun addBot() {
+        val name = listOf("Bob", "Jack", "John", "Boris", "HAL", "GLaDOS").random()
+//        val botName = "\uD83E\uDD16 $name"
+        props.addBot(name)
     }
 
     private fun RBuilder.leaveButton() {
@@ -82,6 +104,7 @@ private val lobby = connectStateAndDispatch<LobbyStateProps, LobbyDispatchProps,
     },
     mapDispatchToProps = { dispatch, _ ->
         startGame = { dispatch(RequestStartGame()) }
+        addBot = { name -> dispatch(RequestAddBot(name)) }
         leaveLobby = { dispatch(RequestLeaveLobby()) }
     }
 )

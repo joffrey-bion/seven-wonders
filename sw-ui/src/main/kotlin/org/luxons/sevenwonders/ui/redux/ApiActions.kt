@@ -10,6 +10,8 @@ data class RequestCreateGame(val gameName: String) : RAction
 
 data class RequestJoinGame(val gameId: Long) : RAction
 
+data class RequestAddBot(val botDisplayName: String) : RAction
+
 data class RequestReorderPlayers(val orderedPlayers: List<String>) : RAction
 
 data class RequestUpdateSettings(val settings: CustomizableSettings) : RAction

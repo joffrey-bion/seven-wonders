@@ -18,6 +18,7 @@ import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
+import org.luxons.sevenwonders.model.api.actions.AddBotAction
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
@@ -86,6 +87,10 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         stompSession.sendEmptyMsg("/app/lobby/leave")
     }
 
+    suspend fun addBot(displayName: String) {
+        stompSession.convertAndSend("/app/lobby/addBot", AddBotAction(displayName), AddBotAction.serializer())
+    }
+
     suspend fun reorderPlayers(players: List<String>) {
         stompSession.convertAndSend("/app/lobby/reorderPlayers", ReorderPlayersAction(players), ReorderPlayersAction.serializer())
     }
@@ -133,7 +138,4 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun unprepareMove() {
         stompSession.sendEmptyMsg("/app/game/unprepareMove")
     }
-
-//    suspend fun watchGameEnd() {
-//    }
 }

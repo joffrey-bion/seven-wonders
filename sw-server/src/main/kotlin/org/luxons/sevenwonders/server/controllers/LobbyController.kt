@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.server.controllers
 
 import org.hildan.livedoc.core.annotations.Api
+import org.luxons.sevenwonders.bot.SevenWondersBot
+import org.luxons.sevenwonders.model.api.actions.AddBotAction
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
@@ -16,6 +18,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -75,6 +79,18 @@ class LobbyController @Autowired constructor(
         lobby.settings = action.settings
 
         logger.info("Updated settings of game '{}'", lobby.name)
+        sendLobbyUpdateToPlayers(lobby)
+    }
+
+    @MessageMapping("/lobby/addBot")
+    fun addBot(@Validated action: AddBotAction, principal: Principal) {
+        val lobby = principal.player.ownedLobby
+        val bot = SevenWondersBot(action.botDisplayName)
+        GlobalScope.launch {
+            bot.play("localhost:8000", lobby.id)
+        }
+
+        logger.info("Added bot {} to game '{}'", action.botDisplayName, lobby.name)
         sendLobbyUpdateToPlayers(lobby)
     }
 
