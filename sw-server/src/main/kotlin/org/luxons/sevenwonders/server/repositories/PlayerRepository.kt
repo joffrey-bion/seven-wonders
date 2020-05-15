@@ -3,33 +3,19 @@ package org.luxons.sevenwonders.server.repositories
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.lobby.Player
 import org.springframework.stereotype.Repository
-import java.util.HashMap
+import java.util.concurrent.ConcurrentHashMap
 
 @Repository
 class PlayerRepository {
 
-    private val players = HashMap<String, Player>()
+    private val players = ConcurrentHashMap<String, Player>()
 
     operator fun contains(username: String): Boolean = players.containsKey(username)
 
     fun createOrUpdate(username: String, displayName: String): Player {
-        return if (players.containsKey(username)) {
-            update(username, displayName)
-        } else {
-            create(username, displayName)
-        }
-    }
-
-    private fun create(username: String, displayName: String): Player {
-        val player = Player(username, displayName)
-        players[username] = player
-        return player
-    }
-
-    private fun update(username: String, displayName: String): Player {
-        val player = find(username)
-        player.displayName = displayName
-        return player
+        val p = players.computeIfAbsent(username) { Player(username, displayName) }
+        p.displayName = displayName
+        return p
     }
 
     fun find(username: String): Player = players[username] ?: throw PlayerNotFoundException(username)

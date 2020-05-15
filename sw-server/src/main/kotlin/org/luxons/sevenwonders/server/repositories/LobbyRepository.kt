@@ -5,19 +5,20 @@ import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
-import java.util.HashMap
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
 
 @Repository
 class LobbyRepository @Autowired constructor() {
 
-    private val lobbies = HashMap<Long, Lobby>()
+    private val lobbies = ConcurrentHashMap<Long, Lobby>()
 
-    private var lastGameId: Long = 0
+    private var lastGameId: AtomicLong = AtomicLong(0)
 
     fun list(): Collection<Lobby> = lobbies.values
 
     fun create(gameName: String, owner: Player): Lobby {
-        val id = lastGameId++
+        val id = lastGameId.getAndIncrement()
         val lobby = Lobby(id, gameName, owner, GameDefinition.load())
         lobbies[id] = lobby
         return lobby
