@@ -5,8 +5,6 @@ import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
@@ -18,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.Test
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -26,14 +25,10 @@ class SevenWondersTest {
     @LocalServerPort
     private val randomServerPort: Int = 0
 
-    private lateinit var client: SevenWondersClient
-
-    private lateinit var serverUrl: String
-
-    @Before
-    fun setUpClientAndUrl() {
-        client = SevenWondersClient()
-        serverUrl = "localhost:$randomServerPort"
+    private suspend fun connectNewClient(): SevenWondersSession {
+        val client = SevenWondersClient()
+        val serverUrl = "localhost:$randomServerPort"
+        return client.connect(serverUrl)
     }
 
     private suspend fun disconnect(vararg sessions: SevenWondersSession) {
@@ -43,8 +38,8 @@ class SevenWondersTest {
     }
 
     @Test
-    fun chooseName() = runAsyncTest {
-        val session = client.connect(serverUrl)
+    fun chooseName_succeedsWithCorrectDisplayName() = runAsyncTest {
+        val session = connectNewClient()
         val playerName = "Test User"
         val player = session.chooseName(playerName)
         assertNotNull(player)
@@ -52,7 +47,7 @@ class SevenWondersTest {
         session.disconnect()
     }
 
-    private suspend fun newPlayer(name: String): SevenWondersSession = client.connect(serverUrl).apply {
+    private suspend fun newPlayer(name: String): SevenWondersSession = connectNewClient().apply {
         chooseName(name)
     }
 
