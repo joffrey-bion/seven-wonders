@@ -1,5 +1,9 @@
 package org.luxons.sevenwonders.client
 
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.DeserializationStrategy
@@ -38,16 +42,19 @@ class SevenWondersClient {
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKxSerialization.request(
     sendDestination: String,
     receiveDestination: String,
     payload: T? = null,
     serializer: SerializationStrategy<T>,
     deserializer: DeserializationStrategy<U>
-): U {
-    val sub = subscribe(receiveDestination, deserializer)
+): U = coroutineScope {
+    val sub = async(start = CoroutineStart.UNDISPATCHED) {
+        subscribe(receiveDestination, deserializer).first()
+    }
     convertAndSend(sendDestination, payload, serializer)
-    return sub.first()
+    sub.await()
 }
 
 class SevenWondersSession(private val stompSession: StompSessionWithKxSerialization) {

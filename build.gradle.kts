@@ -23,6 +23,14 @@ subprojects {
         kotlinOptions.freeCompilerArgs = compilerArgs
     }
 
+    tasks.withType<AbstractTestTask> {
+        testLogging {
+            events("failed", "standardError")
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+            showStackTraces = true
+        }
+    }
+
     afterEvaluate {
         // The import ordering expected by ktlint is alphabetical, which doesn't match IDEA's formatter.
         // Since it is not configurable, we have to disable the rule.
