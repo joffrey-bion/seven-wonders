@@ -36,12 +36,14 @@ dependencies {
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
-// packages the frontend app within the jar
-tasks.bootJar {
-    from("../sw-ui/build/processedResources/Js/main") {
+tasks.processResources {
+    // package the frontend app within the jar as static
+    val frontendBuildDir = project(":sw-ui").buildDir
+    val frontendDist = frontendBuildDir.toPath().resolve("distributions")
+    from(frontendDist) {
+        include("**/*")
         into("static")
     }
 }
-
 // make sure we build the frontend before creating the jar
-tasks.bootJar.get().dependsOn(":sw-ui:assemble")
+tasks.processResources.get().dependsOn(":sw-ui:assemble")
