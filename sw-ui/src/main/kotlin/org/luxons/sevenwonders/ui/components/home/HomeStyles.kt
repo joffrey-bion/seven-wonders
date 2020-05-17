@@ -6,7 +6,7 @@ import styled.StyleSheet
 object HomeStyles : StyleSheet("HomeStyles", isStatic = true) {
 
     val zeusBackground by css {
-        background = "url('images/background-zeus-temple.jpg') center no-repeat"
+        background = "url('images/background/zeus-temple.jpg') center no-repeat"
         backgroundSize = "cover"
     }
 

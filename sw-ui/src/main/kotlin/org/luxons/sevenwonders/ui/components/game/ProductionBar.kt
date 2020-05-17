@@ -62,7 +62,7 @@ private fun RBuilder.fixedResources(resources: List<CountedResource>) {
             display = Display.flex
         }
         resources.forEach {
-            tokenWithCount(tokenName = getTokenName(it.type), count = it.count) {
+            tokenWithCount(tokenName = getResourceTokenName(it.type), count = it.count) {
                 attrs { key = it.type.toString() }
                 css { marginLeft = 1.rem }
             }
@@ -93,7 +93,7 @@ private fun RBuilder.resourceChoice(types: Set<ResourceType>, block: StyledDOMBu
         }
         block()
         for ((i, t) in types.withIndex()) {
-            tokenImage(tokenName = getTokenName(t)) {
+            tokenImage(tokenName = getResourceTokenName(t)) {
                 attrs { this.key = t.toString() }
             }
             if (i < types.indices.last) {
@@ -129,7 +129,7 @@ private fun RBuilder.tokenImage(tokenName: String, block: StyledDOMBuilder<IMG>.
 
 private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.png"
 
-private fun getTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().toLowerCase()}"
+private fun getResourceTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().toLowerCase()}"
 
 private fun CSSBuilder.productionBarStyle() {
     alignItems = Align.center

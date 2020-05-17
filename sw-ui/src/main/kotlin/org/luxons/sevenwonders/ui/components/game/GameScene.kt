@@ -52,7 +52,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     override fun RBuilder.render() {
         styledDiv {
             css {
-                background = "url('images/background-papyrus3.jpg')"
+                background = "url('images/background/papyrus.jpg')"
                 backgroundSize = "cover"
                 +GlobalStyles.fullscreen
             }
@@ -179,7 +179,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     }
 
     private fun StyledDOMBuilder<DIV>.upgradeWonderSymbol() {
-        styledImg(src = "/images/tokens/wonder-upgrade-bright.png") {
+        styledImg(src = "/images/wonder-upgrade-bright.png") {
             css {
                 width = 8.rem
                 position = Position.absolute
