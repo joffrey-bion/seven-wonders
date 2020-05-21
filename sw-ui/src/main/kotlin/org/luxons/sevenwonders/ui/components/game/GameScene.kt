@@ -52,7 +52,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     override fun RBuilder.render() {
         styledDiv {
             css {
-                background = "url('images/background/papyrus.jpg')"
+                background = "url('images/backgrounds/papyrus.jpg')"
                 backgroundSize = "cover"
                 +GlobalStyles.fullscreen
             }
