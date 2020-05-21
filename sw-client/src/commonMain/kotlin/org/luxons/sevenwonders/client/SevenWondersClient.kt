@@ -22,13 +22,7 @@ import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
-import org.luxons.sevenwonders.model.api.actions.AddBotAction
-import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
-import org.luxons.sevenwonders.model.api.actions.CreateGameAction
-import org.luxons.sevenwonders.model.api.actions.JoinGameAction
-import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
-import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
-import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
+import org.luxons.sevenwonders.model.api.actions.*
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
 
@@ -63,10 +57,10 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
 
     fun watchErrors(): Flow<ErrorDTO> = stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
-    suspend fun chooseName(displayName: String): ConnectedPlayer = stompSession.request(
+    suspend fun chooseName(displayName: String, icon: Icon? = null): ConnectedPlayer = stompSession.request(
         sendDestination = "/app/chooseName",
         receiveDestination = "/user/queue/nameChoice",
-        payload = ChooseNameAction(displayName),
+        payload = ChooseNameAction(displayName, icon),
         serializer = ChooseNameAction.serializer(),
         deserializer = ConnectedPlayer.serializer()
     )

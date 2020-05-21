@@ -1,10 +1,10 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import com.palantir.blueprintjs.IconName
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
+import org.luxons.sevenwonders.model.api.actions.Icon
 import react.RBuilder
 import react.ReactElement
 import react.dom.*
@@ -67,7 +67,11 @@ private fun RBuilder.playerItem(player: PlayerDTO, isMe: Boolean): ReactElement 
         alignItems = Align.center
     }
     val title = if (player.isGameOwner) "Game owner" else null
-    userIcon(isMe = isMe, isOwner = player.isGameOwner, title = title)
+    val icon = player.icon ?: when {
+        player.isGameOwner -> Icon("badge")
+        else -> Icon("user")
+    }
+    userIcon(isMe = isMe, icon = icon, title = title)
     styledH5 {
         css {
             margin = "0"
@@ -83,7 +87,7 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
         alignItems = Align.center
         opacity = 0.3
     }
-    userIcon(isMe = false, isOwner = false, title = "Waiting for player...")
+    userIcon(isMe = false, icon = Icon("user"), title = "Waiting for player...")
     styledH5 {
         css {
             margin = "0"
@@ -92,8 +96,7 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
     }
 }
 
-private fun RBuilder.userIcon(isMe: Boolean, isOwner: Boolean, title: String?): ReactElement {
-    val iconName: IconName = if (isOwner) "badge" else "user"
+private fun RBuilder.userIcon(isMe: Boolean, icon: Icon, title: String?): ReactElement {
     val intent: Intent = if (isMe) Intent.WARNING else Intent.NONE
-    return bpIcon(name = iconName, intent = intent, size = 50, title = title)
+    return bpIcon(name = icon.name, intent = intent, size = 50, title = title)
 }

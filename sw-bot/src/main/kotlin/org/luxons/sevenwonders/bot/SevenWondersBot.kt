@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.model.resources.noTransactions
 import kotlin.random.Random
 import kotlin.time.Duration
@@ -34,7 +35,7 @@ class SevenWondersBot(
     suspend fun play(serverHost: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
         val session = client.connect(serverHost)
         botDelay()
-        session.chooseName(displayName)
+        session.chooseName(displayName, Icon("desktop"))
         botDelay()
         session.joinGame(gameId)
         botDelay()

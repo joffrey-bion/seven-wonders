@@ -15,4 +15,4 @@ fun Lobby.toDTO(): LobbyDTO = LobbyDTO(
     maxPlayersReached = maxPlayersReached()
 )
 
-fun Player.toDTO() = PlayerDTO(username, displayName, index, isGameOwner, isReady)
+fun Player.toDTO() = PlayerDTO(username, displayName, icon, index, isGameOwner, isReady)

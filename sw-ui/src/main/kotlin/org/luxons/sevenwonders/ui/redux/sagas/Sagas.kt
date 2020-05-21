@@ -30,7 +30,7 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
         serverErrorSaga(session)
     }
 
-    val player = session.chooseName(action.playerName)
+    val player = session.chooseName(action.playerName, null)
     dispatch(SetCurrentPlayerAction(player))
 
     routerSaga(Route.GAME_BROWSER) {

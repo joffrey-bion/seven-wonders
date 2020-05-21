@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.repositories
 
+import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.lobby.Player
 import org.springframework.stereotype.Repository
@@ -12,9 +13,10 @@ class PlayerRepository {
 
     operator fun contains(username: String): Boolean = players.containsKey(username)
 
-    fun createOrUpdate(username: String, displayName: String): Player {
-        val p = players.computeIfAbsent(username) { Player(username, displayName) }
+    fun createOrUpdate(username: String, displayName: String, icon: Icon? = null): Player {
+        val p = players.computeIfAbsent(username) { Player(username, displayName, icon) }
         p.displayName = displayName
+        p.icon = icon
         return p
     }
 

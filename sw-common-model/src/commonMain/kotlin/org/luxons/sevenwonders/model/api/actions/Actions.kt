@@ -12,7 +12,16 @@ class ChooseNameAction(
     /**
      * The display name of the player. May contain spaces and special characters.
      */
-    val playerName: String
+    val playerName: String,
+    /**
+     * The player's icon.
+     */
+    val icon: Icon?
+)
+
+@Serializable
+data class Icon(
+    val name: String
 )
 
 /**

@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.model.api
 
 import kotlinx.serialization.Serializable
+import org.luxons.sevenwonders.model.api.actions.Icon
 
 const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
 
@@ -46,13 +47,15 @@ data class Actionability(
 @Serializable
 data class ConnectedPlayer(
     val username: String,
-    val displayName: String
+    val displayName: String,
+    val icon: Icon?
 )
 
 @Serializable
 data class PlayerDTO(
     val username: String,
     val displayName: String,
+    val icon: Icon?,
     val index: Int,
     val isGameOwner: Boolean,
     val isReady: Boolean

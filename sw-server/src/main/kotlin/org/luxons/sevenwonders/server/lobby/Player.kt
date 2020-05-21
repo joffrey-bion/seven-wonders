@@ -1,11 +1,13 @@
 package org.luxons.sevenwonders.server.lobby
 
 import org.luxons.sevenwonders.engine.Game
+import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.server.ApiMisuseException
 
 class Player(
     val username: String,
-    var displayName: String
+    var displayName: String,
+    var icon: Icon? = null
 ) {
     var index: Int = -1
 
