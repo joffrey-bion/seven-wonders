@@ -14,13 +14,16 @@ import org.luxons.sevenwonders.ui.router.Route
 import org.luxons.sevenwonders.ui.router.routerSaga
 import redux.RAction
 import redux.WrapperAction
+import webpack.isProdEnv
+import kotlin.browser.window
 
 typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 
 @OptIn(ExperimentalCoroutinesApi::class)
 suspend fun SwSagaContext.rootSaga() = coroutineScope {
     val action = next<RequestChooseName>()
-    val session = SevenWondersClient().connect("localhost:8000")
+    val port = if (isProdEnv()) window.location.port.ifEmpty { "80" } else "8000"
+    val session = SevenWondersClient().connect("localhost:$port")
     console.info("Connected to Seven Wonders web socket API")
 
     launch(start = CoroutineStart.UNDISPATCHED) {
