@@ -14,6 +14,8 @@ import react.RProps
 import react.RState
 import react.dom.*
 
+private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS")
+
 interface LobbyStateProps : RProps {
     var currentGame: LobbyDTO?
     var currentPlayer: PlayerDTO?
@@ -41,7 +43,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             radialPlayerList(currentGame.players, currentPlayer)
             if (currentPlayer.isGameOwner) {
                 startButton(currentGame, currentPlayer)
-                addBotButton()
+                addBotButton(currentGame)
             } else {
                 leaveButton()
             }
@@ -62,23 +64,23 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
     }
 
-    private fun RBuilder.addBotButton() {
+    private fun RBuilder.addBotButton(currentGame: LobbyDTO) {
         bpButton(
             large = true,
             intent = Intent.NONE,
             icon = "plus",
             rightIcon = "desktop",
-            title = "Add a bot to this game",
-            onClick = { addBot() }
-        ) {
-            +"ADD BOT"
-        }
+            title = if (currentGame.maxPlayersReached) "Max players reached" else "Add a bot to this game",
+            disabled = currentGame.maxPlayersReached,
+            onClick = { addBot(currentGame) }
+        )
     }
 
-    private fun addBot() {
-        val name = listOf("Bob", "Jack", "John", "Boris", "HAL", "GLaDOS").random()
-//        val botName = "\uD83E\uDD16 $name"
-        props.addBot(name)
+    private fun addBot(currentGame: LobbyDTO) {
+        val availableBotNames = BOT_NAMES.filter { name ->
+            currentGame.players.all { it.displayName != name }
+        }
+        props.addBot(availableBotNames.random())
     }
 
     private fun RBuilder.leaveButton() {
