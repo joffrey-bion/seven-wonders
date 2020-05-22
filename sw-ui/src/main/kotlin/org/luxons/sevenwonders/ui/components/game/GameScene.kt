@@ -1,9 +1,6 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpButtonGroup
-import com.palantir.blueprintjs.bpOverlay
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
@@ -19,12 +16,7 @@ import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
 import org.luxons.sevenwonders.ui.redux.RequestSayReady
 import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
-import react.RBuilder
-import react.RClass
-import react.RComponent
-import react.RProps
-import react.RState
-import react.ReactElement
+import react.*
 import react.dom.*
 import styled.StyledDOMBuilder
 import styled.css
@@ -58,7 +50,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             val turnInfo = props.gameState?.turnInfo
             if (turnInfo == null) {
-                p { +"Error: no turn info data" }
+                bpNonIdealState(icon = "error", title = "Error: no turn info data")
             } else {
                 turnInfoScene(turnInfo)
             }
