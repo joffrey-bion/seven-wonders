@@ -11,11 +11,7 @@ import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.ui.components.GlobalStyles
-import org.luxons.sevenwonders.ui.redux.GameState
-import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
-import org.luxons.sevenwonders.ui.redux.RequestSayReady
-import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
-import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
+import org.luxons.sevenwonders.ui.redux.*
 import react.*
 import react.dom.*
 import styled.*
@@ -32,6 +28,7 @@ interface GameSceneDispatchProps : RProps {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
     var unprepareMove: () -> Unit
+    var leaveGame: () -> Unit
 }
 
 interface GameSceneProps : GameSceneStateProps, GameSceneDispatchProps
@@ -57,6 +54,9 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
         val board = turnInfo.table.boards[turnInfo.playerIndex]
         div {
+            turnInfo.scoreBoard?.let {
+                scoreTableOverlay(it, props.players, props.leaveGame)
+            }
             actionInfo(turnInfo.message)
             boardComponent(board = board)
             val hand = turnInfo.hand
@@ -206,6 +206,7 @@ private val gameScene: RClass<GameSceneProps> =
                 prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
                 unprepareMove = { dispatch(RequestUnprepareMove()) }
                 sayReady = { dispatch(RequestSayReady()) }
+                leaveGame = { dispatch(RequestLeaveGame()) }
             },
             mapStateToProps = { state, _ ->
                 playerIsReady = state.currentPlayer?.isReady == true

@@ -17,12 +17,12 @@ data class PlayerScore(
     override fun compareTo(other: PlayerScore) = compareValuesBy(this, other, { it.totalPoints }, { it.boardGold })
 }
 
-enum class ScoreCategory {
-    CIVIL,
-    SCIENCE,
-    MILITARY,
-    TRADE,
-    GUILD,
-    WONDER,
-    GOLD
+enum class ScoreCategory(val title: String) {
+    CIVIL("Civil"),
+    SCIENCE("Science"),
+    MILITARY("War"),
+    TRADE("Trade"),
+    GUILD("Guild"),
+    WONDER("Wonder"),
+    GOLD("Gold")
 }

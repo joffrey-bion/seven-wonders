@@ -85,12 +85,20 @@ fun RBuilder.bpInputGroup(
 fun RBuilder.bpTag(
     intent: Intent? = null,
     minimal: Boolean? = null,
+    large: Boolean? = null,
+    round: Boolean? = null,
+    fill: Boolean? = null,
     active: Boolean? = null,
+    icon: String? = null,
     block: RHandler<ITagProps> = {}
 ): ReactElement = child(Tag::class) {
     attrs {
         this.intent = intent
         this.minimal = minimal
+        this.large = large
+        this.round = round
+        this.fill = fill
+        this.icon = icon
         this.active = active
     }
     block()
@@ -173,6 +181,22 @@ fun RBuilder.bpCard(
         this.elevation = elevation
         this.interactive = interactive
         this.onClick = { onClick() }
+    }
+    block()
+}
+
+fun RBuilder.bpHtmlTable(
+    bordered: Boolean = false,
+    interactive: Boolean = false,
+    condensed: Boolean = false,
+    striped: Boolean = false,
+    block: RHandler<IHTMLTableProps> = {}
+): ReactElement = child(HTMLTable::class) {
+    attrs {
+        this.bordered = bordered
+        this.interactive = interactive
+        this.condensed = condensed
+        this.striped = striped
     }
     block()
 }

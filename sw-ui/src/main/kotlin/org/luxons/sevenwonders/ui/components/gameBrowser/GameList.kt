@@ -1,12 +1,7 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.Classes
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpIcon
-import com.palantir.blueprintjs.bpTag
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
-import kotlinx.html.classes
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
@@ -37,10 +32,7 @@ interface GameListProps : GameListStateProps, GameListDispatchProps
 class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState>(props) {
 
     override fun RBuilder.render() {
-        table {
-            attrs {
-                classes = setOf(Classes.HTML_TABLE)
-            }
+        bpHtmlTable {
             thead {
                 gameListHeaderRow()
             }
