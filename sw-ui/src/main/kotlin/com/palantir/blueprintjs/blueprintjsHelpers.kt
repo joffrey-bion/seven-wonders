@@ -162,3 +162,17 @@ fun RBuilder.bpCallout(
     }
     block()
 }
+
+fun RBuilder.bpCard(
+    elevation: Elevation = Elevation.ZERO,
+    interactive: Boolean = false,
+    onClick: () -> Unit = {},
+    block: RHandler<ICardProps> = {}
+): ReactElement = child(Card::class) {
+    attrs {
+        this.elevation = elevation
+        this.interactive = interactive
+        this.onClick = { onClick() }
+    }
+    block()
+}
