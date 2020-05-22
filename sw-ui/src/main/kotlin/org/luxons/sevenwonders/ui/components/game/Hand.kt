@@ -38,6 +38,7 @@ import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.resources.noTransactions
 import react.RBuilder
 import styled.StyledDOMBuilder
 import styled.css
@@ -100,19 +101,20 @@ private fun RBuilder.actionButtons(card: HandCard, wonderUpgradable: Boolean, pr
                 display = Display.flex
             }
         }
+        val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
         bpButtonGroup {
             bpButton(title = "PLAY",
                 large = true,
                 intent = Intent.SUCCESS,
                 icon = "play",
                 disabled = !card.playability.isPlayable,
-                onClick = { prepareMove(PlayerMove(MoveType.PLAY, card.name)) })
+                onClick = { prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions)) })
             bpButton(title = "UPGRADE WONDER",
                 large = true,
                 intent = Intent.PRIMARY,
                 icon = "key-shift",
                 disabled = !wonderUpgradable,
-                onClick = { prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name)) })
+                onClick = { prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions)) })
             bpButton(title = "DISCARD",
                 large = true,
                 intent = Intent.DANGER,
