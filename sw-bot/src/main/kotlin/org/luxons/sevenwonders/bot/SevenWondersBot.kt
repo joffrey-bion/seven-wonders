@@ -34,11 +34,8 @@ class SevenWondersBot(
 
     suspend fun play(serverHost: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
         val session = client.connect(serverHost)
-        botDelay()
         session.chooseName(displayName, Icon("desktop"))
-        botDelay()
         session.joinGame(gameId)
-        botDelay()
         session.awaitGameStart(gameId)
 
         coroutineScope {
