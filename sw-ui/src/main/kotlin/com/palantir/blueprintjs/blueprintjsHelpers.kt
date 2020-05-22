@@ -146,3 +146,19 @@ fun RBuilder.bpOverlay(
     }
     block()
 }
+
+fun RBuilder.bpCallout(
+    intent: Intent? = Intent.NONE,
+    icon: IconName? = null,
+    title: String? = null,
+    block: RHandler<ICalloutProps> = {}
+): ReactElement = child(Callout::class) {
+    attrs {
+        if (icon != null) {
+            this.icon = icon
+        }
+        this.title = title
+        this.intent = intent
+    }
+    block()
+}
