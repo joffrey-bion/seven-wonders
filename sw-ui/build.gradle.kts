@@ -10,7 +10,7 @@ repositories {
     maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
 }
 
-val kotlinWrappersVersion = "pre.93-kotlin-1.3.70"
+val kotlinWrappersVersion = "pre.105-kotlin-1.3.72"
 
 kotlin {
     target {
@@ -23,7 +23,7 @@ kotlin {
                 implementation(kotlin("stdlib-js"))
                 implementation(project(":sw-client"))
 
-                val reactVersion = "16.13.0"
+                val reactVersion = "16.13.1"
                 implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react", reactVersion))
                 implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
@@ -34,7 +34,7 @@ kotlin {
                 implementation(npm("react-redux", reactReduxVersion))
                 implementation(npm("redux", "4.0.4"))
 
-                val reactRouterDomVersion = "4.3.1"
+                val reactRouterDomVersion = "5.1.2"
                 implementation("org.jetbrains:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
                 implementation(npm("react-router-dom", reactRouterDomVersion))
 
@@ -45,7 +45,7 @@ kotlin {
                 // seems to be required by "kotlin-extensions" JS lib
                 implementation(npm("core-js", "3.1.4"))
 
-                implementation(npm("@blueprintjs/core", "3.24.0"))
+                implementation(npm("@blueprintjs/core", "3.26.1"))
                 implementation(npm("@blueprintjs/icons", "3.14.0"))
             }
         }
