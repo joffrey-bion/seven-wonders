@@ -1,17 +1,8 @@
 package org.luxons.sevenwonders.ui.components
 
-import kotlinx.css.Overflow
-import kotlinx.css.Position
-import kotlinx.css.bottom
-import kotlinx.css.left
-import kotlinx.css.overflow
-import kotlinx.css.pct
-import kotlinx.css.position
+import kotlinx.css.*
 import kotlinx.css.properties.transform
 import kotlinx.css.properties.translate
-import kotlinx.css.px
-import kotlinx.css.right
-import kotlinx.css.top
 import styled.StyleSheet
 
 object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
@@ -41,5 +32,9 @@ object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
         transform {
             translate((-50).pct, (-50).pct)
         }
+    }
+
+    val noPadding by css {
+        padding(all = 0.px)
     }
 }

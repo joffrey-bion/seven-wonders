@@ -18,10 +18,7 @@ import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
 import react.*
 import react.dom.*
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
-import styled.styledImg
+import styled.*
 
 interface GameSceneStateProps : RProps {
     var playerIsReady: Boolean
@@ -60,14 +57,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
         val board = turnInfo.table.boards[turnInfo.playerIndex]
         div {
-            styledDiv {
-                css {
-                    classes.add("bp3-dark")
-                    display = Display.inlineBlock // so that the cards below don't overlap, but the width is not full
-                    margin(all = 0.4.rem)
-                }
-                bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +turnInfo.message }
-            }
+            actionInfo(turnInfo.message)
             boardComponent(board = board)
             val hand = turnInfo.hand
             if (hand != null) {
@@ -87,6 +77,22 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 sayReadyButton()
             }
             productionBar(gold = board.gold, production = board.production)
+        }
+    }
+
+    private fun RDOMBuilder<DIV>.actionInfo(message: String) {
+        styledDiv {
+            css {
+                classes.add("bp3-dark")
+                display = Display.inlineBlock // so that the cards below don't overlap, but the width is not full
+                margin(all = 0.4.rem)
+            }
+            bpCard(elevation = Elevation.TWO) {
+                attrs {
+                    this.className = GlobalStyles.getClassName { it::noPadding }
+                }
+                bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +message }
+            }
         }
     }
 
