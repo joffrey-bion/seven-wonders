@@ -1,10 +1,12 @@
 package com.palantir.blueprintjs
 
+import org.luxons.sevenwonders.ui.utils.createElement
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import react.RBuilder
 import react.RHandler
 import react.ReactElement
+import react.dom.*
 
 typealias IconName = String
 
@@ -111,6 +113,15 @@ fun RBuilder.bpNonIdealState(
     }
     block()
 }
+
+fun RBuilder.bpNonIdealState(
+    icon: IconName? = null,
+    title: String,
+    description: ReactElement? = null,
+    action: ReactElement? = null,
+    children: ReactElement? = null,
+    block: RHandler<INonIdealStateProps> = {}
+): ReactElement = bpNonIdealState(icon, createElement { h2 { +title } }, description, action, children, block)
 
 fun RBuilder.bpOverlay(
     isOpen: Boolean,
