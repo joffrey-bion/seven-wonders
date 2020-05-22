@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.config
 
+import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -9,8 +10,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler
-
-const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
 
 @Configuration
 @EnableWebSocketMessageBroker
