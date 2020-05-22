@@ -93,8 +93,14 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
         val board = turnInfo.table.boards[turnInfo.playerIndex]
         div {
-            // TODO use blueprint's Callout component without header and primary intent
-            p { +turnInfo.message }
+            styledDiv {
+                css {
+                    classes.add("bp3-dark")
+                    display = Display.inlineBlock // so that the cards below don't overlap, but the width is not full
+                    margin(all = 0.4.rem)
+                }
+                bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +turnInfo.message }
+            }
             boardComponent(board = board)
             val hand = turnInfo.hand
             if (hand != null) {
