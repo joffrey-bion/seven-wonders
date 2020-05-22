@@ -57,39 +57,6 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun RBuilder.sayReadyButton(): ReactElement {
-        val isReady = props.playerIsReady
-        val intent = if (isReady) Intent.SUCCESS else Intent.PRIMARY
-        return styledDiv {
-            css {
-                position = Position.absolute
-                bottom = 6.rem
-                left = 50.pct
-                transform { translate(tx = (-50).pct) }
-            }
-            bpButtonGroup {
-                bpButton(
-                    large = true,
-                    disabled = isReady,
-                    intent = intent,
-                    icon = if (isReady) "tick-circle" else "play",
-                    onClick = { props.sayReady() }
-                ) {
-                    +"READY"
-                }
-                // not really a button, but nice for style
-                bpButton(
-                    large = true,
-                    icon = "people",
-                    disabled = isReady,
-                    intent = intent
-                ) {
-                    +"${props.players.count { it.isReady }}/${props.players.size}"
-                }
-            }
-        }
-    }
-
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
         val board = turnInfo.table.boards[turnInfo.playerIndex]
         div {
@@ -185,6 +152,39 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 top = 50.pct
                 transform {
                     translate((-50).pct, (-50).pct)
+                }
+            }
+        }
+    }
+
+    private fun RBuilder.sayReadyButton(): ReactElement {
+        val isReady = props.playerIsReady
+        val intent = if (isReady) Intent.SUCCESS else Intent.PRIMARY
+        return styledDiv {
+            css {
+                position = Position.absolute
+                bottom = 6.rem
+                left = 50.pct
+                transform { translate(tx = (-50).pct) }
+            }
+            bpButtonGroup {
+                bpButton(
+                    large = true,
+                    disabled = isReady,
+                    intent = intent,
+                    icon = if (isReady) "tick-circle" else "play",
+                    onClick = { props.sayReady() }
+                ) {
+                    +"READY"
+                }
+                // not really a button, but nice for style
+                bpButton(
+                    large = true,
+                    icon = "people",
+                    disabled = isReady,
+                    intent = intent
+                ) {
+                    +"${props.players.count { it.isReady }}/${props.players.size}"
                 }
             }
         }
