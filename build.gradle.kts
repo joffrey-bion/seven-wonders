@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+
 plugins {
     val kotlinVersion = "1.3.72"
     kotlin("js") version kotlinVersion apply false
@@ -25,7 +27,7 @@ subprojects {
 
     tasks.withType<AbstractTestTask> {
         testLogging {
-            events("failed", "standardError")
+            events(FAILED, STANDARD_ERROR)
             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
             showStackTraces = true
         }
