@@ -139,4 +139,8 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun unprepareMove() {
         stompSession.sendEmptyMsg("/app/game/unprepareMove")
     }
+
+    suspend fun leaveGame() {
+        stompSession.sendEmptyMsg("/app/game/leave")
+    }
 }

@@ -171,7 +171,7 @@ class Game internal constructor(
 
     private fun executeEndOfAgeEvents() = table.resolveMilitaryConflicts()
 
-    private fun endOfGameReached(): Boolean = endOfAgeReached() && table.currentAge == LAST_AGE
+    fun endOfGameReached(): Boolean = endOfAgeReached() && table.currentAge == LAST_AGE
 
     private fun rotateHandsIfRelevant() {
         // we don't rotate hands if some player can play his last card (with the special ability)

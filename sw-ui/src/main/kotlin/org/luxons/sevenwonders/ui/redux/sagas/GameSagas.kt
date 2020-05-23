@@ -4,13 +4,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.ui.redux.PlayerReadyEvent
-import org.luxons.sevenwonders.ui.redux.PreparedCardEvent
-import org.luxons.sevenwonders.ui.redux.PreparedMoveEvent
-import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
-import org.luxons.sevenwonders.ui.redux.RequestSayReady
-import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
-import org.luxons.sevenwonders.ui.redux.TurnInfoEvent
+import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.router.Navigate
+import org.luxons.sevenwonders.ui.router.Route
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     val game = getState().gameState ?: error("Game saga run without a current game")
@@ -24,7 +20,9 @@ suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
         launch { onEach<RequestPrepareMove> { session.prepareMove(it.move) } }
         launch { onEach<RequestUnprepareMove> { session.unprepareMove() } }
 
-        // TODO await game end and cancel this scope to unsubscribe everything
+        next<RequestLeaveGame>()
+        session.leaveGame()
+        dispatch(Navigate(Route.GAME_BROWSER))
     }
     console.log("End of game saga")
 }

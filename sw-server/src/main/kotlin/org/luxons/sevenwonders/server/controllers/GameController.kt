@@ -76,6 +76,9 @@ class GameController @Autowired constructor(
             logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
             game.playTurn()
             sendTurnInfo(player.lobby.getPlayers(), game, true)
+            if (game.endOfGameReached()) {
+                player.lobby.setEndOfGame()
+            }
         }
         return action.move
     }
@@ -103,6 +106,14 @@ class GameController @Autowired constructor(
             val player = players[turnInfo.playerIndex]
             template.convertAndSendToUser(player.username, "/queue/game/turn", turnInfo)
         }
+    }
+
+    @MessageMapping("/game/leave")
+    fun leave(principal: Principal) {
+        val player = principal.player
+        val game = player.game
+        player.leave()
+        logger.info("Game {}: player {} left the game", game.id, principal.name)
     }
 
     companion object {

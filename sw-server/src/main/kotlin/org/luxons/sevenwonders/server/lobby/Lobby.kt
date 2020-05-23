@@ -88,6 +88,10 @@ class Lobby(
         return player
     }
 
+    fun setEndOfGame() {
+        state = State.FINISHED
+    }
+
     internal class GameAlreadyStartedException(name: String) :
         IllegalStateException("Game '$name' has already started")
 
