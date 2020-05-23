@@ -22,8 +22,8 @@ typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 @OptIn(ExperimentalCoroutinesApi::class)
 suspend fun SwSagaContext.rootSaga() = coroutineScope {
     val action = next<RequestChooseName>()
-    val port = if (isProdEnv()) window.location.port.ifEmpty { "80" } else "8000"
-    val session = SevenWondersClient().connect("localhost:$port")
+    val serverHost = if (isProdEnv()) window.location.host else "localhost:8000"
+    val session = SevenWondersClient().connect(serverHost)
     console.info("Connected to Seven Wonders web socket API")
 
     launch(start = CoroutineStart.UNDISPATCHED) {
