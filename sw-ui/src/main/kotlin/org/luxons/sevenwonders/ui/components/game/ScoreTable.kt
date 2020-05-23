@@ -25,6 +25,7 @@ fun RBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>,
                     display = Display.flex
                     flexDirection = FlexDirection.column
                     alignItems = Align.center
+                    +GameStyles.scoreBoard // loads the styles so that they can be picked up by bpCard
                 }
                 styledH1 {
                     css {
