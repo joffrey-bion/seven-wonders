@@ -115,7 +115,7 @@ private fun RBuilder.centeredTd(block: RDOMBuilder<TD>.() -> Unit) {
 }
 
 private val ScoreCategory.intent: Intent
-    get() = when(this) {
+    get() = when (this) {
         ScoreCategory.CIVIL -> Intent.PRIMARY
         ScoreCategory.SCIENCE -> Intent.SUCCESS
         ScoreCategory.MILITARY -> Intent.DANGER
@@ -126,7 +126,7 @@ private val ScoreCategory.intent: Intent
     }
 
 private val ScoreCategory.icon: String
-    get() = when(this) {
+    get() = when (this) {
         ScoreCategory.CIVIL -> "office"
         ScoreCategory.SCIENCE -> "lab-test"
         ScoreCategory.MILITARY -> "cut"
