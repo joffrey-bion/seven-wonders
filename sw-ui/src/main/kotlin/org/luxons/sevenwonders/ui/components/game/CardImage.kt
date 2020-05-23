@@ -1,15 +1,11 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import kotlinx.css.CSSBuilder
-import kotlinx.css.Color
-import kotlinx.css.borderRadius
-import kotlinx.css.pct
+import kotlinx.css.*
 import kotlinx.css.properties.*
-import kotlinx.css.px
-import kotlinx.css.rem
 import kotlinx.html.IMG
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.cards.Card
+import org.luxons.sevenwonders.model.cards.CardBack
 import react.RBuilder
 import styled.StyledDOMBuilder
 import styled.css
@@ -21,22 +17,49 @@ fun RBuilder.cardImage(
     highlightColor: Color? = null,
     block: StyledDOMBuilder<IMG>.() -> Unit = {}
 ) {
-    styledImg(src = card.imageSrc(faceDown)) {
+    if (faceDown) {
+        cardBackImage(card.back, highlightColor, block)
+        return
+    }
+    styledImg(src = "/images/cards/${card.image}") {
         css {
             cardImageStyle(highlightColor)
         }
         attrs {
             title = card.name
-            alt = if (faceDown) "Card back (${card.back.image})" else "Card ${card.name}"
+            alt = "Card ${card.name}"
         }
         block()
     }
 }
 
-private fun Card.imageSrc(faceDown: Boolean): String = if (faceDown) {
-    "/images/cards/back/${back.image}"
-} else {
-    "/images/cards/$image"
+fun RBuilder.cardBackImage(
+    cardBack: CardBack,
+    highlightColor: Color? = null,
+    block: StyledDOMBuilder<IMG>.() -> Unit = {}
+) {
+    styledImg(src = "/images/cards/back/${cardBack.image}") {
+        css {
+            cardImageStyle(highlightColor)
+        }
+        attrs {
+            alt = "Card back (${cardBack.image})"
+        }
+        block()
+    }
+}
+
+fun RBuilder.cardPlaceholderImage(block: StyledDOMBuilder<IMG>.() -> Unit = {}) {
+    styledImg(src = "/images/cards/back/placeholder.png") {
+        css {
+            opacity = 0.20
+            borderRadius = 5.pct
+        }
+        attrs {
+            alt = "Card placeholder"
+        }
+        block()
+    }
 }
 
 private fun CSSBuilder.cardImageStyle(highlightColor: Color?) {

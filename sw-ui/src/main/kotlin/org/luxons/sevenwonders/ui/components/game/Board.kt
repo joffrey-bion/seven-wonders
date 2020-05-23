@@ -1,31 +1,18 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import kotlinx.css.Color
-import kotlinx.css.Display
-import kotlinx.css.Position
-import kotlinx.css.TextAlign
-import kotlinx.css.display
-import kotlinx.css.height
-import kotlinx.css.margin
-import kotlinx.css.maxHeight
-import kotlinx.css.maxWidth
-import kotlinx.css.pct
-import kotlinx.css.position
+import kotlinx.css.*
 import kotlinx.css.properties.boxShadow
 import kotlinx.css.properties.transform
 import kotlinx.css.properties.translate
-import kotlinx.css.rem
-import kotlinx.css.textAlign
-import kotlinx.css.vh
-import kotlinx.css.vw
-import kotlinx.css.width
-import kotlinx.css.zIndex
 import kotlinx.html.DIV
+import kotlinx.html.HTMLTag
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.wonders.ApiWonder
+import org.luxons.sevenwonders.model.wonders.ApiWonderStage
 import react.RBuilder
+import react.dom.*
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
@@ -83,7 +70,7 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
     styledDiv {
         css {
             position = Position.absolute
-            zIndex = indexInColumn
+            zIndex = indexInColumn + 2 // go above the board and the built wonder cards
             transform {
                 translate(
                     tx = (indexInColumn * xOffset).pct,
@@ -105,20 +92,65 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
 private fun RBuilder.wonderComponent(wonder: ApiWonder) {
     styledDiv {
         css {
+            position = Position.relative
             width = 100.vw
-            textAlign = TextAlign.center
         }
         styledImg(src = "/images/wonders/${wonder.image}") {
             css {
+                position = Position.absolute
+                left = 50.pct
+                top = 0.px
+                transform { translate((-50).pct) }
                 declarations["border-radius"] = "0.5%/1.5%"
                 boxShadow(color = Color.black, offsetX = 0.2.rem, offsetY = 0.2.rem, blurRadius = 0.5.rem)
                 maxHeight = 30.vh
                 maxWidth = 95.vw
+                zIndex = 1 // go above the built wonder cards, but below the table cards
             }
             attrs {
                 this.title = wonder.name
                 this.alt = "Wonder ${wonder.name}"
             }
         }
+        styledDiv {
+            css {
+                position = Position.absolute
+                left = 50.pct
+                top = 0.px
+                transform { translate((-50).pct, (60).pct) }
+                display = Display.flex
+                justifyContent = JustifyContent.spaceAround
+                flexWrap = FlexWrap.nowrap
+                maxHeight = 30.vh // same as wonder
+                maxWidth = 95.vw // same as wonder
+                zIndex = 0 // below wonder
+            }
+            wonder.stages.forEach {
+                wonderStageElement(it) {
+                    css {
+                        wonderCardStyle()
+                    }
+                }
+            }
+        }
     }
+}
+
+private fun StyledDOMBuilder<DIV>.wonderStageElement(it: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {
+    val back = it.cardBack
+    if (back != null) {
+        cardBackImage(back) {
+            block()
+        }
+    } else {
+        cardPlaceholderImage {
+            block()
+        }
+    }
+}
+
+fun CSSBuilder.wonderCardStyle() {
+    maxWidth = 10.vw
+    maxHeight = 25.vh
+    margin(vertical = 0.px, horizontal = 6.3.pct)
 }
