@@ -63,7 +63,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             if (hand != null) {
                 handComponent(
                     cards = hand,
-                    wonderUpgradable = turnInfo.wonderBuildability.isBuildable,
+                    wonderBuildability = turnInfo.wonderBuildability,
                     preparedMove = props.preparedMove,
                     prepareMove = props.prepareMove
                 )

@@ -39,6 +39,7 @@ import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.noTransactions
+import org.luxons.sevenwonders.model.wonders.WonderBuildability
 import react.RBuilder
 import styled.StyledDOMBuilder
 import styled.css
@@ -46,7 +47,7 @@ import styled.styledDiv
 
 fun RBuilder.handComponent(
     cards: List<HandCard>,
-    wonderUpgradable: Boolean,
+    wonderBuildability: WonderBuildability,
     preparedMove: PlayerMove?,
     prepareMove: (PlayerMove) -> Unit
 ) {
@@ -57,7 +58,7 @@ fun RBuilder.handComponent(
         cards.filter { it.name != preparedMove?.cardName }.forEachIndexed { index, c ->
             handCard(
                 card = c,
-                wonderUpgradable = wonderUpgradable,
+                wonderBuildability = wonderBuildability,
                 prepareMove = prepareMove
             ) {
                 attrs {
@@ -70,7 +71,7 @@ fun RBuilder.handComponent(
 
 private fun RBuilder.handCard(
     card: HandCard,
-    wonderUpgradable: Boolean,
+    wonderBuildability: WonderBuildability,
     prepareMove: (PlayerMove) -> Unit,
     block: StyledDOMBuilder<DIV>.() -> Unit
 ) {
@@ -84,11 +85,11 @@ private fun RBuilder.handCard(
                 handCardImgStyle(card.playability.isPlayable)
             }
         }
-        actionButtons(card, wonderUpgradable, prepareMove)
+        actionButtons(card, wonderBuildability, prepareMove)
     }
 }
 
-private fun RBuilder.actionButtons(card: HandCard, wonderUpgradable: Boolean, prepareMove: (PlayerMove) -> Unit) {
+private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBuildability, prepareMove: (PlayerMove) -> Unit) {
     // class: action-buttons
     styledDiv {
         css {
@@ -101,20 +102,25 @@ private fun RBuilder.actionButtons(card: HandCard, wonderUpgradable: Boolean, pr
                 display = Display.flex
             }
         }
-        val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
         bpButtonGroup {
             bpButton(title = "PLAY",
                 large = true,
                 intent = Intent.SUCCESS,
                 icon = "play",
                 disabled = !card.playability.isPlayable,
-                onClick = { prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions)) })
+                onClick = {
+                    val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
+                    prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions))
+                })
             bpButton(title = "UPGRADE WONDER",
                 large = true,
                 intent = Intent.PRIMARY,
                 icon = "key-shift",
-                disabled = !wonderUpgradable,
-                onClick = { prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions)) })
+                disabled = !wonderBuildability.isBuildable,
+                onClick = {
+                    val wonderTransactions = wonderBuildability.cheapestTransactions.firstOrNull() ?: noTransactions()
+                    prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, wonderTransactions))
+                })
             bpButton(title = "DISCARD",
                 large = true,
                 intent = Intent.DANGER,
