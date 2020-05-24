@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 
 @Component
-class DestinationAccessValidator @Autowired constructor(private val lobbyRepository: LobbyRepository) {
+class DestinationAccessValidator(private val lobbyRepository: LobbyRepository) {
 
     fun hasAccess(username: String?, destination: String): Boolean {
         return when {

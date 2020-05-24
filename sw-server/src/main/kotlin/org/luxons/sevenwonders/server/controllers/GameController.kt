@@ -22,7 +22,7 @@ import java.security.Principal
  */
 @Api(name = "Game")
 @Controller
-class GameController @Autowired constructor(
+class GameController(
     private val template: SimpMessagingTemplate,
     private val playerRepository: PlayerRepository
 ) {

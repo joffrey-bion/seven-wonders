@@ -11,7 +11,7 @@ import org.springframework.messaging.support.ChannelInterceptor
 import org.springframework.stereotype.Component
 
 @Component
-class TopicSubscriptionInterceptor @Autowired constructor(
+class TopicSubscriptionInterceptor(
     private val destinationAccessValidator: DestinationAccessValidator
 ) : ChannelInterceptor {
 

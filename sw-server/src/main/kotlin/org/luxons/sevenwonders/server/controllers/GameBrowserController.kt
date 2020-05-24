@@ -24,7 +24,7 @@ import java.security.Principal
  */
 @Api(name = "GameBrowser")
 @Controller
-class GameBrowserController @Autowired constructor(
+class GameBrowserController(
     private val lobbyController: LobbyController,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,

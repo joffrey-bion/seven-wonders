@@ -18,7 +18,7 @@ import java.security.Principal
  */
 @Api(name = "Home")
 @Controller
-class HomeController @Autowired constructor(
+class HomeController(
     private val playerRepository: PlayerRepository
 ) {
 

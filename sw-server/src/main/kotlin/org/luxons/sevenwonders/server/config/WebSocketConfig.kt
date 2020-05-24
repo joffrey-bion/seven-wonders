@@ -13,8 +13,9 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler
 
 @Configuration
 @EnableWebSocketMessageBroker
-class WebSocketConfig @Autowired constructor(private val topicSubscriptionInterceptor: TopicSubscriptionInterceptor) :
-    WebSocketMessageBrokerConfigurer {
+class WebSocketConfig(
+    private val topicSubscriptionInterceptor: TopicSubscriptionInterceptor
+) : WebSocketMessageBrokerConfigurer {
 
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
         // prefixes for all subscriptions

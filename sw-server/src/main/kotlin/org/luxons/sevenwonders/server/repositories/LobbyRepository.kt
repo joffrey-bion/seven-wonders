@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
 @Repository
-class LobbyRepository @Autowired constructor() {
+class LobbyRepository {
 
     private val lobbies = ConcurrentHashMap<Long, Lobby>()
 
