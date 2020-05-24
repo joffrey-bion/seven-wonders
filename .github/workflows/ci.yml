@@ -32,7 +32,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Docker push
+    - name: Docker push to GitHub Packages
       uses: docker/build-push-action@v1
       with:
         path: ./sw-server
@@ -40,5 +40,16 @@ jobs:
         password: ${{ github.token }}
         registry: docker.pkg.github.com
         repository: joffrey-bion/seven-wonders/sw-server
+        tag_with_ref: true
+        tag_with_sha: true
+
+    - name: Docker push to Heroku
+      uses: docker/build-push-action@v1
+      with:
+        path: ./sw-server
+        username: _
+        password: ${{ secrets.HEROKU_API_KEY }}
+        registry: registry.heroku.com
+        repository: seven-wonders-online/web
         tag_with_ref: true
         tag_with_sha: true
