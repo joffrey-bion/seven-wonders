@@ -13,7 +13,7 @@ fun mockSimpMessagingTemplate(): SimpMessagingTemplate = SimpMessagingTemplate(o
     override fun send(message: Message<*>, timeout: Long): Boolean = true
 })
 
-fun runAsyncTest(timeoutMillis: Long = 5000, block: suspend CoroutineScope.() -> Unit) = runBlocking {
+fun runAsyncTest(timeoutMillis: Long = 10000, block: suspend CoroutineScope.() -> Unit) = runBlocking {
     val result = withTimeoutOrNull(timeoutMillis, block)
     assertNotNull(result, "Test timed out, exceeded ${timeoutMillis}ms")
 }
