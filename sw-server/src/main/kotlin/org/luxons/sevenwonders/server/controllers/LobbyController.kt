@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated
 import java.security.Principal
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.springframework.core.env.Environment
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -29,8 +30,12 @@ import kotlinx.coroutines.launch
 class LobbyController @Autowired constructor(
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
-    private val template: SimpMessagingTemplate
+    private val template: SimpMessagingTemplate,
+    private val environment: Environment
 ) {
+    private val serverPort: String
+        get() = environment.getProperty("server.port")
+
     private val Principal.player: Player
         get() = playerRepository.find(name)
 
@@ -87,7 +92,7 @@ class LobbyController @Autowired constructor(
         val lobby = principal.player.ownedLobby
         val bot = SevenWondersBot(action.botDisplayName)
         GlobalScope.launch {
-            bot.play("localhost:8000", lobby.id)
+            bot.play("ws://localhost:$serverPort", lobby.id)
         }
 
         logger.info("Added bot {} to game '{}'", action.botDisplayName, lobby.name)
