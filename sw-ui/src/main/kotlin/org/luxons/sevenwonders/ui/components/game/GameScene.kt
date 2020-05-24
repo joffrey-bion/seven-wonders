@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.cards.HandRotationDirection
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
@@ -59,6 +60,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             actionInfo(turnInfo.message)
             boardComponent(board = board)
+            handRotationIndicator(turnInfo.table.handRotationDirection)
             val hand = turnInfo.hand
             if (hand != null) {
                 handComponent(
@@ -80,7 +82,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun RDOMBuilder<DIV>.actionInfo(message: String) {
+    private fun RBuilder.actionInfo(message: String) {
         styledDiv {
             css {
                 classes.add("bp3-dark")
@@ -92,6 +94,38 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     this.className = GlobalStyles.getClassName { it::noPadding }
                 }
                 bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +message }
+            }
+        }
+    }
+
+    private fun RBuilder.handRotationIndicator(direction: HandRotationDirection) {
+        styledDiv {
+            css {
+                position = Position.absolute
+                display = Display.flex
+                alignItems = Align.center
+                bottom = 25.vh
+            }
+            val sideDistance = 2.rem
+            when (direction) {
+                HandRotationDirection.LEFT -> {
+                    css { left = sideDistance }
+                    bpIcon("arrow-left", size = 25)
+                    handCardsImg()
+                }
+                HandRotationDirection.RIGHT -> {
+                    css { right = sideDistance }
+                    handCardsImg()
+                    bpIcon("arrow-right", size = 25)
+                }
+            }
+        }
+    }
+
+    private fun RBuilder.handCardsImg() {
+        styledImg(src = "images/hand-cards5.png") {
+            css {
+                width = 4.rem
             }
         }
     }
