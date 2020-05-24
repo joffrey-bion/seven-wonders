@@ -3,19 +3,18 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
-import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.cards.HandRotationDirection
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
 import react.dom.*
-import styled.*
+import styled.css
+import styled.getClassName
+import styled.styledDiv
 
 interface GameSceneStateProps : RProps {
     var playerIsReady: Boolean
@@ -98,101 +97,10 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun RBuilder.handRotationIndicator(direction: HandRotationDirection) {
-        styledDiv {
-            css {
-                position = Position.absolute
-                display = Display.flex
-                alignItems = Align.center
-                bottom = 25.vh
-            }
-            val sideDistance = 2.rem
-            when (direction) {
-                HandRotationDirection.LEFT -> {
-                    css { left = sideDistance }
-                    bpIcon("arrow-left", size = 25)
-                    handCardsImg()
-                }
-                HandRotationDirection.RIGHT -> {
-                    css { right = sideDistance }
-                    handCardsImg()
-                    bpIcon("arrow-right", size = 25)
-                }
-            }
-        }
-    }
-
-    private fun RBuilder.handCardsImg() {
-        styledImg(src = "images/hand-cards5.png") {
-            css {
-                width = 4.rem
-            }
-        }
-    }
-
     private fun RBuilder.preparedMove(card: HandCard, move: PlayerMove) {
         bpOverlay(isOpen = true, onClose = props.unprepareMove) {
-            styledDiv {
+            preparedMove(card, move, props.unprepareMove) {
                 css { +GlobalStyles.fixedCenter }
-                cardImage(card, faceDown = move.type == MoveType.UPGRADE_WONDER) {
-                    if (move.type == MoveType.DISCARD) {
-                        css { discardedCardStyle() }
-                    }
-                }
-                if (move.type == MoveType.DISCARD) {
-                    discardText()
-                }
-                if (move.type == MoveType.UPGRADE_WONDER) {
-                    upgradeWonderSymbol()
-                }
-                styledDiv {
-                    css {
-                        position = Position.absolute
-                        top = 0.px
-                        right = 0.px
-                    }
-                    bpButton(
-                        icon = "cross",
-                        title = "Cancel prepared move",
-                        small = true,
-                        intent = Intent.DANGER,
-                        onClick = { props.unprepareMove() }
-                    )
-                }
-            }
-        }
-    }
-
-    private fun CSSBuilder.discardedCardStyle() {
-        filter = "brightness(60%) grayscale(50%)"
-    }
-
-    private fun StyledDOMBuilder<DIV>.discardText() {
-        styledDiv {
-            css {
-                +GlobalStyles.centerInParent
-                display = Display.flex
-                alignItems = Align.center
-                height = 3.rem
-                fontSize = 2.rem
-                color = Color.goldenrod
-                borderTop(2.px, BorderStyle.solid, Color.goldenrod)
-                borderBottom(2.px, BorderStyle.solid, Color.goldenrod)
-            }
-            +"DISCARD"
-        }
-    }
-
-    private fun StyledDOMBuilder<DIV>.upgradeWonderSymbol() {
-        styledImg(src = "/images/wonder-upgrade-bright.png") {
-            css {
-                width = 8.rem
-                position = Position.absolute
-                left = 10.pct
-                top = 50.pct
-                transform {
-                    translate((-50).pct, (-50).pct)
-                }
             }
         }
     }
