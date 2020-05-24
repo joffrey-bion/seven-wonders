@@ -20,22 +20,20 @@ import org.springframework.validation.annotation.Validated
 import java.security.Principal
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.springframework.core.env.Environment
+import org.springframework.beans.factory.annotation.Value
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
  */
 @Api(name = "Lobby")
 @Controller
-class LobbyController @Autowired constructor(
+class LobbyController(
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
     private val template: SimpMessagingTemplate,
-    private val environment: Environment
-) {
+    @Value("\${server.port}")
     private val serverPort: String
-        get() = environment.getProperty("server.port")
-
+) {
     private val Principal.player: Player
         get() = playerRepository.find(name)
 

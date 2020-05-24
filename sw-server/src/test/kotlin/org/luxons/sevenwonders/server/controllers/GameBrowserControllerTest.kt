@@ -26,7 +26,7 @@ class GameBrowserControllerTest {
         playerRepository = PlayerRepository()
         val lobbyRepository = LobbyRepository()
         val template = mockSimpMessagingTemplate()
-        val lobbyController = LobbyController(lobbyRepository, playerRepository, template)
+        val lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED")
         gameBrowserController = GameBrowserController(lobbyController, lobbyRepository, playerRepository, template)
     }
 

@@ -35,7 +35,7 @@ class LobbyControllerTest {
         val template = mockSimpMessagingTemplate()
         playerRepository = PlayerRepository()
         lobbyRepository = LobbyRepository()
-        lobbyController = LobbyController(lobbyRepository, playerRepository, template)
+        lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED")
     }
 
     @Test
