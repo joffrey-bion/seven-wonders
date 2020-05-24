@@ -22,7 +22,7 @@ class SevenWondersTest {
 
     private suspend fun connectNewClient(): SevenWondersSession {
         val client = SevenWondersClient()
-        val serverUrl = "localhost:$randomServerPort"
+        val serverUrl = "ws://localhost:$randomServerPort"
         return client.connect(serverUrl)
     }
 

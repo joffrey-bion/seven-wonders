@@ -30,8 +30,8 @@ class SevenWondersClient {
 
     private val stompClient = StompClient()
 
-    suspend fun connect(serverHost: String): SevenWondersSession {
-        val session = stompClient.connect("ws://$serverHost$SEVEN_WONDERS_WS_ENDPOINT").withJsonConversions()
+    suspend fun connect(serverUrl: String): SevenWondersSession {
+        val session = stompClient.connect("$serverUrl$SEVEN_WONDERS_WS_ENDPOINT").withJsonConversions()
         return SevenWondersSession(session)
     }
 }

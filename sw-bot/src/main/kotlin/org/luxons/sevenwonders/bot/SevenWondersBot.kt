@@ -32,8 +32,8 @@ class SevenWondersBot(
 ) {
     private val client = SevenWondersClient()
 
-    suspend fun play(serverHost: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
-        val session = client.connect(serverHost)
+    suspend fun play(serverUrl: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
+        val session = client.connect(serverUrl)
         session.chooseName(displayName, Icon("desktop"))
         session.joinGame(gameId)
         session.awaitGameStart(gameId)

@@ -22,8 +22,8 @@ typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 @OptIn(ExperimentalCoroutinesApi::class)
 suspend fun SwSagaContext.rootSaga() = coroutineScope {
     val action = next<RequestChooseName>()
-    val serverHost = if (isProdEnv()) window.location.host else "localhost:8000"
-    val session = SevenWondersClient().connect(serverHost)
+    val serverUrl = sevenWondersWebSocketUrl()
+    val session = SevenWondersClient().connect(serverUrl)
     console.info("Connected to Seven Wonders web socket API")
 
     launch(start = CoroutineStart.UNDISPATCHED) {
@@ -41,6 +41,15 @@ suspend fun SwSagaContext.rootSaga() = coroutineScope {
             Route.GAME -> gameSaga(session)
         }
     }
+}
+
+private fun sevenWondersWebSocketUrl(): String {
+    if (!isProdEnv()) {
+        return "ws://localhost:8000"
+    }
+    // prevents mixed content requests
+    val scheme = if (window.location.protocol.startsWith("https")) "wss" else "ws"
+    return "$scheme://${window.location.host}"
 }
 
 private suspend fun serverErrorSaga(session: SevenWondersSession) {
