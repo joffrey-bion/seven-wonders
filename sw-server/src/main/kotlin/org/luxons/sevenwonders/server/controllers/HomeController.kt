@@ -6,7 +6,6 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.annotation.SendToUser
 import org.springframework.stereotype.Controller

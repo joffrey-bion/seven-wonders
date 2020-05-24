@@ -10,7 +10,6 @@ import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.annotation.SendToUser

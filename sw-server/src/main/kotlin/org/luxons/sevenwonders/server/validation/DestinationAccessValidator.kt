@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.server.validation
 
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.regex.Pattern
 

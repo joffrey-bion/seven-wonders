@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.server.repositories
 import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong

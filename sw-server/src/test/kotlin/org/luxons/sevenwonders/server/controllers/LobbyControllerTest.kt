@@ -2,25 +2,21 @@ package org.luxons.sevenwonders.server.controllers
 
 import org.junit.Before
 import org.junit.Test
-import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
-import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
 import org.luxons.sevenwonders.model.CustomizableSettings
 import org.luxons.sevenwonders.model.WonderSidePickMethod.ALL_A
+import org.luxons.sevenwonders.model.api.State
+import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
+import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
 import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.lobby.PlayerIsNotOwnerException
 import org.luxons.sevenwonders.server.lobby.PlayerNotInLobbyException
-import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.luxons.sevenwonders.server.test.mockSimpMessagingTemplate
 import java.util.HashMap
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class LobbyControllerTest {
 

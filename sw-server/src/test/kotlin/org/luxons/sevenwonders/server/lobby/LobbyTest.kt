@@ -17,12 +17,7 @@ import org.luxons.sevenwonders.server.lobby.Lobby.PlayerNameAlreadyUsedException
 import org.luxons.sevenwonders.server.lobby.Lobby.PlayerOverflowException
 import org.luxons.sevenwonders.server.lobby.Lobby.PlayerUnderflowException
 import org.luxons.sevenwonders.server.lobby.Lobby.UnknownPlayerException
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @RunWith(Theories::class)
 class LobbyTest {

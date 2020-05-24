@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.server.controllers
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.bot.SevenWondersBot
 import org.luxons.sevenwonders.model.api.actions.AddBotAction
@@ -12,15 +14,12 @@ import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.springframework.beans.factory.annotation.Value
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.

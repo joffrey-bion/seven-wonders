@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.server.config
 
 import org.luxons.sevenwonders.server.validation.DestinationAccessValidator
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.Message
 import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.simp.stomp.StompCommand

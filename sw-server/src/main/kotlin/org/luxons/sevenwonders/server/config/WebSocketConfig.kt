@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.server.config
 
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.ChannelRegistration
