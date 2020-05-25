@@ -44,12 +44,10 @@ jobs:
         tag_with_sha: true
 
     - name: Docker push to Heroku
-      uses: docker/build-push-action@v1
+      uses: akhileshns/heroku-deploy@v3.0.4
       with:
-        path: ./sw-server
-        username: _
-        password: ${{ secrets.HEROKU_API_KEY }}
-        registry: registry.heroku.com
-        repository: seven-wonders-online/web
-        tag_with_ref: true
-        tag_with_sha: true
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: "seven-wonders-online"
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
+        usedocker: true
+        appdir: "./sw-server"
