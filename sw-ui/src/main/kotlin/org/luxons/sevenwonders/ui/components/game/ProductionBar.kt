@@ -97,7 +97,10 @@ private fun RBuilder.resourceChoice(types: Set<ResourceType>, block: StyledDOMBu
                 attrs { this.key = t.toString() }
             }
             if (i < types.indices.last) {
-                styledSpan { css { choiceSeparatorStyle() } }
+                styledSpan {
+                    css { choiceSeparatorStyle() }
+                    +"/"
+                }
             }
         }
     }
