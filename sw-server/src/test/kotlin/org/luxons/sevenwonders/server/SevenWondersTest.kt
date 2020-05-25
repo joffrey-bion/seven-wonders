@@ -73,6 +73,7 @@ class SevenWondersTest {
         started.cancel()
         System.err.println("before disconnect")
         disconnect(ownerSession, session1, session2, outsiderSession)
+        System.err.println("after disconnect")
     }
 
     @Test
