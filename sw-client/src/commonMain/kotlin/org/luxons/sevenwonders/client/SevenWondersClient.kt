@@ -1,9 +1,6 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.DeserializationStrategy
@@ -36,6 +33,7 @@ class SevenWondersClient {
     }
 }
 
+// TODO replace these calls by actual HTTP endpoints
 @OptIn(ExperimentalCoroutinesApi::class)
 private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKxSerialization.request(
     sendDestination: String,
@@ -47,6 +45,7 @@ private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKx
     val sub = async(start = CoroutineStart.UNDISPATCHED) {
         subscribe(receiveDestination, deserializer).first()
     }
+    delay(30) // ensures the subscription happened
     convertAndSend(sendDestination, payload, serializer)
     sub.await()
 }
