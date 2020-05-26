@@ -27,7 +27,8 @@ fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO
         itemHeight = 100,
         options = RadialConfig(
             radius = 175,
-            firstItemAngleDegrees = 180 // self at the bottom
+            firstItemAngleDegrees = 180, // self at the bottom
+            direction = Direction.COUNTERCLOCKWISE // new players sit to the right of last player
         )
     )
 }
