@@ -137,12 +137,12 @@ private fun RElementBuilder<IButtonGroupProps>.discardButton(
     )
 }
 
-private fun cardPlayabilityInfo(playability: CardPlayability) = when(playability.isPlayable) {
+private fun cardPlayabilityInfo(playability: CardPlayability) = when (playability.isPlayable) {
     true -> priceText(-playability.minPrice)
     false -> playability.playabilityLevel.message
 }
 
-private fun wonderBuildabilityInfo(buildability: WonderBuildability) = when(buildability.isBuildable) {
+private fun wonderBuildabilityInfo(buildability: WonderBuildability) = when (buildability.isBuildable) {
     true -> priceText(-buildability.minPrice)
     false -> buildability.playabilityLevel.message
 }
