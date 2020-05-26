@@ -52,7 +52,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
                     rightElement = createGameButton()
                 )
             }
-            playerInfo()
+            currentPlayerInfo()
         }
     }
 

@@ -1,6 +1,8 @@
 package org.luxons.sevenwonders.model
 
 import kotlinx.serialization.Serializable
+import org.luxons.sevenwonders.model.boards.Board
+import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
@@ -32,6 +34,11 @@ data class PlayerTurnInfo(
     val message: String = action.message
     val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
 }
+
+fun PlayerTurnInfo.getOwnBoard(): Board = table.boards[playerIndex]
+
+fun PlayerTurnInfo.getBoard(position: RelativeBoardPosition): Board =
+    table.boards[position.getIndexFrom(playerIndex, table.boards.size)]
 
 // TODO move to server code
 fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() =

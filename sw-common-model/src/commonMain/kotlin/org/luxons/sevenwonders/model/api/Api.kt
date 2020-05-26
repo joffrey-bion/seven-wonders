@@ -44,19 +44,25 @@ data class Actionability(
     val tooltip: String
 )
 
+interface BasicPlayerInfo {
+    val username: String
+    val displayName: String
+    val icon: Icon?
+}
+
 @Serializable
 data class ConnectedPlayer(
-    val username: String,
-    val displayName: String,
-    val icon: Icon?
-)
+    override val username: String,
+    override val displayName: String,
+    override val icon: Icon?
+) : BasicPlayerInfo
 
 @Serializable
 data class PlayerDTO(
-    val username: String,
-    val displayName: String,
-    val icon: Icon?,
+    override val username: String,
+    override val displayName: String,
+    override val icon: Icon?,
     val index: Int,
     val isGameOwner: Boolean,
     val isReady: Boolean
-)
+) : BasicPlayerInfo

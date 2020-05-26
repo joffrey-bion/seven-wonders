@@ -15,7 +15,8 @@ data class Board(
     val science: Science,
     val military: Military,
     val playedCards: List<List<TableCard>>,
-    val gold: Int
+    val gold: Int,
+    val bluePoints: Int
 )
 
 @Serializable

@@ -2,9 +2,11 @@ package org.luxons.sevenwonders.engine.converters
 
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.boards.ScienceType
+import org.luxons.sevenwonders.engine.effects.RawPointsIncrease
 import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.model.MoveType
+import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.resources.CountedResource
 import org.luxons.sevenwonders.engine.boards.Board as InternalBoard
@@ -31,7 +33,11 @@ internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): ApiBoard
         science = science.toApiScience(),
         military = military.toApiMilitary(),
         playedCards = getPlayedCards().map { it.toTableCard(lastMove) }.toColumns(),
-        gold = gold
+        gold = gold,
+        bluePoints = getPlayedCards()
+            .filter { it.color == Color.BLUE }
+            .flatMap { it.effects.filterIsInstance<RawPointsIncrease>() }
+            .sumBy { it.points }
     )
 
 internal fun List<TableCard>.toColumns(): List<List<TableCard>> {

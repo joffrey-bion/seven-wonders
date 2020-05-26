@@ -3,10 +3,10 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
+import org.luxons.sevenwonders.model.boards.Board
+import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
@@ -52,13 +52,21 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     }
 
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
-        val board = turnInfo.table.boards[turnInfo.playerIndex]
+        val board = turnInfo.getOwnBoard()
+        val leftBoard = turnInfo.getBoard(RelativeBoardPosition.LEFT)
+        val rightBoard = turnInfo.getBoard(RelativeBoardPosition.RIGHT)
+        val topBoards = (turnInfo.table.boards - board - leftBoard - rightBoard).reversed()
         div {
             turnInfo.scoreBoard?.let {
                 scoreTableOverlay(it, props.players, props.leaveGame)
             }
             actionInfo(turnInfo.message)
             boardComponent(board = board)
+            leftPlayerBoardSummary(leftBoard)
+            rightPlayerBoardSummary(rightBoard)
+            if (topBoards.isNotEmpty()) {
+                topPlayerBoardsSummaries(topBoards)
+            }
             handRotationIndicator(turnInfo.table.handRotationDirection)
             val hand = turnInfo.hand
             if (hand != null) {
@@ -93,6 +101,52 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     this.className = GlobalStyles.getClassName { it::noPadding }
                 }
                 bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +message }
+            }
+        }
+    }
+
+    private fun RBuilder.leftPlayerBoardSummary(board: Board) {
+        boardSummary(props.players[board.playerIndex], board, BoardSummarySide.LEFT) {
+            css {
+                position = Position.absolute
+                left = 0.px
+                bottom = 40.pct
+                borderTopRightRadius = 0.4.rem
+                borderBottomRightRadius = 0.4.rem
+            }
+        }
+    }
+
+    private fun RBuilder.rightPlayerBoardSummary(board: Board) {
+        boardSummary(props.players[board.playerIndex], board, BoardSummarySide.RIGHT) {
+            css {
+                position = Position.absolute
+                right = 0.px
+                bottom = 40.pct
+                borderTopLeftRadius = 0.4.rem
+                borderBottomLeftRadius = 0.4.rem
+            }
+        }
+    }
+
+    private fun RBuilder.topPlayerBoardsSummaries(boards: List<Board>) {
+        styledDiv {
+            css {
+                position = Position.absolute
+                top = 0.px
+                left = 50.pct
+                transform { translate((-50).pct) }
+                display = Display.flex
+                flexDirection = FlexDirection.row
+            }
+            boards.forEach { board ->
+                boardSummary(props.players[board.playerIndex], board, BoardSummarySide.TOP) {
+                    css {
+                        borderBottomLeftRadius = 0.4.rem
+                        borderBottomRightRadius = 0.4.rem
+                        margin(horizontal = 2.rem)
+                    }
+                }
             }
         }
     }

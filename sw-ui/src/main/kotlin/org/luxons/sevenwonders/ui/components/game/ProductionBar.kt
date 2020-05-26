@@ -12,7 +12,6 @@ import kotlinx.css.background
 import kotlinx.css.bottom
 import kotlinx.css.color
 import kotlinx.css.display
-import kotlinx.css.fontFamily
 import kotlinx.css.fontSize
 import kotlinx.css.height
 import kotlinx.css.margin
@@ -27,8 +26,6 @@ import kotlinx.css.vw
 import kotlinx.css.width
 import kotlinx.css.zIndex
 import kotlinx.html.DIV
-import kotlinx.html.IMG
-import kotlinx.html.title
 import org.luxons.sevenwonders.model.boards.Production
 import org.luxons.sevenwonders.model.resources.CountedResource
 import org.luxons.sevenwonders.model.resources.ResourceType
@@ -37,7 +34,6 @@ import react.dom.*
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
-import styled.styledImg
 import styled.styledSpan
 
 fun RBuilder.productionBar(gold: Int, production: Production) {
@@ -49,10 +45,6 @@ fun RBuilder.productionBar(gold: Int, production: Production) {
         fixedResources(production.fixedResources)
         alternativeResources(production.alternativeResources)
     }
-}
-
-private fun RBuilder.goldIndicator(amount: Int) {
-    tokenWithCount(tokenName = "coin", count = amount)
 }
 
 private fun RBuilder.fixedResources(resources: List<CountedResource>) {
@@ -106,32 +98,6 @@ private fun RBuilder.resourceChoice(types: Set<ResourceType>, block: StyledDOMBu
     }
 }
 
-private fun RBuilder.tokenWithCount(tokenName: String, count: Int, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
-    styledDiv {
-        block()
-        tokenImage(tokenName)
-        styledSpan {
-            css { tokenCountStyle() }
-            + "× $count"
-        }
-    }
-}
-
-private fun RBuilder.tokenImage(tokenName: String, block: StyledDOMBuilder<IMG>.() -> Unit = {}) {
-    styledImg(src = getTokenImagePath(tokenName)) {
-        css {
-            tokenImageStyle()
-        }
-        attrs {
-            this.title = tokenName
-            this.alt = tokenName
-        }
-        block()
-    }
-}
-
-private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.png"
-
 private fun getResourceTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().toLowerCase()}"
 
 private fun CSSBuilder.productionBarStyle() {
@@ -153,17 +119,4 @@ private fun CSSBuilder.choiceSeparatorStyle() {
     margin(all = 5.px)
     color = Color("#c29929")
     declarations["text-shadow"] = "0 0 1px black"
-}
-
-private fun CSSBuilder.tokenImageStyle() {
-    height = 3.rem
-    width = 3.rem
-    verticalAlign = VerticalAlign.middle
-}
-
-private fun CSSBuilder.tokenCountStyle() {
-    fontFamily = "fantasy"
-    fontSize = 1.5.rem
-    verticalAlign = VerticalAlign.middle
-    marginLeft = 0.2.rem
 }

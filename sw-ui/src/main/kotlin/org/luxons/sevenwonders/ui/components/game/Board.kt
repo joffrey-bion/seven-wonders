@@ -25,6 +25,7 @@ private const val yOffset = 21
 fun RBuilder.boardComponent(board: Board) {
     styledDiv {
         css {
+            paddingTop = 3.rem
             width = 100.vw
         }
         tableCards(cardColumns = board.playedCards)
