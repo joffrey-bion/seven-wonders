@@ -1,42 +1,17 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpButtonGroup
-import kotlinx.css.Align
-import kotlinx.css.CSSBuilder
-import kotlinx.css.Color
-import kotlinx.css.Display
-import kotlinx.css.GridColumn
-import kotlinx.css.GridRow
-import kotlinx.css.Position
-import kotlinx.css.alignItems
-import kotlinx.css.bottom
-import kotlinx.css.display
-import kotlinx.css.filter
-import kotlinx.css.gridColumn
-import kotlinx.css.gridRow
-import kotlinx.css.height
-import kotlinx.css.left
-import kotlinx.css.margin
-import kotlinx.css.maxHeight
-import kotlinx.css.maxWidth
-import kotlinx.css.pct
-import kotlinx.css.position
+import com.palantir.blueprintjs.*
+import kotlinx.css.*
 import kotlinx.css.properties.*
-import kotlinx.css.px
-import kotlinx.css.rem
-import kotlinx.css.vh
-import kotlinx.css.vw
-import kotlinx.css.width
-import kotlinx.css.zIndex
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
 import react.RBuilder
+import react.RElementBuilder
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
@@ -87,7 +62,6 @@ private fun RBuilder.handCard(
 }
 
 private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBuildability, prepareMove: (PlayerMove) -> Unit) {
-    // class: action-buttons
     styledDiv {
         css {
             alignItems = Align.flexEnd
@@ -100,40 +74,107 @@ private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBui
             }
         }
         bpButtonGroup {
-            bpButton(title = "PLAY (${priceText(-card.playability.minPrice)})",
-                large = true,
-                intent = Intent.SUCCESS,
-                icon = "play",
-                disabled = !card.playability.isPlayable,
-                onClick = {
-                    val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
-                    prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions))
-                }
-            )
-            bpButton(title = "UPGRADE WONDER (${priceText(-wonderBuildability.minPrice)})",
-                large = true,
-                intent = Intent.PRIMARY,
-                icon = "key-shift",
-                disabled = !wonderBuildability.isBuildable,
-                onClick = {
-                    val wonderTransactions = wonderBuildability.cheapestTransactions.firstOrNull() ?: noTransactions()
-                    prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, wonderTransactions))
-                }
-            )
-            bpButton(title = "DISCARD (+3 coins)", // TODO remove hardcoded value
-                large = true,
-                intent = Intent.DANGER,
-                icon = "cross",
-                onClick = { prepareMove(PlayerMove(MoveType.DISCARD, card.name)) }
-            )
+            playCardButton(card, prepareMove)
+            upgradeWonderButton(wonderBuildability, prepareMove, card)
+            discardButton(prepareMove, card)
         }
     }
 }
 
+private fun RElementBuilder<IButtonGroupProps>.playCardButton(
+    card: HandCard,
+    prepareMove: (PlayerMove) -> Unit
+) {
+    bpButton(
+        title = "PLAY (${cardPlayabilityInfo(card.playability)})",
+        large = true,
+        intent = Intent.SUCCESS,
+        disabled = !card.playability.isPlayable,
+        onClick = {
+            val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
+            prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions))
+        }
+    ) {
+        bpIcon("play")
+        if (card.playability.isPlayable && !card.playability.isFree) {
+            priceInfo(card.playability.minPrice)
+        }
+    }
+}
+
+private fun RElementBuilder<IButtonGroupProps>.upgradeWonderButton(
+    wonderBuildability: WonderBuildability,
+    prepareMove: (PlayerMove) -> Unit,
+    card: HandCard
+) {
+    bpButton(
+        title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
+        large = true,
+        intent = Intent.PRIMARY,
+        disabled = !wonderBuildability.isBuildable,
+        onClick = {
+            val transactions = wonderBuildability.cheapestTransactions.firstOrNull() ?: noTransactions()
+            prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions))
+        }
+    ) {
+        bpIcon("key-shift")
+        if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
+            priceInfo(wonderBuildability.minPrice)
+        }
+    }
+}
+
+private fun RElementBuilder<IButtonGroupProps>.discardButton(
+    prepareMove: (PlayerMove) -> Unit,
+    card: HandCard
+) {
+    bpButton(
+        title = "DISCARD (+3 coins)", // TODO remove hardcoded value
+        large = true,
+        intent = Intent.DANGER,
+        icon = "cross",
+        onClick = { prepareMove(PlayerMove(MoveType.DISCARD, card.name)) }
+    )
+}
+
+private fun cardPlayabilityInfo(playability: CardPlayability) = when(playability.isPlayable) {
+    true -> priceText(-playability.minPrice)
+    false -> playability.playabilityLevel.message
+}
+
+private fun wonderBuildabilityInfo(buildability: WonderBuildability) = when(buildability.isBuildable) {
+    true -> priceText(-buildability.minPrice)
+    false -> buildability.playabilityLevel.message
+}
+
 private fun priceText(amount: Int) = when (amount.absoluteValue) {
     0 -> "free"
-    1 -> "$amount coin"
-    else -> "$amount coins"
+    1 -> "${pricePrefix(amount)}$amount coin"
+    else -> "${pricePrefix(amount)}$amount coins"
+}
+
+private fun pricePrefix(amount: Int) = when {
+    amount > 0 -> "+"
+    else -> ""
+}
+
+private fun RElementBuilder<IButtonProps>.priceInfo(amount: Int) {
+    styledDiv {
+        val size = 1.rem
+        css {
+            position = Position.absolute
+            top = (-0.2).rem
+            left = (-0.2).rem
+            backgroundColor = Color.goldenrod
+            width = size
+            height = size
+            borderRadius = size
+            fontSize = size * 0.8
+            textAlign = TextAlign.center
+            zIndex = 5 // above all 3 buttons
+        }
+        +"$amount"
+    }
 }
 
 private fun CSSBuilder.handStyle() {

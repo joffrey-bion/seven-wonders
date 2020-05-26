@@ -52,17 +52,17 @@ data class PreparedCard(
 @Serializable
 data class CardBack(val image: String)
 
-enum class PlayabilityLevel {
-    CHAINABLE,
-    NO_REQUIREMENTS,
-    ENOUGH_RESOURCES,
-    ENOUGH_GOLD,
-    ENOUGH_GOLD_AND_RES,
-    REQUIRES_HELP,
-    MISSING_REQUIRED_GOLD,
-    MISSING_GOLD_FOR_RES,
-    UNAVAILABLE_RESOURCES,
-    INCOMPATIBLE_WITH_BOARD
+enum class PlayabilityLevel(val message: String) {
+    CHAINABLE("free because of a card on the board"),
+    NO_REQUIREMENTS("free"),
+    ENOUGH_RESOURCES("free"),
+    ENOUGH_GOLD("enough gold"),
+    ENOUGH_GOLD_AND_RES("enough gold and resources"),
+    REQUIRES_HELP("requires buying resources"),
+    MISSING_REQUIRED_GOLD("not enough gold"),
+    MISSING_GOLD_FOR_RES("not enough gold to buy resources"),
+    UNAVAILABLE_RESOURCES("neighbours don't have the missing resources"),
+    INCOMPATIBLE_WITH_BOARD("card already on the board")
 }
 
 enum class Color(val isResource: Boolean) {
