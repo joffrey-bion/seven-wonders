@@ -11,7 +11,7 @@ import org.luxons.sevenwonders.model.score.ScoreBoard
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
 
 enum class Action(val message: String) {
-    SAY_READY("Say when you're ready to get your next hand"),
+    SAY_READY("Click 'READY' when you are ready to receive your next hand."),
     PLAY("Pick the card you want to play or discard."),
     PLAY_2("Pick the first card you want to play or discard. Note that you have the ability to play these 2 last cards. You will choose how to play the last one during your next turn."),
     PLAY_LAST("You have the special ability to play your last card. Choose how you want to play it."),
