@@ -78,7 +78,8 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     })
     is TurnInfoEvent -> gameState?.copy(
         players = gameState.players.map { p -> p.copy(isReady = false) },
-        turnInfo = action.turnInfo
+        turnInfo = action.turnInfo,
+        currentPreparedMove = null
     )
     else -> gameState
 }

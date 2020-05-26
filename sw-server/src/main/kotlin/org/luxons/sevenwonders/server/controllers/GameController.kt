@@ -62,8 +62,7 @@ class GameController(
      * the connected user's information
      */
     @MessageMapping("/game/prepareMove")
-    @SendToUser("/queue/game/preparedMove")
-    fun prepareMove(action: PrepareMoveAction, principal: Principal): PlayerMove {
+    fun prepareMove(action: PrepareMoveAction, principal: Principal) {
         val player = principal.player
         val game = player.game
         val preparedCardBack = game.prepareMove(player.index, action.move)
@@ -78,8 +77,9 @@ class GameController(
             if (game.endOfGameReached()) {
                 player.lobby.setEndOfGame()
             }
+        } else {
+            template.convertAndSendToUser(player.username, "/queue/game/preparedMove", action.move)
         }
-        return action.move
     }
 
     @MessageMapping("/game/unprepareMove")
