@@ -13,12 +13,11 @@ import styled.styledHr
 
 enum class BoardSummarySide(
     val tokenCountPosition: TokenCountPosition,
-    val scienceCountPosition: TokenCountPosition,
     val alignment: Align
 ) {
-    LEFT(TokenCountPosition.RIGHT, TokenCountPosition.RIGHT, Align.flexStart),
-    TOP(TokenCountPosition.OVER, TokenCountPosition.OVER, Align.flexStart),
-    RIGHT(TokenCountPosition.LEFT, TokenCountPosition.LEFT, Align.flexEnd)
+    LEFT(TokenCountPosition.RIGHT, Align.flexStart),
+    TOP(TokenCountPosition.OVER, Align.flexStart),
+    RIGHT(TokenCountPosition.LEFT, Align.flexEnd)
 }
 
 fun RBuilder.boardSummary(
@@ -36,7 +35,6 @@ fun RBuilder.boardSummary(
             backgroundColor = Color.paleGoldenrod.withAlpha(0.5)
         }
         val tokenSize = 2.rem
-        val countPosition = boardSummarySide.tokenCountPosition
 
         playerInfo(player, iconSize = 25)
         styledHr {
@@ -58,9 +56,9 @@ fun RBuilder.boardSummary(
                     alignItems = boardSummarySide.alignment
                     if (boardSummarySide == BoardSummarySide.TOP) marginRight = 1.rem else marginBottom = 1.rem
                 }
-                generalCounts(board, tokenSize, countPosition)
+                generalCounts(board, tokenSize, boardSummarySide.tokenCountPosition)
             }
-            scienceTokens(board, tokenSize, boardSummarySide.scienceCountPosition)
+            scienceTokens(board, tokenSize, boardSummarySide.tokenCountPosition)
         }
         block()
     }
