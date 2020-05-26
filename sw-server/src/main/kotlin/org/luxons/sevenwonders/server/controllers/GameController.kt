@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.server.controllers
 
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.engine.Game
-import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
@@ -12,7 +11,6 @@ import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.messaging.simp.annotation.SendToUser
 import org.springframework.stereotype.Controller
 import java.security.Principal
 
