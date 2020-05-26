@@ -68,19 +68,21 @@ class SevenWondersBot(
     }
 }
 
+@OptIn(ExperimentalStdlibApi::class)
 private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
+    val hand = turnInfo.hand ?: error("Cannot choose move, no hand in current turn info!")
     val wonderBuildability = turnInfo.wonderBuildability
     if (wonderBuildability.isBuildable) {
-        val transactions = wonderBuildability.cheapestTransactions.first()
-        return PlayerMove(MoveType.UPGRADE_WONDER, turnInfo.hand!!.first().name, transactions)
+        val transactions = wonderBuildability.cheapestTransactions.random()
+        return PlayerMove(MoveType.UPGRADE_WONDER, hand.random().name, transactions)
     }
-    val playableCard = turnInfo.hand!!.firstOrNull { it.playability.isPlayable }
+    val playableCard = hand.filter { it.playability.isPlayable }.randomOrNull()
     return if (playableCard != null) {
-        PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.cheapestTransactions.first())
+        PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.cheapestTransactions.random())
     } else {
-        PlayerMove(MoveType.DISCARD, turnInfo.hand!!.first().name, noTransactions())
+        PlayerMove(MoveType.DISCARD, hand.random().name, noTransactions())
     }
 }
 
 private fun createPickGuildMove(turnInfo: PlayerTurnInfo): PlayerMove =
-    PlayerMove(MoveType.COPY_GUILD, turnInfo.neighbourGuildCards.first().name)
+    PlayerMove(MoveType.COPY_GUILD, turnInfo.neighbourGuildCards.random().name)
