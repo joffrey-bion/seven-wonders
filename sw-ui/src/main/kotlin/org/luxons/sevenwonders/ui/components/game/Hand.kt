@@ -23,11 +23,7 @@ import kotlinx.css.maxHeight
 import kotlinx.css.maxWidth
 import kotlinx.css.pct
 import kotlinx.css.position
-import kotlinx.css.properties.boxShadow
-import kotlinx.css.properties.s
-import kotlinx.css.properties.transform
-import kotlinx.css.properties.transition
-import kotlinx.css.properties.translate
+import kotlinx.css.properties.*
 import kotlinx.css.px
 import kotlinx.css.rem
 import kotlinx.css.vh
@@ -44,6 +40,7 @@ import react.RBuilder
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
+import kotlin.math.absoluteValue
 
 fun RBuilder.handComponent(
     cards: List<HandCard>,
@@ -103,7 +100,7 @@ private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBui
             }
         }
         bpButtonGroup {
-            bpButton(title = "PLAY",
+            bpButton(title = "PLAY (${priceText(-card.playability.minPrice)})",
                 large = true,
                 intent = Intent.SUCCESS,
                 icon = "play",
@@ -111,8 +108,9 @@ private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBui
                 onClick = {
                     val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
                     prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions))
-                })
-            bpButton(title = "UPGRADE WONDER",
+                }
+            )
+            bpButton(title = "UPGRADE WONDER (${priceText(-wonderBuildability.minPrice)})",
                 large = true,
                 intent = Intent.PRIMARY,
                 icon = "key-shift",
@@ -120,14 +118,22 @@ private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBui
                 onClick = {
                     val wonderTransactions = wonderBuildability.cheapestTransactions.firstOrNull() ?: noTransactions()
                     prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, wonderTransactions))
-                })
-            bpButton(title = "DISCARD",
+                }
+            )
+            bpButton(title = "DISCARD (+3 coins)", // TODO remove hardcoded value
                 large = true,
                 intent = Intent.DANGER,
                 icon = "cross",
-                onClick = { prepareMove(PlayerMove(MoveType.DISCARD, card.name)) })
+                onClick = { prepareMove(PlayerMove(MoveType.DISCARD, card.name)) }
+            )
         }
     }
+}
+
+private fun priceText(amount: Int) = when (amount.absoluteValue) {
+    0 -> "free"
+    1 -> "$amount coin"
+    else -> "$amount coins"
 }
 
 private fun CSSBuilder.handStyle() {
