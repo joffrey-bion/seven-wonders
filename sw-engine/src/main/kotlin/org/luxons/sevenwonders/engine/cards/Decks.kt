@@ -11,7 +11,6 @@ internal fun List<Card>.deal(nbPlayers: Int): Hands {
 
 internal class Decks(private val cardsPerAge: Map<Int, List<Card>>) {
 
-    @Throws(Decks.CardNotFoundException::class)
     fun getCard(age: Int, cardName: String): Card =
         getDeck(age).firstOrNull { c -> c.name == cardName } ?: throw CardNotFoundException(cardName)
 
