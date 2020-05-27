@@ -31,7 +31,7 @@ The client handles the major features to play a full game:
 - Play/discard cards or upgrade wonder (auto-buying missing resources from neighbours)
 - Display the score board
 
-:construction: It lacks the following features:
+It lacks the following features:
 - View full boards of other players
 - Control which resources to buy from which neighbour
 - "Special power" actions:
