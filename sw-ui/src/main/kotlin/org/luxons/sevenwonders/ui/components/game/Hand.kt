@@ -171,7 +171,6 @@ private fun RElementBuilder<IButtonProps>.priceInfo(amount: Int) {
             borderRadius = size
             fontSize = size * 0.8
             textAlign = TextAlign.center
-            zIndex = 12 // blueprintjs sets hovered buttons z-index to 11
         }
         +"$amount"
     }
