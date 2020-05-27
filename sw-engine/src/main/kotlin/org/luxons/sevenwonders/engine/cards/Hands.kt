@@ -13,7 +13,7 @@ internal class Hands(private val hands: List<List<Card>>) {
         return hands[playerIndex]
     }
 
-    fun discardHand(playerIndex: Int): Hands {
+    fun clearHand(playerIndex: Int): Hands {
         val mutatedHands = hands.toMutableList()
         mutatedHands[playerIndex] = emptyList()
         return Hands(mutatedHands)

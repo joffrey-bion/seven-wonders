@@ -193,7 +193,7 @@ class Game internal constructor(
     private fun discardHand(playerIndex: Int) {
         val hand = hands[playerIndex]
         discardedCards.addAll(hand)
-        hands = hands.discardHand(playerIndex)
+        hands = hands.clearHand(playerIndex)
     }
 
     private fun activatePlayedCards(playedMoves: List<Move>) =
