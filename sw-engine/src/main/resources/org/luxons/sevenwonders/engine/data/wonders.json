@@ -356,7 +356,7 @@
               "resources": "SS"
             },
             "effects": {
-              "action": "ONE_FREE"
+              "action": "ONE_FREE_PER_AGE"
             }
           },
           {
