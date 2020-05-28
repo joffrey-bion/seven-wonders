@@ -25,10 +25,12 @@ class InvalidMoveException internal constructor(move: Move, message: String) : I
     "Player ${move.playerContext.index} cannot perform move ${move.type}: $message"
 )
 
-internal fun MoveType.resolve(move: PlayerMove, card: Card, context: PlayerContext): Move = when (this) {
-    MoveType.PLAY -> PlayCardMove(move, card, context)
-    MoveType.PLAY_FREE -> PlayFreeCardMove(move, card, context)
-    MoveType.UPGRADE_WONDER -> BuildWonderMove(move, card, context)
-    MoveType.DISCARD -> DiscardMove(move, card, context)
-    MoveType.COPY_GUILD -> CopyGuildMove(move, card, context)
-}
+internal fun MoveType.resolve(move: PlayerMove, card: Card, context: PlayerContext, discardedCards: List<Card>): Move =
+    when (this) {
+        MoveType.PLAY -> PlayCardMove(move, card, context)
+        MoveType.PLAY_FREE -> PlayFreeCardMove(move, card, context)
+        MoveType.PLAY_FREE_DISCARDED -> PlayFreeDiscardedCardMove(move, card, context, discardedCards)
+        MoveType.UPGRADE_WONDER -> BuildWonderMove(move, card, context)
+        MoveType.DISCARD -> DiscardMove(move, card, context)
+        MoveType.COPY_GUILD -> CopyGuildMove(move, card, context)
+    }

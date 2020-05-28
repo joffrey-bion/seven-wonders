@@ -55,6 +55,7 @@ data class CardBack(val image: String)
 enum class PlayabilityLevel(val message: String) {
     CHAINABLE("free because of a card on the board"),
     NO_REQUIREMENTS("free"),
+    SPECIAL_FREE("free because of a special ability"),
     ENOUGH_RESOURCES("free"),
     ENOUGH_GOLD("enough gold"),
     ENOUGH_GOLD_AND_RES("enough gold and resources"),

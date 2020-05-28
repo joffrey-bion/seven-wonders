@@ -63,6 +63,10 @@ internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Setting
         specialAbilities.add(specialAbility)
     }
 
+    fun removeSpecial(specialAbility: SpecialAbility) {
+        specialAbilities.remove(specialAbility)
+    }
+
     fun hasSpecial(specialAbility: SpecialAbility): Boolean = specialAbilities.contains(specialAbility)
 
     fun canPlayFreeCard(age: Age): Boolean =

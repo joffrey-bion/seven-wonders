@@ -15,6 +15,7 @@ enum class Action(val message: String) {
     PLAY("Pick the card you want to play or discard."),
     PLAY_2("Pick the first card you want to play or discard. Note that you have the ability to play these 2 last cards. You will choose how to play the last one during your next turn."),
     PLAY_LAST("You have the special ability to play your last card. Choose how you want to play it."),
+    PLAY_FREE_DISCARDED("Pick a card from the discarded deck, you can play it for free."),
     PICK_NEIGHBOR_GUILD("Choose a Guild card (purple) that you want to copy from one of your neighbours."),
     WAIT("Please wait for other players to perform extra actions."),
     WATCH_SCORE("The game is over! Look at the scoreboard to see the final ranking!")
@@ -27,7 +28,8 @@ data class PlayerTurnInfo(
     val action: Action,
     val hand: List<HandCard>?,
     val preparedMove: PlayedMove?,
-    val neighbourGuildCards: List<TableCard>,
+    val neighbourGuildCards: List<HandCard>,
+    val discardedCards: List<HandCard>?, // only present when the player can actually see them
     val scoreBoard: ScoreBoard? = null
 ) {
     val currentAge: Int = table.currentAge
@@ -62,6 +64,7 @@ data class PlayerMove(
 enum class MoveType {
     PLAY,
     PLAY_FREE,
+    PLAY_FREE_DISCARDED,
     UPGRADE_WONDER,
     DISCARD,
     COPY_GUILD;

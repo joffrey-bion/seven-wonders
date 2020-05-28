@@ -5,20 +5,17 @@ import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.cards.Decks
 import org.luxons.sevenwonders.engine.cards.Hands
-import org.luxons.sevenwonders.engine.converters.toTableState
+import org.luxons.sevenwonders.engine.converters.toHandCard
 import org.luxons.sevenwonders.engine.converters.toPlayedMove
-import org.luxons.sevenwonders.engine.converters.toTableCard
+import org.luxons.sevenwonders.engine.converters.toTableState
 import org.luxons.sevenwonders.engine.data.LAST_AGE
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.moves.resolve
-import org.luxons.sevenwonders.model.score.ScoreBoard
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.TableState
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.score.ScoreBoard
 
 class Game internal constructor(
     val id: Long,
@@ -44,10 +41,25 @@ class Game internal constructor(
     }
 
     private fun startNewTurn() {
-        currentTurnInfo = players.map { createPlayerTurnInfo(it) }
+        currentTurnInfo = players.map {
+            val hand = hands.createHand(it)
+            val action = determineAction(hand, it.board)
+            createPlayerTurnInfo(it, action, hand)
+        }
     }
 
-    private fun startEndGame() {
+    private fun startPlayDiscardedTurn() {
+        currentTurnInfo = players.map {
+            val action = if (it.board.hasSpecial(SpecialAbility.PLAY_DISCARDED)) {
+                Action.PLAY_FREE_DISCARDED
+            } else {
+                Action.WAIT
+            }
+            createPlayerTurnInfo(it, action, null)
+        }
+    }
+
+    private fun startEndGameTurn() {
         // some player may need to do additional stuff
         startNewTurn()
         val allDone = currentTurnInfo.all { it.action == Action.WAIT }
@@ -60,17 +72,20 @@ class Game internal constructor(
         }
     }
 
-    private fun createPlayerTurnInfo(player: Player): PlayerTurnInfo {
-        val hand = hands.createHand(player)
-        val action = determineAction(hand, player.board)
-        val neighbourGuildCards = table.getNeighbourGuildCards(player.index).map { it.toTableCard(null) }
-
+    private fun createPlayerTurnInfo(player: Player, action: Action, hand: List<HandCard>?): PlayerTurnInfo {
+        val neighbourGuildCards = table.getNeighbourGuildCards(player.index).map { it.toHandCard(player, true) }
+        val exposedDiscardedCards = if (action == Action.PLAY_FREE_DISCARDED) {
+            discardedCards.map { it.toHandCard(player, true) }
+        } else {
+            null
+        }
         return PlayerTurnInfo(
             playerIndex = player.index,
             table = table.toTableState(),
             action = action,
             hand = hand,
             preparedMove = preparedMoves[player.index]?.toPlayedMove(),
+            discardedCards = exposedDiscardedCards,
             neighbourGuildCards = neighbourGuildCards
         )
     }
@@ -102,11 +117,16 @@ class Game internal constructor(
      * @return the back of the card that is prepared on the table
      */
     fun prepareMove(playerIndex: Int, move: PlayerMove): CardBack {
-        val card = decks.getCard(table.currentAge, move.cardName)
+        val card = move.findCard()
         val context = PlayerContext(playerIndex, table, hands[playerIndex])
-        val resolvedMove = move.type.resolve(move, card, context)
+        val resolvedMove = move.type.resolve(move, card, context, discardedCards)
         preparedMoves[playerIndex] = resolvedMove
         return card.back
+    }
+
+    private fun PlayerMove.findCard() = when (type) {
+        MoveType.PLAY_FREE_DISCARDED -> discardedCards.first { it.name == cardName }
+        else -> decks.getCard(table.currentAge, cardName)
     }
 
     fun unprepareMove(playerIndex: Int) {
@@ -132,13 +152,17 @@ class Game internal constructor(
         if (endOfAgeReached()) {
             executeEndOfAgeEvents()
             if (endOfGameReached()) {
-                startEndGame()
+                startEndGameTurn()
             } else {
                 startNewAge()
             }
         } else {
-            rotateHandsIfRelevant()
-            startNewTurn()
+            if (shouldStartPlayDiscardedTurn()) {
+                startPlayDiscardedTurn()
+            } else {
+                rotateHandsIfRelevant()
+                startNewTurn()
+            }
         }
         return table.toTableState()
     }
@@ -172,6 +196,19 @@ class Game internal constructor(
     private fun executeEndOfAgeEvents() = table.resolveMilitaryConflicts()
 
     fun endOfGameReached(): Boolean = endOfAgeReached() && table.currentAge == LAST_AGE
+
+    private fun shouldStartPlayDiscardedTurn(): Boolean {
+        val boardsWithPlayDiscardedAbility = table.boards.filter { it.hasSpecial(SpecialAbility.PLAY_DISCARDED) }
+        if (boardsWithPlayDiscardedAbility.isEmpty()) {
+            return false
+        }
+        if (discardedCards.isEmpty()) {
+            // it was wasted for this turn, no discarded card to play
+            boardsWithPlayDiscardedAbility.forEach { it.removeSpecial(SpecialAbility.PLAY_DISCARDED) }
+            return false
+        }
+        return true
+    }
 
     private fun rotateHandsIfRelevant() {
         // we don't rotate hands if some player can play his last card (with the special ability)

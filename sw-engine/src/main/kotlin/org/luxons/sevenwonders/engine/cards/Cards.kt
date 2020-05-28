@@ -20,8 +20,9 @@ internal data class Card(
     val image: String,
     val back: CardBack
 ) {
-    fun computePlayabilityBy(player: Player): CardPlayability = when {
+    fun computePlayabilityBy(player: Player, forceSpecialFree: Boolean = false): CardPlayability = when {
         isAlreadyOnBoard(player.board) -> Playability.incompatibleWithBoard() // cannot play twice the same card
+        forceSpecialFree -> Playability.specialFree()
         isParentOnBoard(player.board) -> Playability.chainable()
         else -> Playability.requirementDependent(requirements.assess(player))
     }
@@ -45,13 +46,13 @@ internal data class Card(
 
 private object Playability {
 
-    internal fun incompatibleWithBoard(): CardPlayability =
+    fun incompatibleWithBoard(): CardPlayability =
         CardPlayability(
             isPlayable = false,
             playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
         )
 
-    internal fun chainable(): CardPlayability =
+    fun chainable(): CardPlayability =
         CardPlayability(
             isPlayable = true,
             isChainable = true,
@@ -60,12 +61,21 @@ private object Playability {
             playabilityLevel = PlayabilityLevel.CHAINABLE
         )
 
-    internal fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability =
+    fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability =
         CardPlayability(
             isPlayable = satisfaction.satisfied,
             isChainable = false,
             minPrice = satisfaction.minPrice,
             cheapestTransactions = satisfaction.cheapestTransactions,
             playabilityLevel = satisfaction.level
+        )
+
+    fun specialFree(): CardPlayability =
+        CardPlayability(
+            isPlayable = true,
+            isChainable = false,
+            minPrice = 0,
+            cheapestTransactions = setOf(noTransactions()),
+            playabilityLevel = PlayabilityLevel.SPECIAL_FREE
         )
 }

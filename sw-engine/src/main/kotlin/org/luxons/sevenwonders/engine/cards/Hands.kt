@@ -25,7 +25,7 @@ internal class Hands(private val hands: List<List<Card>>) {
         return Hands(mutatedHands)
     }
 
-    fun createHand(player: Player): List<HandCard> = hands[player.index].map { c -> c.toHandCard(player) }
+    fun createHand(player: Player): List<HandCard> = hands[player.index].map { c -> c.toHandCard(player, false) }
 
     fun rotate(direction: HandRotationDirection): Hands {
         val newHands = when (direction) {

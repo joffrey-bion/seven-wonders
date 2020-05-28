@@ -18,7 +18,7 @@ internal fun Card.toTableCard(lastMove: Move? = null): TableCard =
         playedDuringLastMove = lastMove != null && this.name == lastMove.card.name
     )
 
-internal fun Card.toHandCard(player: Player): HandCard =
+internal fun Card.toHandCard(player: Player, forceSpecialFree: Boolean): HandCard =
     HandCard(
         name = name,
         color = color,
@@ -27,5 +27,5 @@ internal fun Card.toHandCard(player: Player): HandCard =
         chainChildren = chainChildren,
         image = image,
         back = back,
-        playability = computePlayabilityBy(player)
+        playability = computePlayabilityBy(player, forceSpecialFree)
     )

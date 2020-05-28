@@ -129,7 +129,7 @@ internal fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
 }
 
 internal fun createMove(context: PlayerContext, card: Card, type: MoveType): Move =
-    type.resolve(PlayerMove(type, card.name), card, context)
+    type.resolve(PlayerMove(type, card.name), card, context, emptyList())
 
 internal fun singleBoardPlayer(board: Board): Player = object : Player {
     override val index = 0
