@@ -97,7 +97,7 @@ class Game internal constructor(
 
     private fun determineAction(hand: List<HandCard>, board: Board): Action = when {
         endOfGameReached() -> when {
-            board.hasSpecial(SpecialAbility.COPY_GUILD) -> determineCopyGuildAction(board)
+            board.hasSpecial(SpecialAbility.COPY_GUILD) && board.copiedGuild == null -> determineCopyGuildAction(board)
             else -> Action.WAIT
         }
         hand.size == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_LAST
