@@ -20,8 +20,8 @@ private enum class HandAction(
     val icon: IconName
 ) {
     PLAY("PLAY", MoveType.PLAY, "play"),
-    PLAY_FREE("Play as this age's free card", MoveType.PLAY_FREE, "play"),
-    PLAY_FREE_DISCARDED("Play discarded card", MoveType.PLAY_FREE_DISCARDED, "play"),
+    PLAY_FREE("Play as this age's free card", MoveType.PLAY_FREE, "star"),
+    PLAY_FREE_DISCARDED("Play discarded card", MoveType.PLAY_FREE_DISCARDED, "star"),
     COPY_GUILD("Copy this guild card", MoveType.COPY_GUILD, "duplicate")
 }
 
