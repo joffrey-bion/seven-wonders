@@ -62,7 +62,7 @@ private fun RBuilder.fixedResources(resources: List<CountedResource>) {
     }
 }
 
-private fun RBuilder.alternativeResources(resources: Set<Set<ResourceType>>) {
+private fun RBuilder.alternativeResources(resources: List<Set<ResourceType>>) {
     styledDiv {
         css {
             margin = "auto"

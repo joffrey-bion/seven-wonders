@@ -11,7 +11,6 @@ import org.luxons.sevenwonders.model.resources.ResourceType.PAPYRUS
 import org.luxons.sevenwonders.model.resources.ResourceType.STONE
 import org.luxons.sevenwonders.model.resources.ResourceType.WOOD
 import java.util.EnumSet
-import java.util.HashSet
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -228,12 +227,22 @@ class ProductionTest {
     }
 
     @Test
+    fun asChoices_withDuplicateChoices() {
+        val production = Production()
+        production.addChoice(STONE, WOOD)
+        production.addChoice(STONE, ORE)
+        production.addChoice(STONE, ORE)
+        production.addChoice(CLAY, LOOM, GLASS)
+        assertEquals(production.getAlternativeResources(), production.asChoices())
+    }
+
+    @Test
     fun asChoices_onlyFixed() {
         val production = Production()
         production.addFixedResource(WOOD, 1)
         production.addFixedResource(CLAY, 2)
 
-        val expected = HashSet<Set<ResourceType>>()
+        val expected = mutableListOf<Set<ResourceType>>()
         expected.add(EnumSet.of(WOOD))
         expected.add(EnumSet.of(CLAY))
         expected.add(EnumSet.of(CLAY))
@@ -249,12 +258,32 @@ class ProductionTest {
         production.addFixedResource(WOOD, 1)
         production.addFixedResource(CLAY, 2)
 
-        val expected = HashSet<Set<ResourceType>>()
-        expected.add(EnumSet.of(STONE, ORE))
-        expected.add(EnumSet.of(CLAY, LOOM, GLASS))
+        val expected = mutableListOf<Set<ResourceType>>()
         expected.add(EnumSet.of(WOOD))
         expected.add(EnumSet.of(CLAY))
         expected.add(EnumSet.of(CLAY))
+        expected.add(EnumSet.of(STONE, ORE))
+        expected.add(EnumSet.of(CLAY, LOOM, GLASS))
+
+        assertEquals(expected, production.asChoices())
+    }
+
+    @Test
+    fun asChoices_mixed_withDuplicates() {
+        val production = Production()
+        production.addChoice(STONE, ORE)
+        production.addChoice(CLAY, LOOM, GLASS)
+        production.addChoice(STONE, ORE)
+        production.addFixedResource(WOOD, 1)
+        production.addFixedResource(CLAY, 2)
+
+        val expected = mutableListOf<Set<ResourceType>>()
+        expected.add(EnumSet.of(WOOD))
+        expected.add(EnumSet.of(CLAY))
+        expected.add(EnumSet.of(CLAY))
+        expected.add(EnumSet.of(STONE, ORE))
+        expected.add(EnumSet.of(CLAY, LOOM, GLASS))
+        expected.add(EnumSet.of(STONE, ORE))
 
         assertEquals(expected, production.asChoices())
     }
@@ -269,13 +298,13 @@ class ProductionTest {
     fun equals_trueWhenSameContent() {
         val production1 = Production()
         val production2 = Production()
-        assertTrue(production1 == production2)
+        assertEquals(production1, production2)
         production1.addFixedResource(GLASS, 1)
         production2.addFixedResource(GLASS, 1)
-        assertTrue(production1 == production2)
+        assertEquals(production1, production2)
         production1.addChoice(ORE, WOOD)
         production2.addChoice(ORE, WOOD)
-        assertTrue(production1 == production2)
+        assertEquals(production1, production2)
     }
 
     @Test

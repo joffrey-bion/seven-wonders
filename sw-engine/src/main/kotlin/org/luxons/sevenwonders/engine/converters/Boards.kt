@@ -73,7 +73,7 @@ internal fun InternalWonderStage.toApiWonderStage(isLastBuiltStage: Boolean, las
 internal fun InternalProduction.toApiProduction(): ApiProduction =
     ApiProduction(
         fixedResources = getFixedResources().toCountedResourcesList(),
-        alternativeResources = getAlternativeResources()
+        alternativeResources = getAlternativeResources().sortedBy { it.size }
     )
 
 internal fun InternalRequirements.toApiRequirements(): ApiRequirements =

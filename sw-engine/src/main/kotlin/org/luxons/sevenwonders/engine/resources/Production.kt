@@ -5,11 +5,12 @@ import java.util.EnumSet
 
 data class Production internal constructor(
     private val fixedResources: MutableResources = mutableResourcesOf(),
-    private val alternativeResources: MutableSet<Set<ResourceType>> = mutableSetOf()
+    // cannot be a Set because the same choices can be there multiple times
+    private val alternativeResources: MutableList<Set<ResourceType>> = mutableListOf()
 ) {
     fun getFixedResources(): Resources = fixedResources
 
-    fun getAlternativeResources(): Set<Set<ResourceType>> = alternativeResources
+    fun getAlternativeResources(): List<Set<ResourceType>> = alternativeResources
 
     fun addFixedResource(type: ResourceType, quantity: Int) = fixedResources.add(type, quantity)
 
@@ -25,8 +26,8 @@ data class Production internal constructor(
         alternativeResources.addAll(production.getAlternativeResources())
     }
 
-    internal fun asChoices(): Set<Set<ResourceType>> {
-        val fixedAsChoices = fixedResources.toList().mapTo(HashSet()) { EnumSet.of(it) }
+    internal fun asChoices(): List<Set<ResourceType>> {
+        val fixedAsChoices = fixedResources.toList().map { EnumSet.of(it) }
         return fixedAsChoices + alternativeResources
     }
 
@@ -42,7 +43,7 @@ data class Production internal constructor(
 
     private fun containedInAlternatives(
         resources: MutableResources,
-        alternatives: MutableSet<Set<ResourceType>>
+        alternatives: MutableList<Set<ResourceType>>
     ): Boolean {
         if (resources.isEmpty()) {
             return true

@@ -29,7 +29,7 @@ data class Requirements(
 @Serializable
 data class Production(
     val fixedResources: List<CountedResource>,
-    val alternativeResources: Set<Set<ResourceType>>
+    val alternativeResources: List<Set<ResourceType>>
 )
 
 @Serializable

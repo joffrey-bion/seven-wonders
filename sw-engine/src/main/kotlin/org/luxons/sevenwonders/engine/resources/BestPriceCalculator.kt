@@ -15,7 +15,7 @@ data class TransactionPlan(val price: Int, val possibleTransactions: Set<Resourc
 private class ResourcePool(
     val provider: Provider?,
     private val rules: TradingRules,
-    choices: Set<Set<ResourceType>>
+    choices: List<Set<ResourceType>>
 ) {
     val choices: Set<MutableSet<ResourceType>> = choices.mapTo(HashSet()) { it.toMutableSet() }
 

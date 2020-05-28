@@ -24,14 +24,14 @@ internal class ProductionSerializer : JsonSerializer<Production>, JsonDeserializ
         }
     }
 
-    private fun serializeAsChoice(choices: Set<Set<ResourceType>>, context: JsonSerializationContext): JsonElement {
+    private fun serializeAsChoice(choices: List<Set<ResourceType>>, context: JsonSerializationContext): JsonElement {
         if (choices.isEmpty()) {
             return JsonNull.INSTANCE
         }
         if (choices.size > 1) {
             throw IllegalArgumentException("Cannot serialize a production with more than one choice")
         }
-        val str = choices.flatten().map { it.symbol }.joinToString("/")
+        val str = choices[0].map { it.symbol }.joinToString("/")
         return context.serialize(str)
     }
 
