@@ -2,8 +2,11 @@ package org.luxons.sevenwonders.server.lobby
 
 import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.engine.data.GameDefinition
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import org.luxons.sevenwonders.model.wonders.PreGameWonder
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.State
+import org.luxons.sevenwonders.model.wonders.withRandomSide
 
 class Lobby(
     val id: Long,
@@ -13,7 +16,11 @@ class Lobby(
 ) {
     private val players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
 
-    var settings: CustomizableSettings = CustomizableSettings()
+    val allWonders: List<PreGameWonder> = gameDefinition.allWonders
+
+    private val assignedWonders: MutableList<AssignedWonder> = mutableListOf()
+
+    var settings: Settings = Settings()
 
     var state = State.LOBBY
         private set
@@ -23,6 +30,8 @@ class Lobby(
     }
 
     fun getPlayers(): List<Player> = players
+
+    fun getAssignedWonders(): List<AssignedWonder> = assignedWonders
 
     @Synchronized
     fun addPlayer(player: Player) {
@@ -37,7 +46,14 @@ class Lobby(
         }
         player.join(this)
         players.add(player)
+        assignedWonders.add(pickRandomWonder())
     }
+
+    @Synchronized
+    private fun pickRandomWonder(): AssignedWonder =
+        allWonders.filter { !it.isAssigned() }.random().withRandomSide()
+
+    private fun PreGameWonder.isAssigned() = name in assignedWonders.map { it.name }
 
     private fun hasStarted(): Boolean = state != State.LOBBY
 
@@ -51,7 +67,7 @@ class Lobby(
             throw PlayerUnderflowException(gameDefinition.minPlayers)
         }
         state = State.PLAYING
-        val game = gameDefinition.initGame(id, settings, players.size)
+        val game = gameDefinition.createGame(id, assignedWonders, settings)
         players.forEachIndexed { index, player -> player.join(game, index) }
         return game
     }
@@ -67,8 +83,15 @@ class Lobby(
         players.sortBy { orderedUsernames.indexOf(it.username) }
     }
 
-    private fun find(username: String): Player =
-        players.firstOrNull { it.username == username } ?: throw UnknownPlayerException(username)
+    @Synchronized
+    fun reassignWonders(wonders: List<AssignedWonder>) {
+        require(wonders.size == players.size)
+        wonders.forEach {
+            require(it.name in allWonders.map { w -> w.name })
+        }
+        assignedWonders.clear()
+        assignedWonders.addAll(wonders)
+    }
 
     @Synchronized
     fun isOwner(username: String?): Boolean = owner.username == username
@@ -78,15 +101,21 @@ class Lobby(
 
     @Synchronized
     fun removePlayer(username: String): Player {
-        val player = find(username)
-        players.remove(player)
+        val playerIndex = find(username)
+        if (playerIndex < 0) {
+            throw UnknownPlayerException(username)
+        }
+        assignedWonders.removeAt(playerIndex)
+        val player = players.removeAt(playerIndex)
         player.leave()
 
-        if (player == owner && !players.isEmpty()) {
+        if (player == owner && players.isNotEmpty()) {
             owner = players[0]
         }
         return player
     }
+
+    private fun find(username: String): Int = players.indexOfFirst { it.username == username }
 
     fun setEndOfGame() {
         state = State.FINISHED

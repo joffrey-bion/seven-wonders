@@ -46,7 +46,7 @@ data class HandCard(
 
 @Serializable
 data class PreparedCard(
-    val player: PlayerDTO,
+    val username: String,
     val cardBack: CardBack?
 )
 

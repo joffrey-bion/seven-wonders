@@ -2,8 +2,7 @@ package org.luxons.sevenwonders.server.controllers
 
 import org.junit.Before
 import org.junit.Test
-import org.luxons.sevenwonders.model.CustomizableSettings
-import org.luxons.sevenwonders.model.WonderSidePickMethod.ALL_A
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
@@ -142,9 +141,9 @@ class LobbyControllerTest {
         addPlayer(lobby, "testuser3")
         addPlayer(lobby, "testuser4")
 
-        assertEquals(CustomizableSettings(), lobby.settings)
+        assertEquals(Settings(), lobby.settings)
 
-        val newSettings = CustomizableSettings(12L, 5, ALL_A, 5, 5, 4, 10, 2, HashMap())
+        val newSettings = Settings(12L, 5, 5, 5, 4, 10, 2, HashMap())
         val updateSettingsAction = UpdateSettingsAction(newSettings)
 
         val principal = TestPrincipal("testuser")
@@ -161,7 +160,7 @@ class LobbyControllerTest {
         addPlayer(lobby, "testuser2")
         addPlayer(lobby, "testuser3")
 
-        val updateSettingsAction = UpdateSettingsAction(CustomizableSettings())
+        val updateSettingsAction = UpdateSettingsAction(Settings())
 
         val principal = TestPrincipal("testuser2")
 

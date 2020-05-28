@@ -2,9 +2,8 @@ package org.luxons.sevenwonders.engine.test
 
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.PlayerContext
-import org.luxons.sevenwonders.engine.Settings
 import org.luxons.sevenwonders.model.resources.CountedResource
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
@@ -30,18 +29,16 @@ import org.luxons.sevenwonders.engine.resources.resourcesOf
 import org.luxons.sevenwonders.engine.wonders.Wonder
 import org.luxons.sevenwonders.engine.wonders.WonderStage
 
-private const val SEED: Long = 42
+internal const val SEED: Long = 42
 
-internal fun testCustomizableSettings(initialGold: Int = 0): CustomizableSettings =
-    CustomizableSettings(randomSeedForTests = SEED).copy(initialGold = initialGold)
+internal fun testSettings(initialGold: Int = 0): Settings = Settings(
+    randomSeedForTests = SEED,
+    initialGold = initialGold
+)
 
-internal fun testSettings(nbPlayers: Int = 5, initialGold: Int = 0): Settings =
-    Settings(nbPlayers, testCustomizableSettings(initialGold))
+internal fun testTable(nbPlayers: Int = 5): Table = testTable(nbPlayers, testSettings())
 
-internal fun testTable(nbPlayers: Int = 5): Table = testTable(testSettings(nbPlayers))
-
-internal fun testTable(settings: Settings): Table =
-    Table(testBoards(settings.nbPlayers, settings))
+internal fun testTable(nbPlayers: Int, settings: Settings): Table = Table(testBoards(nbPlayers, settings))
 
 private fun testBoards(count: Int, settings: Settings): List<Board> = List(count) { testBoard(settings) }
 

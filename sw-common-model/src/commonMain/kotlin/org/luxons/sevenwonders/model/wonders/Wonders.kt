@@ -6,6 +6,37 @@ import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.PlayabilityLevel
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.ResourceType
+import kotlin.random.Random
+
+typealias WonderName = String
+
+@Serializable
+data class PreGameWonder(
+    val name: WonderName,
+    val images: Map<WonderSide, String>
+)
+
+@Serializable
+data class AssignedWonder(
+    val name: WonderName,
+    val side: WonderSide,
+    val image: String
+)
+
+@Serializable
+enum class WonderSide {
+    A,
+    B
+}
+
+fun List<PreGameWonder>.deal(nbPlayers: Int, random: Random = Random): List<AssignedWonder> =
+    shuffled(random).take(nbPlayers).map { it.withRandomSide(random) }
+
+fun PreGameWonder.withRandomSide(random: Random = Random): AssignedWonder {
+    val side = WonderSide.values().random(random)
+    val sideImage = images.getValue(side)
+    return AssignedWonder(name, side, sideImage)
+}
 
 @Serializable
 data class ApiWonder(

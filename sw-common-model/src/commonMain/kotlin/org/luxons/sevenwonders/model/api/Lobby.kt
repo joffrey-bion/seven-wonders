@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.model.api
 
 import kotlinx.serialization.Serializable
-import org.luxons.sevenwonders.model.api.actions.Icon
+import org.luxons.sevenwonders.model.wonders.PreGameWonder
 
 const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
 
@@ -15,6 +15,7 @@ data class LobbyDTO(
     val name: String,
     val owner: String,
     val players: List<PlayerDTO>,
+    val allWonders: List<PreGameWonder>,
     val state: State,
     val hasEnoughPlayers: Boolean,
     val maxPlayersReached: Boolean
@@ -43,26 +44,3 @@ data class Actionability(
     val canDo: Boolean,
     val tooltip: String
 )
-
-interface BasicPlayerInfo {
-    val username: String
-    val displayName: String
-    val icon: Icon?
-}
-
-@Serializable
-data class ConnectedPlayer(
-    override val username: String,
-    override val displayName: String,
-    override val icon: Icon?
-) : BasicPlayerInfo
-
-@Serializable
-data class PlayerDTO(
-    override val username: String,
-    override val displayName: String,
-    override val icon: Icon?,
-    val index: Int,
-    val isGameOwner: Boolean,
-    val isReady: Boolean
-) : BasicPlayerInfo

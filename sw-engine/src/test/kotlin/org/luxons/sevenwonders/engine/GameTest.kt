@@ -1,17 +1,16 @@
 package org.luxons.sevenwonders.engine
 
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.PlayedMove
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.engine.data.LAST_AGE
-import org.luxons.sevenwonders.model.MoveType
+import org.luxons.sevenwonders.engine.test.SEED
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.noTransactions
-import org.luxons.sevenwonders.engine.test.testCustomizableSettings
+import org.luxons.sevenwonders.engine.test.testSettings
+import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.wonders.deal
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -46,8 +45,10 @@ class GameTest {
         }
     }
 
-    private fun createGame(nbPlayers: Int): Game =
-        GameDefinition.load().initGame(0, testCustomizableSettings(), nbPlayers)
+    private fun createGame(nbPlayers: Int): Game = GameDefinition.load().let {
+        val wonders = it.allWonders.deal(nbPlayers, random = Random(SEED))
+        it.createGame(0, wonders, testSettings())
+    }
 
     private fun playAge(nbPlayers: Int, game: Game, age: Int) {
         do {

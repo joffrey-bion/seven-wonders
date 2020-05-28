@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.engine.boards
 
 import org.luxons.sevenwonders.engine.Player
-import org.luxons.sevenwonders.engine.Settings
 import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.resources.Production
@@ -9,6 +8,7 @@ import org.luxons.sevenwonders.engine.resources.TradingRules
 import org.luxons.sevenwonders.engine.resources.mutableResourcesOf
 import org.luxons.sevenwonders.engine.wonders.Wonder
 import org.luxons.sevenwonders.model.Age
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.score.PlayerScore
 import org.luxons.sevenwonders.model.score.ScoreCategory

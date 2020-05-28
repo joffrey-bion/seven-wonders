@@ -5,7 +5,6 @@ import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
-import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
@@ -29,8 +28,7 @@ class GameController(
     /**
      * Notifies the game that the player is ready to receive his hand.
      *
-     * @param principal
-     * the connected user's information
+     * @param principal the connected user's information
      */
     @MessageMapping("/game/sayReady")
     fun ready(principal: Principal) {
@@ -54,17 +52,15 @@ class GameController(
     /**
      * Prepares the player's next move. When all players have prepared their moves, all moves are executed.
      *
-     * @param action
-     * the action to prepare the move
-     * @param principal
-     * the connected user's information
+     * @param action the action to prepare the move
+     * @param principal the connected user's information
      */
     @MessageMapping("/game/prepareMove")
     fun prepareMove(action: PrepareMoveAction, principal: Principal) {
         val player = principal.player
         val game = player.game
         val preparedCardBack = game.prepareMove(player.index, action.move)
-        val preparedCard = PreparedCard(player.toDTO(), preparedCardBack)
+        val preparedCard = PreparedCard(player.username, preparedCardBack)
         logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
         sendPreparedCard(game.id, preparedCard)
 
@@ -85,7 +81,7 @@ class GameController(
         val player = principal.player
         val game = player.game
         game.unprepareMove(player.index)
-        val preparedCard = PreparedCard(player.toDTO(), null)
+        val preparedCard = PreparedCard(player.username, null)
         logger.info("Game {}: player {} unprepared his move", game.id, principal.name)
         sendPreparedCard(game.id, preparedCard)
     }

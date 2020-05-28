@@ -1,7 +1,8 @@
 package org.luxons.sevenwonders.model.api.actions
 
 import kotlinx.serialization.Serializable
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
 
 /**
@@ -58,8 +59,8 @@ class PrepareMoveAction(
 )
 
 /**
- * The action to update the order of the players around the table. Can only be called in the lobby by the owner of the
- * game.
+ * The action to update the order of the players around the table.
+ * Can only be called in the lobby by the owner of the game.
  */
 @Serializable
 class ReorderPlayersAction(
@@ -70,6 +71,18 @@ class ReorderPlayersAction(
 )
 
 /**
+ * The action to update the wonders assigned to each player.
+ * Can only be called in the lobby by the owner of the game.
+ */
+@Serializable
+class ReassignWondersAction(
+    /**
+     * The list of wonders assigned to each player, in the players' order.
+     */
+    val assignedWonders: List<AssignedWonder>
+)
+
+/**
  * The action to update the settings of the game. Can only be called in the lobby by the owner of the game.
  */
 @Serializable
@@ -77,7 +90,7 @@ class UpdateSettingsAction(
     /**
      * The new values for the settings.
      */
-    val settings: CustomizableSettings
+    val settings: Settings
 )
 
 /**

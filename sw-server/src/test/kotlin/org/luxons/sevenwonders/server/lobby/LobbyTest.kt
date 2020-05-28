@@ -9,7 +9,7 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.data.GameDefinition
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.server.lobby.Lobby.GameAlreadyStartedException
 import org.luxons.sevenwonders.server.lobby.Lobby.PlayerListMismatchException
@@ -240,7 +240,7 @@ class LobbyTest {
 
     @Test
     fun setSettings() {
-        val settings = CustomizableSettings()
+        val settings = Settings()
         lobby.settings = settings
         assertSame(settings, lobby.settings)
     }

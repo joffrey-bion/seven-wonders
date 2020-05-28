@@ -4,7 +4,6 @@ import com.github.salomonbrys.kotson.typeToken
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.luxons.sevenwonders.engine.Game
-import org.luxons.sevenwonders.engine.Settings
 import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.engine.data.definitions.DecksDefinition
 import org.luxons.sevenwonders.engine.data.definitions.WonderDefinition
@@ -23,7 +22,9 @@ import org.luxons.sevenwonders.engine.effects.ScienceProgress
 import org.luxons.sevenwonders.engine.resources.Production
 import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.model.Age
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import org.luxons.sevenwonders.model.Settings
+import org.luxons.sevenwonders.model.wonders.PreGameWonder
 import org.luxons.sevenwonders.model.resources.ResourceType
 
 internal const val LAST_AGE: Age = 3
@@ -35,23 +36,30 @@ internal data class GlobalRules(
 
 class GameDefinition internal constructor(
     rules: GlobalRules,
-    private val wonders: List<WonderDefinition>,
+    wonderDefinitions: List<WonderDefinition>,
     private val decksDefinition: DecksDefinition
 ) {
     val minPlayers: Int = rules.minPlayers
     val maxPlayers: Int = rules.maxPlayers
 
-    fun initGame(id: Long, customSettings: CustomizableSettings, nbPlayers: Int): Game {
-        val settings = Settings(nbPlayers, customSettings)
-        val boards = assignBoards(settings, nbPlayers)
-        val decks = decksDefinition.prepareDecks(settings.nbPlayers, settings.random)
+    val allWonders: List<PreGameWonder> = wonderDefinitions.map { w ->
+        PreGameWonder(
+            w.name,
+            w.sides.mapValues { (_, def) -> def.image })
+    }
+
+    private val wondersByName = wonderDefinitions.associateBy { it.name }
+
+    fun createGame(id: Long, wonders: Collection<AssignedWonder>, settings: Settings): Game {
+        val nbPlayers = wonders.size
+        val boards = wonders.mapIndexed { index, wonder -> wonder.createBoard(index, settings) }
+        val decks = decksDefinition.prepareDecks(nbPlayers, settings.random)
         return Game(id, settings, boards, decks)
     }
 
-    private fun assignBoards(settings: Settings, nbPlayers: Int): List<Board> {
-        return wonders.shuffled(settings.random)
-            .take(nbPlayers)
-            .mapIndexed { i, wDef -> Board(wDef.create(settings.pickWonderSide()), i, settings) }
+    private fun AssignedWonder.createBoard(playerIndex: Int, settings: Settings): Board {
+        val wonder = wondersByName[name] ?: error("Unknown wonder '$name'")
+        return Board(wonder.create(side), playerIndex, settings)
     }
 
     companion object {

@@ -20,7 +20,7 @@ class CardTest {
     fun playCardCostingMoney() {
         val initialGold = 3
         val price = 1
-        val settings = testSettings(3, initialGold)
+        val settings = testSettings(initialGold)
 
         val boards = listOf(
             Board(Wonder("TestWonder", ResourceType.WOOD, emptyList(), ""), 0, settings),

@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.engine.moves
 
 import org.luxons.sevenwonders.engine.PlayerContext
-import org.luxons.sevenwonders.engine.Settings
 import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.Color

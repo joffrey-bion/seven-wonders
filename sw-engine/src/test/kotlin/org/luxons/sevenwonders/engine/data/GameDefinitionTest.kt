@@ -1,7 +1,8 @@
 package org.luxons.sevenwonders.engine.data
 
 import org.junit.Test
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.Settings
+import org.luxons.sevenwonders.model.wonders.deal
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -14,7 +15,8 @@ class GameDefinitionTest {
         assertEquals(3, gameDefinition.minPlayers)
         assertEquals(7, gameDefinition.maxPlayers)
 
-        val game = gameDefinition.initGame(0, CustomizableSettings(), 7)
+        val wonders = gameDefinition.allWonders.deal(7)
+        val game = gameDefinition.createGame(0, wonders, Settings())
         assertNotNull(game)
     }
 }

@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.engine.moves
 
 import org.junit.Test
 import org.luxons.sevenwonders.engine.PlayerContext
-import org.luxons.sevenwonders.engine.Settings
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.cards.Card
@@ -11,6 +10,7 @@ import org.luxons.sevenwonders.engine.test.sampleCards
 import org.luxons.sevenwonders.engine.test.testCard
 import org.luxons.sevenwonders.engine.test.testSettings
 import org.luxons.sevenwonders.engine.test.testTable
+import org.luxons.sevenwonders.model.Settings
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.fail
@@ -31,8 +31,8 @@ class BuildWonderMoveTest {
 
     @Test
     fun init_failsWhenWonderIsCompletelyBuilt() {
-        val settings = testSettings(3)
-        val table = testTable(settings)
+        val settings = testSettings()
+        val table = testTable(3, settings)
         val hand = sampleCards(7)
 
         fillPlayerWonderLevels(settings, table, hand)
@@ -64,8 +64,8 @@ class BuildWonderMoveTest {
 
     @Test
     fun place_increasesWonderLevel() {
-        val settings = testSettings(3)
-        val table = testTable(settings)
+        val settings = testSettings()
+        val table = testTable(3, settings)
         val hand = sampleCards(7)
         val cardToUse = hand[0]
         val playerContext = PlayerContext(0, table, hand)

@@ -71,7 +71,7 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     is PreparedMoveEvent -> gameState?.copy(currentPreparedMove = action.move)
     is RequestUnprepareMove -> gameState?.copy(currentPreparedMove = null)
     is PreparedCardEvent -> gameState?.copy(
-        preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.player.username to action.card.cardBack)
+        preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.username to action.card.cardBack)
     )
     is PlayerReadyEvent -> gameState?.copy(players = gameState.players.map { p ->
         if (p.username == action.username) p.copy(isReady = true) else p

@@ -14,9 +14,10 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
 import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
 import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
@@ -98,7 +99,11 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         stompSession.convertAndSend("/app/lobby/reorderPlayers", ReorderPlayersAction(players), ReorderPlayersAction.serializer())
     }
 
-    suspend fun updateSettings(settings: CustomizableSettings) {
+    suspend fun reassignWonders(wonders: List<AssignedWonder>) {
+        stompSession.convertAndSend("/app/lobby/reassignWonders", ReassignWondersAction(wonders), ReassignWondersAction.serializer())
+    }
+
+    suspend fun updateSettings(settings: Settings) {
         stompSession.convertAndSend("/app/lobby/updateSettings", UpdateSettingsAction(settings), UpdateSettingsAction.serializer())
     }
 

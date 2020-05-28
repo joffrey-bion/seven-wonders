@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.CustomizableSettings
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
 import redux.RAction
 
@@ -14,7 +14,7 @@ data class RequestAddBot(val botDisplayName: String) : RAction
 
 data class RequestReorderPlayers(val orderedPlayers: List<String>) : RAction
 
-data class RequestUpdateSettings(val settings: CustomizableSettings) : RAction
+data class RequestUpdateSettings(val settings: Settings) : RAction
 
 class RequestStartGame : RAction
 

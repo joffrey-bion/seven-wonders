@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.bot.SevenWondersBot
 import org.luxons.sevenwonders.model.api.actions.AddBotAction
+import org.luxons.sevenwonders.model.api.actions.ReassignWondersAction
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
@@ -66,6 +67,21 @@ class LobbyController(
         lobby.reorderPlayers(action.orderedPlayers)
 
         logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
+        sendLobbyUpdateToPlayers(lobby)
+    }
+
+    /**
+     * Reassigns the wonders in the current lobby. This can only be done by the lobby's owner.
+     *
+     * @param action the action to reassign the wonders
+     * @param principal the connected user's information
+     */
+    @MessageMapping("/lobby/reassignWonders")
+    fun reassignWonders(@Validated action: ReassignWondersAction, principal: Principal) {
+        val lobby = principal.player.ownedLobby
+        lobby.reassignWonders(action.assignedWonders)
+
+        logger.info("Reassigned wonders in game '{}': {}", lobby.name, action.assignedWonders)
         sendLobbyUpdateToPlayers(lobby)
     }
 
