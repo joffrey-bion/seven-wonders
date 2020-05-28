@@ -63,7 +63,7 @@ enum class PlayabilityLevel(val message: String) {
     REQUIRES_HELP("requires buying resources"),
     MISSING_REQUIRED_GOLD("not enough gold"),
     MISSING_GOLD_FOR_RES("not enough gold to buy resources"),
-    UNAVAILABLE_RESOURCES("neighbours don't have the missing resources"),
+    UNAVAILABLE_RESOURCES("missing resources that even neighbours don't have"),
     INCOMPATIBLE_WITH_BOARD("card already on the board")
 }
 
