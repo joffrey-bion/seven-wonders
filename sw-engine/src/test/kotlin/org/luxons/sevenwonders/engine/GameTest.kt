@@ -77,7 +77,7 @@ class GameTest {
 
     private fun PlayerTurnInfo.firstAvailableMove(): MoveExpectation? = when (action) {
         Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> createPlayCardMove(this)
-        Action.PLAY_FREE_DISCARDED -> createPlayFreeDiscardedMove(this)
+        Action.PLAY_FREE_DISCARDED -> createPlayFreeDiscardedCardMove(this)
         Action.PICK_NEIGHBOR_GUILD -> createPickGuildMove(this)
         Action.WAIT, Action.SAY_READY -> null
         Action.WATCH_SCORE -> fail("should not have WATCH_SCORE action before end of game")
@@ -97,7 +97,7 @@ class GameTest {
         }
     }
 
-    private fun createPlayFreeDiscardedMove(turn: PlayerTurnInfo): MoveExpectation {
+    private fun createPlayFreeDiscardedCardMove(turn: PlayerTurnInfo): MoveExpectation {
         val card = turn.discardedCards?.random() ?: error("No discarded card to play")
         return MoveExpectation(
             turn.playerIndex,

@@ -15,10 +15,21 @@ enum class Action(val message: String) {
     PLAY("Pick the card you want to play or discard."),
     PLAY_2("Pick the first card you want to play or discard. Note that you have the ability to play these 2 last cards. You will choose how to play the last one during your next turn."),
     PLAY_LAST("You have the special ability to play your last card. Choose how you want to play it."),
-    PLAY_FREE_DISCARDED("Pick a card from the discarded deck, you can play it for free."),
+    PLAY_FREE_DISCARDED("Pick a card from the discarded deck, you can play it for free (but you cannot discard for 3 " +
+            "gold coins or upgrade your wonder with it."),
     PICK_NEIGHBOR_GUILD("Choose a Guild card (purple) that you want to copy from one of your neighbours."),
     WAIT("Please wait for other players to perform extra actions."),
-    WATCH_SCORE("The game is over! Look at the scoreboard to see the final ranking!")
+    WATCH_SCORE("The game is over! Look at the scoreboard to see the final ranking!");
+
+    fun allowsBuildingWonder(): Boolean = when (this) {
+        PLAY, PLAY_2, PLAY_LAST -> true
+        else -> false
+    }
+
+    fun allowsDiscarding(): Boolean = when (this) {
+        PLAY, PLAY_2, PLAY_LAST -> true
+        else -> false
+    }
 }
 
 @Serializable

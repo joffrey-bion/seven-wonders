@@ -52,6 +52,8 @@ private object Buildability {
 
     fun alreadyBuilt() = WonderBuildability(
         isBuildable = false,
+        minPrice = Int.MAX_VALUE,
+        cheapestTransactions = emptySet(),
         playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
     )
 

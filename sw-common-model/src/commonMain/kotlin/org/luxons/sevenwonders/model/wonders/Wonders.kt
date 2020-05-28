@@ -28,8 +28,8 @@ data class ApiWonderStage(
 @Serializable
 data class WonderBuildability(
     val isBuildable: Boolean,
-    val minPrice: Int = Int.MAX_VALUE,
-    val cheapestTransactions: Set<ResourceTransactions> = emptySet(),
+    val minPrice: Int,
+    val cheapestTransactions: Set<ResourceTransactions>,
     val playabilityLevel: PlayabilityLevel
 ) {
     val isFree: Boolean = minPrice == 0

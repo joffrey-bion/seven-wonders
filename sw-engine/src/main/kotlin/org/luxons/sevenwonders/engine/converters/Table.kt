@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.model.TableState
 
 internal fun Table.toTableState(): TableState = TableState(
-    boards = boards.mapIndexed { i, b -> b.toApiBoard(SimplePlayer(i, this), lastPlayedMoves.getOrNull(i)) },
+    boards = boards.mapIndexed { i, b -> b.toApiBoard(SimplePlayer(i, this), lastPlayedMoves.getOrNull(i), currentAge) },
     currentAge = currentAge,
     handRotationDirection = handRotationDirection,
     lastPlayedMoves = lastPlayedMoves.map { it.toPlayedMove() }

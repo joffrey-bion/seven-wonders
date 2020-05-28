@@ -4,137 +4,155 @@ import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.MoveType
-import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
-import react.RBuilder
-import react.RElementBuilder
+import react.*
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
 import kotlin.math.absoluteValue
 
-fun RBuilder.handComponent(
-    cards: List<HandCard>,
-    wonderBuildability: WonderBuildability,
-    preparedMove: PlayerMove?,
-    prepareMove: (PlayerMove) -> Unit
+private enum class HandAction(
+    val buttonTitle: String,
+    val moveType: MoveType,
+    val icon: IconName
 ) {
-    styledDiv {
-        css {
-            handStyle()
-        }
-        cards.filter { it.name != preparedMove?.cardName }.forEachIndexed { index, c ->
-            handCard(
-                card = c,
-                wonderBuildability = wonderBuildability,
-                prepareMove = prepareMove
-            ) {
-                attrs {
-                    key = index.toString()
+    PLAY("PLAY", MoveType.PLAY, "play"),
+    PLAY_FREE("Play as this age's free card", MoveType.PLAY_FREE, "play"),
+    PLAY_FREE_DISCARDED("Play discarded card", MoveType.PLAY_FREE_DISCARDED, "play"),
+    COPY_GUILD("Copy this guild card", MoveType.COPY_GUILD, "duplicate")
+}
+
+interface HandProps : RProps {
+    var turnInfo: PlayerTurnInfo
+    var preparedMove: PlayerMove?
+    var prepareMove: (PlayerMove) -> Unit
+}
+
+class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
+
+    override fun RBuilder.render() {
+        val hand = props.turnInfo.cardsToPlay() ?: return
+        styledDiv {
+            css {
+                handStyle()
+            }
+            hand.filter { it.name != props.preparedMove?.cardName }.forEachIndexed { index, c ->
+                handCard(card = c) {
+                    attrs {
+                        key = index.toString()
+                    }
                 }
             }
         }
     }
-}
 
-private fun RBuilder.handCard(
-    card: HandCard,
-    wonderBuildability: WonderBuildability,
-    prepareMove: (PlayerMove) -> Unit,
-    block: StyledDOMBuilder<DIV>.() -> Unit
-) {
-    styledDiv {
-        css {
-            handCardStyle()
-        }
-        block()
-        cardImage(card) {
+    private fun PlayerTurnInfo.cardsToPlay(): List<HandCard>? = when (action) {
+        Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> hand
+        Action.PLAY_FREE_DISCARDED -> discardedCards
+        Action.PICK_NEIGHBOR_GUILD -> neighbourGuildCards
+        Action.WAIT, Action.WATCH_SCORE, Action.SAY_READY -> null
+    }
+
+    private fun RBuilder.handCard(
+        card: HandCard,
+        block: StyledDOMBuilder<DIV>.() -> Unit
+    ) {
+        styledDiv {
             css {
-                handCardImgStyle(card.playability.isPlayable)
+                handCardStyle()
+            }
+            block()
+            cardImage(card) {
+                css {
+                    handCardImgStyle(card.playability.isPlayable)
+                }
+            }
+            actionButtons(card)
+        }
+    }
+
+    private fun RBuilder.actionButtons(card: HandCard) {
+        styledDiv {
+            css {
+                justifyContent = JustifyContent.center
+                alignItems = Align.flexEnd
+                display = Display.none
+                gridRow = GridRow("1")
+                gridColumn = GridColumn("1")
+
+                ancestorHover(".hand-card") {
+                    display = Display.flex
+                }
+            }
+            bpButtonGroup {
+                val action = props.turnInfo.action
+                when (action) {
+                    Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> {
+                        playCardButton(card, HandAction.PLAY)
+                        if (props.turnInfo.getOwnBoard().canPlayAnyCardForFree) {
+                            playCardButton(card.copy(playability = CardPlayability.SPECIAL_FREE), HandAction.PLAY_FREE)
+                        }
+                    }
+                    Action.PLAY_FREE_DISCARDED -> playCardButton(card, HandAction.PLAY_FREE_DISCARDED)
+                    Action.PICK_NEIGHBOR_GUILD -> playCardButton(card, HandAction.COPY_GUILD)
+                    else -> error("unsupported action in hand card: $action")
+                }
+
+                if (action.allowsBuildingWonder()) {
+                    upgradeWonderButton(card)
+                }
+                if (action.allowsDiscarding()) {
+                    discardButton(card)
+                }
             }
         }
-        actionButtons(card, wonderBuildability, prepareMove)
     }
-}
 
-private fun RBuilder.actionButtons(card: HandCard, wonderBuildability: WonderBuildability, prepareMove: (PlayerMove) -> Unit) {
-    styledDiv {
-        css {
-            alignItems = Align.flexEnd
-            display = Display.none
-            gridRow = GridRow("1")
-            gridColumn = GridColumn("1")
-
-            ancestorHover(".hand-card") {
-                display = Display.flex
+    private fun RElementBuilder<IButtonGroupProps>.playCardButton(card: HandCard, handAction: HandAction) {
+        bpButton(title = "${handAction.buttonTitle} (${cardPlayabilityInfo(card.playability)})",
+            large = true,
+            intent = Intent.SUCCESS,
+            disabled = !card.playability.isPlayable,
+            onClick = {
+                val transactions = card.playability.cheapestTransactions.first()
+                props.prepareMove(PlayerMove(handAction.moveType, card.name, transactions))
+            }) {
+            bpIcon(handAction.icon)
+            if (card.playability.isPlayable && !card.playability.isFree) {
+                priceInfo(card.playability.minPrice)
             }
         }
-        bpButtonGroup {
-            playCardButton(card, prepareMove)
-            upgradeWonderButton(wonderBuildability, prepareMove, card)
-            discardButton(prepareMove, card)
+    }
+
+    private fun RElementBuilder<IButtonGroupProps>.upgradeWonderButton(card: HandCard) {
+        val wonderBuildability = props.turnInfo.wonderBuildability
+        bpButton(title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
+            large = true,
+            intent = Intent.PRIMARY,
+            disabled = !wonderBuildability.isBuildable,
+            onClick = {
+                val transactions = wonderBuildability.cheapestTransactions.first()
+                props.prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions))
+            }) {
+            bpIcon("key-shift")
+            if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
+                priceInfo(wonderBuildability.minPrice)
+            }
         }
     }
-}
 
-private fun RElementBuilder<IButtonGroupProps>.playCardButton(
-    card: HandCard,
-    prepareMove: (PlayerMove) -> Unit
-) {
-    bpButton(
-        title = "PLAY (${cardPlayabilityInfo(card.playability)})",
-        large = true,
-        intent = Intent.SUCCESS,
-        disabled = !card.playability.isPlayable,
-        onClick = {
-            val transactions = card.playability.cheapestTransactions.firstOrNull() ?: noTransactions()
-            prepareMove(PlayerMove(MoveType.PLAY, card.name, transactions))
-        }
-    ) {
-        bpIcon("play")
-        if (card.playability.isPlayable && !card.playability.isFree) {
-            priceInfo(card.playability.minPrice)
-        }
+    private fun RElementBuilder<IButtonGroupProps>.discardButton(card: HandCard) {
+        bpButton(
+            title = "DISCARD (+3 coins)", // TODO remove hardcoded value
+            large = true,
+            intent = Intent.DANGER,
+            icon = "cross",
+            onClick = { props.prepareMove(PlayerMove(MoveType.DISCARD, card.name)) }
+        )
     }
-}
-
-private fun RElementBuilder<IButtonGroupProps>.upgradeWonderButton(
-    wonderBuildability: WonderBuildability,
-    prepareMove: (PlayerMove) -> Unit,
-    card: HandCard
-) {
-    bpButton(
-        title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
-        large = true,
-        intent = Intent.PRIMARY,
-        disabled = !wonderBuildability.isBuildable,
-        onClick = {
-            val transactions = wonderBuildability.cheapestTransactions.firstOrNull() ?: noTransactions()
-            prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions))
-        }
-    ) {
-        bpIcon("key-shift")
-        if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
-            priceInfo(wonderBuildability.minPrice)
-        }
-    }
-}
-
-private fun RElementBuilder<IButtonGroupProps>.discardButton(
-    prepareMove: (PlayerMove) -> Unit,
-    card: HandCard
-) {
-    bpButton(
-        title = "DISCARD (+3 coins)", // TODO remove hardcoded value
-        large = true,
-        intent = Intent.DANGER,
-        icon = "cross",
-        onClick = { prepareMove(PlayerMove(MoveType.DISCARD, card.name)) }
-    )
 }
 
 private fun cardPlayabilityInfo(playability: CardPlayability) = when (playability.isPlayable) {
@@ -222,5 +240,19 @@ private fun CSSBuilder.handCardImgStyle(isPlayable: Boolean) {
 
     if (!isPlayable) {
         filter = "grayscale(50%) contrast(50%)"
+    }
+}
+
+fun RBuilder.handCards(
+    turnInfo: PlayerTurnInfo,
+    preparedMove: PlayerMove?,
+    prepareMove: (PlayerMove) -> Unit
+) {
+    child(HandComponent::class) {
+        attrs {
+            this.turnInfo = turnInfo
+            this.preparedMove = preparedMove
+            this.prepareMove = prepareMove
+        }
     }
 }

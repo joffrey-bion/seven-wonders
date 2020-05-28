@@ -59,7 +59,7 @@ class SevenWondersBot(
     private suspend fun SevenWondersSession.playTurn(turn: PlayerTurnInfo): Boolean {
         when (turn.action) {
             Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> prepareMove(createPlayCardMove(turn))
-            Action.PLAY_FREE_DISCARDED -> prepareMove(createPlayFreeDiscardedMove(turn))
+            Action.PLAY_FREE_DISCARDED -> prepareMove(createPlayFreeDiscardedCardMove(turn))
             Action.PICK_NEIGHBOR_GUILD -> prepareMove(createPickGuildMove(turn))
             Action.SAY_READY -> sayReady()
             Action.WAIT -> Unit
@@ -85,8 +85,8 @@ private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
     }
 }
 
-private fun createPlayFreeDiscardedMove(turn: PlayerTurnInfo): PlayerMove {
-    val card = turn.discardedCards?.random() ?: error("No discarded card to play")
+private fun createPlayFreeDiscardedCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
+    val card = turnInfo.discardedCards?.random() ?: error("No discarded card to play")
     return PlayerMove(MoveType.PLAY_FREE_DISCARDED, card.name)
 }
 

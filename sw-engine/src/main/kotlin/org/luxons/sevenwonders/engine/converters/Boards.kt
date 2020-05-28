@@ -5,6 +5,7 @@ import org.luxons.sevenwonders.engine.boards.ScienceType
 import org.luxons.sevenwonders.engine.effects.RawPointsIncrease
 import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.resources.Resources
+import org.luxons.sevenwonders.model.Age
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.cards.TableCard
@@ -24,7 +25,7 @@ import org.luxons.sevenwonders.model.boards.Science as ApiScience
 import org.luxons.sevenwonders.model.wonders.ApiWonder as ApiWonder
 import org.luxons.sevenwonders.model.wonders.ApiWonderStage as ApiWonderStage
 
-internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): ApiBoard =
+internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?, currentAge: Age): ApiBoard =
     ApiBoard(
         playerIndex = playerIndex,
         wonder = wonder.toApiWonder(player, lastMove),
@@ -37,7 +38,8 @@ internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?): ApiBoard
         bluePoints = getPlayedCards()
             .filter { it.color == Color.BLUE }
             .flatMap { it.effects.filterIsInstance<RawPointsIncrease>() }
-            .sumBy { it.points }
+            .sumBy { it.points },
+        canPlayAnyCardForFree = canPlayFreeCard(currentAge)
     )
 
 internal fun List<TableCard>.toColumns(): List<List<TableCard>> {

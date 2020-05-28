@@ -68,15 +68,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 topPlayerBoardsSummaries(topBoards)
             }
             handRotationIndicator(turnInfo.table.handRotationDirection)
-            val hand = turnInfo.hand
-            if (hand != null) {
-                handComponent(
-                    cards = hand,
-                    wonderBuildability = turnInfo.wonderBuildability,
-                    preparedMove = props.preparedMove,
-                    prepareMove = props.prepareMove
-                )
-            }
+            handCards(turnInfo, props.preparedMove, props.prepareMove)
             val card = props.preparedCard
             val move = props.preparedMove
             if (card != null && move != null) {
