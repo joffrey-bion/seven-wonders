@@ -33,6 +33,7 @@ fun RBuilder.boardSummary(
             alignItems = boardSummarySide.alignment
             padding(all = 0.5.rem)
             backgroundColor = Color.paleGoldenrod.withAlpha(0.5)
+            zIndex = 50 // above table cards
         }
         val tokenSize = 2.rem
 

@@ -87,6 +87,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 classes.add("bp3-dark")
                 display = Display.inlineBlock // so that the cards below don't overlap, but the width is not full
                 margin(all = 0.4.rem)
+                maxWidth = 25.pct // leave space for 4 board summaries when there are 7 players
             }
             bpCard(elevation = Elevation.TWO) {
                 attrs {
@@ -160,6 +161,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 bottom = 6.rem
                 left = 50.pct
                 transform { translate(tx = (-50).pct) }
+                zIndex = 2 // go above the wonder (1) and wonder-upgrade cards (0)
             }
             bpButtonGroup {
                 bpButton(
