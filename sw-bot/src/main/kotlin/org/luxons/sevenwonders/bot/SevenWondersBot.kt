@@ -1,9 +1,8 @@
 package org.luxons.sevenwonders.bot
 
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withTimeout
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
@@ -25,7 +24,7 @@ data class BotConfig(
     val globalTimeout: Duration = 10.hours
 )
 
-@OptIn(ExperimentalTime::class)
+@OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
 class SevenWondersBot(
     private val displayName: String,
     private val botConfig: BotConfig = BotConfig()
@@ -36,36 +35,30 @@ class SevenWondersBot(
         val session = client.connect(serverUrl)
         session.chooseName(displayName, Icon("desktop"))
         session.joinGame(gameId)
-        session.awaitGameStart(gameId)
+        val firstTurn = session.awaitGameStart(gameId)
 
-        coroutineScope {
-            launch {
-                session.watchTurns().first { turn ->
-                    botDelay()
-                    val keepPlaying = session.playTurn(turn)
-                    !keepPlaying
-                }
+        session.watchTurns()
+            .onStart { emit(firstTurn) }
+            .takeWhile { it.action != Action.WATCH_SCORE }
+            .onCompletion { session.disconnect() }
+            .collect { turn ->
+                botDelay()
+                session.playTurn(turn)
             }
-            botDelay()
-            session.sayReady() // triggers the first turn
-        }
-        session.disconnect()
     }
 
     private suspend fun botDelay() {
         delay(Random.nextLong(botConfig.minActionDelayMillis, botConfig.maxActionDelayMillis))
     }
 
-    private suspend fun SevenWondersSession.playTurn(turn: PlayerTurnInfo): Boolean {
+    private suspend fun SevenWondersSession.playTurn(turn: PlayerTurnInfo) {
         when (turn.action) {
             Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> prepareMove(createPlayCardMove(turn))
             Action.PLAY_FREE_DISCARDED -> prepareMove(createPlayFreeDiscardedCardMove(turn))
             Action.PICK_NEIGHBOR_GUILD -> prepareMove(createPickGuildMove(turn))
             Action.SAY_READY -> sayReady()
-            Action.WAIT -> Unit
-            Action.WATCH_SCORE -> return false
+            Action.WAIT, Action.WATCH_SCORE -> Unit
         }
-        return true
     }
 }
 
