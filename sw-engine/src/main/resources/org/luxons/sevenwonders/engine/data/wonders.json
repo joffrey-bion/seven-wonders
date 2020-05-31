@@ -1,6 +1,6 @@
 [
   {
-    "name": "alexandria",
+    "name": "Alexandria",
     "sides": {
       "A": {
         "initialResource": "G",
@@ -65,7 +65,7 @@
     }
   },
   {
-    "name": "babylon",
+    "name": "Babylon",
     "sides": {
       "A": {
         "initialResource": "C",
@@ -130,7 +130,7 @@
     }
   },
   {
-    "name": "ephesos",
+    "name": "Ephesos",
     "sides": {
       "A": {
         "initialResource": "P",
@@ -198,7 +198,7 @@
     }
   },
   {
-    "name": "gizah",
+    "name": "Gizah",
     "sides": {
       "A": {
         "initialResource": "S",
@@ -271,7 +271,7 @@
     }
   },
   {
-    "name": "halikarnassus",
+    "name": "Halikarnassus",
     "sides": {
       "A": {
         "initialResource": "L",
@@ -338,7 +338,7 @@
     }
   },
   {
-    "name": "olympia",
+    "name": "Olympia",
     "sides": {
       "A": {
         "initialResource": "W",
@@ -410,7 +410,7 @@
     }
   },
   {
-    "name": "rhodos",
+    "name": "Rhodos",
     "sides": {
       "A": {
         "initialResource": "O",
