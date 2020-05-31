@@ -4,7 +4,6 @@ import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
-import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.controllers.GameBrowserController.UserAlreadyInGameException
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerNotFoundException
@@ -52,7 +51,7 @@ class GameBrowserControllerTest {
         assertFalse(games.isEmpty())
         val lobby = games.iterator().next()
         assertEquals(lobby, createdLobby)
-        assertEquals(player.toDTO(), lobby.players[0])
+        assertEquals(player.username, lobby.players[0].username)
     }
 
     @Test
@@ -90,7 +89,7 @@ class GameBrowserControllerTest {
         val createGameAction = CreateGameAction("Test Game")
 
         val createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal)
-        assertEquals(owner.toDTO(), createdLobby.players[0])
+        assertEquals(owner.username, createdLobby.players[0].username)
 
         val joiner = playerRepository.createOrUpdate("testjoiner", "Test User Joiner")
         val joinerPrincipal = TestPrincipal("testjoiner")
@@ -98,8 +97,8 @@ class GameBrowserControllerTest {
 
         val joinedLobby = gameBrowserController.joinGame(joinGameAction, joinerPrincipal)
 
-        assertEquals(owner.toDTO(), joinedLobby.players[0])
-        assertEquals(joiner.toDTO(), joinedLobby.players[1])
+        assertEquals(owner.username, joinedLobby.players[0].username)
+        assertEquals(joiner.username, joinedLobby.players[1].username)
     }
 
     @Test

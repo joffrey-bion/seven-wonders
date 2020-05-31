@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.model.cards
 
 import kotlinx.serialization.Serializable
-import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.noTransactions
