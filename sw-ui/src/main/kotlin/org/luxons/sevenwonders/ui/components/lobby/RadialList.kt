@@ -1,33 +1,13 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import kotlinx.css.CSSBuilder
-import kotlinx.css.Display
-import kotlinx.css.ListStyleType
-import kotlinx.css.Position
-import kotlinx.css.display
-import kotlinx.css.height
-import kotlinx.css.left
-import kotlinx.css.listStyleType
-import kotlinx.css.margin
-import kotlinx.css.padding
-import kotlinx.css.pct
-import kotlinx.css.position
-import kotlinx.css.properties.Timing
-import kotlinx.css.properties.ms
-import kotlinx.css.properties.transform
-import kotlinx.css.properties.transition
-import kotlinx.css.properties.translate
-import kotlinx.css.px
-import kotlinx.css.top
-import kotlinx.css.width
-import kotlinx.css.zIndex
+import kotlinx.css.*
+import kotlinx.css.properties.*
+import kotlinx.html.DIV
+import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
 import react.ReactElement
 import react.dom.*
-import styled.css
-import styled.styledDiv
-import styled.styledLi
-import styled.styledUl
+import styled.*
 
 typealias ElementBuilder = RBuilder.() -> ReactElement
 
@@ -36,7 +16,8 @@ fun RBuilder.radialList(
     centerElementBuilder: ElementBuilder,
     itemWidth: Int,
     itemHeight: Int,
-    options: RadialConfig = RadialConfig()
+    options: RadialConfig = RadialConfig(),
+    block: StyledDOMBuilder<DIV>.() -> Unit = {}
 ): ReactElement {
     val containerWidth = options.diameter + itemWidth
     val containerHeight = options.diameter + itemHeight
@@ -44,10 +25,11 @@ fun RBuilder.radialList(
     return styledDiv {
         css {
             zeroMargins()
-            position = Position.relative
+            +GlobalStyles.fixedCenter
             width = containerWidth.px
             height = containerHeight.px
         }
+        block()
         radialListItems(itemBuilders, options)
         radialListCenter(centerElementBuilder)
     }
@@ -116,6 +98,6 @@ private fun CSSBuilder.absoluteCenter() {
 }
 
 private fun CSSBuilder.zeroMargins() {
-    margin = "0"
-    padding = "0"
+    margin(all = 0.px)
+    padding(all = 0.px)
 }

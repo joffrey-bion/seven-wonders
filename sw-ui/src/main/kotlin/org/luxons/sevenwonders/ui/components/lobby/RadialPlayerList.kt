@@ -10,7 +10,7 @@ import react.ReactElement
 import react.dom.*
 import styled.css
 import styled.styledDiv
-import styled.styledH5
+import styled.styledH4
 
 fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
     val playerItemBuilders = players
@@ -33,10 +33,8 @@ fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO
     )
 }
 
-private fun RBuilder.roundTableImg(): ReactElement = img {
+private fun RBuilder.roundTableImg(): ReactElement = img(src = "images/round-table.png", alt = "Round table") {
     attrs {
-        src = "images/round-table.png"
-        alt = "Round table"
         width = "200"
         height = "200"
     }
@@ -73,11 +71,17 @@ private fun RBuilder.playerItem(player: PlayerDTO, isMe: Boolean): ReactElement 
         else -> Icon("user")
     }
     userIcon(isMe = isMe, icon = icon, title = title)
-    styledH5 {
+    styledH4 {
         css {
-            margin = "0"
+            margin(all = 0.px)
         }
         +player.displayName
+    }
+    styledDiv {
+        css {
+            margin(top = 0.3.rem)
+        }
+        +"${player.wonder.name} (${player.wonder.side.name})"
     }
 }
 
@@ -89,11 +93,17 @@ private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
         opacity = 0.3
     }
     userIcon(isMe = false, icon = Icon("user"), title = "Waiting for player...")
-    styledH5 {
+    styledH4 {
         css {
             margin = "0"
         }
         +"?"
+    }
+    styledDiv {
+        css {
+            margin(top = 0.3.rem)
+        }
+        +" " // placeholder for wonder name
     }
 }
 

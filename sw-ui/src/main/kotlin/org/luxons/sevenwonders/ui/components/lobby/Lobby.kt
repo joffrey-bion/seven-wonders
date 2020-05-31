@@ -3,6 +3,8 @@ package org.luxons.sevenwonders.ui.components.lobby
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpNonIdealState
+import kotlinx.css.*
+import kotlinx.css.properties.*
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.RequestAddBot
@@ -14,6 +16,8 @@ import react.RComponent
 import react.RProps
 import react.RState
 import react.dom.*
+import styled.css
+import styled.styledDiv
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS")
 
@@ -42,11 +46,20 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         div {
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(currentGame.players, currentPlayer)
-            if (currentPlayer.isGameOwner) {
-                startButton(currentGame, currentPlayer)
-                addBotButton(currentGame)
-            } else {
-                leaveButton()
+
+            styledDiv {
+                css {
+                    position = Position.fixed
+                    bottom = 2.rem
+                    left = 50.pct
+                    transform { translate((-50).pct) }
+                }
+                if (currentPlayer.isGameOwner) {
+                    startButton(currentGame, currentPlayer)
+                    addBotButton(currentGame)
+                } else {
+                    leaveButton()
+                }
             }
         }
     }
