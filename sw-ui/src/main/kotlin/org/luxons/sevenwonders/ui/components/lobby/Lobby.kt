@@ -5,6 +5,7 @@ import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpNonIdealState
 import kotlinx.css.*
 import kotlinx.css.properties.*
+import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.RequestAddBot
@@ -43,23 +44,29 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             bpNonIdealState(icon = "error", title = "Error: no current game")
             return
         }
-        div {
+        styledDiv {
+            css {
+                margin(1.rem)
+            }
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(currentGame.players, currentPlayer)
+            actionButtons(currentPlayer, currentGame)
+        }
+    }
 
-            styledDiv {
-                css {
-                    position = Position.fixed
-                    bottom = 2.rem
-                    left = 50.pct
-                    transform { translate((-50).pct) }
-                }
-                if (currentPlayer.isGameOwner) {
-                    startButton(currentGame, currentPlayer)
-                    addBotButton(currentGame)
-                } else {
-                    leaveButton()
-                }
+    private fun RDOMBuilder<DIV>.actionButtons(currentPlayer: PlayerDTO, currentGame: LobbyDTO) {
+        styledDiv {
+            css {
+                position = Position.fixed
+                bottom = 2.rem
+                left = 50.pct
+                transform { translate((-50).pct) }
+            }
+            if (currentPlayer.isGameOwner) {
+                startButton(currentGame, currentPlayer)
+                addBotButton(currentGame)
+            } else {
+                leaveButton()
             }
         }
     }
