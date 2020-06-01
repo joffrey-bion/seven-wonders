@@ -145,7 +145,7 @@ fun CSSBuilder.wonderCardStyle() {
     zIndex = -1 // below wonder
 }
 
-private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when(nbStages) {
+private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when (nbStages) {
     2 -> 37.5 + stageIndex * 29.8 // 37.5 (29.8) 67.3
     4 -> -1.5 + stageIndex * 26.7 // -1.5 (26.6) 25.1 (26.8) 51.9 (26.7) 78.6
     else -> 7.9 + stageIndex * 30.0
