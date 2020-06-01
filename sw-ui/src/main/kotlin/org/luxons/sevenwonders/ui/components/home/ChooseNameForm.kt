@@ -6,15 +6,9 @@ import com.palantir.blueprintjs.bpInputGroup
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
-import org.luxons.sevenwonders.ui.utils.createElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
-import react.RBuilder
-import react.RClass
-import react.RComponent
-import react.RProps
-import react.RState
-import react.ReactElement
+import react.*
 import react.dom.*
 
 private interface ChooseNameFormProps : RProps {
@@ -44,7 +38,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
         }
     }
 
-    private fun submitButton(): ReactElement = createElement {
+    private fun submitButton(): ReactElement = buildElement {
         bpButton(
             minimal = true,
             icon = "arrow-right",

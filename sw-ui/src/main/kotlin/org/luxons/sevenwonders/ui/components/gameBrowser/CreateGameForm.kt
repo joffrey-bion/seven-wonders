@@ -7,14 +7,9 @@ import kotlinx.css.*
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestCreateGame
 import org.luxons.sevenwonders.ui.redux.connectDispatch
-import org.luxons.sevenwonders.ui.utils.createElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
-import react.RBuilder
-import react.RClass
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import react.dom.*
 import styled.css
 import styled.styledDiv
@@ -56,7 +51,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
         }
     }
 
-    private fun createGameButton() = createElement {
+    private fun createGameButton() = buildElement {
         bpButton(minimal = true, intent = Intent.PRIMARY, icon = "add", onClick = { e -> createGame(e) })
     }
 
