@@ -200,3 +200,15 @@ fun RBuilder.bpHtmlTable(
     }
     block()
 }
+
+fun RBuilder.bpDivider(
+    tagName: String? = null,
+    block: RHandler<IDividerProps> = {}
+): ReactElement = child(Divider::class) {
+    attrs {
+        if (tagName != null) {
+            this.tagName = tagName
+        }
+    }
+    block()
+}
