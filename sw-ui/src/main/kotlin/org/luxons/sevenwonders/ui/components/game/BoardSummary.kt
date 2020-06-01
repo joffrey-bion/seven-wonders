@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui.components.game
 
+import com.palantir.blueprintjs.bpDivider
 import kotlinx.css.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.PlayerDTO
@@ -50,15 +51,8 @@ fun RBuilder.boardSummary(
                 flexDirection = if (boardSummarySide == BoardSummarySide.TOP) FlexDirection.row else FlexDirection.column
                 alignItems = boardSummarySide.alignment
             }
-            styledDiv {
-                css {
-                    display = Display.flex
-                    flexDirection = if (boardSummarySide == BoardSummarySide.TOP) FlexDirection.row else FlexDirection.column
-                    alignItems = boardSummarySide.alignment
-                    if (boardSummarySide == BoardSummarySide.TOP) marginRight = 1.rem else marginBottom = 1.rem
-                }
-                generalCounts(board, tokenSize, boardSummarySide.tokenCountPosition)
-            }
+            generalCounts(board, tokenSize, boardSummarySide.tokenCountPosition)
+            bpDivider()
             scienceTokens(board, tokenSize, boardSummarySide.tokenCountPosition)
         }
         block()
