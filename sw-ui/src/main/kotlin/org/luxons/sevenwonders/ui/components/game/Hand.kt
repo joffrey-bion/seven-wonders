@@ -177,20 +177,21 @@ private fun pricePrefix(amount: Int) = when {
 }
 
 private fun RElementBuilder<IButtonProps>.priceInfo(amount: Int) {
-    styledDiv {
-        val size = 1.rem
+    val size = 1.rem
+    goldIndicator(
+        amount = amount,
+        amountPosition = TokenCountPosition.OVER,
+        imgSize = size,
+        customCountStyle = {
+            fontFamily = "sans-serif"
+            fontSize = size * 0.8
+        }
+    ) {
         css {
             position = Position.absolute
             top = (-0.2).rem
             left = (-0.2).rem
-            backgroundColor = Color.goldenrod
-            width = size
-            height = size
-            borderRadius = size
-            fontSize = size * 0.8
-            textAlign = TextAlign.center
         }
-        +"$amount"
     }
 }
 

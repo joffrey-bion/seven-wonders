@@ -15,14 +15,18 @@ enum class TokenCountPosition {
 fun RBuilder.goldIndicator(
     amount: Int,
     amountPosition: TokenCountPosition = TokenCountPosition.OVER,
-    imgSize: LinearDimension = 3.rem
+    imgSize: LinearDimension = 3.rem,
+    customCountStyle: CSSBuilder.() -> Unit = {},
+    block: StyledDOMBuilder<DIV>.() -> Unit = {}
 ) {
     tokenWithCount(
         tokenName = "coin",
         title = "$amount gold coins",
         imgSize = imgSize,
         count = amount,
-        countPosition = amountPosition
+        countPosition = amountPosition,
+        customCountStyle = customCountStyle,
+        block = block
     )
 }
 
@@ -33,6 +37,7 @@ fun RBuilder.tokenWithCount(
     imgSize: LinearDimension = 3.rem,
     countPosition: TokenCountPosition = TokenCountPosition.RIGHT,
     brightText: Boolean = false,
+    customCountStyle: CSSBuilder.() -> Unit = {},
     block: StyledDOMBuilder<DIV>.() -> Unit = {}
 ) {
     styledDiv {
@@ -43,7 +48,7 @@ fun RBuilder.tokenWithCount(
                 tokenImage(tokenName, title = title, size = imgSize)
                 styledSpan {
                     css {
-                        tokenCountStyle(tokenCountSize, brightText)
+                        tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         marginLeft = 0.2.rem
                     }
                     +"× $count"
@@ -52,7 +57,7 @@ fun RBuilder.tokenWithCount(
             TokenCountPosition.LEFT -> {
                 styledSpan {
                     css {
-                        tokenCountStyle(tokenCountSize, brightText)
+                        tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         marginRight = 0.2.rem
                     }
                     +"$count ×"
@@ -66,7 +71,7 @@ fun RBuilder.tokenWithCount(
                     styledSpan {
                         css {
                             +GlobalStyles.centerInParent
-                            tokenCountStyle(tokenCountSize, brightText)
+                            tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         }
                         +"$count"
                     }
@@ -102,12 +107,15 @@ private fun CSSBuilder.tokenImageStyle(size: LinearDimension) {
     verticalAlign = VerticalAlign.middle
 }
 
-private fun CSSBuilder.tokenCountStyle(size: LinearDimension, brightText: Boolean) {
+private fun CSSBuilder.tokenCountStyle(
+    size: LinearDimension,
+    brightText: Boolean,
+    customStyle: CSSBuilder.() -> Unit = {}
+) {
     fontFamily = "fantasy"
     fontSize = size
     verticalAlign = VerticalAlign.middle
-    if (brightText) {
-        color = Color.white
-    }
+    color = if (brightText) Color.white else Color.black
     fontWeight = FontWeight.bold
+    customStyle()
 }
