@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
+import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
@@ -11,7 +12,7 @@ import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
-import react.dom.*
+import styled.StyledDOMBuilder
 import styled.css
 import styled.getClassName
 import styled.styledDiv
@@ -71,11 +72,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     height = 100.pct
                 }
             }
-            leftPlayerBoardSummary(leftBoard)
-            rightPlayerBoardSummary(rightBoard)
-            if (topBoards.isNotEmpty()) {
-                topPlayerBoardsSummaries(topBoards)
-            }
+            boardSummaries(leftBoard, rightBoard, topBoards)
             handRotationIndicator(turnInfo.table.handRotationDirection)
             handCards(turnInfo, props.preparedMove, props.prepareMove)
             val card = props.preparedCard
@@ -106,6 +103,15 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 }
                 bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +message }
             }
+        }
+    }
+
+    private fun StyledDOMBuilder<DIV>.boardSummaries(leftBoard: Board, rightBoard: Board, topBoards: List<Board>) {
+        // TODO use blueprint popover with full board preview
+        leftPlayerBoardSummary(leftBoard)
+        rightPlayerBoardSummary(rightBoard)
+        if (topBoards.isNotEmpty()) {
+            topPlayerBoardsSummaries(topBoards)
         }
     }
 
