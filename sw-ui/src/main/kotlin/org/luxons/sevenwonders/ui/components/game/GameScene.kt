@@ -56,12 +56,21 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         val leftBoard = turnInfo.getBoard(RelativeBoardPosition.LEFT)
         val rightBoard = turnInfo.getBoard(RelativeBoardPosition.RIGHT)
         val topBoards = (turnInfo.table.boards - board - leftBoard - rightBoard).reversed()
-        div {
+        styledDiv {
+            css {
+                height = 100.pct
+            }
             turnInfo.scoreBoard?.let {
                 scoreTableOverlay(it, props.players, props.leaveGame)
             }
             actionInfo(turnInfo.message)
-            boardComponent(board = board)
+            boardComponent(board = board) {
+                css {
+                    padding(all = 7.rem) // to fit the action info message & board summaries
+                    width = 100.pct
+                    height = 100.pct
+                }
+            }
             leftPlayerBoardSummary(leftBoard)
             rightPlayerBoardSummary(rightBoard)
             if (topBoards.isNotEmpty()) {
@@ -85,7 +94,9 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         styledDiv {
             css {
                 classes.add("bp3-dark")
-                display = Display.inlineBlock // so that the cards below don't overlap, but the width is not full
+                position = Position.fixed
+                top = 0.pct
+                left = 0.pct
                 margin(all = 0.4.rem)
                 maxWidth = 25.pct // leave space for 4 board summaries when there are 7 players
             }
