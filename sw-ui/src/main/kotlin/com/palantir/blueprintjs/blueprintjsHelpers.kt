@@ -155,6 +155,36 @@ fun RBuilder.bpOverlay(
     block()
 }
 
+fun RBuilder.bpPopover(
+    content: ReactElement,
+    hoverOpenDelay: Number? = null,
+    hoverCloseDelay: Number? = null,
+    position: PopoverPosition = PopoverPosition.AUTO,
+    interactionKind: PopoverInteractionKind = PopoverInteractionKind.HOVER,
+    minimal: Boolean = false,
+    canEscapeKeyClose: Boolean = true,
+    className: String? = null,
+    popoverClassName: String? = null,
+    portalClassName: String? = null,
+    onClose: () -> Unit = {},
+    block: RHandler<IPopoverProps> = {}
+): ReactElement = child(Popover::class) {
+    attrs {
+        this.interactionKind = interactionKind
+        this.minimal = minimal
+        this.content = content
+        this.position = position
+        this.hoverOpenDelay = hoverOpenDelay
+        this.hoverCloseDelay = hoverCloseDelay
+        this.canEscapeKeyClose = canEscapeKeyClose
+        this.className = className
+        this.popoverClassName = popoverClassName
+        this.portalClassName = portalClassName
+        this.onClose = { onClose() }
+    }
+    block()
+}
+
 fun RBuilder.bpCallout(
     intent: Intent? = Intent.NONE,
     icon: IconName? = null,
