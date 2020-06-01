@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.ui.components.game
 
 import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.*
+import kotlinx.html.title
 import org.luxons.sevenwonders.model.cards.HandRotationDirection
 import react.RBuilder
 import styled.css
@@ -15,6 +16,9 @@ fun RBuilder.handRotationIndicator(direction: HandRotationDirection) {
             display = Display.flex
             alignItems = Align.center
             bottom = 25.vh
+        }
+        attrs {
+            title = "Your hand will be passed to the player on your $direction after playing this card."
         }
         val sideDistance = 2.rem
         when (direction) {
