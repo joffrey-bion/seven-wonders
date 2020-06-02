@@ -19,6 +19,9 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
             put("fill", bgColor.toString()) // overrides default white arrow
         }
         descendants(".bp3-popover-arrow::before") {
+            // The popover arrow is implemented with a simple square rotated 45 degrees (like a rhombus).
+            // Since we use a semi-transparent background, we can see the box shadow of the rest of the arrow through
+            // the popover, and thus we see the square. This boxShadow(transparent) is to avoid that.
             boxShadow(Color.transparent)
         }
     }
