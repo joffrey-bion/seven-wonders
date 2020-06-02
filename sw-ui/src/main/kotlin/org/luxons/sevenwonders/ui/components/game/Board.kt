@@ -124,8 +124,8 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder) {
     }
 }
 
-private fun StyledDOMBuilder<DIV>.wonderStageElement(it: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {
-    val back = it.cardBack
+private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {
+    val back = stage.cardBack
     if (back != null) {
         cardBackImage(back) {
             block()
@@ -142,7 +142,7 @@ fun CSSBuilder.wonderCardStyle() {
     top = 60.pct // makes the cards stick out of the bottom of the wonder
     maxWidth = 24.pct // ratio of card width to wonder width
     maxHeight = 90.pct // ratio of card height to wonder height
-    zIndex = -1 // below wonder
+    zIndex = -1 // below wonder (somehow 0 is not sufficient)
 }
 
 private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when (nbStages) {
