@@ -1,27 +1,53 @@
 package org.luxons.sevenwonders.ui.components.game
 
+import com.palantir.blueprintjs.PopoverPosition
 import com.palantir.blueprintjs.bpDivider
+import com.palantir.blueprintjs.bpPopover
 import kotlinx.css.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import react.RBuilder
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
-import styled.styledHr
+import react.ReactElement
+import react.buildElement
+import styled.*
 
 enum class BoardSummarySide(
     val tokenCountPosition: TokenCountPosition,
-    val alignment: Align
+    val alignment: Align,
+    val popoverPosition: PopoverPosition
 ) {
-    LEFT(TokenCountPosition.RIGHT, Align.flexStart),
-    TOP(TokenCountPosition.OVER, Align.flexStart),
-    RIGHT(TokenCountPosition.LEFT, Align.flexEnd)
+    LEFT(TokenCountPosition.RIGHT, Align.flexStart, PopoverPosition.RIGHT),
+    TOP(TokenCountPosition.OVER, Align.flexStart, PopoverPosition.BOTTOM),
+    RIGHT(TokenCountPosition.LEFT, Align.flexEnd, PopoverPosition.LEFT)
 }
 
-fun RBuilder.boardSummary(
+fun RBuilder.boardSummaryWithPopover(
+    player: PlayerDTO,
+    board: Board,
+    boardSummarySide: BoardSummarySide,
+    block: StyledDOMBuilder<DIV>.() -> Unit = {}
+) {
+    val popoverClass = GameStyles.getClassName { it::fullBoardPreviewPopover }
+    bpPopover(
+        content = createFullBoardPreview(board),
+        position = boardSummarySide.popoverPosition,
+        popoverClassName = popoverClass
+    ) {
+        boardSummary(player, board, boardSummarySide, block)
+    }
+}
+
+private fun createFullBoardPreview(board: Board): ReactElement = buildElement {
+    boardComponent(board = board) {
+        css {
+            +GameStyles.fullBoardPreview
+        }
+    }
+}
+
+private fun RBuilder.boardSummary(
     player: PlayerDTO,
     board: Board,
     boardSummarySide: BoardSummarySide,
@@ -35,8 +61,11 @@ fun RBuilder.boardSummary(
             padding(all = 0.5.rem)
             backgroundColor = Color.paleGoldenrod.withAlpha(0.5)
             zIndex = 50 // above table cards
+
+            hover {
+                backgroundColor = Color.paleGoldenrod
+            }
         }
-        val tokenSize = 2.rem
 
         playerInfo(player, iconSize = 25)
         styledHr {
@@ -51,6 +80,7 @@ fun RBuilder.boardSummary(
                 flexDirection = if (boardSummarySide == BoardSummarySide.TOP) FlexDirection.row else FlexDirection.column
                 alignItems = boardSummarySide.alignment
             }
+            val tokenSize = 2.rem
             generalCounts(board, tokenSize, boardSummarySide.tokenCountPosition)
             bpDivider()
             scienceTokens(board, tokenSize, boardSummarySide.tokenCountPosition)

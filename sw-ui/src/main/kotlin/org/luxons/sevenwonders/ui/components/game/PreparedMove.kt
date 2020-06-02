@@ -25,7 +25,7 @@ fun RBuilder.preparedMove(
         block()
         cardImage(card) {
             if (move.type == MoveType.DISCARD || move.type == MoveType.UPGRADE_WONDER) {
-                css { discardedCardStyle() }
+                css { +GameStyles.dimmedCard }
             }
         }
         if (move.type == MoveType.DISCARD) {
@@ -51,22 +51,11 @@ fun RBuilder.preparedMove(
     }
 }
 
-private fun CSSBuilder.discardedCardStyle() {
-    filter = "brightness(60%) grayscale(50%)"
-}
-
 private fun StyledDOMBuilder<DIV>.discardText() {
     styledDiv {
         css {
             +GlobalStyles.centerInParent
-            display = Display.flex
-            alignItems = Align.center
-            height = 3.rem
-            fontSize = 2.rem
-            color = Color.goldenrod
-            fontWeight = FontWeight.bold
-            borderTop(0.2.rem, BorderStyle.solid, Color.goldenrod)
-            borderBottom(0.2.rem, BorderStyle.solid, Color.goldenrod)
+            +GameStyles.discardMoveText
         }
         +"DISCARD"
     }

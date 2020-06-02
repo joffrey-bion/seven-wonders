@@ -116,25 +116,33 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     }
 
     private fun RBuilder.leftPlayerBoardSummary(board: Board) {
-        boardSummary(props.players[board.playerIndex], board, BoardSummarySide.LEFT) {
+        styledDiv {
             css {
                 position = Position.absolute
                 left = 0.px
                 bottom = 40.pct
-                borderTopRightRadius = 0.4.rem
-                borderBottomRightRadius = 0.4.rem
+            }
+            boardSummaryWithPopover(props.players[board.playerIndex], board, BoardSummarySide.LEFT) {
+                css {
+                    borderTopRightRadius = 0.4.rem
+                    borderBottomRightRadius = 0.4.rem
+                }
             }
         }
     }
 
     private fun RBuilder.rightPlayerBoardSummary(board: Board) {
-        boardSummary(props.players[board.playerIndex], board, BoardSummarySide.RIGHT) {
+        styledDiv {
             css {
                 position = Position.absolute
                 right = 0.px
                 bottom = 40.pct
-                borderTopLeftRadius = 0.4.rem
-                borderBottomLeftRadius = 0.4.rem
+            }
+            boardSummaryWithPopover(props.players[board.playerIndex], board, BoardSummarySide.RIGHT) {
+                css {
+                    borderTopLeftRadius = 0.4.rem
+                    borderBottomLeftRadius = 0.4.rem
+                }
             }
         }
     }
@@ -150,7 +158,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 flexDirection = FlexDirection.row
             }
             boards.forEach { board ->
-                boardSummary(props.players[board.playerIndex], board, BoardSummarySide.TOP) {
+                boardSummaryWithPopover(props.players[board.playerIndex], board, BoardSummarySide.TOP) {
                     css {
                         borderBottomLeftRadius = 0.4.rem
                         borderBottomRightRadius = 0.4.rem
