@@ -9,6 +9,7 @@ import kotlinx.serialization.builtins.list
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.config.HeartBeat
+import org.hildan.krossbow.stomp.config.HeartBeatTolerance
 import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization
 import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
 import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
@@ -28,7 +29,8 @@ import org.luxons.sevenwonders.model.cards.PreparedCard
 class SevenWondersClient {
 
     private val stompClient = StompClient {
-        heartBeat = HeartBeat(10000, 15000)
+        heartBeat = HeartBeat(10000, 10000)
+        heartBeatTolerance = HeartBeatTolerance(0, 5000)
     }
 
     suspend fun connect(serverUrl: String): SevenWondersSession {

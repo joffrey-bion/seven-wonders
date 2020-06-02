@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.ChannelRegistration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
@@ -18,11 +19,19 @@ class WebSocketConfig(
 
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
         // prefixes for all subscriptions
-        config.enableSimpleBroker("/queue", "/topic")
+        config.enableSimpleBroker("/queue", "/topic").apply {
+            setTaskScheduler(createTaskScheduler()) // to support heart beats
+        }
         config.setUserDestinationPrefix("/user")
 
         // /app for normal calls, /topic for subscription events
         config.setApplicationDestinationPrefixes("/app", "/topic")
+    }
+
+    private fun createTaskScheduler() = ThreadPoolTaskScheduler().apply {
+        poolSize = 1
+        threadNamePrefix = "stomp-heartbeat-thread-"
+        initialize()
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
