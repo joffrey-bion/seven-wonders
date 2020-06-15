@@ -30,7 +30,7 @@ class SevenWondersClient {
 
     private val stompClient = StompClient {
         heartBeat = HeartBeat(10000, 10000)
-        heartBeatTolerance = HeartBeatTolerance(0, 5000)
+        heartBeatTolerance = HeartBeatTolerance(0, 10000) // wide margin to account for heroku cold start
     }
 
     suspend fun connect(serverUrl: String): SevenWondersSession {
