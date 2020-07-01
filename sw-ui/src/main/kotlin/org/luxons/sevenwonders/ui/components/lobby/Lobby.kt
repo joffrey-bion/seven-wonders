@@ -8,10 +8,9 @@ import kotlinx.css.properties.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.ui.redux.RequestAddBot
-import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
-import org.luxons.sevenwonders.ui.redux.RequestStartGame
-import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import org.luxons.sevenwonders.model.wonders.deal
+import org.luxons.sevenwonders.ui.redux.*
 import react.RBuilder
 import react.RComponent
 import react.RProps
@@ -31,6 +30,8 @@ interface LobbyDispatchProps : RProps {
     var startGame: () -> Unit
     var addBot: (displayName: String) -> Unit
     var leaveLobby: () -> Unit
+    var reorderPlayers: (orderedPlayers: List<String>) -> Unit
+    var reassignWonders: (wonders: List<AssignedWonder>) -> Unit
 }
 
 interface LobbyProps : LobbyDispatchProps, LobbyStateProps
@@ -65,6 +66,8 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             if (currentPlayer.isGameOwner) {
                 startButton(currentGame, currentPlayer)
                 addBotButton(currentGame)
+                reorderPlayersButton(currentGame)
+                randomizeWondersButton(currentGame)
             } else {
                 leaveButton()
             }
@@ -104,6 +107,37 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         props.addBot(availableBotNames.random())
     }
 
+    private fun RBuilder.reorderPlayersButton(currentGame: LobbyDTO) {
+        bpButton(
+            large = true,
+            intent = Intent.NONE,
+            icon = "random",
+            rightIcon = "people",
+            title = "Re-order players randomly",
+            onClick = { reorderPlayers(currentGame) }
+        )
+    }
+
+    private fun reorderPlayers(currentGame: LobbyDTO) {
+        props.reorderPlayers(currentGame.players.map { it.username }.shuffled())
+    }
+
+    private fun RBuilder.randomizeWondersButton(currentGame: LobbyDTO) {
+        bpButton(
+            large = true,
+            intent = Intent.NONE,
+            icon = "random",
+            title = "Re-assign wonders to players randomly",
+            onClick = { randomizeWonders(currentGame) }
+        ) {
+            +"W"
+        }
+    }
+
+    private fun randomizeWonders(currentGame: LobbyDTO) {
+        props.reassignWonders(currentGame.allWonders.deal(currentGame.players.size))
+    }
+
     private fun RBuilder.leaveButton() {
         bpButton(
             large = true,
@@ -129,5 +163,7 @@ private val lobby = connectStateAndDispatch<LobbyStateProps, LobbyDispatchProps,
         startGame = { dispatch(RequestStartGame()) }
         addBot = { name -> dispatch(RequestAddBot(name)) }
         leaveLobby = { dispatch(RequestLeaveLobby()) }
+        reorderPlayers = { orderedPlayers -> dispatch(RequestReorderPlayers(orderedPlayers)) }
+        reassignWonders = { wonders -> dispatch(RequestReassignWonders(wonders)) }
     }
 )
