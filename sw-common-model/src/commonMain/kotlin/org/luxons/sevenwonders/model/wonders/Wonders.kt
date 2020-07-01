@@ -32,11 +32,9 @@ enum class WonderSide {
 fun List<PreGameWonder>.deal(nbPlayers: Int, random: Random = Random): List<AssignedWonder> =
     shuffled(random).take(nbPlayers).map { it.withRandomSide(random) }
 
-fun PreGameWonder.withRandomSide(random: Random = Random): AssignedWonder {
-    val side = WonderSide.values().random(random)
-    val sideImage = images.getValue(side)
-    return AssignedWonder(name, side, sideImage)
-}
+fun PreGameWonder.withRandomSide(random: Random = Random): AssignedWonder = withSide(WonderSide.values().random(random))
+
+fun PreGameWonder.withSide(side: WonderSide): AssignedWonder = AssignedWonder(name, side, images.getValue(side))
 
 @Serializable
 data class ApiWonder(

@@ -20,6 +20,10 @@ data class LobbyDTO(
     val hasEnoughPlayers: Boolean,
     val maxPlayersReached: Boolean
 ) {
+    private val wondersByName = allWonders.associateBy { it.name }
+
+    fun findWonder(name: String): PreGameWonder = wondersByName[name] ?: error("Unknown wonder '$name'")
+
     fun joinability(userDisplayName: String): Actionability = when {
         state != State.LOBBY -> Actionability(false, "Cannot join: the game has already started")
         maxPlayersReached -> Actionability(false, "Cannot join: the game is full")
