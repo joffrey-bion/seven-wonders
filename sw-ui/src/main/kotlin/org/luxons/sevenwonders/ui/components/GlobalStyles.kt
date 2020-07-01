@@ -16,6 +16,11 @@ object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
         overflow = Overflow.hidden
     }
 
+    val papyrusBackground by css {
+        background = "url('images/backgrounds/papyrus.jpg')"
+        backgroundSize = "cover"
+    }
+
     val fixedCenter by css {
         position = Position.fixed
         left = 50.pct

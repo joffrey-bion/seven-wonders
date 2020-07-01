@@ -39,8 +39,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     override fun RBuilder.render() {
         styledDiv {
             css {
-                background = "url('images/backgrounds/papyrus.jpg')"
-                backgroundSize = "cover"
+                +GlobalStyles.papyrusBackground
                 +GlobalStyles.fullscreen
             }
             val turnInfo = props.gameState?.turnInfo
