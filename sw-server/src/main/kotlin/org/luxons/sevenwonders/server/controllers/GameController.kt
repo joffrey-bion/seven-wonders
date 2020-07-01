@@ -37,15 +37,17 @@ class GameController(
         val game = player.game
         logger.info("Game {}: player {} is ready for the next turn", game.id, player)
 
-        val players = player.lobby.getPlayers()
+        synchronized(player.lobby) {
+            val players = player.lobby.getPlayers()
 
-        sendPlayerReady(game.id, player)
+            sendPlayerReady(game.id, player)
 
-        val allReady = players.all { it.isReady }
-        if (allReady) {
-            logger.info("Game {}: all players ready, sending turn info", game.id)
-            players.forEach { it.isReady = false }
-            sendTurnInfo(players, game, false)
+            val allReady = players.all { it.isReady }
+            if (allReady) {
+                logger.info("Game {}: all players ready, sending turn info", game.id)
+                players.forEach { it.isReady = false }
+                sendTurnInfo(players, game, false)
+            }
         }
     }
 
@@ -59,20 +61,22 @@ class GameController(
     fun prepareMove(action: PrepareMoveAction, principal: Principal) {
         val player = principal.player
         val game = player.game
-        val preparedCardBack = game.prepareMove(player.index, action.move)
-        val preparedCard = PreparedCard(player.username, preparedCardBack)
-        logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
-        sendPreparedCard(game.id, preparedCard)
+        synchronized(game) {
+            val preparedCardBack = game.prepareMove(player.index, action.move)
+            val preparedCard = PreparedCard(player.username, preparedCardBack)
+            logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
+            sendPreparedCard(game.id, preparedCard)
 
-        if (game.allPlayersPreparedTheirMove()) {
-            logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
-            game.playTurn()
-            sendTurnInfo(player.lobby.getPlayers(), game, true)
-            if (game.endOfGameReached()) {
-                player.lobby.setEndOfGame()
+            if (game.allPlayersPreparedTheirMove()) {
+                logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
+                game.playTurn()
+                sendTurnInfo(player.lobby.getPlayers(), game, true)
+                if (game.endOfGameReached()) {
+                    player.lobby.setEndOfGame()
+                }
+            } else {
+                template.convertAndSendToUser(player.username, "/queue/game/preparedMove", action.move)
             }
-        } else {
-            template.convertAndSendToUser(player.username, "/queue/game/preparedMove", action.move)
         }
     }
 
@@ -80,7 +84,9 @@ class GameController(
     fun unprepareMove(principal: Principal) {
         val player = principal.player
         val game = player.game
-        game.unprepareMove(player.index)
+        synchronized(game) {
+            game.unprepareMove(player.index)
+        }
         val preparedCard = PreparedCard(player.username, null)
         logger.info("Game {}: player {} unprepared his move", game.id, principal.name)
         sendPreparedCard(game.id, preparedCard)
