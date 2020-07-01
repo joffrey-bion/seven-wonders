@@ -80,7 +80,9 @@ class Lobby(
         if (orderedUsernames.toSet() != usernames.toSet()) {
             throw PlayerListMismatchException(orderedUsernames)
         }
+        val wondersMap = players.indices.associate { assignedWonders[it] to players[it].username }
         players.sortBy { orderedUsernames.indexOf(it.username) }
+        assignedWonders.sortBy { orderedUsernames.indexOf(wondersMap[it]) }
     }
 
     @Synchronized
