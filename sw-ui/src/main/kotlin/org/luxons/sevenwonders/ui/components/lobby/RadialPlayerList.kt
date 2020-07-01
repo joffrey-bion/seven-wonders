@@ -5,24 +5,35 @@ import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.Icon
-import react.RBuilder
-import react.ReactElement
+import react.*
 import react.dom.*
 import styled.css
 import styled.styledDiv
 import styled.styledH4
 
-fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
-    val playerItemBuilders = players
-        .growTo(targetSize = 3)
-        .withUserFirst(currentPlayer)
-        .map { p -> p.elementBuilder(p?.username == currentPlayer.username) }
+private sealed class PlayerItem {
+    abstract val username: String
 
-    val tableImgBuilder: ElementBuilder = { roundTableImg() }
+    data class Player(val player: PlayerDTO) : PlayerItem() {
+        override val username = player.username
+    }
+    data class Placeholder(val index: Int) : PlayerItem() {
+        override val username = "player-placeholder-$index"
+    }
+}
+
+fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
+    val playerItems = players
+        .growWithPlaceholders(targetSize = 3)
+        .withUserFirst(currentPlayer)
+
+    val tableImg = buildElement { roundTableImg() }
 
     return radialList(
-        itemBuilders = playerItemBuilders,
-        centerElementBuilder = tableImgBuilder,
+        items = playerItems,
+        centerElement = tableImg,
+        renderItem = { it.renderAsListItem(it.username == currentPlayer.username) },
+        getKey = { it.username },
         itemWidth = 120,
         itemHeight = 100,
         options = RadialConfig(
@@ -40,23 +51,24 @@ private fun RBuilder.roundTableImg(): ReactElement = img(src = "images/round-tab
     }
 }
 
-private fun List<PlayerDTO?>.withUserFirst(me: PlayerDTO): List<PlayerDTO?> {
-    val nonUsersBeginning = takeWhile { it?.username != me.username }
+private fun List<PlayerItem>.withUserFirst(me: PlayerDTO): List<PlayerItem> {
+    val nonUsersBeginning = takeWhile { (it as? PlayerItem.Player)?.player?.username != me.username }
     val userToEnd = subList(nonUsersBeginning.size, size)
     return userToEnd + nonUsersBeginning
 }
 
-private fun <T> List<T>.growTo(targetSize: Int): List<T?> {
-    if (size >= targetSize) return this
-    return this + List(targetSize - size) { null }
+private fun List<PlayerDTO>.growWithPlaceholders(targetSize: Int): List<PlayerItem> {
+    val items = map { PlayerItem.Player(it) }
+    return if (size >= targetSize) {
+        items
+    } else {
+        items + List(targetSize - size) { PlayerItem.Placeholder(size + it) }
+    }
 }
 
-private fun PlayerDTO?.elementBuilder(isMe: Boolean): ElementBuilder {
-    if (this == null) {
-        return { playerPlaceholder() }
-    } else {
-        return { playerItem(this@elementBuilder, isMe) }
-    }
+private fun PlayerItem.renderAsListItem(isMe: Boolean): ReactElement = when (this) {
+    is PlayerItem.Placeholder -> buildElement { playerPlaceholder() }
+    is PlayerItem.Player -> buildElement { playerItem(this@renderAsListItem.player, isMe) }
 }
 
 private fun RBuilder.playerItem(player: PlayerDTO, isMe: Boolean): ReactElement = styledDiv {

@@ -9,11 +9,11 @@ import react.ReactElement
 import react.dom.*
 import styled.*
 
-typealias ElementBuilder = RBuilder.() -> ReactElement
-
-fun RBuilder.radialList(
-    itemBuilders: List<ElementBuilder>,
-    centerElementBuilder: ElementBuilder,
+fun <T> RBuilder.radialList(
+    items: List<T>,
+    centerElement: ReactElement,
+    renderItem: (T) -> ReactElement,
+    getKey: (T) -> String,
     itemWidth: Int,
     itemHeight: Int,
     options: RadialConfig = RadialConfig(),
@@ -30,13 +30,18 @@ fun RBuilder.radialList(
             height = containerHeight.px
         }
         block()
-        radialListItems(itemBuilders, options)
-        radialListCenter(centerElementBuilder)
+        radialListItems(items, renderItem, getKey, options)
+        radialListCenter(centerElement)
     }
 }
 
-private fun RBuilder.radialListItems(itemBuilders: List<ElementBuilder>, radialConfig: RadialConfig): ReactElement {
-    val offsets = offsetsFromCenter(itemBuilders.size, radialConfig)
+private fun <T> RBuilder.radialListItems(
+    items: List<T>,
+    renderItem: (T) -> ReactElement,
+    getKey: (T) -> String,
+    radialConfig: RadialConfig
+): ReactElement {
+    val offsets = offsetsFromCenter(items.size, radialConfig)
     return styledUl {
         css {
             zeroMargins()
@@ -46,13 +51,13 @@ private fun RBuilder.radialListItems(itemBuilders: List<ElementBuilder>, radialC
             height = radialConfig.diameter.px
             absoluteCenter()
         }
-        itemBuilders.forEachIndexed { i, itemBuilder ->
-            radialListItem(itemBuilder, i, offsets[i])
+        items.forEachIndexed { i, item ->
+            radialListItem(renderItem(item), getKey(item), offsets[i])
         }
     }
 }
 
-private fun RBuilder.radialListItem(itemBuilder: ElementBuilder, i: Int, offset: CartesianCoords): ReactElement {
+private fun RBuilder.radialListItem(item: ReactElement, key: String, offset: CartesianCoords): ReactElement {
     return styledLi {
         css {
             display = Display.block
@@ -69,13 +74,13 @@ private fun RBuilder.radialListItem(itemBuilder: ElementBuilder, i: Int, offset:
             }
         }
         attrs {
-            key = "$i"
+            this.key = key
         }
-        itemBuilder()
+        child(item)
     }
 }
 
-private fun RBuilder.radialListCenter(centerElement: ElementBuilder?): ReactElement? {
+private fun RBuilder.radialListCenter(centerElement: ReactElement?): ReactElement? {
     if (centerElement == null) {
         return null
     }
@@ -84,7 +89,7 @@ private fun RBuilder.radialListCenter(centerElement: ElementBuilder?): ReactElem
             zIndex = 0
             absoluteCenter()
         }
-        centerElement()
+        child(centerElement)
     }
 }
 
