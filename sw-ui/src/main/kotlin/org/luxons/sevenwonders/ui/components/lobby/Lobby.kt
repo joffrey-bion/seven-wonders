@@ -51,7 +51,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             radialPlayerList(currentGame.players, currentPlayer)
             actionButtons(currentPlayer, currentGame)
             if (currentPlayer.isGameOwner) {
-                sideBar(currentGame)
+                setupPanel(currentGame)
             }
         }
     }
@@ -89,7 +89,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
     }
 
-    private fun RBuilder.sideBar(currentGame: LobbyDTO) {
+    private fun RBuilder.setupPanel(currentGame: LobbyDTO) {
         styledDiv {
             css {
                 position = Position.fixed
@@ -97,7 +97,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
                 right = 1.rem
                 width = 15.rem
             }
-            bpCard(Elevation.ONE) {
+            bpCard(Elevation.TWO) {
                 styledH2 {
                     css {
                         margin(top = 0.px)
