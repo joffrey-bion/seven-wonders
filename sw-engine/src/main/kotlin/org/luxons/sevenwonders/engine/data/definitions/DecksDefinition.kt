@@ -9,10 +9,7 @@ internal class DeckDefinition(
     val cards: List<CardDefinition>,
     val backImage: String
 ) {
-    fun create(nbPlayers: Int): List<Card> = cards.flatMap { it.create(
-        CardBack(
-            backImage
-        ), nbPlayers) }
+    fun create(nbPlayers: Int): List<Card> = cards.flatMap { it.create(CardBack(backImage), nbPlayers) }
 }
 
 internal class DecksDefinition(
