@@ -82,12 +82,13 @@ class GameBrowserController(
 
         val lobby = lobbyRepository.find(action.gameId)
         val player = playerRepository.find(principal.name)
-        lobby.addPlayer(player)
+        synchronized(lobby) {
+            lobby.addPlayer(player)
 
-        logger.info("Player '{}' ({}) joined game {}", player.displayName, player.username, lobby.name)
-        val lobbyDTO = lobby.toDTO()
-        lobbyController.sendLobbyUpdateToPlayers(lobby)
-        return lobbyDTO
+            logger.info("Player '{}' ({}) joined game {}", player.displayName, player.username, lobby.name)
+            lobbyController.sendLobbyUpdateToPlayers(lobby)
+        }
+        return lobby.toDTO()
     }
 
     private fun checkThatUserIsNotInAGame(principal: Principal, impossibleActionDescription: String) {

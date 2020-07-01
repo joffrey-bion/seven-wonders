@@ -49,7 +49,6 @@ class Lobby(
         assignedWonders.add(pickRandomWonder())
     }
 
-    @Synchronized
     private fun pickRandomWonder(): AssignedWonder =
         allWonders.filter { !it.isAssigned() }.random().withRandomSide()
 
