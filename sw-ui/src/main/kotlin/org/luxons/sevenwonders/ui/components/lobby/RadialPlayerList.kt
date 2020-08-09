@@ -5,25 +5,17 @@ import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.Icon
-import react.*
+import react.RBuilder
+import react.ReactElement
+import react.buildElement
 import react.dom.*
 import styled.css
 import styled.styledDiv
 import styled.styledH4
 
-private sealed class PlayerItem {
-    abstract val username: String
-
-    data class Player(val player: PlayerDTO) : PlayerItem() {
-        override val username = player.username
-    }
-    data class Placeholder(val index: Int) : PlayerItem() {
-        override val username = "player-placeholder-$index"
-    }
-}
-
 fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
     val playerItems = players
+        .map { PlayerItem.Player(it, it.username == currentPlayer.username) }
         .growWithPlaceholders(targetSize = 3)
         .withUserFirst(currentPlayer)
 
@@ -32,8 +24,8 @@ fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO
     return radialList(
         items = playerItems,
         centerElement = tableImg,
-        renderItem = { it.renderAsListItem(it.username == currentPlayer.username) },
-        getKey = { it.username },
+        renderItem = { buildElement { playerElement(it) } },
+        getKey = { it.key },
         itemWidth = 120,
         itemHeight = 100,
         options = RadialConfig(
@@ -51,75 +43,84 @@ private fun RBuilder.roundTableImg(): ReactElement = img(src = "images/round-tab
     }
 }
 
+private fun List<PlayerItem>.growWithPlaceholders(targetSize: Int): List<PlayerItem> = when {
+    size < targetSize -> this + List(targetSize - size) { PlayerItem.Placeholder(size + it) }
+    else -> this
+}
+
 private fun List<PlayerItem>.withUserFirst(me: PlayerDTO): List<PlayerItem> {
     val nonUsersBeginning = takeWhile { (it as? PlayerItem.Player)?.player?.username != me.username }
     val userToEnd = subList(nonUsersBeginning.size, size)
     return userToEnd + nonUsersBeginning
 }
 
-private fun List<PlayerDTO>.growWithPlaceholders(targetSize: Int): List<PlayerItem> {
-    val items = map { PlayerItem.Player(it) }
-    return if (size >= targetSize) {
-        items
-    } else {
-        items + List(targetSize - size) { PlayerItem.Placeholder(size + it) }
-    }
-}
+private sealed class PlayerItem {
+    abstract val key: String
+    abstract val playerText: String
+    abstract val wonderText: String
+    abstract val opacity: Double
+    abstract val icon: ReactElement
 
-private fun PlayerItem.renderAsListItem(isMe: Boolean): ReactElement = when (this) {
-    is PlayerItem.Placeholder -> buildElement { playerPlaceholder() }
-    is PlayerItem.Player -> buildElement { playerItem(this@renderAsListItem.player, isMe) }
-}
-
-private fun RBuilder.playerItem(player: PlayerDTO, isMe: Boolean): ReactElement = styledDiv {
-    css {
-        display = Display.flex
-        flexDirection = FlexDirection.column
-        alignItems = Align.center
-    }
-    val title = if (player.isGameOwner) "Game owner" else null
-    val icon = player.icon ?: when {
-        player.isGameOwner -> Icon("badge")
-        else -> Icon("user")
-    }
-    userIcon(isMe = isMe, icon = icon, title = title)
-    styledH4 {
-        css {
-            margin(all = 0.px)
+    data class Player(val player: PlayerDTO, val isMe: Boolean) : PlayerItem() {
+        override val key = player.username
+        override val playerText = player.displayName
+        override val wonderText = "${player.wonder.name} (${player.wonder.side.name})"
+        override val opacity = 1.0
+        override val icon = buildElement {
+            userIcon(
+                isMe = isMe,
+                icon = player.icon ?: when {
+                    player.isGameOwner -> Icon("badge")
+                    else -> Icon("user")
+                },
+                title = if (player.isGameOwner) "Game owner" else null
+            )
         }
-        +player.displayName
     }
+
+    data class Placeholder(val index: Int) : PlayerItem() {
+        override val key = "player-placeholder-$index"
+        override val playerText = "?"
+        override val wonderText = " "
+        override val opacity = 0.3
+        override val icon = buildElement {
+            userIcon(
+                isMe = false,
+                icon = Icon("user"),
+                title = "Waiting for player..."
+            )
+        }
+    }
+}
+
+private fun RBuilder.userIcon(isMe: Boolean, icon: Icon, title: String?): ReactElement =
+    bpIcon(
+        name = icon.name,
+        intent = if (isMe) Intent.WARNING else Intent.NONE,
+        size = 50,
+        title = title
+    )
+
+private fun RBuilder.playerElement(playerItem: PlayerItem) {
     styledDiv {
         css {
-            margin(top = 0.3.rem)
+            display = Display.flex
+            flexDirection = FlexDirection.column
+            alignItems = Align.center
+            opacity = playerItem.opacity
         }
-        +"${player.wonder.name} (${player.wonder.side.name})"
-    }
-}
-
-private fun RBuilder.playerPlaceholder(): ReactElement = styledDiv {
-    css {
-        display = Display.flex
-        flexDirection = FlexDirection.column
-        alignItems = Align.center
-        opacity = 0.3
-    }
-    userIcon(isMe = false, icon = Icon("user"), title = "Waiting for player...")
-    styledH4 {
-        css {
-            margin = "0"
+        child(playerItem.icon)
+        styledH4 {
+            css {
+                margin(all = 0.px)
+            }
+            +playerItem.playerText
         }
-        +"?"
-    }
-    styledDiv {
-        css {
-            margin(top = 0.3.rem)
+        styledDiv {
+            css {
+                margin(top = 0.3.rem)
+            }
+            +playerItem.wonderText
         }
-        +" " // placeholder for wonder name
     }
-}
-
-private fun RBuilder.userIcon(isMe: Boolean, icon: Icon, title: String?): ReactElement {
-    val intent: Intent = if (isMe) Intent.WARNING else Intent.NONE
-    return bpIcon(name = icon.name, intent = intent, size = 50, title = title)
 }

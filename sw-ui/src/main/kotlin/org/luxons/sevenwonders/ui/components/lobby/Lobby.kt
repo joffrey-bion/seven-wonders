@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.wonders.*
 import org.luxons.sevenwonders.model.wonders.withRandomSide
+import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
 import react.RBuilder
 import react.RComponent
@@ -45,7 +46,8 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
         styledDiv {
             css {
-                margin(1.rem)
+                padding(1.rem)
+                +GlobalStyles.fullscreen
             }
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(currentGame.players, currentPlayer)
