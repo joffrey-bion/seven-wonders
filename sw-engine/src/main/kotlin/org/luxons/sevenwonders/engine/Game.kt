@@ -149,7 +149,9 @@ class Game internal constructor(
      */
     fun playTurn(): TableState {
         makeMoves()
-        if (endOfAgeReached()) {
+        if (shouldStartPlayDiscardedTurn()) {
+            startPlayDiscardedTurn()
+        } else if (endOfAgeReached()) {
             executeEndOfAgeEvents()
             if (endOfGameReached()) {
                 startEndGameTurn()
@@ -157,12 +159,8 @@ class Game internal constructor(
                 startNewAge()
             }
         } else {
-            if (shouldStartPlayDiscardedTurn()) {
-                startPlayDiscardedTurn()
-            } else {
-                rotateHandsIfRelevant()
-                startNewTurn()
-            }
+            rotateHandsIfRelevant()
+            startNewTurn()
         }
         return table.toTableState()
     }
