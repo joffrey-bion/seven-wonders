@@ -9,7 +9,10 @@ internal class Military(
     var nbShields = 0
         private set
 
-    var totalPoints = 0
+    val totalPoints
+        get() = victoryPoints + lostPointsPerDefeat * nbDefeatTokens
+
+    var victoryPoints = 0
         private set
 
     var nbDefeatTokens = 0
@@ -21,11 +24,10 @@ internal class Military(
 
     internal fun victory(age: Age) {
         val wonPoints = wonPointsPerVictoryPerAge[age] ?: throw UnknownAgeException(age)
-        totalPoints += wonPoints
+        victoryPoints += wonPoints
     }
 
     internal fun defeat() {
-        totalPoints -= lostPointsPerDefeat
         nbDefeatTokens++
     }
 

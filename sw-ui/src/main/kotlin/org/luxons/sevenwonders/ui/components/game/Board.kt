@@ -113,7 +113,7 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
                     this.alt = "Wonder ${wonder.name}"
                 }
             }
-            victoryPoints(military.totalPoints) {
+            victoryPoints(military.victoryPoints) {
                 css {
                     position = Position.absolute
                     top = 25.pct // below the wonder name

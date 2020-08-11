@@ -87,7 +87,8 @@ internal fun Resources.toCountedResourcesList(): List<CountedResource> =
             .map { (type, count) -> CountedResource(count, type) }
             .sortedBy { it.type }
 
-internal fun InternalMilitary.toApiMilitary(): ApiMilitary = ApiMilitary(nbShields, totalPoints, nbDefeatTokens)
+internal fun InternalMilitary.toApiMilitary(): ApiMilitary =
+    ApiMilitary(nbShields, victoryPoints, totalPoints, nbDefeatTokens)
 
 internal fun InternalScience.toApiScience(): ApiScience =
     ApiScience(

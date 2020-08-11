@@ -35,6 +35,7 @@ data class Production(
 @Serializable
 data class Military(
     val nbShields: Int,
+    val victoryPoints: Int,
     val totalPoints: Int,
     val nbDefeatTokens: Int
 )
