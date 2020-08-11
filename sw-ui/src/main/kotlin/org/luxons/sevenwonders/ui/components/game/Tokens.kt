@@ -34,7 +34,7 @@ fun RBuilder.tokenWithCount(
     tokenName: String,
     count: Int,
     title: String = tokenName,
-    imgSize: LinearDimension = 3.rem,
+    imgSize: LinearDimension? = null,
     countPosition: TokenCountPosition = TokenCountPosition.RIGHT,
     brightText: Boolean = false,
     customCountStyle: CSSBuilder.() -> Unit = {},
@@ -42,7 +42,7 @@ fun RBuilder.tokenWithCount(
 ) {
     styledDiv {
         block()
-        val tokenCountSize = imgSize * 0.6
+        val tokenCountSize = if (imgSize != null) imgSize * 0.6 else 1.5.rem
         when (countPosition) {
             TokenCountPosition.RIGHT -> {
                 tokenImage(tokenName, title = title, size = imgSize)
@@ -84,12 +84,16 @@ fun RBuilder.tokenWithCount(
 fun RBuilder.tokenImage(
     tokenName: String,
     title: String = tokenName,
-    size: LinearDimension = 3.rem,
+    size: LinearDimension?,
     block: StyledDOMBuilder<IMG>.() -> Unit = {}
 ) {
     styledImg(src = getTokenImagePath(tokenName)) {
         css {
-            tokenImageStyle(size)
+            height = size ?: 100.pct
+            if (size != null) {
+                width = size
+            }
+            verticalAlign = VerticalAlign.middle
         }
         attrs {
             this.title = title
@@ -100,12 +104,6 @@ fun RBuilder.tokenImage(
 }
 
 private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.png"
-
-private fun CSSBuilder.tokenImageStyle(size: LinearDimension) {
-    height = size
-    width = size
-    verticalAlign = VerticalAlign.middle
-}
 
 private fun CSSBuilder.tokenCountStyle(
     size: LinearDimension,

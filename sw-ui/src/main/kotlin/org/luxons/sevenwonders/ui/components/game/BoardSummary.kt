@@ -103,7 +103,7 @@ private fun StyledDOMBuilder<DIV>.generalCounts(
         brightText = countPosition == TokenCountPosition.OVER
     )
     tokenWithCount(
-        tokenName = "military",
+        tokenName = "military/shield",
         count = board.military.nbShields,
         imgSize = tokenSize,
         countPosition = countPosition,
@@ -117,21 +117,21 @@ private fun RBuilder.scienceTokens(
     sciencePosition: TokenCountPosition
 ) {
     tokenWithCount(
-        tokenName = "compass",
+        tokenName = "science/compass",
         count = board.science.nbCompasses,
         imgSize = tokenSize,
         countPosition = sciencePosition,
         brightText = sciencePosition == TokenCountPosition.OVER
     )
     tokenWithCount(
-        tokenName = "cog",
+        tokenName = "science/cog",
         count = board.science.nbWheels,
         imgSize = tokenSize,
         countPosition = sciencePosition,
         brightText = sciencePosition == TokenCountPosition.OVER
     )
     tokenWithCount(
-        tokenName = "tablet",
+        tokenName = "science/tablet",
         count = board.science.nbTablets,
         imgSize = tokenSize,
         countPosition = sciencePosition,

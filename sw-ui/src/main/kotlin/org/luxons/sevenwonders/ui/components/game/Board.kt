@@ -7,6 +7,7 @@ import kotlinx.html.HTMLTag
 import kotlinx.html.IMG
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.boards.Board
+import org.luxons.sevenwonders.model.boards.Military
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.wonders.ApiWonder
 import org.luxons.sevenwonders.model.wonders.ApiWonderStage
@@ -25,7 +26,7 @@ fun RBuilder.boardComponent(board: Board, block: StyledDOMBuilder<DIV>.() -> Uni
     styledDiv {
         block()
         tableCards(cardColumns = board.playedCards)
-        wonderComponent(wonder = board.wonder)
+        wonderComponent(wonder = board.wonder, military = board.military)
     }
 }
 
@@ -83,7 +84,7 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
     }
 }
 
-private fun RBuilder.wonderComponent(wonder: ApiWonder) {
+private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
     styledDiv {
         css {
             position = Position.relative
@@ -112,16 +113,63 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder) {
                     this.alt = "Wonder ${wonder.name}"
                 }
             }
+            victoryPoints(military.totalPoints) {
+                css {
+                    position = Position.absolute
+                    top = 25.pct // below the wonder name
+                    left = 60.pct
+                    zIndex = 2 // go above the wonder, but below the table cards
+                }
+            }
+            defeatTokenCount(military.nbDefeatTokens) {
+                css {
+                    position = Position.absolute
+                    top = 25.pct // below the wonder name
+                    left = 80.pct
+                    zIndex = 2 // go above the wonder, but below the table cards
+                }
+            }
             wonder.stages.forEachIndexed { index, stage ->
                 wonderStageElement(stage) {
                     css {
-                        wonderCardStyle()
-                        left = stagePositionPercent(index, wonder.stages.size).pct
+                        wonderCardStyle(index, wonder.stages.size)
                     }
                 }
             }
         }
     }
+}
+
+private fun RBuilder.victoryPoints(points: Int, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
+    boardToken("military/victory1", points, block)
+}
+
+private fun RBuilder.defeatTokenCount(nbDefeatTokens: Int, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
+    boardToken("military/defeat1", nbDefeatTokens, block)
+}
+
+private fun RBuilder.boardToken(tokenName: String, count: Int, block: StyledDOMBuilder<DIV>.() -> Unit) {
+    tokenWithCount(
+        tokenName = tokenName,
+        count = count,
+        countPosition = TokenCountPosition.RIGHT,
+        brightText = true
+    ) {
+        css {
+            filter = "drop-shadow(0.2rem 0.2rem 0.5rem black)"
+            height = 15.pct
+        }
+        block()
+    }
+}
+
+private fun CSSBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
+    position = Position.absolute
+    top = 60.pct
+    left = stagePositionPercent(stageIndex, nbStages).pct
+    maxWidth = 24.pct
+    maxHeight = 90.pct
+    zIndex = -1
 }
 
 private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {

@@ -54,7 +54,7 @@ private fun RBuilder.fixedResources(resources: List<CountedResource>) {
             display = Display.flex
         }
         resources.forEach {
-            tokenWithCount(tokenName = getResourceTokenName(it.type), count = it.count) {
+            tokenWithCount(tokenName = getResourceTokenName(it.type), count = it.count, imgSize = 3.rem) {
                 attrs { key = it.type.toString() }
                 css { marginLeft = 1.rem }
             }
@@ -85,7 +85,7 @@ private fun RBuilder.resourceChoice(types: Set<ResourceType>, block: StyledDOMBu
         }
         block()
         for ((i, t) in types.withIndex()) {
-            tokenImage(tokenName = getResourceTokenName(t)) {
+            tokenImage(tokenName = getResourceTokenName(t), size = 3.rem) {
                 attrs { this.key = t.toString() }
             }
             if (i < types.indices.last) {
