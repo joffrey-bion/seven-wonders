@@ -110,10 +110,9 @@ private fun CSSBuilder.tokenCountStyle(
     brightText: Boolean,
     customStyle: CSSBuilder.() -> Unit = {}
 ) {
-    fontFamily = "Josefin Sans"
+    fontFamily = "Acme"
     fontSize = size
     verticalAlign = VerticalAlign.middle
     color = if (brightText) Color.white else Color.black
-    fontWeight = FontWeight.bold
     customStyle()
 }
