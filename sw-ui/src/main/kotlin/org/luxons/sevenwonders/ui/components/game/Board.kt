@@ -163,15 +163,6 @@ private fun RBuilder.boardToken(tokenName: String, count: Int, block: StyledDOMB
     }
 }
 
-private fun CSSBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
-    position = Position.absolute
-    top = 60.pct
-    left = stagePositionPercent(stageIndex, nbStages).pct
-    maxWidth = 24.pct
-    maxHeight = 90.pct
-    zIndex = -1
-}
-
 private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {
     val back = stage.cardBack
     if (back != null) {
@@ -185,9 +176,10 @@ private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMB
     }
 }
 
-fun CSSBuilder.wonderCardStyle() {
+private fun CSSBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
     position = Position.absolute
     top = 60.pct // makes the cards stick out of the bottom of the wonder
+    left = stagePositionPercent(stageIndex, nbStages).pct
     maxWidth = 24.pct // ratio of card width to wonder width
     maxHeight = 90.pct // ratio of card height to wonder height
     zIndex = -1 // below wonder (somehow 0 is not sufficient)
