@@ -587,8 +587,7 @@
             "boards": [
               "SELF", "LEFT", "RIGHT"
             ],
-            "gold": 0,
-            "points": 2,
+            "gold": 2,
             "type": "CARD",
             "colors": [
               "GREY"
@@ -653,7 +652,7 @@
             "boards": [
               "SELF", "LEFT", "RIGHT"
             ],
-            "points": 1,
+            "gold": 1,
             "type": "CARD",
             "colors": [
               "BROWN"
