@@ -10,7 +10,7 @@ internal class Military(
         private set
 
     val totalPoints
-        get() = victoryPoints + lostPointsPerDefeat * nbDefeatTokens
+        get() = victoryPoints - lostPointsPerDefeat * nbDefeatTokens
 
     var victoryPoints = 0
         private set
