@@ -5,11 +5,11 @@ import org.junit.experimental.theories.DataPoints
 import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
+import org.luxons.sevenwonders.engine.test.createTransaction
+import org.luxons.sevenwonders.engine.test.createTransactions
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.model.resources.noTransactions
-import org.luxons.sevenwonders.engine.test.createTransaction
-import org.luxons.sevenwonders.engine.test.createTransactions
 import kotlin.test.assertEquals
 
 @RunWith(Theories::class)

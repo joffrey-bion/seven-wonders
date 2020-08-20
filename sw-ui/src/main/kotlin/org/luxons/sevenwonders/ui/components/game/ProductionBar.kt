@@ -17,8 +17,7 @@ import kotlinx.css.height
 import kotlinx.css.margin
 import kotlinx.css.marginLeft
 import kotlinx.css.position
-import kotlinx.css.properties.borderTop
-import kotlinx.css.properties.boxShadow
+import kotlinx.css.properties.*
 import kotlinx.css.px
 import kotlinx.css.rem
 import kotlinx.css.verticalAlign

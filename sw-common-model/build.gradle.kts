@@ -1,7 +1,6 @@
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("org.jlleitschuh.gradle.ktlint")
+    kotlin("plugin.serialization")
 }
 
 val kotlinSerialization = "0.20.0"

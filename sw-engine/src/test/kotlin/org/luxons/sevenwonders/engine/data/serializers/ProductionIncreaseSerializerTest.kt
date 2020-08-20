@@ -9,8 +9,8 @@ import org.junit.Test
 import org.luxons.sevenwonders.engine.effects.ProductionIncrease
 import org.luxons.sevenwonders.engine.resources.MutableResources
 import org.luxons.sevenwonders.engine.resources.Production
-import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.engine.resources.Resources
+import org.luxons.sevenwonders.model.resources.ResourceType
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull

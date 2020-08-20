@@ -5,11 +5,11 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.SimplePlayer
-import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.engine.resources.resourcesOf
 import org.luxons.sevenwonders.engine.test.fixedProduction
 import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.engine.test.testTable
+import org.luxons.sevenwonders.model.resources.ResourceType
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

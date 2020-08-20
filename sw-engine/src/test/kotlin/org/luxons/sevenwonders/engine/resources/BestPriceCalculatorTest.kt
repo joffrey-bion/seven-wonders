@@ -3,6 +3,10 @@ package org.luxons.sevenwonders.engine.resources
 import org.junit.Test
 import org.luxons.sevenwonders.engine.SimplePlayer
 import org.luxons.sevenwonders.engine.boards.Table
+import org.luxons.sevenwonders.engine.test.createTransaction
+import org.luxons.sevenwonders.engine.test.createTransactions
+import org.luxons.sevenwonders.engine.test.testBoard
+import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.resources.Provider.LEFT_PLAYER
 import org.luxons.sevenwonders.model.resources.Provider.RIGHT_PLAYER
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
@@ -12,10 +16,6 @@ import org.luxons.sevenwonders.model.resources.ResourceType.ORE
 import org.luxons.sevenwonders.model.resources.ResourceType.STONE
 import org.luxons.sevenwonders.model.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.model.resources.noTransactions
-import org.luxons.sevenwonders.engine.test.createTransaction
-import org.luxons.sevenwonders.engine.test.createTransactions
-import org.luxons.sevenwonders.engine.test.testBoard
-import org.luxons.sevenwonders.engine.test.testTable
 import kotlin.test.assertEquals
 
 class BestPriceCalculatorTest {

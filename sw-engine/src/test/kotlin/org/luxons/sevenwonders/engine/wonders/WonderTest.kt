@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.engine.wonders
 
 import org.junit.Test
-import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.engine.test.testWonder
+import org.luxons.sevenwonders.model.cards.CardBack
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 

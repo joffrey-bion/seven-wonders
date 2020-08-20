@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
     kotlin("js")
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
 repositories {

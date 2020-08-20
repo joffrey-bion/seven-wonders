@@ -2,16 +2,16 @@ package org.luxons.sevenwonders.engine.cards
 
 import org.junit.Test
 import org.luxons.sevenwonders.engine.SimplePlayer
-import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.effects.ProductionIncrease
 import org.luxons.sevenwonders.engine.resources.Production
-import org.luxons.sevenwonders.model.resources.ResourceType
-import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.engine.test.testCard
 import org.luxons.sevenwonders.engine.test.testSettings
 import org.luxons.sevenwonders.engine.wonders.Wonder
+import org.luxons.sevenwonders.model.cards.Color
+import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.resources.noTransactions
 import kotlin.test.assertEquals
 
 class CardTest {

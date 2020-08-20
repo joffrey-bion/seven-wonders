@@ -1,6 +1,5 @@
 plugins {
     kotlin("multiplatform")
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
 val krossbowVersion = "0.21.1"

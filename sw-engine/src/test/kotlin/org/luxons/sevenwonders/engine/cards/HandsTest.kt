@@ -8,9 +8,9 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.SimplePlayer
-import org.luxons.sevenwonders.model.cards.HandRotationDirection
 import org.luxons.sevenwonders.engine.test.sampleCards
 import org.luxons.sevenwonders.engine.test.testTable
+import org.luxons.sevenwonders.model.cards.HandRotationDirection
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse

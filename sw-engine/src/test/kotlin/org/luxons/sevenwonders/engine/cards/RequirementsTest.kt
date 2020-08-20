@@ -8,14 +8,14 @@ import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.SimplePlayer
 import org.luxons.sevenwonders.engine.boards.Table
-import org.luxons.sevenwonders.model.resources.Provider
-import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.engine.resources.emptyResources
-import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.engine.test.createRequirements
 import org.luxons.sevenwonders.engine.test.createTransactions
 import org.luxons.sevenwonders.engine.test.singleBoardPlayer
 import org.luxons.sevenwonders.engine.test.testBoard
+import org.luxons.sevenwonders.model.resources.Provider
+import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.resources.noTransactions
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue

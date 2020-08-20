@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.engine.moves
 
 import org.junit.Test
 import org.luxons.sevenwonders.engine.PlayerContext
-import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.test.createMove
@@ -10,6 +9,7 @@ import org.luxons.sevenwonders.engine.test.sampleCards
 import org.luxons.sevenwonders.engine.test.testCard
 import org.luxons.sevenwonders.engine.test.testSettings
 import org.luxons.sevenwonders.engine.test.testTable
+import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.Settings
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

@@ -1,8 +1,7 @@
 package org.luxons.sevenwonders.ui.components
 
 import kotlinx.css.*
-import kotlinx.css.properties.transform
-import kotlinx.css.properties.translate
+import kotlinx.css.properties.*
 import styled.StyleSheet
 
 object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {

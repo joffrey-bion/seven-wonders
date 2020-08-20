@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     id("org.springframework.boot") version "2.3.3.RELEASE"
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
 apply(plugin = "io.spring.dependency-management")

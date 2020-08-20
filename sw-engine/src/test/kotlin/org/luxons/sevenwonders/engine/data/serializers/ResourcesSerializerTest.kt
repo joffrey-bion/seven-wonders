@@ -6,12 +6,12 @@ import com.google.gson.GsonBuilder
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.engine.resources.MutableResources
-import org.luxons.sevenwonders.model.resources.ResourceType.CLAY
-import org.luxons.sevenwonders.model.resources.ResourceType.STONE
-import org.luxons.sevenwonders.model.resources.ResourceType.WOOD
 import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.engine.resources.emptyResources
 import org.luxons.sevenwonders.engine.resources.resourcesOf
+import org.luxons.sevenwonders.model.resources.ResourceType.CLAY
+import org.luxons.sevenwonders.model.resources.ResourceType.STONE
+import org.luxons.sevenwonders.model.resources.ResourceType.WOOD
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
