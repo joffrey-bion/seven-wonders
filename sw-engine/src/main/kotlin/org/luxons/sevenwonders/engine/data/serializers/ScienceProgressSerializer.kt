@@ -1,13 +1,6 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonParseException
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import com.google.gson.*
 import org.luxons.sevenwonders.engine.boards.Science
 import org.luxons.sevenwonders.engine.boards.ScienceType
 import org.luxons.sevenwonders.engine.effects.ScienceProgress
@@ -50,6 +43,6 @@ internal class ScienceProgressSerializer : JsonSerializer<ScienceProgress>, Json
 
     private fun deserializeScienceType(json: JsonElement, context: JsonDeserializationContext): ScienceType {
         return context.deserialize<ScienceType>(json, ScienceType::class.java)
-                ?: throw IllegalArgumentException("Invalid science level " + json.asString)
+            ?: throw IllegalArgumentException("Invalid science level " + json.asString)
     }
 }

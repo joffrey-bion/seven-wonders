@@ -112,14 +112,16 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
     }
 
     private fun RElementBuilder<IButtonGroupProps>.playCardButton(card: HandCard, handAction: HandAction) {
-        bpButton(title = "${handAction.buttonTitle} (${cardPlayabilityInfo(card.playability)})",
+        bpButton(
+            title = "${handAction.buttonTitle} (${cardPlayabilityInfo(card.playability)})",
             large = true,
             intent = Intent.SUCCESS,
             disabled = !card.playability.isPlayable,
             onClick = {
                 val transactions = card.playability.cheapestTransactions.first()
                 props.prepareMove(PlayerMove(handAction.moveType, card.name, transactions))
-            }) {
+            }
+        ) {
             bpIcon(handAction.icon)
             if (card.playability.isPlayable && !card.playability.isFree) {
                 priceInfo(card.playability.minPrice)
@@ -129,14 +131,16 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
 
     private fun RElementBuilder<IButtonGroupProps>.upgradeWonderButton(card: HandCard) {
         val wonderBuildability = props.turnInfo.wonderBuildability
-        bpButton(title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
+        bpButton(
+            title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
             large = true,
             intent = Intent.PRIMARY,
             disabled = !wonderBuildability.isBuildable,
             onClick = {
                 val transactions = wonderBuildability.cheapestTransactions.first()
                 props.prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions))
-            }) {
+            }
+        ) {
             bpIcon("key-shift")
             if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
                 priceInfo(wonderBuildability.minPrice)

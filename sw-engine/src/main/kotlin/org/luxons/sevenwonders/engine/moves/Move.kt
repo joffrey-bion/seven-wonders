@@ -2,9 +2,9 @@ package org.luxons.sevenwonders.engine.moves
 
 import org.luxons.sevenwonders.engine.PlayerContext
 import org.luxons.sevenwonders.engine.cards.Card
-import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
 internal abstract class Move(

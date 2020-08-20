@@ -28,8 +28,8 @@ internal data class BonusPerBoardElement(
         .sumBy { nbMatchingElementsIn(it) }
 
     private fun nbMatchingElementsIn(board: Board): Int = when (type) {
-            BoardElementType.CARD -> board.getNbCardsOfColor(colors!!)
-            BoardElementType.BUILT_WONDER_STAGES -> board.wonder.nbBuiltStages
-            BoardElementType.DEFEAT_TOKEN -> board.military.nbDefeatTokens
+        BoardElementType.CARD -> board.getNbCardsOfColor(colors!!)
+        BoardElementType.BUILT_WONDER_STAGES -> board.wonder.nbBuiltStages
+        BoardElementType.DEFEAT_TOKEN -> board.military.nbDefeatTokens
     }
 }

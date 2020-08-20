@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import redux.RAction
 

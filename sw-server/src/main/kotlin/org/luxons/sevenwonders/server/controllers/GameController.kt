@@ -93,10 +93,10 @@ class GameController(
     }
 
     private fun sendPlayerReady(gameId: Long, player: Player) =
-            template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
+        template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
 
     private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) =
-            template.convertAndSend("/topic/game/$gameId/prepared", preparedCard)
+        template.convertAndSend("/topic/game/$gameId/prepared", preparedCard)
 
     private fun sendTurnInfo(players: List<Player>, game: Game, hideHands: Boolean) {
         val turns = game.getCurrentTurnInfo()

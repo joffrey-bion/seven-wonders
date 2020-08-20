@@ -214,19 +214,19 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
 fun RBuilder.gameScene() = gameScene {}
 
 private val gameScene: RClass<GameSceneProps> =
-        connectStateAndDispatch<GameSceneStateProps, GameSceneDispatchProps, GameSceneProps>(
-            clazz = GameScene::class,
-            mapDispatchToProps = { dispatch, _ ->
-                prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
-                unprepareMove = { dispatch(RequestUnprepareMove()) }
-                sayReady = { dispatch(RequestSayReady()) }
-                leaveGame = { dispatch(RequestLeaveGame()) }
-            },
-            mapStateToProps = { state, _ ->
-                playerIsReady = state.currentPlayer?.isReady == true
-                players = state.gameState?.players ?: emptyList()
-                gameState = state.gameState
-                preparedMove = state.gameState?.currentPreparedMove
-                preparedCard = state.gameState?.currentPreparedCard
-            }
-        )
+    connectStateAndDispatch<GameSceneStateProps, GameSceneDispatchProps, GameSceneProps>(
+        clazz = GameScene::class,
+        mapDispatchToProps = { dispatch, _ ->
+            prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
+            unprepareMove = { dispatch(RequestUnprepareMove()) }
+            sayReady = { dispatch(RequestSayReady()) }
+            leaveGame = { dispatch(RequestLeaveGame()) }
+        },
+        mapStateToProps = { state, _ ->
+            playerIsReady = state.currentPlayer?.isReady == true
+            players = state.gameState?.players ?: emptyList()
+            gameState = state.gameState
+            preparedMove = state.gameState?.currentPreparedMove
+            preparedCard = state.gameState?.currentPreparedCard
+        }
+    )

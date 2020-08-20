@@ -15,16 +15,16 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
 import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
 import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
-import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
-import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
 import org.luxons.sevenwonders.model.api.actions.*
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
 
 class SevenWondersClient {
 
@@ -122,13 +122,13 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     }
 
     fun watchPlayerReady(gameId: Long): Flow<String> =
-            stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
+        stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
 
     fun watchPreparedCards(gameId: Long): Flow<PreparedCard> =
-            stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
+        stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
 
     fun watchTurns(): Flow<PlayerTurnInfo> =
-            stompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo.serializer())
+        stompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo.serializer())
 
     suspend fun sayReady() {
         stompSession.sendEmptyMsg("/app/game/sayReady")

@@ -75,9 +75,9 @@ class BoardsKtTest {
         val cards = listOf(res1, green1, green2, res2, blue1, res3)
         val cols = cards.toColumns()
         val expectedCols = listOf(
-                listOf(res1, res2, res3),
-                listOf(blue1),
-                listOf(green1, green2)
+            listOf(res1, res2, res3),
+            listOf(blue1),
+            listOf(green1, green2)
         )
         assertEquals(expectedCols, cols)
     }

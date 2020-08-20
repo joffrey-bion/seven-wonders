@@ -10,6 +10,8 @@ import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.cards.TableCard
 import org.luxons.sevenwonders.model.resources.CountedResource
+import org.luxons.sevenwonders.model.wonders.ApiWonder
+import org.luxons.sevenwonders.model.wonders.ApiWonderStage
 import org.luxons.sevenwonders.engine.boards.Board as InternalBoard
 import org.luxons.sevenwonders.engine.boards.Military as InternalMilitary
 import org.luxons.sevenwonders.engine.boards.Science as InternalScience
@@ -22,8 +24,6 @@ import org.luxons.sevenwonders.model.boards.Military as ApiMilitary
 import org.luxons.sevenwonders.model.boards.Production as ApiProduction
 import org.luxons.sevenwonders.model.boards.Requirements as ApiRequirements
 import org.luxons.sevenwonders.model.boards.Science as ApiScience
-import org.luxons.sevenwonders.model.wonders.ApiWonder as ApiWonder
-import org.luxons.sevenwonders.model.wonders.ApiWonderStage as ApiWonderStage
 
 internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?, currentAge: Age): ApiBoard =
     ApiBoard(
@@ -83,9 +83,9 @@ internal fun InternalRequirements.toApiRequirements(): ApiRequirements =
     )
 
 internal fun Resources.toCountedResourcesList(): List<CountedResource> =
-        quantities.filterValues { it > 0 }
-            .map { (type, count) -> CountedResource(count, type) }
-            .sortedBy { it.type }
+    quantities.filterValues { it > 0 }
+        .map { (type, count) -> CountedResource(count, type) }
+        .sortedBy { it.type }
 
 internal fun InternalMilitary.toApiMilitary(): ApiMilitary =
     ApiMilitary(nbShields, victoryPoints, totalPoints, nbDefeatTokens)

@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.model.api.actions
 
 import kotlinx.serialization.Serializable
-import org.luxons.sevenwonders.model.wonders.AssignedWonder
-import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.Settings
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
 
 /**
  * The action to choose the player's name. This is the first action that should be called.

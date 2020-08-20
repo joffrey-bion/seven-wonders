@@ -28,7 +28,7 @@ enum class SpecialAbility {
     COPY_GUILD {
         override fun computePoints(player: Player): Int {
             val copiedGuild = player.board.copiedGuild
-                    ?: throw IllegalStateException("The copied Guild has not been chosen, cannot compute points")
+                ?: throw IllegalStateException("The copied Guild has not been chosen, cannot compute points")
             return copiedGuild.effects.sumBy { it.computePoints(player) }
         }
     };

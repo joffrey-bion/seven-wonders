@@ -13,24 +13,16 @@ internal data class RequirementsSatisfaction(
     companion object {
 
         internal fun noRequirements() =
-            RequirementsSatisfaction(true, PlayabilityLevel.NO_REQUIREMENTS, 0, setOf(
-                noTransactions()
-            ))
+            RequirementsSatisfaction(true, PlayabilityLevel.NO_REQUIREMENTS, 0, setOf(noTransactions()))
 
         internal fun enoughResources() =
-            RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_RESOURCES, 0, setOf(
-                noTransactions()
-            ))
+            RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_RESOURCES, 0, setOf(noTransactions()))
 
         internal fun enoughGold(minPrice: Int) =
-            RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_GOLD, minPrice, setOf(
-                noTransactions()
-            ))
+            RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_GOLD, minPrice, setOf(noTransactions()))
 
         internal fun enoughResourcesAndGold(minPrice: Int) =
-            RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_GOLD_AND_RES, minPrice, setOf(
-                noTransactions()
-            ))
+            RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_GOLD_AND_RES, minPrice, setOf(noTransactions()))
 
         internal fun metWithHelp(minPrice: Int, cheapestTransactions: Set<ResourceTransactions>) =
             RequirementsSatisfaction(true, PlayabilityLevel.REQUIRES_HELP, minPrice, cheapestTransactions)

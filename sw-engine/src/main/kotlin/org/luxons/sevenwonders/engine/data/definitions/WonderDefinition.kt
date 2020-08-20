@@ -3,9 +3,9 @@ package org.luxons.sevenwonders.engine.data.definitions
 import org.luxons.sevenwonders.engine.cards.Requirements
 import org.luxons.sevenwonders.engine.wonders.Wonder
 import org.luxons.sevenwonders.engine.wonders.WonderStage
+import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.model.wonders.WonderName
 import org.luxons.sevenwonders.model.wonders.WonderSide
-import org.luxons.sevenwonders.model.resources.ResourceType
 
 internal class WonderDefinition(
     val name: WonderName,

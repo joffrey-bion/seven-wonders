@@ -2,10 +2,10 @@ package org.luxons.sevenwonders.server.lobby
 
 import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.engine.data.GameDefinition
-import org.luxons.sevenwonders.model.wonders.AssignedWonder
-import org.luxons.sevenwonders.model.wonders.PreGameWonder
 import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.State
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import org.luxons.sevenwonders.model.wonders.PreGameWonder
 import org.luxons.sevenwonders.model.wonders.withRandomSide
 
 class Lobby(

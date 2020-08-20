@@ -2,32 +2,27 @@ package org.luxons.sevenwonders.engine.test
 
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.PlayerContext
-import org.luxons.sevenwonders.model.resources.CountedResource
-import org.luxons.sevenwonders.model.Settings
-import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.engine.boards.Board
-import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.engine.boards.Science
 import org.luxons.sevenwonders.engine.boards.ScienceType
 import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.cards.Card
-import org.luxons.sevenwonders.model.cards.CardBack
-import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.engine.cards.Requirements
 import org.luxons.sevenwonders.engine.effects.Effect
 import org.luxons.sevenwonders.engine.effects.ScienceProgress
 import org.luxons.sevenwonders.engine.moves.Move
-import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.engine.moves.resolve
 import org.luxons.sevenwonders.engine.resources.Production
-import org.luxons.sevenwonders.model.resources.Provider
-import org.luxons.sevenwonders.model.resources.ResourceTransaction
-import org.luxons.sevenwonders.model.resources.ResourceTransactions
-import org.luxons.sevenwonders.model.resources.ResourceType
-import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.engine.resources.resourcesOf
 import org.luxons.sevenwonders.engine.wonders.Wonder
 import org.luxons.sevenwonders.engine.wonders.WonderStage
+import org.luxons.sevenwonders.model.MoveType
+import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.Settings
+import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
+import org.luxons.sevenwonders.model.cards.CardBack
+import org.luxons.sevenwonders.model.cards.Color
+import org.luxons.sevenwonders.model.resources.*
 
 internal const val SEED: Long = 42
 
@@ -72,8 +67,7 @@ internal fun createTransactions(provider: Provider, vararg resources: ResourceTy
 internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions = transactions.toSet()
 
 internal fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction =
-    ResourceTransaction(provider,
-        resources.map { CountedResource(1, it) })
+    ResourceTransaction(provider, resources.map { CountedResource(1, it) })
 
 internal fun createRequirements(vararg types: ResourceType): Requirements = Requirements(resources = resourcesOf(*types))
 
@@ -92,9 +86,7 @@ internal fun testCard(
     effect: Effect? = null
 ): Card {
     val effects = if (effect == null) emptyList() else listOf(effect)
-    return Card(name, color, requirements, effects, null, emptyList(), "path/to/card/image",
-        CardBack("image-III")
-    )
+    return Card(name, color, requirements, effects, null, emptyList(), "path/to/card/image", CardBack("image-III"))
 }
 
 internal fun addCards(board: Board, nbCardsOfColor: Int, nbOtherCards: Int, color: Color) {

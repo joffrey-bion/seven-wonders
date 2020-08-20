@@ -55,9 +55,7 @@ private fun currentLobbyReducer(currentLobby: LobbyDTO?, action: RAction): Lobby
     is EnterLobbyAction -> action.lobby
     is UpdateLobbyAction -> action.lobby
     is PlayerReadyEvent -> currentLobby?.let { l ->
-        l.copy(players = l.players.map { p ->
-            if (p.username == action.username) p.copy(isReady = true) else p
-        })
+        l.copy(players = l.players.map { p -> if (p.username == action.username) p.copy(isReady = true) else p })
     }
     else -> currentLobby
 }
@@ -73,9 +71,9 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     is PreparedCardEvent -> gameState?.copy(
         preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.username to action.card.cardBack)
     )
-    is PlayerReadyEvent -> gameState?.copy(players = gameState.players.map { p ->
-        if (p.username == action.username) p.copy(isReady = true) else p
-    })
+    is PlayerReadyEvent -> gameState?.copy(
+        players = gameState.players.map { p -> if (p.username == action.username) p.copy(isReady = true) else p }
+    )
     is TurnInfoEvent -> gameState?.copy(
         players = gameState.players.map { p -> p.copy(isReady = false) },
         turnInfo = action.turnInfo,

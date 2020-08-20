@@ -43,9 +43,7 @@ class RequirementsTest {
         val board = testBoard(ResourceType.CLAY, boardGold)
         val player = singleBoardPlayer(board)
 
-        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board,
-            noTransactions()
-        ))
+        assertEquals(boardGold >= requiredGold, requirements.areMetWithHelpBy(board, noTransactions()))
 
         val satisfaction = requirements.assess(player)
         if (boardGold >= requiredGold) {
@@ -66,9 +64,7 @@ class RequirementsTest {
         val board = testBoard(initialResource, 0)
         val player = singleBoardPlayer(board)
 
-        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board,
-            noTransactions()
-        ))
+        assertEquals(initialResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
 
         if (initialResource == requiredResource) {
             val satisfaction = requirements.assess(player)
@@ -90,9 +86,7 @@ class RequirementsTest {
         board.production.addFixedResource(producedResource, 1)
         val player = singleBoardPlayer(board)
 
-        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board,
-            noTransactions()
-        ))
+        assertEquals(producedResource == requiredResource, requirements.areMetWithHelpBy(board, noTransactions()))
 
         if (producedResource == requiredResource) {
             val satisfaction = requirements.assess(player)
