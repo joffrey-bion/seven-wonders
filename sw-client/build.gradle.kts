@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
 }
 
-val krossbowVersion = "0.21.1"
+val krossbowVersion = "0.30.1"
 
 kotlin {
     jvm()
@@ -13,20 +13,14 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":sw-common-model"))
-                implementation(kotlin("stdlib-common"))
-                api("org.hildan.krossbow:krossbow-stomp-kxserialization-metadata:$krossbowVersion")
+                api("org.hildan.krossbow:krossbow-stomp-kxserialization:$krossbowVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-            }
-        }
-        val jvmMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-jdk8"))
-                api("org.hildan.krossbow:krossbow-stomp-kxserialization-jvm:$krossbowVersion")
             }
         }
         val jvmTest by getting {
@@ -37,8 +31,6 @@ kotlin {
         }
         val jsMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-js"))
-                api("org.hildan.krossbow:krossbow-stomp-kxserialization-js:$krossbowVersion")
                 implementation(npm("text-encoding", "0.7.0")) // required by krossbow, because required by kotlinx-io
             }
         }

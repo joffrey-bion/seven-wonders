@@ -9,7 +9,7 @@ repositories {
     maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
 }
 
-val kotlinWrappersVersion = "pre.105-kotlin-1.3.72"
+val kotlinWrappersVersion = "pre.112-kotlin-1.4.0"
 
 kotlin {
     target {
@@ -19,7 +19,6 @@ kotlin {
     sourceSets {
         main {
             dependencies {
-                implementation(kotlin("stdlib-js"))
                 implementation(project(":sw-client"))
 
                 val reactVersion = "16.13.1"

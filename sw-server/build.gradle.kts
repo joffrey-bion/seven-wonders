@@ -10,9 +10,8 @@ dependencies {
     implementation(project(":sw-common-model"))
     implementation(project(":sw-engine"))
     implementation(project(":sw-bot"))
-    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect")) // required by Spring 5
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")

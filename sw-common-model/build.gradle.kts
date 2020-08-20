@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val kotlinSerialization = "0.20.0"
+val kotlinSerialization = "1.0.0-RC"
 
 kotlin {
     jvm()
@@ -13,8 +13,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(kotlin("stdlib-common"))
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinSerialization")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinSerialization")
             }
         }
         val commonTest by getting {
@@ -23,22 +22,10 @@ kotlin {
                 implementation(kotlin("test-annotations-common"))
             }
         }
-        val jvmMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-jdk8"))
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinSerialization")
-            }
-        }
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-js"))
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinSerialization")
             }
         }
         val jsTest by getting {

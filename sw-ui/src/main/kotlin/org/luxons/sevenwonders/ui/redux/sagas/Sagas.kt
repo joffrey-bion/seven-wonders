@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
+import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -15,7 +16,6 @@ import org.luxons.sevenwonders.ui.router.routerSaga
 import redux.RAction
 import redux.WrapperAction
 import webpack.isProdEnv
-import kotlin.browser.window
 
 typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 

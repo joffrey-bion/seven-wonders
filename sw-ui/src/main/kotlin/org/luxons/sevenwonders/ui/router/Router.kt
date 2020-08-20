@@ -1,11 +1,11 @@
 package org.luxons.sevenwonders.ui.router
 
+import kotlinx.browser.window
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.ui.redux.sagas.SwSagaContext
 import redux.RAction
-import kotlin.browser.window
 
 enum class Route(val path: String) {
     HOME("/"),

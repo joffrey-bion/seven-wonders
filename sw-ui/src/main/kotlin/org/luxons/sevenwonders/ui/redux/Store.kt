@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui.redux
 
+import kotlinx.browser.window
 import org.luxons.sevenwonders.ui.redux.sagas.SagaManager
 import redux.RAction
 import redux.Store
@@ -8,7 +9,6 @@ import redux.applyMiddleware
 import redux.compose
 import redux.createStore
 import redux.rEnhancer
-import kotlin.browser.window
 
 val INITIAL_STATE = SwState()
 

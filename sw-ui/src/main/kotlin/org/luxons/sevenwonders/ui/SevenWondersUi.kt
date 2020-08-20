@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.ui
 
+import kotlinx.browser.document
+import kotlinx.browser.window
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.ui.components.application
@@ -13,8 +15,6 @@ import react.redux.provider
 import redux.RAction
 import redux.Store
 import redux.WrapperAction
-import kotlin.browser.document
-import kotlin.browser.window
 
 fun main() {
     window.onload = {

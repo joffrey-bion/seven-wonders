@@ -4,8 +4,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.builtins.list
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.config.HeartBeat
@@ -33,6 +34,7 @@ class SevenWondersClient {
         heartBeatTolerance = HeartBeatTolerance(0, 10000) // wide margin to account for heroku cold start
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     suspend fun connect(serverUrl: String): SevenWondersSession {
         val session = stompClient.connect("$serverUrl$SEVEN_WONDERS_WS_ENDPOINT").withJsonConversions()
         return SevenWondersSession(session)
@@ -71,7 +73,7 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     )
 
     fun watchGames(): Flow<List<LobbyDTO>> =
-        stompSession.subscribe("/topic/games", LobbyDTO.serializer().list)
+        stompSession.subscribe("/topic/games", ListSerializer(LobbyDTO.serializer()))
 
     suspend fun createGame(gameName: String): LobbyDTO = stompSession.request(
         sendDestination = "/app/lobby/create",
