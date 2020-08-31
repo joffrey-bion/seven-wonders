@@ -12,7 +12,7 @@ repositories {
 val kotlinWrappersVersion = "pre.112-kotlin-1.4.0"
 
 kotlin {
-    target {
+    js {
         browser()
         useCommonJs()
     }
