@@ -37,7 +37,7 @@ jobs:
       with:
         path: ./sw-server
         username: ${{ github.actor }}
-        password: ${{ github.token }}
+        password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
         registry: ghcr.io
         repository: joffrey-bion/seven-wonders-server
         tag_with_ref: true
