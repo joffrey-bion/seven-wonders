@@ -7,8 +7,18 @@ import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.engine.data.definitions.DecksDefinition
 import org.luxons.sevenwonders.engine.data.definitions.WonderDefinition
-import org.luxons.sevenwonders.engine.data.serializers.*
-import org.luxons.sevenwonders.engine.effects.*
+import org.luxons.sevenwonders.engine.data.serializers.NumericEffectSerializer
+import org.luxons.sevenwonders.engine.data.serializers.ProductionIncreaseSerializer
+import org.luxons.sevenwonders.engine.data.serializers.ProductionSerializer
+import org.luxons.sevenwonders.engine.data.serializers.ResourceTypeSerializer
+import org.luxons.sevenwonders.engine.data.serializers.ResourceTypesSerializer
+import org.luxons.sevenwonders.engine.data.serializers.ResourcesSerializer
+import org.luxons.sevenwonders.engine.data.serializers.ScienceProgressSerializer
+import org.luxons.sevenwonders.engine.effects.GoldIncrease
+import org.luxons.sevenwonders.engine.effects.MilitaryReinforcements
+import org.luxons.sevenwonders.engine.effects.ProductionIncrease
+import org.luxons.sevenwonders.engine.effects.RawPointsIncrease
+import org.luxons.sevenwonders.engine.effects.ScienceProgress
 import org.luxons.sevenwonders.engine.resources.Production
 import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.model.Age
@@ -21,13 +31,13 @@ internal const val LAST_AGE: Age = 3
 
 internal data class GlobalRules(
     val minPlayers: Int,
-    val maxPlayers: Int
+    val maxPlayers: Int,
 )
 
 class GameDefinition internal constructor(
     rules: GlobalRules,
     wonderDefinitions: List<WonderDefinition>,
-    private val decksDefinition: DecksDefinition
+    private val decksDefinition: DecksDefinition,
 ) {
     val minPlayers: Int = rules.minPlayers
     val maxPlayers: Int = rules.maxPlayers

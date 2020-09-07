@@ -19,7 +19,7 @@ fun RBuilder.preparedMove(
     card: HandCard,
     move: PlayerMove,
     unprepareMove: () -> Unit,
-    block: StyledDOMBuilder<DIV>.() -> Unit
+    block: StyledDOMBuilder<DIV>.() -> Unit,
 ) {
     styledDiv {
         block()
@@ -45,7 +45,7 @@ fun RBuilder.preparedMove(
                 title = "Cancel prepared move",
                 small = true,
                 intent = Intent.DANGER,
-                onClick = { unprepareMove() }
+                onClick = { unprepareMove() },
             )
         }
     }

@@ -64,7 +64,7 @@ interface Resources {
 }
 
 class MutableResources(
-    override val quantities: MutableMap<ResourceType, Int> = mutableMapOf()
+    override val quantities: MutableMap<ResourceType, Int> = mutableMapOf(),
 ) : Resources {
 
     fun add(type: ResourceType, quantity: Int) {

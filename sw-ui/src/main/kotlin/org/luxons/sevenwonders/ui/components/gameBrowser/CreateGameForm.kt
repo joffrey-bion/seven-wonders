@@ -9,7 +9,12 @@ import org.luxons.sevenwonders.ui.redux.RequestCreateGame
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
-import react.*
+import react.RBuilder
+import react.RClass
+import react.RComponent
+import react.RProps
+import react.RState
+import react.buildElement
 import react.dom.*
 import styled.css
 import styled.styledDiv
@@ -44,7 +49,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
                         val input = e.currentTarget as HTMLInputElement
                         setState(transformState = { CreateGameFormState(input.value) })
                     },
-                    rightElement = createGameButton()
+                    rightElement = createGameButton(),
                 )
             }
             currentPlayerInfo()

@@ -16,7 +16,7 @@ internal class AnonymousUsersHandshakeHandler : DefaultHandshakeHandler() {
     override fun determineUser(
         request: ServerHttpRequest,
         wsHandler: WebSocketHandler,
-        attributes: Map<String, Any>
+        attributes: Map<String, Any>,
     ): Principal? {
         var p = super.determineUser(request, wsHandler, attributes)
         if (p == null) {

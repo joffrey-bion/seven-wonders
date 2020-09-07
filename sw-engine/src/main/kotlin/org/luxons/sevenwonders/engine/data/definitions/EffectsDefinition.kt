@@ -19,7 +19,7 @@ internal class EffectsDefinition(
     private val perBoardElement: BonusPerBoardElement? = null,
     private val production: ProductionIncrease? = null,
     private val points: RawPointsIncrease? = null,
-    private val action: SpecialAbility? = null
+    private val action: SpecialAbility? = null,
 ) {
     fun create(): List<Effect> = mutableListOf<Effect>().apply {
         gold?.let { add(it) }

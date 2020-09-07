@@ -25,7 +25,7 @@ class CardTest {
         val boards = listOf(
             Board(Wonder("TestWonder", ResourceType.WOOD, emptyList(), ""), 0, settings),
             Board(Wonder("TestWonder", ResourceType.STONE, emptyList(), ""), 1, settings),
-            Board(Wonder("TestWonder", ResourceType.PAPYRUS, emptyList(), ""), 2, settings)
+            Board(Wonder("TestWonder", ResourceType.PAPYRUS, emptyList(), ""), 2, settings),
         )
         val table = Table(boards)
 

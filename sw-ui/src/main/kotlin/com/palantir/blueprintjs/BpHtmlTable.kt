@@ -1,4 +1,5 @@
 @file:JsModule("@blueprintjs/core")
+
 package com.palantir.blueprintjs
 
 import react.PureComponent

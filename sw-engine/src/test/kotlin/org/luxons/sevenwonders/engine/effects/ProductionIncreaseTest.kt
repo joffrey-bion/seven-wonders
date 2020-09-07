@@ -21,7 +21,7 @@ class ProductionIncreaseTest {
     fun apply_boardContainsAddedResourceType(
         initialType: ResourceType,
         addedType: ResourceType,
-        extraType: ResourceType
+        extraType: ResourceType,
     ) {
         val board = testBoard(initialType)
         val effect = ProductionIncrease(fixedProduction(addedType), false)
@@ -41,7 +41,7 @@ class ProductionIncreaseTest {
     fun apply_boardContainsAddedResourceType_sellable(
         initialType: ResourceType,
         addedType: ResourceType,
-        extraType: ResourceType
+        extraType: ResourceType,
     ) {
         val board = testBoard(initialType)
         val effect = ProductionIncrease(fixedProduction(addedType), true)

@@ -6,10 +6,16 @@ import kotlinx.html.IMG
 import kotlinx.html.title
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
-import styled.*
+import styled.StyledDOMBuilder
+import styled.css
+import styled.styledDiv
+import styled.styledImg
+import styled.styledSpan
 
 enum class TokenCountPosition {
-    LEFT, RIGHT, OVER
+    LEFT,
+    RIGHT,
+    OVER,
 }
 
 fun RBuilder.goldIndicator(
@@ -17,7 +23,7 @@ fun RBuilder.goldIndicator(
     amountPosition: TokenCountPosition = TokenCountPosition.OVER,
     imgSize: LinearDimension = 3.rem,
     customCountStyle: CSSBuilder.() -> Unit = {},
-    block: StyledDOMBuilder<DIV>.() -> Unit = {}
+    block: StyledDOMBuilder<DIV>.() -> Unit = {},
 ) {
     tokenWithCount(
         tokenName = "coin",
@@ -26,7 +32,7 @@ fun RBuilder.goldIndicator(
         count = amount,
         countPosition = amountPosition,
         customCountStyle = customCountStyle,
-        block = block
+        block = block,
     )
 }
 
@@ -38,7 +44,7 @@ fun RBuilder.tokenWithCount(
     countPosition: TokenCountPosition = TokenCountPosition.RIGHT,
     brightText: Boolean = false,
     customCountStyle: CSSBuilder.() -> Unit = {},
-    block: StyledDOMBuilder<DIV>.() -> Unit = {}
+    block: StyledDOMBuilder<DIV>.() -> Unit = {},
 ) {
     styledDiv {
         block()
@@ -85,7 +91,7 @@ fun RBuilder.tokenImage(
     tokenName: String,
     title: String = tokenName,
     size: LinearDimension?,
-    block: StyledDOMBuilder<IMG>.() -> Unit = {}
+    block: StyledDOMBuilder<IMG>.() -> Unit = {},
 ) {
     styledImg(src = getTokenImagePath(tokenName)) {
         css {
@@ -108,7 +114,7 @@ private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.pn
 private fun CSSBuilder.tokenCountStyle(
     size: LinearDimension,
     brightText: Boolean,
-    customStyle: CSSBuilder.() -> Unit = {}
+    customStyle: CSSBuilder.() -> Unit = {},
 ) {
     fontFamily = "Acme"
     fontSize = size

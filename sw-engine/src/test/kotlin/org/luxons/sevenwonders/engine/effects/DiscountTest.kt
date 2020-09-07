@@ -30,7 +30,7 @@ class DiscountTest {
         discountedType: ResourceType,
         provider: Provider,
         otherType: ResourceType,
-        otherProvider: Provider
+        otherProvider: Provider,
     ) {
         Assume.assumeTrue(otherProvider != provider)
         Assume.assumeTrue(otherType != discountedType)

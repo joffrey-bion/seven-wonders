@@ -10,7 +10,7 @@ import org.luxons.sevenwonders.model.resources.ResourceTransactions
 internal abstract class Move(
     val move: PlayerMove,
     val card: Card,
-    val playerContext: PlayerContext
+    val playerContext: PlayerContext,
 ) {
     val type: MoveType = move.type
 
@@ -21,9 +21,8 @@ internal abstract class Move(
     abstract fun activate(discardedCards: List<Card>, settings: Settings)
 }
 
-class InvalidMoveException internal constructor(move: Move, message: String) : IllegalArgumentException(
-    "Player ${move.playerContext.index} cannot perform move ${move.type}: $message"
-)
+class InvalidMoveException internal constructor(move: Move, message: String) :
+    IllegalArgumentException("Player ${move.playerContext.index} cannot perform move ${move.type}: $message")
 
 internal fun MoveType.resolve(move: PlayerMove, card: Card, context: PlayerContext, discardedCards: List<Card>): Move =
     when (this) {

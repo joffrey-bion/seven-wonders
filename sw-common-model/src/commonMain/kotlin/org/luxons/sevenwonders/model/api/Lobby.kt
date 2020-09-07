@@ -6,7 +6,9 @@ import org.luxons.sevenwonders.model.wonders.PreGameWonder
 const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
 
 enum class State {
-    LOBBY, PLAYING, FINISHED
+    LOBBY,
+    PLAYING,
+    FINISHED,
 }
 
 @Serializable
@@ -18,7 +20,7 @@ data class LobbyDTO(
     val allWonders: List<PreGameWonder>,
     val state: State,
     val hasEnoughPlayers: Boolean,
-    val maxPlayersReached: Boolean
+    val maxPlayersReached: Boolean,
 ) {
     private val wondersByName = allWonders.associateBy { it.name }
 
@@ -28,8 +30,8 @@ data class LobbyDTO(
         state != State.LOBBY -> Actionability(false, "Cannot join: the game has already started")
         maxPlayersReached -> Actionability(false, "Cannot join: the game is full")
         playerNameAlreadyUsed(userDisplayName) -> Actionability(
-            false,
-            "Cannot join: already a player named '$userDisplayName' in this game"
+            canDo = false,
+            tooltip = "Cannot join: already a player named '$userDisplayName' in this game",
         )
         else -> Actionability(true, "Join game")
     }
@@ -46,5 +48,5 @@ data class LobbyDTO(
 @Serializable
 data class Actionability(
     val canDo: Boolean,
-    val tooltip: String
+    val tooltip: String,
 )

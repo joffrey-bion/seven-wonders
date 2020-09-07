@@ -15,7 +15,7 @@ class MilitaryTest {
     @Theory
     fun victory_addsCorrectPoints(
         @FromDataPoints("ages") age: Int,
-        @FromDataPoints("points") nbPointsPerVictory: Int
+        @FromDataPoints("points") nbPointsPerVictory: Int,
     ) {
         val military = createMilitary(age, nbPointsPerVictory, 0)
         val initialPoints = military.totalPoints

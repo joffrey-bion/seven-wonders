@@ -17,19 +17,19 @@ data class Board(
     val playedCards: List<List<TableCard>>,
     val gold: Int,
     val bluePoints: Int,
-    val canPlayAnyCardForFree: Boolean
+    val canPlayAnyCardForFree: Boolean,
 )
 
 @Serializable
 data class Requirements(
     val gold: Int = 0,
-    val resources: List<CountedResource> = emptyList()
+    val resources: List<CountedResource> = emptyList(),
 )
 
 @Serializable
 data class Production(
     val fixedResources: List<CountedResource>,
-    val alternativeResources: List<Set<ResourceType>>
+    val alternativeResources: List<Set<ResourceType>>,
 )
 
 @Serializable
@@ -37,7 +37,7 @@ data class Military(
     val nbShields: Int,
     val victoryPoints: Int,
     val totalPoints: Int,
-    val nbDefeatTokens: Int
+    val nbDefeatTokens: Int,
 )
 
 @Serializable
@@ -45,5 +45,5 @@ data class Science(
     val jokers: Int,
     val nbWheels: Int,
     val nbCompasses: Int,
-    val nbTablets: Int
+    val nbTablets: Int,
 )

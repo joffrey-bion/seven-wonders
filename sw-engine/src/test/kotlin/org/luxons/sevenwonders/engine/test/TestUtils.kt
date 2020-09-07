@@ -22,14 +22,17 @@ import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.Color
-import org.luxons.sevenwonders.model.resources.*
+import org.luxons.sevenwonders.model.resources.CountedResource
+import org.luxons.sevenwonders.model.resources.Provider
+import org.luxons.sevenwonders.model.resources.ResourceTransaction
+import org.luxons.sevenwonders.model.resources.ResourceTransactions
+import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.resources.noTransactions
 
 internal const val SEED: Long = 42
 
-internal fun testSettings(initialGold: Int = 0): Settings = Settings(
-    randomSeedForTests = SEED,
-    initialGold = initialGold
-)
+internal fun testSettings(initialGold: Int = 0): Settings =
+    Settings(randomSeedForTests = SEED, initialGold = initialGold)
 
 internal fun testTable(nbPlayers: Int = 5): Table = testTable(nbPlayers, testSettings())
 
@@ -40,7 +43,7 @@ private fun testBoards(count: Int, settings: Settings): List<Board> = List(count
 internal fun testBoard(
     initialResource: ResourceType = ResourceType.WOOD,
     initialGold: Int = 0,
-    vararg production: ResourceType
+    vararg production: ResourceType,
 ): Board {
     val settings = testSettings(initialGold = initialGold)
     val board = testBoard(settings, initialResource)
@@ -69,7 +72,8 @@ internal fun createTransactions(vararg transactions: ResourceTransaction): Resou
 internal fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction =
     ResourceTransaction(provider, resources.map { CountedResource(1, it) })
 
-internal fun createRequirements(vararg types: ResourceType): Requirements = Requirements(resources = resourcesOf(*types))
+internal fun createRequirements(vararg types: ResourceType): Requirements =
+    Requirements(resources = resourcesOf(*types))
 
 internal fun sampleCards(nbCards: Int, fromIndex: Int = 0, color: Color = Color.BLUE): List<Card> =
     List(nbCards) { i -> testCard("Test Card ${fromIndex + i}", color) }
@@ -83,7 +87,7 @@ internal fun testCard(
     name: String = "Test Card",
     color: Color = Color.BLUE,
     requirements: Requirements = Requirements(),
-    effect: Effect? = null
+    effect: Effect? = null,
 ): Card {
     val effects = if (effect == null) emptyList() else listOf(effect)
     return Card(name, color, requirements, effects, null, emptyList(), "path/to/card/image", CardBack("image-III"))

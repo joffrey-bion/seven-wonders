@@ -18,7 +18,7 @@ import java.security.Principal
 @Api(name = "Home")
 @Controller
 class HomeController(
-    private val playerRepository: PlayerRepository
+    private val playerRepository: PlayerRepository,
 ) {
 
     /**

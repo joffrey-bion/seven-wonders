@@ -12,7 +12,7 @@ class Lobby(
     val id: Long,
     val name: String,
     var owner: Player,
-    private val gameDefinition: GameDefinition
+    private val gameDefinition: GameDefinition,
 ) {
     private val players: MutableList<Player> = ArrayList(gameDefinition.maxPlayers)
 
@@ -49,8 +49,7 @@ class Lobby(
         assignedWonders.add(pickRandomWonder())
     }
 
-    private fun pickRandomWonder(): AssignedWonder =
-        allWonders.filter { !it.isAssigned() }.random().withRandomSide()
+    private fun pickRandomWonder(): AssignedWonder = allWonders.filter { !it.isAssigned() }.random().withRandomSide()
 
     private fun PreGameWonder.isAssigned() = name in assignedWonders.map { it.name }
 
@@ -122,11 +121,9 @@ class Lobby(
         state = State.FINISHED
     }
 
-    internal class GameAlreadyStartedException(name: String) :
-        IllegalStateException("Game '$name' has already started")
+    internal class GameAlreadyStartedException(name: String) : IllegalStateException("Game '$name' has already started")
 
-    internal class PlayerOverflowException(max: Int) :
-        IllegalStateException("Maximum $max players allowed")
+    internal class PlayerOverflowException(max: Int) : IllegalStateException("Maximum $max players allowed")
 
     internal class PlayerUnderflowException(min: Int) :
         IllegalStateException("Minimum $min players required to start a game")
@@ -134,8 +131,7 @@ class Lobby(
     internal class PlayerNameAlreadyUsedException(displayName: String, gameName: String) :
         IllegalArgumentException("Name '$displayName' is already used by a player in game '$gameName'")
 
-    internal class UnknownPlayerException(username: String) :
-        IllegalArgumentException("Unknown player '$username'")
+    internal class UnknownPlayerException(username: String) : IllegalArgumentException("Unknown player '$username'")
 
     internal class PlayerListMismatchException(usernames: List<String>) :
         IllegalArgumentException("Newly ordered usernames $usernames don't match the current player list")

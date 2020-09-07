@@ -25,5 +25,4 @@ class PlayerRepository {
     fun remove(username: String): Player = players.remove(username) ?: throw PlayerNotFoundException(username)
 }
 
-internal class PlayerNotFoundException(username: String) :
-    ApiMisuseException("Player '$username' doesn't exist")
+internal class PlayerNotFoundException(username: String) : ApiMisuseException("Player '$username' doesn't exist")

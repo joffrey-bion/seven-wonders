@@ -13,7 +13,7 @@ internal interface Player {
 
 internal data class SimplePlayer(
     override val index: Int,
-    private val table: Table
+    private val table: Table,
 ) : Player {
     override val board = table.getBoard(index)
     override fun getBoard(relativePosition: RelativeBoardPosition) = table.getBoard(index, relativePosition)
@@ -22,7 +22,7 @@ internal data class SimplePlayer(
 internal data class PlayerContext(
     override val index: Int,
     private val table: Table,
-    val hand: List<Card>
+    val hand: List<Card>,
 ) : Player by SimplePlayer(index, table) {
     val currentAge = table.currentAge
 }

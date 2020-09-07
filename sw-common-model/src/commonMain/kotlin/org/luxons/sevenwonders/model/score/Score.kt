@@ -9,7 +9,7 @@ class ScoreBoard(val scores: Collection<PlayerScore>)
 data class PlayerScore(
     val playerIndex: Int,
     val boardGold: Int,
-    val pointsByCategory: Map<ScoreCategory, Int>
+    val pointsByCategory: Map<ScoreCategory, Int>,
 ) : Comparable<PlayerScore> {
 
     val totalPoints = pointsByCategory.values.sum()

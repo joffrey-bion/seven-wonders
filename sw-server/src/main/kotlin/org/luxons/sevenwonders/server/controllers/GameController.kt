@@ -20,7 +20,7 @@ import java.security.Principal
 @Controller
 class GameController(
     private val template: SimpMessagingTemplate,
-    private val playerRepository: PlayerRepository
+    private val playerRepository: PlayerRepository,
 ) {
     private val Principal.player
         get() = playerRepository.find(name)

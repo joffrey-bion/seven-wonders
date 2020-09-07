@@ -15,7 +15,7 @@ fun RBuilder.cardImage(
     card: Card,
     faceDown: Boolean = false,
     highlightColor: Color? = null,
-    block: StyledDOMBuilder<IMG>.() -> Unit = {}
+    block: StyledDOMBuilder<IMG>.() -> Unit = {},
 ) {
     if (faceDown) {
         cardBackImage(card.back, highlightColor, block)
@@ -36,7 +36,7 @@ fun RBuilder.cardImage(
 fun RBuilder.cardBackImage(
     cardBack: CardBack,
     highlightColor: Color? = null,
-    block: StyledDOMBuilder<IMG>.() -> Unit = {}
+    block: StyledDOMBuilder<IMG>.() -> Unit = {},
 ) {
     styledImg(src = "/images/cards/back/${cardBack.image}") {
         css {
@@ -75,7 +75,7 @@ private fun CSSBuilder.highlightStyle(highlightColor: Color?) {
             offsetY = 0.px,
             blurRadius = 1.rem,
             spreadRadius = 0.1.rem,
-            color = highlightColor
+            color = highlightColor,
         )
     }
 }

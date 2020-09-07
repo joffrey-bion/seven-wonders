@@ -74,7 +74,7 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
             transform {
                 translate(
                     tx = (indexInColumn * xOffset).pct,
-                    ty = (indexInColumn * yOffset).pct
+                    ty = (indexInColumn * yOffset).pct,
                 )
             }
             maxWidth = 100.pct
@@ -153,7 +153,7 @@ private fun RBuilder.boardToken(tokenName: String, count: Int, block: StyledDOMB
         tokenName = tokenName,
         count = count,
         countPosition = TokenCountPosition.RIGHT,
-        brightText = true
+        brightText = true,
     ) {
         css {
             filter = "drop-shadow(0.2rem 0.2rem 0.5rem black)"

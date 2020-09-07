@@ -24,13 +24,13 @@ import kotlin.time.hours
 data class BotConfig(
     val minActionDelayMillis: Long = 500,
     val maxActionDelayMillis: Long = 1000,
-    val globalTimeout: Duration = 10.hours
+    val globalTimeout: Duration = 10.hours,
 )
 
 @OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
 class SevenWondersBot(
     private val displayName: String,
-    private val botConfig: BotConfig = BotConfig()
+    private val botConfig: BotConfig = BotConfig(),
 ) {
     private val client = SevenWondersClient()
 

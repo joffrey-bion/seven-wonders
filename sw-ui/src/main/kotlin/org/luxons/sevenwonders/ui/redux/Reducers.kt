@@ -15,7 +15,7 @@ data class SwState(
     // they must be by ID to support updates to a sublist
     val gamesById: Map<Long, LobbyDTO> = emptyMap(),
     val currentLobby: LobbyDTO? = null,
-    val gameState: GameState? = null
+    val gameState: GameState? = null,
 ) {
     val currentPlayer: PlayerDTO? = (gameState?.players ?: currentLobby?.players)?.first {
         it.username == connectedPlayer?.username
@@ -28,7 +28,7 @@ data class GameState(
     val players: List<PlayerDTO>,
     val turnInfo: PlayerTurnInfo?,
     val preparedCardsByUsername: Map<String, CardBack?> = emptyMap(),
-    val currentPreparedMove: PlayerMove? = null
+    val currentPreparedMove: PlayerMove? = null,
 ) {
     val currentPreparedCard: HandCard?
         get() = turnInfo?.hand?.firstOrNull { it.name == currentPreparedMove?.cardName }
@@ -38,7 +38,7 @@ fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
     gamesById = gamesReducer(state.gamesById, action),
     connectedPlayer = currentPlayerReducer(state.connectedPlayer, action),
     currentLobby = currentLobbyReducer(state.currentLobby, action),
-    gameState = gameStateReducer(state.gameState, action)
+    gameState = gameStateReducer(state.gameState, action),
 )
 
 private fun gamesReducer(games: Map<Long, LobbyDTO>, action: RAction): Map<Long, LobbyDTO> = when (action) {
@@ -64,20 +64,22 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     is EnterGameAction -> GameState(
         id = action.lobby.id,
         players = action.lobby.players,
-        turnInfo = action.turnInfo
+        turnInfo = action.turnInfo,
     )
     is PreparedMoveEvent -> gameState?.copy(currentPreparedMove = action.move)
     is RequestUnprepareMove -> gameState?.copy(currentPreparedMove = null)
     is PreparedCardEvent -> gameState?.copy(
-        preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.username to action.card.cardBack)
+        preparedCardsByUsername = gameState.preparedCardsByUsername + (action.card.username to action.card.cardBack),
     )
     is PlayerReadyEvent -> gameState?.copy(
-        players = gameState.players.map { p -> if (p.username == action.username) p.copy(isReady = true) else p }
+        players = gameState.players.map { p ->
+            if (p.username == action.username) p.copy(isReady = true) else p
+        },
     )
     is TurnInfoEvent -> gameState?.copy(
         players = gameState.players.map { p -> p.copy(isReady = false) },
         turnInfo = action.turnInfo,
-        currentPreparedMove = null
+        currentPreparedMove = null,
     )
     else -> gameState
 }

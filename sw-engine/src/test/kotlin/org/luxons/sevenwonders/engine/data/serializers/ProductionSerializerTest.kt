@@ -25,7 +25,8 @@ class ProductionSerializerTest {
             .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
             .registerTypeAdapter(ResourceType::class.java, ResourceTypeSerializer())
             .registerTypeAdapter(resourceTypeList, ResourceTypesSerializer())
-            .registerTypeAdapter(Production::class.java, ProductionSerializer()).create()
+            .registerTypeAdapter(Production::class.java, ProductionSerializer())
+            .create()
     }
 
     private fun create(wood: Int, stone: Int, clay: Int): Production {

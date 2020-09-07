@@ -18,7 +18,7 @@ internal data class Card(
     val chainParent: String?,
     val chainChildren: List<String>,
     val image: String,
-    val back: CardBack
+    val back: CardBack,
 ) {
     fun computePlayabilityBy(player: Player, forceSpecialFree: Boolean = false): CardPlayability = when {
         isAlreadyOnBoard(player.board) -> Playability.incompatibleWithBoard() // cannot play twice the same card
@@ -47,35 +47,29 @@ internal data class Card(
 private object Playability {
 
     fun incompatibleWithBoard(): CardPlayability =
-        CardPlayability(
-            isPlayable = false,
-            playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
-        )
+        CardPlayability(isPlayable = false, playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD)
 
-    fun chainable(): CardPlayability =
-        CardPlayability(
-            isPlayable = true,
-            isChainable = true,
-            minPrice = 0,
-            cheapestTransactions = setOf(noTransactions()),
-            playabilityLevel = PlayabilityLevel.CHAINABLE
-        )
+    fun chainable(): CardPlayability = CardPlayability(
+        isPlayable = true,
+        isChainable = true,
+        minPrice = 0,
+        cheapestTransactions = setOf(noTransactions()),
+        playabilityLevel = PlayabilityLevel.CHAINABLE,
+    )
 
-    fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability =
-        CardPlayability(
-            isPlayable = satisfaction.satisfied,
-            isChainable = false,
-            minPrice = satisfaction.minPrice,
-            cheapestTransactions = satisfaction.cheapestTransactions,
-            playabilityLevel = satisfaction.level
-        )
+    fun requirementDependent(satisfaction: RequirementsSatisfaction): CardPlayability = CardPlayability(
+        isPlayable = satisfaction.satisfied,
+        isChainable = false,
+        minPrice = satisfaction.minPrice,
+        cheapestTransactions = satisfaction.cheapestTransactions,
+        playabilityLevel = satisfaction.level,
+    )
 
-    fun specialFree(): CardPlayability =
-        CardPlayability(
-            isPlayable = true,
-            isChainable = false,
-            minPrice = 0,
-            cheapestTransactions = setOf(noTransactions()),
-            playabilityLevel = PlayabilityLevel.SPECIAL_FREE
-        )
+    fun specialFree(): CardPlayability = CardPlayability(
+        isPlayable = true,
+        isChainable = false,
+        minPrice = 0,
+        cheapestTransactions = setOf(noTransactions()),
+        playabilityLevel = PlayabilityLevel.SPECIAL_FREE,
+    )
 }

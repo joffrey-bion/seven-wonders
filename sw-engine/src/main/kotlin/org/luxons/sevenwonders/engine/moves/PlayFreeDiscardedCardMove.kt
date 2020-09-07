@@ -10,7 +10,7 @@ internal class PlayFreeDiscardedCardMove(
     move: PlayerMove,
     card: Card,
     playerContext: PlayerContext,
-    discardedCards: List<Card>
+    discardedCards: List<Card>,
 ) : Move(move, card, playerContext) {
 
     init {

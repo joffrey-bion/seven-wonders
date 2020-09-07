@@ -14,7 +14,7 @@ import styled.styledDiv
 import styled.styledH4
 
 fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
-    val playerItems = players
+    val playerItems = players //
         .map { PlayerItem.Player(it, it.username == currentPlayer.username) }
         .growWithPlaceholders(targetSize = 3)
         .withUserFirst(currentPlayer)
@@ -31,8 +31,8 @@ fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO
         options = RadialConfig(
             radius = 175,
             firstItemAngleDegrees = 180, // self at the bottom
-            direction = Direction.COUNTERCLOCKWISE // new players sit to the right of last player
-        )
+            direction = Direction.COUNTERCLOCKWISE, // new players sit to the right of last player
+        ),
     )
 }
 
@@ -73,7 +73,7 @@ private sealed class PlayerItem {
                     player.isGameOwner -> Icon("badge")
                     else -> Icon("user")
                 },
-                title = if (player.isGameOwner) "Game owner" else null
+                title = if (player.isGameOwner) "Game owner" else null,
             )
         }
     }
@@ -87,19 +87,18 @@ private sealed class PlayerItem {
             userIcon(
                 isMe = false,
                 icon = Icon("user"),
-                title = "Waiting for player..."
+                title = "Waiting for player...",
             )
         }
     }
 }
 
-private fun RBuilder.userIcon(isMe: Boolean, icon: Icon, title: String?): ReactElement =
-    bpIcon(
-        name = icon.name,
-        intent = if (isMe) Intent.WARNING else Intent.NONE,
-        size = 50,
-        title = title
-    )
+private fun RBuilder.userIcon(isMe: Boolean, icon: Icon, title: String?): ReactElement = bpIcon(
+    name = icon.name,
+    intent = if (isMe) Intent.WARNING else Intent.NONE,
+    size = 50,
+    title = title,
+)
 
 private fun RBuilder.playerElement(playerItem: PlayerItem) {
     styledDiv {

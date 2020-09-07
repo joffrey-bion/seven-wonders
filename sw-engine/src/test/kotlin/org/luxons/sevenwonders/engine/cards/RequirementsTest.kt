@@ -76,7 +76,7 @@ class RequirementsTest {
     fun resourceRequirement_ownProduction(
         initialResource: ResourceType,
         producedResource: ResourceType,
-        requiredResource: ResourceType
+        requiredResource: ResourceType,
     ) {
         assumeTrue(initialResource != requiredResource)
 
@@ -98,7 +98,7 @@ class RequirementsTest {
     fun resourceRequirement_boughtResource(
         initialResource: ResourceType,
         boughtResource: ResourceType,
-        requiredResource: ResourceType
+        requiredResource: ResourceType,
     ) {
         assumeTrue(initialResource != requiredResource)
 
@@ -119,7 +119,7 @@ class RequirementsTest {
         if (neighbourHasResource) {
             val transactions = setOf(
                 createTransactions(Provider.LEFT_PLAYER, requiredResource),
-                createTransactions(Provider.RIGHT_PLAYER, requiredResource)
+                createTransactions(Provider.RIGHT_PLAYER, requiredResource),
             )
             assertEquals(RequirementsSatisfaction.metWithHelp(2, transactions), satisfaction)
         } else {

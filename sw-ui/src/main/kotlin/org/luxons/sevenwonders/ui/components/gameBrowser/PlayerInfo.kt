@@ -76,7 +76,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
 fun RBuilder.playerInfo(
     playerDTO: PlayerDTO,
     showUsername: Boolean = false,
-    iconSize: Int = 30
+    iconSize: Int = 30,
 ) = child(PlayerInfoPresenter::class) {
     attrs {
         this.player = playerDTO
@@ -92,5 +92,5 @@ private val playerInfo = connectState(
     mapStateToProps = { state, _ ->
         player = state.connectedPlayer
         showUsername = true
-    }
+    },
 )

@@ -13,7 +13,7 @@ internal class Wonder(
     val name: String,
     val initialResource: ResourceType,
     val stages: List<WonderStage>,
-    val image: String
+    val image: String,
 ) {
     val nbBuiltStages: Int
         get() = stages.count { it.isBuilt }
@@ -54,14 +54,13 @@ private object Buildability {
         isBuildable = false,
         minPrice = Int.MAX_VALUE,
         cheapestTransactions = emptySet(),
-        playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD
+        playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD,
     )
 
-    internal fun requirementDependent(satisfaction: RequirementsSatisfaction) =
-        WonderBuildability(
-            isBuildable = satisfaction.satisfied,
-            minPrice = satisfaction.minPrice,
-            cheapestTransactions = satisfaction.cheapestTransactions,
-            playabilityLevel = satisfaction.level
-        )
+    fun requirementDependent(satisfaction: RequirementsSatisfaction) = WonderBuildability(
+        isBuildable = satisfaction.satisfied,
+        minPrice = satisfaction.minPrice,
+        cheapestTransactions = satisfaction.cheapestTransactions,
+        playabilityLevel = satisfaction.level,
+    )
 }

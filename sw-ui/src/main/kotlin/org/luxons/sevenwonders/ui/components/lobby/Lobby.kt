@@ -99,7 +99,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             icon = "play",
             title = startability.tooltip,
             disabled = !startability.canDo,
-            onClick = { props.startGame() }
+            onClick = { props.startGame() },
         ) {
             +"START"
         }
@@ -141,7 +141,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             rightIcon = "desktop",
             title = if (currentGame.maxPlayersReached) "Max players reached" else "Add a bot to this game",
             disabled = currentGame.maxPlayersReached,
-            onClick = { addBot(currentGame) }
+            onClick = { addBot(currentGame) },
         )
     }
 
@@ -157,7 +157,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             icon = "random",
             rightIcon = "people",
             title = "Re-order players randomly",
-            onClick = { reorderPlayers(currentGame) }
+            onClick = { reorderPlayers(currentGame) },
         ) {
             +"Reorder players"
         }
@@ -171,7 +171,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         bpButton(
             icon = "random",
             title = "Re-assign wonders to players randomly",
-            onClick = { randomizeWonders(currentGame) }
+            onClick = { randomizeWonders(currentGame) },
         ) {
             +"Randomize wonders"
         }
@@ -185,17 +185,17 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             bpButton(
                 icon = "random",
                 title = "Re-roll wonder sides randomly",
-                onClick = { randomizeWonderSides(currentGame) }
+                onClick = { randomizeWonderSides(currentGame) },
             )
             bpButton(
                 title = "Choose side A for everyone",
-                onClick = { setWonderSides(currentGame, WonderSide.A) }
+                onClick = { setWonderSides(currentGame, WonderSide.A) },
             ) {
                 +"A"
             }
             bpButton(
                 title = "Choose side B for everyone",
-                onClick = { setWonderSides(currentGame, WonderSide.B) }
+                onClick = { setWonderSides(currentGame, WonderSide.B) },
             ) {
                 +"B"
             }
@@ -220,7 +220,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             intent = Intent.DANGER,
             icon = "arrow-left",
             title = "Leave the lobby and go back to the game browser",
-            onClick = { props.leaveLobby() }
+            onClick = { props.leaveLobby() },
         ) {
             +"LEAVE"
         }
@@ -241,5 +241,5 @@ private val lobby = connectStateAndDispatch<LobbyStateProps, LobbyDispatchProps,
         leaveLobby = { dispatch(RequestLeaveLobby()) }
         reorderPlayers = { orderedPlayers -> dispatch(RequestReorderPlayers(orderedPlayers)) }
         reassignWonders = { wonders -> dispatch(RequestReassignWonders(wonders)) }
-    }
+    },
 )

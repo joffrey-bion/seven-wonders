@@ -1,6 +1,13 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.google.gson.*
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
+import com.google.gson.JsonParseException
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import org.luxons.sevenwonders.engine.boards.Science
 import org.luxons.sevenwonders.engine.boards.ScienceType
 import org.luxons.sevenwonders.engine.effects.ScienceProgress
@@ -11,7 +18,7 @@ internal class ScienceProgressSerializer : JsonSerializer<ScienceProgress>, Json
     override fun serialize(
         scienceProgress: ScienceProgress,
         typeOfSrc: Type,
-        context: JsonSerializationContext
+        context: JsonSerializationContext,
     ): JsonElement {
         val science = scienceProgress.science
 

@@ -8,7 +8,13 @@ import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
-import react.*
+import react.RBuilder
+import react.RClass
+import react.RComponent
+import react.RProps
+import react.RState
+import react.ReactElement
+import react.buildElement
 import react.dom.*
 
 private interface ChooseNameFormProps : RProps {
@@ -33,7 +39,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
                 onChange = { e ->
                     val input = e.currentTarget as HTMLInputElement
                     setState(transformState = { ChooseNameFormState(input.value) })
-                }
+                },
             )
         }
     }
@@ -43,7 +49,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
             minimal = true,
             icon = "arrow-right",
             intent = Intent.PRIMARY,
-            onClick = { e -> chooseUsername(e) }
+            onClick = { e -> chooseUsername(e) },
         )
     }
 

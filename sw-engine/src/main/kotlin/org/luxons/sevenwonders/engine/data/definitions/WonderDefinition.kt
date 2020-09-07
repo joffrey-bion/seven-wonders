@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.model.wonders.WonderSide
 
 internal class WonderDefinition(
     val name: WonderName,
-    val sides: Map<WonderSide, WonderSideDefinition>
+    val sides: Map<WonderSide, WonderSideDefinition>,
 ) {
     fun create(wonderSide: WonderSide): Wonder = sides[wonderSide]!!.createWonder(name)
 }
@@ -17,14 +17,14 @@ internal class WonderDefinition(
 internal class WonderSideDefinition(
     private val initialResource: ResourceType,
     private val stages: List<WonderStageDefinition>,
-    val image: String
+    val image: String,
 ) {
     fun createWonder(name: String): Wonder = Wonder(name, initialResource, stages.map { it.create() }, image)
 }
 
 internal class WonderStageDefinition(
     private val requirements: Requirements,
-    private val effects: EffectsDefinition
+    private val effects: EffectsDefinition,
 ) {
     fun create(): WonderStage = WonderStage(requirements, effects.create())
 }

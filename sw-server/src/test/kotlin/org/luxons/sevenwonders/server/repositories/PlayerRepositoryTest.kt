@@ -2,7 +2,11 @@ package org.luxons.sevenwonders.server.repositories
 
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class PlayerRepositoryTest {
 

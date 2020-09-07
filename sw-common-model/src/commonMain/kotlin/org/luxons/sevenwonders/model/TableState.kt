@@ -11,7 +11,7 @@ data class TableState(
     val boards: List<Board>,
     val currentAge: Age,
     val handRotationDirection: HandRotationDirection,
-    val lastPlayedMoves: List<PlayedMove>
+    val lastPlayedMoves: List<PlayedMove>,
 ) {
     val nbPlayers: Int = boards.size
 }

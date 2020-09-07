@@ -16,18 +16,18 @@ internal class ProductionIncreaseSerializer : JsonSerializer<ProductionIncrease>
     override fun serialize(
         productionIncrease: ProductionIncrease,
         typeOfSrc: Type,
-        context: JsonSerializationContext
+        context: JsonSerializationContext,
     ): JsonElement {
         val production = productionIncrease.production
         val json = context.serialize(production)
-        return if (!json.isJsonNull && !productionIncrease.isSellable) { JsonPrimitive("(${json.asString})") } else json
+        return if (!json.isJsonNull && !productionIncrease.isSellable) JsonPrimitive("(${json.asString})") else json
     }
 
     @Throws(JsonParseException::class)
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        context: JsonDeserializationContext,
     ): ProductionIncrease {
         var prodJson = json
 

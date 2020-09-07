@@ -17,7 +17,7 @@ fun RBuilder.bpIcon(
     title: String? = null,
     alt: String? = null,
     className: String? = null,
-    block: RHandler<IIconProps> = {}
+    block: RHandler<IIconProps> = {},
 ): ReactElement = child(Icon::class) {
     attrs {
         this.icon = name
@@ -40,7 +40,7 @@ fun RBuilder.bpButton(
     rightIcon: IconName? = null,
     intent: Intent = Intent.NONE,
     onClick: ((event: MouseEvent) -> Unit)? = {},
-    block: RHandler<IButtonProps> = {}
+    block: RHandler<IButtonProps> = {},
 ): ReactElement = child(Button::class) {
     attrs {
         this.title = title
@@ -59,7 +59,7 @@ fun RBuilder.bpButton(
 fun RBuilder.bpButtonGroup(
     large: Boolean = false,
     minimal: Boolean = false,
-    block: RHandler<IButtonGroupProps> = {}
+    block: RHandler<IButtonGroupProps> = {},
 ): ReactElement = child(ButtonGroup::class) {
     attrs {
         this.large = large
@@ -72,7 +72,7 @@ fun RBuilder.bpInputGroup(
     large: Boolean = false,
     placeholder: String = "",
     rightElement: ReactElement? = null,
-    onChange: (Event) -> Unit
+    onChange: (Event) -> Unit,
 ): ReactElement = child(InputGroup::class) {
     attrs {
         this.large = large
@@ -90,7 +90,7 @@ fun RBuilder.bpTag(
     fill: Boolean? = null,
     active: Boolean? = null,
     icon: String? = null,
-    block: RHandler<ITagProps> = {}
+    block: RHandler<ITagProps> = {},
 ): ReactElement = child(Tag::class) {
     attrs {
         this.intent = intent
@@ -110,7 +110,7 @@ fun RBuilder.bpNonIdealState(
     description: ReactElement? = null,
     action: ReactElement? = null,
     children: ReactElement? = null,
-    block: RHandler<INonIdealStateProps> = {}
+    block: RHandler<INonIdealStateProps> = {},
 ): ReactElement = child(NonIdealState::class) {
     attrs {
         this.icon = icon
@@ -128,7 +128,7 @@ fun RBuilder.bpNonIdealState(
     description: ReactElement? = null,
     action: ReactElement? = null,
     children: ReactElement? = null,
-    block: RHandler<INonIdealStateProps> = {}
+    block: RHandler<INonIdealStateProps> = {},
 ): ReactElement = bpNonIdealState(icon, buildElement { h2 { +title } }, description, action, children, block)
 
 fun RBuilder.bpOverlay(
@@ -140,7 +140,7 @@ fun RBuilder.bpOverlay(
     canEscapeKeyClose: Boolean = true,
     canOutsideClickClose: Boolean = true,
     onClose: () -> Unit = {},
-    block: RHandler<IOverlayProps> = {}
+    block: RHandler<IOverlayProps> = {},
 ): ReactElement = child(Overlay::class) {
     attrs {
         this.isOpen = isOpen
@@ -167,7 +167,7 @@ fun RBuilder.bpPopover(
     popoverClassName: String? = null,
     portalClassName: String? = null,
     onClose: () -> Unit = {},
-    block: RHandler<IPopoverProps> = {}
+    block: RHandler<IPopoverProps> = {},
 ): ReactElement = child(Popover::class) {
     attrs {
         this.interactionKind = interactionKind
@@ -189,7 +189,7 @@ fun RBuilder.bpCallout(
     intent: Intent? = Intent.NONE,
     icon: IconName? = null,
     title: String? = null,
-    block: RHandler<ICalloutProps> = {}
+    block: RHandler<ICalloutProps> = {},
 ): ReactElement = child(Callout::class) {
     attrs {
         if (icon != null) {
@@ -206,7 +206,7 @@ fun RBuilder.bpCard(
     interactive: Boolean = false,
     className: String? = null,
     onClick: () -> Unit = {},
-    block: RHandler<ICardProps> = {}
+    block: RHandler<ICardProps> = {},
 ): ReactElement = child(Card::class) {
     attrs {
         this.elevation = elevation
@@ -222,7 +222,7 @@ fun RBuilder.bpHtmlTable(
     interactive: Boolean = false,
     condensed: Boolean = false,
     striped: Boolean = false,
-    block: RHandler<IHTMLTableProps> = {}
+    block: RHandler<IHTMLTableProps> = {},
 ): ReactElement = child(HTMLTable::class) {
     attrs {
         this.bordered = bordered
@@ -235,7 +235,7 @@ fun RBuilder.bpHtmlTable(
 
 fun RBuilder.bpDivider(
     tagName: String? = null,
-    block: RHandler<IDividerProps> = {}
+    block: RHandler<IDividerProps> = {},
 ): ReactElement = child(Divider::class) {
     attrs {
         if (tagName != null) {

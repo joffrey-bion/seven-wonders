@@ -22,7 +22,7 @@ private fun <A, T1, R> composeWithDevTools(function1: (T1) -> R, function2: (A) 
 
 fun configureStore(
     sagaManager: SagaManager<SwState, RAction, WrapperAction>,
-    initialState: SwState = INITIAL_STATE
+    initialState: SwState = INITIAL_STATE,
 ): Store<SwState, RAction, WrapperAction> {
     val sagaEnhancer = applyMiddleware(sagaManager.createMiddleware())
     return createStore(::rootReducer, initialState, composeWithDevTools(sagaEnhancer, rEnhancer()))

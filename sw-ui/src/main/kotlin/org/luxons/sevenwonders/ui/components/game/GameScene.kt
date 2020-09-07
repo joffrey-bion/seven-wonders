@@ -1,17 +1,38 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.*
+import com.palantir.blueprintjs.Elevation
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
+import com.palantir.blueprintjs.bpButtonGroup
+import com.palantir.blueprintjs.bpCallout
+import com.palantir.blueprintjs.bpCard
+import com.palantir.blueprintjs.bpNonIdealState
+import com.palantir.blueprintjs.bpOverlay
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.Action
+import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.getBoard
+import org.luxons.sevenwonders.model.getOwnBoard
 import org.luxons.sevenwonders.ui.components.GlobalStyles
-import org.luxons.sevenwonders.ui.redux.*
-import react.*
+import org.luxons.sevenwonders.ui.redux.GameState
+import org.luxons.sevenwonders.ui.redux.RequestLeaveGame
+import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
+import org.luxons.sevenwonders.ui.redux.RequestSayReady
+import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
+import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
+import react.RBuilder
+import react.RClass
+import react.RComponent
+import react.RProps
+import react.RState
+import react.ReactElement
 import styled.StyledDOMBuilder
 import styled.css
 import styled.getClassName
@@ -193,17 +214,12 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     disabled = isReady,
                     intent = intent,
                     icon = if (isReady) "tick-circle" else "play",
-                    onClick = { props.sayReady() }
+                    onClick = { props.sayReady() },
                 ) {
                     +"READY"
                 }
                 // not really a button, but nice for style
-                bpButton(
-                    large = true,
-                    icon = "people",
-                    disabled = isReady,
-                    intent = intent
-                ) {
+                bpButton(large = true, icon = "people", disabled = isReady, intent = intent) {
                     +"${props.players.count { it.isReady }}/${props.players.size}"
                 }
             }
@@ -228,5 +244,5 @@ private val gameScene: RClass<GameSceneProps> =
             gameState = state.gameState
             preparedMove = state.gameState?.currentPreparedMove
             preparedCard = state.gameState?.currentPreparedCard
-        }
+        },
     )

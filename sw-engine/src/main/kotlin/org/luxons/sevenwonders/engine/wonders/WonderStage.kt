@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
 internal class WonderStage(
     val requirements: Requirements,
-    val effects: List<Effect>
+    val effects: List<Effect>,
 ) {
     var cardBack: CardBack? = null
         private set

@@ -24,7 +24,7 @@ data class TableCard(
     override val chainChildren: List<String>,
     override val image: String,
     override val back: CardBack,
-    val playedDuringLastMove: Boolean
+    val playedDuringLastMove: Boolean,
 ) : Card
 
 /**
@@ -40,13 +40,13 @@ data class HandCard(
     override val chainChildren: List<String>,
     override val image: String,
     override val back: CardBack,
-    val playability: CardPlayability
+    val playability: CardPlayability,
 ) : Card
 
 @Serializable
 data class PreparedCard(
     val username: String,
-    val cardBack: CardBack?
+    val cardBack: CardBack?,
 )
 
 @Serializable
@@ -82,7 +82,7 @@ data class CardPlayability(
     val isChainable: Boolean = false,
     val minPrice: Int = Int.MAX_VALUE,
     val cheapestTransactions: Set<ResourceTransactions> = setOf(noTransactions()),
-    val playabilityLevel: PlayabilityLevel
+    val playabilityLevel: PlayabilityLevel,
 ) {
     val isFree: Boolean = minPrice == 0
 
@@ -92,7 +92,7 @@ data class CardPlayability(
             isChainable = false,
             minPrice = 0,
             cheapestTransactions = setOf(noTransactions()),
-            playabilityLevel = PlayabilityLevel.SPECIAL_FREE
+            playabilityLevel = PlayabilityLevel.SPECIAL_FREE,
         )
     }
 }

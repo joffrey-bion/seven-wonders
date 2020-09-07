@@ -1,14 +1,28 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.*
+import com.palantir.blueprintjs.IButtonGroupProps
+import com.palantir.blueprintjs.IButtonProps
+import com.palantir.blueprintjs.IconName
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
+import com.palantir.blueprintjs.bpButtonGroup
+import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.Action
+import org.luxons.sevenwonders.model.MoveType
+import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.getOwnBoard
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
-import react.*
+import react.RBuilder
+import react.RComponent
+import react.RElementBuilder
+import react.RProps
+import react.RState
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
@@ -17,7 +31,7 @@ import kotlin.math.absoluteValue
 private enum class HandAction(
     val buttonTitle: String,
     val moveType: MoveType,
-    val icon: IconName
+    val icon: IconName,
 ) {
     PLAY("PLAY", MoveType.PLAY, "play"),
     PLAY_FREE("Play as this age's free card", MoveType.PLAY_FREE, "star"),
@@ -58,7 +72,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
 
     private fun RBuilder.handCard(
         card: HandCard,
-        block: StyledDOMBuilder<DIV>.() -> Unit
+        block: StyledDOMBuilder<DIV>.() -> Unit,
     ) {
         styledDiv {
             css {
@@ -120,7 +134,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             onClick = {
                 val transactions = card.playability.cheapestTransactions.first()
                 props.prepareMove(PlayerMove(handAction.moveType, card.name, transactions))
-            }
+            },
         ) {
             bpIcon(handAction.icon)
             if (card.playability.isPlayable && !card.playability.isFree) {
@@ -139,7 +153,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             onClick = {
                 val transactions = wonderBuildability.cheapestTransactions.first()
                 props.prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions))
-            }
+            },
         ) {
             bpIcon("key-shift")
             if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
@@ -154,7 +168,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             large = true,
             intent = Intent.DANGER,
             icon = "cross",
-            onClick = { props.prepareMove(PlayerMove(MoveType.DISCARD, card.name)) }
+            onClick = { props.prepareMove(PlayerMove(MoveType.DISCARD, card.name)) },
         )
     }
 }
@@ -189,7 +203,7 @@ private fun RElementBuilder<IButtonProps>.priceInfo(amount: Int) {
         customCountStyle = {
             fontFamily = "sans-serif"
             fontSize = size * 0.8
-        }
+        },
     ) {
         css {
             position = Position.absolute
@@ -251,7 +265,7 @@ private fun CSSBuilder.handCardImgStyle(isPlayable: Boolean) {
 fun RBuilder.handCards(
     turnInfo: PlayerTurnInfo,
     preparedMove: PlayerMove?,
-    prepareMove: (PlayerMove) -> Unit
+    prepareMove: (PlayerMove) -> Unit,
 ) {
     child(HandComponent::class) {
         attrs {

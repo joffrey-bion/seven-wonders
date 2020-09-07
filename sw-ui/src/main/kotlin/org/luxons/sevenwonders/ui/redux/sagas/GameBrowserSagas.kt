@@ -20,7 +20,7 @@ suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
 
 private class GameBrowserSaga(
     private val session: SevenWondersSession,
-    private val sagaContext: SwSagaContext
+    private val sagaContext: SwSagaContext,
 ) {
     suspend fun run() {
         coroutineScope {

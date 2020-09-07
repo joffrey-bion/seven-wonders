@@ -7,12 +7,12 @@ import kotlin.math.sin
 
 data class CartesianCoords(
     val x: Int,
-    val y: Int
+    val y: Int,
 )
 
 data class PolarCoords(
     val radius: Int,
-    val angleDeg: Int
+    val angleDeg: Int,
 )
 
 private fun Int.toRadians() = (this * PI / 180.0)
@@ -22,7 +22,7 @@ private fun Double.yProjection(angleRad: Double) = project(angleRad, ::sin)
 
 private fun PolarCoords.toCartesian() = CartesianCoords(
     x = radius.toDouble().xProjection(angleDeg.toRadians()),
-    y = radius.toDouble().yProjection(angleDeg.toRadians())
+    y = radius.toDouble().yProjection(angleDeg.toRadians()),
 )
 
 // Y-axis is pointing down in the browser, so the directions need to be reversed
@@ -38,7 +38,7 @@ data class RadialConfig(
     val radius: Int = 120,
     val spreadArcDegrees: Int = 360, // full circle
     val firstItemAngleDegrees: Int = 0, // 12 o'clock
-    val direction: Direction = Direction.CLOCKWISE
+    val direction: Direction = Direction.CLOCKWISE,
 ) {
     val diameter: Int = radius * 2
 }

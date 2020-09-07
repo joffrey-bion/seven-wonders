@@ -1,6 +1,12 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.*
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
+import com.palantir.blueprintjs.bpCard
+import com.palantir.blueprintjs.bpHtmlTable
+import com.palantir.blueprintjs.bpIcon
+import com.palantir.blueprintjs.bpOverlay
+import com.palantir.blueprintjs.bpTag
 import kotlinx.css.*
 import kotlinx.html.TD
 import kotlinx.html.TH
@@ -10,7 +16,12 @@ import org.luxons.sevenwonders.model.score.ScoreCategory
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
 import react.dom.*
-import styled.*
+import styled.css
+import styled.getClassName
+import styled.inlineStyles
+import styled.styledDiv
+import styled.styledH1
+import styled.styledTd
 
 fun RBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>, leaveGame: () -> Unit) {
     bpOverlay(isOpen = true) {

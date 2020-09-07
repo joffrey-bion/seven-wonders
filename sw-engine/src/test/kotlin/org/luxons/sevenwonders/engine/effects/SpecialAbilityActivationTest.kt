@@ -77,15 +77,15 @@ class SpecialAbilityActivationTest {
         @DataPoints
         internal fun guilds(): Array<Card> {
             val bonus = BonusPerBoardElement(
-                listOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT),
-                BoardElementType.CARD,
+                boards = listOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT),
+                type = BoardElementType.CARD,
                 points = 1,
-                colors = listOf(Color.GREY, Color.BROWN)
+                colors = listOf(Color.GREY, Color.BROWN),
             )
             val bonus2 = BonusPerBoardElement(
-                listOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.SELF, RelativeBoardPosition.RIGHT),
-                BoardElementType.BUILT_WONDER_STAGES,
-                points = 1
+                boards = listOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.SELF, RelativeBoardPosition.RIGHT),
+                type = BoardElementType.BUILT_WONDER_STAGES,
+                points = 1,
             )
             return arrayOf(createGuildCard(1, bonus), createGuildCard(2, bonus2))
         }

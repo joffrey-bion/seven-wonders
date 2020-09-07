@@ -8,7 +8,7 @@ internal data class RequirementsSatisfaction(
     val satisfied: Boolean,
     val level: PlayabilityLevel,
     val minPrice: Int,
-    val cheapestTransactions: Set<ResourceTransactions>
+    val cheapestTransactions: Set<ResourceTransactions>,
 ) {
     companion object {
 

@@ -50,7 +50,7 @@ class BoardTest {
     @Theory
     fun removeGold_successfulWhenNotTooMuch(
         @FromDataPoints("gold") initialGold: Int,
-        @FromDataPoints("gold") goldRemoved: Int
+        @FromDataPoints("gold") goldRemoved: Int,
     ) {
         assumeTrue(goldRemoved >= 0)
         assumeTrue(initialGold >= goldRemoved)
@@ -63,7 +63,7 @@ class BoardTest {
     @Theory
     fun removeGold_failsWhenTooMuch(
         @FromDataPoints("gold") initialGold: Int,
-        @FromDataPoints("gold") goldRemoved: Int
+        @FromDataPoints("gold") goldRemoved: Int,
     ) {
         assumeTrue(goldRemoved >= 0)
         assumeTrue(initialGold < goldRemoved)
@@ -79,7 +79,7 @@ class BoardTest {
         type: ResourceType,
         @FromDataPoints("nbCards") nbCards: Int,
         @FromDataPoints("nbCards") nbOtherCards: Int,
-        color: Color
+        color: Color,
     ) {
         val board = testBoard(initialResource = type)
         addCards(board, nbCards, nbOtherCards, color)
@@ -93,7 +93,7 @@ class BoardTest {
         @FromDataPoints("nbCards") nbCards2: Int,
         @FromDataPoints("nbCards") nbOtherCards: Int,
         color1: Color,
-        color2: Color
+        color2: Color,
     ) {
         val board = testBoard(initialResource = type)
         addCards(board, nbCards1, color1)

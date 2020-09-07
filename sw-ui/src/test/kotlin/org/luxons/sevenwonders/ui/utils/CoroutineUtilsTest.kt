@@ -12,12 +12,12 @@ class CoroutineUtilsTest {
     fun awaitFirstTest(): dynamic = GlobalScope.promise {
         val s = awaitFirst(
             { delay(100); "1" },
-            { delay(200); "2" }
+            { delay(200); "2" },
         )
         assertEquals("1", s)
         val s2 = awaitFirst(
             { delay(150); "1" },
-            { delay(50); "2" }
+            { delay(50); "2" },
         )
         assertEquals("2", s2)
     }

@@ -4,7 +4,13 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.redux.EnterGameAction
+import org.luxons.sevenwonders.ui.redux.RequestAddBot
+import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
+import org.luxons.sevenwonders.ui.redux.RequestReassignWonders
+import org.luxons.sevenwonders.ui.redux.RequestReorderPlayers
+import org.luxons.sevenwonders.ui.redux.RequestStartGame
+import org.luxons.sevenwonders.ui.redux.UpdateLobbyAction
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
 import org.luxons.sevenwonders.ui.utils.awaitFirst
@@ -12,9 +18,7 @@ import org.luxons.sevenwonders.ui.utils.awaitFirst
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
     val lobby = getState().currentLobby ?: error("Lobby saga run without a current lobby")
     coroutineScope {
-        val lobbyUpdatesSubscription = session.watchLobbyUpdates()
-            .map { UpdateLobbyAction(it) }
-            .dispatchAllIn(this)
+        val lobbyUpdatesSubscription = session.watchLobbyUpdates().map { UpdateLobbyAction(it) }.dispatchAllIn(this)
 
         launch {
             onEach<RequestAddBot> { session.addBot(it.botDisplayName) }
@@ -39,7 +43,7 @@ suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
                 lobbyUpdatesSubscription.cancel()
                 startGameJob.cancel()
                 dispatch(Navigate(Route.GAME))
-            }
+            },
         )
     }
 }

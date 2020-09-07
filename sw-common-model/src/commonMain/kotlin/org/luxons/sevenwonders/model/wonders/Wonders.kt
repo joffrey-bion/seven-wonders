@@ -13,14 +13,14 @@ typealias WonderName = String
 @Serializable
 data class PreGameWonder(
     val name: WonderName,
-    val images: Map<WonderSide, String>
+    val images: Map<WonderSide, String>,
 )
 
 @Serializable
 data class AssignedWonder(
     val name: WonderName,
     val side: WonderSide,
-    val image: String
+    val image: String,
 )
 
 @Serializable
@@ -43,7 +43,7 @@ data class ApiWonder(
     val stages: List<ApiWonderStage>,
     val image: String,
     val nbBuiltStages: Int,
-    val buildability: WonderBuildability
+    val buildability: WonderBuildability,
 )
 
 @Serializable
@@ -51,7 +51,7 @@ data class ApiWonderStage(
     val cardBack: CardBack?,
     val isBuilt: Boolean,
     val requirements: Requirements,
-    val builtDuringLastMove: Boolean
+    val builtDuringLastMove: Boolean,
 )
 
 @Serializable
@@ -59,7 +59,7 @@ data class WonderBuildability(
     val isBuildable: Boolean,
     val minPrice: Int,
     val cheapestTransactions: Set<ResourceTransactions>,
-    val playabilityLevel: PlayabilityLevel
+    val playabilityLevel: PlayabilityLevel,
 ) {
     val isFree: Boolean = minPrice == 0
 }

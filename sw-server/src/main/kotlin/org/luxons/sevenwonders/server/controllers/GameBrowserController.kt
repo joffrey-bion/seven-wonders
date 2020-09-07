@@ -27,7 +27,7 @@ class GameBrowserController(
     private val lobbyController: LobbyController,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
-    private val template: SimpMessagingTemplate
+    private val template: SimpMessagingTemplate,
 ) {
     /**
      * Gets the created or updated games. The list of existing games is received on this topic at once upon

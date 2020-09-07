@@ -18,7 +18,7 @@ data class Navigate(val route: Route) : RAction
 
 suspend fun SwSagaContext.routerSaga(
     startRoute: Route,
-    runRouteSaga: suspend SwSagaContext.(Route) -> Unit
+    runRouteSaga: suspend SwSagaContext.(Route) -> Unit,
 ) {
     coroutineScope {
         window.location.hash = startRoute.path

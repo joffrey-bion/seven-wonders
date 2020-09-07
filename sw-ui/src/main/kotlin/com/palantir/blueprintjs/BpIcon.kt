@@ -1,4 +1,5 @@
 @file:JsModule("@blueprintjs/core")
+
 package com.palantir.blueprintjs
 
 import react.PureComponent
@@ -13,11 +14,13 @@ external interface IIconProps : IIntentProps, IProps {
      * surrounding text.
      */
     var color: String?
+
     /**
      * String for the `title` attribute on the rendered element, which will appear
      * on hover as a native browser tooltip.
      */
     var htmlTitle: String?
+
     /**
      * Name of a Blueprint UI icon, or an icon element, to render. This prop is
      * required because it determines the content of the component, but it can
@@ -35,6 +38,7 @@ external interface IIconProps : IIntentProps, IProps {
      *   `<Element />` instead.
      */
     var icon: IconName
+
     /**
      * Size of the icon, in pixels. Blueprint contains 16px and 20px SVG icon
      * images, and chooses the appropriate resolution based on this prop.
@@ -48,6 +52,7 @@ external interface IIconProps : IIntentProps, IProps {
      * @default "span"
      */
     var tagName: String? // keyof JSX.IntrinsicElements
+
     /**
      * Description string. This string does not appear in normal browsers, but
      * it increases accessibility. For instance, screen readers will use it for

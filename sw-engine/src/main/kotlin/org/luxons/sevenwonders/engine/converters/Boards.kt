@@ -25,22 +25,20 @@ import org.luxons.sevenwonders.model.boards.Production as ApiProduction
 import org.luxons.sevenwonders.model.boards.Requirements as ApiRequirements
 import org.luxons.sevenwonders.model.boards.Science as ApiScience
 
-internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?, currentAge: Age): ApiBoard =
-    ApiBoard(
-        playerIndex = playerIndex,
-        wonder = wonder.toApiWonder(player, lastMove),
-        production = production.toApiProduction(),
-        publicProduction = publicProduction.toApiProduction(),
-        science = science.toApiScience(),
-        military = military.toApiMilitary(),
-        playedCards = getPlayedCards().map { it.toTableCard(lastMove) }.toColumns(),
-        gold = gold,
-        bluePoints = getPlayedCards()
-            .filter { it.color == Color.BLUE }
-            .flatMap { it.effects.filterIsInstance<RawPointsIncrease>() }
-            .sumBy { it.points },
-        canPlayAnyCardForFree = canPlayFreeCard(currentAge)
-    )
+internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?, currentAge: Age): ApiBoard = ApiBoard(
+    playerIndex = playerIndex,
+    wonder = wonder.toApiWonder(player, lastMove),
+    production = production.toApiProduction(),
+    publicProduction = publicProduction.toApiProduction(),
+    science = science.toApiScience(),
+    military = military.toApiMilitary(),
+    playedCards = getPlayedCards().map { it.toTableCard(lastMove) }.toColumns(),
+    gold = gold,
+    bluePoints = getPlayedCards().filter { it.color == Color.BLUE }
+        .flatMap { it.effects.filterIsInstance<RawPointsIncrease>() }
+        .sumBy { it.points },
+    canPlayAnyCardForFree = canPlayFreeCard(currentAge),
+)
 
 internal fun List<TableCard>.toColumns(): List<List<TableCard>> {
     val cardsByColor = this.groupBy { it.color }
@@ -59,7 +57,7 @@ internal fun InternalWonder.toApiWonder(player: Player, lastMove: Move?): ApiWon
     stages = stages.map { it.toApiWonderStage(lastBuiltStage == it, lastMove) },
     image = image,
     nbBuiltStages = nbBuiltStages,
-    buildability = computeBuildabilityBy(player)
+    buildability = computeBuildabilityBy(player),
 )
 
 internal fun InternalWonderStage.toApiWonderStage(isLastBuiltStage: Boolean, lastMove: Move?): ApiWonderStage =
@@ -67,33 +65,28 @@ internal fun InternalWonderStage.toApiWonderStage(isLastBuiltStage: Boolean, las
         cardBack = cardBack,
         isBuilt = isBuilt,
         requirements = requirements.toApiRequirements(),
-        builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage
+        builtDuringLastMove = lastMove?.type == MoveType.UPGRADE_WONDER && isLastBuiltStage,
     )
 
-internal fun InternalProduction.toApiProduction(): ApiProduction =
-    ApiProduction(
-        fixedResources = getFixedResources().toCountedResourcesList(),
-        alternativeResources = getAlternativeResources().sortedBy { it.size }
-    )
+internal fun InternalProduction.toApiProduction(): ApiProduction = ApiProduction(
+    fixedResources = getFixedResources().toCountedResourcesList(),
+    alternativeResources = getAlternativeResources().sortedBy { it.size },
+)
 
 internal fun InternalRequirements.toApiRequirements(): ApiRequirements =
-    ApiRequirements(
-        gold = gold,
-        resources = resources.toCountedResourcesList()
-    )
+    ApiRequirements(gold = gold, resources = resources.toCountedResourcesList())
 
-internal fun Resources.toCountedResourcesList(): List<CountedResource> =
-    quantities.filterValues { it > 0 }
-        .map { (type, count) -> CountedResource(count, type) }
+internal fun Resources.toCountedResourcesList(): List<CountedResource> = //
+    quantities.filterValues { it > 0 } //
+        .map { (type, count) -> CountedResource(count, type) } //
         .sortedBy { it.type }
 
 internal fun InternalMilitary.toApiMilitary(): ApiMilitary =
     ApiMilitary(nbShields, victoryPoints, totalPoints, nbDefeatTokens)
 
-internal fun InternalScience.toApiScience(): ApiScience =
-    ApiScience(
-        jokers = jokers,
-        nbWheels = getQuantity(ScienceType.WHEEL),
-        nbCompasses = getQuantity(ScienceType.COMPASS),
-        nbTablets = getQuantity(ScienceType.TABLET)
-    )
+internal fun InternalScience.toApiScience(): ApiScience = ApiScience(
+    jokers = jokers,
+    nbWheels = getQuantity(ScienceType.WHEEL),
+    nbCompasses = getQuantity(ScienceType.COMPASS),
+    nbTablets = getQuantity(ScienceType.TABLET),
+)

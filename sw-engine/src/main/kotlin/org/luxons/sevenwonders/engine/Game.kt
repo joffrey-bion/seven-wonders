@@ -12,7 +12,12 @@ import org.luxons.sevenwonders.engine.data.LAST_AGE
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.moves.resolve
-import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.Action
+import org.luxons.sevenwonders.model.MoveType
+import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.Settings
+import org.luxons.sevenwonders.model.TableState
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.score.ScoreBoard
@@ -21,7 +26,7 @@ class Game internal constructor(
     val id: Long,
     private val settings: Settings,
     boards: List<Board>,
-    private val decks: Decks
+    private val decks: Decks,
 ) {
     private val table: Table = Table(boards)
     private val players: List<Player> = boards.map { SimplePlayer(it.playerIndex, table) }
@@ -86,7 +91,7 @@ class Game internal constructor(
             hand = hand,
             preparedMove = preparedMoves[player.index]?.toPlayedMove(),
             discardedCards = exposedDiscardedCards,
-            neighbourGuildCards = neighbourGuildCards
+            neighbourGuildCards = neighbourGuildCards,
         )
     }
 

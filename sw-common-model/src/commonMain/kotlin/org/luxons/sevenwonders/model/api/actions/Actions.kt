@@ -17,12 +17,12 @@ class ChooseNameAction(
     /**
      * The player's icon.
      */
-    val icon: Icon?
+    val icon: Icon?,
 )
 
 @Serializable
 data class Icon(
-    val name: String
+    val name: String,
 )
 
 /**
@@ -33,7 +33,7 @@ class CreateGameAction(
     /**
      * The name of the game to create.
      */
-    val gameName: String
+    val gameName: String,
 )
 
 /**
@@ -44,7 +44,7 @@ class JoinGameAction(
     /**
      * The ID of the game to join.
      */
-    val gameId: Long
+    val gameId: Long,
 )
 
 /**
@@ -55,7 +55,7 @@ class PrepareMoveAction(
     /**
      * The move to prepare.
      */
-    val move: PlayerMove
+    val move: PlayerMove,
 )
 
 /**
@@ -67,7 +67,7 @@ class ReorderPlayersAction(
     /**
      * The list of usernames of the players, in the new order.
      */
-    val orderedPlayers: List<String>
+    val orderedPlayers: List<String>,
 )
 
 /**
@@ -79,7 +79,7 @@ class ReassignWondersAction(
     /**
      * The list of wonders assigned to each player, in the players' order.
      */
-    val assignedWonders: List<AssignedWonder>
+    val assignedWonders: List<AssignedWonder>,
 )
 
 /**
@@ -90,7 +90,7 @@ class UpdateSettingsAction(
     /**
      * The new values for the settings.
      */
-    val settings: Settings
+    val settings: Settings,
 )
 
 /**
@@ -101,5 +101,5 @@ class AddBotAction(
     /**
      * The display name for the bot to add.
      */
-    val botDisplayName: String
+    val botDisplayName: String,
 )

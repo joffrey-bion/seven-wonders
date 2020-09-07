@@ -31,8 +31,7 @@ class LobbyController(
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
     private val template: SimpMessagingTemplate,
-    @Value("\${server.port}")
-    private val serverPort: String
+    @Value("\${server.port}") private val serverPort: String,
 ) {
     private val Principal.player: Player
         get() = playerRepository.find(name)

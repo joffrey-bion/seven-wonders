@@ -36,7 +36,7 @@ private fun configureTestStore(initialState: State): TestRedux {
 
 private data class TestRedux(
     val store: Store<State, RAction, WrapperAction>,
-    val sagas: SagaManager<State, RAction, WrapperAction>
+    val sagas: SagaManager<State, RAction, WrapperAction>,
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)

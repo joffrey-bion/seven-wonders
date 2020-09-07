@@ -11,7 +11,7 @@ import org.luxons.sevenwonders.model.resources.ResourceTransactions
 
 data class Requirements internal constructor(
     val gold: Int = 0,
-    val resources: Resources = emptyResources()
+    val resources: Resources = emptyResources(),
 ) {
     /**
      * Returns information about the extent to which the given [player] meets these requirements, either on its own or

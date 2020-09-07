@@ -15,7 +15,11 @@ import org.luxons.sevenwonders.server.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.luxons.sevenwonders.server.test.mockSimpMessagingTemplate
 import java.util.HashMap
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class LobbyControllerTest {
 

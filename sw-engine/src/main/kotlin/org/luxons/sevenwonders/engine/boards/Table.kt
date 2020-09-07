@@ -54,7 +54,7 @@ internal class Table(val boards: List<Board>) {
         }
     }
 
-    fun getNeighbourGuildCards(playerIndex: Int): List<Card> = neighboursPositions()
-        .flatMap { getBoard(playerIndex, it).getPlayedCards() }
+    fun getNeighbourGuildCards(playerIndex: Int): List<Card> = neighboursPositions() //
+        .flatMap { getBoard(playerIndex, it).getPlayedCards() } //
         .filter { it.color == Color.PURPLE }
 }

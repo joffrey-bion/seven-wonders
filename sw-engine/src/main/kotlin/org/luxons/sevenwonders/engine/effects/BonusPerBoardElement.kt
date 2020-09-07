@@ -8,7 +8,7 @@ import org.luxons.sevenwonders.model.cards.Color
 enum class BoardElementType {
     CARD,
     BUILT_WONDER_STAGES,
-    DEFEAT_TOKEN
+    DEFEAT_TOKEN,
 }
 
 internal data class BonusPerBoardElement(
@@ -16,16 +16,14 @@ internal data class BonusPerBoardElement(
     val type: BoardElementType,
     val gold: Int = 0,
     val points: Int = 0,
-    val colors: List<Color>? = null // only relevant if type=CARD
+    val colors: List<Color>? = null, // only relevant if type=CARD
 ) : Effect {
 
     override fun applyTo(player: Player) = player.board.addGold(gold * nbMatchingElementsFor(player))
 
     override fun computePoints(player: Player): Int = points * nbMatchingElementsFor(player)
 
-    private fun nbMatchingElementsFor(player: Player): Int = boards
-        .map(player::getBoard)
-        .sumBy { nbMatchingElementsIn(it) }
+    private fun nbMatchingElementsFor(player: Player): Int = boards.sumBy { nbMatchingElementsIn(player.getBoard(it)) }
 
     private fun nbMatchingElementsIn(board: Board): Int = when (type) {
         BoardElementType.CARD -> board.getNbCardsOfColor(colors!!)

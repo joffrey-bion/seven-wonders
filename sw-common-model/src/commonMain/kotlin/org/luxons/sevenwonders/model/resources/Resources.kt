@@ -31,7 +31,7 @@ enum class ResourceType(val symbol: Char) {
 @Serializable
 data class CountedResource(
     val count: Int,
-    val type: ResourceType
+    val type: ResourceType,
 )
 
 @Serializable

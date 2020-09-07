@@ -15,7 +15,7 @@ internal class ResourceTypesSerializer : JsonSerializer<List<ResourceType>>, Jso
     override fun serialize(
         resources: List<ResourceType>,
         typeOfSrc: Type,
-        context: JsonSerializationContext
+        context: JsonSerializationContext,
     ): JsonElement {
         val s = resources.map { it.symbol }.joinToString("")
         return JsonPrimitive(s)
@@ -25,6 +25,6 @@ internal class ResourceTypesSerializer : JsonSerializer<List<ResourceType>>, Jso
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,
-        context: JsonDeserializationContext
+        context: JsonDeserializationContext,
     ): List<ResourceType> = json.asString.map { ResourceType.fromSymbol(it) }
 }

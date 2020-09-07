@@ -14,12 +14,12 @@ class ResourceTransactionsTest {
     fun toTransactions() {
         val transactionMap = mapOf(
             Provider.LEFT_PLAYER to (1 of WOOD) + (1 of CLAY),
-            Provider.RIGHT_PLAYER to (1 of WOOD)
+            Provider.RIGHT_PLAYER to (1 of WOOD),
         )
 
         val expectedNormalized = setOf(
             createTransaction(Provider.LEFT_PLAYER, WOOD, CLAY),
-            createTransaction(Provider.RIGHT_PLAYER, WOOD)
+            createTransaction(Provider.RIGHT_PLAYER, WOOD),
         )
 
         assertEquals(expectedNormalized, transactionMap.toTransactions().toSet())

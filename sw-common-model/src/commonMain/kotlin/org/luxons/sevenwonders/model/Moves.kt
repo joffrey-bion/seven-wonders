@@ -40,7 +40,7 @@ data class PlayerTurnInfo(
     val preparedMove: PlayedMove?,
     val neighbourGuildCards: List<HandCard>,
     val discardedCards: List<HandCard>?, // only present when the player can actually see them
-    val scoreBoard: ScoreBoard? = null
+    val scoreBoard: ScoreBoard? = null,
 ) {
     val currentAge: Int = table.currentAge
     val message: String = action.message
@@ -53,22 +53,21 @@ fun PlayerTurnInfo.getBoard(position: RelativeBoardPosition): Board =
     table.boards[position.getIndexFrom(playerIndex, table.boards.size)]
 
 // TODO move to server code
-fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() =
-    map { it.copy(action = Action.SAY_READY, hand = null) }
+fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() = map { it.copy(action = Action.SAY_READY, hand = null) }
 
 @Serializable
 data class PlayedMove(
     val playerIndex: Int,
     val type: MoveType,
     val card: TableCard,
-    val transactions: ResourceTransactions
+    val transactions: ResourceTransactions,
 )
 
 @Serializable
 data class PlayerMove(
     val type: MoveType,
     val cardName: String,
-    val transactions: ResourceTransactions = noTransactions()
+    val transactions: ResourceTransactions = noTransactions(),
 )
 
 enum class MoveType {
@@ -77,5 +76,5 @@ enum class MoveType {
     PLAY_FREE_DISCARDED,
     UPGRADE_WONDER,
     DISCARD,
-    COPY_GUILD;
+    COPY_GUILD,
 }

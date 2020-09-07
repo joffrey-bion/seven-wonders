@@ -28,7 +28,8 @@ class NumericEffectSerializerTest {
             .registerTypeAdapter(RawPointsIncrease::class.java, NumericEffectSerializer())
             .registerTypeAdapter(GoldIncrease::class.java, NumericEffectSerializer())
             // ProductionIncrease is not a numeric effect, it is here for negative testing purpose
-            .registerTypeAdapter(ProductionIncrease::class.java, NumericEffectSerializer()).create()
+            .registerTypeAdapter(ProductionIncrease::class.java, NumericEffectSerializer())
+            .create()
     }
 
     @Test

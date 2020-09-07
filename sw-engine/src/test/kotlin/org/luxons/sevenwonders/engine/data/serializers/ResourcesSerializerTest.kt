@@ -21,7 +21,7 @@ class ResourcesSerializerTest {
 
     @Before
     fun setUp() {
-        gson = GsonBuilder()
+        gson = GsonBuilder() //
             .registerTypeAdapter(Resources::class.java, ResourcesSerializer())
             .registerTypeAdapter(MutableResources::class.java, ResourcesSerializer())
             .create()

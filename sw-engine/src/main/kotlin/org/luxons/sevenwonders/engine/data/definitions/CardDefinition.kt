@@ -13,7 +13,7 @@ internal class CardDefinition(
     private val chainParent: String?,
     private val chainChildren: List<String>?,
     private val image: String,
-    private val countPerNbPlayer: Map<Int, Int>
+    private val countPerNbPlayer: Map<Int, Int>,
 ) {
     fun create(back: CardBack, nbPlayers: Int): List<Card> = List(countPerNbPlayer[nbPlayers] ?: 0) { create(back) }
 

@@ -23,7 +23,7 @@ class ScienceProgressTest {
         compasses: Int,
         wheels: Int,
         tablets: Int,
-        jokers: Int
+        jokers: Int,
     ) {
         val board = testBoard(ResourceType.ORE)
         val initialScience = createScience(initCompasses, initWheels, initTablets, initJokers)

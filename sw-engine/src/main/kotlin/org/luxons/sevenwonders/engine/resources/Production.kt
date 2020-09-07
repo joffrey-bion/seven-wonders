@@ -6,7 +6,7 @@ import java.util.EnumSet
 data class Production internal constructor(
     private val fixedResources: MutableResources = mutableResourcesOf(),
     // cannot be a Set because the same choices can be there multiple times
-    private val alternativeResources: MutableList<Set<ResourceType>> = mutableListOf()
+    private val alternativeResources: MutableList<Set<ResourceType>> = mutableListOf(),
 ) {
     fun getFixedResources(): Resources = fixedResources
 
@@ -43,7 +43,7 @@ data class Production internal constructor(
 
     private fun containedInAlternatives(
         resources: MutableResources,
-        alternatives: MutableList<Set<ResourceType>>
+        alternatives: MutableList<Set<ResourceType>>,
     ): Boolean {
         if (resources.isEmpty()) {
             return true

@@ -4,7 +4,7 @@ import org.luxons.sevenwonders.model.Age
 
 internal class Military(
     private val lostPointsPerDefeat: Int,
-    private val wonPointsPerVictoryPerAge: Map<Age, Int>
+    private val wonPointsPerVictoryPerAge: Map<Age, Int>,
 ) {
     var nbShields = 0
         private set

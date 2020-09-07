@@ -38,7 +38,7 @@ class HandsTest {
     @Theory
     fun isEmpty_falseWhenAtLeast1_allSame(
         @FromDataPoints("nbPlayers") nbPlayers: Int,
-        @FromDataPoints("nbCardsPerPlayer") nbCardsPerPlayer: Int
+        @FromDataPoints("nbCardsPerPlayer") nbCardsPerPlayer: Int,
     ) {
         assumeTrue(nbCardsPerPlayer >= 1)
         val hands = createHands(nbPlayers, nbCardsPerPlayer)
@@ -54,7 +54,7 @@ class HandsTest {
     @Theory
     fun maxOneCardRemains_falseWhenAtLeast2_allSame(
         @FromDataPoints("nbPlayers") nbPlayers: Int,
-        @FromDataPoints("nbCardsPerPlayer") nbCardsPerPlayer: Int
+        @FromDataPoints("nbCardsPerPlayer") nbCardsPerPlayer: Int,
     ) {
         assumeTrue(nbCardsPerPlayer >= 2)
         val hands = createHands(nbPlayers, nbCardsPerPlayer)
@@ -64,7 +64,7 @@ class HandsTest {
     @Theory
     fun maxOneCardRemains_trueWhenAtMost1_allSame(
         @FromDataPoints("nbPlayers") nbPlayers: Int,
-        @FromDataPoints("nbCardsPerPlayer") nbCardsPerPlayer: Int
+        @FromDataPoints("nbCardsPerPlayer") nbCardsPerPlayer: Int,
     ) {
         assumeTrue(nbCardsPerPlayer <= 1)
         val hands = createHands(nbPlayers, nbCardsPerPlayer)

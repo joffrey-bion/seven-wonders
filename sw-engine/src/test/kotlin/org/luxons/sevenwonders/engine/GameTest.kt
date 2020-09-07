@@ -107,7 +107,7 @@ class GameTest {
         return MoveExpectation(
             turn.playerIndex,
             PlayerMove(MoveType.PLAY_FREE_DISCARDED, card.name, noTransactions()),
-            PlayedMove(turn.playerIndex, MoveType.PLAY_FREE_DISCARDED, card.toPlayedCard(), noTransactions())
+            PlayedMove(turn.playerIndex, MoveType.PLAY_FREE_DISCARDED, card.toPlayedCard(), noTransactions()),
         )
     }
 
@@ -115,11 +115,11 @@ class GameTest {
         turnInfo: PlayerTurnInfo,
         moveType: MoveType,
         card: HandCard,
-        transactions: ResourceTransactions
+        transactions: ResourceTransactions,
     ): MoveExpectation = MoveExpectation(
         turnInfo.playerIndex,
         PlayerMove(moveType, card.name, transactions),
-        PlayedMove(turnInfo.playerIndex, moveType, card.toPlayedCard(), transactions)
+        PlayedMove(turnInfo.playerIndex, moveType, card.toPlayedCard(), transactions),
     )
 
     private fun createPickGuildMove(turnInfo: PlayerTurnInfo): MoveExpectation {
@@ -131,7 +131,7 @@ class GameTest {
         return MoveExpectation(
             turnInfo.playerIndex,
             PlayerMove(MoveType.COPY_GUILD, card.name),
-            PlayedMove(turnInfo.playerIndex, MoveType.COPY_GUILD, card.toPlayedCard(), noTransactions())
+            PlayedMove(turnInfo.playerIndex, MoveType.COPY_GUILD, card.toPlayedCard(), noTransactions()),
         )
     }
 

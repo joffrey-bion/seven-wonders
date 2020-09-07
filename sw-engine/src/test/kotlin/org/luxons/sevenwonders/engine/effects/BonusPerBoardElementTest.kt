@@ -34,7 +34,7 @@ class BonusPerBoardElementTest {
         nbOtherCards: Int,
         points: Int,
         gold: Int,
-        color: Color
+        color: Color,
     ) {
         val board = table.getBoard(0, boardPosition)
         addCards(board, nbCards, nbOtherCards, color)
@@ -49,7 +49,7 @@ class BonusPerBoardElementTest {
         boardPosition: RelativeBoardPosition,
         nbDefeatTokens: Int,
         points: Int,
-        gold: Int
+        gold: Int,
     ) {
         val board = table.getBoard(0, boardPosition)
         repeat(nbDefeatTokens) {
@@ -81,7 +81,7 @@ class BonusPerBoardElementTest {
         nbOtherCards: Int,
         points: Int,
         gold: Int,
-        color: Color
+        color: Color,
     ) {
         val board = table.getBoard(0, boardPosition)
         addCards(board, nbCards, nbOtherCards, color)

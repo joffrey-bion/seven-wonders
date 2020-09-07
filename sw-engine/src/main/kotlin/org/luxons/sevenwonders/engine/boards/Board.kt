@@ -13,8 +13,11 @@ import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.score.PlayerScore
 import org.luxons.sevenwonders.model.score.ScoreCategory
 
-internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Settings) {
-
+internal class Board(
+    val wonder: Wonder,
+    val playerIndex: Int,
+    settings: Settings,
+) {
     val production = Production(mutableResourcesOf(wonder.initialResource))
     val publicProduction = Production(mutableResourcesOf(wonder.initialResource))
     val science = Science()
@@ -86,14 +89,12 @@ internal class Board(val wonder: Wonder, val playerIndex: Int, settings: Setting
             ScoreCategory.TRADE to computePointsForCards(player, Color.YELLOW),
             ScoreCategory.GUILD to computePointsForCards(player, Color.PURPLE),
             ScoreCategory.WONDER to wonder.computePoints(player),
-            ScoreCategory.GOLD to computeGoldPoints()
-        )
+            ScoreCategory.GOLD to computeGoldPoints(),
+        ),
     )
 
     private fun computePointsForCards(player: Player, color: Color): Int =
-        playedCards.filter { it.color === color }
-            .flatMap { it.effects }
-            .sumBy { it.computePoints(player) }
+        playedCards.filter { it.color === color }.flatMap { it.effects }.sumBy { it.computePoints(player) }
 
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
 

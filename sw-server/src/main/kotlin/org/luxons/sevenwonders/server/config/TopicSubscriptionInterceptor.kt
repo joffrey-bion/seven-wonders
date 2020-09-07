@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class TopicSubscriptionInterceptor(
-    private val destinationAccessValidator: DestinationAccessValidator
+    private val destinationAccessValidator: DestinationAccessValidator,
 ) : ChannelInterceptor {
 
     override fun preSend(message: Message<*>, channel: MessageChannel): Message<*>? {

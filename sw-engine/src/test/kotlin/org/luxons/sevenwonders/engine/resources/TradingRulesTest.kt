@@ -21,7 +21,7 @@ class TradingRulesTest {
         overriddenCost: Int,
         overriddenProvider: Provider,
         provider: Provider,
-        type: ResourceType
+        type: ResourceType,
     ) {
         assumeTrue(defaultCost != overriddenCost)
         assumeTrue(overriddenProvider != provider)
@@ -68,7 +68,7 @@ class TradingRulesTest {
         overriddenProvider: Provider,
         overriddenType: ResourceType,
         provider: Provider,
-        type: ResourceType
+        type: ResourceType,
     ) {
         assumeTrue(overriddenProvider != provider || overriddenType != type)
         val rules = TradingRules(defaultCost)
@@ -83,7 +83,7 @@ class TradingRulesTest {
         overriddenCost: Int,
         overriddenType: ResourceType,
         provider: Provider,
-        type: ResourceType
+        type: ResourceType,
     ) {
         assumeTrue(overriddenType != type)
         val rules = TradingRules(defaultCost)
@@ -98,7 +98,7 @@ class TradingRulesTest {
         overriddenCost: Int,
         overriddenProvider: Provider,
         provider: Provider,
-        type: ResourceType
+        type: ResourceType,
     ) {
         assumeTrue(overriddenProvider != provider)
         val rules = TradingRules(defaultCost)
@@ -106,7 +106,7 @@ class TradingRulesTest {
 
         val boughtResources = createTransactions(
             createTransaction(provider, type),
-            createTransaction(overriddenProvider, type)
+            createTransaction(overriddenProvider, type),
         )
 
         assertEquals(defaultCost + overriddenCost, rules.computeCost(boughtResources))

@@ -1,6 +1,10 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.*
+import com.palantir.blueprintjs.Intent
+import com.palantir.blueprintjs.bpButton
+import com.palantir.blueprintjs.bpHtmlTable
+import com.palantir.blueprintjs.bpIcon
+import com.palantir.blueprintjs.bpTag
 import kotlinx.css.*
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
@@ -99,7 +103,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
             title = joinability.tooltip,
             icon = "arrow-right",
             disabled = !joinability.canDo,
-            onClick = { props.joinGame(lobby.id) }
+            onClick = { props.joinGame(lobby.id) },
         )
     }
 }
@@ -114,5 +118,5 @@ private val gameList = connectStateAndDispatch<GameListStateProps, GameListDispa
     },
     mapDispatchToProps = { dispatch, _ ->
         joinGame = { gameId -> dispatch(RequestJoinGame(gameId = gameId)) }
-    }
+    },
 )

@@ -7,7 +7,11 @@ import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
 import react.ReactElement
 import react.dom.*
-import styled.*
+import styled.StyledDOMBuilder
+import styled.css
+import styled.styledDiv
+import styled.styledLi
+import styled.styledUl
 
 fun <T> RBuilder.radialList(
     items: List<T>,
@@ -17,7 +21,7 @@ fun <T> RBuilder.radialList(
     itemWidth: Int,
     itemHeight: Int,
     options: RadialConfig = RadialConfig(),
-    block: StyledDOMBuilder<DIV>.() -> Unit = {}
+    block: StyledDOMBuilder<DIV>.() -> Unit = {},
 ): ReactElement {
     val containerWidth = options.diameter + itemWidth
     val containerHeight = options.diameter + itemHeight
@@ -39,7 +43,7 @@ private fun <T> RBuilder.radialListItems(
     items: List<T>,
     renderItem: (T) -> ReactElement,
     getKey: (T) -> String,
-    radialConfig: RadialConfig
+    radialConfig: RadialConfig,
 ): ReactElement {
     val offsets = offsetsFromCenter(items.size, radialConfig)
     return styledUl {

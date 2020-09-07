@@ -15,7 +15,7 @@ import redux.RAction
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SagaManager<S, A : RAction, R>(
-    private val monitor: ((A) -> Unit)? = null
+    private val monitor: ((A) -> Unit)? = null,
 ) {
     private lateinit var context: SagaContext<S, A, R>
 
@@ -65,7 +65,7 @@ class SagaManager<S, A : RAction, R>(
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class SagaContext<S, A : RAction, R>(
     private val reduxApi: MiddlewareApi<S, A, R>,
-    private val actions: BroadcastChannel<A>
+    private val actions: BroadcastChannel<A>,
 ) {
     /**
      * Gets the current redux state.
@@ -112,7 +112,7 @@ class SagaContext<S, A : RAction, R>(
      * cancelled.
      */
     suspend inline fun <reified T : A> onEach(
-        crossinline handle: suspend SagaContext<S, A, R>.(T) -> Unit
+        crossinline handle: suspend SagaContext<S, A, R>.(T) -> Unit,
     ) = onEach {
         if (it is T) {
             handle(it)

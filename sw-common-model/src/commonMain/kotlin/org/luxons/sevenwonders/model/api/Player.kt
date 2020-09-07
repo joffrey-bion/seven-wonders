@@ -14,7 +14,7 @@ interface BasicPlayerInfo {
 data class ConnectedPlayer(
     override val username: String,
     override val displayName: String,
-    override val icon: Icon?
+    override val icon: Icon?,
 ) : BasicPlayerInfo
 
 @Serializable
@@ -24,5 +24,5 @@ data class PlayerDTO(
     override val icon: Icon?,
     val wonder: AssignedWonder,
     val isGameOwner: Boolean,
-    val isReady: Boolean
+    val isReady: Boolean,
 ) : BasicPlayerInfo
