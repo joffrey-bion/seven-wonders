@@ -23,8 +23,10 @@ It is therefore possible that you experience a server restart if I just pushed s
 You can also run the server on your own machine by running:
 
 ```
-docker run -p 80:80 ghcr.io/joffrey-bion/seven-wonders-server:latest
+docker run -p 80:80 hildan/seven-wonders-server
 ```
+
+And then go to `http://localhost` in your browser to play (add some bots if you're alone).
 
 ## Technicalities
 
