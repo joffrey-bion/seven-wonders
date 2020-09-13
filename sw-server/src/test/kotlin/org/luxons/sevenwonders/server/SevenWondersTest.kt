@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.server
 
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -55,32 +54,22 @@ class SevenWondersTest {
 
     @Test
     fun lobbySubscription_ignoredForOutsiders() = runAsyncTest {
-        System.err.println("before new player owner")
         val ownerSession = newPlayer("GameOwner")
-        System.err.println("before new player 1")
         val session1 = newPlayer("Player1")
-        System.err.println("before new player 2")
         val session2 = newPlayer("Player2")
         val gameName = "Test Game"
-        System.err.println("before create game")
         val lobby = ownerSession.createGame(gameName)
-        System.err.println("before join game 1")
         session1.joinGame(lobby.id)
-        System.err.println("before join game 2")
         session2.joinGame(lobby.id)
 
-        System.err.println("before new outsider player")
         val outsiderSession = newPlayer("Outsider")
         val started = launch { outsiderSession.awaitGameStart(lobby.id) }
 
-        System.err.println("before start game")
         ownerSession.startGame()
         val nothing = withTimeoutOrNull(50) { started.join() }
         assertNull(nothing)
         started.cancel()
-        System.err.println("before disconnect")
         disconnect(ownerSession, session1, session2, outsiderSession)
-        System.err.println("after disconnect")
     }
 
     @Test
@@ -133,7 +122,6 @@ class SevenWondersTest {
             launch {
                 session.awaitGameStart(lobby.id)
                 val turns = session.watchTurns().produceIn(this)
-                delay(100) // ensures the subscription happened
                 session.sayReady()
                 val turn = turns.receive()
                 assertNotNull(turn)

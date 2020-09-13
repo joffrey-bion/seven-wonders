@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
 }
 
-val krossbowVersion = "0.30.1"
+val krossbowVersion = "0.41.0"
 
 kotlin {
     jvm()

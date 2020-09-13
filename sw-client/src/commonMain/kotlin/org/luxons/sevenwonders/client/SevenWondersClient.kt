@@ -1,10 +1,6 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.DeserializationStrategy
@@ -61,20 +57,17 @@ private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKx
     payload: T? = null,
     serializer: SerializationStrategy<T>,
     deserializer: DeserializationStrategy<U>,
-): U = coroutineScope {
-    val sub = async(start = CoroutineStart.UNDISPATCHED) {
-        subscribe(receiveDestination, deserializer).first()
-    }
-    delay(30) // ensures the subscription happened
+): U {
+    val sub = subscribe(receiveDestination, deserializer)
     convertAndSend(sendDestination, payload, serializer)
-    sub.await()
+    return sub.first()
 }
 
 class SevenWondersSession(private val stompSession: StompSessionWithKxSerialization) {
 
     suspend fun disconnect() = stompSession.disconnect()
 
-    fun watchErrors(): Flow<ErrorDTO> = stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
+    suspend fun watchErrors(): Flow<ErrorDTO> = stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
     suspend fun chooseName(displayName: String, icon: Icon? = null): ConnectedPlayer = stompSession.request(
         sendDestination = "/app/chooseName",
@@ -84,7 +77,7 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         deserializer = ConnectedPlayer.serializer(),
     )
 
-    fun watchGames(): Flow<List<LobbyDTO>> =
+    suspend fun watchGames(): Flow<List<LobbyDTO>> =
         stompSession.subscribe("/topic/games", ListSerializer(LobbyDTO.serializer()))
 
     suspend fun createGame(gameName: String): LobbyDTO = stompSession.request(
@@ -135,7 +128,8 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         )
     }
 
-    fun watchLobbyUpdates(): Flow<LobbyDTO> = stompSession.subscribe("/user/queue/lobby/updated", LobbyDTO.serializer())
+    suspend fun watchLobbyUpdates(): Flow<LobbyDTO> =
+        stompSession.subscribe("/user/queue/lobby/updated", LobbyDTO.serializer())
 
     suspend fun awaitGameStart(gameId: Long): PlayerTurnInfo {
         val startEvents = stompSession.subscribe("/user/queue/lobby/$gameId/started", PlayerTurnInfo.serializer())
@@ -146,20 +140,20 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         stompSession.sendEmptyMsg("/app/lobby/startGame")
     }
 
-    fun watchPlayerReady(gameId: Long): Flow<String> =
+    suspend fun watchPlayerReady(gameId: Long): Flow<String> =
         stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
 
-    fun watchPreparedCards(gameId: Long): Flow<PreparedCard> =
+    suspend fun watchPreparedCards(gameId: Long): Flow<PreparedCard> =
         stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
 
-    fun watchTurns(): Flow<PlayerTurnInfo> =
+    suspend fun watchTurns(): Flow<PlayerTurnInfo> =
         stompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo.serializer())
 
     suspend fun sayReady() {
         stompSession.sendEmptyMsg("/app/game/sayReady")
     }
 
-    fun watchOwnMoves(): Flow<PlayerMove> =
+    suspend fun watchOwnMoves(): Flow<PlayerMove> =
         stompSession.subscribe("/user/queue/game/preparedMove", PlayerMove.serializer())
 
     suspend fun prepareMove(move: PlayerMove) {
