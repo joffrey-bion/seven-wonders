@@ -34,12 +34,14 @@ class Game internal constructor(
     private val preparedMoves: MutableMap<Int, Move> = mutableMapOf()
     private var currentTurnInfo: List<PlayerTurnInfo> = emptyList()
     private var hands: Hands = Hands(emptyList())
+    private var militaryConflictsResolved = false
 
     init {
         startNewAge()
     }
 
     private fun startNewAge() {
+        militaryConflictsResolved = false
         table.increaseCurrentAge()
         hands = decks.deal(table.currentAge, players.size)
         startNewTurn()
@@ -196,7 +198,12 @@ class Game internal constructor(
 
     private fun endOfAgeReached(): Boolean = hands.isEmpty
 
-    private fun executeEndOfAgeEvents() = table.resolveMilitaryConflicts()
+    private fun executeEndOfAgeEvents() {
+        if (!militaryConflictsResolved) {
+            table.resolveMilitaryConflicts()
+            militaryConflictsResolved = true
+        }
+    }
 
     fun endOfGameReached(): Boolean = endOfAgeReached() && table.currentAge == LAST_AGE
 
