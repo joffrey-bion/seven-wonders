@@ -199,6 +199,8 @@ class Game internal constructor(
     private fun endOfAgeReached(): Boolean = hands.isEmpty
 
     private fun executeEndOfAgeEvents() {
+        // this is necessary because this method is actually called twice in the 3rd age if someone has CPY_GUILD
+        // TODO we should instead manage the game's state machine in a better way to avoid stuff like this
         if (!militaryConflictsResolved) {
             table.resolveMilitaryConflicts()
             militaryConflictsResolved = true
