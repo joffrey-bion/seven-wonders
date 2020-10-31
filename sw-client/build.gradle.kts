@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
 }
 
-val krossbowVersion = "0.41.0"
+val krossbowVersion = "1.1.0"
 
 kotlin {
     jvm()
@@ -14,7 +14,7 @@ kotlin {
             dependencies {
                 api(project(":sw-common-model"))
                 api("org.hildan.krossbow:krossbow-stomp-kxserialization:$krossbowVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
             }
         }
         val commonTest by getting {

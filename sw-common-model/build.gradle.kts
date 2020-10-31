@@ -3,7 +3,7 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val kotlinSerialization = "1.0.0-RC"
+val kotlinSerialization = "1.0.0"
 
 kotlin {
     jvm()

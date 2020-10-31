@@ -9,7 +9,7 @@ repositories {
     maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
 }
 
-val kotlinWrappersVersion = "pre.112-kotlin-1.4.0"
+val kotlinWrappersVersion = "pre.129-kotlin-1.4.10"
 
 kotlin {
     js {
@@ -21,24 +21,27 @@ kotlin {
             dependencies {
                 implementation(project(":sw-client"))
 
-                val reactVersion = "16.13.1"
+                val reactVersion = "17.0.0"
                 implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react", reactVersion))
                 implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react-dom", reactVersion))
 
-                val reactReduxVersion = "5.0.7"
+                val reactReduxVersion = "7.2.1"
                 implementation("org.jetbrains:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
                 implementation(npm("react-redux", reactReduxVersion))
-                implementation(npm("redux", "4.0.4"))
+                // redux version aligned with the wrapper's build:
+                // https://github.com/JetBrains/kotlin-wrappers/blob/master/gradle.properties#L39
+                implementation(npm("redux", "4.0.5"))
 
-                val reactRouterDomVersion = "5.1.2"
+                val reactRouterDomVersion = "5.2.0"
                 implementation("org.jetbrains:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
                 implementation(npm("react-router-dom", reactRouterDomVersion))
 
-                implementation("org.jetbrains:kotlin-styled:1.0.0-$kotlinWrappersVersion")
-                implementation(npm("styled-components", "4.3.2"))
-                implementation(npm("inline-style-prefixer", "5.1.0"))
+                val styledComponentsVersion = "5.2.0"
+                implementation("org.jetbrains:kotlin-styled:$styledComponentsVersion-$kotlinWrappersVersion")
+                implementation(npm("styled-components", styledComponentsVersion))
+                implementation(npm("inline-style-prefixer", "6.0.0"))
 
                 // seems to be required by "kotlin-extensions" JS lib
                 implementation(npm("core-js", "3.1.4"))
