@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.server.controllers
 
-import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
@@ -16,7 +15,6 @@ import java.security.Principal
 /**
  * This API is for in-game events management.
  */
-@Api(name = "Game")
 @Controller
 class GameController(
     private val template: SimpMessagingTemplate,

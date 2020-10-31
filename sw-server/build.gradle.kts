@@ -21,10 +21,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("ch.qos.logback:logback-classic:1.1.8")
-    implementation("org.hildan.livedoc:livedoc-springboot:4.3.2")
-    implementation("org.hildan.livedoc:livedoc-ui-webjar:4.3.2")
-
-    annotationProcessor("org.hildan.livedoc:livedoc-javadoc-processor:4.3.2")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))

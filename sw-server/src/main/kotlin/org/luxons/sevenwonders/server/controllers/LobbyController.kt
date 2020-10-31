@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.server.controllers
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.bot.SevenWondersBot
 import org.luxons.sevenwonders.model.api.actions.AddBotAction
 import org.luxons.sevenwonders.model.api.actions.ReassignWondersAction
@@ -25,7 +24,6 @@ import java.security.Principal
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
  */
-@Api(name = "Lobby")
 @Controller
 class LobbyController(
     private val lobbyRepository: LobbyRepository,

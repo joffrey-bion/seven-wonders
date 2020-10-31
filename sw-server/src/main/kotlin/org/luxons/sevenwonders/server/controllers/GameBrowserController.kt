@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.server.controllers
 
-import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
@@ -21,7 +20,6 @@ import java.security.Principal
 /**
  * This is the place where the player looks for a game.
  */
-@Api(name = "GameBrowser")
 @Controller
 class GameBrowserController(
     private val lobbyController: LobbyController,

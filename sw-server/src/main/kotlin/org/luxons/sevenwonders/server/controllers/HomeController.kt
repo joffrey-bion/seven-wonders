@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.server.controllers
 
-import org.hildan.livedoc.core.annotations.Api
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
@@ -15,7 +14,6 @@ import java.security.Principal
 /**
  * Handles actions in the homepage of the game.
  */
-@Api(name = "Home")
 @Controller
 class HomeController(
     private val playerRepository: PlayerRepository,
