@@ -30,7 +30,6 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     testImplementation(project(":sw-client"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.hildan.jackstomp:jackstomp:2.0.0")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
