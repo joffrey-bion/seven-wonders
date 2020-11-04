@@ -33,7 +33,7 @@ jobs:
         run: ./gradlew build
 
       - name: Docker push to GitHub Container Registry
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2.1.0
         with:
           path: ./sw-server
           username: ${{ github.actor }}
@@ -44,7 +44,7 @@ jobs:
           tag_with_sha: true
 
       - name: Docker push to DockerHub
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2.1.0
         with:
           path: ./sw-server
           username: hildan
@@ -54,7 +54,7 @@ jobs:
           tag_with_sha: true
 
 #     - name: Docker push to GitHub Packages
-#       uses: docker/build-push-action@v1
+#       uses: docker/build-push-action@v2.1.0
 #       with:
 #         path: ./sw-server
 #         username: ${{ github.actor }}
@@ -65,7 +65,7 @@ jobs:
 #         tag_with_sha: true
 
 #    - name: Docker push to Heroku
-#      uses: docker/build-push-action@v1
+#      uses: docker/build-push-action@v2.1.0
 #      with:
 #        path: ./sw-server
 #        username: _
