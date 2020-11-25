@@ -21,7 +21,7 @@ internal data class Card(
     val back: CardBack,
 ) {
     fun computePlayabilityBy(player: Player, forceSpecialFree: Boolean = false): CardPlayability = when {
-        isAlreadyOnBoard(player.board) -> Playability.incompatibleWithBoard() // cannot play twice the same card
+        isAlreadyOnBoard(player.board) -> Playability.alreadyPlayed() // cannot play twice the same card
         forceSpecialFree -> Playability.specialFree()
         isParentOnBoard(player.board) -> Playability.chainable()
         else -> Playability.requirementDependent(requirements.assess(player))
@@ -46,8 +46,10 @@ internal data class Card(
 
 private object Playability {
 
-    fun incompatibleWithBoard(): CardPlayability =
-        CardPlayability(isPlayable = false, playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD)
+    fun alreadyPlayed(): CardPlayability = CardPlayability(
+        isPlayable = false,
+        playabilityLevel = PlayabilityLevel.ALREADY_PLAYED,
+    )
 
     fun chainable(): CardPlayability = CardPlayability(
         isPlayable = true,

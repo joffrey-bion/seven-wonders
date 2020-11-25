@@ -63,7 +63,8 @@ enum class PlayabilityLevel(val message: String) {
     MISSING_REQUIRED_GOLD("not enough gold"),
     MISSING_GOLD_FOR_RES("not enough gold to buy resources"),
     UNAVAILABLE_RESOURCES("missing resources that even neighbours don't have"),
-    INCOMPATIBLE_WITH_BOARD("card already on the board")
+    ALREADY_PLAYED("card already played"),
+    WONDER_FULLY_BUILT("all wonder levels are already built"),
 }
 
 enum class Color(val isResource: Boolean) {
@@ -73,7 +74,7 @@ enum class Color(val isResource: Boolean) {
     BLUE(false),
     GREEN(false),
     RED(false),
-    PURPLE(false)
+    PURPLE(false),
 }
 
 @Serializable

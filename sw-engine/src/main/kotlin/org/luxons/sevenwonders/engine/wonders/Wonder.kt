@@ -31,7 +31,7 @@ internal class Wonder(
 
     fun computeBuildabilityBy(player: Player): WonderBuildability {
         if (nbBuiltStages == stages.size) {
-            return Buildability.alreadyBuilt()
+            return Buildability.wonderFullyBuilt()
         }
         return Buildability.requirementDependent(nextStage.requirements.assess(player))
     }
@@ -50,11 +50,11 @@ internal class Wonder(
 
 private object Buildability {
 
-    fun alreadyBuilt() = WonderBuildability(
+    fun wonderFullyBuilt() = WonderBuildability(
         isBuildable = false,
         minPrice = Int.MAX_VALUE,
         cheapestTransactions = emptySet(),
-        playabilityLevel = PlayabilityLevel.INCOMPATIBLE_WITH_BOARD,
+        playabilityLevel = PlayabilityLevel.WONDER_FULLY_BUILT,
     )
 
     fun requirementDependent(satisfaction: RequirementsSatisfaction) = WonderBuildability(
