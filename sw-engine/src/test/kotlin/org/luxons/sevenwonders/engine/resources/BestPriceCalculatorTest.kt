@@ -10,11 +10,7 @@ import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.resources.Provider.LEFT_PLAYER
 import org.luxons.sevenwonders.model.resources.Provider.RIGHT_PLAYER
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
-import org.luxons.sevenwonders.model.resources.ResourceType.CLAY
-import org.luxons.sevenwonders.model.resources.ResourceType.GLASS
-import org.luxons.sevenwonders.model.resources.ResourceType.ORE
-import org.luxons.sevenwonders.model.resources.ResourceType.STONE
-import org.luxons.sevenwonders.model.resources.ResourceType.WOOD
+import org.luxons.sevenwonders.model.resources.ResourceType.*
 import org.luxons.sevenwonders.model.resources.noTransactions
 import kotlin.test.assertEquals
 
@@ -106,6 +102,45 @@ class BestPriceCalculatorTest {
         assertEquals(solutions(1, woodRight), bestSolution(resources, player0))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player1))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player2))
+    }
+
+    @Test
+    fun bestPrice_mixedResources_overridenCost_sameMultipleTimes() {
+        val left = testBoard(WOOD)
+
+        val main = testBoard(WOOD)
+        main.tradingRules.setCost(CLAY, LEFT_PLAYER, 1)
+        main.tradingRules.setCost(CLAY, RIGHT_PLAYER, 1)
+
+        main.publicProduction.addFixedResource(STONE, 1)
+        main.publicProduction.addChoice(CLAY, ORE)
+        main.production.addFixedResource(STONE, 1)
+        main.production.addChoice(CLAY, ORE)
+
+        val right = testBoard(CLAY)
+        right.publicProduction.addFixedResource(ORE, 1)
+        right.publicProduction.addFixedResource(CLAY, 1)
+        right.publicProduction.addFixedResource(WOOD, 2)
+        right.production.addFixedResource(ORE, 1)
+        right.production.addFixedResource(CLAY, 1)
+        right.production.addFixedResource(WOOD, 2)
+
+        val table = Table(listOf(main, right, left))
+
+        val player0 = SimplePlayer(0, table)
+        val player1 = SimplePlayer(1, table)
+        val player2 = SimplePlayer(2, table)
+
+        val resources = resourcesOf(WOOD, CLAY, CLAY, CLAY)
+
+        val claysRight = createTransaction(RIGHT_PLAYER, CLAY, CLAY)
+        val claysLeft = createTransaction(LEFT_PLAYER, CLAY, CLAY)
+        val clayLeft = createTransaction(LEFT_PLAYER, CLAY)
+        val clayRight = createTransaction(RIGHT_PLAYER, CLAY)
+
+        assertEquals(solutions(2, createTransactions(claysRight)), bestSolution(resources, player0))
+        assertEquals(solutions(2, createTransactions(clayLeft)), bestSolution(resources, player1))
+        assertEquals(solutions(6, createTransactions(claysLeft, clayRight)), bestSolution(resources, player2))
     }
 
     @Test

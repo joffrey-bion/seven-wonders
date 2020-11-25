@@ -70,7 +70,7 @@ internal fun createTransactions(provider: Provider, vararg resources: ResourceTy
 internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions = transactions.toSet()
 
 internal fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction =
-    ResourceTransaction(provider, resources.map { CountedResource(1, it) })
+    ResourceTransaction(provider, resources.groupBy { it }.map { (type, reps) -> CountedResource(reps.size, type) })
 
 internal fun createRequirements(vararg types: ResourceType): Requirements =
     Requirements(resources = resourcesOf(*types))

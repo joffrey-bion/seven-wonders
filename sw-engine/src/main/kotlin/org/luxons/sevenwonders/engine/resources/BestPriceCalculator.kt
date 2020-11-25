@@ -17,7 +17,7 @@ private class ResourcePool(
     private val rules: TradingRules,
     choices: List<Set<ResourceType>>,
 ) {
-    val choices: Set<MutableSet<ResourceType>> = choices.mapTo(HashSet()) { it.toMutableSet() }
+    val choices: List<MutableSet<ResourceType>> = choices.map { it.toMutableSet() }
 
     fun getCost(type: ResourceType): Int = if (provider == null) 0 else rules.getCost(type, provider)
 }
@@ -98,7 +98,7 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
 
     fun unbuyOne(provider: Provider, type: ResourceType, cost: Int) {
         pricePaid -= cost
-        boughtResources.get(provider)!!.remove(type, 1)
+        boughtResources[provider]!!.remove(type, 1)
     }
 
     private fun computePossibilitiesWhenUsing(type: ResourceType, pool: ResourcePool) {
