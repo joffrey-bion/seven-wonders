@@ -3,7 +3,21 @@ package org.luxons.sevenwonders.model.score
 import kotlinx.serialization.Serializable
 
 @Serializable
-class ScoreBoard(val scores: Collection<PlayerScore>)
+class ScoreBoard(val scores: List<PlayerScore>) {
+
+    @OptIn(ExperimentalStdlibApi::class)
+    val ranks = buildList {
+        var r = 1
+        add(1)
+        for (i in 1..scores.lastIndex) {
+            if (scores[i] < scores[i - 1]) {
+                add(++r)
+            } else {
+                add(r)
+            }
+        }
+    }
+}
 
 @Serializable
 data class PlayerScore(

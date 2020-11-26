@@ -77,7 +77,7 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
             scoreBoard.scores.forEachIndexed { index, score ->
                 val player = players[score.playerIndex]
                 tr {
-                    centeredTd { +"${index + 1}" }
+                    centeredTd { +"${scoreBoard.ranks[index]}" }
                     centeredTd { bpIcon(player.icon?.name ?: "user", size = 25) }
                     styledTd {
                         inlineStyles {
