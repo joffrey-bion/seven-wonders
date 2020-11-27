@@ -35,5 +35,5 @@ internal class Hands(private val hands: List<List<Card>>) {
         return Hands(newHands)
     }
 
-    fun maxOneCardRemains(): Boolean = hands.map { it.size }.max() ?: 0 <= 1
+    fun maxOneCardRemains(): Boolean = hands.map { it.size }.maxOrNull() ?: 0 <= 1
 }

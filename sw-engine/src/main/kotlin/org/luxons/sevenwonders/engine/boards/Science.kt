@@ -50,7 +50,7 @@ internal class Science {
 
     private fun computePointsNoJoker(values: List<Int>): Int {
         val independentSquaresSum = values.sumBy { it * it }
-        val nbGroupsOfAll = values.min() ?: 0
+        val nbGroupsOfAll = values.minOrNull() ?: 0
         return independentSquaresSum + nbGroupsOfAll * 7
     }
 }
