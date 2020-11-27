@@ -48,7 +48,7 @@ fun RBuilder.transactionsSelectorDialog(
                         display = Display.flex
                         alignItems = Align.center
                     }
-                    bpIcon("user", size = 50)
+                    neighbour()
                     styledDiv {
                         css {
                             grow(Grow.GROW)
@@ -56,10 +56,22 @@ fun RBuilder.transactionsSelectorDialog(
                         }
                         optionsTable(state, prepareMove)
                     }
-                    bpIcon("user", size = 50)
+                    neighbour()
                 }
             }
         }
+    }
+}
+
+private fun StyledDOMBuilder<DIV>.neighbour() {
+    styledDiv {
+        css {
+            width = 100.pct
+            display = Display.flex
+            flexDirection = FlexDirection.column
+            alignItems = Align.center
+        }
+        bpIcon("user", size = 40)
     }
 }
 
@@ -79,57 +91,43 @@ private fun RBuilder.optionsTable(
                         onClickFunction = { prepareMove(PlayerMove(state.moveType, state.card.name, transactions)) }
                     }
                     // there should be at most one of each
-                    val left = transactions.firstOrNull { it.provider == Provider.LEFT_PLAYER }
-                    val right = transactions.firstOrNull { it.provider == Provider.RIGHT_PLAYER }
+                    val leftTr = transactions.firstOrNull { it.provider == Provider.LEFT_PLAYER }
+                    val rightTr = transactions.firstOrNull { it.provider == Provider.RIGHT_PLAYER }
                     styledTd {
                         transactionCellCss()
-                        if (left != null) {
-                            styledDiv {
-                                transactionCellInnerCss()
-                                bpIcon(name = left.provider.arrowIcon(), size = Icon.SIZE_LARGE)
-                                goldIndicator(left.totalPrice, imgSize = 2.rem)
+                        styledDiv {
+                            css {
+                                opacity = if (leftTr == null) 0.5 else 1
                             }
+                            transactionCellInnerCss()
+                            bpIcon(name = "caret-left", size = Icon.SIZE_LARGE)
+                            goldIndicator(leftTr?.totalPrice ?: 0, imgSize = 2.5.rem)
                         }
                     }
                     styledTd {
                         transactionCellCss()
-                        if (left != null) {
-                            styledDiv {
-                                transactionCellInnerCss()
-                                resourceList(left.resources)
-                            }
+                        if (leftTr != null) {
+                            resourceList(leftTr.resources)
+                        }
+                    }
+                    styledTd {
+                        css { width = 2.rem }
+                    }
+                    styledTd {
+                        transactionCellCss()
+                        if (rightTr != null) {
+                            resourceList(rightTr.resources)
                         }
                     }
                     styledTd {
                         transactionCellCss()
-                        css {
-                            // make this cell fill the space
-                            width = 100.pct
-                        }
-//                        goldIndicator(-transactions.sumBy { it.totalPrice }) {
-//                            css {
-//                                width = LinearDimension.fitContent
-//                                margin(horizontal = LinearDimension.auto)
-//                            }
-//                        }
-                    }
-                    styledTd {
-                        transactionCellCss()
-                        if (right != null) {
-                            styledDiv {
-                                transactionCellInnerCss()
-                                resourceList(right.resources)
+                        styledDiv {
+                            css {
+                                opacity = if (rightTr == null) 0.5 else 1
                             }
-                        }
-                    }
-                    styledTd {
-                        transactionCellCss()
-                        if (right != null) {
-                            styledDiv {
-                                transactionCellInnerCss()
-                                goldIndicator(right.totalPrice, imgSize = 2.rem)
-                                bpIcon(name = right.provider.arrowIcon(), size = Icon.SIZE_LARGE)
-                            }
+                            transactionCellInnerCss()
+                            goldIndicator(rightTr?.totalPrice ?: 0, imgSize = 2.5.rem)
+                            bpIcon(name = "caret-right", size = Icon.SIZE_LARGE)
                         }
                     }
                 }
@@ -139,7 +137,7 @@ private fun RBuilder.optionsTable(
 }
 
 private fun StyledDOMBuilder<TD>.transactionCellCss() {
-    // we need inline styles to win over blueprintjs's styles (which are more specific than .class)
+    // we need inline styles to win over BlueprintJS's styles (which are more specific than .class)
     inlineStyles {
         verticalAlign = VerticalAlign.middle
     }
@@ -153,28 +151,26 @@ private fun StyledDOMBuilder<DIV>.transactionCellInnerCss() {
     }
 }
 
-private fun Provider.arrowIcon() = when (this) {
-    Provider.LEFT_PLAYER -> "caret-left"
-    Provider.RIGHT_PLAYER -> "caret-right"
-}
-
 private fun RBuilder.resourceList(resources: List<CountedResource>) {
     // The biggest card is the Palace and requires 7 resources (1 of each).
     // We always have at least 1 resource on our wonder, so we'll never need to buy more than 6.
     // Therefore, 3 by row seems decent.
     val rows = resources.toRepeatedTypesList().chunked(3)
+    val imgSize = 1.5.rem
     styledDiv {
         css {
             display = Display.flex
             flexDirection = FlexDirection.column
             alignItems = Align.center
+            justifyContent = JustifyContent.center
             grow(Grow.GROW)
+            height = imgSize * 2
         }
         rows.forEach { row ->
             styledDiv {
                 resourceRowCss()
                 row.forEach {
-                    resourceImage(it, size = 1.5.rem)
+                    resourceImage(it, size = imgSize)
                 }
             }
         }
