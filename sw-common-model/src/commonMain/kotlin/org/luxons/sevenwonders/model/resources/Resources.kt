@@ -41,8 +41,20 @@ enum class Provider(val boardPosition: RelativeBoardPosition) {
 }
 
 @Serializable
-data class ResourceTransaction(val provider: Provider, val resources: List<CountedResource>)
+sealed class ResourceTransaction {
+    abstract val provider: Provider
+    abstract val resources: List<CountedResource>
+}
 
 typealias ResourceTransactions = Set<ResourceTransaction>
 
-fun noTransactions(): ResourceTransactions = emptySet()
+@Serializable
+data class PricedResourceTransaction(
+    override val provider: Provider,
+    override val resources: List<CountedResource>,
+    val totalPrice: Int,
+) : ResourceTransaction()
+
+typealias PricedResourceTransactions = Set<PricedResourceTransaction>
+
+fun noTransactions(): PricedResourceTransactions = emptySet()

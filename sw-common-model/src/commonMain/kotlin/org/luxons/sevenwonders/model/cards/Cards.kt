@@ -2,7 +2,7 @@ package org.luxons.sevenwonders.model.cards
 
 import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.boards.Requirements
-import org.luxons.sevenwonders.model.resources.ResourceTransactions
+import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
 import org.luxons.sevenwonders.model.resources.noTransactions
 
 interface Card {
@@ -82,7 +82,7 @@ data class CardPlayability(
     val isPlayable: Boolean,
     val isChainable: Boolean = false,
     val minPrice: Int = Int.MAX_VALUE,
-    val cheapestTransactions: Set<ResourceTransactions> = setOf(noTransactions()),
+    val cheapestTransactions: Set<PricedResourceTransactions> = setOf(noTransactions()),
     val playabilityLevel: PlayabilityLevel,
 ) {
     val isFree: Boolean = minPrice == 0

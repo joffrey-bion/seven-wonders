@@ -2,14 +2,11 @@ package org.luxons.sevenwonders.engine.resources
 
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.converters.toCountedResourcesList
-import org.luxons.sevenwonders.model.resources.CountedResource
-import org.luxons.sevenwonders.model.resources.Provider
-import org.luxons.sevenwonders.model.resources.ResourceTransaction
-import org.luxons.sevenwonders.model.resources.ResourceTransactions
+import org.luxons.sevenwonders.model.resources.*
 
-fun Map<Provider, Resources>.toTransactions(): ResourceTransactions = //
+fun Map<Provider, Resources>.toTransactions(price: Map<Provider, Int>): PricedResourceTransactions = //
     filterValues { !it.isEmpty() } //
-        .map { (p, res) -> ResourceTransaction(p, res.toCountedResourcesList()) } //
+        .map { (p, res) -> PricedResourceTransaction(p, res.toCountedResourcesList(), price[p]!!) } //
         .toSet()
 
 fun ResourceTransactions.asResources(): Resources = flatMap { it.resources }.asResources()

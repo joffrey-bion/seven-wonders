@@ -1,14 +1,14 @@
 package org.luxons.sevenwonders.engine.cards
 
 import org.luxons.sevenwonders.model.cards.PlayabilityLevel
-import org.luxons.sevenwonders.model.resources.ResourceTransactions
+import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
 import org.luxons.sevenwonders.model.resources.noTransactions
 
 internal data class RequirementsSatisfaction(
     val satisfied: Boolean,
     val level: PlayabilityLevel,
     val minPrice: Int,
-    val cheapestTransactions: Set<ResourceTransactions>,
+    val cheapestTransactions: Set<PricedResourceTransactions>,
 ) {
     companion object {
 
@@ -24,13 +24,13 @@ internal data class RequirementsSatisfaction(
         internal fun enoughResourcesAndGold(minPrice: Int) =
             RequirementsSatisfaction(true, PlayabilityLevel.ENOUGH_GOLD_AND_RES, minPrice, setOf(noTransactions()))
 
-        internal fun metWithHelp(minPrice: Int, cheapestTransactions: Set<ResourceTransactions>) =
+        internal fun metWithHelp(minPrice: Int, cheapestTransactions: Set<PricedResourceTransactions>) =
             RequirementsSatisfaction(true, PlayabilityLevel.REQUIRES_HELP, minPrice, cheapestTransactions)
 
         internal fun missingRequiredGold(minPrice: Int) =
             RequirementsSatisfaction(false, PlayabilityLevel.MISSING_REQUIRED_GOLD, minPrice, emptySet())
 
-        internal fun missingGoldForResources(minPrice: Int, cheapestTransactions: Set<ResourceTransactions>) =
+        internal fun missingGoldForResources(minPrice: Int, cheapestTransactions: Set<PricedResourceTransactions>) =
             RequirementsSatisfaction(false, PlayabilityLevel.MISSING_GOLD_FOR_RES, minPrice, cheapestTransactions)
 
         internal fun unavailableResources() =

@@ -22,12 +22,7 @@ import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.Color
-import org.luxons.sevenwonders.model.resources.CountedResource
-import org.luxons.sevenwonders.model.resources.Provider
-import org.luxons.sevenwonders.model.resources.ResourceTransaction
-import org.luxons.sevenwonders.model.resources.ResourceTransactions
-import org.luxons.sevenwonders.model.resources.ResourceType
-import org.luxons.sevenwonders.model.resources.noTransactions
+import org.luxons.sevenwonders.model.resources.*
 
 internal const val SEED: Long = 42
 
@@ -70,7 +65,20 @@ internal fun createTransactions(provider: Provider, vararg resources: ResourceTy
 internal fun createTransactions(vararg transactions: ResourceTransaction): ResourceTransactions = transactions.toSet()
 
 internal fun createTransaction(provider: Provider, vararg resources: ResourceType): ResourceTransaction =
-    ResourceTransaction(provider, resources.groupBy { it }.map { (type, reps) -> CountedResource(reps.size, type) })
+    createPricedTransaction(provider, 0, *resources)
+
+internal fun createPricedTransactions(vararg transactions: PricedResourceTransaction): PricedResourceTransactions =
+    transactions.toSet()
+
+internal fun createPricedTransactions(provider: Provider, price: Int, vararg resources: ResourceType): PricedResourceTransactions =
+    createPricedTransactions(createPricedTransaction(provider, price, *resources))
+
+internal fun createPricedTransaction(provider: Provider, price: Int, vararg resources: ResourceType) =
+    PricedResourceTransaction(
+        provider = provider,
+        resources = resources.groupBy { it }.map { (type, reps) -> CountedResource(reps.size, type) },
+        totalPrice = price,
+    )
 
 internal fun createRequirements(vararg types: ResourceType): Requirements =
     Requirements(resources = resourcesOf(*types))

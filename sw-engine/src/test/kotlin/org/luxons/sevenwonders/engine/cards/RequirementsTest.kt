@@ -9,8 +9,8 @@ import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.SimplePlayer
 import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.resources.emptyResources
+import org.luxons.sevenwonders.engine.test.createPricedTransactions
 import org.luxons.sevenwonders.engine.test.createRequirements
-import org.luxons.sevenwonders.engine.test.createTransactions
 import org.luxons.sevenwonders.engine.test.singleBoardPlayer
 import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.model.resources.Provider
@@ -110,7 +110,7 @@ class RequirementsTest {
         val table = Table(listOf(board, neighbourBoard))
         val player = SimplePlayer(0, table)
 
-        val resources = createTransactions(Provider.RIGHT_PLAYER, boughtResource)
+        val resources = createPricedTransactions(Provider.RIGHT_PLAYER, 2, boughtResource)
 
         val neighbourHasResource = boughtResource == requiredResource
         assertEquals(neighbourHasResource, requirements.areMetWithHelpBy(board, resources))
@@ -118,8 +118,8 @@ class RequirementsTest {
         val satisfaction = requirements.assess(player)
         if (neighbourHasResource) {
             val transactions = setOf(
-                createTransactions(Provider.LEFT_PLAYER, requiredResource),
-                createTransactions(Provider.RIGHT_PLAYER, requiredResource),
+                createPricedTransactions(Provider.LEFT_PLAYER, 2, requiredResource),
+                createPricedTransactions(Provider.RIGHT_PLAYER, 2, requiredResource),
             )
             assertEquals(RequirementsSatisfaction.metWithHelp(2, transactions), satisfaction)
         } else {
@@ -138,7 +138,7 @@ class RequirementsTest {
         val table = Table(listOf(board, neighbourBoard))
         val player = SimplePlayer(0, table)
 
-        val transactions = createTransactions(Provider.RIGHT_PLAYER, requiredResource)
+        val transactions = createPricedTransactions(Provider.RIGHT_PLAYER, 2, requiredResource)
 
         assertTrue(requirements.areMetWithHelpBy(board, transactions))
         assertTrue(requirements.assess(player).satisfied)

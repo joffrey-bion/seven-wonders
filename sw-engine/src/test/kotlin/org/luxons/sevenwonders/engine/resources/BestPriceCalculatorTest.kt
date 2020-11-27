@@ -3,20 +3,20 @@ package org.luxons.sevenwonders.engine.resources
 import org.junit.Test
 import org.luxons.sevenwonders.engine.SimplePlayer
 import org.luxons.sevenwonders.engine.boards.Table
-import org.luxons.sevenwonders.engine.test.createTransaction
-import org.luxons.sevenwonders.engine.test.createTransactions
+import org.luxons.sevenwonders.engine.test.createPricedTransaction
+import org.luxons.sevenwonders.engine.test.createPricedTransactions
 import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.engine.test.testTable
+import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
 import org.luxons.sevenwonders.model.resources.Provider.LEFT_PLAYER
 import org.luxons.sevenwonders.model.resources.Provider.RIGHT_PLAYER
-import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.ResourceType.*
 import org.luxons.sevenwonders.model.resources.noTransactions
 import kotlin.test.assertEquals
 
 class BestPriceCalculatorTest {
 
-    private fun solutions(price: Int, vararg resourceTransactions: ResourceTransactions) =
+    private fun solutions(price: Int, vararg resourceTransactions: PricedResourceTransactions) =
         TransactionPlan(price, setOf(*resourceTransactions))
 
     @Test
@@ -41,12 +41,12 @@ class BestPriceCalculatorTest {
 
         val resources = resourcesOf(STONE, STONE)
 
-        val stoneLeftSingle = createTransaction(LEFT_PLAYER, STONE)
-        val stoneRightSingle = createTransaction(RIGHT_PLAYER, STONE)
+        val stoneLeftSingle = createPricedTransaction(LEFT_PLAYER, 2, STONE)
+        val stoneRightSingle = createPricedTransaction(RIGHT_PLAYER, 2, STONE)
 
-        val stoneLeft = createTransactions(stoneLeftSingle)
-        val stoneRight = createTransactions(stoneRightSingle)
-        val stoneLeftAndRight = createTransactions(stoneLeftSingle, stoneRightSingle)
+        val stoneLeft = createPricedTransactions(stoneLeftSingle)
+        val stoneRight = createPricedTransactions(stoneRightSingle)
+        val stoneLeftAndRight = createPricedTransactions(stoneLeftSingle, stoneRightSingle)
 
         assertEquals(solutions(2, stoneLeft), bestSolution(resources, player0))
         assertEquals(solutions(4, stoneLeftAndRight), bestSolution(resources, player1))
@@ -70,10 +70,11 @@ class BestPriceCalculatorTest {
 
         val resources = resourcesOf(WOOD)
 
-        val woodLeft = createTransactions(LEFT_PLAYER, WOOD)
-        val woodRight = createTransactions(RIGHT_PLAYER, WOOD)
+        val woodLeft = createPricedTransactions(LEFT_PLAYER, 2, WOOD)
+        val woodRightDiscounted = createPricedTransactions(RIGHT_PLAYER, 1, WOOD)
+        val woodRight = createPricedTransactions(RIGHT_PLAYER, 2, WOOD)
 
-        assertEquals(solutions(1, woodRight), bestSolution(resources, player0))
+        assertEquals(solutions(1, woodRightDiscounted), bestSolution(resources, player0))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player1))
         assertEquals(solutions(2, woodLeft, woodRight), bestSolution(resources, player2))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player3))
@@ -97,9 +98,9 @@ class BestPriceCalculatorTest {
         val player2 = SimplePlayer(2, table)
 
         val resources = resourcesOf(WOOD)
-        val woodRight = createTransactions(RIGHT_PLAYER, WOOD)
+        val woodRightDiscounted = createPricedTransactions(RIGHT_PLAYER, 1, WOOD)
 
-        assertEquals(solutions(1, woodRight), bestSolution(resources, player0))
+        assertEquals(solutions(1, woodRightDiscounted), bestSolution(resources, player0))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player1))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player2))
     }
@@ -133,14 +134,14 @@ class BestPriceCalculatorTest {
 
         val resources = resourcesOf(WOOD, CLAY, CLAY, CLAY)
 
-        val claysRight = createTransaction(RIGHT_PLAYER, CLAY, CLAY)
-        val claysLeft = createTransaction(LEFT_PLAYER, CLAY, CLAY)
-        val clayLeft = createTransaction(LEFT_PLAYER, CLAY)
-        val clayRight = createTransaction(RIGHT_PLAYER, CLAY)
+        val claysRightDiscounted = createPricedTransaction(RIGHT_PLAYER, 2, CLAY, CLAY)
+        val claysLeft = createPricedTransaction(LEFT_PLAYER, 4, CLAY, CLAY)
+        val clayLeft = createPricedTransaction(LEFT_PLAYER, 2, CLAY)
+        val clayRight = createPricedTransaction(RIGHT_PLAYER, 2, CLAY)
 
-        assertEquals(solutions(2, createTransactions(claysRight)), bestSolution(resources, player0))
-        assertEquals(solutions(2, createTransactions(clayLeft)), bestSolution(resources, player1))
-        assertEquals(solutions(6, createTransactions(claysLeft, clayRight)), bestSolution(resources, player2))
+        assertEquals(solutions(2, createPricedTransactions(claysRightDiscounted)), bestSolution(resources, player0))
+        assertEquals(solutions(2, createPricedTransactions(clayLeft)), bestSolution(resources, player1))
+        assertEquals(solutions(6, createPricedTransactions(claysLeft, clayRight)), bestSolution(resources, player2))
     }
 
     @Test
@@ -164,10 +165,10 @@ class BestPriceCalculatorTest {
         val player2 = SimplePlayer(2, table)
 
         val resources = resourcesOf(ORE, CLAY)
-        val oreAndClayLeft = createTransactions(LEFT_PLAYER, ORE, CLAY)
-        val clayRight = createTransactions(RIGHT_PLAYER, CLAY)
+        val oreAndClayLeft = createPricedTransactions(LEFT_PLAYER, 4, ORE, CLAY)
+        val clayRightDiscounted = createPricedTransactions(RIGHT_PLAYER, 1, CLAY)
 
-        assertEquals(solutions(1, clayRight), bestSolution(resources, player0))
+        assertEquals(solutions(1, clayRightDiscounted), bestSolution(resources, player0))
         assertEquals(solutions(0, noTransactions()), bestSolution(resources, player1))
         assertEquals(solutions(4, oreAndClayLeft), bestSolution(resources, player2))
     }
