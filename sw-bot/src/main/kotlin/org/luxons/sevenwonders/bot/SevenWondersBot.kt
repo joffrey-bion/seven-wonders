@@ -73,7 +73,9 @@ private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
         val transactions = wonderBuildability.cheapestTransactions.random()
         return PlayerMove(MoveType.UPGRADE_WONDER, hand.random().name, transactions)
     }
-    val playableCard = hand.filter { it.playability.isPlayable }.randomOrNull()
+    val playableCard = hand
+        .filter { it.playability.isPlayable }
+        .randomOrNull()
     return if (playableCard != null) {
         PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.cheapestTransactions.random())
     } else {

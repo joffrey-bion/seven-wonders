@@ -1,38 +1,18 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.Elevation
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpButtonGroup
-import com.palantir.blueprintjs.bpCallout
-import com.palantir.blueprintjs.bpCard
-import com.palantir.blueprintjs.bpNonIdealState
-import com.palantir.blueprintjs.bpOverlay
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
-import kotlinx.css.properties.*
+import kotlinx.css.properties.transform
+import kotlinx.css.properties.translate
 import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.getBoard
-import org.luxons.sevenwonders.model.getOwnBoard
 import org.luxons.sevenwonders.ui.components.GlobalStyles
-import org.luxons.sevenwonders.ui.redux.GameState
-import org.luxons.sevenwonders.ui.redux.RequestLeaveGame
-import org.luxons.sevenwonders.ui.redux.RequestPrepareMove
-import org.luxons.sevenwonders.ui.redux.RequestSayReady
-import org.luxons.sevenwonders.ui.redux.RequestUnprepareMove
-import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
-import react.RBuilder
-import react.RClass
-import react.RComponent
-import react.RProps
-import react.RState
-import react.ReactElement
+import org.luxons.sevenwonders.ui.redux.*
+import react.*
 import styled.StyledDOMBuilder
 import styled.css
 import styled.getClassName
@@ -50,6 +30,8 @@ interface GameSceneDispatchProps : RProps {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
     var unprepareMove: () -> Unit
+    var startTransactionsSelection: (TransactionSelectorState) -> Unit
+    var cancelTransactionsSelection: () -> Unit
     var leaveGame: () -> Unit
 }
 
@@ -92,9 +74,14 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     height = 100.pct
                 }
             }
+            transactionsSelectorDialog(
+                state = props.gameState?.transactionSelector,
+                prepareMove = props.prepareMove,
+                cancelTransactionSelection = props.cancelTransactionsSelection,
+            )
             boardSummaries(leftBoard, rightBoard, topBoards)
             handRotationIndicator(turnInfo.table.handRotationDirection)
-            handCards(turnInfo, props.preparedMove, props.prepareMove)
+            handCards(turnInfo, props.preparedMove, props.prepareMove, props.startTransactionsSelection)
             val card = props.preparedCard
             val move = props.preparedMove
             if (card != null && move != null) {
@@ -235,6 +222,8 @@ private val gameScene: RClass<GameSceneProps> =
         mapDispatchToProps = { dispatch, _ ->
             prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
             unprepareMove = { dispatch(RequestUnprepareMove()) }
+            startTransactionsSelection = { selector -> dispatch(StartTransactionSelection(selector)) }
+            cancelTransactionsSelection = { dispatch(CancelTransactionSelection) }
             sayReady = { dispatch(RequestSayReady()) }
             leaveGame = { dispatch(RequestLeaveGame()) }
         },

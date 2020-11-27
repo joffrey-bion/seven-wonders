@@ -1,35 +1,14 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import kotlinx.css.Align
-import kotlinx.css.BorderStyle
-import kotlinx.css.CSSBuilder
-import kotlinx.css.Color
-import kotlinx.css.Display
-import kotlinx.css.Position
-import kotlinx.css.VerticalAlign
-import kotlinx.css.alignItems
-import kotlinx.css.background
-import kotlinx.css.bottom
-import kotlinx.css.color
-import kotlinx.css.display
-import kotlinx.css.fontSize
-import kotlinx.css.height
-import kotlinx.css.margin
-import kotlinx.css.marginLeft
-import kotlinx.css.position
-import kotlinx.css.properties.*
-import kotlinx.css.px
-import kotlinx.css.rem
-import kotlinx.css.verticalAlign
-import kotlinx.css.vw
-import kotlinx.css.width
-import kotlinx.css.zIndex
+import kotlinx.css.*
+import kotlinx.css.properties.borderTop
+import kotlinx.css.properties.boxShadow
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.boards.Production
 import org.luxons.sevenwonders.model.resources.CountedResource
 import org.luxons.sevenwonders.model.resources.ResourceType
 import react.RBuilder
-import react.dom.*
+import react.dom.key
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
@@ -53,7 +32,7 @@ private fun RBuilder.fixedResources(resources: List<CountedResource>) {
             display = Display.flex
         }
         resources.forEach {
-            tokenWithCount(tokenName = getResourceTokenName(it.type), count = it.count, imgSize = 3.rem) {
+            resourceWithCount(resourceType = it.type, count = it.count, imgSize = 3.rem) {
                 attrs { key = it.type.toString() }
                 css { marginLeft = 1.rem }
             }
@@ -84,7 +63,7 @@ private fun RBuilder.resourceChoice(types: Set<ResourceType>, block: StyledDOMBu
         }
         block()
         for ((i, t) in types.withIndex()) {
-            tokenImage(tokenName = getResourceTokenName(t), size = 3.rem) {
+            resourceImage(resourceType = t, size = 3.rem) {
                 attrs { this.key = t.toString() }
             }
             if (i < types.indices.last) {
@@ -96,8 +75,6 @@ private fun RBuilder.resourceChoice(types: Set<ResourceType>, block: StyledDOMBu
         }
     }
 }
-
-private fun getResourceTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().toLowerCase()}"
 
 private fun CSSBuilder.productionBarStyle() {
     alignItems = Align.center

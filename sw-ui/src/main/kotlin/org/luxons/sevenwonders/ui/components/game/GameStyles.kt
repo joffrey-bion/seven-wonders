@@ -6,8 +6,10 @@ import styled.StyleSheet
 
 object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
+    private val sandColor = Color.paleGoldenrod.withAlpha(0.7)
+
     val fullBoardPreviewPopover by css {
-        val bgColor = Color.paleGoldenrod.withAlpha(0.7)
+        val bgColor = sandColor
         backgroundColor = bgColor
         borderRadius = 0.5.rem
         padding(all = 0.5.rem)
@@ -33,6 +35,14 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
     val dimmedCard by css {
         filter = "brightness(60%) grayscale(50%)"
+    }
+
+    val transactionsSelector by css {
+        backgroundColor = sandColor
+
+        children(".bp3-dialog-header") {
+            background = "none" // overrides default white background
+        }
     }
 
     val discardMoveText by css {

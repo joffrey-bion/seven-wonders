@@ -1,13 +1,12 @@
 package com.palantir.blueprintjs
 
-import kotlinext.js.js
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import react.RBuilder
 import react.RHandler
 import react.ReactElement
 import react.buildElement
-import react.dom.*
+import react.dom.h2
 
 typealias IconName = String
 

@@ -4,13 +4,14 @@ import kotlinx.css.*
 import kotlinx.html.DIV
 import kotlinx.html.IMG
 import kotlinx.html.title
+import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
-import styled.styledImg
-import styled.styledSpan
+import styled.*
+
+private fun getResourceTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().toLowerCase()}"
+
+private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.png"
 
 enum class TokenCountPosition {
     LEFT,
@@ -34,6 +35,37 @@ fun RBuilder.goldIndicator(
         customCountStyle = customCountStyle,
         block = block,
     )
+}
+
+fun RBuilder.resourceWithCount(
+    resourceType: ResourceType,
+    count: Int,
+    title: String = resourceType.toString(),
+    imgSize: LinearDimension? = null,
+    countPosition: TokenCountPosition = TokenCountPosition.RIGHT,
+    brightText: Boolean = false,
+    customCountStyle: CSSBuilder.() -> Unit = {},
+    block: StyledDOMBuilder<DIV>.() -> Unit = {},
+) {
+    tokenWithCount(
+        tokenName = getResourceTokenName(resourceType),
+        count = count,
+        title = title,
+        imgSize = imgSize,
+        countPosition = countPosition,
+        brightText = brightText,
+        customCountStyle = customCountStyle,
+        block = block
+    )
+}
+
+fun RBuilder.resourceImage(
+    resourceType: ResourceType,
+    title: String = resourceType.toString(),
+    size: LinearDimension?,
+    block: StyledDOMBuilder<IMG>.() -> Unit = {},
+) {
+    tokenImage(getResourceTokenName(resourceType), title, size, block)
 }
 
 fun RBuilder.tokenWithCount(
@@ -72,7 +104,11 @@ fun RBuilder.tokenWithCount(
             }
             TokenCountPosition.OVER -> {
                 styledDiv {
-                    css { position = Position.relative }
+                    css {
+                        position = Position.relative
+                        // if container becomes large, this one stays small so that children stay on top of each other
+                        width = LinearDimension.fitContent
+                    }
                     tokenImage(tokenName, title = title, size = imgSize)
                     styledSpan {
                         css {
@@ -108,8 +144,6 @@ fun RBuilder.tokenImage(
         block()
     }
 }
-
-private fun getTokenImagePath(tokenName: String) = "/images/tokens/$tokenName.png"
 
 private fun CSSBuilder.tokenCountStyle(
     size: LinearDimension,

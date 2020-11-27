@@ -1,28 +1,16 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.IButtonGroupProps
-import com.palantir.blueprintjs.IButtonProps
-import com.palantir.blueprintjs.IconName
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpButtonGroup
-import com.palantir.blueprintjs.bpIcon
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.MoveType
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.getOwnBoard
+import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
-import react.RBuilder
-import react.RComponent
-import react.RElementBuilder
-import react.RProps
-import react.RState
+import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
+import react.*
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
@@ -43,6 +31,7 @@ interface HandProps : RProps {
     var turnInfo: PlayerTurnInfo
     var preparedMove: PlayerMove?
     var prepareMove: (PlayerMove) -> Unit
+    var startTransactionsSelection: (TransactionSelectorState) -> Unit
 }
 
 class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
@@ -131,10 +120,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             large = true,
             intent = Intent.SUCCESS,
             disabled = !card.playability.isPlayable,
-            onClick = {
-                val transactions = card.playability.cheapestTransactions.first()
-                props.prepareMove(PlayerMove(handAction.moveType, card.name, transactions))
-            },
+            onClick = { prepareMove(handAction.moveType, card, card.playability.cheapestTransactions) },
         ) {
             bpIcon(handAction.icon)
             if (card.playability.isPlayable && !card.playability.isFree) {
@@ -150,15 +136,19 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             large = true,
             intent = Intent.PRIMARY,
             disabled = !wonderBuildability.isBuildable,
-            onClick = {
-                val transactions = wonderBuildability.cheapestTransactions.first()
-                props.prepareMove(PlayerMove(MoveType.UPGRADE_WONDER, card.name, transactions))
-            },
+            onClick = { prepareMove(MoveType.UPGRADE_WONDER, card, wonderBuildability.cheapestTransactions) },
         ) {
             bpIcon("key-shift")
             if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
                 priceInfo(wonderBuildability.minPrice)
             }
+        }
+    }
+
+    private fun prepareMove(moveType: MoveType, card: HandCard, transactions: Set<PricedResourceTransactions>) {
+        when (transactions.size) {
+            1 -> props.prepareMove(PlayerMove(moveType, card.name, transactions.first()))
+            else -> props.startTransactionsSelection(TransactionSelectorState(moveType, card, transactions))
         }
     }
 
@@ -266,12 +256,14 @@ fun RBuilder.handCards(
     turnInfo: PlayerTurnInfo,
     preparedMove: PlayerMove?,
     prepareMove: (PlayerMove) -> Unit,
+    startTransactionsSelection: (TransactionSelectorState) -> Unit,
 ) {
     child(HandComponent::class) {
         attrs {
             this.turnInfo = turnInfo
             this.preparedMove = preparedMove
             this.prepareMove = prepareMove
+            this.startTransactionsSelection = startTransactionsSelection
         }
     }
 }
