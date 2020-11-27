@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.boards.Requirements
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.PlayabilityLevel
-import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
+import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.model.resources.ResourceType
 import kotlin.random.Random
 
@@ -58,7 +58,7 @@ data class ApiWonderStage(
 data class WonderBuildability(
     val isBuildable: Boolean,
     val minPrice: Int,
-    val cheapestTransactions: Set<PricedResourceTransactions>,
+    val transactionsOptions: ResourceTransactionOptions,
     val playabilityLevel: PlayabilityLevel,
 ) {
     val isFree: Boolean = minPrice == 0

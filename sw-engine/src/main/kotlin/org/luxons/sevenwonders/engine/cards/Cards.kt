@@ -8,7 +8,7 @@ import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.cards.PlayabilityLevel
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
-import org.luxons.sevenwonders.model.resources.noTransactions
+import org.luxons.sevenwonders.model.resources.singleOptionNoTransactionNeeded
 
 internal data class Card(
     val name: String,
@@ -55,7 +55,7 @@ private object Playability {
         isPlayable = true,
         isChainable = true,
         minPrice = 0,
-        cheapestTransactions = setOf(noTransactions()),
+        transactionOptions = singleOptionNoTransactionNeeded(),
         playabilityLevel = PlayabilityLevel.CHAINABLE,
     )
 
@@ -63,7 +63,7 @@ private object Playability {
         isPlayable = satisfaction.satisfied,
         isChainable = false,
         minPrice = satisfaction.minPrice,
-        cheapestTransactions = satisfaction.cheapestTransactions,
+        transactionOptions = satisfaction.transactionOptions,
         playabilityLevel = satisfaction.level,
     )
 
@@ -71,7 +71,7 @@ private object Playability {
         isPlayable = true,
         isChainable = false,
         minPrice = 0,
-        cheapestTransactions = setOf(noTransactions()),
+        transactionOptions = singleOptionNoTransactionNeeded(),
         playabilityLevel = PlayabilityLevel.SPECIAL_FREE,
     )
 }

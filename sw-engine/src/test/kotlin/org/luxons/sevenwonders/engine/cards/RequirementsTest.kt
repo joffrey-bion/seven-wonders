@@ -117,11 +117,11 @@ class RequirementsTest {
 
         val satisfaction = requirements.assess(player)
         if (neighbourHasResource) {
-            val transactions = setOf(
+            val transactionOptions = listOf(
                 createPricedTransactions(Provider.LEFT_PLAYER, 2, requiredResource),
                 createPricedTransactions(Provider.RIGHT_PLAYER, 2, requiredResource),
             )
-            assertEquals(RequirementsSatisfaction.metWithHelp(2, transactions), satisfaction)
+            assertEquals(RequirementsSatisfaction.metWithHelp(2, transactionOptions), satisfaction)
         } else {
             assertEquals(RequirementsSatisfaction.unavailableResources(), satisfaction)
         }

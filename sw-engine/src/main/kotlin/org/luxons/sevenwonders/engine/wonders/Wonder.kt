@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.PlayabilityLevel
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.resources.noTransactionOptions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
 
 internal class Wonder(
@@ -53,14 +54,14 @@ private object Buildability {
     fun wonderFullyBuilt() = WonderBuildability(
         isBuildable = false,
         minPrice = Int.MAX_VALUE,
-        cheapestTransactions = emptySet(),
+        transactionsOptions = noTransactionOptions(),
         playabilityLevel = PlayabilityLevel.WONDER_FULLY_BUILT,
     )
 
     fun requirementDependent(satisfaction: RequirementsSatisfaction) = WonderBuildability(
         isBuildable = satisfaction.satisfied,
         minPrice = satisfaction.minPrice,
-        cheapestTransactions = satisfaction.cheapestTransactions,
+        transactionsOptions = satisfaction.transactionOptions,
         playabilityLevel = satisfaction.level,
     )
 }

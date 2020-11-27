@@ -7,7 +7,7 @@ import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
+import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
 import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
 import react.*
@@ -120,7 +120,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             large = true,
             intent = Intent.SUCCESS,
             disabled = !card.playability.isPlayable,
-            onClick = { prepareMove(handAction.moveType, card, card.playability.cheapestTransactions) },
+            onClick = { prepareMove(handAction.moveType, card, card.playability.transactionOptions) },
         ) {
             bpIcon(handAction.icon)
             if (card.playability.isPlayable && !card.playability.isFree) {
@@ -136,7 +136,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             large = true,
             intent = Intent.PRIMARY,
             disabled = !wonderBuildability.isBuildable,
-            onClick = { prepareMove(MoveType.UPGRADE_WONDER, card, wonderBuildability.cheapestTransactions) },
+            onClick = { prepareMove(MoveType.UPGRADE_WONDER, card, wonderBuildability.transactionsOptions) },
         ) {
             bpIcon("key-shift")
             if (wonderBuildability.isBuildable && !wonderBuildability.isFree) {
@@ -145,10 +145,10 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
         }
     }
 
-    private fun prepareMove(moveType: MoveType, card: HandCard, transactions: Set<PricedResourceTransactions>) {
-        when (transactions.size) {
-            1 -> props.prepareMove(PlayerMove(moveType, card.name, transactions.first()))
-            else -> props.startTransactionsSelection(TransactionSelectorState(moveType, card, transactions))
+    private fun prepareMove(moveType: MoveType, card: HandCard, transactionOptions: ResourceTransactionOptions) {
+        when (transactionOptions.size) {
+            1 -> props.prepareMove(PlayerMove(moveType, card.name, transactionOptions.first()))
+            else -> props.startTransactionsSelection(TransactionSelectorState(moveType, card, transactionOptions))
         }
     }
 

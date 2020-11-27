@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
+import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import redux.RAction
 
 data class SwState(
@@ -40,7 +40,7 @@ data class GameState(
 data class TransactionSelectorState(
     val moveType: MoveType,
     val card: HandCard,
-    val transactionsOptions: Set<PricedResourceTransactions>,
+    val transactionsOptions: ResourceTransactionOptions,
 )
 
 fun rootReducer(state: SwState, action: RAction): SwState = state.copy(

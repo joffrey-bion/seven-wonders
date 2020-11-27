@@ -2,12 +2,9 @@ package org.luxons.sevenwonders.engine.cards
 
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.boards.Board
-import org.luxons.sevenwonders.engine.resources.Resources
-import org.luxons.sevenwonders.engine.resources.asResources
-import org.luxons.sevenwonders.engine.resources.bestSolution
-import org.luxons.sevenwonders.engine.resources.emptyResources
-import org.luxons.sevenwonders.engine.resources.execute
+import org.luxons.sevenwonders.engine.resources.*
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
+import org.luxons.sevenwonders.model.resources.bestPrice
 
 data class Requirements internal constructor(
     val gold: Int = 0,
@@ -37,15 +34,15 @@ data class Requirements internal constructor(
     }
 
     private fun satisfactionWithPotentialHelp(player: Player): RequirementsSatisfaction {
-        val (minPriceForResources, possibleTransactions) = bestSolution(resources, player)
-        val minPrice = minPriceForResources + gold
-        if (possibleTransactions.isEmpty()) {
+        val options = transactionOptions(resources, player)
+        val minPrice = options.bestPrice + gold
+        if (options.isEmpty()) {
             return RequirementsSatisfaction.unavailableResources()
         }
         if (player.board.gold < minPrice) {
-            return RequirementsSatisfaction.missingGoldForResources(minPrice, possibleTransactions)
+            return RequirementsSatisfaction.missingGoldForResources(minPrice, options)
         }
-        return RequirementsSatisfaction.metWithHelp(minPrice, possibleTransactions)
+        return RequirementsSatisfaction.metWithHelp(minPrice, options)
     }
 
     /**

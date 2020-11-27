@@ -1,15 +1,11 @@
 package org.luxons.sevenwonders.engine.resources
 
 import org.luxons.sevenwonders.engine.Player
-import org.luxons.sevenwonders.model.resources.PricedResourceTransactions
-import org.luxons.sevenwonders.model.resources.Provider
-import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.resources.*
 import java.util.*
 
-internal fun bestSolution(resources: Resources, player: Player): TransactionPlan =
-    BestPriceCalculator(resources, player).computeBestSolution()
-
-data class TransactionPlan(val price: Int, val possibleTransactions: Set<PricedResourceTransactions>)
+internal fun transactionOptions(resources: Resources, player: Player): ResourceTransactionOptions =
+    TransactionOptionsCalculator(resources, player).computeOptions()
 
 private class ResourcePool(
     val provider: Provider?,
@@ -21,16 +17,14 @@ private class ResourcePool(
     fun getCost(type: ResourceType): Int = if (provider == null) 0 else rules.getCost(type, provider)
 }
 
-private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
+private class TransactionOptionsCalculator(resourcesToPay: Resources, player: Player) {
 
     private val pools: List<ResourcePool>
     private val resourcesLeftToPay: MutableResources
     private val boughtResources: MutableMap<Provider, MutableResources> = EnumMap(Provider::class.java)
-    private val pricePaid: MutableMap<Provider, Int> = EnumMap(Provider::class.java)
-    private var totalPricePaid: Int = 0
+    private val pricePaidPerProvider: MutableMap<Provider, Int> = EnumMap(Provider::class.java)
 
-    private var bestSolutions: MutableSet<PricedResourceTransactions> = mutableSetOf()
-    private var bestPrice: Int = Integer.MAX_VALUE
+    private var optionsSoFar: MutableSet<PricedResourceTransactions> = mutableSetOf()
 
     init {
         val board = player.board
@@ -53,14 +47,17 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
         return ResourcePool(this, player.board.tradingRules, choices)
     }
 
-    fun computeBestSolution(): TransactionPlan {
+    fun computeOptions(): ResourceTransactionOptions {
         computePossibilities()
-        return TransactionPlan(bestPrice, bestSolutions)
+        return optionsSoFar.distinctBy { it.costByProvider }.sortedBy { it.totalPrice }
     }
+
+    private val PricedResourceTransactions.costByProvider: Map<Provider, Int>
+        get() = associate { it.provider to it.totalPrice }
 
     private fun computePossibilities() {
         if (resourcesLeftToPay.isEmpty()) {
-            updateBestSolutionIfNeeded()
+            addCurrentOption()
             return
         }
         for (type in ResourceType.values()) {
@@ -93,13 +90,11 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
 
     fun buyOne(provider: Provider, type: ResourceType, cost: Int) {
         boughtResources.getOrPut(provider) { MutableResources() }.add(type, 1)
-        pricePaid.merge(provider, cost) { old, new -> old + new }
-        totalPricePaid += cost
+        pricePaidPerProvider.merge(provider, cost) { old, new -> old + new }
     }
 
     fun unbuyOne(provider: Provider, type: ResourceType, cost: Int) {
-        totalPricePaid -= cost
-        pricePaid.merge(provider, -cost) { old, new -> old + new }
+        pricePaidPerProvider.merge(provider, -cost) { old, new -> old + new }
         boughtResources[provider]!!.remove(type, 1)
     }
 
@@ -114,15 +109,27 @@ private class BestPriceCalculator(resourcesToPay: Resources, player: Player) {
         }
     }
 
-    private fun updateBestSolutionIfNeeded() {
-        if (totalPricePaid > bestPrice) return
-
-        if (totalPricePaid < bestPrice) {
-            bestPrice = totalPricePaid
-            bestSolutions.clear()
+    private fun addCurrentOption() {
+        if (optionsSoFar.any { it < pricePaidPerProvider }) {
+            return
         }
         // avoid mutating the resources from the transactions
-        val transactionSet = boughtResources.mapValues { (_, res) -> res.copy() }.toTransactions(pricePaid)
-        bestSolutions.add(transactionSet)
+        val transactionsOption = boughtResources.mapValues { (_, res) -> res.copy() }.toTransactions(pricePaidPerProvider)
+        optionsSoFar.add(transactionsOption)
+        optionsSoFar.removeIf { it > pricePaidPerProvider }
     }
+
+    private operator fun PricedResourceTransactions.compareTo(prices: Map<Provider, Int>): Int = when {
+        left == prices.left -> right.compareTo(prices.right)
+        right == prices.right -> left.compareTo(prices.left)
+        else -> 0
+    }
+
+    private val Map<Provider, Int>.left: Int get() = this[Provider.LEFT_PLAYER] ?: 0
+    private val Map<Provider, Int>.right: Int get() = this[Provider.RIGHT_PLAYER] ?: 0
+
+    private val PricedResourceTransactions.left: Int
+        get() = firstOrNull { it.provider == Provider.LEFT_PLAYER }?.totalPrice ?: 0
+    private val PricedResourceTransactions.right: Int
+        get() = firstOrNull { it.provider == Provider.RIGHT_PLAYER }?.totalPrice ?: 0
 }

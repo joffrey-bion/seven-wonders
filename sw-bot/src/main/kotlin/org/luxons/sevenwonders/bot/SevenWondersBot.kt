@@ -70,14 +70,14 @@ private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
     val hand = turnInfo.hand ?: error("Cannot choose move, no hand in current turn info!")
     val wonderBuildability = turnInfo.wonderBuildability
     if (wonderBuildability.isBuildable) {
-        val transactions = wonderBuildability.cheapestTransactions.random()
+        val transactions = wonderBuildability.transactionsOptions.random()
         return PlayerMove(MoveType.UPGRADE_WONDER, hand.random().name, transactions)
     }
     val playableCard = hand
         .filter { it.playability.isPlayable }
         .randomOrNull()
     return if (playableCard != null) {
-        PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.cheapestTransactions.random())
+        PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.transactionOptions.random())
     } else {
         PlayerMove(MoveType.DISCARD, hand.random().name, noTransactions())
     }

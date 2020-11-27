@@ -57,4 +57,16 @@ data class PricedResourceTransaction(
 
 typealias PricedResourceTransactions = Set<PricedResourceTransaction>
 
+typealias ResourceTransactionOptions = List<PricedResourceTransactions>
+
+val PricedResourceTransactions.totalPrice: Int
+    get() = sumBy { it.totalPrice }
+
+val ResourceTransactionOptions.bestPrice: Int
+    get() = minOfOrNull { it.totalPrice } ?: Int.MAX_VALUE
+
 fun noTransactions(): PricedResourceTransactions = emptySet()
+
+fun noTransactionOptions(): ResourceTransactionOptions = emptyList()
+
+fun singleOptionNoTransactionNeeded(): ResourceTransactionOptions = listOf(noTransactions())
