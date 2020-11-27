@@ -105,5 +105,7 @@ external interface IOptionProps : IProps {
 external class Classes {
     companion object {
         val HTML_TABLE: String = definedExternally
+        val DIALOG_BODY: String = definedExternally
+        val DIALOG_FOOTER: String = definedExternally
     }
 }

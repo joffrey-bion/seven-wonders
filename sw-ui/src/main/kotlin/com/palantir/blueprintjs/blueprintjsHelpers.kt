@@ -1,5 +1,6 @@
 package com.palantir.blueprintjs
 
+import kotlinext.js.js
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import react.RBuilder
@@ -154,6 +155,74 @@ fun RBuilder.bpOverlay(
     }
     block()
 }
+
+fun RBuilder.bpDialog(
+    isOpen: Boolean,
+    title: ReactElement? = null,
+    icon: IconName? = null,
+    autoFocus: Boolean = true,
+    enforceFocus: Boolean = true,
+    usePortal: Boolean = true,
+    hasBackdrop: Boolean = true,
+    canEscapeKeyClose: Boolean = true,
+    canOutsideClickClose: Boolean = true,
+    isCloseButtonShown: Boolean = true,
+    transitionName: String? = null,
+    onClose: () -> Unit = {},
+    block: RHandler<IDialogProps> = {},
+): ReactElement = child(Dialog::class) {
+    attrs {
+        this.isOpen = isOpen
+        if (title != null) {
+            this.title = title
+        }
+        if (icon != null) {
+            this.icon = icon
+        }
+        this.autoFocus = autoFocus
+        this.enforceFocus = enforceFocus
+        this.usePortal = usePortal
+        this.hasBackdrop = hasBackdrop
+        this.canEscapeKeyClose = canEscapeKeyClose
+        this.canOutsideClickClose = canOutsideClickClose
+        this.isCloseButtonShown = isCloseButtonShown
+        if (transitionName != null) {
+            this.transitionName = transitionName
+        }
+        this.onClose = { onClose() }
+    }
+    block()
+}
+
+fun RBuilder.bpDialog(
+    isOpen: Boolean,
+    title: String? = null,
+    icon: IconName? = null,
+    autoFocus: Boolean = true,
+    enforceFocus: Boolean = true,
+    usePortal: Boolean = true,
+    hasBackdrop: Boolean = true,
+    canEscapeKeyClose: Boolean = true,
+    canOutsideClickClose: Boolean = true,
+    isCloseButtonShown: Boolean = true,
+    transitionName: String? = null,
+    onClose: () -> Unit = {},
+    block: RHandler<IDialogProps> = {},
+): ReactElement = bpDialog(
+    isOpen = isOpen,
+    title = title?.let { buildElement { +title } },
+    icon = icon,
+    autoFocus = autoFocus,
+    enforceFocus = enforceFocus,
+    usePortal = usePortal,
+    hasBackdrop = hasBackdrop,
+    canEscapeKeyClose = canEscapeKeyClose,
+    canOutsideClickClose = canOutsideClickClose,
+    isCloseButtonShown = isCloseButtonShown,
+    transitionName = transitionName,
+    onClose = onClose,
+    block = block
+)
 
 fun RBuilder.bpPopover(
     content: ReactElement,
