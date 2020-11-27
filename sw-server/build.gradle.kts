@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
+    kotlin("plugin.serialization")
     id("org.springframework.boot") version "2.4.0"
 }
 
@@ -12,13 +13,12 @@ dependencies {
     implementation(project(":sw-bot"))
     implementation(kotlin("reflect")) // required by Spring 5
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")
     // required by spring security when using websockets
     implementation("org.springframework.security:spring-security-messaging")
-
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("ch.qos.logback:logback-classic:1.1.8")
 
@@ -26,7 +26,6 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     testImplementation(project(":sw-client"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 tasks.processResources {

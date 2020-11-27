@@ -113,7 +113,9 @@ class LobbyController(
         lobby.getPlayers().forEach {
             template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobby.toDTO())
         }
-        template.convertAndSend("/topic/games", listOf(lobby.toDTO()))
+        // we need to pass a non-generic type (array is fine) so that Spring doesn't break when trying to find a
+        // serializer from Kotlinx Serialization
+        template.convertAndSend("/topic/games", listOf(lobby.toDTO()).toTypedArray())
     }
 
     /**

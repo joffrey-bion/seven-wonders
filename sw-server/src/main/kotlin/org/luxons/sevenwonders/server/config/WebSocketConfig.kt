@@ -3,6 +3,8 @@ package org.luxons.sevenwonders.server.config
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.messaging.converter.KotlinSerializationJsonMessageConverter
+import org.springframework.messaging.converter.MessageConverter
 import org.springframework.messaging.simp.config.ChannelRegistration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
@@ -47,5 +49,10 @@ class WebSocketConfig(
 
     override fun configureClientInboundChannel(registration: ChannelRegistration) {
         registration.interceptors(topicSubscriptionInterceptor)
+    }
+
+    override fun configureMessageConverters(messageConverters: MutableList<MessageConverter>): Boolean {
+        messageConverters.add(KotlinSerializationJsonMessageConverter())
+        return true
     }
 }

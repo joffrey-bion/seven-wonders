@@ -36,7 +36,7 @@ class GameBrowserController(
      * @return the current list of [Lobby]s
      */
     @SubscribeMapping("/games") // prefix /topic not shown
-    fun listGames(principal: Principal): Collection<LobbyDTO> {
+    fun listGames(principal: Principal): List<LobbyDTO> {
         logger.info("Player '{}' subscribed to /topic/games", principal.name)
         return lobbyRepository.list().map { it.toDTO() }
     }
@@ -61,7 +61,9 @@ class GameBrowserController(
 
         // notify everyone that a new game exists
         val lobbyDto = lobby.toDTO()
-        template.convertAndSend("/topic/games", listOf(lobbyDto))
+        // we need to pass a non-generic type (array is fine) so that Spring doesn't break when trying to find a
+        // serializer from Kotlinx Serialization
+        template.convertAndSend("/topic/games", listOf(lobbyDto).toTypedArray())
         return lobbyDto
     }
 
