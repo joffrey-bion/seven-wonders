@@ -156,11 +156,14 @@ private fun StyledDOMBuilder<DIV>.transactionCellInnerCss() {
     }
 }
 
-private fun RBuilder.resourceList(resources: List<CountedResource>) {
+private fun RBuilder.resourceList(countedResources: List<CountedResource>) {
+    val resources = countedResources.toRepeatedTypesList()
+
     // The biggest card is the Palace and requires 7 resources (1 of each).
     // We always have at least 1 resource on our wonder, so we'll never need to buy more than 6.
-    // Therefore, 3 by row seems decent.
-    val rows = resources.toRepeatedTypesList().chunked(3)
+    // Therefore, 3 by row seems decent. When there are 4 items, it's visually better to have a 2x2 matrix, though.
+    val rows = resources.chunked(if (resources.size == 4) 2 else 3)
+
     val imgSize = 1.5.rem
     styledDiv {
         css {
