@@ -108,12 +108,17 @@ class SevenWondersTest {
     }
 
     @Test
-    fun startGame_3players() = runAsyncTest {
+    fun startGame_3players() = runAsyncTest(30000) {
+        println("startGame_3players: START")
         val session1 = newPlayer("Player1")
+        println("startGame_3players: after player 1")
         val session2 = newPlayer("Player2")
+        println("startGame_3players: after player 2")
 
         val lobby = session1.createGame("Test Game")
+        println("startGame_3players: after player 1 creates game")
         session2.joinGame(lobby.id)
+        println("startGame_3players: after player 2 joins game")
 
         val session3 = newPlayer("Player3")
         session3.joinGame(lobby.id)

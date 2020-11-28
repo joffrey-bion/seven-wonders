@@ -39,3 +39,9 @@ tasks.processResources {
 }
 // make sure we build the frontend before creating the jar
 tasks.processResources.get().dependsOn(":sw-ui:assemble")
+
+tasks.withType<Test> {
+    testLogging {
+        showStandardStreams = true
+    }
+}
