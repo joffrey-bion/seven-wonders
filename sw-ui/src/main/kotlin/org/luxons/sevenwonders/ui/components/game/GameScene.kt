@@ -19,7 +19,7 @@ import styled.getClassName
 import styled.styledDiv
 
 interface GameSceneStateProps : RProps {
-    var playerIsReady: Boolean
+    var currentPlayer: PlayerDTO?
     var players: List<PlayerDTO>
     var gameState: GameState?
     var preparedMove: PlayerMove?
@@ -47,7 +47,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             val turnInfo = props.gameState?.turnInfo
             if (turnInfo == null) {
-                bpNonIdealState(icon = "error", title = "Error: no turn info data")
+                bpNonIdealState(icon = "error", title = "Error: no game data")
             } else {
                 turnInfoScene(turnInfo)
             }
@@ -76,6 +76,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             transactionsSelectorDialog(
                 state = props.gameState?.transactionSelector,
+                neighbours = playerNeighbours(),
                 prepareMove = props.prepareMove,
                 cancelTransactionSelection = props.cancelTransactionsSelection,
             )
@@ -92,6 +93,14 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             productionBar(gold = board.gold, production = board.production)
         }
+    }
+
+    private fun playerNeighbours(): Pair<PlayerDTO, PlayerDTO> {
+        val me = props.currentPlayer?.username ?: error("we shouldn't be trying to display this if there is no player")
+        val players = props.players
+        val size = players.size
+        val myIndex = players.indexOfFirst { it.username == me }
+        return players[(myIndex - 1 + size) % size] to players[(myIndex + 1) % size]
     }
 
     private fun RBuilder.actionInfo(message: String) {
@@ -185,7 +194,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
     }
 
     private fun RBuilder.sayReadyButton(): ReactElement {
-        val isReady = props.playerIsReady
+        val isReady = props.currentPlayer?.isReady == true
         val intent = if (isReady) Intent.SUCCESS else Intent.PRIMARY
         return styledDiv {
             css {
@@ -228,7 +237,7 @@ private val gameScene: RClass<GameSceneProps> =
             leaveGame = { dispatch(RequestLeaveGame()) }
         },
         mapStateToProps = { state, _ ->
-            playerIsReady = state.currentPlayer?.isReady == true
+            currentPlayer = state.currentPlayer
             players = state.gameState?.players ?: emptyList()
             gameState = state.gameState
             preparedMove = state.gameState?.currentPreparedMove

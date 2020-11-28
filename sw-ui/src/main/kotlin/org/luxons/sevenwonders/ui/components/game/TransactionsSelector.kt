@@ -7,9 +7,11 @@ import kotlinx.html.TD
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.resources.CountedResource
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
 import react.RBuilder
 import react.dom.div
@@ -19,6 +21,7 @@ import styled.*
 
 fun RBuilder.transactionsSelectorDialog(
     state: TransactionSelectorState?,
+    neighbours: Pair<PlayerDTO, PlayerDTO>,
     prepareMove: (PlayerMove) -> Unit,
     cancelTransactionSelection: () -> Unit,
 ) {
@@ -48,7 +51,7 @@ fun RBuilder.transactionsSelectorDialog(
                         display = Display.flex
                         alignItems = Align.center
                     }
-                    neighbour()
+                    neighbour(neighbours.first)
                     styledDiv {
                         css {
                             grow(Grow.GROW)
@@ -56,22 +59,24 @@ fun RBuilder.transactionsSelectorDialog(
                         }
                         optionsTable(state, prepareMove)
                     }
-                    neighbour()
+                    neighbour(neighbours.second)
                 }
             }
         }
     }
 }
 
-private fun StyledDOMBuilder<DIV>.neighbour() {
+private fun StyledDOMBuilder<DIV>.neighbour(player: PlayerDTO) {
     styledDiv {
         css {
             width = 100.pct
+
+            // center the icon
             display = Display.flex
             flexDirection = FlexDirection.column
             alignItems = Align.center
         }
-        bpIcon("user", size = 40)
+        playerInfo(player, iconSize = 40, orientation = FlexDirection.column)
     }
 }
 
@@ -164,6 +169,8 @@ private fun RBuilder.resourceList(resources: List<CountedResource>) {
             alignItems = Align.center
             justifyContent = JustifyContent.center
             grow(Grow.GROW)
+            // this ensures stable dimensions, no matter how many resources (up to 2x3 matrix)
+            width = imgSize * 3
             height = imgSize * 2
         }
         rows.forEach { row ->

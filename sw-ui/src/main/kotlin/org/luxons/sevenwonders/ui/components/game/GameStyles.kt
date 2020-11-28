@@ -39,6 +39,7 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
     val transactionsSelector by css {
         backgroundColor = sandColor
+        width = 600.px // default is 500px, we want to fit players on the side
 
         children(".bp3-dialog-header") {
             background = "none" // overrides default white background

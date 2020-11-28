@@ -17,6 +17,7 @@ interface PlayerInfoProps : RProps {
     var player: BasicPlayerInfo?
     var showUsername: Boolean
     var iconSize: Int
+    var orientation: FlexDirection
 }
 
 class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, RState>(props) {
@@ -26,6 +27,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
             css {
                 display = Display.flex
                 alignItems = Align.center
+                flexDirection = props.orientation
             }
             props.player?.let {
                 bpIcon(name = it.icon?.name ?: "user", size = props.iconSize)
@@ -42,9 +44,19 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
         styledSpan {
             css {
                 fontSize = 1.rem
-                marginLeft = 0.4.rem
+                iconSeparationMargin()
             }
             +displayName
+        }
+    }
+
+    private fun CSSBuilder.iconSeparationMargin() {
+        val margin = 0.4.rem
+        when (props.orientation) {
+            FlexDirection.row -> marginLeft = margin
+            FlexDirection.column -> marginTop = margin
+            FlexDirection.rowReverse -> marginRight = margin
+            FlexDirection.columnReverse -> marginBottom = margin
         }
     }
 
@@ -53,7 +65,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
             css {
                 display = Display.flex
                 flexDirection = FlexDirection.column
-                marginLeft = 0.4.rem
+                iconSeparationMargin()
             }
             styledSpan {
                 css {
@@ -74,14 +86,16 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
 }
 
 fun RBuilder.playerInfo(
-    playerDTO: PlayerDTO,
+    player: PlayerDTO,
     showUsername: Boolean = false,
     iconSize: Int = 30,
+    orientation: FlexDirection = FlexDirection.row,
 ) = child(PlayerInfoPresenter::class) {
     attrs {
-        this.player = playerDTO
+        this.player = player
         this.showUsername = showUsername
         this.iconSize = iconSize
+        this.orientation = orientation
     }
 }
 
@@ -92,5 +106,6 @@ private val playerInfo = connectState(
     mapStateToProps = { state, _ ->
         player = state.connectedPlayer
         showUsername = true
+        orientation = FlexDirection.row
     },
 )
