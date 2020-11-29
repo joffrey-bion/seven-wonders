@@ -13,7 +13,6 @@ import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.Color
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 @RunWith(Theories::class)
@@ -53,13 +52,12 @@ class SpecialAbilityActivationTest {
         assertEquals(directPointsFromGuildCard, effect.computePoints(player))
     }
 
+    // there can be no copiedGuild if no neighbour had any guild cards
     @Test
-    fun computePoints_copyGuild_failWhenNoChosenGuild() {
+    fun computePoints_copyGuild_noPointWhenNoChosenGuild() {
         val effect = SpecialAbilityActivation(SpecialAbility.COPY_GUILD)
         val player = SimplePlayer(0, testTable(5))
-        assertFailsWith<IllegalStateException> {
-            effect.computePoints(player)
-        }
+        assertEquals(0, effect.computePoints(player))
     }
 
     companion object {
