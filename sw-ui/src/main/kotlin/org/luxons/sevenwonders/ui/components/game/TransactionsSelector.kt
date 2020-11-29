@@ -87,6 +87,7 @@ private fun RBuilder.optionsTable(
             val bestPrice = state.transactionsOptions.bestPrice
             val hasExpensiveOptions = state.transactionsOptions.any { it.totalPrice != bestPrice }
             state.transactionsOptions.forEach { transactions ->
+                val isCheapest = transactions.totalPrice == bestPrice
                 styledTr {
                     css {
                         cursor = Cursor.pointer
@@ -120,8 +121,8 @@ private fun RBuilder.optionsTable(
                         css {
                             width = 1.5.rem
                         }
-                        if (hasExpensiveOptions && transactions.totalPrice == bestPrice) {
-                            styledSpan {
+                        if (hasExpensiveOptions && isCheapest) {
+                            styledDiv {
                                 css {
                                     +GameStyles.bestPrice
                                 }

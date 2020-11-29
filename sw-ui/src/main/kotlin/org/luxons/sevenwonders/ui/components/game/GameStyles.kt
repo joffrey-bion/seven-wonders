@@ -8,11 +8,6 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
     private val sandColor = Color.paleGoldenrod.withAlpha(0.7)
 
-    val bestPrice by css {
-        fontWeight = FontWeight.bold
-        color = rgb(50, 120, 50)
-    }
-
     val fullBoardPreviewPopover by css {
         val bgColor = sandColor
         backgroundColor = bgColor
@@ -48,6 +43,14 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
         children(".bp3-dialog-header") {
             background = "none" // overrides default white background
+        }
+    }
+
+    val bestPrice by css {
+        fontWeight = FontWeight.bold
+        color = rgb(50, 120, 50)
+        transform {
+            rotate((-20).deg)
         }
     }
 
