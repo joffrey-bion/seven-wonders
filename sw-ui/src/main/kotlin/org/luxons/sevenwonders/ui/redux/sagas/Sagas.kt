@@ -1,13 +1,14 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.browser.window
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import org.hildan.krossbow.stomp.ConnectionException
+import org.hildan.krossbow.stomp.MissingHeartBeatException
+import org.hildan.krossbow.stomp.WebSocketClosedUnexpectedly
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
+import org.luxons.sevenwonders.ui.redux.FatalError
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.SetCurrentPlayerAction
 import org.luxons.sevenwonders.ui.redux.SwState
@@ -20,26 +21,40 @@ import webpack.isProdEnv
 typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 
 @OptIn(ExperimentalCoroutinesApi::class)
-suspend fun SwSagaContext.rootSaga() = coroutineScope {
-    val action = next<RequestChooseName>()
-    val serverUrl = sevenWondersWebSocketUrl()
-    val session = SevenWondersClient().connect(serverUrl)
-    console.info("Connected to Seven Wonders web socket API")
+suspend fun SwSagaContext.rootSaga() = try {
+    coroutineScope {
+        val action = next<RequestChooseName>()
+        val serverUrl = sevenWondersWebSocketUrl()
+        val session = SevenWondersClient().connect(serverUrl)
+        console.info("Connected to Seven Wonders web socket API")
 
-    launch(start = CoroutineStart.UNDISPATCHED) {
-        serverErrorSaga(session)
-    }
-
-    val player = session.chooseName(action.playerName, null)
-    dispatch(SetCurrentPlayerAction(player))
-
-    routerSaga(Route.GAME_BROWSER) {
-        when (it) {
-            Route.HOME -> homeSaga(session)
-            Route.LOBBY -> lobbySaga(session)
-            Route.GAME_BROWSER -> gameBrowserSaga(session)
-            Route.GAME -> gameSaga(session)
+        launch(start = CoroutineStart.UNDISPATCHED) {
+            serverErrorSaga(session)
         }
+
+        val player = session.chooseName(action.playerName, null)
+        dispatch(SetCurrentPlayerAction(player))
+
+        routerSaga(Route.GAME_BROWSER) {
+            when (it) {
+                Route.HOME -> homeSaga(session)
+                Route.LOBBY -> lobbySaga(session)
+                Route.GAME_BROWSER -> gameBrowserSaga(session)
+                Route.GAME -> gameSaga(session)
+            }
+        }
+    }
+} catch (e: Exception) {
+    console.error(e)
+    dispatchFatalError(e)
+}
+
+private fun SwSagaContext.dispatchFatalError(throwable: Throwable) {
+    when (throwable) {
+        is ConnectionException -> dispatch(FatalError(throwable.message ?: "Couldn't connect to the server."))
+        is MissingHeartBeatException -> dispatch(FatalError("The server doesn't seem to be responding."))
+        is WebSocketClosedUnexpectedly -> dispatch(FatalError("The connection to the server was closed unexpectedly."))
+        else -> dispatch(FatalError("An unexpected error occurred: ${throwable.message}"))
     }
 }
 
@@ -54,7 +69,7 @@ private fun sevenWondersWebSocketUrl(): String {
 
 private suspend fun serverErrorSaga(session: SevenWondersSession) {
     session.watchErrors().collect { err ->
-        // TODO use blueprintjs toaster
+        // These are not an error for the user, but rather for the programmer
         console.error("${err.code}: ${err.message}")
         console.error(JSON.stringify(err))
     }
