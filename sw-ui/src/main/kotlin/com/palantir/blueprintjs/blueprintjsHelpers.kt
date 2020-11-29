@@ -158,7 +158,7 @@ fun RBuilder.bpOverlay(
 fun RBuilder.bpDialog(
     isOpen: Boolean,
     title: ReactElement? = null,
-    icon: IconName? = null,
+    icon: ReactElement? = null,
     autoFocus: Boolean = true,
     enforceFocus: Boolean = true,
     usePortal: Boolean = true,
@@ -195,8 +195,9 @@ fun RBuilder.bpDialog(
 
 fun RBuilder.bpDialog(
     isOpen: Boolean,
-    title: String? = null,
+    title: String?,
     icon: IconName? = null,
+    iconIntent: Intent = Intent.NONE,
     autoFocus: Boolean = true,
     enforceFocus: Boolean = true,
     usePortal: Boolean = true,
@@ -210,7 +211,7 @@ fun RBuilder.bpDialog(
 ): ReactElement = bpDialog(
     isOpen = isOpen,
     title = title?.let { buildElement { +title } },
-    icon = icon,
+    icon = icon?.let { buildElement { bpIcon(name = icon, intent = iconIntent) } },
     autoFocus = autoFocus,
     enforceFocus = enforceFocus,
     usePortal = usePortal,

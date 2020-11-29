@@ -17,7 +17,7 @@ external interface IDialogProps : IOverlayableProps, IBackdropProps, IProps {
      * dialog's header. Note that the header will only be rendered if `title` is
      * provided.
      */
-    var icon: IconName?
+    var icon: dynamic /* IconName? | ReactElement? */
     /**
      * Whether to show the close button in the dialog's header.
      * Note that the header will only be rendered if `title` is provided.
