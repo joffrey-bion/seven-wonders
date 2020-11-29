@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui.components
 
+import org.luxons.sevenwonders.ui.components.errors.errorDialog
 import org.luxons.sevenwonders.ui.components.game.gameScene
 import org.luxons.sevenwonders.ui.components.gameBrowser.gameBrowser
 import org.luxons.sevenwonders.ui.components.home.home
@@ -12,6 +13,7 @@ import react.router.dom.route
 import react.router.dom.switch
 
 fun RBuilder.application() = hashRouter {
+    errorDialog()
     switch {
         route(Route.GAME_BROWSER.path) { gameBrowser() }
         route(Route.GAME.path) { gameScene() }

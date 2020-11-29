@@ -7,6 +7,8 @@ import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import redux.RAction
 
+data class FatalError(val message: String) : RAction
+
 data class SetCurrentPlayerAction(val player: ConnectedPlayer) : RAction
 
 data class UpdateGameListAction(val games: List<LobbyDTO>) : RAction

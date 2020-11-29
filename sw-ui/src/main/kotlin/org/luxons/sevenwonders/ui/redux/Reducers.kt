@@ -18,6 +18,7 @@ data class SwState(
     val gamesById: Map<Long, LobbyDTO> = emptyMap(),
     val currentLobby: LobbyDTO? = null,
     val gameState: GameState? = null,
+    val fatalError: String? = null,
 ) {
     val currentPlayer: PlayerDTO? = (gameState?.players ?: currentLobby?.players)?.first {
         it.username == connectedPlayer?.username
@@ -48,6 +49,7 @@ fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
     connectedPlayer = currentPlayerReducer(state.connectedPlayer, action),
     currentLobby = currentLobbyReducer(state.currentLobby, action),
     gameState = gameStateReducer(state.gameState, action),
+    fatalError = connectionLostReducer(action),
 )
 
 private fun gamesReducer(games: Map<Long, LobbyDTO>, action: RAction): Map<Long, LobbyDTO> = when (action) {
@@ -94,4 +96,9 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     is CancelTransactionSelection -> gameState?.copy(transactionSelector = null)
     is RequestPrepareMove -> gameState?.copy(transactionSelector = null)
     else -> gameState
+}
+
+private fun connectionLostReducer(action: RAction): String? = when (action) {
+    is FatalError -> action.message
+    else -> null
 }
