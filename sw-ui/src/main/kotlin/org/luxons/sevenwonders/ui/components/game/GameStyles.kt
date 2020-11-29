@@ -6,10 +6,10 @@ import styled.StyleSheet
 
 object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
-    private val sandColor = Color.paleGoldenrod.withAlpha(0.7)
+    private val sandBgColor = Color.paleGoldenrod
 
     val fullBoardPreviewPopover by css {
-        val bgColor = sandColor
+        val bgColor = sandBgColor.withAlpha(0.7)
         backgroundColor = bgColor
         borderRadius = 0.5.rem
         padding(all = 0.5.rem)
@@ -38,7 +38,7 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
     }
 
     val transactionsSelector by css {
-        backgroundColor = sandColor
+        backgroundColor = sandBgColor
         width = 600.px // default is 500px, we want to fit players on the side
 
         children(".bp3-dialog-header") {
@@ -66,6 +66,6 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
     }
 
     val scoreBoard by css {
-        backgroundColor = Color.paleGoldenrod
+        backgroundColor = sandBgColor
     }
 }

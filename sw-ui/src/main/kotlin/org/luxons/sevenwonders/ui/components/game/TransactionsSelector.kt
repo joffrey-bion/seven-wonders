@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.components.game
 import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.html.DIV
+import kotlinx.html.TBODY
 import kotlinx.html.TD
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
@@ -11,10 +12,8 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
-import react.RBuilder
-import react.dom.div
-import react.dom.p
-import react.dom.tbody
+import react.*
+import react.dom.*
 import styled.*
 
 fun RBuilder.transactionsSelectorDialog(
@@ -54,6 +53,9 @@ fun RBuilder.transactionsSelectorDialog(
                         css {
                             grow(Grow.GROW)
                             margin(horizontal = 0.5.rem)
+                            display = Display.flex
+                            flexDirection = FlexDirection.column
+                            alignItems = Align.center
                         }
                         optionsTable(state, prepareMove)
                     }
@@ -82,74 +84,125 @@ private fun RBuilder.optionsTable(
     state: TransactionSelectorState,
     prepareMove: (PlayerMove) -> Unit,
 ) {
+    child(optionsTable) {
+        attrs {
+            this.state = state
+            this.prepareMove = prepareMove
+        }
+    }
+}
+
+private interface OptionsTableProps : RProps {
+    var state: TransactionSelectorState
+    var prepareMove: (PlayerMove) -> Unit
+}
+
+private val optionsTable = functionalComponent<OptionsTableProps> { props ->
+    val state = props.state
+    val prepareMove = props.prepareMove
+
+    var expanded by useState { false }
+
+    val bestPrice = state.transactionsOptions.bestPrice
+    val (cheapestOptions, otherOptions) = state.transactionsOptions.partition { it.totalPrice == bestPrice }
+
     bpHtmlTable(interactive = true) {
         tbody {
-            val bestPrice = state.transactionsOptions.bestPrice
-            val hasExpensiveOptions = state.transactionsOptions.any { it.totalPrice != bestPrice }
-            state.transactionsOptions.forEach { transactions ->
-                val isCheapest = transactions.totalPrice == bestPrice
-                styledTr {
-                    css {
-                        cursor = Cursor.pointer
-                        alignItems = Align.center
-                    }
-                    attrs {
-                        onClickFunction = { prepareMove(PlayerMove(state.moveType, state.card.name, transactions)) }
-                    }
-                    // there should be at most one of each
-                    val leftTr = transactions.firstOrNull { it.provider == Provider.LEFT_PLAYER }
-                    val rightTr = transactions.firstOrNull { it.provider == Provider.RIGHT_PLAYER }
-                    styledTd {
-                        transactionCellCss()
-                        styledDiv {
-                            css {
-                                opacity = if (leftTr == null) 0.5 else 1
-                            }
-                            transactionCellInnerCss()
-                            bpIcon(name = "caret-left", size = Icon.SIZE_LARGE)
-                            goldIndicator(leftTr?.totalPrice ?: 0, imgSize = 2.5.rem)
-                        }
-                    }
-                    styledTd {
-                        transactionCellCss()
-                        if (leftTr != null) {
-                            resourceList(leftTr.resources)
-                        }
-                    }
-                    styledTd {
-                        transactionCellCss()
-                        css {
-                            width = 1.5.rem
-                        }
-                        if (hasExpensiveOptions && isCheapest) {
-                            styledDiv {
-                                css {
-                                    +GameStyles.bestPrice
-                                }
-                                +"Best\nprice!"
-                            }
-                        }
-                    }
-                    styledTd {
-                        transactionCellCss()
-                        if (rightTr != null) {
-                            resourceList(rightTr.resources)
-                        }
-                    }
-                    styledTd {
-                        transactionCellCss()
-                        styledDiv {
-                            css {
-                                opacity = if (rightTr == null) 0.5 else 1
-                            }
-                            transactionCellInnerCss()
-                            goldIndicator(rightTr?.totalPrice ?: 0, imgSize = 2.5.rem)
-                            bpIcon(name = "caret-right", size = Icon.SIZE_LARGE)
-                        }
-                    }
+            cheapestOptions.forEach { transactions ->
+                transactionsOptionRow(
+                    transactions = transactions,
+                    showBestPriceIndicator = expanded,
+                    onClick = { prepareMove(PlayerMove(state.moveType, state.card.name, transactions)) },
+                )
+            }
+            if (expanded) {
+                otherOptions.forEach { transactions ->
+                    transactionsOptionRow(
+                        transactions = transactions,
+                        showBestPriceIndicator = false,
+                        onClick = { prepareMove(PlayerMove(state.moveType, state.card.name, transactions)) },
+                    )
                 }
             }
         }
+    }
+    if (otherOptions.isNotEmpty()) {
+        val icon = if (expanded) "chevron-up" else "chevron-down"
+        val text = if (expanded) "Hide expensive options" else "Show more expensive options"
+        bpButton(
+            minimal = true,
+            small = true,
+            icon = icon,
+            rightIcon = icon,
+            onClick = { expanded = !expanded },
+        ) {
+            +text
+        }
+    }
+}
+
+private fun RDOMBuilder<TBODY>.transactionsOptionRow(
+    transactions: PricedResourceTransactions,
+    showBestPriceIndicator: Boolean,
+    onClick: () -> Unit,
+) {
+    styledTr {
+        css {
+            cursor = Cursor.pointer
+            alignItems = Align.center
+        }
+        attrs {
+            onClickFunction = { onClick() }
+        }
+        // there should be at most one of each
+        val leftTr = transactions.firstOrNull { it.provider == Provider.LEFT_PLAYER }
+        val rightTr = transactions.firstOrNull { it.provider == Provider.RIGHT_PLAYER }
+        styledTd {
+            transactionCellCss()
+            styledDiv {
+                css { opacity = if (leftTr == null) 0.5 else 1 }
+                transactionCellInnerCss()
+                bpIcon(name = "caret-left", size = Icon.SIZE_LARGE)
+                goldIndicator(leftTr?.totalPrice ?: 0, imgSize = 2.5.rem)
+            }
+        }
+        styledTd {
+            transactionCellCss()
+            if (leftTr != null) {
+                resourceList(leftTr.resources)
+            }
+        }
+        styledTd {
+            transactionCellCss()
+            css { width = 1.5.rem }
+            if (showBestPriceIndicator) {
+                bestPriceIndicator()
+            }
+        }
+        styledTd {
+            transactionCellCss()
+            if (rightTr != null) {
+                resourceList(rightTr.resources)
+            }
+        }
+        styledTd {
+            transactionCellCss()
+            styledDiv {
+                css { opacity = if (rightTr == null) 0.5 else 1 }
+                transactionCellInnerCss()
+                goldIndicator(rightTr?.totalPrice ?: 0, imgSize = 2.5.rem)
+                bpIcon(name = "caret-right", size = Icon.SIZE_LARGE)
+            }
+        }
+    }
+}
+
+private fun StyledDOMBuilder<TD>.bestPriceIndicator() {
+    styledDiv {
+        css {
+            +GameStyles.bestPrice
+        }
+        +"Best\nprice!"
     }
 }
 
