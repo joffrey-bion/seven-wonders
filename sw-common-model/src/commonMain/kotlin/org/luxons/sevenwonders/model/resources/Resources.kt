@@ -32,7 +32,9 @@ enum class ResourceType(val symbol: Char) {
 data class CountedResource(
     val count: Int,
     val type: ResourceType,
-)
+) {
+    override fun toString(): String = "$count $type"
+}
 
 @Serializable
 enum class Provider(val boardPosition: RelativeBoardPosition) {
@@ -53,7 +55,9 @@ data class PricedResourceTransaction(
     override val provider: Provider,
     override val resources: List<CountedResource>,
     val totalPrice: Int,
-) : ResourceTransaction()
+) : ResourceTransaction() {
+    override fun toString(): String = "{$totalPrice coin(s) to $provider for $resources}"
+}
 
 typealias PricedResourceTransactions = Set<PricedResourceTransaction>
 

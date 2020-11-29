@@ -122,6 +122,8 @@ private class TransactionOptionsCalculator(resourcesToPay: Resources, player: Pl
     private operator fun PricedResourceTransactions.compareTo(prices: Map<Provider, Int>): Int = when {
         left == prices.left -> right.compareTo(prices.right)
         right == prices.right -> left.compareTo(prices.left)
+        left < prices.left && right < prices.right -> -1
+        left > prices.left && right > prices.right -> 1
         else -> 0
     }
 

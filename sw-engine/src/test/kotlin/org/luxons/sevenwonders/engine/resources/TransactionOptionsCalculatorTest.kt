@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.engine.resources
 
-import org.junit.Test
 import org.luxons.sevenwonders.engine.SimplePlayer
 import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.test.createPricedTransaction
@@ -12,6 +11,7 @@ import org.luxons.sevenwonders.model.resources.Provider.RIGHT_PLAYER
 import org.luxons.sevenwonders.model.resources.ResourceType.*
 import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.resources.singleOptionNoTransactionNeeded
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TransactionOptionsCalculatorTest {
@@ -76,7 +76,7 @@ class TransactionOptionsCalculatorTest {
     }
 
     @Test
-    fun transactionOptions_fixedResources_overridenCost() {
+    fun transactionOptions_fixedResources_overridenCost_cheapestFirst() {
         val board0 = testBoard(STONE)
         board0.tradingRules.setCost(WOOD, RIGHT_PLAYER, 1)
 
@@ -104,7 +104,7 @@ class TransactionOptionsCalculatorTest {
     }
 
     @Test
-    fun transactionOptions_mixedResources_overridenCost() {
+    fun transactionOptions_choiceResources_overridenCost() {
         val board0 = testBoard(STONE)
         board0.tradingRules.setCost(WOOD, RIGHT_PLAYER, 1)
 
@@ -128,6 +128,36 @@ class TransactionOptionsCalculatorTest {
         assertEquals(listOf(woodRightDiscounted, woodLeft), transactionOptions(resources, player0))
         assertEquals(listOf(noTransactions()), transactionOptions(resources, player1))
         assertEquals(listOf(noTransactions()), transactionOptions(resources, player2))
+    }
+
+    @Test
+    fun transactionOptions_mixedResources_overridenCost() {
+        val board0 = testBoard(WOOD)
+        board0.production.addChoice(CLAY, ORE)
+        board0.tradingRules.setCost(CLAY, RIGHT_PLAYER, 1)
+
+        val board1 = testBoard(WOOD)
+        board1.production.addFixedResource(ORE, 1)
+        board1.production.addFixedResource(CLAY, 1)
+        board1.publicProduction.addFixedResource(ORE, 1)
+        board1.publicProduction.addFixedResource(CLAY, 1)
+
+        val board2 = testBoard(WOOD)
+
+        val table = Table(listOf(board0, board1, board2))
+
+        val player0 = SimplePlayer(0, table)
+        val player1 = SimplePlayer(1, table)
+        val player2 = SimplePlayer(2, table)
+
+        val resources = resourcesOf(ORE, CLAY)
+
+        val clayRightDiscounted = createPricedTransactions(RIGHT_PLAYER, 1, CLAY)
+        val oreAndClayLeft = createPricedTransactions(LEFT_PLAYER, 4, ORE, CLAY)
+
+        assertEquals(listOf(clayRightDiscounted), transactionOptions(resources, player0))
+        assertEquals(listOf(noTransactions()), transactionOptions(resources, player1))
+        assertEquals(listOf(oreAndClayLeft), transactionOptions(resources, player2))
     }
 
     @Test
@@ -170,18 +200,18 @@ class TransactionOptionsCalculatorTest {
     }
 
     @Test
-    fun transactionOptions_cheapestFirst() {
-        val board0 = testBoard(WOOD)
-        board0.production.addChoice(CLAY, ORE)
-        board0.tradingRules.setCost(CLAY, RIGHT_PLAYER, 1)
+    fun transactionOptions_avoidOptionsWithWorsePriceOnBothSides() {
+        val board0 = testBoard(STONE)
+        board0.tradingRules.setCost(CLAY, LEFT_PLAYER, 1)
+        board0.tradingRules.setCost(WOOD, RIGHT_PLAYER, 1)
 
-        val board1 = testBoard(WOOD)
-        board1.production.addFixedResource(ORE, 1)
-        board1.production.addFixedResource(CLAY, 1)
-        board1.publicProduction.addFixedResource(ORE, 1)
-        board1.publicProduction.addFixedResource(CLAY, 1)
+        val board1 = testBoard(CLAY)
+        board1.publicProduction.addFixedResource(WOOD, 1)
+        board1.production.addFixedResource(WOOD, 1)
 
         val board2 = testBoard(WOOD)
+        board2.publicProduction.addFixedResource(CLAY, 1)
+        board2.production.addFixedResource(CLAY, 1)
 
         val table = Table(listOf(board0, board1, board2))
 
@@ -189,13 +219,19 @@ class TransactionOptionsCalculatorTest {
         val player1 = SimplePlayer(1, table)
         val player2 = SimplePlayer(2, table)
 
-        val resources = resourcesOf(ORE, CLAY)
+        val resources = resourcesOf(WOOD, CLAY)
 
-        val clayRightDiscounted = createPricedTransactions(RIGHT_PLAYER, 1, CLAY)
-        val oreAndClayLeft = createPricedTransactions(LEFT_PLAYER, 4, ORE, CLAY)
+        val woodAndClayLeft = createPricedTransaction(LEFT_PLAYER, 3, WOOD, CLAY)
+        val woodAndClayRight = createPricedTransaction(RIGHT_PLAYER, 3, WOOD, CLAY)
+        val clayLeftDiscounted = createPricedTransaction(LEFT_PLAYER, 1, CLAY)
+        val woodRightDiscounted = createPricedTransaction(RIGHT_PLAYER, 1, WOOD)
 
-        assertEquals(listOf(clayRightDiscounted), transactionOptions(resources, player0))
-        assertEquals(listOf(noTransactions()), transactionOptions(resources, player1))
-        assertEquals(listOf(oreAndClayLeft), transactionOptions(resources, player2))
+        val everythingLeft = createPricedTransactions(woodAndClayLeft)
+        val everythingRight = createPricedTransactions(woodAndClayRight)
+        val woodRightClayLeftDiscounted = createPricedTransactions(woodRightDiscounted, clayLeftDiscounted)
+
+        assertEquals(listOf(woodRightClayLeftDiscounted, everythingLeft, everythingRight), transactionOptions(resources, player0))
+        assertEquals(singleOptionNoTransactionNeeded(), transactionOptions(resources, player1))
+        assertEquals(singleOptionNoTransactionNeeded(), transactionOptions(resources, player2))
     }
 }
