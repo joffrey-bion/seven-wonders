@@ -8,9 +8,7 @@ import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.model.resources.CountedResource
-import org.luxons.sevenwonders.model.resources.Provider
-import org.luxons.sevenwonders.model.resources.ResourceType
+import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
 import react.RBuilder
@@ -27,7 +25,7 @@ fun RBuilder.transactionsSelectorDialog(
 ) {
     bpDialog(
         isOpen = state != null,
-        title = "Time to foot the bill!",
+        title = "Trading time!",
         canEscapeKeyClose = true,
         canOutsideClickClose = true,
         isCloseButtonShown = true,
@@ -86,6 +84,8 @@ private fun RBuilder.optionsTable(
 ) {
     bpHtmlTable(interactive = true) {
         tbody {
+            val bestPrice = state.transactionsOptions.bestPrice
+            val hasExpensiveOptions = state.transactionsOptions.any { it.totalPrice != bestPrice }
             state.transactionsOptions.forEach { transactions ->
                 styledTr {
                     css {
@@ -116,7 +116,18 @@ private fun RBuilder.optionsTable(
                         }
                     }
                     styledTd {
-                        css { width = 2.rem }
+                        transactionCellCss()
+                        css {
+                            width = 1.5.rem
+                        }
+                        if (hasExpensiveOptions && transactions.totalPrice == bestPrice) {
+                            styledSpan {
+                                css {
+                                    +GameStyles.bestPrice
+                                }
+                                +"Best\nprice!"
+                            }
+                        }
                     }
                     styledTd {
                         transactionCellCss()
@@ -145,6 +156,7 @@ private fun StyledDOMBuilder<TD>.transactionCellCss() {
     // we need inline styles to win over BlueprintJS's styles (which are more specific than .class)
     inlineStyles {
         verticalAlign = VerticalAlign.middle
+        textAlign = TextAlign.center
     }
 }
 
