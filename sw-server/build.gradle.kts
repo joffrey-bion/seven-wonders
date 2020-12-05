@@ -20,7 +20,12 @@ dependencies {
     // required by spring security when using websockets
     implementation("org.springframework.security:spring-security-messaging")
 
+    // logging
     implementation("ch.qos.logback:logback-classic:1.1.8")
+
+    // monitoring / metrics
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.6.1")
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
