@@ -123,16 +123,24 @@ class SevenWondersTest {
         val session3 = newPlayer("Player3")
         session3.joinGame(lobby.id)
 
-        listOf(session1, session2, session3).forEach { session ->
+        listOf(session1, session2, session3).forEachIndexed { i, session ->
             launch {
+                println("startGame_3players [launch ${i + 1}] awaiting game start...")
                 session.awaitGameStart(lobby.id)
+                println("startGame_3players [launch ${i + 1}] game started, watching turns")
                 val turns = session.watchTurns().produceIn(this)
+                println("startGame_3players [launch ${i + 1}] saying ready...")
                 session.sayReady()
+                println("startGame_3players [launch ${i + 1}] ready, receiving first turn...")
                 val turn = turns.receive()
                 assertNotNull(turn)
+                println("startGame_3players [launch ${i + 1}] turn OK, disconnecting...")
                 session.disconnect()
+                println("startGame_3players [launch ${i + 1}] disconnected")
             }
         }
+        println("startGame_3players: player 1 starting the game...")
         session1.startGame()
+        println("startGame_3players: end of test method (main body)")
     }
 }
