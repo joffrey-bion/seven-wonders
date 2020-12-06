@@ -2,8 +2,6 @@ plugins {
     kotlin("multiplatform")
 }
 
-val krossbowVersion = "1.1.0"
-
 kotlin {
     jvm()
     js {
@@ -13,7 +11,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(project(":sw-common-model"))
-                api("org.hildan.krossbow:krossbow-stomp-kxserialization:$krossbowVersion")
+                api("org.hildan.krossbow:krossbow-stomp-kxserialization:1.1.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0")
             }
         }
