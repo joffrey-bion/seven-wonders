@@ -91,7 +91,7 @@ class GameController(
     }
 
     private fun sendPlayerReady(gameId: Long, player: Player) =
-        template.convertAndSend("/topic/game/$gameId/playerReady", "\"${player.username}\"")
+        template.convertAndSend("/topic/game/$gameId/playerReady", player.username)
 
     private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) =
         template.convertAndSend("/topic/game/$gameId/prepared", preparedCard)
