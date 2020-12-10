@@ -120,6 +120,14 @@ class SagaContext<S, A : RAction, R>(
     }
 
     /**
+     * Launches a coroutine in the receiver scope that executes [handle] on every action dispatched of the type [T].
+     * The returned [Job] can be used to cancel that coroutine (just like a regular [launch])
+     */
+    inline fun <reified T : A> CoroutineScope.launchOnEach(
+        crossinline handle: suspend SagaContext<S, A, R>.(T) -> Unit,
+    ): Job = launch { onEach(handle) }
+
+    /**
      * Suspends until the next action matching the given [predicate] is dispatched, and returns that action.
      */
     suspend fun next(predicate: (A) -> Boolean): A {

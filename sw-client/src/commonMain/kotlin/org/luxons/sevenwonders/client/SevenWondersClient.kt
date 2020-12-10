@@ -22,15 +22,7 @@ import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
-import org.luxons.sevenwonders.model.api.actions.AddBotAction
-import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
-import org.luxons.sevenwonders.model.api.actions.CreateGameAction
-import org.luxons.sevenwonders.model.api.actions.Icon
-import org.luxons.sevenwonders.model.api.actions.JoinGameAction
-import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
-import org.luxons.sevenwonders.model.api.actions.ReassignWondersAction
-import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
-import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
+import org.luxons.sevenwonders.model.api.actions.*
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
@@ -80,21 +72,16 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun watchGames(): Flow<List<LobbyDTO>> =
         stompSession.subscribe("/topic/games", ListSerializer(LobbyDTO.serializer()))
 
-    suspend fun createGame(gameName: String): LobbyDTO = stompSession.request(
-        sendDestination = "/app/lobby/create",
-        receiveDestination = "/user/queue/lobby/joined",
-        payload = CreateGameAction(gameName),
-        serializer = CreateGameAction.serializer(),
-        deserializer = LobbyDTO.serializer(),
-    )
+    suspend fun createGame(gameName: String) {
+        stompSession.convertAndSend("/app/lobby/create", CreateGameAction(gameName), CreateGameAction.serializer())
+    }
 
-    suspend fun joinGame(gameId: Long): LobbyDTO = stompSession.request(
-        sendDestination = "/app/lobby/join",
-        receiveDestination = "/user/queue/lobby/joined",
-        payload = JoinGameAction(gameId),
-        serializer = JoinGameAction.serializer(),
-        deserializer = LobbyDTO.serializer(),
-    )
+    suspend fun joinGame(gameId: Long) {
+        stompSession.convertAndSend("/app/lobby/join", JoinGameAction(gameId), JoinGameAction.serializer())
+    }
+
+    suspend fun watchLobbyJoined(): Flow<LobbyDTO> =
+        stompSession.subscribe("/user/queue/lobby/joined", LobbyDTO.serializer())
 
     suspend fun leaveLobby() {
         stompSession.sendEmptyMsg("/app/lobby/leave")
@@ -171,4 +158,10 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun leaveGame() {
         stompSession.sendEmptyMsg("/app/game/leave")
     }
+}
+
+suspend fun SevenWondersSession.joinGameAndWaitLobby(gameId: Long): LobbyDTO {
+    val joinedLobbies = watchLobbyJoined()
+    joinGame(gameId)
+    return joinedLobbies.first()
 }

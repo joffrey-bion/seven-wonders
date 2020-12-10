@@ -8,10 +8,8 @@ import org.hildan.krossbow.stomp.MissingHeartBeatException
 import org.hildan.krossbow.stomp.WebSocketClosedUnexpectedly
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.ui.redux.FatalError
-import org.luxons.sevenwonders.ui.redux.RequestChooseName
-import org.luxons.sevenwonders.ui.redux.SetCurrentPlayerAction
-import org.luxons.sevenwonders.ui.redux.SwState
+import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
 import org.luxons.sevenwonders.ui.router.routerSaga
 import redux.RAction
@@ -31,6 +29,9 @@ suspend fun SwSagaContext.rootSaga() = try {
         launch(start = CoroutineStart.UNDISPATCHED) {
             serverErrorSaga(session)
         }
+
+        launchApiActionHandlersIn(this, session)
+        launchNavigationHandlers(this, session)
 
         val player = session.chooseName(action.playerName, null)
         dispatch(SetCurrentPlayerAction(player))
@@ -75,8 +76,41 @@ private suspend fun serverErrorSaga(session: SevenWondersSession) {
     }
 }
 
-private suspend fun SwSagaContext.homeSaga(session: SevenWondersSession) {
-    val action = next<RequestChooseName>()
-    val player = session.chooseName(action.playerName)
-    dispatch(SetCurrentPlayerAction(player))
+private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, session: SevenWondersSession) {
+
+    scope.launchOnEach<RequestCreateGame> { session.createGame(it.gameName) }
+    scope.launchOnEach<RequestJoinGame> { session.joinGame(it.gameId) }
+
+    scope.launchOnEach<RequestAddBot> { session.addBot(it.botDisplayName) }
+    scope.launchOnEach<RequestReorderPlayers> { session.reorderPlayers(it.orderedPlayers) }
+    scope.launchOnEach<RequestReassignWonders> { session.reassignWonders(it.wonders) }
+    // mapAction<RequestUpdateSettings> { updateSettings(it.settings) }
+    scope.launchOnEach<RequestStartGame> { session.startGame() }
+
+    scope.launchOnEach<RequestSayReady> { session.sayReady() }
+    scope.launchOnEach<RequestPrepareMove> { session.prepareMove(it.move) }
+    scope.launchOnEach<RequestUnprepareMove> { session.unprepareMove() }
 }
+
+private fun SwSagaContext.launchNavigationHandlers(scope: CoroutineScope, session: SevenWondersSession) {
+
+    // FIXME map this actions like others and await server event instead
+    scope.launchOnEach<RequestLeaveLobby> {
+        session.leaveLobby()
+        dispatch(Navigate(Route.GAME_BROWSER))
+    }
+
+    // FIXME map this actions like others and await server event instead
+    scope.launchOnEach<RequestLeaveGame> {
+        session.leaveGame()
+        dispatch(Navigate(Route.GAME_BROWSER))
+    }
+
+    scope.launch {
+        session.watchLobbyJoined().collect { lobby ->
+            dispatch(EnterLobbyAction(lobby))
+            dispatch(Navigate(Route.LOBBY))
+        }
+    }
+}
+

@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.server
 
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
@@ -8,6 +9,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
+import org.luxons.sevenwonders.client.joinGameAndWaitLobby
+import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.server.test.runAsyncTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
@@ -58,9 +61,11 @@ class SevenWondersTest {
         val session1 = newPlayer("Player1")
         val session2 = newPlayer("Player2")
         val gameName = "Test Game"
-        val lobby = ownerSession.createGame(gameName)
-        session1.joinGame(lobby.id)
-        session2.joinGame(lobby.id)
+
+        val lobby = ownerSession.createGameAndWaitLobby(gameName)
+
+        session1.joinGameAndWaitLobby(lobby.id)
+        session2.joinGameAndWaitLobby(lobby.id)
 
         val outsiderSession = newPlayer("Outsider")
         val started = launch { outsiderSession.awaitGameStart(lobby.id) }
@@ -77,7 +82,7 @@ class SevenWondersTest {
         val ownerSession = newPlayer("GameOwner")
 
         val gameName = "Test Game"
-        val lobby = ownerSession.createGame(gameName)
+        val lobby = ownerSession.createGameAndWaitLobby(gameName)
         assertNotNull(lobby)
         assertEquals(gameName, lobby.name)
 
@@ -95,7 +100,7 @@ class SevenWondersTest {
 
         val ownerSession = newPlayer("GameOwner")
         val gameName = "Test Game"
-        val createdLobby = ownerSession.createGame(gameName)
+        val createdLobby = ownerSession.createGameAndWaitLobby(gameName)
 
         receivedLobbies = withTimeout(500) { games.receive() }
         assertNotNull(receivedLobbies)
@@ -115,13 +120,13 @@ class SevenWondersTest {
         val session2 = newPlayer("Player2")
         println("startGame_3players: after player 2")
 
-        val lobby = session1.createGame("Test Game")
+        val lobby = session1.createGameAndWaitLobby("Test Game")
         println("startGame_3players: after player 1 creates game")
-        session2.joinGame(lobby.id)
+        session2.joinGameAndWaitLobby(lobby.id)
         println("startGame_3players: after player 2 joins game")
 
         val session3 = newPlayer("Player3")
-        session3.joinGame(lobby.id)
+        session3.joinGameAndWaitLobby(lobby.id)
 
         listOf(session1, session2, session3).forEachIndexed { i, session ->
             launch {
@@ -143,4 +148,10 @@ class SevenWondersTest {
         session1.startGame()
         println("startGame_3players: end of test method (main body)")
     }
+}
+
+private suspend fun SevenWondersSession.createGameAndWaitLobby(gameName: String): LobbyDTO {
+    val joinedLobbies = watchLobbyJoined()
+    createGame(gameName)
+    return joinedLobbies.first()
 }
