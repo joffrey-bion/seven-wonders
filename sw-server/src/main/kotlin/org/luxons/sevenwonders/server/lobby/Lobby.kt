@@ -101,7 +101,7 @@ class Lobby(
 
     @Synchronized
     fun removePlayer(username: String): Player {
-        val playerIndex = find(username)
+        val playerIndex = players.indexOfFirst { it.username == username }
         if (playerIndex < 0) {
             throw UnknownPlayerException(username)
         }
@@ -114,8 +114,6 @@ class Lobby(
         }
         return player
     }
-
-    private fun find(username: String): Int = players.indexOfFirst { it.username == username }
 
     fun setEndOfGame() {
         state = State.FINISHED

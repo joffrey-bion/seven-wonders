@@ -4,9 +4,9 @@ import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
+import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
@@ -53,7 +53,11 @@ fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
 )
 
 private fun gamesReducer(games: Map<Long, LobbyDTO>, action: RAction): Map<Long, LobbyDTO> = when (action) {
-    is UpdateGameListAction -> (games + action.games.associateBy { it.id }).filterValues { it.state != State.FINISHED }
+    is UpdateGameListAction -> when (action.event) {
+        is GameListEvent.ReplaceList -> action.event.lobbies.associateBy { it.id }
+        is GameListEvent.CreateOrUpdate -> games + (action.event.lobby.id to action.event.lobby)
+        is GameListEvent.Delete -> games - action.event.lobbyId
+    }
     else -> games
 }
 
@@ -64,6 +68,7 @@ private fun currentPlayerReducer(currentPlayer: ConnectedPlayer?, action: RActio
 
 private fun currentLobbyReducer(currentLobby: LobbyDTO?, action: RAction): LobbyDTO? = when (action) {
     is EnterLobbyAction -> action.lobby
+    is LeaveLobbyAction -> null
     is UpdateLobbyAction -> action.lobby
     is PlayerReadyEvent -> currentLobby?.let { l ->
         l.copy(players = l.players.map { p -> if (p.username == action.username) p.copy(isReady = true) else p })

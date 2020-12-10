@@ -1,33 +1,21 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import com.palantir.blueprintjs.Elevation
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpButtonGroup
-import com.palantir.blueprintjs.bpCard
-import com.palantir.blueprintjs.bpDivider
-import com.palantir.blueprintjs.bpNonIdealState
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
-import kotlinx.css.properties.*
+import kotlinx.css.properties.transform
+import kotlinx.css.properties.translate
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.model.wonders.AssignedWonder
-import org.luxons.sevenwonders.model.wonders.WonderSide
-import org.luxons.sevenwonders.model.wonders.deal
-import org.luxons.sevenwonders.model.wonders.withRandomSide
-import org.luxons.sevenwonders.model.wonders.withSide
+import org.luxons.sevenwonders.model.wonders.*
 import org.luxons.sevenwonders.ui.components.GlobalStyles
-import org.luxons.sevenwonders.ui.redux.RequestAddBot
-import org.luxons.sevenwonders.ui.redux.RequestLeaveLobby
-import org.luxons.sevenwonders.ui.redux.RequestReassignWonders
-import org.luxons.sevenwonders.ui.redux.RequestReorderPlayers
-import org.luxons.sevenwonders.ui.redux.RequestStartGame
-import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
+import org.luxons.sevenwonders.ui.redux.*
 import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import react.dom.*
+import react.dom.h2
+import react.dom.h3
+import react.dom.h4
 import styled.css
 import styled.styledDiv
 import styled.styledH2
@@ -43,6 +31,7 @@ interface LobbyDispatchProps : RProps {
     var startGame: () -> Unit
     var addBot: (displayName: String) -> Unit
     var leaveLobby: () -> Unit
+    var disbandLobby: () -> Unit
     var reorderPlayers: (orderedPlayers: List<String>) -> Unit
     var reassignWonders: (wonders: List<AssignedWonder>) -> Unit
 }
@@ -84,6 +73,8 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
                 bpButtonGroup {
                     startButton(currentGame, currentPlayer)
                     addBotButton(currentGame)
+                    leaveButton()
+                    disbandButton()
                 }
             } else {
                 leaveButton()
@@ -217,12 +208,24 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
     private fun RBuilder.leaveButton() {
         bpButton(
             large = true,
-            intent = Intent.DANGER,
+            intent = Intent.WARNING,
             icon = "arrow-left",
             title = "Leave the lobby and go back to the game browser",
             onClick = { props.leaveLobby() },
         ) {
             +"LEAVE"
+        }
+    }
+
+    private fun RBuilder.disbandButton() {
+        bpButton(
+            large = true,
+            intent = Intent.DANGER,
+            icon = "delete",
+            title = "Disband the group and go back to the game browser",
+            onClick = { props.disbandLobby() },
+        ) {
+            +"DISBAND"
         }
     }
 }
@@ -239,6 +242,7 @@ private val lobby = connectStateAndDispatch<LobbyStateProps, LobbyDispatchProps,
         startGame = { dispatch(RequestStartGame()) }
         addBot = { name -> dispatch(RequestAddBot(name)) }
         leaveLobby = { dispatch(RequestLeaveLobby()) }
+        disbandLobby = { dispatch(RequestDisbandLobby()) }
         reorderPlayers = { orderedPlayers -> dispatch(RequestReorderPlayers(orderedPlayers)) }
         reassignWonders = { wonders -> dispatch(RequestReassignWonders(wonders)) }
     },

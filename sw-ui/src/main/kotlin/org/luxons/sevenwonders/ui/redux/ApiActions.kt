@@ -23,6 +23,8 @@ class RequestStartGame : RAction
 
 class RequestLeaveLobby : RAction
 
+class RequestDisbandLobby : RAction
+
 class RequestLeaveGame : RAction
 
 class RequestSayReady : RAction

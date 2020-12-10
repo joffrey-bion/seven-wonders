@@ -3,10 +3,10 @@ package org.luxons.sevenwonders.client
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.config.HeartBeat
@@ -19,9 +19,7 @@ import org.hildan.krossbow.stomp.sendEmptyMsg
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.Settings
-import org.luxons.sevenwonders.model.api.ConnectedPlayer
-import org.luxons.sevenwonders.model.api.LobbyDTO
-import org.luxons.sevenwonders.model.api.SEVEN_WONDERS_WS_ENDPOINT
+import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.api.actions.*
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
 import org.luxons.sevenwonders.model.cards.PreparedCard
@@ -69,8 +67,8 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         deserializer = ConnectedPlayer.serializer(),
     )
 
-    suspend fun watchGames(): Flow<List<LobbyDTO>> =
-        stompSession.subscribe("/topic/games", ListSerializer(LobbyDTO.serializer()))
+    suspend fun watchGames(): Flow<GameListEvent> =
+        stompSession.subscribe("/topic/games", GameListEventWrapper.serializer()).map { it.event }
 
     suspend fun createGame(gameName: String) {
         stompSession.convertAndSend("/app/lobby/create", CreateGameAction(gameName), CreateGameAction.serializer())
@@ -86,6 +84,12 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun leaveLobby() {
         stompSession.sendEmptyMsg("/app/lobby/leave")
     }
+
+    suspend fun disbandLobby() {
+        stompSession.sendEmptyMsg("/app/lobby/disband")
+    }
+
+    suspend fun watchLobbyLeft(): Flow<Long> = stompSession.subscribe("/user/queue/lobby/left", Long.serializer())
 
     suspend fun addBot(displayName: String) {
         stompSession.convertAndSend("/app/lobby/addBot", AddBotAction(displayName), AddBotAction.serializer())

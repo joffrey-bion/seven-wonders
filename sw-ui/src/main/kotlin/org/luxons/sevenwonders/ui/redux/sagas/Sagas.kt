@@ -80,6 +80,8 @@ private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, sessi
 
     scope.launchOnEach<RequestCreateGame> { session.createGame(it.gameName) }
     scope.launchOnEach<RequestJoinGame> { session.joinGame(it.gameId) }
+    scope.launchOnEach<RequestLeaveLobby> { session.leaveLobby() }
+    scope.launchOnEach<RequestDisbandLobby> { session.disbandLobby() }
 
     scope.launchOnEach<RequestAddBot> { session.addBot(it.botDisplayName) }
     scope.launchOnEach<RequestReorderPlayers> { session.reorderPlayers(it.orderedPlayers) }
@@ -94,10 +96,11 @@ private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, sessi
 
 private fun SwSagaContext.launchNavigationHandlers(scope: CoroutineScope, session: SevenWondersSession) {
 
-    // FIXME map this actions like others and await server event instead
-    scope.launchOnEach<RequestLeaveLobby> {
-        session.leaveLobby()
-        dispatch(Navigate(Route.GAME_BROWSER))
+    scope.launch {
+        session.watchLobbyLeft().collect { leftLobbyId ->
+            dispatch(LeaveLobbyAction(leftLobbyId))
+            dispatch(Navigate(Route.GAME_BROWSER))
+        }
     }
 
     // FIXME map this actions like others and await server event instead
@@ -113,4 +116,3 @@ private fun SwSagaContext.launchNavigationHandlers(scope: CoroutineScope, sessio
         }
     }
 }
-

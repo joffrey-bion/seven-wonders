@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.server.controllers
 
 import org.junit.Before
 import org.junit.Test
+import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
 import org.luxons.sevenwonders.server.controllers.GameBrowserController.UserAlreadyInGameException
@@ -32,8 +33,8 @@ class GameBrowserControllerTest {
     @Test
     fun listGames_initiallyEmpty() {
         val principal = TestPrincipal("testuser")
-        val games = gameBrowserController.listGames(principal)
-        assertTrue(games.isEmpty())
+        val gameListEvent = gameBrowserController.listGames(principal).event as GameListEvent.ReplaceList
+        assertTrue(gameListEvent.lobbies.isEmpty())
     }
 
     @Test
@@ -47,9 +48,9 @@ class GameBrowserControllerTest {
 
         assertEquals("Test Game", createdLobby.name)
 
-        val games = gameBrowserController.listGames(principal)
-        assertFalse(games.isEmpty())
-        val lobby = games.iterator().next()
+        val gameListEvent = gameBrowserController.listGames(principal).event as GameListEvent.ReplaceList
+        assertFalse(gameListEvent.lobbies.isEmpty())
+        val lobby = gameListEvent.lobbies.first()
         assertEquals(lobby, createdLobby)
         assertEquals(player.username, lobby.players[0].username)
     }

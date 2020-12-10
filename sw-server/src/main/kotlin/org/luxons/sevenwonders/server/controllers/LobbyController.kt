@@ -3,10 +3,12 @@ package org.luxons.sevenwonders.server.controllers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.bot.SevenWondersBot
+import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.AddBotAction
 import org.luxons.sevenwonders.model.api.actions.ReassignWondersAction
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
+import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
@@ -44,12 +46,38 @@ class LobbyController(
         val player = principal.player
         val lobby = player.lobby
         lobby.removePlayer(principal.name)
-        if (lobby.getPlayers().isEmpty()) {
-            lobbyRepository.remove(lobby.id)
-        }
-
         logger.info("Player {} left game '{}'", player, lobby.name)
-        sendLobbyUpdateToPlayers(lobby)
+        template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
+
+        if (lobby.getPlayers().isEmpty()) {
+            deleteLobby(lobby)
+        } else {
+            sendLobbyUpdateToPlayers(lobby)
+        }
+    }
+
+    /**
+     * Disbands the current group, making everyone leave the lobby.
+     *
+     * @param principal the connected user's information
+     */
+    @MessageMapping("/lobby/disband")
+    fun disband(principal: Principal) {
+        val player = principal.player
+        val lobby = player.ownedLobby
+
+        lobby.getPlayers().forEach {
+            it.leave()
+            template.convertAndSendToUser(it.username, "/queue/lobby/left", lobby.id)
+        }
+        logger.info("Player {} disbanded game '{}'", player, lobby.name)
+        deleteLobby(lobby)
+    }
+
+    private fun deleteLobby(lobby: Lobby) {
+        lobbyRepository.remove(lobby.id)
+        template.convertAndSend("/topic/games", GameListEvent.Delete(lobby.id).wrap())
+        logger.info("Game '{}' removed", lobby.name)
     }
 
     /**
@@ -110,12 +138,11 @@ class LobbyController(
     }
 
     internal fun sendLobbyUpdateToPlayers(lobby: Lobby) {
+        val lobbyDto = lobby.toDTO()
         lobby.getPlayers().forEach {
-            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobby.toDTO())
+            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobbyDto)
         }
-        // we need to pass a non-generic type (array is fine) so that Spring doesn't break when trying to find a
-        // serializer from Kotlinx Serialization
-        template.convertAndSend("/topic/games", listOf(lobby.toDTO()).toTypedArray())
+        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
     }
 
     /**

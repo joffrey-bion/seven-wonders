@@ -14,12 +14,8 @@ import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.luxons.sevenwonders.server.test.mockSimpMessagingTemplate
-import java.util.HashMap
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
+import java.util.*
+import kotlin.test.*
 
 class LobbyControllerTest {
 
@@ -69,7 +65,7 @@ class LobbyControllerTest {
     }
 
     @Test
-    fun leave_succeedsWhenInALobby_asOwner() {
+    fun leave_ownerAloneInLobby_succeedsAndRemovesLobby() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
 
@@ -82,7 +78,29 @@ class LobbyControllerTest {
     }
 
     @Test
-    fun leave_succeedsWhenInALobby_asPeasant() {
+    fun leave_ownerInLobbyWithOthers_succeedsAndTransfersOwnership() {
+        val player1 = playerRepository.createOrUpdate("testuser", "Test User")
+        val lobby = lobbyRepository.create("Test Game", player1)
+        val player2 = addPlayer(lobby, "testuser2")
+
+        val principal = TestPrincipal("testuser")
+        lobbyController.leave(principal)
+
+        assertTrue(lobbyRepository.list().contains(lobby))
+        assertFalse(lobby.getPlayers().contains(player1))
+        assertEquals(lobby.owner, player2)
+
+        assertTrue(player2.isGameOwner)
+        assertTrue(player2.isInLobby)
+        assertFalse(player2.isInGame)
+
+        assertFalse(player1.isGameOwner)
+        assertFalse(player1.isInLobby)
+        assertFalse(player1.isInGame)
+    }
+
+    @Test
+    fun leave_succeedsWhenInALobby_asJoiner() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
         val player2 = addPlayer(lobby, "testuser2")
@@ -118,7 +136,7 @@ class LobbyControllerTest {
     }
 
     @Test
-    fun reorderPlayers_failsForPeasant() {
+    fun reorderPlayers_failsForJoiner() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
 
@@ -157,7 +175,7 @@ class LobbyControllerTest {
     }
 
     @Test
-    fun updateSettings_failsForPeasant() {
+    fun updateSettings_failsForJoiner() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
 
@@ -189,7 +207,7 @@ class LobbyControllerTest {
     }
 
     @Test
-    fun startGame_failsForPeasant() {
+    fun startGame_failsForJoiner() {
         val player = playerRepository.createOrUpdate("testuser", "Test User")
         val lobby = lobbyRepository.create("Test Game", player)
 

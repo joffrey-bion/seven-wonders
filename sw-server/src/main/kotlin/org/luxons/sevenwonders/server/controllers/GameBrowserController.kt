@@ -1,8 +1,11 @@
 package org.luxons.sevenwonders.server.controllers
 
+import org.luxons.sevenwonders.model.api.GameListEvent
+import org.luxons.sevenwonders.model.api.GameListEventWrapper
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
+import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
@@ -36,9 +39,9 @@ class GameBrowserController(
      * @return the current list of [Lobby]s
      */
     @SubscribeMapping("/games") // prefix /topic not shown
-    fun listGames(principal: Principal): List<LobbyDTO> {
+    fun listGames(principal: Principal): GameListEventWrapper {
         logger.info("Player '{}' subscribed to /topic/games", principal.name)
-        return lobbyRepository.list().map { it.toDTO() }
+        return GameListEvent.ReplaceList(lobbyRepository.list().map { it.toDTO() }).wrap()
     }
 
     /**
@@ -61,9 +64,7 @@ class GameBrowserController(
 
         // notify everyone that a new game exists
         val lobbyDto = lobby.toDTO()
-        // we need to pass a non-generic type (array is fine) so that Spring doesn't break when trying to find a
-        // serializer from Kotlinx Serialization
-        template.convertAndSend("/topic/games", listOf(lobbyDto).toTypedArray())
+        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
         return lobbyDto
     }
 

@@ -10,16 +10,14 @@ import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.client.joinGameAndWaitLobby
+import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.server.test.runAsyncTest
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 
 @OptIn(FlowPreview::class)
 @RunWith(SpringRunner::class)
@@ -94,18 +92,17 @@ class SevenWondersTest {
         val otherSession = newPlayer("OtherPlayer")
         val games = otherSession.watchGames().produceIn(this)
 
-        var receivedLobbies = withTimeout(500) { games.receive() }
-        assertNotNull(receivedLobbies)
-        assertEquals(0, receivedLobbies.size)
+        val initialListEvent = withTimeout(500) { games.receive() }
+        assertTrue(initialListEvent is GameListEvent.ReplaceList)
+        assertEquals(0, initialListEvent.lobbies.size)
 
         val ownerSession = newPlayer("GameOwner")
         val gameName = "Test Game"
         val createdLobby = ownerSession.createGameAndWaitLobby(gameName)
 
-        receivedLobbies = withTimeout(500) { games.receive() }
-        assertNotNull(receivedLobbies)
-        assertEquals(1, receivedLobbies.size)
-        val receivedLobby = receivedLobbies[0]
+        val afterGameListEvent = withTimeout(500) { games.receive() }
+        assertTrue(afterGameListEvent is GameListEvent.CreateOrUpdate)
+        val receivedLobby = afterGameListEvent.lobby
         assertEquals(createdLobby.id, receivedLobby.id)
         assertEquals(createdLobby.name, receivedLobby.name)
 
