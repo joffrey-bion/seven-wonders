@@ -6,6 +6,18 @@ import styled.StyleSheet
 
 object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
+    val totalScore by css {
+        fontWeight = FontWeight.bold
+    }
+
+    val civilScore by scoreTagColorCss(Color("#2a73c9"))
+    val scienceScore by scoreTagColorCss(Color("#0f9960"))
+    val militaryScore by scoreTagColorCss(Color("#d03232"))
+    val tradeScore by scoreTagColorCss(Color("#e2c11b"))
+    val guildScore by scoreTagColorCss(Color("#663399"))
+    val wonderScore by scoreTagColorCss(Color.darkCyan)
+    val goldScore by scoreTagColorCss(Color.goldenrod)
+
     private val sandBgColor = Color.paleGoldenrod
 
     val fullBoardPreviewPopover by css {
@@ -67,5 +79,9 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
     val scoreBoard by css {
         backgroundColor = sandBgColor
+    }
+
+    private fun scoreTagColorCss(color: Color) = css {
+        backgroundColor = color
     }
 }

@@ -1,12 +1,6 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpCard
-import com.palantir.blueprintjs.bpHtmlTable
-import com.palantir.blueprintjs.bpIcon
-import com.palantir.blueprintjs.bpOverlay
-import com.palantir.blueprintjs.bpTag
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.html.TD
 import kotlinx.html.TH
@@ -16,12 +10,7 @@ import org.luxons.sevenwonders.model.score.ScoreCategory
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
 import react.dom.*
-import styled.css
-import styled.getClassName
-import styled.inlineStyles
-import styled.styledDiv
-import styled.styledH1
-import styled.styledTd
+import styled.*
 
 fun RBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>, leaveGame: () -> Unit) {
     bpOverlay(isOpen = true) {
@@ -87,12 +76,18 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
                     }
                     centeredTd {
                         bpTag(large = true, round = true, minimal = true) {
+                            attrs {
+                                this.className = GameStyles.getClassName { it::totalScore }
+                            }
                             +"${score.totalPoints}"
                         }
                     }
                     ScoreCategory.values().forEach { cat ->
                         centeredTd {
-                            bpTag(intent = cat.intent, large = true, round = true, icon = cat.icon, fill = true) {
+                            bpTag(large = true, round = true, icon = cat.icon, fill = true) {
+                                attrs {
+                                    this.className = classNameForCategory(cat)
+                                }
                                 +"${score.pointsByCategory[cat]}"
                             }
                         }
@@ -125,16 +120,17 @@ private fun RBuilder.centeredTd(block: RDOMBuilder<TD>.() -> Unit) {
     }
 }
 
-private val ScoreCategory.intent: Intent
-    get() = when (this) {
-        ScoreCategory.CIVIL -> Intent.PRIMARY
-        ScoreCategory.SCIENCE -> Intent.SUCCESS
-        ScoreCategory.MILITARY -> Intent.DANGER
-        ScoreCategory.TRADE -> Intent.WARNING
-        ScoreCategory.GUILD -> Intent.NONE
-        ScoreCategory.WONDER -> Intent.NONE
-        ScoreCategory.GOLD -> Intent.WARNING
+private fun classNameForCategory(cat: ScoreCategory): String = GameStyles.getClassName {
+    when (cat) {
+        ScoreCategory.CIVIL -> it::civilScore
+        ScoreCategory.SCIENCE -> it::scienceScore
+        ScoreCategory.MILITARY -> it::militaryScore
+        ScoreCategory.TRADE -> it::tradeScore
+        ScoreCategory.GUILD -> it::guildScore
+        ScoreCategory.WONDER -> it::wonderScore
+        ScoreCategory.GOLD -> it::goldScore
     }
+}
 
 private val ScoreCategory.icon: String
     get() = when (this) {
