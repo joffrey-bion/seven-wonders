@@ -44,7 +44,10 @@ class SevenWondersBot(
         session.watchTurns()
             .onStart { emit(firstTurn) }
             .takeWhile { it.action != Action.WATCH_SCORE }
-            .onCompletion { session.disconnect() }
+            .onCompletion {
+                session.leaveGame()
+                session.disconnect()
+            }
             .collect { turn ->
                 botDelay()
                 session.playTurn(turn)

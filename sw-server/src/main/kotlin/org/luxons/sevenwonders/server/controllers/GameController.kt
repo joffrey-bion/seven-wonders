@@ -5,6 +5,7 @@ import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.lobby.Player
+import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -19,6 +20,7 @@ import java.security.Principal
 class GameController(
     private val template: SimpMessagingTemplate,
     private val playerRepository: PlayerRepository,
+    private val lobbyRepository: LobbyRepository,
 ) {
     private val Principal.player
         get() = playerRepository.find(name)
@@ -116,8 +118,13 @@ class GameController(
     fun leave(principal: Principal) {
         val player = principal.player
         val game = player.game
-        player.leave()
+        val lobby = player.lobby
+        lobby.removePlayer(player.username)
         logger.info("Game {}: player {} left the game", game.id, principal.name)
+        if (lobby.getPlayers().isEmpty()) {
+            lobbyRepository.remove(lobby.id)
+            logger.info("Game {}: game deleted", game.id, principal.name)
+        }
     }
 
     companion object {
