@@ -156,10 +156,23 @@ class LobbyController(
         val game = lobby.startGame()
 
         logger.info("Game {} successfully started", game.id)
-        game.getCurrentTurnInfo().hideHandsAndWaitForReadiness().forEach {
+        val currentTurnInfo = game.getCurrentTurnInfo().let {
+            if (lobby.settings.askForReadiness) it.hideHandsAndWaitForReadiness() else it
+        }
+
+        // even if we don't care about ready state for business logic, the UI may use it nonetheless
+        lobby.initializePlayersReadyState()
+
+        currentTurnInfo.forEach {
             val player = lobby.getPlayers()[it.playerIndex]
             template.convertAndSendToUser(player.username, "/queue/lobby/" + lobby.id + "/started", it)
         }
+    }
+
+    private fun Lobby.initializePlayersReadyState() {
+        val players = getPlayers()
+        val initialReadyState = !settings.askForReadiness
+        players.forEach { it.isReady = initialReadyState }
     }
 
     companion object {

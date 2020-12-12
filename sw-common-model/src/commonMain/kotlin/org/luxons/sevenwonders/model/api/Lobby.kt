@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.model.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.wonders.PreGameWonder
 
 const val SEVEN_WONDERS_WS_ENDPOINT = "/seven-wonders-websocket"
@@ -45,6 +46,7 @@ data class LobbyDTO(
     val players: List<PlayerDTO>,
     val allWonders: List<PreGameWonder>,
     val state: State,
+    val settings: Settings,
     val hasEnoughPlayers: Boolean,
     val maxPlayersReached: Boolean,
 ) {

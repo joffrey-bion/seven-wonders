@@ -13,6 +13,7 @@ fun Lobby.toDTO(): LobbyDTO = LobbyDTO(
     players = getPlayers().zip(getAssignedWonders()).map { (p, w) -> p.toDTO(w) },
     allWonders = allWonders,
     state = state,
+    settings = settings,
     hasEnoughPlayers = hasEnoughPlayers(),
     maxPlayersReached = maxPlayersReached(),
 )

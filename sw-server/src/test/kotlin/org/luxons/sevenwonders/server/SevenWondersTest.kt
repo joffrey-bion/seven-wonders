@@ -150,5 +150,7 @@ class SevenWondersTest {
 private suspend fun SevenWondersSession.createGameAndWaitLobby(gameName: String): LobbyDTO {
     val joinedLobbies = watchLobbyJoined()
     createGame(gameName)
-    return joinedLobbies.first()
+    val lobby = joinedLobbies.first()
+    updateSettings(lobby.settings.copy(askForReadiness = true))
+    return lobby
 }

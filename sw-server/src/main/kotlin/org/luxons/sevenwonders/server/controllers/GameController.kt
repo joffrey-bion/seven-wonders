@@ -31,14 +31,20 @@ class GameController(
     @MessageMapping("/game/sayReady")
     fun ready(principal: Principal) {
         val player = principal.player
-        player.isReady = true
-        val game = player.game
-        logger.info("Game {}: player {} is ready for the next turn", game.id, player)
+        val lobby = player.lobby
+        if (!lobby.settings.askForReadiness) {
+            logger.warn("Game {}: player {} is saying ready but readiness concept is disabled", lobby.id, player)
+            return
+        }
 
-        synchronized(player.lobby) {
-            val players = player.lobby.getPlayers()
+        val game = player.game
+        player.isReady = true
+
+        synchronized(lobby) {
+            val players = lobby.getPlayers()
 
             sendPlayerReady(game.id, player)
+            logger.info("Game {}: player {} is ready for the next turn", game.id, player)
 
             val allReady = players.all { it.isReady }
             if (allReady) {
@@ -58,6 +64,7 @@ class GameController(
     @MessageMapping("/game/prepareMove")
     fun prepareMove(action: PrepareMoveAction, principal: Principal) {
         val player = principal.player
+        val lobby = player.lobby
         val game = player.game
         synchronized(game) {
             val preparedCardBack = game.prepareMove(player.index, action.move)
@@ -68,7 +75,7 @@ class GameController(
             if (game.allPlayersPreparedTheirMove()) {
                 logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
                 game.playTurn()
-                sendTurnInfo(player.lobby.getPlayers(), game, true)
+                sendTurnInfo(player.lobby.getPlayers(), game, hideHands = lobby.settings.askForReadiness)
                 if (game.endOfGameReached()) {
                     player.lobby.setEndOfGame()
                 }

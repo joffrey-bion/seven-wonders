@@ -7,6 +7,7 @@ import kotlin.random.Random
 data class Settings(
     val randomSeedForTests: Long? = null,
     val timeLimitInSeconds: Int = 45,
+    val askForReadiness: Boolean = false,
     val initialGold: Int = 3,
     val discardedCardGold: Int = 3,
     val defaultTradingCost: Int = 2,

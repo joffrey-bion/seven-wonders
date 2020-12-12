@@ -165,7 +165,7 @@ class LobbyControllerTest {
 
         assertEquals(Settings(), lobby.settings)
 
-        val newSettings = Settings(12L, 5, 5, 5, 4, 10, 2, HashMap())
+        val newSettings = Settings(12L, 5, false, 5, 5, 4, 10, 2, HashMap())
         val updateSettingsAction = UpdateSettingsAction(newSettings)
 
         val principal = TestPrincipal("testuser")
