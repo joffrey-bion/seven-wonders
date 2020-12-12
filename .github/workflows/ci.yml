@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  DOCKERHUB_USER: hildan
+  DOCKER_IMAGE_NAME: seven-wonders-server
+  HEROKU_APP_NAME: seven-wonders-online
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,7 +49,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: hildan
+          username: ${{ env.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to GitHub Container Registry
@@ -68,6 +73,6 @@ jobs:
           file: ./sw-server/Dockerfile
           push: true
           tags: |
-            hildan/seven-wonders-server:latest
-            ghcr.io/joffrey-bion/seven-wonders-server:latest
-            registry.heroku.com/seven-wonders-online/web
+            ${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
+            registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
