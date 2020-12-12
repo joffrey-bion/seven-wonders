@@ -46,7 +46,7 @@ class LobbyController(
         val player = principal.player
         val lobby = player.lobby
         lobby.removePlayer(principal.name)
-        logger.info("Player {} left game '{}'", player, lobby.name)
+        logger.info("Player {} left the lobby of game '{}'", player, lobby.name)
         template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
 
         synchronized(lobby) {
@@ -163,7 +163,7 @@ class LobbyController(
         val lobby = principal.player.ownedLobby
         val game = lobby.startGame()
 
-        logger.info("Game {} successfully started", game.id)
+        logger.info("Game {} ('{}') successfully started", game.id, lobby.name)
         val currentTurnInfo = game.getCurrentTurnInfo().let {
             if (lobby.settings.askForReadiness) it.hideHandsAndWaitForReadiness() else it
         }

@@ -71,7 +71,7 @@ class GameController(
         synchronized(game) {
             val preparedCardBack = game.prepareMove(player.index, action.move)
             val preparedCard = PreparedCard(player.username, preparedCardBack)
-            logger.info("Game {}: player {} prepared move {}", game.id, principal.name, action.move)
+            logger.info("Game {}: player {} prepared move {}", game.id, player, action.move)
             sendPreparedCard(game.id, preparedCard)
 
             if (game.allPlayersPreparedTheirMove()) {
@@ -79,6 +79,7 @@ class GameController(
                 game.playTurn()
                 sendTurnInfo(player.lobby.getPlayers(), game, hideHands = lobby.settings.askForReadiness)
                 if (game.endOfGameReached()) {
+                    logger.info("Game {}: end of game, displaying score board", game.id)
                     player.lobby.setEndOfGame()
                 }
             } else {
@@ -95,7 +96,7 @@ class GameController(
             game.unprepareMove(player.index)
         }
         val preparedCard = PreparedCard(player.username, null)
-        logger.info("Game {}: player {} unprepared his move", game.id, principal.name)
+        logger.info("Game {}: player {} unprepared his move", game.id, player)
         sendPreparedCard(game.id, preparedCard)
     }
 
@@ -120,10 +121,10 @@ class GameController(
         val game = player.game
         val lobby = player.lobby
         lobby.removePlayer(player.username)
-        logger.info("Game {}: player {} left the game", game.id, principal.name)
+        logger.info("Game {}: player {} left the game", game.id, player)
         if (lobby.getPlayers().isEmpty()) {
             lobbyRepository.remove(lobby.id)
-            logger.info("Game {}: game deleted", game.id, principal.name)
+            logger.info("Game {}: game deleted", game.id)
         }
     }
 
