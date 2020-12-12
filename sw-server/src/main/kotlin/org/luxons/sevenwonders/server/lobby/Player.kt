@@ -36,10 +36,12 @@ class Player(
         get() = _game ?: throw PlayerNotInGameException(username)
 
     fun join(lobby: Lobby) {
+        require(_lobby == null) { "The player $displayName ($username) is already in a lobby" }
         _lobby = lobby
     }
 
     fun join(game: Game, index: Int) {
+        require(_game == null) { "The player $displayName ($username) is already in a game" }
         _game = game
         this.index = index
     }

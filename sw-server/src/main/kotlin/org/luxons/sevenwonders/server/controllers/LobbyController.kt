@@ -49,10 +49,12 @@ class LobbyController(
         logger.info("Player {} left game '{}'", player, lobby.name)
         template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
 
-        if (lobby.getPlayers().isEmpty()) {
-            deleteLobby(lobby)
-        } else {
-            sendLobbyUpdateToPlayers(lobby)
+        synchronized(lobby) {
+            if (lobby.getPlayers().isEmpty()) {
+                deleteLobby(lobby)
+            } else {
+                sendLobbyUpdateToPlayers(lobby)
+            }
         }
     }
 
@@ -66,12 +68,14 @@ class LobbyController(
         val player = principal.player
         val lobby = player.ownedLobby
 
-        lobby.getPlayers().forEach {
-            it.leave()
-            template.convertAndSendToUser(it.username, "/queue/lobby/left", lobby.id)
+        synchronized(lobby) {
+            lobby.getPlayers().forEach {
+                it.leave()
+                template.convertAndSendToUser(it.username, "/queue/lobby/left", lobby.id)
+            }
+            logger.info("Player {} disbanded game '{}'", player, lobby.name)
+            deleteLobby(lobby)
         }
-        logger.info("Player {} disbanded game '{}'", player, lobby.name)
-        deleteLobby(lobby)
     }
 
     private fun deleteLobby(lobby: Lobby) {
@@ -89,10 +93,12 @@ class LobbyController(
     @MessageMapping("/lobby/reorderPlayers")
     fun reorderPlayers(@Validated action: ReorderPlayersAction, principal: Principal) {
         val lobby = principal.player.ownedLobby
-        lobby.reorderPlayers(action.orderedPlayers)
 
-        logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
-        sendLobbyUpdateToPlayers(lobby)
+        synchronized(lobby) {
+            lobby.reorderPlayers(action.orderedPlayers)
+            logger.info("Players in game '{}' reordered to {}", lobby.name, action.orderedPlayers)
+            sendLobbyUpdateToPlayers(lobby)
+        }
     }
 
     /**
@@ -104,10 +110,12 @@ class LobbyController(
     @MessageMapping("/lobby/reassignWonders")
     fun reassignWonders(@Validated action: ReassignWondersAction, principal: Principal) {
         val lobby = principal.player.ownedLobby
-        lobby.reassignWonders(action.assignedWonders)
 
-        logger.info("Reassigned wonders in game '{}': {}", lobby.name, action.assignedWonders)
-        sendLobbyUpdateToPlayers(lobby)
+        synchronized(lobby) {
+            lobby.reassignWonders(action.assignedWonders)
+            logger.info("Reassigned wonders in game '{}': {}", lobby.name, action.assignedWonders)
+            sendLobbyUpdateToPlayers(lobby)
+        }
     }
 
     /**
@@ -119,10 +127,20 @@ class LobbyController(
     @MessageMapping("/lobby/updateSettings")
     fun updateSettings(@Validated action: UpdateSettingsAction, principal: Principal) {
         val lobby = principal.player.ownedLobby
-        lobby.settings = action.settings
 
-        logger.info("Updated settings of game '{}'", lobby.name)
-        sendLobbyUpdateToPlayers(lobby)
+        synchronized(lobby) {
+            lobby.settings = action.settings
+            logger.info("Updated settings of game '{}'", lobby.name)
+            sendLobbyUpdateToPlayers(lobby)
+        }
+    }
+
+    internal fun sendLobbyUpdateToPlayers(lobby: Lobby) {
+        val lobbyDto = lobby.toDTO()
+        lobby.getPlayers().forEach {
+            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobbyDto)
+        }
+        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
     }
 
     @MessageMapping("/lobby/addBot")
@@ -132,17 +150,7 @@ class LobbyController(
         GlobalScope.launch {
             bot.play("ws://localhost:$serverPort", lobby.id)
         }
-
         logger.info("Added bot {} to game '{}'", action.botDisplayName, lobby.name)
-        sendLobbyUpdateToPlayers(lobby)
-    }
-
-    internal fun sendLobbyUpdateToPlayers(lobby: Lobby) {
-        val lobbyDto = lobby.toDTO()
-        lobby.getPlayers().forEach {
-            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobbyDto)
-        }
-        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
     }
 
     /**

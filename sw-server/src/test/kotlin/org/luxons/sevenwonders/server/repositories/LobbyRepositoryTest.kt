@@ -25,9 +25,8 @@ class LobbyRepositoryTest {
 
     @Test
     fun list_returnsAllLobbies() {
-        val owner = Player("owner", "The Owner")
-        val lobby1 = repository.create("Test Name 1", owner)
-        val lobby2 = repository.create("Test Name 2", owner)
+        val lobby1 = repository.create("Test Name 1", Player("owner1", "The Owner"))
+        val lobby2 = repository.create("Test Name 2", Player("owner2", "The Owner"))
         assertTrue(repository.list().contains(lobby1))
         assertTrue(repository.list().contains(lobby2))
     }
@@ -48,9 +47,8 @@ class LobbyRepositoryTest {
 
     @Test
     fun find_returnsTheSameObject() {
-        val owner = Player("owner", "The Owner")
-        val lobby1 = repository.create("Test Name 1", owner)
-        val lobby2 = repository.create("Test Name 2", owner)
+        val lobby1 = repository.create("Test Name 1", Player("owner1", "The Owner"))
+        val lobby2 = repository.create("Test Name 2", Player("owner2", "The Owner"))
         assertSame(lobby1, repository.find(lobby1.id))
         assertSame(lobby2, repository.find(lobby2.id))
     }

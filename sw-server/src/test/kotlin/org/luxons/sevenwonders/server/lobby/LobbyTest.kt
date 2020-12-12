@@ -34,24 +34,21 @@ class LobbyTest {
     @Before
     fun setUp() {
         gameOwner = Player("gameowner", "Game owner")
-        lobby = Lobby(0, "Test Game", gameOwner, gameDefinition)
+        lobby = Lobby(42, "Test Game", gameOwner, gameDefinition)
     }
 
     @Test
     fun testId() {
-        val lobby = Lobby(5, "Test Game", gameOwner, gameDefinition)
-        assertEquals(5, lobby.id)
+        assertEquals(42, lobby.id)
     }
 
     @Test
     fun testName() {
-        val lobby = Lobby(5, "Test Game", gameOwner, gameDefinition)
         assertEquals("Test Game", lobby.name)
     }
 
     @Test
     fun testOwner() {
-        val lobby = Lobby(5, "Test Game", gameOwner, gameDefinition)
         assertSame(gameOwner, lobby.getPlayers()[0])
         assertSame(lobby, gameOwner.lobby)
     }
