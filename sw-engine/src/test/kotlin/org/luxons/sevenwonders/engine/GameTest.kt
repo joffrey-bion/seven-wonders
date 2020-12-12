@@ -65,10 +65,10 @@ class GameTest {
         moveExpectations.forEach { game.prepareMove(it.playerIndex, it.moveToSend) }
         assertTrue(game.allPlayersPreparedTheirMove())
 
-        val table = game.playTurn()
+        game.playTurn()
 
         val expectedMoves = moveExpectations.map { it.expectedPlayedMove }
-        assertEquals(expectedMoves, table.lastPlayedMoves)
+        assertEquals(expectedMoves, game.getCurrentTurnInfo()[0].table.lastPlayedMoves)
     }
 
     private fun PlayerTurnInfo.firstAvailableMove(): MoveExpectation? = when (action) {

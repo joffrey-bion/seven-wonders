@@ -17,7 +17,10 @@ internal fun Card.toTableCard(lastMove: Move? = null): TableCard = TableCard(
     playedDuringLastMove = lastMove != null && this.name == lastMove.card.name,
 )
 
-internal fun Card.toHandCard(player: Player, forceSpecialFree: Boolean): HandCard = HandCard(
+internal fun List<Card>.toHandCards(player: Player, forceSpecialFree: Boolean) =
+    map { it.toHandCard(player, forceSpecialFree) }
+
+private fun Card.toHandCard(player: Player, forceSpecialFree: Boolean): HandCard = HandCard(
     name = name,
     color = color,
     requirements = requirements.toApiRequirements(),

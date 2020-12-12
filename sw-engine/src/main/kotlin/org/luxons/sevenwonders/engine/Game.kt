@@ -5,19 +5,14 @@ import org.luxons.sevenwonders.engine.boards.Table
 import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.cards.Decks
 import org.luxons.sevenwonders.engine.cards.Hands
-import org.luxons.sevenwonders.engine.converters.toHandCard
+import org.luxons.sevenwonders.engine.converters.toHandCards
 import org.luxons.sevenwonders.engine.converters.toPlayedMove
 import org.luxons.sevenwonders.engine.converters.toTableState
 import org.luxons.sevenwonders.engine.data.LAST_AGE
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.engine.moves.Move
 import org.luxons.sevenwonders.engine.moves.resolve
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.MoveType
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
-import org.luxons.sevenwonders.model.Settings
-import org.luxons.sevenwonders.model.TableState
+import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.score.ScoreBoard
@@ -48,23 +43,35 @@ class Game internal constructor(
     }
 
     private fun startNewTurn() {
-        currentTurnInfo = players.map {
-            val hand = hands.createHand(it)
-            val action = determineAction(hand, it.board)
-            createPlayerTurnInfo(it, action, hand)
+        val newTableState = table.toTableState()
+        currentTurnInfo = players.map { player ->
+            val hand = hands.createHand(player)
+            val action = determineAction(hand, player.board)
+            createPlayerTurnInfo(player, action, hand, newTableState)
         }
     }
 
     private fun startPlayDiscardedTurn() {
-        currentTurnInfo = players.map {
-            val action = if (it.board.hasSpecial(SpecialAbility.PLAY_DISCARDED)) {
-                Action.PLAY_FREE_DISCARDED
-            } else {
-                Action.WAIT
+        val newTableState = table.toTableState()
+        currentTurnInfo = players.map { player ->
+            val action = when {
+                player.board.hasSpecial(SpecialAbility.PLAY_DISCARDED) -> Action.PLAY_FREE_DISCARDED
+                else -> Action.WAIT
             }
-            createPlayerTurnInfo(it, action, null)
+            createPlayerTurnInfo(player, action, null, newTableState)
         }
     }
+
+    private fun createPlayerTurnInfo(player: Player, action: Action, hand: List<HandCard>?, newTableState: TableState) =
+        PlayerTurnInfo(
+            playerIndex = player.index,
+            table = newTableState,
+            action = action,
+            hand = hand,
+            preparedMove = preparedMoves[player.index]?.toPlayedMove(),
+            discardedCards = discardedCards.toHandCards(player, true).takeIf { action == Action.PLAY_FREE_DISCARDED },
+            neighbourGuildCards = table.getNeighbourGuildCards(player.index).toHandCards(player, true),
+        )
 
     private fun startEndGameTurn() {
         // some player may need to do additional stuff
@@ -79,28 +86,10 @@ class Game internal constructor(
         }
     }
 
-    private fun createPlayerTurnInfo(player: Player, action: Action, hand: List<HandCard>?): PlayerTurnInfo {
-        val neighbourGuildCards = table.getNeighbourGuildCards(player.index).map { it.toHandCard(player, true) }
-        val exposedDiscardedCards = if (action == Action.PLAY_FREE_DISCARDED) {
-            discardedCards.map { it.toHandCard(player, true) }
-        } else {
-            null
-        }
-        return PlayerTurnInfo(
-            playerIndex = player.index,
-            table = table.toTableState(),
-            action = action,
-            hand = hand,
-            preparedMove = preparedMoves[player.index]?.toPlayedMove(),
-            discardedCards = exposedDiscardedCards,
-            neighbourGuildCards = neighbourGuildCards,
-        )
-    }
-
     /**
      * Returns information for each player about the current turn.
      */
-    fun getCurrentTurnInfo(): Collection<PlayerTurnInfo> = currentTurnInfo
+    fun getCurrentTurnInfo(): List<PlayerTurnInfo> = currentTurnInfo
 
     private fun determineAction(hand: List<HandCard>, board: Board): Action = when {
         endOfGameReached() -> when {
@@ -150,11 +139,12 @@ class Game internal constructor(
     }
 
     /**
-     * Plays all the [prepared moves][prepareMove] for the current turn. An exception will be thrown if some players
-     * had not prepared their moves (unless these players had nothing to do). To avoid this, please check if everyone
-     * is ready using [allPlayersPreparedTheirMove].
+     * Plays all the [prepared moves][prepareMove] for the current turn.
+     *
+     * An exception will be thrown if some players had not prepared their moves (unless these players had nothing to
+     * do). To avoid this, please check if everyone is ready using [allPlayersPreparedTheirMove].
      */
-    fun playTurn(): TableState {
+    fun playTurn() {
         makeMoves()
         if (shouldStartPlayDiscardedTurn()) {
             startPlayDiscardedTurn()
@@ -169,7 +159,6 @@ class Game internal constructor(
             rotateHandsIfRelevant()
             startNewTurn()
         }
-        return table.toTableState()
     }
 
     private fun makeMoves() {
