@@ -1,8 +1,11 @@
 package org.luxons.sevenwonders.server
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.produceIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
@@ -42,7 +45,6 @@ class SevenWondersTest {
         val session = connectNewClient()
         val playerName = "Test User"
         val player = session.chooseName(playerName)
-        assertNotNull(player)
         assertEquals(playerName, player.displayName)
         session.disconnect()
     }
@@ -64,12 +66,12 @@ class SevenWondersTest {
         session2.joinGameAndWaitLobby(lobby.id)
 
         val outsiderSession = newPlayer("Outsider")
-        val started = launch { outsiderSession.awaitGameStart(lobby.id) }
-
+        val gameStartedEvents = outsiderSession.watchGameStarted()
         ownerSession.startGame()
-        val nothing = withTimeoutOrNull(50) { started.join() }
-        assertNull(nothing)
-        started.cancel()
+
+        val nullForTimeout = withTimeoutOrNull(50) { gameStartedEvents.first() }
+        assertNull(nullForTimeout, "outsider should not receive the game start event of this game")
+
         disconnect(ownerSession, session1, session2, outsiderSession)
     }
 
@@ -79,7 +81,6 @@ class SevenWondersTest {
 
         val gameName = "Test Game"
         val lobby = ownerSession.createGameAndWaitLobby(gameName)
-        assertNotNull(lobby)
         assertEquals(gameName, lobby.name)
 
         disconnect(ownerSession)
@@ -108,35 +109,40 @@ class SevenWondersTest {
     }
 
     @Test
-    fun startGame_3players() = runAsyncTest(30000) {
+    fun startGame_3players() = runAsyncTest {
         val session1 = newPlayer("Player1")
         val session2 = newPlayer("Player2")
 
+        val startEvents1 = session1.watchGameStarted()
         val lobby = session1.createGameAndWaitLobby("Test Game")
+
+        val startEvents2 = session2.watchGameStarted()
         session2.joinGameAndWaitLobby(lobby.id)
 
+        // player 3 connects after game creation (on purpose)
         val session3 = newPlayer("Player3")
+        val startEvents3 = session3.watchGameStarted()
         session3.joinGameAndWaitLobby(lobby.id)
 
-        listOf(session1, session2, session3).forEachIndexed { i, session ->
+        session1.startGame()
+
+        listOf(
+            session1 to startEvents1,
+            session2 to startEvents2,
+            session3 to startEvents3,
+        ).forEach { (session, startEvents) ->
             launch {
-                println("startGame_3players [launch ${i + 1}] awaiting game start...")
-                val firstTurn = session.awaitGameStart(lobby.id)
-                assertEquals(Action.SAY_READY, firstTurn.action)
-                val turns = session.watchTurns().produceIn(this)
-                println("startGame_3players [launch ${i + 1}] saying ready...")
+                val initialReadyTurn = startEvents.first()
+                assertEquals(Action.SAY_READY, initialReadyTurn.action)
+                assertNull(initialReadyTurn.hand)
+                val turns = session.watchTurns()
                 session.sayReady()
-                println("startGame_3players [launch ${i + 1}] ready, receiving first turn...")
-                val turn = turns.receive()
-                assertNotNull(turn)
-                println("startGame_3players [launch ${i + 1}] turn OK, disconnecting...")
+
+                val firstActualTurn = turns.first()
+                assertNotNull(firstActualTurn.hand)
                 session.disconnect()
             }
         }
-        println("startGame_3players: player 1 starting the game...")
-        delay(50) // ensure awaitGameStart actually subscribed in all sessions
-        session1.startGame()
-        println("startGame_3players: end of test method (main body)")
     }
 }
 

@@ -19,14 +19,7 @@ suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
 }
 
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
-    val lobby = getState().currentLobby ?: error("Lobby saga run without a current lobby")
-    coroutineScope {
-        session.watchLobbyUpdates().map { UpdateLobbyAction(it) }.dispatchAllIn(this)
-
-        val turnInfo = session.awaitGameStart(lobby.id)
-        dispatch(EnterGameAction(getState().currentLobby!!, turnInfo))
-        dispatch(Navigate(Route.GAME))
-    }
+    session.watchLobbyUpdates().map { UpdateLobbyAction(it) }.dispatchAll()
 }
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {

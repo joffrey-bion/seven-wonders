@@ -173,7 +173,7 @@ class LobbyController(
 
         currentTurnInfo.forEach {
             val player = lobby.getPlayers()[it.playerIndex]
-            template.convertAndSendToUser(player.username, "/queue/lobby/" + lobby.id + "/started", it)
+            template.convertAndSendToUser(player.username, "/queue/lobby/started", it)
         }
     }
 

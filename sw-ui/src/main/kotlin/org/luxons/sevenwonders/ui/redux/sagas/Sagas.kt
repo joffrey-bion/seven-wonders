@@ -31,7 +31,7 @@ suspend fun SwSagaContext.rootSaga() = try {
         }
 
         launchApiActionHandlersIn(this, session)
-        launchNavigationHandlers(this, session)
+        launchApiEventHandlersIn(this, session)
 
         val player = session.chooseName(action.playerName, null)
         dispatch(SetCurrentPlayerAction(player))
@@ -94,7 +94,14 @@ private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, sessi
     scope.launchOnEach<RequestUnprepareMove> { session.unprepareMove() }
 }
 
-private fun SwSagaContext.launchNavigationHandlers(scope: CoroutineScope, session: SevenWondersSession) {
+private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, session: SevenWondersSession) {
+
+    scope.launch {
+        session.watchLobbyJoined().collect { lobby ->
+            dispatch(EnterLobbyAction(lobby))
+            dispatch(Navigate(Route.LOBBY))
+        }
+    }
 
     scope.launch {
         session.watchLobbyLeft().collect { leftLobbyId ->
@@ -103,16 +110,17 @@ private fun SwSagaContext.launchNavigationHandlers(scope: CoroutineScope, sessio
         }
     }
 
+    scope.launch {
+        session.watchGameStarted().collect { turnInfo ->
+            val currentLobby = getState().currentLobby ?: error("Received game started event without being in a lobby")
+            dispatch(EnterGameAction(currentLobby, turnInfo))
+            dispatch(Navigate(Route.GAME))
+        }
+    }
+
     // FIXME map this actions like others and await server event instead
     scope.launchOnEach<RequestLeaveGame> {
         session.leaveGame()
         dispatch(Navigate(Route.GAME_BROWSER))
-    }
-
-    scope.launch {
-        session.watchLobbyJoined().collect { lobby ->
-            dispatch(EnterLobbyAction(lobby))
-            dispatch(Navigate(Route.LOBBY))
-        }
     }
 }

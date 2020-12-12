@@ -2,10 +2,7 @@ package org.luxons.sevenwonders.bot
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withTimeout
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
@@ -38,8 +35,9 @@ class SevenWondersBot(
     suspend fun play(serverUrl: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
         val session = client.connect(serverUrl)
         session.chooseName(displayName, Icon("desktop"))
+        val gameStartedEvents = session.watchGameStarted()
         session.joinGameAndWaitLobby(gameId)
-        val firstTurn = session.awaitGameStart(gameId)
+        val firstTurn = gameStartedEvents.first()
 
         session.watchTurns()
             .onStart { emit(firstTurn) }
