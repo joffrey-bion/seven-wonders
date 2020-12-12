@@ -1,12 +1,9 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.config.HeartBeat
@@ -39,33 +36,24 @@ class SevenWondersClient {
     }
 }
 
-// TODO replace these calls by actual HTTP endpoints
-@OptIn(ExperimentalCoroutinesApi::class)
-private suspend inline fun <reified T : Any, reified U : Any> StompSessionWithKxSerialization.request(
-    sendDestination: String,
-    receiveDestination: String,
-    payload: T? = null,
-    serializer: SerializationStrategy<T>,
-    deserializer: DeserializationStrategy<U>,
-): U {
-    val sub = subscribe(receiveDestination, deserializer)
-    convertAndSend(sendDestination, payload, serializer)
-    return sub.first()
-}
-
 class SevenWondersSession(private val stompSession: StompSessionWithKxSerialization) {
 
     suspend fun disconnect() = stompSession.disconnect()
 
     suspend fun watchErrors(): Flow<ErrorDTO> = stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
-    suspend fun chooseName(displayName: String, icon: Icon? = null): ConnectedPlayer = stompSession.request(
-        sendDestination = "/app/chooseName",
-        receiveDestination = "/user/queue/nameChoice",
-        payload = ChooseNameAction(displayName, icon),
-        serializer = ChooseNameAction.serializer(),
-        deserializer = ConnectedPlayer.serializer(),
-    )
+    suspend fun chooseName(displayName: String, icon: Icon? = null): ConnectedPlayer {
+        val sub = stompSession.subscribe(
+            destination = "/user/queue/nameChoice",
+            deserializer = ConnectedPlayer.serializer(),
+        )
+        stompSession.convertAndSend(
+            destination = "/app/chooseName",
+            body = ChooseNameAction(displayName, icon),
+            serializer = ChooseNameAction.serializer(),
+        )
+        return sub.first()
+    }
 
     suspend fun watchGames(): Flow<GameListEvent> =
         stompSession.subscribe("/topic/games", GameListEventWrapper.serializer()).map { it.event }
