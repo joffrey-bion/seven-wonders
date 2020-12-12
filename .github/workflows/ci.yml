@@ -76,3 +76,8 @@ jobs:
             ${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:latest
             ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
             registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
+
+      - name: Heroku release (deploy Docker image)
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
