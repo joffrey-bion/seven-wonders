@@ -1,15 +1,13 @@
 package org.luxons.sevenwonders.server
 
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.produceIn
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
-import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.client.joinGameAndWaitLobby
+import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.server.test.runAsyncTest
@@ -111,16 +109,11 @@ class SevenWondersTest {
 
     @Test
     fun startGame_3players() = runAsyncTest(30000) {
-        println("startGame_3players: START")
         val session1 = newPlayer("Player1")
-        println("startGame_3players: after player 1")
         val session2 = newPlayer("Player2")
-        println("startGame_3players: after player 2")
 
         val lobby = session1.createGameAndWaitLobby("Test Game")
-        println("startGame_3players: after player 1 creates game")
         session2.joinGameAndWaitLobby(lobby.id)
-        println("startGame_3players: after player 2 joins game")
 
         val session3 = newPlayer("Player3")
         session3.joinGameAndWaitLobby(lobby.id)
@@ -128,8 +121,8 @@ class SevenWondersTest {
         listOf(session1, session2, session3).forEachIndexed { i, session ->
             launch {
                 println("startGame_3players [launch ${i + 1}] awaiting game start...")
-                session.awaitGameStart(lobby.id)
-                println("startGame_3players [launch ${i + 1}] game started, watching turns")
+                val firstTurn = session.awaitGameStart(lobby.id)
+                assertEquals(Action.SAY_READY, firstTurn.action)
                 val turns = session.watchTurns().produceIn(this)
                 println("startGame_3players [launch ${i + 1}] saying ready...")
                 session.sayReady()
@@ -138,10 +131,10 @@ class SevenWondersTest {
                 assertNotNull(turn)
                 println("startGame_3players [launch ${i + 1}] turn OK, disconnecting...")
                 session.disconnect()
-                println("startGame_3players [launch ${i + 1}] disconnected")
             }
         }
         println("startGame_3players: player 1 starting the game...")
+        delay(50) // ensure awaitGameStart actually subscribed in all sessions
         session1.startGame()
         println("startGame_3players: end of test method (main body)")
     }
