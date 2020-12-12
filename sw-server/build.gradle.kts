@@ -34,6 +34,8 @@ dependencies {
 }
 
 tasks.processResources {
+    // make sure we build the frontend before creating the jar
+    dependsOn(":sw-ui:assemble")
     // package the frontend app within the jar as static
     val frontendBuildDir = project(":sw-ui").buildDir
     val frontendDist = frontendBuildDir.toPath().resolve("distributions")
@@ -42,8 +44,6 @@ tasks.processResources {
         into("static")
     }
 }
-// make sure we build the frontend before creating the jar
-tasks.processResources.get().dependsOn(":sw-ui:assemble")
 
 tasks.withType<Test> {
     testLogging {
