@@ -57,6 +57,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
             FlexDirection.column -> marginTop = margin
             FlexDirection.rowReverse -> marginRight = margin
             FlexDirection.columnReverse -> marginBottom = margin
+            else -> error("Unsupported orientation '${props.orientation}' for player info component")
         }
     }
 
