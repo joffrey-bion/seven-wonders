@@ -13,6 +13,7 @@ import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.model.resources.noTransactions
+import org.slf4j.LoggerFactory
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
@@ -25,6 +26,8 @@ data class BotConfig(
     val globalTimeout: Duration = 10.hours,
 )
 
+private val logger = LoggerFactory.getLogger(SevenWondersBot::class.simpleName)
+
 @OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
 class SevenWondersBot(
     private val displayName: String,
@@ -34,7 +37,7 @@ class SevenWondersBot(
 
     suspend fun play(serverUrl: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
         val session = client.connect(serverUrl)
-        session.chooseName(displayName, Icon("desktop"))
+        val player = session.chooseName(displayName, Icon("desktop"))
         val gameStartedEvents = session.watchGameStarted()
         session.joinGameAndWaitLobby(gameId)
         val firstTurn = gameStartedEvents.first()
@@ -48,6 +51,8 @@ class SevenWondersBot(
             }
             .collect { turn ->
                 botDelay()
+                val shortTurnDescription = "action ${turn.action}, ${turn.hand?.size ?: 0} cards in hand"
+                logger.info("BOT $player: playing turn ($shortTurnDescription)")
                 session.playTurn(turn)
             }
     }
