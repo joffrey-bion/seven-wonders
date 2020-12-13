@@ -45,12 +45,13 @@ class LobbyController(
     fun leave(principal: Principal) {
         val player = principal.player
         val lobby = player.lobby
-        lobby.removePlayer(principal.name)
-        logger.info("Player {} left the lobby of game '{}'", player, lobby.name)
-        template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
 
         synchronized(lobby) {
-            if (lobby.getPlayers().isEmpty()) {
+            lobby.removePlayer(principal.name)
+            logger.info("Player {} left the lobby of game '{}'", player, lobby.name)
+            template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
+
+            if (lobby.getPlayers().none { it.isHuman }) {
                 deleteLobby(lobby)
             } else {
                 sendLobbyUpdateToPlayers(lobby)

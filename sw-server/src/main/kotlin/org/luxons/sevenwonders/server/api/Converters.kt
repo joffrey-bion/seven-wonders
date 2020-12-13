@@ -18,4 +18,12 @@ fun Lobby.toDTO(): LobbyDTO = LobbyDTO(
     maxPlayersReached = maxPlayersReached(),
 )
 
-private fun Player.toDTO(wonder: AssignedWonder) = PlayerDTO(username, displayName, icon, wonder, isGameOwner, isReady)
+private fun Player.toDTO(wonder: AssignedWonder) = PlayerDTO(
+    username = username,
+    displayName = displayName,
+    isHuman = isHuman,
+    icon = icon,
+    wonder = wonder,
+    isGameOwner = isGameOwner,
+    isReady = isReady,
+)

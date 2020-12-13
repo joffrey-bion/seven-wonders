@@ -37,7 +37,7 @@ class SevenWondersBot(
 
     suspend fun play(serverUrl: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
         val session = client.connect(serverUrl)
-        val player = session.chooseName(displayName, Icon("desktop"))
+        val player = session.chooseName(displayName, Icon("desktop"), isHuman = false)
         val gameStartedEvents = session.watchGameStarted()
         session.joinGameAndWaitLobby(gameId)
         val firstTurn = gameStartedEvents.first()

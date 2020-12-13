@@ -33,7 +33,7 @@ suspend fun SwSagaContext.rootSaga() = try {
         launchApiActionHandlersIn(this, session)
         launchApiEventHandlersIn(this, session)
 
-        val player = session.chooseName(action.playerName, null)
+        val player = session.chooseName(action.playerName)
         dispatch(SetCurrentPlayerAction(player))
 
         routerSaga(Route.GAME_BROWSER) {

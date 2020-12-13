@@ -109,8 +109,8 @@ class Lobby(
         val player = players.removeAt(playerIndex)
         player.leave()
 
-        if (player == owner && players.isNotEmpty()) {
-            owner = players[0]
+        if (player == owner && players.any { it.isHuman }) {
+            owner = players.first { it.isHuman }
         }
         return player
     }

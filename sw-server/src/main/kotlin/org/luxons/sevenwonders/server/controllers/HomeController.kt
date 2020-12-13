@@ -31,10 +31,10 @@ class HomeController(
     @SendToUser("/queue/nameChoice")
     fun chooseName(@Validated action: ChooseNameAction, principal: Principal): ConnectedPlayer {
         val username = principal.name
-        val player = playerRepository.createOrUpdate(username, action.playerName, action.icon)
+        val player = playerRepository.createOrUpdate(username, action.playerName, action.isHuman, action.icon)
 
         logger.info("Player '{}' chose the name '{}'", username, player.displayName)
-        return ConnectedPlayer(username, player.displayName, player.icon)
+        return ConnectedPlayer(username, player.displayName, player.isHuman, player.icon)
     }
 
     companion object {

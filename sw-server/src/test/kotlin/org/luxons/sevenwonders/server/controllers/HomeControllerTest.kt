@@ -13,7 +13,7 @@ class HomeControllerTest {
         val playerRepository = PlayerRepository()
         val homeController = HomeController(playerRepository)
 
-        val action = ChooseNameAction("Test User", Icon("person"))
+        val action = ChooseNameAction("Test User", Icon("person"), isHuman = true)
         val principal = TestPrincipal("testuser")
 
         val player = homeController.chooseName(action, principal)

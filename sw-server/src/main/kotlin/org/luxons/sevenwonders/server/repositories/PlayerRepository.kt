@@ -13,8 +13,8 @@ class PlayerRepository {
 
     operator fun contains(username: String): Boolean = players.containsKey(username)
 
-    fun createOrUpdate(username: String, displayName: String, icon: Icon? = null): Player {
-        val p = players.computeIfAbsent(username) { Player(username, displayName, icon) }
+    fun createOrUpdate(username: String, displayName: String, isHuman: Boolean = true, icon: Icon? = null): Player {
+        val p = players.computeIfAbsent(username) { Player(username, displayName, isHuman, icon) }
         p.displayName = displayName
         p.icon = icon
         return p

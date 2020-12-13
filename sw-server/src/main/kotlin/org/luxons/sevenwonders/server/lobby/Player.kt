@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.server.ApiMisuseException
 class Player(
     val username: String,
     var displayName: String,
+    val isHuman: Boolean = true,
     var icon: Icon? = null,
 ) {
     var index: Int = -1

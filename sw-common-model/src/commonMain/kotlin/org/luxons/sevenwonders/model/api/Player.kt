@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.model.wonders.AssignedWonder
 interface BasicPlayerInfo {
     val username: String
     val displayName: String
+    val isHuman: Boolean
     val icon: Icon?
 }
 
@@ -14,6 +15,7 @@ interface BasicPlayerInfo {
 data class ConnectedPlayer(
     override val username: String,
     override val displayName: String,
+    override val isHuman: Boolean,
     override val icon: Icon?,
 ) : BasicPlayerInfo
 
@@ -21,6 +23,7 @@ data class ConnectedPlayer(
 data class PlayerDTO(
     override val username: String,
     override val displayName: String,
+    override val isHuman: Boolean,
     override val icon: Icon?,
     val wonder: AssignedWonder,
     val isGameOwner: Boolean,

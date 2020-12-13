@@ -18,6 +18,10 @@ class ChooseNameAction(
      * The player's icon.
      */
     val icon: Icon?,
+    /**
+     * Whether the new player is a human (as opposed to a bot).
+     */
+    val isHuman: Boolean,
 )
 
 @Serializable
