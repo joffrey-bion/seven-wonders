@@ -19,9 +19,11 @@ Heroku's free plan shuts down servers when not used for 30 minutes, so please al
  new app on it after every successful build of the master branch.
 It is therefore possible that you experience a server restart if I just pushed some new changes.
 
-#### Locally
+### Locally
 
-You can also run the server on your own machine by running:
+The game is published as a [Docker image on DockerHub](https://hub.docker.com/r/hildan/seven-wonders-server).
+
+If you have [Docker](https://www.docker.com/) installed, you can run the server on your own machine by running:
 
 ```
 docker run -p 80:80 hildan/seven-wonders-server
