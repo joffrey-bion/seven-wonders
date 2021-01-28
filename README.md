@@ -1,6 +1,7 @@
 # Seven Wonders Online
 
 [![Github Build](https://img.shields.io/github/workflow/status/joffrey-bion/seven-wonders/ci-cd?label=build&logo=github)](https://github.com/joffrey-bion/seven-wonders/actions?query=workflow%3A%22ci-cd%22)
+[![Heroku App Status](http://heroku-shields.herokuapp.com/seven-wonders-online)](https://seven-wonders-online.herokuapp.com)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/joffrey-bion/seven-wonders/blob/master/LICENSE)
 
 A digital version of the [7 Wonders board game](https://en.wikipedia.org/wiki/7_Wonders_(board_game)).
