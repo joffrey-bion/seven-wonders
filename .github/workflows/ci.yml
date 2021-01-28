@@ -9,6 +9,8 @@ on:
 env:
   DOCKERHUB_USER: hildan
   DOCKER_IMAGE_NAME: seven-wonders-server
+  DOCKER_IMAGE_TAG_SHA: sha-${{ github.sha }}
+  DOCKER_IMAGE_TAG_BUILD: build-${{ github.run_id }}
   HEROKU_APP_NAME: seven-wonders-online
 
 jobs:
@@ -74,9 +76,11 @@ jobs:
           push: true
           tags: |
             ${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-            ${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_SHA }}
+            ${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_BUILD }}
             ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
-            ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_SHA }}
+            ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_BUILD }}
             registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
       - name: Heroku release (deploy Docker image)
