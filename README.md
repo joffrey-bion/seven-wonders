@@ -38,16 +38,11 @@ For this, it uses the [krossbow](https://github.com/joffrey-bion/krossbow) multi
 
 ## How does it look?
 
-The game contains most features of the actual board game:
+The game contains all features of the actual board game:
 
 - Play cards, discard, or upgrade your wonder
 - Buy resources from your neighbours
 - Special bonuses: pick from discarded cards, play your 2 last cards, copy neighbour guild etc.
-
-Missing features:
-
-- You can't currently choose which neighbour you buy the resources from. The game automatically picks the
- cheapest option for you.
 
 Online-only features:
 
