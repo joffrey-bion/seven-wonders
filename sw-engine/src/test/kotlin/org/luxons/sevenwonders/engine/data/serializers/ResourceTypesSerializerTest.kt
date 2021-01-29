@@ -1,11 +1,7 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.github.salomonbrys.kotson.fromJson
-import com.github.salomonbrys.kotson.typeToken
-import com.github.salomonbrys.kotson.typedToJson
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import org.junit.Before
+import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.luxons.sevenwonders.model.resources.ResourceType
 import kotlin.test.assertEquals
@@ -13,68 +9,61 @@ import kotlin.test.assertNull
 
 class ResourceTypesSerializerTest {
 
-    private lateinit var gson: Gson
-
-    @Before
-    fun setUp() {
-        gson = GsonBuilder().registerTypeAdapter(typeToken<List<ResourceType>>(), ResourceTypesSerializer()).create()
-    }
-
     @Test
     fun serialize_null() {
-        assertEquals("null", gson.toJson(null, typeToken<List<ResourceType>>()))
+        assertEquals("null", Json.encodeToString(ResourceTypesSerializer.nullable, null))
     }
 
     @Test
     fun serialize_emptyList() {
         val types = emptyList<ResourceType>()
-        assertEquals("\"\"", gson.typedToJson(types))
+        assertEquals("\"\"", Json.encodeToString(ResourceTypesSerializer, types))
     }
 
     @Test
     fun serialize_singleType() {
         val types = listOf(ResourceType.WOOD)
-        assertEquals("\"W\"", gson.typedToJson(types))
+        assertEquals("\"W\"", Json.encodeToString(ResourceTypesSerializer, types))
     }
 
     @Test
     fun serialize_multipleTimesSameType() {
         val types = List(3) { ResourceType.WOOD }
-        assertEquals("\"WWW\"", gson.typedToJson(types))
+        assertEquals("\"WWW\"", Json.encodeToString(ResourceTypesSerializer, types))
     }
 
     @Test
     fun serialize_mixedTypes() {
         val types = listOf(ResourceType.WOOD, ResourceType.CLAY, ResourceType.STONE)
-        assertEquals("\"WCS\"", gson.typedToJson(types))
+        assertEquals("\"WCS\"", Json.encodeToString(ResourceTypesSerializer, types))
     }
 
     @Test
     fun deserialize_null() {
-        assertNull(gson.fromJson("null", typeToken<List<ResourceType>>()))
+        assertNull(Json.decodeFromString(ResourceTypesSerializer.nullable, "null"))
     }
 
     @Test
     fun deserialize_emptyList() {
         val types = emptyList<ResourceType>()
-        assertEquals(types, gson.fromJson("\"\""))
+        assertEquals(types, Json.decodeFromString(ResourceTypesSerializer, "\"\""))
     }
 
     @Test
     fun deserialize_singleType() {
         val types = listOf(ResourceType.WOOD)
-        assertEquals(types, gson.fromJson("\"W\""))
+        assertEquals(types, Json.decodeFromString(ResourceTypesSerializer, "\"W\""))
     }
 
     @Test
     fun deserialize_multipleTimesSameType() {
         val types = List(3) { ResourceType.WOOD }
-        assertEquals(types, gson.fromJson("\"WWW\""))
+        assertEquals(types, Json.decodeFromString(ResourceTypesSerializer, "\"WWW\""))
     }
 
     @Test
     fun deserialize_mixedTypes() {
         val types = listOf(ResourceType.WOOD, ResourceType.CLAY, ResourceType.STONE)
-        assertEquals(types, gson.fromJson("\"WCS\""))
+        assertEquals(types, Json.decodeFromString(ResourceTypesSerializer, "\"WCS\""))
     }
 }

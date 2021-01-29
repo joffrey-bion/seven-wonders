@@ -1,10 +1,11 @@
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 dependencies {
     implementation(project(":sw-common-model"))
-    implementation("com.github.salomonbrys.kotson:kotson:2.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
 }

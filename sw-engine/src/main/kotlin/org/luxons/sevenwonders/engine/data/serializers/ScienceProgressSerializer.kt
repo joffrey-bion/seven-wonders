@@ -1,55 +1,48 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonParseException
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.serializer
 import org.luxons.sevenwonders.engine.boards.Science
 import org.luxons.sevenwonders.engine.boards.ScienceType
 import org.luxons.sevenwonders.engine.effects.ScienceProgress
-import java.lang.reflect.Type
 
-internal class ScienceProgressSerializer : JsonSerializer<ScienceProgress>, JsonDeserializer<ScienceProgress> {
+internal object ScienceProgressSerializer : KSerializer<ScienceProgress> {
 
-    override fun serialize(
-        scienceProgress: ScienceProgress,
-        typeOfSrc: Type,
-        context: JsonSerializationContext,
-    ): JsonElement {
-        val science = scienceProgress.science
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("ScienceProgress", PrimitiveKind.STRING)
 
-        if (science.size() > 1) {
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun serialize(encoder: Encoder, value: ScienceProgress) {
+        if (value.science.size() > 1) {
             throw UnsupportedOperationException("Cannot serialize science containing more than one element")
         }
-
+        if (value.science.jokers == 1) {
+            encoder.encodeString("any")
+            return
+        }
         for (type in ScienceType.values()) {
-            val quantity = science.getQuantity(type)
+            val quantity = value.science.getQuantity(type)
             if (quantity == 1) {
-                return context.serialize(type)
+                encoder.encodeSerializableValue(serializer(), type)
+                return
             }
         }
-
-        return if (science.jokers == 1) JsonPrimitive("any") else JsonNull.INSTANCE
+        encoder.encodeNull()
     }
 
-    @Throws(JsonParseException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ScienceProgress {
-        val s = json.asString
+    override fun deserialize(decoder: Decoder): ScienceProgress {
+        val s = decoder.decodeString()
         val science = Science()
         if ("any" == s) {
             science.addJoker(1)
         } else {
-            science.add(deserializeScienceType(json, context), 1)
+            science.add(ScienceType.valueOf(s), 1)
         }
         return ScienceProgress(science)
-    }
-
-    private fun deserializeScienceType(json: JsonElement, context: JsonDeserializationContext): ScienceType {
-        return context.deserialize<ScienceType>(json, ScienceType::class.java)
-            ?: throw IllegalArgumentException("Invalid science level " + json.asString)
     }
 }

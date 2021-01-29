@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.engine.resources
 
+import kotlinx.serialization.Serializable
+import org.luxons.sevenwonders.engine.data.serializers.ResourcesSerializer
 import org.luxons.sevenwonders.model.resources.ResourceType
 
 fun emptyResources(): Resources = MutableResources()
@@ -34,6 +36,7 @@ internal fun Map<ResourceType, Int>.toMutableResources(): MutableResources = Mut
 
 internal fun Resources.toMutableResources(): MutableResources = quantities.toMutableResources()
 
+@Serializable(with = ResourcesSerializer::class)
 interface Resources {
 
     val quantities: Map<ResourceType, Int>

@@ -1,26 +1,27 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonParseException
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.engine.resources.toResources
 import org.luxons.sevenwonders.model.resources.ResourceType
-import java.lang.reflect.Type
 
-internal class ResourcesSerializer : JsonSerializer<Resources>, JsonDeserializer<Resources> {
+internal object ResourcesSerializer : KSerializer<Resources> {
 
-    override fun serialize(resources: Resources, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        val s = resources.toList().map { it.symbol }.joinToString("")
-        return if (s.isEmpty()) JsonNull.INSTANCE else JsonPrimitive(s)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Resources", PrimitiveKind.STRING)
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun serialize(encoder: Encoder, value: Resources) {
+        val s = value.toList().map { it.symbol }.joinToString("")
+        if (s.isEmpty()) encoder.encodeNull() else encoder.encodeString(s)
     }
 
-    @Throws(JsonParseException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Resources =
-        json.asString.map { ResourceType.fromSymbol(it) to 1 }.toResources()
+    override fun deserialize(decoder: Decoder): Resources = deserializeString(decoder.decodeString())
+
+    fun deserializeString(symbols: String): Resources = symbols.map { ResourceType.fromSymbol(it) to 1 }.toResources()
 }

@@ -1,53 +1,47 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonParseException
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import org.luxons.sevenwonders.engine.resources.Production
-import org.luxons.sevenwonders.engine.resources.Resources
 import org.luxons.sevenwonders.model.resources.ResourceType
-import java.lang.reflect.Type
 
-internal class ProductionSerializer : JsonSerializer<Production>, JsonDeserializer<Production> {
+internal object ProductionSerializer : KSerializer<Production> {
 
-    override fun serialize(production: Production, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        val fixedResources = production.getFixedResources()
-        val choices = production.getAlternativeResources()
-        return when {
-            fixedResources.isEmpty() -> serializeAsChoice(choices, context)
-            choices.isEmpty() -> serializeAsResources(fixedResources, context)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Production", PrimitiveKind.STRING)
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override fun serialize(encoder: Encoder, value: Production) {
+        val fixedResources = value.getFixedResources()
+        val choices = value.getAlternativeResources()
+        when {
+            fixedResources.isEmpty() -> choices.toChoiceString()?.let { encoder.encodeString(it) } ?: encoder.encodeNull()
+            choices.isEmpty() -> encoder.encodeSerializableValue(ResourcesSerializer, fixedResources)
             else -> throw IllegalArgumentException("Cannot serialize a production with mixed fixed resources and choices")
         }
     }
 
-    private fun serializeAsChoice(choices: List<Set<ResourceType>>, context: JsonSerializationContext): JsonElement {
-        if (choices.isEmpty()) {
-            return JsonNull.INSTANCE
+    private fun List<Set<ResourceType>>.toChoiceString(): String? {
+        if (isEmpty()) {
+            return null
         }
-        if (choices.size > 1) {
+        if (size > 1) {
             throw IllegalArgumentException("Cannot serialize a production with more than one choice")
         }
-        val str = choices[0].map { it.symbol }.joinToString("/")
-        return context.serialize(str)
+        return this[0].map { it.symbol }.joinToString("/")
     }
 
-    private fun serializeAsResources(fixedResources: Resources, context: JsonSerializationContext): JsonElement {
-        return context.serialize(fixedResources)
-    }
-
-    @Throws(JsonParseException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Production {
-        val resourcesStr = json.asString
+    override fun deserialize(decoder: Decoder): Production {
+        val resourcesStr = decoder.decodeString()
         val production = Production()
         if (resourcesStr.contains("/")) {
             production.addChoice(*createChoice(resourcesStr))
         } else {
-            val fixedResources = context.deserialize<Resources>(json, Resources::class.java)
-            production.addAll(fixedResources)
+            production.addAll(ResourcesSerializer.deserializeString(resourcesStr))
         }
         return production
     }

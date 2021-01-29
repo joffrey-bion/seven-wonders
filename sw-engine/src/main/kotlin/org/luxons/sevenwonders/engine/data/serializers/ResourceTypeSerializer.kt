@@ -1,26 +1,20 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonParseException
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import org.luxons.sevenwonders.model.resources.ResourceType
-import java.lang.reflect.Type
 
-internal class ResourceTypeSerializer : JsonSerializer<ResourceType>, JsonDeserializer<ResourceType> {
+internal object ResourceTypeSerializer : KSerializer<ResourceType> {
 
-    override fun serialize(type: ResourceType, typeOfSrc: Type, context: JsonSerializationContext): JsonElement =
-        JsonPrimitive(type.symbol)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("ResourceType", PrimitiveKind.STRING)
 
-    @Throws(JsonParseException::class)
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ResourceType {
-        val str = json.asString
-        if (str.isEmpty()) {
-            throw IllegalArgumentException("Empty string is not a valid resource level")
-        }
-        return ResourceType.fromSymbol(str[0])
+    override fun serialize(encoder: Encoder, value: ResourceType) {
+        encoder.encodeString(value.symbol.toString())
     }
+
+    override fun deserialize(decoder: Decoder): ResourceType = ResourceType.fromSymbol(decoder.decodeString())
 }

@@ -1,8 +1,11 @@
 package org.luxons.sevenwonders.engine.resources
 
+import kotlinx.serialization.Serializable
+import org.luxons.sevenwonders.engine.data.serializers.ProductionSerializer
 import org.luxons.sevenwonders.model.resources.ResourceType
 import java.util.EnumSet
 
+@Serializable(with = ProductionSerializer::class)
 data class Production internal constructor(
     private val fixedResources: MutableResources = mutableResourcesOf(),
     // cannot be a Set because the same choices can be there multiple times

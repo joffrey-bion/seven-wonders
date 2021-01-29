@@ -1,11 +1,13 @@
 package org.luxons.sevenwonders.engine.cards
 
+import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.engine.resources.*
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.bestPrice
 
+@Serializable
 data class Requirements internal constructor(
     val gold: Int = 0,
     val resources: Resources = emptyResources(),

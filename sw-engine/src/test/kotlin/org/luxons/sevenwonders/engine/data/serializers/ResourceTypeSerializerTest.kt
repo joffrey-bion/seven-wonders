@@ -1,9 +1,7 @@
 package org.luxons.sevenwonders.engine.data.serializers
 
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import org.junit.Before
+import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.luxons.sevenwonders.model.resources.ResourceType
 import kotlin.test.assertEquals
@@ -12,45 +10,38 @@ import kotlin.test.assertNull
 
 class ResourceTypeSerializerTest {
 
-    private lateinit var gson: Gson
-
-    @Before
-    fun setUp() {
-        gson = GsonBuilder().registerTypeAdapter(ResourceType::class.java, ResourceTypeSerializer()).create()
-    }
-
     @Test
     fun serialize_useSymbolForEachType() {
         ResourceType.values().forEach { type ->
-            val expectedJson = "\"" + type.symbol + "\""
-            assertEquals(expectedJson, gson.toJson(type))
+            val expectedjson = "\"" + type.symbol + "\""
+            assertEquals(expectedjson, Json.encodeToString(ResourceTypeSerializer, type))
         }
     }
 
     @Test
     fun deserialize_useSymbolForEachType() {
         ResourceType.values().forEach { type ->
-            val typeInJson = "\"" + type.symbol + "\""
-            assertEquals(type, gson.fromJson(typeInJson))
+            val typeInjson = "\"" + type.symbol + "\""
+            assertEquals(type, Json.decodeFromString(ResourceTypeSerializer, typeInjson))
         }
     }
 
     @Test
     fun deserialize_nullFromNull() {
-        assertNull(gson.fromJson("null", ResourceType::class.java))
+        assertNull(Json.decodeFromString(ResourceTypeSerializer.nullable, "null"))
     }
 
     @Test
     fun deserialize_failsOnEmptyString() {
         assertFailsWith<IllegalArgumentException> {
-            gson.fromJson<ResourceType>("\"\"")
+            Json.decodeFromString(ResourceTypeSerializer, "\"\"")
         }
     }
 
     @Test
     fun deserialize_failsOnGarbageString() {
         assertFailsWith<IllegalArgumentException> {
-            gson.fromJson<ResourceType>("\"thisisgarbage\"")
+            Json.decodeFromString(ResourceTypeSerializer, "\"thisisgarbage\"")
         }
     }
 }

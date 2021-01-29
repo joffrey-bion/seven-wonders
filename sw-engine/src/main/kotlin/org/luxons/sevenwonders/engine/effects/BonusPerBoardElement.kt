@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.engine.effects
 
+import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.engine.Player
 import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
@@ -11,6 +12,7 @@ enum class BoardElementType {
     DEFEAT_TOKEN,
 }
 
+@Serializable
 internal data class BonusPerBoardElement(
     val boards: List<RelativeBoardPosition>,
     val type: BoardElementType,

@@ -5,7 +5,10 @@
         "name": "Clay Pit",
         "color": "BROWN",
         "effect": {
-          "production": "O/C"
+          "production": {
+            "resources": "O/C",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -18,11 +21,15 @@
           "7": 1
         },
         "image": "claypit.png"
-      }, {
+      },
+      {
         "name": "Clay Pool",
         "color": "BROWN",
         "effect": {
-          "production": "C"
+          "production": {
+            "resources": "C",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -32,11 +39,15 @@
           "7": 2
         },
         "image": "claypool.png"
-      }, {
+      },
+      {
         "name": "Excavation",
         "color": "BROWN",
         "effect": {
-          "production": "S/C"
+          "production": {
+            "resources": "S/C",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -49,11 +60,15 @@
           "7": 1
         },
         "image": "excavation.png"
-      }, {
+      },
+      {
         "name": "Forest Cave",
         "color": "BROWN",
         "effect": {
-          "production": "W/O"
+          "production": {
+            "resources": "W/O",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -66,11 +81,15 @@
           "7": 1
         },
         "image": "forestcave.png"
-      }, {
+      },
+      {
         "name": "Lumber Yard",
         "color": "BROWN",
         "effect": {
-          "production": "W"
+          "production": {
+            "resources": "W",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -80,11 +99,15 @@
           "7": 2
         },
         "image": "lumberyard.png"
-      }, {
+      },
+      {
         "name": "Mine",
         "color": "BROWN",
         "effect": {
-          "production": "S/O"
+          "production": {
+            "resources": "S/O",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -97,11 +120,15 @@
           "7": 1
         },
         "image": "mine.png"
-      }, {
+      },
+      {
         "name": "Ore Vein",
         "color": "BROWN",
         "effect": {
-          "production": "O"
+          "production": {
+            "resources": "O",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -111,11 +138,15 @@
           "7": 2
         },
         "image": "orevein.png"
-      }, {
+      },
+      {
         "name": "Stone Pit",
         "color": "BROWN",
         "effect": {
-          "production": "S"
+          "production": {
+            "resources": "S",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -125,11 +156,15 @@
           "7": 2
         },
         "image": "stonepit.png"
-      }, {
+      },
+      {
         "name": "Timber Yard",
         "color": "BROWN",
         "effect": {
-          "production": "W/S"
+          "production": {
+            "resources": "W/S",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -142,11 +177,15 @@
           "7": 1
         },
         "image": "timberyard.png"
-      }, {
+      },
+      {
         "name": "Tree Farm",
         "color": "BROWN",
         "effect": {
-          "production": "W/C"
+          "production": {
+            "resources": "W/C",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -159,11 +198,15 @@
           "7": 1
         },
         "image": "treefarm.png"
-      }, {
+      },
+      {
         "name": "Glassworks",
         "color": "GREY",
         "effect": {
-          "production": "G"
+          "production": {
+            "resources": "G",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -173,11 +216,15 @@
           "7": 2
         },
         "image": "glassworks.png"
-      }, {
+      },
+      {
         "name": "Loom",
         "color": "GREY",
         "effect": {
-          "production": "L"
+          "production": {
+            "resources": "L",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -187,11 +234,15 @@
           "7": 2
         },
         "image": "loom.png"
-      }, {
+      },
+      {
         "name": "Press",
         "color": "GREY",
         "effect": {
-          "production": "P"
+          "production": {
+            "resources": "P",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -201,7 +252,8 @@
           "7": 2
         },
         "image": "press.png"
-      }, {
+      },
+      {
         "name": "East Trading Post",
         "color": "YELLOW",
         "effect": {
@@ -224,16 +276,17 @@
           "7": 2
         },
         "image": "easttradingpost.png"
-      }, {
+      },
+      {
         "name": "Marketplace",
         "color": "YELLOW",
         "effect": {
           "discount": {
             "resourceTypes": "LGP",
             "providers": [
-              "LEFT_PLAYER", "RIGHT_PLAYER"
-            ],
-            "discountedPrice": 1
+              "LEFT_PLAYER",
+              "RIGHT_PLAYER"
+            ]
           }
         },
         "chainChildren": [
@@ -247,7 +300,8 @@
           "7": 2
         },
         "image": "marketplace.png"
-      }, {
+      },
+      {
         "name": "Tavern",
         "color": "YELLOW",
         "effect": {
@@ -261,7 +315,8 @@
           "7": 3
         },
         "image": "tavern.png"
-      }, {
+      },
+      {
         "name": "West Trading Post",
         "color": "YELLOW",
         "effect": {
@@ -284,7 +339,8 @@
           "7": 2
         },
         "image": "westtradingpost.png"
-      }, {
+      },
+      {
         "name": "Altar",
         "color": "BLUE",
         "effect": {
@@ -301,7 +357,8 @@
           "7": 2
         },
         "image": "altar.png"
-      }, {
+      },
+      {
         "name": "Baths",
         "color": "BLUE",
         "effect": {
@@ -321,7 +378,8 @@
           "7": 2
         },
         "image": "baths.png"
-      }, {
+      },
+      {
         "name": "Pawnshop",
         "color": "BLUE",
         "effect": {
@@ -335,7 +393,8 @@
           "7": 2
         },
         "image": "pawnshop.png"
-      }, {
+      },
+      {
         "name": "Theater",
         "color": "BLUE",
         "effect": {
@@ -352,7 +411,8 @@
           "7": 2
         },
         "image": "theater.png"
-      }, {
+      },
+      {
         "name": "Apothecary",
         "color": "GREEN",
         "effect": {
@@ -362,7 +422,8 @@
           "resources": "L"
         },
         "chainChildren": [
-          "Stables", "Dispensary"
+          "Stables",
+          "Dispensary"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -372,7 +433,8 @@
           "7": 2
         },
         "image": "apothecary.png"
-      }, {
+      },
+      {
         "name": "Scriptorium",
         "color": "GREEN",
         "effect": {
@@ -382,7 +444,8 @@
           "resources": "P"
         },
         "chainChildren": [
-          "Courthouse", "Library"
+          "Courthouse",
+          "Library"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -392,7 +455,8 @@
           "7": 2
         },
         "image": "scriptorium.png"
-      }, {
+      },
+      {
         "name": "Workshop",
         "color": "GREEN",
         "effect": {
@@ -402,7 +466,8 @@
           "resources": "G"
         },
         "chainChildren": [
-          "Archery Range", "Laboratory"
+          "Archery Range",
+          "Laboratory"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -412,7 +477,8 @@
           "7": 2
         },
         "image": "workshop.png"
-      }, {
+      },
+      {
         "name": "Barracks",
         "color": "RED",
         "effect": {
@@ -429,7 +495,8 @@
           "7": 2
         },
         "image": "barracks.png"
-      }, {
+      },
+      {
         "name": "Guard Tower",
         "color": "RED",
         "effect": {
@@ -446,7 +513,8 @@
           "7": 2
         },
         "image": "guardtower.png"
-      }, {
+      },
+      {
         "name": "Stockade",
         "color": "RED",
         "effect": {
@@ -473,7 +541,10 @@
         "name": "Brickyard",
         "color": "BROWN",
         "effect": {
-          "production": "CC"
+          "production": {
+            "resources": "CC",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -486,11 +557,15 @@
           "7": 2
         },
         "image": "brickyard.png"
-      }, {
+      },
+      {
         "name": "Foundry",
         "color": "BROWN",
         "effect": {
-          "production": "OO"
+          "production": {
+            "resources": "OO",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -503,11 +578,15 @@
           "7": 2
         },
         "image": "foundry.png"
-      }, {
+      },
+      {
         "name": "Quarry",
         "color": "BROWN",
         "effect": {
-          "production": "SS"
+          "production": {
+            "resources": "SS",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -520,11 +599,15 @@
           "7": 2
         },
         "image": "quarry.png"
-      }, {
+      },
+      {
         "name": "Sawmill",
         "color": "BROWN",
         "effect": {
-          "production": "WW"
+          "production": {
+            "resources": "WW",
+            "isSellable": true
+          }
         },
         "requirements": {
           "gold": 1
@@ -537,11 +620,15 @@
           "7": 2
         },
         "image": "sawmill.png"
-      }, {
+      },
+      {
         "name": "Glassworks",
         "color": "GREY",
         "effect": {
-          "production": "G"
+          "production": {
+            "resources": "G",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -551,11 +638,15 @@
           "7": 2
         },
         "image": "glassworks.png"
-      }, {
+      },
+      {
         "name": "Loom",
         "color": "GREY",
         "effect": {
-          "production": "L"
+          "production": {
+            "resources": "L",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -565,11 +656,15 @@
           "7": 2
         },
         "image": "loom.png"
-      }, {
+      },
+      {
         "name": "Press",
         "color": "GREY",
         "effect": {
-          "production": "P"
+          "production": {
+            "resources": "P",
+            "isSellable": true
+          }
         },
         "countPerNbPlayer": {
           "3": 1,
@@ -579,13 +674,16 @@
           "7": 2
         },
         "image": "press.png"
-      }, {
+      },
+      {
         "name": "Bazar",
         "color": "YELLOW",
         "effect": {
           "perBoardElement": {
             "boards": [
-              "SELF", "LEFT", "RIGHT"
+              "SELF",
+              "LEFT",
+              "RIGHT"
             ],
             "gold": 2,
             "type": "CARD",
@@ -602,11 +700,15 @@
           "7": 2
         },
         "image": "bazar.png"
-      }, {
+      },
+      {
         "name": "Caravansery",
         "color": "YELLOW",
         "effect": {
-          "production": "(W/S/O/C)"
+          "production": {
+            "resources": "W/S/O/C",
+            "isSellable": false
+          }
         },
         "requirements": {
           "resources": "WW"
@@ -623,11 +725,15 @@
           "7": 3
         },
         "image": "caravansery.png"
-      }, {
+      },
+      {
         "name": "Forum",
         "color": "YELLOW",
         "effect": {
-          "production": "(G/P/L)"
+          "production": {
+            "resources": "G/P/L",
+            "isSellable": false
+          }
         },
         "requirements": {
           "resources": "CC"
@@ -644,13 +750,16 @@
           "7": 3
         },
         "image": "forum.png"
-      }, {
+      },
+      {
         "name": "Vineyard",
         "color": "YELLOW",
         "effect": {
           "perBoardElement": {
             "boards": [
-              "SELF", "LEFT", "RIGHT"
+              "SELF",
+              "LEFT",
+              "RIGHT"
             ],
             "gold": 1,
             "type": "CARD",
@@ -667,7 +776,8 @@
           "7": 2
         },
         "image": "vineyard.png"
-      }, {
+      },
+      {
         "name": "Aqueduct",
         "color": "BLUE",
         "effect": {
@@ -685,7 +795,8 @@
           "7": 2
         },
         "image": "aqueduct.png"
-      }, {
+      },
+      {
         "name": "Courthouse",
         "color": "BLUE",
         "effect": {
@@ -703,7 +814,8 @@
           "7": 2
         },
         "image": "courthouse.png"
-      }, {
+      },
+      {
         "name": "Statue",
         "color": "BLUE",
         "effect": {
@@ -724,7 +836,8 @@
           "7": 2
         },
         "image": "statue.png"
-      }, {
+      },
+      {
         "name": "Temple",
         "color": "BLUE",
         "effect": {
@@ -745,7 +858,8 @@
           "7": 2
         },
         "image": "temple.png"
-      }, {
+      },
+      {
         "name": "Dispensary",
         "color": "GREEN",
         "effect": {
@@ -756,7 +870,8 @@
         },
         "chainParent": "Apothecary",
         "chainChildren": [
-          "Arena", "Lodge"
+          "Arena",
+          "Lodge"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -766,7 +881,8 @@
           "7": 2
         },
         "image": "dispensary.png"
-      }, {
+      },
+      {
         "name": "Laboratory",
         "color": "GREEN",
         "effect": {
@@ -777,7 +893,8 @@
         },
         "chainParent": "Workshop",
         "chainChildren": [
-          "Siege Workshop", "Observatory"
+          "Siege Workshop",
+          "Observatory"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -787,7 +904,8 @@
           "7": 2
         },
         "image": "laboratory.png"
-      }, {
+      },
+      {
         "name": "Library",
         "color": "GREEN",
         "effect": {
@@ -798,7 +916,8 @@
         },
         "chainParent": "Scriptorium",
         "chainChildren": [
-          "Senate", "University"
+          "Senate",
+          "University"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -808,7 +927,8 @@
           "7": 2
         },
         "image": "library.png"
-      }, {
+      },
+      {
         "name": "School",
         "color": "GREEN",
         "effect": {
@@ -818,7 +938,8 @@
           "resources": "WP"
         },
         "chainChildren": [
-          "Academy", "Study"
+          "Academy",
+          "Study"
         ],
         "countPerNbPlayer": {
           "3": 1,
@@ -828,7 +949,8 @@
           "7": 2
         },
         "image": "school.png"
-      }, {
+      },
+      {
         "name": "Archery Range",
         "color": "RED",
         "effect": {
@@ -846,7 +968,8 @@
           "7": 2
         },
         "image": "archeryrange.png"
-      }, {
+      },
+      {
         "name": "Stables",
         "color": "RED",
         "effect": {
@@ -864,7 +987,8 @@
           "7": 2
         },
         "image": "stables.png"
-      }, {
+      },
+      {
         "name": "Training Ground",
         "color": "RED",
         "effect": {
@@ -884,7 +1008,8 @@
           "7": 3
         },
         "image": "trainingground.png"
-      }, {
+      },
+      {
         "name": "Walls",
         "color": "RED",
         "effect": {
@@ -918,9 +1043,9 @@
             "boards": [
               "SELF"
             ],
+            "type": "BUILT_WONDER_STAGES",
             "gold": 3,
-            "points": 1,
-            "type": "BUILT_WONDER_STAGES"
+            "points": 1
           }
         },
         "requirements": {
@@ -935,7 +1060,8 @@
           "7": 3
         },
         "image": "arena.png"
-      }, {
+      },
+      {
         "name": "Chamber of Commerce",
         "color": "YELLOW",
         "effect": {
@@ -943,9 +1069,9 @@
             "boards": [
               "SELF"
             ],
+            "type": "CARD",
             "gold": 2,
             "points": 2,
-            "type": "CARD",
             "colors": [
               "GREY"
             ]
@@ -962,7 +1088,8 @@
           "7": 2
         },
         "image": "chamberofcommerce.png"
-      }, {
+      },
+      {
         "name": "Haven",
         "color": "YELLOW",
         "effect": {
@@ -970,9 +1097,9 @@
             "boards": [
               "SELF"
             ],
+            "type": "CARD",
             "gold": 1,
             "points": 1,
-            "type": "CARD",
             "colors": [
               "BROWN"
             ]
@@ -990,7 +1117,8 @@
           "7": 2
         },
         "image": "haven.png"
-      }, {
+      },
+      {
         "name": "Lighthouse",
         "color": "YELLOW",
         "effect": {
@@ -998,9 +1126,9 @@
             "boards": [
               "SELF"
             ],
+            "type": "CARD",
             "gold": 1,
             "points": 1,
-            "type": "CARD",
             "colors": [
               "GREY"
             ]
@@ -1018,7 +1146,8 @@
           "7": 2
         },
         "image": "lighthouse.png"
-      }, {
+      },
+      {
         "name": "Gardens",
         "color": "BLUE",
         "effect": {
@@ -1036,7 +1165,8 @@
           "7": 2
         },
         "image": "gardens.png"
-      }, {
+      },
+      {
         "name": "Palace",
         "color": "BLUE",
         "effect": {
@@ -1053,7 +1183,8 @@
           "7": 2
         },
         "image": "palace.png"
-      }, {
+      },
+      {
         "name": "Pantheon",
         "color": "BLUE",
         "effect": {
@@ -1071,7 +1202,8 @@
           "7": 2
         },
         "image": "pantheon.png"
-      }, {
+      },
+      {
         "name": "Senate",
         "color": "BLUE",
         "effect": {
@@ -1089,7 +1221,8 @@
           "7": 2
         },
         "image": "senate.png"
-      }, {
+      },
+      {
         "name": "Town Hall",
         "color": "BLUE",
         "effect": {
@@ -1106,7 +1239,8 @@
           "7": 3
         },
         "image": "townhall.png"
-      }, {
+      },
+      {
         "name": "Academy",
         "color": "GREEN",
         "effect": {
@@ -1124,7 +1258,8 @@
           "7": 2
         },
         "image": "academy.png"
-      }, {
+      },
+      {
         "name": "Lodge",
         "color": "GREEN",
         "effect": {
@@ -1142,7 +1277,8 @@
           "7": 2
         },
         "image": "lodge.png"
-      }, {
+      },
+      {
         "name": "Observatory",
         "color": "GREEN",
         "effect": {
@@ -1160,7 +1296,8 @@
           "7": 2
         },
         "image": "observatory.png"
-      }, {
+      },
+      {
         "name": "Study",
         "color": "GREEN",
         "effect": {
@@ -1178,7 +1315,8 @@
           "7": 2
         },
         "image": "study.png"
-      }, {
+      },
+      {
         "name": "University",
         "color": "GREEN",
         "effect": {
@@ -1196,7 +1334,8 @@
           "7": 2
         },
         "image": "university.png"
-      }, {
+      },
+      {
         "name": "Arsenal",
         "color": "RED",
         "effect": {
@@ -1213,7 +1352,8 @@
           "7": 3
         },
         "image": "arsenal.png"
-      }, {
+      },
+      {
         "name": "Circus",
         "color": "RED",
         "effect": {
@@ -1231,7 +1371,8 @@
           "7": 3
         },
         "image": "circus.png"
-      }, {
+      },
+      {
         "name": "Fortifications",
         "color": "RED",
         "effect": {
@@ -1249,7 +1390,8 @@
           "7": 2
         },
         "image": "fortifications.png"
-      }, {
+      },
+      {
         "name": "Siege Workshop",
         "color": "RED",
         "effect": {
@@ -1278,28 +1420,30 @@
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "SELF", "RIGHT"
+            "LEFT",
+            "SELF",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
-          "type": "BUILT_WONDER_STAGES"
+          "type": "BUILT_WONDER_STAGES",
+          "points": 1
         }
       },
       "requirements": {
         "resources": "SSCCG"
       },
       "image": "buildersguild.png"
-    }, {
+    },
+    {
       "name": "Craftsmens Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 2,
           "type": "CARD",
+          "points": 2,
           "colors": [
             "GREY"
           ]
@@ -1309,17 +1453,18 @@
         "resources": "SSOO"
       },
       "image": "craftsmensguild.png"
-    }, {
+    },
+    {
       "name": "Magistrates Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
           "type": "CARD",
+          "points": 1,
           "colors": [
             "BLUE"
           ]
@@ -1329,17 +1474,18 @@
         "resources": "WWWSL"
       },
       "image": "magistratesguild.png"
-    }, {
+    },
+    {
       "name": "Philosophers Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
           "type": "CARD",
+          "points": 1,
           "colors": [
             "GREEN"
           ]
@@ -1349,7 +1495,8 @@
         "resources": "CCCPL"
       },
       "image": "philosophersguild.png"
-    }, {
+    },
+    {
       "name": "Scientists Guild",
       "color": "PURPLE",
       "effect": {
@@ -1359,7 +1506,8 @@
         "resources": "WWOOP"
       },
       "image": "scientistsguild.png"
-    }, {
+    },
+    {
       "name": "Shipowners Guild",
       "color": "PURPLE",
       "effect": {
@@ -1367,11 +1515,12 @@
           "boards": [
             "SELF"
           ],
-          "gold": 0,
-          "points": 1,
           "type": "CARD",
+          "points": 1,
           "colors": [
-            "BROWN", "GREY", "PURPLE"
+            "BROWN",
+            "GREY",
+            "PURPLE"
           ]
         }
       },
@@ -1379,17 +1528,18 @@
         "resources": "WWWGP"
       },
       "image": "shipownersguild.png"
-    }, {
+    },
+    {
       "name": "Spies Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
           "type": "CARD",
+          "points": 1,
           "colors": [
             "RED"
           ]
@@ -1399,34 +1549,36 @@
         "resources": "CCCG"
       },
       "image": "spiesguild.png"
-    }, {
+    },
+    {
       "name": "Strategists Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
-          "type": "DEFEAT_TOKEN"
+          "type": "DEFEAT_TOKEN",
+          "points": 1
         }
       },
       "requirements": {
         "resources": "SOOL"
       },
       "image": "strategistsguild.png"
-    }, {
+    },
+    {
       "name": "Traders Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
           "type": "CARD",
+          "points": 1,
           "colors": [
             "YELLOW"
           ]
@@ -1436,17 +1588,18 @@
         "resources": "GPL"
       },
       "image": "tradersguild.png"
-    }, {
+    },
+    {
       "name": "Workers Guild",
       "color": "PURPLE",
       "effect": {
         "perBoardElement": {
           "boards": [
-            "LEFT", "RIGHT"
+            "LEFT",
+            "RIGHT"
           ],
-          "gold": 0,
-          "points": 1,
           "type": "CARD",
+          "points": 1,
           "colors": [
             "BROWN"
           ]
