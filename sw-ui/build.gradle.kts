@@ -43,9 +43,6 @@ kotlin {
                 implementation(npm("styled-components", styledComponentsVersion))
                 implementation(npm("inline-style-prefixer", "6.0.0"))
 
-                // seems to be required by "kotlin-extensions" JS lib
-                implementation(npm("core-js", "3.1.4"))
-
                 implementation(npm("@blueprintjs/core", "3.26.1"))
                 implementation(npm("@blueprintjs/icons", "3.14.0"))
             }
