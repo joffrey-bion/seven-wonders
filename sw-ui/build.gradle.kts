@@ -9,7 +9,7 @@ repositories {
     maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
 }
 
-val kotlinWrappersVersion = "pre.129-kotlin-1.4.10"
+val kotlinWrappersVersion = "pre.144-kotlin-1.4.21"
 
 kotlin {
     js {
@@ -21,7 +21,7 @@ kotlin {
             dependencies {
                 implementation(project(":sw-client"))
 
-                val reactVersion = "17.0.0"
+                val reactVersion = "17.0.1"
                 implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react", reactVersion))
                 implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
@@ -31,7 +31,7 @@ kotlin {
                 implementation("org.jetbrains:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
                 implementation(npm("react-redux", reactReduxVersion))
                 // redux version aligned with the wrapper's build:
-                // https://github.com/JetBrains/kotlin-wrappers/blob/master/gradle.properties#L39
+                // https://github.com/JetBrains/kotlin-wrappers/blob/master/gradle.properties#L42
                 implementation(npm("redux", "4.0.5"))
 
                 val reactRouterDomVersion = "5.2.0"
@@ -61,7 +61,6 @@ kotlin {
 tasks {
     "processResources"(ProcessResources::class) {
         val webpack = project.tasks.withType(KotlinWebpack::class).first()
-        into(webpack.destinationDirectory!!)
 
         val bundleFile = webpack.outputFileName
         val publicPath = "./" // TODO get public path from webpack config
