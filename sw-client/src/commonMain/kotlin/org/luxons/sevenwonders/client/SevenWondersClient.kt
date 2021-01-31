@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.client
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.config.HeartBeat
@@ -29,7 +28,6 @@ class SevenWondersClient {
         heartBeatTolerance = HeartBeatTolerance(0, 10000) // wide margin to account for heroku cold start
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     suspend fun connect(serverUrl: String): SevenWondersSession {
         val session = stompClient.connect("$serverUrl$SEVEN_WONDERS_WS_ENDPOINT").withJsonConversions()
         return SevenWondersSession(session)
