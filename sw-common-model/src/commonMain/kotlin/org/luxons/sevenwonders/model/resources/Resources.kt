@@ -36,7 +36,6 @@ data class CountedResource(
     override fun toString(): String = "$count $type"
 }
 
-@Serializable
 enum class Provider(val boardPosition: RelativeBoardPosition) {
     LEFT_PLAYER(RelativeBoardPosition.LEFT),
     RIGHT_PLAYER(RelativeBoardPosition.RIGHT)

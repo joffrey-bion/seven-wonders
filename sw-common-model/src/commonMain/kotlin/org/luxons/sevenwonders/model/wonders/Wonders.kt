@@ -23,7 +23,6 @@ data class AssignedWonder(
     val image: String,
 )
 
-@Serializable
 enum class WonderSide {
     A,
     B

@@ -31,7 +31,6 @@ sealed class GameListEvent {
     data class Delete(val lobbyId: Long) : GameListEvent()
 }
 
-@Serializable
 enum class State {
     LOBBY,
     PLAYING,
