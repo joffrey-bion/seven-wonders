@@ -147,7 +147,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
 
     private fun prepareMove(moveType: MoveType, card: HandCard, transactionOptions: ResourceTransactionOptions) {
         when (transactionOptions.size) {
-            1 -> props.prepareMove(PlayerMove(moveType, card.name, transactionOptions.first()))
+            1 -> props.prepareMove(PlayerMove(moveType, card.name, transactionOptions.single()))
             else -> props.startTransactionsSelection(TransactionSelectorState(moveType, card, transactionOptions))
         }
     }

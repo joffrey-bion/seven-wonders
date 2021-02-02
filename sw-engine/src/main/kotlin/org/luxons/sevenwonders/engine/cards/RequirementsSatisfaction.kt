@@ -31,8 +31,8 @@ internal data class RequirementsSatisfaction(
         internal fun missingRequiredGold(minPrice: Int) =
             RequirementsSatisfaction(false, PlayabilityLevel.MISSING_REQUIRED_GOLD, minPrice, noTransactionOptions())
 
-        internal fun missingGoldForResources(minPrice: Int, transactionOptions: ResourceTransactionOptions) =
-            RequirementsSatisfaction(false, PlayabilityLevel.MISSING_GOLD_FOR_RES, minPrice, transactionOptions)
+        internal fun missingGoldForResources(minPrice: Int) =
+            RequirementsSatisfaction(false, PlayabilityLevel.MISSING_GOLD_FOR_RES, minPrice, noTransactionOptions())
 
         internal fun unavailableResources() =
             RequirementsSatisfaction(false, PlayabilityLevel.UNAVAILABLE_RESOURCES, Int.MAX_VALUE, noTransactionOptions())

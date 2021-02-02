@@ -6,7 +6,6 @@ import org.luxons.sevenwonders.engine.boards.Board
 import org.luxons.sevenwonders.engine.resources.*
 import org.luxons.sevenwonders.model.resources.ResourceTransactions
 import org.luxons.sevenwonders.model.resources.bestPrice
-import org.luxons.sevenwonders.model.resources.noTransactionOptions
 import org.luxons.sevenwonders.model.resources.totalPrice
 
 @Serializable
@@ -44,7 +43,7 @@ data class Requirements internal constructor(
         }
         val minPrice = allOptions.bestPrice + gold
         if (minPrice > player.board.gold) {
-            return RequirementsSatisfaction.missingGoldForResources(minPrice, noTransactionOptions())
+            return RequirementsSatisfaction.missingGoldForResources(minPrice)
         }
         val availableOptions = allOptions.filter { it.totalPrice + gold <= player.board.gold }
         return RequirementsSatisfaction.metWithHelp(minPrice, availableOptions)
