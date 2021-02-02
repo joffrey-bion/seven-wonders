@@ -128,6 +128,39 @@ class RequirementsTest {
     }
 
     @Theory
+    fun allTransactionOptionsAreValid(
+        initialResource: ResourceType,
+        boughtResource: ResourceType,
+        requiredResource: ResourceType,
+    ) {
+        assumeTrue(initialResource != requiredResource)
+
+        val requirements = createRequirements(requiredResource)
+
+        val board = testBoard(initialResource, 1)
+        board.tradingRules.setCost(boughtResource, Provider.RIGHT_PLAYER, 1)
+
+        val leftNeighbourBoard = testBoard(initialResource, 0)
+        leftNeighbourBoard.publicProduction.addFixedResource(boughtResource, 1)
+
+        val rightNeighbourBoard = testBoard(initialResource, 0)
+        rightNeighbourBoard.publicProduction.addFixedResource(boughtResource, 1)
+
+        val table = Table(listOf(leftNeighbourBoard, board, rightNeighbourBoard))
+        val player = SimplePlayer(0, table)
+
+        val satisfaction = requirements.assess(player)
+        if (satisfaction.satisfied) {
+            satisfaction.transactionOptions.forEach {
+                assertTrue(
+                    requirements.areMetWithHelpBy(board, it),
+                    "all transaction options should be valid, but this is not: $it"
+                )
+            }
+        }
+    }
+
+    @Theory
     fun pay_boughtResource(initialResource: ResourceType, requiredResource: ResourceType) {
         assumeTrue(initialResource != requiredResource)
 
