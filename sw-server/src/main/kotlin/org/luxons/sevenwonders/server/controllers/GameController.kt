@@ -86,9 +86,9 @@ class GameController(
         //    before the check. It shouldn't cause harm at the moment but could be harmful in the future.
         // 4. we don't want this code to run in the middle of unprepareMove's own lock
         synchronized(game) {
+            logger.info("Game {}: player {} preparing move {}", game.id, player, action.move)
             val preparedCardBack = game.prepareMove(player.index, action.move)
             val preparedCard = PreparedCard(player.username, preparedCardBack)
-            logger.info("Game {}: player {} prepared move {}", game.id, player, action.move)
             sendPreparedCard(game.id, preparedCard)
 
             if (game.allPlayersPreparedTheirMove()) {
