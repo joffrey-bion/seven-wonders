@@ -8,5 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     // this disables default authentication settings
-    override fun configure(httpSecurity: HttpSecurity) = Unit
+    override fun configure(httpSecurity: HttpSecurity) {
+        http.cors().and().csrf().disable()
+    }
 }

@@ -13,6 +13,7 @@ kotlin {
                 api(project(":sw-common-model"))
                 api("org.hildan.krossbow:krossbow-stomp-kxserialization:1.1.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
             }
         }
         val commonTest by getting {

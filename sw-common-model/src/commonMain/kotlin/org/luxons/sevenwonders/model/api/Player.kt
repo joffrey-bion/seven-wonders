@@ -17,7 +17,9 @@ data class ConnectedPlayer(
     override val displayName: String,
     override val isHuman: Boolean,
     override val icon: Icon?,
-) : BasicPlayerInfo
+) : BasicPlayerInfo {
+    override fun toString(): String = "'$displayName' ($username)"
+}
 
 @Serializable
 data class PlayerDTO(

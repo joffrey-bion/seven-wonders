@@ -12,7 +12,10 @@ dependencies {
     implementation(project(":sw-engine"))
     implementation(project(":sw-bot"))
     implementation(kotlin("reflect")) // required by Spring 5
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1")
+
+    val coroutinesVersion = "1.4.2"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$coroutinesVersion") // for Spring
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")

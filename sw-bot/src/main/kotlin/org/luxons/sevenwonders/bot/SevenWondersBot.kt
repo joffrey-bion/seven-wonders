@@ -1,74 +1,119 @@
 package org.luxons.sevenwonders.bot
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.withTimeout
-import org.luxons.sevenwonders.client.SevenWondersClient
-import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.client.joinGameAndWaitLobby
-import org.luxons.sevenwonders.model.Action
-import org.luxons.sevenwonders.model.MoveType
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.client.*
+import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.api.ConnectedPlayer
+import org.luxons.sevenwonders.model.api.actions.BotConfig
 import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.model.resources.noTransactions
+import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.hours
-
-@OptIn(ExperimentalTime::class)
-data class BotConfig(
-    val minActionDelayMillis: Long = 500,
-    val maxActionDelayMillis: Long = 1000,
-    val globalTimeout: Duration = 10.hours,
-)
 
 private val logger = LoggerFactory.getLogger(SevenWondersBot::class.simpleName)
 
-@OptIn(ExperimentalTime::class, ExperimentalCoroutinesApi::class)
+suspend fun SevenWondersClient.connectBot(
+    serverUrl: String,
+    name: String,
+    config: BotConfig = BotConfig(),
+): SevenWondersBot {
+    logger.info("Connecting new bot '$name' to $serverUrl")
+    val session = connect(serverUrl)
+    val player = session.chooseName(name, Icon("desktop"), isHuman = false)
+    return SevenWondersBot(player, config, session)
+}
+
+suspend fun SevenWondersClient.connectBots(
+    serverUrl: String,
+    names: List<String>,
+    config: BotConfig = BotConfig(),
+): List<SevenWondersBot> = names.map { connectBot(serverUrl, it, config) }
+
+@OptIn(ExperimentalTime::class)
 class SevenWondersBot(
-    private val displayName: String,
-    private val botConfig: BotConfig = BotConfig(),
+    private val player: ConnectedPlayer,
+    private val config: BotConfig = BotConfig(),
+    private val session: SevenWondersSession,
 ) {
-    private val client = SevenWondersClient()
+    suspend fun createGameWithBotFriendsAndAutoPlay(
+        gameName: String,
+        otherBots: List<SevenWondersBot>,
+        customWonders: List<AssignedWonder>? = null,
+        customSettings: Settings? = null,
+    ): PlayerTurnInfo {
+        val nJoinerBots = otherBots.size
+        require(nJoinerBots >= 2) { "At least 2 more bots must join the game" }
+        require(customWonders == null || customWonders.size == nJoinerBots + 1) {
+            "Custom wonders don't match the number of players in the game"
+        }
 
-    suspend fun play(serverUrl: String, gameId: Long) = withTimeout(botConfig.globalTimeout) {
-        val session = client.connect(serverUrl)
-        val player = session.chooseName(displayName, Icon("desktop"), isHuman = false)
-        val gameStartedEvents = session.watchGameStarted()
-        session.joinGameAndWaitLobby(gameId)
-        val firstTurn = gameStartedEvents.first()
+        val lobby = session.createGameAndWaitLobby(gameName)
+        otherBots.forEach {
+            it.session.joinGameAndWaitLobby(lobby.id)
+        }
 
-        session.watchTurns()
-            .onStart { emit(firstTurn) }
-            .takeWhile { it.action != Action.WATCH_SCORE }
-            .onCompletion {
-                session.leaveGame()
-                session.disconnect()
+        customWonders?.let { session.reassignWonders(it) }
+        customSettings?.let { session.updateSettings(it) }
+
+        return withContext(Dispatchers.Default) {
+            otherBots.forEach {
+                launch {
+                    val turn = it.session.watchGameStarted().first()
+                    it.autoPlayUntilEnd(turn)
+                }
             }
+            val firstTurn = session.startGameAndAwaitFirstTurn()
+            autoPlayUntilEnd(firstTurn)
+        }
+    }
+
+    suspend fun joinAndAutoPlay(gameId: Long): PlayerTurnInfo {
+        val firstTurn = session.joinGameAndWaitFirstTurn(gameId)
+        return autoPlayUntilEnd(firstTurn)
+    }
+
+    private suspend fun autoPlayUntilEnd(currentTurn: PlayerTurnInfo) = coroutineScope {
+        val endGameTurnInfo = async {
+            session.watchTurns().filter { it.action == Action.WATCH_SCORE }.first()
+        }
+        session.watchTurns()
+            .onStart { emit(currentTurn) }
+            .takeWhile { it.action != Action.WATCH_SCORE }
+            .catch { e -> logger.error("BOT $player: error in turnInfo flow", e) }
             .collect { turn ->
                 botDelay()
                 val shortTurnDescription = "action ${turn.action}, ${turn.hand?.size ?: 0} cards in hand"
                 logger.info("BOT $player: playing turn ($shortTurnDescription)")
-                session.playTurn(turn)
+                session.autoPlayTurn(turn)
             }
+        val lastTurn = endGameTurnInfo.await()
+        logger.info("BOT $player: leaving the game")
+        session.leaveGame()
+        session.disconnect()
+        logger.info("BOT $player: disconnected")
+        lastTurn
     }
 
     private suspend fun botDelay() {
-        delay(Random.nextLong(botConfig.minActionDelayMillis, botConfig.maxActionDelayMillis))
-    }
-
-    private suspend fun SevenWondersSession.playTurn(turn: PlayerTurnInfo) {
-        when (turn.action) {
-            Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> prepareMove(createPlayCardMove(turn))
-            Action.PLAY_FREE_DISCARDED -> prepareMove(createPlayFreeDiscardedCardMove(turn))
-            Action.PICK_NEIGHBOR_GUILD -> prepareMove(createPickGuildMove(turn))
-            Action.SAY_READY -> sayReady()
-            Action.WAIT, Action.WATCH_SCORE -> Unit
+        val timeMillis = if (config.minActionDelayMillis == config.maxActionDelayMillis) {
+            config.minActionDelayMillis
+        } else {
+            Random.nextLong(config.minActionDelayMillis, config.maxActionDelayMillis)
         }
+        delay(timeMillis)
+    }
+}
+
+private suspend fun SevenWondersSession.autoPlayTurn(turn: PlayerTurnInfo) {
+    when (turn.action) {
+        Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> prepareMove(createPlayCardMove(turn))
+        Action.PLAY_FREE_DISCARDED -> prepareMove(createPlayFreeDiscardedCardMove(turn))
+        Action.PICK_NEIGHBOR_GUILD -> prepareMove(createPickGuildMove(turn))
+        Action.SAY_READY -> sayReady()
+        Action.WAIT, Action.WATCH_SCORE -> Unit
     }
 }
 
@@ -80,9 +125,7 @@ private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
         val transactions = wonderBuildability.transactionsOptions.random()
         return PlayerMove(MoveType.UPGRADE_WONDER, hand.random().name, transactions)
     }
-    val playableCard = hand
-        .filter { it.playability.isPlayable }
-        .randomOrNull()
+    val playableCard = hand.filter { it.playability.isPlayable }.randomOrNull()
     return if (playableCard != null) {
         PlayerMove(MoveType.PLAY, playableCard.name, playableCard.playability.transactionOptions.random())
     } else {

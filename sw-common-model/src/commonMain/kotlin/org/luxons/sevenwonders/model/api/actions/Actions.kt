@@ -106,4 +106,14 @@ class AddBotAction(
      * The display name for the bot to add.
      */
     val botDisplayName: String,
+    /**
+     * The configuration of the bot to add.
+     */
+    val config: BotConfig = BotConfig(),
+)
+
+@Serializable
+data class BotConfig(
+    val minActionDelayMillis: Long = 50,
+    val maxActionDelayMillis: Long = 500,
 )

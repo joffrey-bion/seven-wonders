@@ -1,5 +1,7 @@
 package org.luxons.sevenwonders.client
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -148,8 +150,30 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     }
 }
 
-suspend fun SevenWondersSession.joinGameAndWaitLobby(gameId: Long): LobbyDTO {
-    val joinedLobbies = watchLobbyJoined()
+suspend fun SevenWondersSession.createGameAndWaitLobby(gameName: String): LobbyDTO = coroutineScope {
+    val lobbies = watchLobbyJoined()
+    val joinedLobby = async { lobbies.first() }
+    createGame(gameName)
+    joinedLobby.await()
+}
+
+suspend fun SevenWondersSession.joinGameAndWaitLobby(gameId: Long): LobbyDTO = coroutineScope {
+    val lobbies = watchLobbyJoined()
+    val joinedLobby = async { lobbies.first() }
     joinGame(gameId)
-    return joinedLobbies.first()
+    joinedLobby.await()
+}
+
+suspend fun SevenWondersSession.startGameAndAwaitFirstTurn(): PlayerTurnInfo = coroutineScope {
+    val gameStartedEvents = watchGameStarted()
+    val deferredFirstTurn = async { gameStartedEvents.first() }
+    startGame()
+    deferredFirstTurn.await()
+}
+
+suspend fun SevenWondersSession.joinGameAndWaitFirstTurn(gameId: Long): PlayerTurnInfo = coroutineScope {
+    val gameStartedEvents = watchGameStarted()
+    val deferredFirstTurn = async { gameStartedEvents.first() }
+    joinGame(gameId)
+    deferredFirstTurn.await()
 }

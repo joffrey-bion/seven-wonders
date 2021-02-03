@@ -2,7 +2,10 @@ package org.luxons.sevenwonders.server.controllers
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.luxons.sevenwonders.bot.SevenWondersBot
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+import org.luxons.sevenwonders.bot.connectBot
+import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.AddBotAction
 import org.luxons.sevenwonders.model.api.actions.ReassignWondersAction
@@ -22,6 +25,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
+import kotlin.time.ExperimentalTime
+import kotlin.time.hours
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -144,14 +149,19 @@ class LobbyController(
         template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
     }
 
+    @OptIn(ExperimentalTime::class)
     @MessageMapping("/lobby/addBot")
     fun addBot(@Validated action: AddBotAction, principal: Principal) {
         val lobby = principal.player.ownedLobby
-        val bot = SevenWondersBot(action.botDisplayName)
-        GlobalScope.launch {
-            bot.play("ws://localhost:$serverPort", lobby.id)
+        val bot = runBlocking {
+            SevenWondersClient().connectBot("ws://localhost:$serverPort", action.botDisplayName, action.config)
         }
-        logger.info("Added bot {} to game '{}'", action.botDisplayName, lobby.name)
+        logger.info("Starting bot {} in game '{}'", action.botDisplayName, lobby.name)
+        GlobalScope.launch {
+            withTimeout(6.hours) {
+                bot.joinAndAutoPlay(lobby.id)
+            }
+        }
     }
 
     /**
