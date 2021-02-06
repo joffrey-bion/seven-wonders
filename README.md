@@ -11,12 +11,9 @@ A digital version of the [7 Wonders board game](https://en.wikipedia.org/wiki/7_
 
 ## Try it!
 
-A staging version of the app is running [on heroku](https://seven-wonders-online.herokuapp.com/).
-Heroku's free plan shuts down servers when not used for 30 minutes, so please allow for a bit of delay (~30s) if you're
- trying it on a cold start.
+You can play it for free on http://seven-wonders.hildan.org.
 
-:construction: It is still under development, so the staging server is unstable as the CI/CD pipeline deploys the
- new app on it after every successful build of the master branch.
+:construction: The game is still under development.
 It is therefore possible that you experience a server restart if I just pushed some new changes.
 
 ### Locally
