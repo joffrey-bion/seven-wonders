@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Setup DigitalOcean kubeconfig
-        run: doctl kubernetes cluster kubeconfig save bro-cluster
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 bro-cluster
         
       - name: Deploy to DigitalOcean Kubernetes
         run: kubectl apply -f kubernetes/server.yml
