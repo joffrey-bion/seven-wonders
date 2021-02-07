@@ -55,14 +55,3 @@ spec:
                 name: seven-wonders
                 port:
                   number: 80
-    # temporary other host during DNS refresh
-    - host: "sevenwonders.hildan.org"
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: seven-wonders
-                port:
-                  number: 80
