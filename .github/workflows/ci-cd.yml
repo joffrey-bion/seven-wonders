@@ -88,4 +88,4 @@ jobs:
         run: kubectl apply -f kubernetes/server.yml
 
       - name: Verify deployment
-        run: kubectl rollout status deployment/seven-wonders
+        run: kubectl rollout status --namespace seven-wonders deployment/seven-wonders
