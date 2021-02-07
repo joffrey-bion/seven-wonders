@@ -9,7 +9,6 @@ env:
   DOCKER_IMAGE_NAME: seven-wonders-server
   DOCKER_IMAGE_TAG_SHA: sha-${{ github.sha }}
   DOCKER_IMAGE_TAG_BUILD: build-${{ github.run_id }}
-  HEROKU_APP_NAME: seven-wonders-online
 
 jobs:
   build-and-deploy:
@@ -59,13 +58,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
 
-      - name: Login to Heroku Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: registry.heroku.com
-          username: ${{ secrets.HEROKU_EMAIL }}
-          password: ${{ secrets.HEROKU_API_KEY }}
-
       - name: Build and push to DockerHub and GitHub Container Registry
         uses: docker/build-push-action@v2
         with:
@@ -79,7 +71,6 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:latest
             ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_SHA }}
             ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_BUILD }}
-            registry.heroku.com/${{ env.HEROKU_APP_NAME }}/web
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -97,8 +88,3 @@ jobs:
 
       - name: Verify deployment
         run: kubectl rollout status deployment/seven-wonders
-
-      - name: Heroku release (deploy Docker image)
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release -a ${{ env.HEROKU_APP_NAME }} web
