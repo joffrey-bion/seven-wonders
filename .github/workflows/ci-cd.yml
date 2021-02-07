@@ -77,8 +77,9 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
+      # Short-lived credentials (5 min) to avoid accumulating tokens
       - name: Setup DigitalOcean kubeconfig
-        run: doctl kubernetes cluster kubeconfig save bro-cluster
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 300 bro-cluster
         
       - name: Update deployment file
         run: TAG=${{ env.DOCKER_IMAGE_TAG_BUILD }} && sed -i 's|:latest|:'${TAG}'|' kubernetes/server.yml
