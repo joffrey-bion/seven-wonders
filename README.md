@@ -14,7 +14,7 @@ A digital version of the [7 Wonders board game](https://en.wikipedia.org/wiki/7_
 You can play it for free on http://seven-wonders.hildan.org.
 
 :construction: The game is still under development.
-It is therefore possible that you experience a server restart if I just pushed some new changes.
+It is possible that you experience a server restart when new versions are released.
 
 ### Locally
 
