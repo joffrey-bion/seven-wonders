@@ -1,0 +1,30 @@
+name: deploy-digitalocean
+
+on:
+  workflow_dispatch:
+#   push:
+#     branches: [ main ]
+#     paths: kubernetes/*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Setup DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save bro-cluster
+        
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f kubernetes/server.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/seven-wonders
