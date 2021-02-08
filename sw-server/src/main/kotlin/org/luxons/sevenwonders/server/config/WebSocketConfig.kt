@@ -30,12 +30,6 @@ class WebSocketConfig(
         config.setApplicationDestinationPrefixes("/app", "/topic")
     }
 
-    private fun createTaskScheduler() = ThreadPoolTaskScheduler().apply {
-        poolSize = 1
-        threadNamePrefix = "stomp-heartbeat-thread-"
-        initialize()
-    }
-
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
         registry.addEndpoint(SEVEN_WONDERS_WS_ENDPOINT)
             .setHandshakeHandler(handshakeHandler())
@@ -43,9 +37,7 @@ class WebSocketConfig(
     }
 
     @Bean
-    fun handshakeHandler(): DefaultHandshakeHandler {
-        return AnonymousUsersHandshakeHandler()
-    }
+    fun handshakeHandler(): DefaultHandshakeHandler = AnonymousUsersHandshakeHandler()
 
     override fun configureClientInboundChannel(registration: ChannelRegistration) {
         registration.interceptors(topicSubscriptionInterceptor)
@@ -55,4 +47,10 @@ class WebSocketConfig(
         messageConverters.add(KotlinSerializationJsonMessageConverter())
         return true
     }
+}
+
+private fun createTaskScheduler() = ThreadPoolTaskScheduler().apply {
+    poolSize = 1
+    threadNamePrefix = "stomp-heartbeat-thread-"
+    initialize()
 }
