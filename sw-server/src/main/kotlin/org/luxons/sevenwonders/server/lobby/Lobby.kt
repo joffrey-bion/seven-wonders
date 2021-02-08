@@ -4,9 +4,7 @@ import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.State
-import org.luxons.sevenwonders.model.wonders.AssignedWonder
-import org.luxons.sevenwonders.model.wonders.PreGameWonder
-import org.luxons.sevenwonders.model.wonders.withRandomSide
+import org.luxons.sevenwonders.model.wonders.*
 
 class Lobby(
     val id: Long,
@@ -87,7 +85,7 @@ class Lobby(
     fun reassignWonders(wonders: List<AssignedWonder>) {
         require(wonders.size == players.size)
         wonders.forEach {
-            require(it.name in allWonders.map { w -> w.name })
+            require(it.name in allWonders.map { w -> w.name }) { "Unknown wonder '${it.name}'" }
         }
         assignedWonders.clear()
         assignedWonders.addAll(wonders)

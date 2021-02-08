@@ -20,7 +20,6 @@ data class PreGameWonder(
 data class AssignedWonder(
     val name: WonderName,
     val side: WonderSide,
-    val image: String,
 )
 
 enum class WonderSide {
@@ -33,7 +32,7 @@ fun List<PreGameWonder>.deal(nbPlayers: Int, random: Random = Random): List<Assi
 
 fun PreGameWonder.withRandomSide(random: Random = Random): AssignedWonder = withSide(WonderSide.values().random(random))
 
-fun PreGameWonder.withSide(side: WonderSide): AssignedWonder = AssignedWonder(name, side, images.getValue(side))
+fun PreGameWonder.withSide(side: WonderSide): AssignedWonder = AssignedWonder(name, side)
 
 @Serializable
 data class ApiWonder(
