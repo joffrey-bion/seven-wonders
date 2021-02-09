@@ -3,12 +3,15 @@ package org.luxons.sevenwonders.ui.components.home
 import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpButton
 import com.palantir.blueprintjs.bpInputGroup
+import kotlinx.browser.document
 import kotlinx.css.*
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.EventListener
+import org.w3c.dom.events.KeyboardEvent
 import react.*
 import styled.css
 import styled.styledDiv
@@ -20,10 +23,27 @@ private interface ChooseNameFormProps : RProps {
 
 private data class ChooseNameFormState(var username: String = "") : RState
 
+private const val KEY_RANDOM_NAME = "r"
+
 private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseNameFormProps, ChooseNameFormState>(props) {
+
+    val rKeyListener = EventListener { event: Event ->
+        val e = event as? KeyboardEvent ?: return@EventListener
+        if (e.key == KEY_RANDOM_NAME) {
+            fillRandomUsername()
+        }
+    }
 
     override fun ChooseNameFormState.init(props: ChooseNameFormProps) {
         username = ""
+    }
+
+    override fun componentWillMount() {
+        document.addEventListener(type = "keydown", callback = rKeyListener)
+    }
+
+    override fun componentWillUnmount() {
+        document.removeEventListener(type = "keydown", callback = rKeyListener)
     }
 
     override fun RBuilder.render() {
@@ -59,7 +79,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
 
     private fun RBuilder.randomNameButton() {
         bpButton(
-            title = "Generate random name",
+            title = "Generate random name (${KEY_RANDOM_NAME.toUpperCase()})",
             large = true,
             icon = "random",
             intent = Intent.PRIMARY,
