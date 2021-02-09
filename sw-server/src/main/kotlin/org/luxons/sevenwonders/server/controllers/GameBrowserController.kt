@@ -9,6 +9,7 @@ import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
+import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
@@ -95,12 +96,12 @@ class GameBrowserController(
     private fun checkThatUserIsNotInAGame(principal: Principal, impossibleActionDescription: String) {
         val player = playerRepository.get(principal.name)
         if (player.isInLobby || player.isInGame) {
-            throw UserAlreadyInGameException(player.lobby.name, impossibleActionDescription)
+            throw UserAlreadyInGameException(player, impossibleActionDescription)
         }
     }
 
-    internal class UserAlreadyInGameException(gameName: String, impossibleActionDescription: String) :
-        ApiMisuseException("Client already in game '$gameName', $impossibleActionDescription")
+    internal class UserAlreadyInGameException(player: Player, impossibleActionDescription: String) :
+        ApiMisuseException("Player $player is already in game '${player.lobby.name}', $impossibleActionDescription")
 
     companion object {
         private val logger = LoggerFactory.getLogger(GameBrowserController::class.java)
