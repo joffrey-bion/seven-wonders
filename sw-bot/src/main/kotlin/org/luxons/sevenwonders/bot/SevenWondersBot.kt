@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory
 import kotlin.random.Random
 import kotlin.time.ExperimentalTime
 
-private val logger = LoggerFactory.getLogger(SevenWondersBot::class.simpleName)
+private val logger = LoggerFactory.getLogger(SevenWondersBot::class.java)
 
 suspend fun SevenWondersClient.connectBot(
     serverUrl: String,
