@@ -1,0 +1,25 @@
+name: rollback-digitalocean
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Setup DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 bro-cluster
+        
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f kubernetes/server.yml
+
+      - name: Verify deployment
+        run: kubectl rollout undo --namespace seven-wonders deployment/seven-wonders
