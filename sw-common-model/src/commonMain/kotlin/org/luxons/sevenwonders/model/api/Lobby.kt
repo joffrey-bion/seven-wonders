@@ -54,7 +54,10 @@ data class LobbyDTO(
     fun findWonder(name: String): PreGameWonder = wondersByName[name] ?: error("Unknown wonder '$name'")
 
     fun joinability(userDisplayName: String): Actionability = when {
-        state != State.LOBBY -> Actionability(false, "Cannot join: the game has already started")
+        state == State.PLAYING -> Actionability(false, "Cannot join: the game has already started")
+        state == State.FINISHED -> Actionability(false, "Cannot join: the game is over")
+        // should only ever happen if a new state is added
+        state != State.LOBBY -> Actionability(false, "Cannot join the game at this time")
         maxPlayersReached -> Actionability(false, "Cannot join: the game is full")
         playerNameAlreadyUsed(userDisplayName) -> Actionability(
             canDo = false,
