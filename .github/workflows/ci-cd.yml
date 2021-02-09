@@ -84,8 +84,22 @@ jobs:
       - name: Update deployment file
         run: TAG=${{ env.DOCKER_IMAGE_TAG_BUILD }} && sed -i 's|:latest|:'${TAG}'|' kubernetes/server.yml
 
+      - name: Notify deploy start
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_SEVEN_WONDERS }}
+        uses: Ilshidur/action-discord@0.3.0
+        with:
+          args: 'Deploying new version ([see changes]({{ EVENT_PAYLOAD.compare }}))...'
+
       - name: Deploy to DigitalOcean Kubernetes
         run: kubectl apply -f kubernetes/server.yml
 
       - name: Verify deployment
         run: kubectl rollout status --namespace seven-wonders deployment/seven-wonders
+
+      - name: Notify deploy success
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_SEVEN_WONDERS }}
+        uses: Ilshidur/action-discord@0.3.0
+        with:
+          args: 'Deployment successful!'
