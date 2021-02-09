@@ -72,12 +72,14 @@ fun RBuilder.bpInputGroup(
     large: Boolean = false,
     placeholder: String = "",
     rightElement: ReactElement? = null,
+    value: String? = null,
     onChange: (Event) -> Unit,
 ): ReactElement = child(InputGroup::class) {
     attrs {
         this.large = large
         this.placeholder = placeholder
         this.rightElement = rightElement
+        this.value = value
         this.onChange = onChange
     }
 }
