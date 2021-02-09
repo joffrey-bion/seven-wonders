@@ -1,0 +1,17 @@
+name: discord-closed-issues
+
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send closed issue notif
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_SEVEN_WONDERS }}
+        uses: Ilshidur/action-discord@0.3.0
+        with:
+          args: '[Issue #{{ EVENT_PAYLOAD.issue.id }}]({{ EVENT_PAYLOAD.issue.url }}) closed: {{ EVENT_PAYLOAD.issue.title }}'
