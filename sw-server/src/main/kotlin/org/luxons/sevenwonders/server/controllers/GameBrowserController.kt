@@ -57,7 +57,7 @@ class GameBrowserController(
     fun createGame(@Validated action: CreateGameAction, principal: Principal): LobbyDTO {
         checkThatUserIsNotInAGame(principal, "cannot create another game")
 
-        val player = playerRepository.find(principal.name)
+        val player = playerRepository.get(principal.name)
         val lobby = lobbyRepository.create(action.gameName, owner = player)
 
         logger.info("Game '{}' ({}) created by {} ({})", lobby.name, lobby.id, player.displayName, player.username)
@@ -81,8 +81,8 @@ class GameBrowserController(
     fun joinGame(@Validated action: JoinGameAction, principal: Principal): LobbyDTO {
         checkThatUserIsNotInAGame(principal, "cannot join another game")
 
-        val lobby = lobbyRepository.find(action.gameId)
-        val player = playerRepository.find(principal.name)
+        val lobby = lobbyRepository.get(action.gameId)
+        val player = playerRepository.get(principal.name)
         synchronized(lobby) {
             lobby.addPlayer(player)
 
@@ -93,7 +93,7 @@ class GameBrowserController(
     }
 
     private fun checkThatUserIsNotInAGame(principal: Principal, impossibleActionDescription: String) {
-        val player = playerRepository.find(principal.name)
+        val player = playerRepository.get(principal.name)
         if (player.isInLobby || player.isInGame) {
             throw UserAlreadyInGameException(player.lobby.name, impossibleActionDescription)
         }

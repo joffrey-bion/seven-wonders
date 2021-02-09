@@ -35,7 +35,7 @@ class DestinationAccessValidator(private val lobbyRepository: LobbyRepository) {
     }
 
     private fun isUserInLobby(username: String, lobbyId: Long): Boolean =
-        lobbyRepository.find(lobbyId).containsUser(username)
+        lobbyRepository.get(lobbyId).containsUser(username)
 
     companion object {
 

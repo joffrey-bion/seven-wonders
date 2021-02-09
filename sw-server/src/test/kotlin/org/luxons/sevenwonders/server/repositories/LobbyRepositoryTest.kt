@@ -41,7 +41,7 @@ class LobbyRepositoryTest {
     @Test
     fun find_failsOnUnknownId() {
         assertFailsWith<LobbyNotFoundException> {
-            repository.find(123)
+            repository.get(123)
         }
     }
 
@@ -49,8 +49,8 @@ class LobbyRepositoryTest {
     fun find_returnsTheSameObject() {
         val lobby1 = repository.create("Test Name 1", Player("owner1", "The Owner"))
         val lobby2 = repository.create("Test Name 2", Player("owner2", "The Owner"))
-        assertSame(lobby1, repository.find(lobby1.id))
-        assertSame(lobby2, repository.find(lobby2.id))
+        assertSame(lobby1, repository.get(lobby1.id))
+        assertSame(lobby2, repository.get(lobby2.id))
     }
 
     @Test
@@ -64,10 +64,10 @@ class LobbyRepositoryTest {
     fun remove_succeeds() {
         val owner = Player("owner", "The Owner")
         val lobby1 = repository.create("Test Name 1", owner)
-        assertNotNull(repository.find(lobby1.id))
+        assertNotNull(repository.get(lobby1.id))
         repository.remove(lobby1.id)
         try {
-            repository.find(lobby1.id)
+            repository.get(lobby1.id)
             fail() // the call to find() should have failed
         } catch (e: LobbyNotFoundException) {
             // the lobby has been properly removed

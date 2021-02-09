@@ -23,7 +23,7 @@ class LobbyRepository {
         return lobby
     }
 
-    fun find(lobbyId: Long): Lobby = lobbies[lobbyId] ?: throw LobbyNotFoundException(lobbyId)
+    fun get(lobbyId: Long): Lobby = lobbies[lobbyId] ?: throw LobbyNotFoundException(lobbyId)
 
     fun remove(lobbyId: Long): Lobby = lobbies.remove(lobbyId) ?: throw LobbyNotFoundException(lobbyId)
 }

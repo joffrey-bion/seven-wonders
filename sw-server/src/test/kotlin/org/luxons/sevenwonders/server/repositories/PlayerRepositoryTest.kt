@@ -46,7 +46,7 @@ class PlayerRepositoryTest {
     @Test
     fun find_failsOnUnknownUsername() {
         assertFailsWith<PlayerNotFoundException> {
-            repository.find("anyUsername")
+            repository.get("anyUsername")
         }
     }
 
@@ -54,8 +54,8 @@ class PlayerRepositoryTest {
     fun find_returnsTheSameObject() {
         val player1 = repository.createOrUpdate("player1", "Player 1")
         val player2 = repository.createOrUpdate("player2", "Player 2")
-        assertSame(player1, repository.find("player1"))
-        assertSame(player2, repository.find("player2"))
+        assertSame(player1, repository.get("player1"))
+        assertSame(player2, repository.get("player2"))
     }
 
     @Test

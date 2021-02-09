@@ -23,7 +23,7 @@ class GameController(
     private val lobbyRepository: LobbyRepository,
 ) {
     private val Principal.player
-        get() = playerRepository.find(name)
+        get() = playerRepository.get(name)
 
     /**
      * Notifies the game that the player is ready to receive his hand.

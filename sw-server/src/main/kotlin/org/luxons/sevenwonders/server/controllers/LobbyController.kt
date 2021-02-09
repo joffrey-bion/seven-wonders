@@ -39,7 +39,7 @@ class LobbyController(
     @Value("\${server.port}") private val serverPort: String,
 ) {
     private val Principal.player: Player
-        get() = playerRepository.find(name)
+        get() = playerRepository.get(name)
 
     /**
      * Leaves the current lobby.

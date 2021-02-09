@@ -20,7 +20,9 @@ class PlayerRepository {
         return p
     }
 
-    fun find(username: String): Player = players[username] ?: throw PlayerNotFoundException(username)
+    fun find(username: String): Player? = players[username]
+
+    fun get(username: String): Player = find(username) ?: throw PlayerNotFoundException(username)
 
     fun remove(username: String): Player = players.remove(username) ?: throw PlayerNotFoundException(username)
 }
