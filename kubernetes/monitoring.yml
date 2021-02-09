@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: prometheus-operator
+    k8s-app: spring-boot-actuator-monitor
+  name: spring-boot-actuator-monitor
+  namespace: seven-wonders
+spec:
+  endpoints:
+    - interval: 10s
+      path: /actuator/prometheus
+      port: 80-80
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: seven-wonders
