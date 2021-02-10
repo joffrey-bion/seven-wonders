@@ -72,7 +72,7 @@ fun RBuilder.bpInputGroup(
     large: Boolean = false,
     placeholder: String = "",
     rightElement: ReactElement? = null,
-    value: String? = null,
+    value: String = "",
     onChange: (Event) -> Unit,
 ): ReactElement = child(InputGroup::class) {
     attrs {
