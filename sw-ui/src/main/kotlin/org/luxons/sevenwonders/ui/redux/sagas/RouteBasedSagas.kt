@@ -15,15 +15,39 @@ suspend fun SwSagaContext.homeSaga(session: SevenWondersSession) {
 }
 
 suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
+    // browser navigation could have brought us here: we should leave the game/lobby
+    ensureNoCurrentGameNorLobby(session)
     session.watchGames().map { UpdateGameListAction(it) }.dispatchAll()
 }
 
+private suspend fun SwSagaContext.ensureNoCurrentGameNorLobby(session: SevenWondersSession) {
+    if (reduxState.gameState != null) {
+        console.warn("User left a game via browser navigation, cleaning up...")
+        session.leaveGame()
+    } else if (reduxState.currentLobby != null) {
+        console.warn("User left the lobby via browser navigation, cleaning up...")
+        session.leaveLobby()
+    }
+}
+
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
+    // browser navigation could have brought us here: we should leave the current game in that case
+    if (reduxState.gameState != null) {
+        console.warn("User left a game via browser navigation, telling the server...")
+        session.leaveGame()
+        return
+    }
+    // browser navigation could have brought us here: we should go back to game browser if no lobby
+    if (reduxState.currentLobby == null) {
+        console.warn("User went to lobby via browser navigation, cleaning up...")
+        dispatch(Navigate(Route.GAME_BROWSER))
+        return
+    }
     session.watchLobbyUpdates().map { UpdateLobbyAction(it) }.dispatchAll()
 }
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
-    val game = getState().gameState ?: error("Game saga run without a current game")
+    val game = reduxState.gameState ?: error("Game saga run without a current game")
     coroutineScope {
         session.watchPlayerReady(game.id).map { PlayerReadyEvent(it) }.dispatchAllIn(this)
         session.watchPreparedCards(game.id).map { PreparedCardEvent(it) }.dispatchAllIn(this)

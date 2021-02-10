@@ -63,9 +63,10 @@ class SagaContext<S, A : RAction, R>(
     private val actions: BroadcastChannel<A>,
 ) {
     /**
-     * Gets the current redux state.
+     * The current redux state.
      */
-    fun getState(): S = reduxApi.getState()
+    val reduxState: S
+        get() = reduxApi.getState()
 
     /**
      * Dispatches the given redux [action].

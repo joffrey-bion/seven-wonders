@@ -113,7 +113,7 @@ private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, sessio
 
     scope.launch {
         session.watchGameStarted().collect { turnInfo ->
-            val currentLobby = getState().currentLobby ?: error("Received game started event without being in a lobby")
+            val currentLobby = reduxState.currentLobby ?: error("Received game started event without being in a lobby")
             dispatch(EnterGameAction(currentLobby, turnInfo))
             dispatch(Navigate(Route.GAME))
         }
