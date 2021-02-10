@@ -68,7 +68,7 @@ private fun CSSBuilder.cardImageStyle(highlightColor: Color?) {
     highlightStyle(highlightColor)
 }
 
-private fun CSSBuilder.highlightStyle(highlightColor: Color?) {
+internal fun CSSBuilder.highlightStyle(highlightColor: Color?) {
     if (highlightColor != null) {
         boxShadow(
             offsetX = 0.px,

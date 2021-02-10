@@ -80,12 +80,11 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
             maxWidth = 100.pct
             maxHeight = 70.pct
 
-            // bring to the foreground on hover
             hover {
                 zIndex = 1000
                 maxWidth = 110.pct
                 maxHeight = 75.pct
-                boxShadow(offsetX = 3.px, offsetY = 3.px, blurRadius = 7.px, color = Color.black)
+                hoverHighlightStyle()
             }
         }
         block()
@@ -107,14 +106,20 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
                 transform { translateX((-50).pct) }
                 height = 100.pct
                 maxWidth = 95.pct // same as wonder
+
+                // bring to the foreground on hover
+                hover { zIndex = 1000 }
             }
             styledImg(src = "/images/wonders/${wonder.image}") {
                 css {
+                    classes.add("wonder-image")
                     declarations["border-radius"] = "0.5%/1.5%"
                     boxShadow(color = Color.black, offsetX = 0.2.rem, offsetY = 0.2.rem, blurRadius = 0.5.rem)
                     maxHeight = 100.pct
                     maxWidth = 100.pct
                     zIndex = 1 // go above the built wonder cards, but below the table cards
+
+                    hover { hoverHighlightStyle() }
                 }
                 attrs {
                     this.title = wonder.name
@@ -197,4 +202,8 @@ private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when 
     2 -> 37.5 + stageIndex * 29.8 // 37.5 (29.8) 67.3
     4 -> -1.5 + stageIndex * 26.7 // -1.5 (26.6) 25.1 (26.8) 51.9 (26.7) 78.6
     else -> 7.9 + stageIndex * 30.0
+}
+
+private fun CSSBuilder.hoverHighlightStyle() {
+    highlightStyle(Color.paleGoldenrod)
 }
