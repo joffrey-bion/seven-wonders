@@ -4,6 +4,8 @@ import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import kotlin.time.ExperimentalTime
+import kotlin.time.hours
 
 /**
  * The action to choose the player's name. This is the first action that should be called.
@@ -101,11 +103,16 @@ class UpdateSettingsAction(
  * The action to add a bot to the game. Can only be called in the lobby by the owner of the game.
  */
 @Serializable
+@OptIn(ExperimentalTime::class)
 class AddBotAction(
     /**
      * The display name for the bot to add.
      */
     val botDisplayName: String,
+    /**
+     * The global timeout for the bot, after which it disconnects (whether the game is over or not).
+     */
+    val globalBotTimeoutMillis: Long = 6.hours.toLongMilliseconds(),
     /**
      * The configuration of the bot to add.
      */

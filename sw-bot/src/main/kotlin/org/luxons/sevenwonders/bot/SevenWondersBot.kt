@@ -38,6 +38,10 @@ class SevenWondersBot(
     private val config: BotConfig = BotConfig(),
     private val session: SevenWondersSession,
 ) {
+    suspend fun disconnect() {
+        session.disconnect()
+    }
+
     suspend fun createGameWithBotFriendsAndAutoPlay(
         gameName: String,
         otherBots: List<SevenWondersBot>,

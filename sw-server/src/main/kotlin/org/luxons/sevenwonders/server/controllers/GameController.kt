@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.server.controllers
 
 import org.luxons.sevenwonders.engine.Game
+import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
+import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.lobby.Player
@@ -149,8 +151,11 @@ class GameController(
         synchronized(game) {
             lobby.removePlayer(player.username)
             logger.info("Game {}: player {} left the game", game.id, player)
-            if (lobby.getPlayers().isEmpty()) {
+            // This could cause problems if the humans are faster than bots to leave a finished game,
+            // but this case should be quite rare, so it does not matter much
+            if (lobby.getPlayers().none { it.isHuman }) {
                 lobbyRepository.remove(lobby.id)
+                template.convertAndSend("/topic/games", GameListEvent.Delete(lobby.id).wrap())
                 logger.info("Game {}: game deleted", game.id)
             }
         }

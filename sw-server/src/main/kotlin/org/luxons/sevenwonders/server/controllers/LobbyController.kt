@@ -3,7 +3,7 @@ package org.luxons.sevenwonders.server.controllers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import org.luxons.sevenwonders.bot.connectBot
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.model.api.GameListEvent
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
 import kotlin.time.ExperimentalTime
-import kotlin.time.hours
+import kotlin.time.milliseconds
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -158,8 +158,13 @@ class LobbyController(
         }
         logger.info("Starting bot {} in game '{}'", action.botDisplayName, lobby.name)
         GlobalScope.launch {
-            withTimeout(6.hours) {
+            val result = withTimeoutOrNull(action.globalBotTimeoutMillis) {
                 bot.joinAndAutoPlay(lobby.id)
+            }
+            if (result == null) {
+                val timeoutDuration = action.globalBotTimeoutMillis.milliseconds
+                logger.error("Bot {} timed out after {}", action.botDisplayName, timeoutDuration)
+                bot.disconnect()
             }
         }
     }
