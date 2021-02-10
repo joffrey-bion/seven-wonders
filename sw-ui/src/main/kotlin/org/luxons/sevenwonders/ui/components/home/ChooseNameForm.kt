@@ -63,7 +63,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
             large = true,
             icon = "random",
             intent = Intent.PRIMARY,
-            onClick = { e -> fillRandomUsername() },
+            onClick = { fillRandomUsername() },
         )
     }
 
