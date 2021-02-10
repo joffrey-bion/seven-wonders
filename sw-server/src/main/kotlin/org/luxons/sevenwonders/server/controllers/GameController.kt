@@ -6,6 +6,7 @@ import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
+import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
@@ -100,6 +101,7 @@ class GameController(
                 if (game.endOfGameReached()) {
                     logger.info("Game {}: end of game, displaying score board", game.id)
                     player.lobby.setEndOfGame()
+                    template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
                 }
             } else {
                 template.convertAndSendToUser(player.username, "/queue/game/preparedMove", action.move)

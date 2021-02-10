@@ -191,6 +191,7 @@ class LobbyController(
             val player = lobby.getPlayers()[it.playerIndex]
             template.convertAndSendToUser(player.username, "/queue/lobby/started", it)
         }
+        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
     }
 
     private fun Lobby.initializePlayersReadyState() {
