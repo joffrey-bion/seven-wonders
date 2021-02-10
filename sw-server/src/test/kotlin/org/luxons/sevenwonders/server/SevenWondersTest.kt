@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.server
 
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.produceIn
 import kotlinx.coroutines.launch
@@ -21,7 +20,6 @@ import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.*
 
-@OptIn(FlowPreview::class)
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class SevenWondersTest {

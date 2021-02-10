@@ -24,18 +24,16 @@ subprojects {
         disabledRules.set(setOf("no-wildcard-imports"))
     }
 
-    val compilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { // JVM only
         kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.freeCompilerArgs += compilerArgs
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile> {
-        kotlinOptions.freeCompilerArgs = compilerArgs
-    }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
-        kotlinOptions.freeCompilerArgs = compilerArgs
+    // this doesn't cover multiplatform projects, see sw-common-model's build.gradle.kts
+    tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>> {
+        kotlinOptions.freeCompilerArgs += listOf(
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xopt-in=kotlin.time.ExperimentalTime"
+        )
     }
 
     tasks.withType<AbstractTestTask> {

@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.promise
@@ -39,7 +38,6 @@ private data class TestRedux(
     val sagas: SagaManager<State, RAction, WrapperAction>,
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SagaContextTest {
 
     @Test

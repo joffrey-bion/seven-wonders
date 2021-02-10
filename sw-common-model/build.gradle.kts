@@ -11,6 +11,10 @@ kotlin {
         browser() // necessary for local dependency from JS UI module
     }
     sourceSets {
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+            languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+        }
         val commonMain by getting {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinSerialization")

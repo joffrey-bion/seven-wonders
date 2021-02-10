@@ -25,7 +25,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
-import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 
 /**
@@ -149,7 +148,6 @@ class LobbyController(
         template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
     }
 
-    @OptIn(ExperimentalTime::class)
     @MessageMapping("/lobby/addBot")
     fun addBot(@Validated action: AddBotAction, principal: Principal) {
         val lobby = principal.player.ownedLobby

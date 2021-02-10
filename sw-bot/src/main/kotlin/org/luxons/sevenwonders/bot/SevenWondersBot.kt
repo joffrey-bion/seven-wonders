@@ -11,7 +11,6 @@ import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
-import kotlin.time.ExperimentalTime
 
 private val logger = LoggerFactory.getLogger(SevenWondersBot::class.java)
 
@@ -32,7 +31,6 @@ suspend fun SevenWondersClient.connectBots(
     config: BotConfig = BotConfig(),
 ): List<SevenWondersBot> = names.map { connectBot(serverUrl, it, config) }
 
-@OptIn(ExperimentalTime::class)
 class SevenWondersBot(
     private val player: ConnectedPlayer,
     private val config: BotConfig = BotConfig(),
@@ -121,7 +119,6 @@ private suspend fun SevenWondersSession.autoPlayTurn(turn: PlayerTurnInfo) {
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
     val hand = turnInfo.hand ?: error("Cannot choose move, no hand in current turn info!")
     val wonderBuildability = turnInfo.wonderBuildability

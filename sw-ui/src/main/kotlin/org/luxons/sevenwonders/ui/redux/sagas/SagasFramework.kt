@@ -1,19 +1,14 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import redux.Middleware
 import redux.MiddlewareApi
 import redux.RAction
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class) // for BroadcastChannel
 class SagaManager<S, A : RAction, R>(
     private val monitor: ((A) -> Unit)? = null,
 ) {
@@ -62,7 +57,7 @@ class SagaManager<S, A : RAction, R>(
     }
 }
 
-@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class) // for BroadcastChannel
 class SagaContext<S, A : RAction, R>(
     private val reduxApi: MiddlewareApi<S, A, R>,
     private val actions: BroadcastChannel<A>,
