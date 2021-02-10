@@ -79,6 +79,14 @@ private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: Style
             }
             maxWidth = 100.pct
             maxHeight = 70.pct
+
+            // bring to the foreground on hover
+            hover {
+                zIndex = 1000
+                maxWidth = 110.pct
+                maxHeight = 75.pct
+                boxShadow(offsetX = 3.px, offsetY = 3.px, blurRadius = 7.px, color = Color.black)
+            }
         }
         block()
     }
