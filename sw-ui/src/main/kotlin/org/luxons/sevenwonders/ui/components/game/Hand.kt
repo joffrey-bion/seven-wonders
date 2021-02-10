@@ -70,7 +70,8 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             block()
             cardImage(card) {
                 css {
-                    handCardImgStyle(card.playability.isPlayable)
+                    val isPlayable = card.playability.isPlayable || props.turnInfo.getOwnBoard().canPlayAnyCardForFree
+                    handCardImgStyle(isPlayable)
                 }
             }
             actionButtons(card)
