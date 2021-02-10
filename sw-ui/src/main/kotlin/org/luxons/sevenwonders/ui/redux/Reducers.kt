@@ -100,6 +100,7 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     is StartTransactionSelection -> gameState?.copy(transactionSelector = action.transactionSelector)
     is CancelTransactionSelection -> gameState?.copy(transactionSelector = null)
     is RequestPrepareMove -> gameState?.copy(transactionSelector = null)
+    is LeaveLobbyAction -> null
     else -> gameState
 }
 

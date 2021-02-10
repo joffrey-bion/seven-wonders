@@ -153,6 +153,8 @@ class GameController(
         synchronized(game) {
             lobby.removePlayer(player.username)
             logger.info("Game {}: player {} left the game", game.id, player)
+            template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
+
             // This could cause problems if the humans are faster than bots to leave a finished game,
             // but this case should be quite rare, so it does not matter much
             if (lobby.getPlayers().none { it.isHuman }) {

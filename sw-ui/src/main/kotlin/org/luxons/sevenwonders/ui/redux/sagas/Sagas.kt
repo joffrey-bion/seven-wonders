@@ -87,12 +87,12 @@ private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, sessi
     scope.launchOnEach<RequestAddBot> { session.addBot(it.botDisplayName) }
     scope.launchOnEach<RequestReorderPlayers> { session.reorderPlayers(it.orderedPlayers) }
     scope.launchOnEach<RequestReassignWonders> { session.reassignWonders(it.wonders) }
-    // mapAction<RequestUpdateSettings> { updateSettings(it.settings) }
     scope.launchOnEach<RequestStartGame> { session.startGame() }
 
     scope.launchOnEach<RequestSayReady> { session.sayReady() }
     scope.launchOnEach<RequestPrepareMove> { session.prepareMove(it.move) }
     scope.launchOnEach<RequestUnprepareMove> { session.unprepareMove() }
+    scope.launchOnEach<RequestLeaveGame> { session.leaveGame() }
 }
 
 private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, session: SevenWondersSession) {
@@ -117,11 +117,5 @@ private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, sessio
             dispatch(EnterGameAction(currentLobby, turnInfo))
             dispatch(Navigate(Route.GAME))
         }
-    }
-
-    // FIXME map this actions like others and await server event instead
-    scope.launchOnEach<RequestLeaveGame> {
-        session.leaveGame()
-        dispatch(Navigate(Route.GAME_BROWSER))
     }
 }
