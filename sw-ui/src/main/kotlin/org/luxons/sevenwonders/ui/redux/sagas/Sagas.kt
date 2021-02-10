@@ -23,8 +23,9 @@ suspend fun SwSagaContext.rootSaga() = try {
     coroutineScope {
         val action = next<RequestChooseName>()
         val serverUrl = sevenWondersWebSocketUrl()
+        console.info("Connecting to Seven Wonders web socket API...")
         val session = SevenWondersClient().connect(serverUrl)
-        console.info("Connected to Seven Wonders web socket API")
+        console.info("Connected!")
 
         launch(start = CoroutineStart.UNDISPATCHED) {
             serverErrorSaga(session)
