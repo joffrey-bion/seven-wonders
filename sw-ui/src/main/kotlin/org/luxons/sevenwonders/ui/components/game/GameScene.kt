@@ -4,7 +4,6 @@ import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.transform
 import kotlinx.css.properties.translate
-import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
@@ -13,7 +12,6 @@ import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
-import styled.StyledDOMBuilder
 import styled.css
 import styled.getClassName
 import styled.styledDiv
@@ -56,9 +54,6 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
 
     private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
         val board = turnInfo.getOwnBoard()
-        val leftBoard = turnInfo.getBoard(RelativeBoardPosition.LEFT)
-        val rightBoard = turnInfo.getBoard(RelativeBoardPosition.RIGHT)
-        val topBoards = (turnInfo.table.boards - board - leftBoard - rightBoard).reversed()
         styledDiv {
             css {
                 height = 100.pct
@@ -80,7 +75,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 prepareMove = props.prepareMove,
                 cancelTransactionSelection = props.cancelTransactionsSelection,
             )
-            boardSummaries(leftBoard, rightBoard, topBoards)
+            boardSummaries(turnInfo)
             handRotationIndicator(turnInfo.table.handRotationDirection)
             handCards(turnInfo, props.preparedMove, props.prepareMove, props.startTransactionsSelection)
             val card = props.preparedCard
@@ -122,8 +117,10 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun StyledDOMBuilder<DIV>.boardSummaries(leftBoard: Board, rightBoard: Board, topBoards: List<Board>) {
-        // TODO use blueprint popover with full board preview
+    private fun RBuilder.boardSummaries(turnInfo: PlayerTurnInfo) {
+        val leftBoard = turnInfo.getBoard(RelativeBoardPosition.LEFT)
+        val rightBoard = turnInfo.getBoard(RelativeBoardPosition.RIGHT)
+        val topBoards = turnInfo.getNonNeighbourBoards().reversed()
         leftPlayerBoardSummary(leftBoard)
         rightPlayerBoardSummary(rightBoard)
         if (topBoards.isNotEmpty()) {

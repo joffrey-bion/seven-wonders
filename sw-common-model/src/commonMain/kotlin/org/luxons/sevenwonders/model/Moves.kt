@@ -45,12 +45,22 @@ data class PlayerTurnInfo(
     val currentAge: Int = table.currentAge
     val message: String = action.message
     val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
+
+    val RelativeBoardPosition.index: Int
+        get() = getIndexFrom(playerIndex, table.boards.size)
 }
 
 fun PlayerTurnInfo.getOwnBoard(): Board = table.boards[playerIndex]
 
-fun PlayerTurnInfo.getBoard(position: RelativeBoardPosition): Board =
-    table.boards[position.getIndexFrom(playerIndex, table.boards.size)]
+fun PlayerTurnInfo.getBoard(position: RelativeBoardPosition): Board = table.boards[position.index]
+
+fun PlayerTurnInfo.getNonNeighbourBoards(): List<Board> {
+    val nPlayers = table.boards.size
+    val first = (playerIndex + 2) % nPlayers
+    val last = (playerIndex - 2 + nPlayers) % nPlayers
+    val range = if (first < last) first..last else ((first until nPlayers) + (0..last))
+    return range.map { table.boards[it] }
+}
 
 // TODO move to server code
 fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() = map { it.copy(action = Action.SAY_READY, hand = null) }
