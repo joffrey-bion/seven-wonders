@@ -9,7 +9,7 @@ repositories {
     maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
 }
 
-val kotlinWrappersVersion = "pre.144-kotlin-1.4.21"
+val kotlinWrappersVersion = "pre.144-kotlin-1.4.30"
 
 kotlin {
     js {
