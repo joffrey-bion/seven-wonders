@@ -25,7 +25,7 @@ subprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { // JVM only
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "15"
     }
 
     // this doesn't cover multiplatform projects, see sw-common-model's build.gradle.kts
