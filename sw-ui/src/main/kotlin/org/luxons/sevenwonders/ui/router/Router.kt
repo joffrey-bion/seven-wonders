@@ -11,7 +11,13 @@ enum class Route(val path: String) {
     HOME("/"),
     GAME_BROWSER("/games"),
     LOBBY("/lobby"),
-    GAME("/game"),
+    GAME("/game");
+
+    companion object {
+        private val all = values().associateBy { it.path }
+
+        fun from(path: String) = all.getValue(path)
+    }
 }
 
 data class Navigate(val route: Route) : RAction
@@ -22,11 +28,21 @@ suspend fun SwSagaContext.routerSaga(
 ) {
     coroutineScope {
         window.location.hash = startRoute.path
+        launch { changeRouteOnNavigateAction() }
         var currentSaga: Job = launch { runRouteSaga(startRoute) }
-        onEach<Navigate> {
+        window.onhashchange = { event ->
+            val route = Route.from(event.newURL.substringAfter("#"))
             currentSaga.cancel()
-            window.location.hash = it.route.path
-            currentSaga = launch { runRouteSaga(it.route) }
+            currentSaga = this@coroutineScope.launch {
+                runRouteSaga(route)
+            }
+            Unit
         }
+    }
+}
+
+suspend fun SwSagaContext.changeRouteOnNavigateAction() {
+    onEach<Navigate> {
+        window.location.hash = it.route.path
     }
 }
