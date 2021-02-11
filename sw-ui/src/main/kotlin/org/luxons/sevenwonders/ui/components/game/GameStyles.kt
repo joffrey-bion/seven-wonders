@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.components.game
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import styled.StyleSheet
+import styled.animation
 
 object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
@@ -83,5 +84,17 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
 
     private fun scoreTagColorCss(color: Color) = css {
         backgroundColor = color
+    }
+
+    val pulsatingRed by css {
+        animation(
+            duration = 2.s,
+            iterationCount = IterationCount.infinite,
+            direction = AnimationDirection.alternate,
+        ) {
+            to {
+                boxShadowInset(color = Color.red, blurRadius = 20.px, spreadRadius = 8.px)
+            }
+        }
     }
 }

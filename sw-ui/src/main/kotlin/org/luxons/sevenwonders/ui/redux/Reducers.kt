@@ -95,6 +95,7 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     is TurnInfoEvent -> gameState?.copy(
         players = gameState.players.map { p -> p.copy(isReady = false) },
         turnInfo = action.turnInfo,
+        preparedCardsByUsername = emptyMap(),
         currentPreparedMove = null,
     )
     is StartTransactionSelection -> gameState?.copy(transactionSelector = action.transactionSelector)
