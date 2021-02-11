@@ -95,7 +95,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
 
     private fun PlayerTurnInfo.everyoneIsWaitingForMe(): Boolean {
         val onlyMeInTheGame = props.players.count { it.isHuman } == 1
-        if (onlyMeInTheGame || preparedMove != null) {
+        if (onlyMeInTheGame || props.preparedMove != null) {
             return false
         }
         val gameState = props.gameState ?: return false

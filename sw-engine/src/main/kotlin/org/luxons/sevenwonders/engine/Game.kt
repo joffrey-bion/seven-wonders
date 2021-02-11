@@ -6,7 +6,6 @@ import org.luxons.sevenwonders.engine.cards.Card
 import org.luxons.sevenwonders.engine.cards.Decks
 import org.luxons.sevenwonders.engine.cards.Hands
 import org.luxons.sevenwonders.engine.converters.toHandCards
-import org.luxons.sevenwonders.engine.converters.toPlayedMove
 import org.luxons.sevenwonders.engine.converters.toTableState
 import org.luxons.sevenwonders.engine.data.LAST_AGE
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
@@ -68,7 +67,6 @@ class Game internal constructor(
             table = newTableState,
             action = action,
             hand = hand,
-            preparedMove = preparedMoves[player.index]?.toPlayedMove(),
             discardedCards = discardedCards.toHandCards(player, true).takeIf { action == Action.PLAY_FREE_DISCARDED },
             neighbourGuildCards = table.getNeighbourGuildCards(player.index).toHandCards(player, true),
         )

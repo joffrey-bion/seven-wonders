@@ -37,7 +37,6 @@ data class PlayerTurnInfo(
     val table: TableState,
     val action: Action,
     val hand: List<HandCard>?,
-    val preparedMove: PlayedMove?,
     val neighbourGuildCards: List<HandCard>,
     val discardedCards: List<HandCard>?, // only present when the player can actually see them
     val scoreBoard: ScoreBoard? = null,
