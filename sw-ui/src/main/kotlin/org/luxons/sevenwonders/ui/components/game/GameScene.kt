@@ -57,6 +57,9 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         styledDiv {
             css {
                 height = 100.pct
+                if (turnInfo.everyoneIsWaitingForMe()) {
+                    +GameStyles.pulsatingRed
+                }
             }
             turnInfo.scoreBoard?.let {
                 scoreTableOverlay(it, props.players, props.leaveGame)
@@ -88,6 +91,15 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             }
             productionBar(gold = board.gold, production = board.production)
         }
+    }
+
+    private fun PlayerTurnInfo.everyoneIsWaitingForMe(): Boolean {
+        val onlyMeInTheGame = props.players.count { it.isHuman } == 1
+        if (onlyMeInTheGame || preparedMove != null) {
+            return false
+        }
+        val gameState = props.gameState ?: return false
+        return gameState.preparedCardsByUsername.values.count { it != null } == props.players.size - 1
     }
 
     private fun playerNeighbours(): Pair<PlayerDTO, PlayerDTO> {
