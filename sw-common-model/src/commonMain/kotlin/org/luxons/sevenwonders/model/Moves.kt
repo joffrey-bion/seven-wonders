@@ -56,9 +56,12 @@ fun PlayerTurnInfo.getBoard(position: RelativeBoardPosition): Board = table.boar
 
 fun PlayerTurnInfo.getNonNeighbourBoards(): List<Board> {
     val nPlayers = table.boards.size
+    if (nPlayers <= 3) {
+        return emptyList()
+    }
     val first = (playerIndex + 2) % nPlayers
     val last = (playerIndex - 2 + nPlayers) % nPlayers
-    val range = if (first < last) first..last else ((first until nPlayers) + (0..last))
+    val range = if (first <= last) first..last else ((first until nPlayers) + (0..last))
     return range.map { table.boards[it] }
 }
 
