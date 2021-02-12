@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -150,30 +149,36 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     }
 }
 
-suspend fun SevenWondersSession.createGameAndWaitLobby(gameName: String): LobbyDTO = coroutineScope {
-    val lobbies = watchLobbyJoined()
-    val joinedLobby = async { lobbies.first() }
-    createGame(gameName)
-    joinedLobby.await()
-}
+suspend fun SevenWondersSession.createGameAndWaitLobby(gameName: String): LobbyDTO = doAndWaitForEvent(
+    send = { createGame(gameName) },
+    subscribe = { watchLobbyJoined() },
+)
 
-suspend fun SevenWondersSession.joinGameAndWaitLobby(gameId: Long): LobbyDTO = coroutineScope {
-    val lobbies = watchLobbyJoined()
-    val joinedLobby = async { lobbies.first() }
-    joinGame(gameId)
-    joinedLobby.await()
-}
+suspend fun SevenWondersSession.joinGameAndWaitLobby(gameId: Long): LobbyDTO = doAndWaitForEvent(
+    send = { joinGame(gameId) },
+    subscribe = { watchLobbyJoined() },
+)
 
-suspend fun SevenWondersSession.startGameAndAwaitFirstTurn(): PlayerTurnInfo = coroutineScope {
-    val gameStartedEvents = watchGameStarted()
-    val deferredFirstTurn = async { gameStartedEvents.first() }
-    startGame()
-    deferredFirstTurn.await()
-}
+suspend fun SevenWondersSession.startGameAndAwaitFirstTurn(): PlayerTurnInfo = doAndWaitForEvent(
+    send = { startGame() },
+    subscribe = { watchGameStarted() },
+)
 
-suspend fun SevenWondersSession.joinGameAndWaitFirstTurn(gameId: Long): PlayerTurnInfo = coroutineScope {
-    val gameStartedEvents = watchGameStarted()
-    val deferredFirstTurn = async { gameStartedEvents.first() }
-    joinGame(gameId)
-    deferredFirstTurn.await()
-}
+suspend fun SevenWondersSession.joinGameAndWaitFirstTurn(gameId: Long): PlayerTurnInfo = doAndWaitForEvent(
+    send = { joinGame(gameId) },
+    subscribe = { watchGameStarted() },
+)
+
+suspend fun SevenWondersSession.leaveGameAndAwaitEnd() = doAndWaitForEvent(
+    send = { leaveGame() },
+    subscribe = { watchLobbyLeft() },
+)
+
+@OptIn(ExperimentalCoroutinesApi::class)
+private suspend fun <T> doAndWaitForEvent(send: suspend () -> Unit, subscribe: suspend () -> Flow<T>): T =
+    coroutineScope {
+        val eventsFlow = subscribe()
+        val deferredFirstEvent = async(start = CoroutineStart.UNDISPATCHED) { eventsFlow.first() }
+        send()
+        deferredFirstEvent.await()
+    }

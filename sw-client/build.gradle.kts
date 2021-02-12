@@ -8,6 +8,9 @@ kotlin {
         browser() // necessary for local dependency from JS UI module
     }
     sourceSets {
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
         val commonMain by getting {
             dependencies {
                 api(project(":sw-common-model"))

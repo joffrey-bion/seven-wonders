@@ -93,7 +93,7 @@ class SevenWondersBot(
             }
         val lastTurn = endGameTurnInfo.await()
         logger.info("BOT $player: leaving the game")
-        session.leaveGame()
+        session.leaveGameAndAwaitEnd()
         session.disconnect()
         logger.info("BOT $player: disconnected")
         lastTurn
