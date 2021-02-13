@@ -42,16 +42,21 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     suspend fun watchErrors(): Flow<ErrorDTO> = stompSession.subscribe("/user/queue/errors", ErrorDTO.serializer())
 
     suspend fun chooseName(displayName: String, icon: Icon? = null, isHuman: Boolean = true): ConnectedPlayer {
-        val sub = stompSession.subscribe(
-            destination = "/user/queue/nameChoice",
-            deserializer = ConnectedPlayer.serializer(),
+        return doAndWaitForEvent(
+            send = {
+                stompSession.convertAndSend(
+                    destination = "/app/chooseName",
+                    body = ChooseNameAction(displayName, icon, isHuman),
+                    serializer = ChooseNameAction.serializer(),
+                )
+            },
+            subscribe = {
+                stompSession.subscribe(
+                    destination = "/user/queue/nameChoice",
+                    deserializer = ConnectedPlayer.serializer(),
+                )
+            }
         )
-        stompSession.convertAndSend(
-            destination = "/app/chooseName",
-            body = ChooseNameAction(displayName, icon, isHuman),
-            serializer = ChooseNameAction.serializer(),
-        )
-        return sub.first()
     }
 
     suspend fun watchGames(): Flow<GameListEvent> =
