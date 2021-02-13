@@ -6,10 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
-import org.luxons.sevenwonders.client.SevenWondersClient
-import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.client.createGameAndAwaitLobby
-import org.luxons.sevenwonders.client.joinGameAndAwaitLobby
+import org.luxons.sevenwonders.client.*
 import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
@@ -66,7 +63,7 @@ class SevenWondersTest {
 
         val outsiderSession = newPlayer("Outsider")
         val gameStartedEvents = outsiderSession.watchGameStarted()
-        ownerSession.startGame()
+        ownerSession.startGameAndAwaitFirstTurn()
 
         val nullForTimeout = withTimeoutOrNull(50) { gameStartedEvents.first() }
         assertNull(nullForTimeout, "outsider should not receive the game start event of this game")
