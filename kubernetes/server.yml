@@ -15,6 +15,17 @@ spec:
     spec:
       containers:
         - name: seven-wonders-server
+          env:
+            - name: LOKI_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: loki-credentials
+                  key: username
+            - name: LOKI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: loki-credentials
+                  key: api-key
           image: hildan/seven-wonders-server:latest
           ports:
             - containerPort: 80

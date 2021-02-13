@@ -24,7 +24,8 @@ dependencies {
     implementation("org.springframework.security:spring-security-messaging")
 
     // logging
-    implementation("ch.qos.logback:logback-classic:1.1.8")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("com.github.loki4j:loki-logback-appender:1.0.0")
 
     // monitoring / metrics
     implementation("org.springframework.boot:spring-boot-starter-actuator")
