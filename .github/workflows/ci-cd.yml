@@ -93,7 +93,7 @@ jobs:
           args: "[Build #${{github.run_id}}](https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}): Deploying new version `${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_BUILD }}` ([see changes]({{ EVENT_PAYLOAD.compare }}))..."
 
       - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl apply -f kubernetes/server.yml
+        run: kubectl apply -f kubernetes
 
       - name: Verify deployment
         run: kubectl rollout status --namespace seven-wonders deployment/seven-wonders
