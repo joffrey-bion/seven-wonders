@@ -149,12 +149,12 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
     }
 }
 
-suspend fun SevenWondersSession.createGameAndWaitLobby(gameName: String): LobbyDTO = doAndWaitForEvent(
+suspend fun SevenWondersSession.createGameAndAwaitLobby(gameName: String): LobbyDTO = doAndWaitForEvent(
     send = { createGame(gameName) },
     subscribe = { watchLobbyJoined() },
 )
 
-suspend fun SevenWondersSession.joinGameAndWaitLobby(gameId: Long): LobbyDTO = doAndWaitForEvent(
+suspend fun SevenWondersSession.joinGameAndAwaitLobby(gameId: Long): LobbyDTO = doAndWaitForEvent(
     send = { joinGame(gameId) },
     subscribe = { watchLobbyJoined() },
 )
@@ -164,7 +164,7 @@ suspend fun SevenWondersSession.startGameAndAwaitFirstTurn(): PlayerTurnInfo = d
     subscribe = { watchGameStarted() },
 )
 
-suspend fun SevenWondersSession.joinGameAndWaitFirstTurn(gameId: Long): PlayerTurnInfo = doAndWaitForEvent(
+suspend fun SevenWondersSession.joinGameAndAwaitFirstTurn(gameId: Long): PlayerTurnInfo = doAndWaitForEvent(
     send = { joinGame(gameId) },
     subscribe = { watchGameStarted() },
 )

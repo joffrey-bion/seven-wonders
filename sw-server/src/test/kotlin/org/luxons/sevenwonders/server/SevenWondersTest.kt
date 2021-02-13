@@ -8,8 +8,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.SevenWondersClient
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.client.createGameAndWaitLobby
-import org.luxons.sevenwonders.client.joinGameAndWaitLobby
+import org.luxons.sevenwonders.client.createGameAndAwaitLobby
+import org.luxons.sevenwonders.client.joinGameAndAwaitLobby
 import org.luxons.sevenwonders.model.Action
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
@@ -61,8 +61,8 @@ class SevenWondersTest {
 
         val lobby = ownerSession.createGameWithLegacySettingsAndWaitLobby(gameName)
 
-        session1.joinGameAndWaitLobby(lobby.id)
-        session2.joinGameAndWaitLobby(lobby.id)
+        session1.joinGameAndAwaitLobby(lobby.id)
+        session2.joinGameAndAwaitLobby(lobby.id)
 
         val outsiderSession = newPlayer("Outsider")
         val gameStartedEvents = outsiderSession.watchGameStarted()
@@ -116,12 +116,12 @@ class SevenWondersTest {
         val lobby = session1.createGameWithLegacySettingsAndWaitLobby("Test Game")
 
         val startEvents2 = session2.watchGameStarted()
-        session2.joinGameAndWaitLobby(lobby.id)
+        session2.joinGameAndAwaitLobby(lobby.id)
 
         // player 3 connects after game creation (on purpose)
         val session3 = newPlayer("Player3")
         val startEvents3 = session3.watchGameStarted()
-        session3.joinGameAndWaitLobby(lobby.id)
+        session3.joinGameAndAwaitLobby(lobby.id)
 
         session1.startGame()
 
@@ -146,7 +146,7 @@ class SevenWondersTest {
 }
 
 private suspend fun SevenWondersSession.createGameWithLegacySettingsAndWaitLobby(gameName: String): LobbyDTO {
-    val lobby = createGameAndWaitLobby(gameName)
+    val lobby = createGameAndAwaitLobby(gameName)
     updateSettings(lobby.settings.copy(askForReadiness = true))
     return lobby
 }

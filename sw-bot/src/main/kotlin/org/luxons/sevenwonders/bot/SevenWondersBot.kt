@@ -52,9 +52,9 @@ class SevenWondersBot(
             "Custom wonders don't match the number of players in the game"
         }
 
-        val lobby = session.createGameAndWaitLobby(gameName)
+        val lobby = session.createGameAndAwaitLobby(gameName)
         otherBots.forEach {
-            it.session.joinGameAndWaitLobby(lobby.id)
+            it.session.joinGameAndAwaitLobby(lobby.id)
         }
 
         customWonders?.let { session.reassignWonders(it) }
@@ -73,7 +73,7 @@ class SevenWondersBot(
     }
 
     suspend fun joinAndAutoPlay(gameId: Long): PlayerTurnInfo {
-        val firstTurn = session.joinGameAndWaitFirstTurn(gameId)
+        val firstTurn = session.joinGameAndAwaitFirstTurn(gameId)
         return autoPlayUntilEnd(firstTurn)
     }
 
