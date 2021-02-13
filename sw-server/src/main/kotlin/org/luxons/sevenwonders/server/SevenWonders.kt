@@ -20,7 +20,7 @@ class SevenWonders {
     @Bean
     fun metricsCommonTags(): MeterRegistryCustomizer<MeterRegistry>? = MeterRegistryCustomizer { registry ->
         registry.config()
-            .commonTags("application", "SevenWonders")
+            .commonTags("application", "seven-wonders")
             .commonTags("instance", InetAddress.getLocalHost().hostAddress)
     }
 }
