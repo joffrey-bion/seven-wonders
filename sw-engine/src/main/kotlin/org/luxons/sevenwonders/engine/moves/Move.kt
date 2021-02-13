@@ -16,7 +16,7 @@ internal abstract class Move(
 
     val transactions: ResourceTransactions = move.transactions
 
-    abstract fun place(discardedCards: MutableList<Card>, settings: Settings)
+    abstract fun place(discardedCards: MutableList<Card>)
 
     abstract fun activate(discardedCards: List<Card>, settings: Settings)
 }

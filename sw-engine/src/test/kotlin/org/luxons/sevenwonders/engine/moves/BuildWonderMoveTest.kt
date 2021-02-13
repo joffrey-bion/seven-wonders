@@ -58,7 +58,7 @@ class BuildWonderMoveTest {
         val card = hand[cardIndex]
         val playerContext = PlayerContext(0, table, hand)
         val move = createMove(playerContext, card, MoveType.UPGRADE_WONDER)
-        move.place(mutableListOf(), settings)
+        move.place(mutableListOf())
         move.activate(emptyList(), settings)
     }
 
@@ -73,7 +73,7 @@ class BuildWonderMoveTest {
 
         val initialStage = table.getBoard(0).wonder.nbBuiltStages
 
-        move.place(mutableListOf(), settings)
+        move.place(mutableListOf())
 
         val newStage = table.getBoard(0).wonder.nbBuiltStages
 

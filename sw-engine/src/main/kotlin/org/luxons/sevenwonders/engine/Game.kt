@@ -218,7 +218,7 @@ class Game internal constructor(
 
     private fun placePreparedCards(playedMoves: List<Move>) {
         playedMoves.forEach { move ->
-            move.place(discardedCards, settings)
+            move.place(discardedCards)
             hands = hands.remove(move.playerContext.index, move.card)
         }
     }

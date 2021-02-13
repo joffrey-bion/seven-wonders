@@ -16,7 +16,7 @@ internal class BuildWonderMove(move: PlayerMove, card: Card, player: PlayerConte
         }
     }
 
-    override fun place(discardedCards: MutableList<Card>, settings: Settings) = wonder.placeCard(card.back)
+    override fun place(discardedCards: MutableList<Card>) = wonder.placeCard(card.back)
 
     override fun activate(discardedCards: List<Card>, settings: Settings) =
         wonder.activateLastBuiltStage(playerContext, transactions)

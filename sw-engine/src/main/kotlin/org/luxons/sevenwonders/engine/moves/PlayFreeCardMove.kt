@@ -15,7 +15,7 @@ internal class PlayFreeCardMove(move: PlayerMove, card: Card, playerContext: Pla
         }
     }
 
-    override fun place(discardedCards: MutableList<Card>, settings: Settings) = playerContext.board.addCard(card)
+    override fun place(discardedCards: MutableList<Card>) = playerContext.board.addCard(card)
 
     override fun activate(discardedCards: List<Card>, settings: Settings) {
         // only apply effects, without paying the cost

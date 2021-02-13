@@ -14,7 +14,7 @@ internal class PlayCardMove(move: PlayerMove, card: Card, player: PlayerContext)
         }
     }
 
-    override fun place(discardedCards: MutableList<Card>, settings: Settings) = playerContext.board.addCard(card)
+    override fun place(discardedCards: MutableList<Card>) = playerContext.board.addCard(card)
 
     override fun activate(discardedCards: List<Card>, settings: Settings) = card.applyTo(playerContext, transactions)
 }

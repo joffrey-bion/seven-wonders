@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.model.Settings
 
 internal class DiscardMove(move: PlayerMove, card: Card, player: PlayerContext) : CardFromHandMove(move, card, player) {
 
-    override fun place(discardedCards: MutableList<Card>, settings: Settings) {
+    override fun place(discardedCards: MutableList<Card>) {
         discardedCards.add(card)
     }
 

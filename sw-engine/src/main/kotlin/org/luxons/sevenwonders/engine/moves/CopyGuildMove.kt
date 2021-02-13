@@ -29,7 +29,7 @@ internal class CopyGuildMove(move: PlayerMove, card: Card, player: PlayerContext
         playerContext.getBoard(position).getPlayedCards().contains(card)
 
     // nothing special to do here
-    override fun place(discardedCards: MutableList<Card>, settings: Settings) = Unit
+    override fun place(discardedCards: MutableList<Card>) = Unit
 
     override fun activate(discardedCards: List<Card>, settings: Settings) {
         playerContext.board.copiedGuild = card

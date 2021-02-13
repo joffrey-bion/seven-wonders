@@ -23,7 +23,7 @@ internal class PlayFreeDiscardedCardMove(
         }
     }
 
-    override fun place(discardedCards: MutableList<Card>, settings: Settings) {
+    override fun place(discardedCards: MutableList<Card>) {
         discardedCards.remove(card)
         playerContext.board.addCard(card)
     }
