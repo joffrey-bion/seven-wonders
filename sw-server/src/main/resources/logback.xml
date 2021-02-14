@@ -23,7 +23,7 @@
                 <pattern>application=seven-wonders,instance=${HOSTNAME},level=%level,class=%logger</pattern>
             </label>
             <message>
-                <pattern>level=%level class=%logger thread=%thread | %msg %ex</pattern>
+                <pattern>timestamp=%date level=%level class=%logger thread=%thread | %msg %ex</pattern>
             </message>
         </format>
     </appender>
