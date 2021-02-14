@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import com.palantir.blueprintjs.bpIcon
 import kotlinx.css.*
+import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.BasicPlayerInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.connectState
@@ -18,6 +19,7 @@ interface PlayerInfoProps : RProps {
     var showUsername: Boolean
     var iconSize: Int
     var orientation: FlexDirection
+    var ellipsize: Boolean
 }
 
 class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, RState>(props) {
@@ -32,23 +34,41 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
             props.player?.let {
                 bpIcon(name = it.icon?.name ?: "user", size = props.iconSize)
                 if (props.showUsername) {
-                    playerNameWithUsername(it.displayName, it.username)
+                    playerNameWithUsername(it.displayName, it.username) {
+                        iconSeparationMargin()
+                    }
                 } else {
-                    playerName(it.displayName)
+                    playerName(it.displayName) {
+                        iconSeparationMargin()
+                    }
                 }
             }
         }
     }
 
-    private fun RBuilder.playerName(displayName: String) {
+    private fun RBuilder.playerName(displayName: String, style: CSSBuilder.() -> Unit = {}) {
         styledSpan {
             css {
                 fontSize = 1.rem
-                iconSeparationMargin()
+                if (props.orientation == FlexDirection.column) {
+                    textAlign = TextAlign.center
+                }
+                style()
             }
-            +displayName
+            // TODO replace by BlueprintJS's Text elements (built-in ellipsize based on width)
+            val maxDisplayNameLength = 15
+            if (props.ellipsize && displayName.length > maxDisplayNameLength) {
+                attrs {
+                    title = displayName
+                }
+                +displayName.ellipsize(maxDisplayNameLength)
+            } else {
+                +displayName
+            }
         }
     }
+
+    private fun String.ellipsize(maxLength: Int) = take(maxLength - 1) + "…"
 
     private fun CSSBuilder.iconSeparationMargin() {
         val margin = 0.4.rem
@@ -61,19 +81,18 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
         }
     }
 
-    private fun RBuilder.playerNameWithUsername(displayName: String, username: String) {
+    private fun RBuilder.playerNameWithUsername(
+        displayName: String,
+        username: String,
+        style: CSSBuilder.() -> Unit = {}
+    ) {
         styledDiv {
             css {
                 display = Display.flex
                 flexDirection = FlexDirection.column
-                iconSeparationMargin()
+                style()
             }
-            styledSpan {
-                css {
-                    fontSize = 1.rem
-                }
-                +displayName
-            }
+            playerName(displayName)
             styledSpan {
                 css {
                     marginTop = 0.1.rem
@@ -91,12 +110,14 @@ fun RBuilder.playerInfo(
     showUsername: Boolean = false,
     iconSize: Int = 30,
     orientation: FlexDirection = FlexDirection.row,
+    ellipsize: Boolean = true,
 ) = child(PlayerInfoPresenter::class) {
     attrs {
         this.player = player
         this.showUsername = showUsername
         this.iconSize = iconSize
         this.orientation = orientation
+        this.ellipsize = ellipsize
     }
 }
 
@@ -108,5 +129,6 @@ private val playerInfo = connectState(
         player = state.connectedPlayer
         showUsername = true
         orientation = FlexDirection.row
+        ellipsize = false
     },
 )
