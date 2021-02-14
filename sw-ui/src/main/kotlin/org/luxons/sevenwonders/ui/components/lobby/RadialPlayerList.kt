@@ -112,6 +112,7 @@ private fun RBuilder.playerElement(playerItem: PlayerItem) {
         styledH4 {
             css {
                 margin(all = 0.px)
+                textAlign = TextAlign.center
             }
             +playerItem.playerText
         }
