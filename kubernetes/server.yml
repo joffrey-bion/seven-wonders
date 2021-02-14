@@ -16,6 +16,9 @@ spec:
       containers:
         - name: seven-wonders-server
           env:
+            # Profile "prod" is used in particular to enable sending logs to Loki
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
             - name: LOKI_USERNAME
               valueFrom:
                 secretKeyRef:

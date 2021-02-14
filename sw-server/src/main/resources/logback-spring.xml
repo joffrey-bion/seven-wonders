@@ -28,11 +28,20 @@
         </format>
     </appender>
 
-    <root level="DEBUG">
-        <appender-ref ref="CONSOLE"/>
-    </root>
-    <root level="INFO">
-        <appender-ref ref="LOKI"/>
-    </root>
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="LOKI"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="!prod">
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="org.springframework" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
 
 </configuration>
