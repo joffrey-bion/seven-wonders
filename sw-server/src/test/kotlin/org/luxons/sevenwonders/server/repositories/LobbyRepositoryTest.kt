@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.repositories
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.server.lobby.Player
@@ -15,7 +16,8 @@ class LobbyRepositoryTest {
 
     @Before
     fun setUp() {
-        repository = LobbyRepository()
+        val meterRegistry = SimpleMeterRegistry()
+        repository = LobbyRepository(meterRegistry)
     }
 
     @Test

@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.repositories
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.lobby.Player
@@ -7,9 +8,10 @@ import org.springframework.stereotype.Repository
 import java.util.concurrent.ConcurrentHashMap
 
 @Repository
-class PlayerRepository {
-
-    private val players = ConcurrentHashMap<String, Player>()
+class PlayerRepository(
+    meterRegistry: MeterRegistry,
+) {
+    private val players = meterRegistry.gaugeMapSize("players.count", emptyList(), ConcurrentHashMap<String, Player>())!!
 
     operator fun contains(username: String): Boolean = players.containsKey(username)
 

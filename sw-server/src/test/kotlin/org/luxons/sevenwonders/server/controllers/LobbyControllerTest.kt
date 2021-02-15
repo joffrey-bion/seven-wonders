@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.model.Settings
@@ -27,10 +28,11 @@ class LobbyControllerTest {
 
     @Before
     fun setUp() {
+        val meterRegistry = SimpleMeterRegistry()
         val template = mockSimpMessagingTemplate()
-        playerRepository = PlayerRepository()
-        lobbyRepository = LobbyRepository()
-        lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED")
+        playerRepository = PlayerRepository(meterRegistry)
+        lobbyRepository = LobbyRepository(meterRegistry)
+        lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED", meterRegistry)
     }
 
     @Test

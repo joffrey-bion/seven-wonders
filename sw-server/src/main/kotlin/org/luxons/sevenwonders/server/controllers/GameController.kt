@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
@@ -7,6 +8,7 @@ import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
+import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
@@ -24,6 +26,7 @@ class GameController(
     private val template: SimpMessagingTemplate,
     private val playerRepository: PlayerRepository,
     private val lobbyRepository: LobbyRepository,
+    private val meterRegistry: MeterRegistry,
 ) {
     private val Principal.player
         get() = playerRepository.get(name)
@@ -99,14 +102,19 @@ class GameController(
                 game.playTurn()
                 sendTurnInfo(player.lobby.getPlayers(), game, hideHands = lobby.settings.askForReadiness)
                 if (game.endOfGameReached()) {
-                    logger.info("Game {}: end of game, displaying score board", game.id)
-                    player.lobby.setEndOfGame()
-                    template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
+                    handleEndOfGame(game, player, lobby)
                 }
             } else {
                 template.convertAndSendToUser(player.username, "/queue/game/preparedMove", action.move)
             }
         }
+    }
+
+    private fun handleEndOfGame(game: Game, player: Player, lobby: Lobby) {
+        meterRegistry.counter("games.finished").increment()
+        logger.info("Game {}: end of game, displaying score board", game.id)
+        player.lobby.setEndOfGame()
+        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
     }
 
     @MessageMapping("/game/unprepareMove")

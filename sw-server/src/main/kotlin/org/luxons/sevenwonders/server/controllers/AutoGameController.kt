@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.withTimeout
 import org.luxons.sevenwonders.bot.connectBot
 import org.luxons.sevenwonders.bot.connectBots
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
+import kotlin.time.measureTimedValue
 import kotlin.time.minutes
+import kotlin.time.toJavaDuration
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -20,6 +23,7 @@ import kotlin.time.minutes
 @RestController
 class AutoGameController(
     @Value("\${server.port}") private val serverPort: String,
+    private val meterRegistry: MeterRegistry,
 ) {
     @PostMapping("/autoGame")
     suspend fun autoGame(@RequestBody action: AutoGameAction, principal: Principal): AutoGameResult {
@@ -28,16 +32,20 @@ class AutoGameController(
         val serverUrl = "ws://localhost:$serverPort"
 
         val lastTurn = withTimeout(5.minutes) {
-            val otherBotNames = List(action.nbPlayers - 1) { "JoinerBot${it + 1}" }
-            val owner = client.connectBot(serverUrl, "OwnerBot", action.config)
-            val joiners = client.connectBots(serverUrl, otherBotNames, action.config)
+            val (lastTurn, duration) = measureTimedValue {
+                val otherBotNames = List(action.nbPlayers - 1) { "JoinerBot${it + 1}" }
+                val owner = client.connectBot(serverUrl, "OwnerBot", action.config)
+                val joiners = client.connectBots(serverUrl, otherBotNames, action.config)
 
-            owner.createGameWithBotFriendsAndAutoPlay(
-                gameName = action.gameName,
-                otherBots = joiners,
-                customWonders = action.customWonders,
-                customSettings = action.customSettings,
-            )
+                owner.createGameWithBotFriendsAndAutoPlay(
+                    gameName = action.gameName,
+                    otherBots = joiners,
+                    customWonders = action.customWonders,
+                    customSettings = action.customSettings,
+                )
+            }
+            meterRegistry.timer("autogame.duration").record(duration.toJavaDuration())
+            lastTurn
         }
 
         val scoreBoard = lastTurn.scoreBoard ?: error("Last turn info doesn't have scoreboard")

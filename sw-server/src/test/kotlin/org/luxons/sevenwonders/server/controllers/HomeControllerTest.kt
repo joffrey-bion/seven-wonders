@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Test
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
 import org.luxons.sevenwonders.model.api.actions.Icon
@@ -10,8 +11,9 @@ class HomeControllerTest {
 
     @Test
     fun chooseName() {
-        val playerRepository = PlayerRepository()
-        val homeController = HomeController(playerRepository)
+        val meterRegistry = SimpleMeterRegistry()
+        val playerRepository = PlayerRepository(meterRegistry)
+        val homeController = HomeController(playerRepository, meterRegistry)
 
         val action = ChooseNameAction("Test User", Icon("person"), isHuman = true)
         val principal = TestPrincipal("testuser")

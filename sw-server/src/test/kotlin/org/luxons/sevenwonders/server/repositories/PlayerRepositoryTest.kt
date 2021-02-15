@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.repositories
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -14,7 +15,8 @@ class PlayerRepositoryTest {
 
     @Before
     fun setUp() {
-        repository = PlayerRepository()
+        val meterRegistry = SimpleMeterRegistry()
+        repository = PlayerRepository(meterRegistry)
     }
 
     @Test

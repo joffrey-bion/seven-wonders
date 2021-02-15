@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.model.api.GameListEvent
@@ -23,10 +24,11 @@ class GameBrowserControllerTest {
 
     @Before
     fun setUp() {
-        playerRepository = PlayerRepository()
-        val lobbyRepository = LobbyRepository()
+        val meterRegistry = SimpleMeterRegistry()
+        playerRepository = PlayerRepository(meterRegistry)
+        val lobbyRepository = LobbyRepository(meterRegistry)
         val template = mockSimpMessagingTemplate()
-        val lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED")
+        val lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED", meterRegistry)
         gameBrowserController = GameBrowserController(lobbyController, lobbyRepository, playerRepository, template)
     }
 

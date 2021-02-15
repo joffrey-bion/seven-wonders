@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.repositories
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.luxons.sevenwonders.engine.data.GameDefinition
 import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
@@ -8,9 +9,10 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
 @Repository
-class LobbyRepository {
-
-    private val lobbies = ConcurrentHashMap<Long, Lobby>()
+class LobbyRepository(
+    meterRegistry: MeterRegistry,
+) {
+    private val lobbies = meterRegistry.gaugeMapSize("games.count", emptyList(), ConcurrentHashMap<Long, Lobby>())!!
 
     private var lastGameId: AtomicLong = AtomicLong(0)
 

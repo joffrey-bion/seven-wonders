@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.validation
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Before
 import org.junit.Test
 import org.luxons.sevenwonders.server.lobby.Lobby
@@ -18,7 +19,8 @@ class DestinationAccessValidatorTest {
 
     @Before
     fun setup() {
-        lobbyRepository = LobbyRepository()
+        val meterRegistry = SimpleMeterRegistry()
+        lobbyRepository = LobbyRepository(meterRegistry)
         destinationAccessValidator = DestinationAccessValidator(lobbyRepository)
     }
 

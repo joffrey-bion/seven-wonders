@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
@@ -17,8 +18,8 @@ import java.security.Principal
 @Controller
 class HomeController(
     private val playerRepository: PlayerRepository,
+    private val meterRegistry: MeterRegistry,
 ) {
-
     /**
      * Creates/updates the player's name (for the user's session).
      *
@@ -33,6 +34,7 @@ class HomeController(
         val username = principal.name
         val player = playerRepository.createOrUpdate(username, action.playerName, action.isHuman, action.icon)
 
+        meterRegistry.counter("players.connections").increment()
         logger.info("Player '{}' chose the name '{}'", username, player.displayName)
         return ConnectedPlayer(username, player.displayName, player.isHuman, player.icon)
     }

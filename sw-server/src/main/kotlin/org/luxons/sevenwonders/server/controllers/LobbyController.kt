@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -16,6 +17,7 @@ import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
 import org.luxons.sevenwonders.server.lobby.Player
+import org.luxons.sevenwonders.server.metrics.playerCountsTags
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
@@ -36,6 +38,7 @@ class LobbyController(
     private val playerRepository: PlayerRepository,
     private val template: SimpMessagingTemplate,
     @Value("\${server.port}") private val serverPort: String,
+    private val meterRegistry: MeterRegistry,
 ) {
     private val Principal.player: Player
         get() = playerRepository.get(name)
@@ -80,6 +83,7 @@ class LobbyController(
             }
             logger.info("Player {} disbanded game '{}'", player, lobby.name)
             deleteLobby(lobby)
+            meterRegistry.counter("games.disbanded", lobby.playerCountsTags()).increment()
         }
     }
 
@@ -163,6 +167,7 @@ class LobbyController(
                 val timeoutDuration = action.globalBotTimeoutMillis.milliseconds
                 logger.error("Bot {} timed out after {}", action.botDisplayName, timeoutDuration)
                 bot.disconnect()
+                meterRegistry.counter("bot.timeout", lobby.playerCountsTags()).increment()
             }
         }
     }
@@ -177,6 +182,7 @@ class LobbyController(
         val lobby = principal.player.ownedLobby
         val game = lobby.startGame()
 
+        meterRegistry.counter("games.started").increment()
         logger.info("Game {} ('{}') successfully started", game.id, lobby.name)
         val currentTurnInfo = game.getCurrentTurnInfo().let {
             if (lobby.settings.askForReadiness) it.hideHandsAndWaitForReadiness() else it
