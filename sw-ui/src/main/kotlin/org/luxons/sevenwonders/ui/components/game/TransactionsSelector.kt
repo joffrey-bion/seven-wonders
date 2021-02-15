@@ -69,14 +69,14 @@ fun RBuilder.transactionsSelectorDialog(
 private fun StyledDOMBuilder<DIV>.neighbour(player: PlayerDTO) {
     styledDiv {
         css {
-            width = 100.pct
+            width = 12.rem
 
             // center the icon
             display = Display.flex
             flexDirection = FlexDirection.column
             alignItems = Align.center
         }
-        playerInfo(player, iconSize = 40, orientation = FlexDirection.column)
+        playerInfo(player, iconSize = 40, orientation = FlexDirection.column, ellipsize = false)
     }
 }
 
