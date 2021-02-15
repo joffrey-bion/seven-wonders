@@ -127,6 +127,7 @@ private val playerInfo = connectState(
     clazz = PlayerInfoPresenter::class,
     mapStateToProps = { state, _ ->
         player = state.connectedPlayer
+        iconSize = 30
         showUsername = true
         orientation = FlexDirection.row
         ellipsize = false
