@@ -106,6 +106,22 @@ fun RBuilder.bpTag(
     block()
 }
 
+fun RBuilder.bpText(
+    ellipsize: Boolean? = null,
+    tagName: String? = null,
+    block: RHandler<ITextProps> = {},
+): ReactElement = child(Text::class) {
+    attrs {
+        if (ellipsize != null) {
+            this.ellipsize = ellipsize
+        }
+        if (tagName != null) {
+            this.tagName = tagName
+        }
+    }
+    block()
+}
+
 fun RBuilder.bpNonIdealState(
     icon: IconName? = null,
     title: ReactElement? = null,
