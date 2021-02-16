@@ -144,6 +144,12 @@ class Game internal constructor(
      */
     fun playTurn() {
         makeMoves()
+
+        // same goes for the discarded cards during the last turn, which should be available for special actions
+        if (hands.maxOneCardRemains()) {
+            discardLastCardsIfRelevant()
+        }
+
         if (shouldStartPlayDiscardedTurn()) {
             startPlayDiscardedTurn()
         } else if (endOfAgeReached()) {
@@ -165,12 +171,6 @@ class Game internal constructor(
         // all cards from this turn need to be placed before executing any effect
         // because effects depending on played cards need to take the ones from the current turn into account too
         placePreparedCards(moves)
-
-        // same goes for the discarded cards during the last turn, which should be available for special actions
-        if (hands.maxOneCardRemains()) {
-            discardLastCardsOfHands()
-        }
-
         activatePlayedCards(moves)
 
         table.lastPlayedMoves = moves
@@ -223,7 +223,7 @@ class Game internal constructor(
         }
     }
 
-    private fun discardLastCardsOfHands() =
+    private fun discardLastCardsIfRelevant() =
         table.boards.filterNot { it.hasSpecial(SpecialAbility.PLAY_LAST_CARD) }.forEach { discardHand(it.playerIndex) }
 
     private fun discardHand(playerIndex: Int) {
