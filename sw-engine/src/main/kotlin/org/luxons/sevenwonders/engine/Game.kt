@@ -183,7 +183,7 @@ class Game internal constructor(
     private fun getMoveToPerformFor(playerIndex: Int) =
         preparedMoves[playerIndex] ?: throw MissingPreparedMoveException(playerIndex)
 
-    private fun endOfAgeReached(): Boolean = hands.isEmpty
+    private fun endOfAgeReached(): Boolean = hands.areEmpty
 
     private fun executeEndOfAgeEvents() {
         // this is necessary because this method is actually called twice in the 3rd age if someone has CPY_GUILD

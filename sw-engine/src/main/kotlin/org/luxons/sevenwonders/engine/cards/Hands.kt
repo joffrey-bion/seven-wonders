@@ -7,7 +7,7 @@ import org.luxons.sevenwonders.model.cards.HandRotationDirection
 
 internal class Hands(private val hands: List<List<Card>>) {
 
-    val isEmpty: Boolean = this.hands.all(List<Card>::isEmpty)
+    val areEmpty: Boolean = this.hands.all(List<Card>::isEmpty)
 
     operator fun get(playerIndex: Int): List<Card> {
         return hands[playerIndex]

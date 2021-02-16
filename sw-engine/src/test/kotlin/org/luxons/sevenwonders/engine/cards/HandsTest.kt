@@ -42,13 +42,13 @@ class HandsTest {
     ) {
         assumeTrue(nbCardsPerPlayer >= 1)
         val hands = createHands(nbPlayers, nbCardsPerPlayer)
-        assertFalse(hands.isEmpty)
+        assertFalse(hands.areEmpty)
     }
 
     @Theory
     fun isEmpty_trueWhenAllEmpty(@FromDataPoints("nbPlayers") nbPlayers: Int) {
         val hands = createHands(nbPlayers, 0)
-        assertTrue(hands.isEmpty)
+        assertTrue(hands.areEmpty)
     }
 
     @Theory
