@@ -57,7 +57,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         styledDiv {
             css {
                 height = 100.pct
-                if (turnInfo.everyoneIsWaitingForMe()) {
+                if (everyoneIsWaitingForMe()) {
                     +GameStyles.pulsatingRed
                 }
             }
@@ -93,7 +93,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun PlayerTurnInfo.everyoneIsWaitingForMe(): Boolean {
+    private fun everyoneIsWaitingForMe(): Boolean {
         val onlyMeInTheGame = props.players.count { it.isHuman } == 1
         if (onlyMeInTheGame || props.preparedMove != null) {
             return false
