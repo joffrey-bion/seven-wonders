@@ -9,18 +9,10 @@ import org.junit.experimental.theories.Theories
 import org.junit.experimental.theories.Theory
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.engine.boards.Board.InsufficientFundsException
-import org.luxons.sevenwonders.engine.effects.RawPointsIncrease
-import org.luxons.sevenwonders.engine.effects.SpecialAbility
-import org.luxons.sevenwonders.engine.effects.SpecialAbilityActivation
+import org.luxons.sevenwonders.engine.effects.*
 import org.luxons.sevenwonders.engine.resources.resourcesOf
-import org.luxons.sevenwonders.engine.test.addCards
-import org.luxons.sevenwonders.engine.test.getDifferentColorFrom
-import org.luxons.sevenwonders.engine.test.playCardWithEffect
-import org.luxons.sevenwonders.engine.test.singleBoardPlayer
-import org.luxons.sevenwonders.engine.test.testBoard
-import org.luxons.sevenwonders.engine.test.testCard
-import org.luxons.sevenwonders.engine.test.testSettings
-import org.luxons.sevenwonders.engine.test.testWonder
+import org.luxons.sevenwonders.engine.test.*
+import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.model.score.ScoreCategory
@@ -184,6 +176,31 @@ class BoardTest {
         assertEquals(gold / 3, score.pointsByCategory[ScoreCategory.GOLD])
         assertEquals(5, score.pointsByCategory[ScoreCategory.CIVIL])
         assertEquals(5 + gold / 3, score.totalPoints)
+    }
+
+    @Theory
+    fun computePoints_countsCopiedGuild(@FromDataPoints("gold") gold: Int) {
+        assumeTrue(gold >= 0)
+        val left = testBoard(initialGold = gold)
+        val self = testBoard(initialGold = gold)
+        val right = testBoard(initialGold = gold)
+
+        left.addCard(testCard(color = Color.YELLOW))
+        right.addCard(testCard(color = Color.YELLOW))
+        right.addCard(testCard(color = Color.YELLOW))
+        self.copiedGuild = testCard(
+            name = "Custom guild for yellows",
+            color = Color.PURPLE,
+            effect = BonusPerBoardElement(
+                boards = listOf(RelativeBoardPosition.LEFT, RelativeBoardPosition.RIGHT),
+                type = BoardElementType.CARD,
+                colors = listOf(Color.YELLOW),
+                points = 1,
+            )
+        )
+
+        val score = self.computeScore(testPlayer(left, self, right))
+        assertEquals(3, score.pointsByCategory[ScoreCategory.GUILD])
     }
 
     companion object {

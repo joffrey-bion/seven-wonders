@@ -132,12 +132,14 @@ internal fun playCardWithEffect(player: Player, color: Color, effect: Effect) {
 internal fun createMove(context: PlayerContext, card: Card, type: MoveType): Move =
     type.resolve(PlayerMove(type, card.name), card, context, emptyList())
 
-internal fun singleBoardPlayer(board: Board): Player = object : Player {
+internal fun singleBoardPlayer(board: Board): Player = testPlayer(leftBoard = null, selfBoard = board, rightBoard = null)
+
+internal fun testPlayer(leftBoard: Board?, selfBoard: Board, rightBoard: Board?): Player = object : Player {
     override val index = 0
-    override val board = board
+    override val board = selfBoard
     override fun getBoard(relativePosition: RelativeBoardPosition): Board = when (relativePosition) {
-        RelativeBoardPosition.LEFT -> throw RuntimeException("No LEFT board")
+        RelativeBoardPosition.LEFT -> leftBoard ?: error("No LEFT board")
         RelativeBoardPosition.SELF -> this.board
-        RelativeBoardPosition.RIGHT -> throw RuntimeException("No RIGHT board")
+        RelativeBoardPosition.RIGHT -> rightBoard ?: error("No RIGHT board")
     }
 }
