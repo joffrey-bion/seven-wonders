@@ -37,7 +37,7 @@ internal class StompDisconnectionListener(
             // TODO auto-play until the end? https://github.com/joffrey-bion/seven-wonders/issues/85
             player.isInGame -> gameController.leave(principal)
             player.isInLobby -> lobbyController.leave(principal)
-            else -> playerRepository.remove(principal.name)
         }
+        playerRepository.remove(principal.name)
     }
 }
