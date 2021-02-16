@@ -112,12 +112,24 @@ fun RBuilder.bpText(
     block: RHandler<ITextProps> = {},
 ): ReactElement = child(Text::class) {
     attrs {
-        if (ellipsize != null) {
-            this.ellipsize = ellipsize
-        }
-        if (tagName != null) {
-            this.tagName = tagName
-        }
+        ellipsize?.let { this.ellipsize = it }
+        tagName?.let { this.tagName = it }
+    }
+    block()
+}
+
+fun RBuilder.bpSpinner(
+    size: Int? = null,
+    value: Double? = null,
+    intent: Intent? = null,
+    tagName: String? = null,
+    block: RHandler<ISpinnerProps> = {},
+): ReactElement = child(Spinner::class) {
+    attrs {
+        size?.let { this.size = it }
+        value?.let { this.value = it }
+        intent?.let { this.intent = it }
+        tagName?.let { this.tagName = it }
     }
     block()
 }
