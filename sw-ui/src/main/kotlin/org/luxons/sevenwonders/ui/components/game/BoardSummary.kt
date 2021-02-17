@@ -11,11 +11,7 @@ import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import react.RBuilder
 import react.ReactElement
 import react.buildElement
-import styled.StyledDOMBuilder
-import styled.css
-import styled.getClassName
-import styled.styledDiv
-import styled.styledHr
+import styled.*
 
 enum class BoardSummarySide(
     val tokenCountPosition: TokenCountPosition,
@@ -71,25 +67,62 @@ private fun RBuilder.boardSummary(
             }
         }
 
-        playerInfo(player, iconSize = 25)
+        topBar(player, side)
         styledHr {
             css {
                 margin(vertical = 0.5.rem)
                 width = 100.pct
             }
         }
+        bottomBar(side, board, player)
+        block()
+    }
+}
+
+private fun RBuilder.topBar(player: PlayerDTO, side: BoardSummarySide) {
+    val playerIconSize = 25
+    if (side == BoardSummarySide.TOP) {
         styledDiv {
             css {
                 display = Display.flex
-                flexDirection = if (side == BoardSummarySide.TOP) FlexDirection.row else FlexDirection.column
-                alignItems = side.alignment
+                flexDirection = FlexDirection.row
+                justifyContent = JustifyContent.spaceBetween
+                width = 100.pct
             }
-            val tokenSize = 2.rem
-            generalCounts(board, tokenSize, side.tokenCountPosition)
-            bpDivider()
-            scienceTokens(board, tokenSize, side.tokenCountPosition)
+            playerInfo(player, iconSize = playerIconSize)
+            playerPreparedCard(player)
         }
-        block()
+    } else {
+        playerInfo(player, iconSize = playerIconSize)
+    }
+}
+
+private fun RBuilder.bottomBar(side: BoardSummarySide, board: Board, player: PlayerDTO) {
+    styledDiv {
+        css {
+            display = Display.flex
+            flexDirection = if (side == BoardSummarySide.TOP) FlexDirection.row else FlexDirection.column
+            alignItems = side.alignment
+            if (side != BoardSummarySide.TOP) {
+                width = 100.pct
+            }
+        }
+        val tokenSize = 2.rem
+        generalCounts(board, tokenSize, side.tokenCountPosition)
+        bpDivider()
+        scienceTokens(board, tokenSize, side.tokenCountPosition)
+        if (side != BoardSummarySide.TOP) {
+            bpDivider()
+            styledDiv {
+                css {
+                    width = 100.pct
+                    alignItems = Align.center
+                    display = Display.flex
+                    flexDirection = FlexDirection.column
+                }
+                playerPreparedCard(player)
+            }
+        }
     }
 }
 
