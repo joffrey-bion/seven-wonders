@@ -43,8 +43,8 @@ kotlin {
                 implementation(npm("styled-components", styledComponentsVersion))
                 implementation(npm("inline-style-prefixer", "6.0.0"))
 
-                implementation(npm("@blueprintjs/core", "3.26.1"))
-                implementation(npm("@blueprintjs/icons", "3.14.0"))
+                implementation(npm("@blueprintjs/core", "3.38.1"))
+                implementation(npm("@blueprintjs/icons", "3.24.0"))
             }
         }
         test {
