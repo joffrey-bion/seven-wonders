@@ -21,7 +21,19 @@ class SevenWonders {
     fun metricsCommonTags(): MeterRegistryCustomizer<MeterRegistry>? = MeterRegistryCustomizer { registry ->
         registry.config()
             .commonTags("application", "seven-wonders")
-            .commonTags("instance", InetAddress.getLocalHost().hostAddress)
+            .commonTags("instance", findInstanceName())
+    }
+
+    private fun findInstanceName(): String? {
+        val hostname = System.getenv("HOSTNAME")?.takeIf { it.isNotBlank() }
+        if (hostname != null) {
+            return hostname
+        }
+        val computerName = System.getenv("COMPUTERNAME")?.takeIf { it.isNotBlank() }
+        if (computerName != null) {
+            return computerName
+        }
+        return InetAddress.getLocalHost().hostName
     }
 }
 
