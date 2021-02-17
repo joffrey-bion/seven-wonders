@@ -15,4 +15,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_SEVEN_WONDERS }}
         uses: Ilshidur/action-discord@0.3.0
         with:
-          args: '[Issue #{{ EVENT_PAYLOAD.issue.number }}]({{ EVENT_PAYLOAD.issue.html_url }}) closed: {{ EVENT_PAYLOAD.issue.title }}'
+          args: '[Issue #{{ EVENT_PAYLOAD.issue.number }}](<{{ EVENT_PAYLOAD.issue.html_url }}>) closed: {{ EVENT_PAYLOAD.issue.title }}'
