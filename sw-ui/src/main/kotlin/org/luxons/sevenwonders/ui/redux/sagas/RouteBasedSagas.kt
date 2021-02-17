@@ -53,6 +53,7 @@ suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
         session.watchPreparedCards(game.id).map { PreparedCardEvent(it) }.dispatchAllIn(this)
         session.watchOwnMoves().map { PreparedMoveEvent(it) }.dispatchAllIn(this)
         session.watchTurns().map { TurnInfoEvent(it) }.dispatchAllIn(this)
+        session.sayReady()
     }
     console.log("End of game saga")
 }

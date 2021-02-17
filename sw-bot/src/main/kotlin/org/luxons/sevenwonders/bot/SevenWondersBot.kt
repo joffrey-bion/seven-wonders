@@ -82,7 +82,10 @@ class SevenWondersBot(
             session.watchTurns().filter { it.action == Action.WATCH_SCORE }.first()
         }
         session.watchTurns()
-            .onStart { emit(currentTurn) }
+            .onStart {
+                session.sayReady()
+                emit(currentTurn)
+            }
             .takeWhile { it.action != Action.WATCH_SCORE }
             .catch { e -> logger.error("BOT $player: error in turnInfo flow", e) }
             .collect { turn ->

@@ -184,12 +184,10 @@ class LobbyController(
 
         meterRegistry.counter("games.started").increment()
         logger.info("Game {} ('{}') successfully started", game.id, lobby.name)
-        val currentTurnInfo = game.getCurrentTurnInfo().let {
-            if (lobby.settings.askForReadiness) it.hideHandsAndWaitForReadiness() else it
-        }
 
-        // even if we don't care about ready state for business logic, the UI may use it nonetheless
-        lobby.initializePlayersReadyState()
+        // we wait for readiness here to ensure all subscriptions are correctly setup on client side
+        val currentTurnInfo = game.getCurrentTurnInfo().hideHandsAndWaitForReadiness()
+        lobby.resetPlayersReadyState()
 
         currentTurnInfo.forEach {
             val player = lobby.getPlayers()[it.playerIndex]
@@ -198,10 +196,8 @@ class LobbyController(
         template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
     }
 
-    private fun Lobby.initializePlayersReadyState() {
-        val players = getPlayers()
-        val initialReadyState = !settings.askForReadiness
-        players.forEach { it.isReady = initialReadyState }
+    private fun Lobby.resetPlayersReadyState() {
+        getPlayers().forEach { it.isReady = false }
     }
 
     companion object {

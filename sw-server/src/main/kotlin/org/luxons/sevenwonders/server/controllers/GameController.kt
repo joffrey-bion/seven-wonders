@@ -40,18 +40,15 @@ class GameController(
     fun ready(principal: Principal) {
         val player = principal.player
         val lobby = player.lobby
-        if (!lobby.settings.askForReadiness) {
-            logger.warn("Game {}: player {} is saying ready but readiness concept is disabled", lobby.id, player)
-            return
-        }
-
         val game = player.game
 
         // This lock doesn't have a clear rationale, but it's cleaner to check the readiness state of everyone within a
         // lock together with the code that updates the readiness status, to avoid interleaving surprises.
         synchronized(game) {
             player.isReady = true
-            sendPlayerReady(game.id, player)
+            if (lobby.settings.askForReadiness) {
+                sendPlayerReady(game.id, player)
+            }
             logger.info("Game {}: player {} is ready for the next turn", game.id, player)
 
             val players = lobby.getPlayers()
