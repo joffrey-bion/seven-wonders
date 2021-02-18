@@ -46,7 +46,7 @@ private class PlayerPreparedCard(props: PlayerPreparedCardProps) : RComponent<Pl
                 title = if (cardBack == null) {
                     "${props.playerDisplayName} is still thinking…"
                 } else {
-                    "${props.playerDisplayName} has prepared his move"
+                    "${props.playerDisplayName} is ready to play this turn"
                 }
             }
             if (cardBack != null) {
