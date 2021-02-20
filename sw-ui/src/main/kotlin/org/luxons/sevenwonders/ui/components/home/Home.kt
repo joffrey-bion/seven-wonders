@@ -11,8 +11,8 @@ private const val LOGO = "images/logo-7-wonders.png"
 fun RBuilder.home() = styledDiv {
     css {
         +GlobalStyles.fullscreen
+        +GlobalStyles.zeusBackground
         +HomeStyles.centerChildren
-        +HomeStyles.zeusBackground
     }
 
     img(src = LOGO, alt = "Seven Wonders") {}

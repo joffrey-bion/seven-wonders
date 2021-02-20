@@ -6,6 +6,11 @@ import styled.StyleSheet
 
 object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
 
+    val zeusBackground by css {
+        background = "url('images/backgrounds/zeus-temple.jpg') center no-repeat"
+        backgroundSize = "cover"
+    }
+
     val fullscreen by css {
         position = Position.fixed
         top = 0.px

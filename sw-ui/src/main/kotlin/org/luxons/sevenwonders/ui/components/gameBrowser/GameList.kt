@@ -1,26 +1,17 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpHtmlTable
-import com.palantir.blueprintjs.bpIcon
-import com.palantir.blueprintjs.bpTag
+import com.palantir.blueprintjs.*
 import kotlinx.css.*
+import kotlinx.html.classes
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.ui.redux.RequestJoinGame
 import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import react.dom.*
-import styled.css
-import styled.styledDiv
-import styled.styledSpan
-import styled.styledTr
+import styled.*
 
 interface GameListStateProps : RProps {
     var connectedPlayer: ConnectedPlayer
@@ -36,7 +27,37 @@ interface GameListProps : GameListStateProps, GameListDispatchProps
 class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState>(props) {
 
     override fun RBuilder.render() {
+        if (props.games.isEmpty()) {
+            noGamesInfo()
+        } else {
+            gamesTable()
+        }
+    }
+
+    private fun RBuilder.noGamesInfo() {
+        bpNonIdealState(
+            icon = "geosearch",
+            title = "No games to join",
+        ) {
+            styledDiv {
+                attrs {
+                    classes += "bp3-running-text"
+                }
+                css {
+                    maxWidth = 35.rem
+                }
+                +"Nobody seems to be playing at the moment. "
+                +"Don't be disappointed, you can always create your own game, and play with bots if you're alone."
+            }
+        }
+    }
+
+    private fun RBuilder.gamesTable() {
         bpHtmlTable {
+            attrs {
+                className = GameBrowserStyles.getClassName { it::gameTable }
+            }
+            columnWidthsSpec()
             thead {
                 gameListHeaderRow()
             }
@@ -48,24 +69,84 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
+    private fun RElementBuilder<IHTMLTableProps>.columnWidthsSpec() {
+        colGroup {
+            styledCol {
+                css {
+                    width = 40.rem
+                }
+            }
+            styledCol {
+                css {
+                    width = 5.rem
+                    textAlign = TextAlign.center
+                }
+            }
+            styledCol {
+                css {
+                    width = 5.rem
+                    textAlign = TextAlign.center // use inline style on th instead to overcome blueprint style
+                }
+            }
+            styledCol {
+                css {
+                    width = 3.rem
+                    textAlign = TextAlign.center
+                }
+            }
+        }
+    }
+
     private fun RBuilder.gameListHeaderRow() = tr {
-        th { +"Name" }
-        th { +"Status" }
-        th { +"Nb Players" }
-        th { +"Join" }
+        th {
+            +"Name"
+        }
+        th {
+            inlineStyles { gameTableHeaderCellStyle() }
+            +"Status"
+        }
+        th {
+            inlineStyles { gameTableHeaderCellStyle() }
+            +"Players"
+        }
+        th {
+            inlineStyles { gameTableHeaderCellStyle() }
+            +"Join"
+        }
     }
 
     private fun RBuilder.gameListItemRow(lobby: LobbyDTO) = styledTr {
-        css {
-            verticalAlign = VerticalAlign.middle
-        }
         attrs {
             key = lobby.id.toString()
         }
-        td { +lobby.name }
-        td { gameStatus(lobby.state) }
-        td { playerCount(lobby.players.size) }
-        td { joinButton(lobby) }
+        // inline styles necessary to overcome BlueprintJS's verticalAlign=top
+        td {
+            inlineStyles { gameTableCellStyle() }
+            +lobby.name
+        }
+        td {
+            inlineStyles {
+                textAlign = TextAlign.center
+                gameTableCellStyle()
+            }
+            gameStatus(lobby.state)
+        }
+        td {
+            inlineStyles { gameTableCellStyle() }
+            playerCount(lobby.players.size)
+        }
+        td {
+            inlineStyles { gameTableCellStyle() }
+            joinButton(lobby)
+        }
+    }
+
+    private fun StyledElement.gameTableHeaderCellStyle() {
+        textAlign = TextAlign.center
+    }
+
+    private fun StyledElement.gameTableCellStyle() {
+        verticalAlign = VerticalAlign.middle
     }
 
     private fun RBuilder.gameStatus(state: State) {
@@ -84,13 +165,16 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
             css {
                 display = Display.flex
                 flexDirection = FlexDirection.row
-                alignItems = Align.center
+                justifyContent = JustifyContent.center
             }
             attrs {
                 title = "Number of players"
             }
             bpIcon(name = "people", title = null)
             styledSpan {
+                css {
+                    marginLeft = 0.3.rem
+                }
                 +nPlayers.toString()
             }
         }
@@ -100,6 +184,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         val joinability = lobby.joinability(props.connectedPlayer.displayName)
         bpButton(
             minimal = true,
+            large = true,
             title = joinability.tooltip,
             icon = "arrow-right",
             disabled = !joinability.canDo,

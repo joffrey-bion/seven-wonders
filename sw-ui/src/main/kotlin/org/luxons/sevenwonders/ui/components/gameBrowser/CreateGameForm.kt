@@ -44,6 +44,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
                 }
 
                 bpInputGroup(
+                    large = true,
                     placeholder = "Game name",
                     onChange = { e ->
                         val input = e.currentTarget as HTMLInputElement
@@ -52,7 +53,6 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
                     rightElement = createGameButton(),
                 )
             }
-            currentPlayerInfo()
         }
     }
 
