@@ -126,20 +126,24 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
                     this.alt = "Wonder ${wonder.name}"
                 }
             }
-            victoryPoints(military.victoryPoints) {
+            styledDiv {
                 css {
                     position = Position.absolute
-                    top = 25.pct // below the wonder name
-                    left = 60.pct
-                    zIndex = 2 // go above the wonder, but below the table cards
+                    top = 20.pct
+                    right = (-80).px
+                    display = Display.flex
+                    flexDirection = FlexDirection.column
+                    alignItems = Align.start
                 }
-            }
-            defeatTokenCount(military.nbDefeatTokens) {
-                css {
-                    position = Position.absolute
-                    top = 25.pct // below the wonder name
-                    left = 80.pct
-                    zIndex = 2 // go above the wonder, but below the table cards
+                victoryPoints(military.victoryPoints) {
+                    css {
+                        marginBottom = 5.px
+                    }
+                }
+                defeatTokenCount(military.nbDefeatTokens) {
+                    css {
+                        marginTop = 5.px
+                    }
                 }
             }
             wonder.stages.forEachIndexed { index, stage ->
