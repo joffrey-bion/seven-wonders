@@ -89,7 +89,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             if (turnInfo.action == Action.SAY_READY) {
                 sayReadyButton()
             }
-            productionBar(gold = board.gold, production = board.production)
+            selfBoardSummary(turnInfo)
         }
     }
 
@@ -189,6 +189,30 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                         borderBottomRightRadius = 0.4.rem
                         margin(horizontal = 2.rem)
                     }
+                }
+            }
+        }
+    }
+
+    private fun RBuilder.selfBoardSummary(turnInfo: PlayerTurnInfo) {
+        styledDiv {
+            css {
+                position = Position.absolute
+                bottom = 0.px
+                left = 0.px
+                display = Display.flex
+                flexDirection = FlexDirection.row
+            }
+            val board = turnInfo.getOwnBoard()
+            boardSummary(
+                player = props.players[board.playerIndex],
+                board = board, BoardSummarySide.BOTTOM,
+                showPreparationStatus = false,
+            ) {
+                css {
+                    borderTopLeftRadius = 0.4.rem
+                    borderTopRightRadius = 0.4.rem
+                    margin(horizontal = 2.rem)
                 }
             }
         }

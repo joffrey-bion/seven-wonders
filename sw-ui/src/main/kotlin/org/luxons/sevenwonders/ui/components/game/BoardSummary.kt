@@ -20,7 +20,8 @@ enum class BoardSummarySide(
 ) {
     LEFT(TokenCountPosition.RIGHT, Align.flexStart, PopoverPosition.RIGHT),
     TOP(TokenCountPosition.OVER, Align.flexStart, PopoverPosition.BOTTOM),
-    RIGHT(TokenCountPosition.LEFT, Align.flexEnd, PopoverPosition.LEFT)
+    RIGHT(TokenCountPosition.LEFT, Align.flexEnd, PopoverPosition.LEFT),
+    BOTTOM(TokenCountPosition.OVER, Align.flexStart, PopoverPosition.TOP),
 }
 
 fun RBuilder.boardSummaryWithPopover(
@@ -35,7 +36,12 @@ fun RBuilder.boardSummaryWithPopover(
         position = boardSummarySide.popoverPosition,
         popoverClassName = popoverClass,
     ) {
-        boardSummary(player, board, boardSummarySide, block)
+        boardSummary(
+            player = player,
+            board = board,
+            side = boardSummarySide,
+            block = block,
+        )
     }
 }
 
@@ -47,10 +53,11 @@ private fun createFullBoardPreview(board: Board): ReactElement = buildElement {
     }
 }
 
-private fun RBuilder.boardSummary(
+fun RBuilder.boardSummary(
     player: PlayerDTO,
     board: Board,
     side: BoardSummarySide,
+    showPreparationStatus: Boolean = true,
     block: StyledDOMBuilder<DIV>.() -> Unit = {},
 ) {
     styledDiv {
@@ -67,21 +74,21 @@ private fun RBuilder.boardSummary(
             }
         }
 
-        topBar(player, side)
+        topBar(player, side, showPreparationStatus)
         styledHr {
             css {
                 margin(vertical = 0.5.rem)
                 width = 100.pct
             }
         }
-        bottomBar(side, board, player)
+        bottomBar(side, board, player, showPreparationStatus)
         block()
     }
 }
 
-private fun RBuilder.topBar(player: PlayerDTO, side: BoardSummarySide) {
+private fun RBuilder.topBar(player: PlayerDTO, side: BoardSummarySide, showPreparationStatus: Boolean) {
     val playerIconSize = 25
-    if (side == BoardSummarySide.TOP) {
+    if (showPreparationStatus && side == BoardSummarySide.TOP) {
         styledDiv {
             css {
                 display = Display.flex
@@ -97,11 +104,11 @@ private fun RBuilder.topBar(player: PlayerDTO, side: BoardSummarySide) {
     }
 }
 
-private fun RBuilder.bottomBar(side: BoardSummarySide, board: Board, player: PlayerDTO) {
+private fun RBuilder.bottomBar(side: BoardSummarySide, board: Board, player: PlayerDTO, showPreparationStatus: Boolean) {
     styledDiv {
         css {
             display = Display.flex
-            flexDirection = if (side == BoardSummarySide.TOP) FlexDirection.row else FlexDirection.column
+            flexDirection = if (side == BoardSummarySide.TOP || side == BoardSummarySide.BOTTOM) FlexDirection.row else FlexDirection.column
             alignItems = side.alignment
             if (side != BoardSummarySide.TOP) {
                 width = 100.pct
@@ -111,7 +118,7 @@ private fun RBuilder.bottomBar(side: BoardSummarySide, board: Board, player: Pla
         generalCounts(board, tokenSize, side.tokenCountPosition)
         bpDivider()
         scienceTokens(board, tokenSize, side.tokenCountPosition)
-        if (side != BoardSummarySide.TOP) {
+        if (showPreparationStatus && side != BoardSummarySide.TOP) {
             bpDivider()
             styledDiv {
                 css {
