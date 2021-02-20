@@ -1,17 +1,16 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import com.palantir.blueprintjs.Intent
 import com.palantir.blueprintjs.bpIcon
+import com.palantir.blueprintjs.bpTag
 import kotlinx.css.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.Icon
+import org.luxons.sevenwonders.model.wonders.WonderSide
 import react.RBuilder
 import react.ReactElement
 import react.buildElement
 import react.dom.*
-import styled.css
-import styled.styledDiv
-import styled.styledH4
+import styled.*
 
 fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
     val playerItems = players //
@@ -64,11 +63,10 @@ private sealed class PlayerItem {
     data class Player(val player: PlayerDTO, val isMe: Boolean) : PlayerItem() {
         override val key = player.username
         override val playerText = player.displayName
-        override val wonderText = "${player.wonder.name} (${player.wonder.side.name})"
+        override val wonderText = "${player.wonder.name} ${player.wonder.side.name}"
         override val opacity = 1.0
         override val icon = buildElement {
             userIcon(
-                isMe = isMe,
                 icon = player.icon ?: when {
                     player.isGameOwner -> Icon("badge")
                     else -> Icon("user")
@@ -82,10 +80,9 @@ private sealed class PlayerItem {
         override val key = "player-placeholder-$index"
         override val playerText = "?"
         override val wonderText = " "
-        override val opacity = 0.3
+        override val opacity = 0.4
         override val icon = buildElement {
             userIcon(
-                isMe = false,
                 icon = Icon("user"),
                 title = "Waiting for player...",
             )
@@ -93,9 +90,8 @@ private sealed class PlayerItem {
     }
 }
 
-private fun RBuilder.userIcon(isMe: Boolean, icon: Icon, title: String?): ReactElement = bpIcon(
+private fun RBuilder.userIcon(icon: Icon, title: String?): ReactElement = bpIcon(
     name = icon.name,
-    intent = if (isMe) Intent.WARNING else Intent.NONE,
     size = 50,
     title = title,
 )
@@ -109,18 +105,32 @@ private fun RBuilder.playerElement(playerItem: PlayerItem) {
             opacity = playerItem.opacity
         }
         child(playerItem.icon)
-        styledH4 {
+        styledSpan {
             css {
                 margin(all = 0.px)
                 textAlign = TextAlign.center
+                fontSize = if (playerItem is PlayerItem.Placeholder) 1.5.rem else 0.9.rem
+                fontWeight = FontWeight.bold
             }
             +playerItem.playerText
         }
-        styledDiv {
-            css {
-                margin(top = 0.3.rem)
+        if (playerItem is PlayerItem.Player) {
+            styledDiv {
+                css {
+                    margin(top = 0.3.rem)
+                }
+                bpTag(round = true) {
+                    attrs {
+                        className = LobbyStyles.getClassName {
+                            when (playerItem.player.wonder.side) {
+                                WonderSide.A -> it::wonderTagSideA
+                                WonderSide.B -> it::wonderTagSideB
+                            }
+                        }
+                    }
+                    +playerItem.wonderText
+                }
             }
-            +playerItem.wonderText
         }
     }
 }

@@ -51,6 +51,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             css {
                 padding(1.rem)
                 +GlobalStyles.fullscreen
+                +GlobalStyles.papyrusBackground
             }
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(currentGame.players, currentPlayer)
@@ -68,13 +69,19 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
                 bottom = 2.rem
                 left = 50.pct
                 transform { translate((-50).pct) }
+
+                width = 70.pct
+                display = Display.flex
+                justifyContent = JustifyContent.spaceAround
             }
             if (currentPlayer.isGameOwner) {
                 bpButtonGroup {
-                    startButton(currentGame, currentPlayer)
-                    addBotButton(currentGame)
                     leaveButton()
                     disbandButton()
+                }
+                bpButtonGroup {
+                    addBotButton(currentGame)
+                    startButton(currentGame, currentPlayer)
                 }
             } else {
                 leaveButton()
@@ -99,12 +106,9 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
     private fun RBuilder.setupPanel(currentGame: LobbyDTO) {
         styledDiv {
             css {
-                position = Position.fixed
-                top = 2.rem
-                right = 1.rem
-                width = 15.rem
+                +LobbyStyles.setupPanel
             }
-            bpCard(Elevation.TWO) {
+            bpCard(Elevation.TWO, className = Classes.DARK) {
                 styledH2 {
                     css {
                         margin(top = 0.px)
@@ -130,6 +134,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
             large = true,
             icon = "plus",
             rightIcon = "desktop",
+            intent = Intent.PRIMARY,
             title = if (currentGame.maxPlayersReached) "Max players reached" else "Add a bot to this game",
             disabled = currentGame.maxPlayersReached,
             onClick = { addBot(currentGame) },
