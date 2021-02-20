@@ -3,11 +3,11 @@
 package com.palantir.blueprintjs
 
 import react.PureComponent
-import react.RProps
 import react.RState
 import react.ReactElement
 
-external interface IHTMLTableProps : RProps {
+// in BlueprintJS, IHTMLTableProps doesn't extend IProps, and yet className works fine...
+external interface IHTMLTableProps : IProps {
     var bordered: Boolean?
         get() = definedExternally
         set(value) = definedExternally
