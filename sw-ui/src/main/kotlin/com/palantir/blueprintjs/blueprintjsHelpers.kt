@@ -143,11 +143,11 @@ fun RBuilder.bpNonIdealState(
     block: RHandler<INonIdealStateProps> = {},
 ): ReactElement = child(NonIdealState::class) {
     attrs {
-        this.icon = icon
-        this.title = title
-        this.description = description
-        this.action = action
-        this.children = children
+        icon?.let { this.icon = it }
+        title?.let { this.title = it }
+        description?.let { this.description = it }
+        action?.let { this.action = it }
+        children?.let { this.children = it }
     }
     block()
 }
