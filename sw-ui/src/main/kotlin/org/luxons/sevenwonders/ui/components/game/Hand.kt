@@ -213,13 +213,14 @@ private fun CSSBuilder.handStyle() {
     maxHeight = 25.vw
     position = Position.absolute
     transform {
-        translate(tx = (-50).pct, ty = 55.pct)
+        translate(tx = (-50).pct, ty = 65.pct)
     }
     transition(duration = 0.5.s)
     zIndex = 30
 
     hover {
-        bottom = 4.rem
+        bottom = 1.rem
+        zIndex = 60
         transform {
             translate(tx = (-50).pct, ty = 0.pct)
         }
