@@ -16,9 +16,7 @@ import react.RState
 import react.dom.h1
 import react.dom.h3
 import react.dom.h4
-import styled.css
-import styled.styledDiv
-import styled.styledH2
+import styled.*
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS")
 
@@ -50,14 +48,30 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         styledDiv {
             css {
                 +GlobalStyles.fullscreen
-                +GlobalStyles.papyrusBackground
+                +GlobalStyles.zeusBackground
                 padding(all = 1.rem)
             }
-            h1 { +"${currentGame.name} — Lobby" }
-            radialPlayerList(currentGame.players, currentPlayer)
-            actionButtons(currentPlayer, currentGame)
-            if (currentPlayer.isGameOwner) {
-                setupPanel(currentGame)
+            styledDiv {
+                css {
+                    classes.add(Classes.DARK)
+                    +LobbyStyles.contentContainer
+                }
+                h1 { +"${currentGame.name} — Lobby" }
+
+                radialPlayerList(currentGame.players, currentPlayer) {
+                    css {
+                        // to make players more readable on the background
+                        background = "radial-gradient(closest-side, black 20%, transparent)"
+                        // make it bigger so the background covers more ground
+                        width = 40.rem
+                        height = 40.rem
+                    }
+                }
+                actionButtons(currentPlayer, currentGame)
+
+                if (currentPlayer.isGameOwner) {
+                    setupPanel(currentGame)
+                }
             }
         }
     }
@@ -65,7 +79,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
     private fun RBuilder.actionButtons(currentPlayer: PlayerDTO, currentGame: LobbyDTO) {
         styledDiv {
             css {
-                position = Position.fixed
+                position = Position.absolute
                 bottom = 2.rem
                 left = 50.pct
                 transform { translate((-50).pct) }

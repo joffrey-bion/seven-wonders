@@ -92,16 +92,18 @@ fun RBuilder.bpTag(
     fill: Boolean? = null,
     active: Boolean? = null,
     icon: String? = null,
+    className: String? = null,
     block: RHandler<ITagProps> = {},
 ): ReactElement = child(Tag::class) {
     attrs {
-        this.intent = intent
-        this.minimal = minimal
-        this.large = large
-        this.round = round
-        this.fill = fill
-        this.icon = icon
-        this.active = active
+        intent?.let { this.intent = it }
+        minimal?.let { this.minimal = it }
+        large?.let { this.large = it }
+        round?.let { this.round = it }
+        fill?.let { this.fill = it }
+        icon?.let { this.icon = it }
+        active?.let { this.active = it }
+        className?.let { this.className = it }
     }
     block()
 }

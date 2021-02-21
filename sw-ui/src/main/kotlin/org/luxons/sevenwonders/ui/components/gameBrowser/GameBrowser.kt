@@ -24,7 +24,7 @@ fun RBuilder.gameBrowser() = styledDiv {
         }
         css {
             margin(horizontal = LinearDimension.auto)
-            maxWidth = 60.rem
+            maxWidth = GlobalStyles.preGameWidth
         }
         styledDiv {
             css {

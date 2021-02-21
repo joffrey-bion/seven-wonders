@@ -6,6 +6,8 @@ import styled.StyleSheet
 
 object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
 
+    val preGameWidth = 60.rem
+
     val zeusBackground by css {
         background = "url('images/backgrounds/zeus-temple.jpg') center no-repeat"
         backgroundSize = "cover"

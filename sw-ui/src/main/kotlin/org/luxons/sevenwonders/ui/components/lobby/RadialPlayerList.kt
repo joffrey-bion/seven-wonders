@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.components.lobby
 import com.palantir.blueprintjs.bpIcon
 import com.palantir.blueprintjs.bpTag
 import kotlinx.css.*
+import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.model.wonders.WonderSide
@@ -12,13 +13,17 @@ import react.buildElement
 import react.dom.*
 import styled.*
 
-fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO): ReactElement {
+fun RBuilder.radialPlayerList(
+    players: List<PlayerDTO>,
+    currentPlayer: PlayerDTO,
+    block: StyledDOMBuilder<DIV>.() -> Unit = {},
+): ReactElement {
     val playerItems = players //
-        .map { PlayerItem.Player(it, it.username == currentPlayer.username) }
+        .map { PlayerItem.Player(it) }
         .growWithPlaceholders(targetSize = 3)
         .withUserFirst(currentPlayer)
 
-    val tableImg = buildElement { roundTableImg() }
+    val tableImg = buildElement { table(200.px, 15.px) }
 
     return radialList(
         items = playerItems,
@@ -32,14 +37,8 @@ fun RBuilder.radialPlayerList(players: List<PlayerDTO>, currentPlayer: PlayerDTO
             firstItemAngleDegrees = 180, // self at the bottom
             direction = Direction.COUNTERCLOCKWISE, // new players sit to the right of last player
         ),
+        block = block,
     )
-}
-
-private fun RBuilder.roundTableImg(): ReactElement = img(src = "images/round-table.png", alt = "Round table") {
-    attrs {
-        width = "200"
-        height = "200"
-    }
 }
 
 private fun List<PlayerItem>.growWithPlaceholders(targetSize: Int): List<PlayerItem> = when {
@@ -60,7 +59,7 @@ private sealed class PlayerItem {
     abstract val opacity: Double
     abstract val icon: ReactElement
 
-    data class Player(val player: PlayerDTO, val isMe: Boolean) : PlayerItem() {
+    data class Player(val player: PlayerDTO) : PlayerItem() {
         override val key = player.username
         override val playerText = player.displayName
         override val wonderText = "${player.wonder.name} ${player.wonder.side.name}"
@@ -118,16 +117,17 @@ private fun RBuilder.playerElement(playerItem: PlayerItem) {
             styledDiv {
                 css {
                     margin(top = 0.3.rem)
-                }
-                bpTag(round = true) {
-                    attrs {
-                        className = LobbyStyles.getClassName {
-                            when (playerItem.player.wonder.side) {
-                                WonderSide.A -> it::wonderTagSideA
-                                WonderSide.B -> it::wonderTagSideB
-                            }
+
+                    // this is to overcome ".bp3-dark .bp3-tag" on the nested bpTag
+                    children(".wonder-tag") {
+                        color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp3-tag)
+                        backgroundColor = when (playerItem.player.wonder.side) {
+                            WonderSide.A -> Color.seaGreen
+                            WonderSide.B -> Color.darkRed
                         }
                     }
+                }
+                bpTag(round = true, className = "wonder-tag") {
                     +playerItem.wonderText
                 }
             }
