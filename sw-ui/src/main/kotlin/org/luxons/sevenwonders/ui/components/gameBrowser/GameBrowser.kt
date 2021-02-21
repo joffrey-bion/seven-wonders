@@ -16,6 +16,7 @@ fun RBuilder.gameBrowser() = styledDiv {
     css {
         +GlobalStyles.fullscreen
         +GlobalStyles.zeusBackground
+        padding(all = 1.rem)
     }
     styledDiv {
         attrs {
@@ -23,7 +24,6 @@ fun RBuilder.gameBrowser() = styledDiv {
         }
         css {
             margin(horizontal = LinearDimension.auto)
-            padding(all = 1.rem)
             maxWidth = 60.rem
         }
         styledDiv {

@@ -49,9 +49,9 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
         styledDiv {
             css {
-                padding(1.rem)
                 +GlobalStyles.fullscreen
                 +GlobalStyles.papyrusBackground
+                padding(all = 1.rem)
             }
             h2 { +"${currentGame.name} — Lobby" }
             radialPlayerList(currentGame.players, currentPlayer)
