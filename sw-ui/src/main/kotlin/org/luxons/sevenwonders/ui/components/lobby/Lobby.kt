@@ -13,7 +13,7 @@ import react.RBuilder
 import react.RComponent
 import react.RProps
 import react.RState
-import react.dom.h2
+import react.dom.h1
 import react.dom.h3
 import react.dom.h4
 import styled.css
@@ -53,7 +53,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
                 +GlobalStyles.papyrusBackground
                 padding(all = 1.rem)
             }
-            h2 { +"${currentGame.name} — Lobby" }
+            h1 { +"${currentGame.name} — Lobby" }
             radialPlayerList(currentGame.players, currentPlayer)
             actionButtons(currentPlayer, currentGame)
             if (currentPlayer.isGameOwner) {
