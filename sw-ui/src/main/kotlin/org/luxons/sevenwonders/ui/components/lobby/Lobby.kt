@@ -18,7 +18,7 @@ import react.dom.h3
 import react.dom.h4
 import styled.*
 
-private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS")
+private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS", "R2-D2", "Bender", "AWESOM-O")
 
 interface LobbyStateProps : RProps {
     var currentGame: LobbyDTO?
