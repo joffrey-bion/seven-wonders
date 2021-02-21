@@ -112,7 +112,7 @@ fun RBuilder.tokenWithCount(
                     tokenImage(tokenName, title = title, size = imgSize)
                     styledSpan {
                         css {
-                            +GlobalStyles.centerInParent
+                            +GlobalStyles.centerInPositionedParent
                             tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         }
                         +"$count"

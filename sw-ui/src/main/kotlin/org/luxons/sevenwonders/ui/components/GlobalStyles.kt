@@ -27,15 +27,15 @@ object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
 
     val fixedCenter by css {
         position = Position.fixed
-        left = 50.pct
-        top = 50.pct
-        transform {
-            translate((-50).pct, (-50).pct)
-        }
+        +centerLeftTopTransform
     }
 
-    val centerInParent by css {
+    val centerInPositionedParent by css {
         position = Position.absolute
+        +centerLeftTopTransform
+    }
+
+    val centerLeftTopTransform by css {
         left = 50.pct
         top = 50.pct
         transform {

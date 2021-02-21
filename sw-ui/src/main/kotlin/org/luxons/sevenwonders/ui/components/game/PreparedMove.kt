@@ -54,7 +54,7 @@ fun RBuilder.preparedMove(
 private fun StyledDOMBuilder<DIV>.discardText() {
     styledDiv {
         css {
-            +GlobalStyles.centerInParent
+            +GlobalStyles.centerInPositionedParent
             +GameStyles.discardMoveText
         }
         +"DISCARD"
