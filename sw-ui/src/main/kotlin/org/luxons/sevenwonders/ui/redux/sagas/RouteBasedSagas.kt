@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.redux.sagas
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
 import org.luxons.sevenwonders.client.SevenWondersSession
+import org.luxons.sevenwonders.model.api.events.GameEvent
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
@@ -49,10 +50,14 @@ suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     val game = reduxState.gameState ?: error("Game saga run without a current game")
     coroutineScope {
-        session.watchPlayerReady(game.id).map { PlayerReadyEvent(it) }.dispatchAllIn(this)
-        session.watchPreparedCards(game.id).map { PreparedCardEvent(it) }.dispatchAllIn(this)
-        session.watchOwnMoves().map { PreparedMoveEvent(it) }.dispatchAllIn(this)
-        session.watchTurns().map { TurnInfoEvent(it) }.dispatchAllIn(this)
+        session.watchGameEvents(game.id).map {
+            when (it) {
+                is GameEvent.NewTurnStarted -> TurnInfoEvent(it.turnInfo)
+                is GameEvent.MovePrepared -> PreparedMoveEvent(it.move)
+                is GameEvent.CardPrepared -> PreparedCardEvent(it.preparedCard)
+                is GameEvent.PlayerIsReady -> PlayerReadyEvent(it.username)
+            }
+        }.dispatchAllIn(this)
         session.sayReady()
     }
     console.log("End of game saga")

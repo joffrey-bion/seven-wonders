@@ -1,9 +1,10 @@
 package org.luxons.sevenwonders.client
 
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.*
 import kotlinx.serialization.builtins.serializer
 import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.stomp.config.HeartBeat
@@ -19,7 +20,8 @@ import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.api.actions.*
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
-import org.luxons.sevenwonders.model.cards.PreparedCard
+import org.luxons.sevenwonders.model.api.events.GameEvent
+import org.luxons.sevenwonders.model.api.events.GameEventWrapper
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
 
 class SevenWondersClient {
@@ -121,21 +123,22 @@ class SevenWondersSession(private val stompSession: StompSessionWithKxSerializat
         stompSession.sendEmptyMsg("/app/lobby/startGame")
     }
 
-    suspend fun watchPlayerReady(gameId: Long): Flow<String> =
-        stompSession.subscribe("/topic/game/$gameId/playerReady", String.serializer())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    suspend fun watchGameEvents(gameId: Long): Flow<GameEvent> {
+        val private = watchPublicGameEvents()
+        val public = watchPrivateGameEvents(gameId)
+        return merge(private, public)
+    }
 
-    suspend fun watchPreparedCards(gameId: Long): Flow<PreparedCard> =
-        stompSession.subscribe("/topic/game/$gameId/prepared", PreparedCard.serializer())
+    private suspend fun watchPrivateGameEvents(gameId: Long) =
+        stompSession.subscribe("/topic/game/$gameId/events", GameEventWrapper.serializer()).map { it.event }
 
-    suspend fun watchTurns(): Flow<PlayerTurnInfo> =
-        stompSession.subscribe("/user/queue/game/turn", PlayerTurnInfo.serializer())
+    suspend fun watchPublicGameEvents() =
+        stompSession.subscribe("/user/queue/game/events", GameEventWrapper.serializer()).map { it.event }
 
     suspend fun sayReady() {
         stompSession.sendEmptyMsg("/app/game/sayReady")
     }
-
-    suspend fun watchOwnMoves(): Flow<PlayerMove> =
-        stompSession.subscribe("/user/queue/game/preparedMove", PlayerMove.serializer())
 
     suspend fun prepareMove(move: PlayerMove) {
         stompSession.convertAndSend(
@@ -187,3 +190,6 @@ private suspend fun <T> doAndWaitForEvent(send: suspend () -> Unit, subscribe: s
         send()
         deferredFirstEvent.await()
     }
+
+suspend fun SevenWondersSession.watchTurns() =
+    watchPublicGameEvents().filterIsInstance<GameEvent.NewTurnStarted>().map { it.turnInfo }

@@ -4,6 +4,8 @@ import io.micrometer.core.instrument.MeterRegistry
 import org.luxons.sevenwonders.engine.Game
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
+import org.luxons.sevenwonders.model.api.events.GameEvent
+import org.luxons.sevenwonders.model.api.events.wrap
 import org.luxons.sevenwonders.model.api.wrap
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
@@ -102,7 +104,7 @@ class GameController(
                     handleEndOfGame(game, player, lobby)
                 }
             } else {
-                template.convertAndSendToUser(player.username, "/queue/game/preparedMove", action.move)
+                template.convertAndSendToUser(player.username, "/queue/game/events", GameEvent.MovePrepared(action.move).wrap())
             }
         }
     }
@@ -130,18 +132,20 @@ class GameController(
         }
     }
 
-    private fun sendPlayerReady(gameId: Long, player: Player) =
-        template.convertAndSend("/topic/game/$gameId/playerReady", player.username)
+    private fun sendPlayerReady(gameId: Long, player: Player) {
+        template.convertAndSend("/topic/game/$gameId/events", GameEvent.PlayerIsReady(player.username).wrap())
+    }
 
-    private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) =
-        template.convertAndSend("/topic/game/$gameId/prepared", preparedCard)
+    private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) {
+        template.convertAndSend("/topic/game/$gameId/events", GameEvent.CardPrepared(preparedCard).wrap())
+    }
 
     private fun sendTurnInfo(players: List<Player>, game: Game, hideHands: Boolean) {
         val turns = game.getCurrentTurnInfo()
         val turnsToSend = if (hideHands) turns.hideHandsAndWaitForReadiness() else turns
         for (turnInfo in turnsToSend) {
             val player = players[turnInfo.playerIndex]
-            template.convertAndSendToUser(player.username, "/queue/game/turn", turnInfo)
+            template.convertAndSendToUser(player.username, "/queue/game/events", GameEvent.NewTurnStarted(turnInfo).wrap())
         }
     }
 
