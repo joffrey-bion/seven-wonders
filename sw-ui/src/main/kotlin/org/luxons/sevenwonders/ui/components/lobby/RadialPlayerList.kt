@@ -22,7 +22,7 @@ fun RBuilder.radialPlayerList(
         .growWithPlaceholders(targetSize = 3)
         .withUserFirst(currentPlayer)
 
-    val tableImg = buildElement { table(200.px, 15.px) }
+    val tableImg = buildElement { lobbyWoodenTable(diameter = 200.px, borderSize = 15.px) }
 
     return radialList(
         items = playerItems,

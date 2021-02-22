@@ -11,7 +11,7 @@ import styled.styledDiv
 
 private const val FIRE_REFLECTION_COLOR = "#b85e00"
 
-fun RBuilder.table(diameter: LinearDimension, borderSize: LinearDimension = 20.px) {
+fun RBuilder.lobbyWoodenTable(diameter: LinearDimension, borderSize: LinearDimension = 20.px) {
     circle(diameter) {
         css {
             backgroundColor = Color("#3d1e0e")
