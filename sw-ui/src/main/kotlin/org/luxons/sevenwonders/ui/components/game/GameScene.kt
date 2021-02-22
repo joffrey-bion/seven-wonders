@@ -89,7 +89,6 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             if (turnInfo.action == Action.SAY_READY) {
                 sayReadyButton()
             }
-            selfBoardSummary(turnInfo)
         }
     }
 
@@ -133,6 +132,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         val leftBoard = turnInfo.getBoard(RelativeBoardPosition.LEFT)
         val rightBoard = turnInfo.getBoard(RelativeBoardPosition.RIGHT)
         val topBoards = turnInfo.getNonNeighbourBoards().reversed()
+        selfBoardSummary(turnInfo.getOwnBoard())
         leftPlayerBoardSummary(leftBoard)
         rightPlayerBoardSummary(rightBoard)
         if (topBoards.isNotEmpty()) {
@@ -194,7 +194,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
         }
     }
 
-    private fun RBuilder.selfBoardSummary(turnInfo: PlayerTurnInfo) {
+    private fun RBuilder.selfBoardSummary(board: Board) {
         styledDiv {
             css {
                 position = Position.absolute
@@ -203,7 +203,6 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 display = Display.flex
                 flexDirection = FlexDirection.row
             }
-            val board = turnInfo.getOwnBoard()
             boardSummary(
                 player = props.players[board.playerIndex],
                 board = board, BoardSummarySide.BOTTOM,
