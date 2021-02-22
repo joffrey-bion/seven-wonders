@@ -10,7 +10,6 @@ import org.luxons.sevenwonders.model.wonders.WonderSide
 import react.RBuilder
 import react.ReactElement
 import react.buildElement
-import react.dom.*
 import styled.*
 
 fun RBuilder.radialPlayerList(
@@ -55,14 +54,12 @@ private fun List<PlayerItem>.withUserFirst(me: PlayerDTO): List<PlayerItem> {
 private sealed class PlayerItem {
     abstract val key: String
     abstract val playerText: String
-    abstract val wonderText: String
     abstract val opacity: Double
     abstract val icon: ReactElement
 
     data class Player(val player: PlayerDTO) : PlayerItem() {
         override val key = player.username
         override val playerText = player.displayName
-        override val wonderText = "${player.wonder.name} ${player.wonder.side.name}"
         override val opacity = 1.0
         override val icon = buildElement {
             userIcon(
@@ -78,7 +75,6 @@ private sealed class PlayerItem {
     data class Placeholder(val index: Int) : PlayerItem() {
         override val key = "player-placeholder-$index"
         override val playerText = "?"
-        override val wonderText = " "
         override val opacity = 0.4
         override val icon = buildElement {
             userIcon(
@@ -106,29 +102,27 @@ private fun RBuilder.playerElement(playerItem: PlayerItem) {
         child(playerItem.icon)
         styledSpan {
             css {
-                margin(all = 0.px)
-                textAlign = TextAlign.center
                 fontSize = if (playerItem is PlayerItem.Placeholder) 1.5.rem else 0.9.rem
-                fontWeight = FontWeight.bold
             }
             +playerItem.playerText
         }
         if (playerItem is PlayerItem.Player) {
             styledDiv {
+                val wonder = playerItem.player.wonder
                 css {
-                    margin(top = 0.3.rem)
+                    marginTop = 0.3.rem
 
                     // this is to overcome ".bp3-dark .bp3-tag" on the nested bpTag
                     children(".wonder-tag") {
                         color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp3-tag)
-                        backgroundColor = when (playerItem.player.wonder.side) {
+                        backgroundColor = when (wonder.side) {
                             WonderSide.A -> Color.seaGreen
                             WonderSide.B -> Color.darkRed
                         }
                     }
                 }
                 bpTag(round = true, className = "wonder-tag") {
-                    +playerItem.wonderText
+                    +"${wonder.name} ${wonder.side}"
                 }
             }
         }
