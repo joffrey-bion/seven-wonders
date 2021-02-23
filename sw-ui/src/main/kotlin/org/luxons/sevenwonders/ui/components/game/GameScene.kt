@@ -228,8 +228,6 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
                 position = Position.absolute
                 bottom = 0.px
                 left = 0.px
-                display = Display.flex
-                flexDirection = FlexDirection.row
             }
             boardSummary(
                 player = props.players[board.playerIndex],
