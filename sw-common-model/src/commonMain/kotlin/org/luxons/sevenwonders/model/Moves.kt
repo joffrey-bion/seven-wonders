@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.model.resources.noTransactions
 data class PlayedMove(
     val playerIndex: Int,
     val type: MoveType,
-    val card: TableCard,
+    val card: TableCard, // For UPGRADE_WONDER and DISCARD, this shouldn't be sent to everyone
     val transactions: ResourceTransactions,
 )
 
