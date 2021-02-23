@@ -183,7 +183,8 @@ private fun RBuilder.boardToken(tokenName: String, count: Int, block: StyledDOMB
 private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {
     val back = stage.cardBack
     if (back != null) {
-        cardBackImage(back) {
+        val highlightColor = if (stage.builtDuringLastMove) Color.gold else null
+        cardBackImage(cardBack = back, highlightColor = highlightColor) {
             block()
         }
     } else {
