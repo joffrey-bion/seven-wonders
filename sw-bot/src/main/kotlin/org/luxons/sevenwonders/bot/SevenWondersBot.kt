@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.actions.BotConfig
 import org.luxons.sevenwonders.model.api.actions.Icon
+import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import org.slf4j.LoggerFactory
@@ -79,19 +80,18 @@ class SevenWondersBot(
 
     private suspend fun autoPlayUntilEnd(currentTurn: PlayerTurnInfo) = coroutineScope {
         val endGameTurnInfo = async {
-            session.watchTurns().filter { it.action == Action.WATCH_SCORE }.first()
+            session.watchTurns().filter { it.action is TurnAction.WatchScore }.first()
         }
         session.watchTurns()
             .onStart {
                 session.sayReady()
                 emit(currentTurn)
             }
-            .takeWhile { it.action != Action.WATCH_SCORE }
+            .takeWhile { it.action !is TurnAction.WatchScore }
             .catch { e -> logger.error("BOT $player: error in turnInfo flow", e) }
             .collect { turn ->
                 botDelay()
-                val shortTurnDescription = "action ${turn.action}, ${turn.hand?.size ?: 0} cards in hand"
-                logger.info("BOT $player: playing turn ($shortTurnDescription)")
+                logger.info("BOT $player: playing turn (action ${turn.action})")
                 session.autoPlayTurn(turn)
             }
         val lastTurn = endGameTurnInfo.await()
@@ -113,17 +113,16 @@ class SevenWondersBot(
 }
 
 private suspend fun SevenWondersSession.autoPlayTurn(turn: PlayerTurnInfo) {
-    when (turn.action) {
-        Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> prepareMove(createPlayCardMove(turn))
-        Action.PLAY_FREE_DISCARDED -> prepareMove(createPlayFreeDiscardedCardMove(turn))
-        Action.PICK_NEIGHBOR_GUILD -> prepareMove(createPickGuildMove(turn))
-        Action.SAY_READY -> sayReady()
-        Action.WAIT, Action.WATCH_SCORE -> Unit
+    when (val action = turn.action) {
+        is TurnAction.PlayFromHand -> prepareMove(createPlayCardMove(turn, action.hand))
+        is TurnAction.PlayFromDiscarded -> prepareMove(createPlayFreeDiscardedCardMove(action))
+        is TurnAction.PickNeighbourGuild -> prepareMove(createPickGuildMove(action))
+        is TurnAction.SayReady -> sayReady()
+        is TurnAction.Wait, is TurnAction.WatchScore -> Unit
     }
 }
 
-private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
-    val hand = turnInfo.hand ?: error("Cannot choose move, no hand in current turn info!")
+private fun createPlayCardMove(turnInfo: PlayerTurnInfo, hand: List<HandCard>): PlayerMove {
     val wonderBuildability = turnInfo.wonderBuildability
     if (wonderBuildability.isBuildable) {
         val transactions = wonderBuildability.transactionsOptions.random()
@@ -137,10 +136,10 @@ private fun createPlayCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
     }
 }
 
-private fun createPlayFreeDiscardedCardMove(turnInfo: PlayerTurnInfo): PlayerMove {
-    val card = turnInfo.discardedCards?.random() ?: error("No discarded card to play")
+private fun createPlayFreeDiscardedCardMove(action: TurnAction.PlayFromDiscarded): PlayerMove {
+    val card = action.discardedCards.random()
     return PlayerMove(MoveType.PLAY_FREE_DISCARDED, card.name)
 }
 
-private fun createPickGuildMove(turnInfo: PlayerTurnInfo): PlayerMove =
-    PlayerMove(MoveType.COPY_GUILD, turnInfo.neighbourGuildCards.random().name)
+private fun createPickGuildMove(action: TurnAction.PickNeighbourGuild): PlayerMove =
+    PlayerMove(MoveType.COPY_GUILD, action.neighbourGuildCards.random().name)

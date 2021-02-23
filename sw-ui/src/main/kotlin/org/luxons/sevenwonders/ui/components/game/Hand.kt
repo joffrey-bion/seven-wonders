@@ -37,7 +37,7 @@ interface HandProps : RProps {
 class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
 
     override fun RBuilder.render() {
-        val hand = props.turnInfo.cardsToPlay() ?: return
+        val hand = props.turnInfo.action.cardsToPlay() ?: return
         styledDiv {
             css {
                 handStyle()
@@ -52,11 +52,13 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
         }
     }
 
-    private fun PlayerTurnInfo.cardsToPlay(): List<HandCard>? = when (action) {
-        Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> hand
-        Action.PLAY_FREE_DISCARDED -> discardedCards
-        Action.PICK_NEIGHBOR_GUILD -> neighbourGuildCards
-        Action.WAIT, Action.WATCH_SCORE, Action.SAY_READY -> null
+    private fun TurnAction.cardsToPlay(): List<HandCard>? = when (this) {
+        is TurnAction.PlayFromHand -> hand
+        is TurnAction.PlayFromDiscarded -> discardedCards
+        is TurnAction.PickNeighbourGuild -> neighbourGuildCards
+        is TurnAction.SayReady,
+        is TurnAction.Wait,
+        is TurnAction.WatchScore -> null
     }
 
     private fun RBuilder.handCard(
@@ -94,15 +96,17 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             bpButtonGroup {
                 val action = props.turnInfo.action
                 when (action) {
-                    Action.PLAY, Action.PLAY_2, Action.PLAY_LAST -> {
+                    is TurnAction.PlayFromHand -> {
                         playCardButton(card, HandAction.PLAY)
                         if (props.turnInfo.getOwnBoard().canPlayAnyCardForFree) {
                             playCardButton(card.copy(playability = CardPlayability.SPECIAL_FREE), HandAction.PLAY_FREE)
                         }
                     }
-                    Action.PLAY_FREE_DISCARDED -> playCardButton(card, HandAction.PLAY_FREE_DISCARDED)
-                    Action.PICK_NEIGHBOR_GUILD -> playCardButton(card, HandAction.COPY_GUILD)
-                    else -> error("unsupported action in hand card: $action")
+                    is TurnAction.PlayFromDiscarded -> playCardButton(card, HandAction.PLAY_FREE_DISCARDED)
+                    is TurnAction.PickNeighbourGuild -> playCardButton(card, HandAction.COPY_GUILD)
+                    is TurnAction.SayReady,
+                    is TurnAction.Wait,
+                    is TurnAction.WatchScore -> error("unsupported action in hand card: $action")
                 }
 
                 if (action.allowsBuildingWonder()) {

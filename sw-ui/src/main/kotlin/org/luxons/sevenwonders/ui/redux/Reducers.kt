@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.redux
 import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
+import org.luxons.sevenwonders.model.TurnAction
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
@@ -32,10 +33,14 @@ data class GameState(
     val turnInfo: PlayerTurnInfo?,
     val preparedCardsByUsername: Map<String, CardBack?> = emptyMap(),
     val currentPreparedMove: PlayerMove? = null,
+    // UI
     val transactionSelector: TransactionSelectorState? = null,
 ) {
     val currentPreparedCard: HandCard?
-        get() = turnInfo?.hand?.firstOrNull { it.name == currentPreparedMove?.cardName }
+        get() {
+            val hand = (turnInfo?.action as? TurnAction.PlayFromHand)?.hand
+            return hand?.firstOrNull { it.name == currentPreparedMove?.cardName }
+        }
 }
 
 data class TransactionSelectorState(

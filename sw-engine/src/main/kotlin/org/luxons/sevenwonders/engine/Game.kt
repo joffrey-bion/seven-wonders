@@ -42,68 +42,70 @@ class Game internal constructor(
     }
 
     private fun startNewTurn() {
-        val newTableState = table.toTableState()
         currentTurnInfo = players.map { player ->
             val hand = hands.createHand(player)
-            val action = determineAction(hand, player.board)
-            createPlayerTurnInfo(player, action, hand, newTableState)
+            val action = if (hand.isEmpty()) {
+                TurnAction.Wait(message = ActionMessages.WAIT_OTHER_PLAY_LAST)
+            } else {
+                TurnAction.PlayFromHand(message = actionMessage(hand, player), hand = hand)
+            }
+            PlayerTurnInfo(playerIndex = player.index, table = table.toTableState(), action = action)
         }
+    }
+
+    private fun actionMessage(hand: List<HandCard>, player: Player) = when {
+        hand.size == 1 && player.board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> ActionMessages.PLAY_LAST_SPECIAL
+        hand.size == 2 && player.board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> ActionMessages.PLAY_2
+        hand.size == 2 -> ActionMessages.PLAY_LAST
+        else -> ActionMessages.PLAY
     }
 
     private fun startPlayDiscardedTurn() {
         val newTableState = table.toTableState()
         currentTurnInfo = players.map { player ->
             val action = when {
-                player.board.hasSpecial(SpecialAbility.PLAY_DISCARDED) -> Action.PLAY_FREE_DISCARDED
-                else -> Action.WAIT
+                player.board.hasSpecial(SpecialAbility.PLAY_DISCARDED) -> TurnAction.PlayFromDiscarded(
+                    discardedCards = discardedCards.toHandCards(player, true),
+                )
+                else -> TurnAction.Wait(message = ActionMessages.WAIT_OTHER_PLAY_DISCARD)
             }
-            createPlayerTurnInfo(player, action, null, newTableState)
+            PlayerTurnInfo(playerIndex = player.index, table = newTableState, action = action)
         }
     }
 
-    private fun createPlayerTurnInfo(player: Player, action: Action, hand: List<HandCard>?, newTableState: TableState) =
-        PlayerTurnInfo(
-            playerIndex = player.index,
-            table = newTableState,
-            action = action,
-            hand = hand,
-            discardedCards = discardedCards.toHandCards(player, true).takeIf { action == Action.PLAY_FREE_DISCARDED },
-            neighbourGuildCards = table.getNeighbourGuildCards(player.index).toHandCards(player, true),
-        )
-
-    private fun startEndGameTurn() {
+    private fun startEndGameActionsTurn() {
         // some player may need to do additional stuff
-        startNewTurn()
-        val allDone = currentTurnInfo.all { it.action == Action.WAIT }
-        if (!allDone) {
+        currentTurnInfo = players.map { player ->
+            PlayerTurnInfo(
+                playerIndex = player.index,
+                table = table.toTableState(),
+                action = computeEndGameAction(player),
+            )
+        }
+        val someSpecialActions = currentTurnInfo.any { it.action !is TurnAction.Wait }
+        if (someSpecialActions) {
             return // we play the last turn like a normal one
         }
         val scoreBoard = computeScore()
         currentTurnInfo = currentTurnInfo.map {
-            it.copy(action = Action.WATCH_SCORE, scoreBoard = scoreBoard)
+            it.copy(action = TurnAction.WatchScore(message = ActionMessages.WATCH_SCORE, scoreBoard = scoreBoard))
         }
     }
+
+    private fun computeEndGameAction(player: Player): TurnAction {
+        val guilds = table.getNeighbourGuildCards(player.index).toHandCards(player, true)
+        return when {
+            player.canCopyGuild() && guilds.isEmpty() -> TurnAction.PickNeighbourGuild(guilds)
+            else -> TurnAction.Wait(ActionMessages.WAIT_OTHER_PICK_GUILD)
+        }
+    }
+
+    private fun Player.canCopyGuild() = board.hasSpecial(SpecialAbility.COPY_GUILD) && board.copiedGuild == null
 
     /**
      * Returns information for each player about the current turn.
      */
     fun getCurrentTurnInfo(): List<PlayerTurnInfo> = currentTurnInfo
-
-    private fun determineAction(hand: List<HandCard>, board: Board): Action = when {
-        endOfGameReached() -> when {
-            board.hasSpecial(SpecialAbility.COPY_GUILD) && board.copiedGuild == null -> determineCopyGuildAction(board)
-            else -> Action.WAIT
-        }
-        hand.size == 1 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_LAST
-        hand.size == 2 && board.hasSpecial(SpecialAbility.PLAY_LAST_CARD) -> Action.PLAY_2
-        hand.isEmpty() -> Action.WAIT
-        else -> Action.PLAY
-    }
-
-    private fun determineCopyGuildAction(board: Board): Action {
-        val neighbourGuildCards = table.getNeighbourGuildCards(board.playerIndex)
-        return if (neighbourGuildCards.isEmpty()) Action.WAIT else Action.PICK_NEIGHBOR_GUILD
-    }
 
     /**
      * Prepares the given [move] for the player at the given [playerIndex].
@@ -132,7 +134,7 @@ class Game internal constructor(
      * ready to [play the current turn][playTurn].
      */
     fun allPlayersPreparedTheirMove(): Boolean {
-        val nbExpectedMoves = currentTurnInfo.count { it.action !== Action.WAIT }
+        val nbExpectedMoves = currentTurnInfo.count { it.action !is TurnAction.Wait }
         return preparedMoves.size == nbExpectedMoves
     }
 
@@ -145,7 +147,6 @@ class Game internal constructor(
     fun playTurn() {
         makeMoves()
 
-        // same goes for the discarded cards during the last turn, which should be available for special actions
         if (hands.maxOneCardRemains()) {
             discardLastCardsIfRelevant()
         }
@@ -153,9 +154,9 @@ class Game internal constructor(
         if (shouldStartPlayDiscardedTurn()) {
             startPlayDiscardedTurn()
         } else if (endOfAgeReached()) {
-            executeEndOfAgeEvents()
+            resolveMilitaryConflicts()
             if (endOfGameReached()) {
-                startEndGameTurn()
+                startEndGameActionsTurn()
             } else {
                 startNewAge()
             }
@@ -178,14 +179,14 @@ class Game internal constructor(
     }
 
     private fun getMovesToPerform(): List<Move> =
-        currentTurnInfo.filter { it.action !== Action.WAIT }.map { getMoveToPerformFor(it.playerIndex) }
+        currentTurnInfo.filter { it.action !is TurnAction.Wait }.map { getMoveToPerformFor(it.playerIndex) }
 
     private fun getMoveToPerformFor(playerIndex: Int) =
         preparedMoves[playerIndex] ?: throw MissingPreparedMoveException(playerIndex)
 
     private fun endOfAgeReached(): Boolean = hands.areEmpty
 
-    private fun executeEndOfAgeEvents() {
+    private fun resolveMilitaryConflicts() {
         // this is necessary because this method is actually called twice in the 3rd age if someone has CPY_GUILD
         // TODO we should instead manage the game's state machine in a better way to avoid stuff like this
         if (!militaryConflictsResolved) {

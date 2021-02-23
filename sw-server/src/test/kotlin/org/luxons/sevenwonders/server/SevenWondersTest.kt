@@ -7,7 +7,7 @@ import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.*
-import org.luxons.sevenwonders.model.Action
+import org.luxons.sevenwonders.model.TurnAction
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.server.test.runAsyncTest
@@ -15,7 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -129,13 +132,13 @@ class SevenWondersTest {
         ).forEach { (session, startEvents) ->
             launch {
                 val initialReadyTurn = startEvents.first()
-                assertEquals(Action.SAY_READY, initialReadyTurn.action)
-                assertNull(initialReadyTurn.hand)
+                assertTrue(initialReadyTurn.action is TurnAction.SayReady)
                 val turns = session.watchTurns()
                 session.sayReady()
 
                 val firstActualTurn = turns.first()
-                assertNotNull(firstActualTurn.hand)
+                val action = firstActualTurn.action
+                assertTrue(action is TurnAction.PlayFromHand)
                 session.disconnect()
             }
         }

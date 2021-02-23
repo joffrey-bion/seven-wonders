@@ -5,6 +5,7 @@ import kotlinx.coroutines.withTimeout
 import org.luxons.sevenwonders.bot.connectBot
 import org.luxons.sevenwonders.bot.connectBots
 import org.luxons.sevenwonders.client.SevenWondersClient
+import org.luxons.sevenwonders.model.TurnAction
 import org.luxons.sevenwonders.model.api.AutoGameAction
 import org.luxons.sevenwonders.model.api.AutoGameResult
 import org.slf4j.LoggerFactory
@@ -48,7 +49,8 @@ class AutoGameController(
             lastTurn
         }
 
-        val scoreBoard = lastTurn.scoreBoard ?: error("Last turn info doesn't have scoreboard")
+        val turnAction = lastTurn.action as? TurnAction.WatchScore ?: error("Last turn action should be to watch the score")
+        val scoreBoard = turnAction.scoreBoard
         return AutoGameResult(scoreBoard, lastTurn.table)
     }
 

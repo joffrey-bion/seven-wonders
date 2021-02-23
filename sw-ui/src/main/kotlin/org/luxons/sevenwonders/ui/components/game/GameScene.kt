@@ -61,8 +61,9 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                     +GameStyles.pulsatingRed
                 }
             }
-            turnInfo.scoreBoard?.let {
-                scoreTableOverlay(it, props.players, props.leaveGame)
+            val action = turnInfo.action
+            if (action is TurnAction.WatchScore) {
+                scoreTableOverlay(action.scoreBoard, props.players, props.leaveGame)
             }
             actionInfo(turnInfo.message)
             boardComponent(board = board) {
@@ -86,7 +87,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
             if (card != null && move != null) {
                 preparedMove(card, move)
             }
-            if (turnInfo.action == Action.SAY_READY) {
+            if (turnInfo.action is TurnAction.SayReady) {
                 sayReadyButton()
             }
         }
