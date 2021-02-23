@@ -9,7 +9,6 @@ import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
-import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
 import react.*
 import styled.StyledDOMBuilder
 import styled.css

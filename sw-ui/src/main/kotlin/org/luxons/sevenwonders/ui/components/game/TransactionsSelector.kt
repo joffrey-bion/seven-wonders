@@ -11,7 +11,6 @@ import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
-import org.luxons.sevenwonders.ui.redux.TransactionSelectorState
 import react.*
 import react.dom.*
 import styled.*

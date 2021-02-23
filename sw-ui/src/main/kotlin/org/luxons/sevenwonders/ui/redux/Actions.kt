@@ -24,10 +24,6 @@ data class EnterGameAction(val lobby: LobbyDTO, val turnInfo: PlayerTurnInfo) : 
 
 data class TurnInfoEvent(val turnInfo: PlayerTurnInfo) : RAction
 
-data class StartTransactionSelection(val transactionSelector: TransactionSelectorState) : RAction
-
-object CancelTransactionSelection : RAction
-
 data class PreparedMoveEvent(val move: PlayerMove) : RAction
 
 data class PreparedCardEvent(val card: PreparedCard) : RAction

@@ -9,8 +9,10 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.HandCard
+import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.redux.GameState
 import react.*
 import styled.css
 import styled.getClassName
@@ -28,14 +30,26 @@ interface GameSceneDispatchProps : RProps {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
     var unprepareMove: () -> Unit
-    var startTransactionsSelection: (TransactionSelectorState) -> Unit
-    var cancelTransactionsSelection: () -> Unit
     var leaveGame: () -> Unit
 }
 
 interface GameSceneProps : GameSceneStateProps, GameSceneDispatchProps
 
-private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RState>(props) {
+data class GameSceneState(
+    var transactionSelector: TransactionSelectorState?
+) : RState
+
+data class TransactionSelectorState(
+    val moveType: MoveType,
+    val card: HandCard,
+    val transactionsOptions: ResourceTransactionOptions,
+)
+
+private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, GameSceneState>(props) {
+
+    override fun GameSceneState.init() {
+        transactionSelector = null
+    }
 
     override fun RBuilder.render() {
         styledDiv {
@@ -74,14 +88,14 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 }
             }
             transactionsSelectorDialog(
-                state = props.gameState?.transactionSelector,
+                state = state.transactionSelector,
                 neighbours = playerNeighbours(),
-                prepareMove = props.prepareMove,
-                cancelTransactionSelection = props.cancelTransactionsSelection,
+                prepareMove = ::prepareMove,
+                cancelTransactionSelection = ::resetTransactionSelector,
             )
             boardSummaries(turnInfo)
             handRotationIndicator(turnInfo.table.handRotationDirection)
-            handCards(turnInfo, props.preparedMove, props.prepareMove, props.startTransactionsSelection)
+            handCards(turnInfo, props.preparedMove, props.prepareMove, ::startTransactionSelection)
             val card = props.preparedCard
             val move = props.preparedMove
             if (card != null && move != null) {
@@ -91,6 +105,19 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, RSta
                 sayReadyButton()
             }
         }
+    }
+
+    private fun prepareMove(move: PlayerMove) {
+        props.prepareMove(move)
+        setState { transactionSelector = null }
+    }
+
+    private fun startTransactionSelection(selectorState: TransactionSelectorState) {
+        setState { transactionSelector = selectorState }
+    }
+
+    private fun resetTransactionSelector() {
+        setState { transactionSelector = null }
     }
 
     private fun everyoneIsWaitingForMe(): Boolean {
@@ -264,8 +291,6 @@ private val gameScene: RClass<GameSceneProps> =
         mapDispatchToProps = { dispatch, _ ->
             prepareMove = { move -> dispatch(RequestPrepareMove(move)) }
             unprepareMove = { dispatch(RequestUnprepareMove()) }
-            startTransactionsSelection = { selector -> dispatch(StartTransactionSelection(selector)) }
-            cancelTransactionsSelection = { dispatch(CancelTransactionSelection) }
             sayReady = { dispatch(RequestSayReady()) }
             leaveGame = { dispatch(RequestLeaveGame()) }
         },

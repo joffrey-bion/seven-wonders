@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.MoveType
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.TurnAction
@@ -10,7 +9,6 @@ import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import redux.RAction
 
 data class SwState(
@@ -33,8 +31,6 @@ data class GameState(
     val turnInfo: PlayerTurnInfo?,
     val preparedCardsByUsername: Map<String, CardBack?> = emptyMap(),
     val currentPreparedMove: PlayerMove? = null,
-    // UI
-    val transactionSelector: TransactionSelectorState? = null,
 ) {
     val currentPreparedCard: HandCard?
         get() {
@@ -42,12 +38,6 @@ data class GameState(
             return hand?.firstOrNull { it.name == currentPreparedMove?.cardName }
         }
 }
-
-data class TransactionSelectorState(
-    val moveType: MoveType,
-    val card: HandCard,
-    val transactionsOptions: ResourceTransactionOptions,
-)
 
 fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
     gamesById = gamesReducer(state.gamesById, action),
@@ -103,9 +93,6 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
         preparedCardsByUsername = emptyMap(),
         currentPreparedMove = null,
     )
-    is StartTransactionSelection -> gameState?.copy(transactionSelector = action.transactionSelector)
-    is CancelTransactionSelection -> gameState?.copy(transactionSelector = null)
-    is RequestPrepareMove -> gameState?.copy(transactionSelector = null)
     is LeaveLobbyAction -> null
     else -> gameState
 }
