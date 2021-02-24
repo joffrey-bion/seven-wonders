@@ -5,6 +5,7 @@ import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
@@ -27,7 +28,8 @@ private enum class HandAction(
 }
 
 interface HandProps : RProps {
-    var turnInfo: PlayerTurnInfo
+    var action: TurnAction
+    var ownBoard: Board
     var preparedMove: PlayerMove?
     var prepareMove: (PlayerMove) -> Unit
     var startTransactionsSelection: (TransactionSelectorState) -> Unit
@@ -36,7 +38,7 @@ interface HandProps : RProps {
 class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
 
     override fun RBuilder.render() {
-        val hand = props.turnInfo.action.cardsToPlay() ?: return
+        val hand = props.action.cardsToPlay() ?: return
         styledDiv {
             css {
                 handStyle()
@@ -71,7 +73,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             block()
             cardImage(card) {
                 css {
-                    val isPlayable = card.playability.isPlayable || props.turnInfo.getOwnBoard().canPlayAnyCardForFree
+                    val isPlayable = card.playability.isPlayable || props.ownBoard.canPlayAnyCardForFree
                     handCardImgStyle(isPlayable)
                 }
             }
@@ -93,11 +95,11 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
                 }
             }
             bpButtonGroup {
-                val action = props.turnInfo.action
+                val action = props.action
                 when (action) {
                     is TurnAction.PlayFromHand -> {
                         playCardButton(card, HandAction.PLAY)
-                        if (props.turnInfo.getOwnBoard().canPlayAnyCardForFree) {
+                        if (props.ownBoard.canPlayAnyCardForFree) {
                             playCardButton(card.copy(playability = CardPlayability.SPECIAL_FREE), HandAction.PLAY_FREE)
                         }
                     }
@@ -134,7 +136,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
     }
 
     private fun RElementBuilder<IButtonGroupProps>.upgradeWonderButton(card: HandCard) {
-        val wonderBuildability = props.turnInfo.wonderBuildability
+        val wonderBuildability = props.ownBoard.wonder.buildability
         bpButton(
             title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
             large = true,
@@ -258,15 +260,15 @@ private fun CSSBuilder.handCardImgStyle(isPlayable: Boolean) {
 }
 
 fun RBuilder.handCards(
-    turnInfo: PlayerTurnInfo,
-    preparedMove: PlayerMove?,
+    game: GameState,
     prepareMove: (PlayerMove) -> Unit,
     startTransactionsSelection: (TransactionSelectorState) -> Unit,
 ) {
     child(HandComponent::class) {
         attrs {
-            this.turnInfo = turnInfo
-            this.preparedMove = preparedMove
+            this.action = game.action
+            this.ownBoard = game.getOwnBoard()
+            this.preparedMove = game.currentPreparedMove
             this.prepareMove = prepareMove
             this.startTransactionsSelection = startTransactionsSelection
         }

@@ -1,14 +1,10 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.PlayerTurnInfo
-import org.luxons.sevenwonders.model.TurnAction
+import org.luxons.sevenwonders.model.GameState
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.model.cards.CardBack
-import org.luxons.sevenwonders.model.cards.HandCard
 import redux.RAction
 
 data class SwState(
@@ -23,20 +19,6 @@ data class SwState(
         it.username == connectedPlayer?.username
     }
     val games: List<LobbyDTO> = gamesById.values.toList()
-}
-
-data class GameState(
-    val id: Long,
-    val players: List<PlayerDTO>,
-    val turnInfo: PlayerTurnInfo?,
-    val preparedCardsByUsername: Map<String, CardBack?> = emptyMap(),
-    val currentPreparedMove: PlayerMove? = null,
-) {
-    val currentPreparedCard: HandCard?
-        get() {
-            val hand = (turnInfo?.action as? TurnAction.PlayFromHand)?.hand
-            return hand?.firstOrNull { it.name == currentPreparedMove?.cardName }
-        }
 }
 
 fun rootReducer(state: SwState, action: RAction): SwState = state.copy(
@@ -73,9 +55,15 @@ private fun currentLobbyReducer(currentLobby: LobbyDTO?, action: RAction): Lobby
 
 private fun gameStateReducer(gameState: GameState?, action: RAction): GameState? = when (action) {
     is EnterGameAction -> GameState(
-        id = action.lobby.id,
+        gameId = action.lobby.id,
         players = action.lobby.players,
-        turnInfo = action.turnInfo,
+        playerIndex = action.turnInfo.playerIndex,
+        currentAge = action.turnInfo.table.currentAge,
+        boards = action.turnInfo.table.boards,
+        handRotationDirection = action.turnInfo.table.handRotationDirection,
+        action = action.turnInfo.action,
+        preparedCardsByUsername = emptyMap(),
+        currentPreparedMove = null,
     )
     is PreparedMoveEvent -> gameState?.copy(currentPreparedMove = action.move)
     is RequestUnprepareMove -> gameState?.copy(currentPreparedMove = null)
@@ -89,7 +77,11 @@ private fun gameStateReducer(gameState: GameState?, action: RAction): GameState?
     )
     is TurnInfoEvent -> gameState?.copy(
         players = gameState.players.map { p -> p.copy(isReady = false) },
-        turnInfo = action.turnInfo,
+        playerIndex = action.turnInfo.playerIndex,
+        currentAge = action.turnInfo.table.currentAge,
+        boards = action.turnInfo.table.boards,
+        handRotationDirection = action.turnInfo.table.handRotationDirection,
+        action = action.turnInfo.action,
         preparedCardsByUsername = emptyMap(),
         currentPreparedMove = null,
     )

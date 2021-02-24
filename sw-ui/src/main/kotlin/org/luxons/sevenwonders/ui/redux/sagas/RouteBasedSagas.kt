@@ -50,7 +50,7 @@ suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
     val game = reduxState.gameState ?: error("Game saga run without a current game")
     coroutineScope {
-        session.watchGameEvents(game.id).map {
+        session.watchGameEvents(game.gameId).map {
             when (it) {
                 is GameEvent.NewTurnStarted -> TurnInfoEvent(it.turnInfo)
                 is GameEvent.MovePrepared -> PreparedMoveEvent(it.move)

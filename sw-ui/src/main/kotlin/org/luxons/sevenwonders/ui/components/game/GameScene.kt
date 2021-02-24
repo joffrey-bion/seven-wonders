@@ -12,7 +12,6 @@ import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
-import org.luxons.sevenwonders.ui.redux.GameState
 import react.*
 import styled.css
 import styled.getClassName
@@ -21,7 +20,7 @@ import styled.styledDiv
 interface GameSceneStateProps : RProps {
     var currentPlayer: PlayerDTO?
     var players: List<PlayerDTO>
-    var gameState: GameState?
+    var game: GameState?
     var preparedMove: PlayerMove?
     var preparedCard: HandCard?
 }
@@ -57,17 +56,17 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
                 +GlobalStyles.papyrusBackground
                 +GlobalStyles.fullscreen
             }
-            val turnInfo = props.gameState?.turnInfo
-            if (turnInfo == null) {
+            val game = props.game
+            if (game == null) {
                 bpNonIdealState(icon = "error", title = "Error: no game data")
             } else {
-                turnInfoScene(turnInfo)
+                boardScene(game)
             }
         }
     }
 
-    private fun RBuilder.turnInfoScene(turnInfo: PlayerTurnInfo) {
-        val board = turnInfo.getOwnBoard()
+    private fun RBuilder.boardScene(game: GameState) {
+        val board = game.getOwnBoard()
         styledDiv {
             css {
                 height = 100.pct
@@ -75,11 +74,11 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
                     +GameStyles.pulsatingRed
                 }
             }
-            val action = turnInfo.action
+            val action = game.action
             if (action is TurnAction.WatchScore) {
                 scoreTableOverlay(action.scoreBoard, props.players, props.leaveGame)
             }
-            actionInfo(turnInfo.message)
+            actionInfo(game.action.message)
             boardComponent(board = board) {
                 css {
                     padding(all = 7.rem) // to fit the action info message & board summaries
@@ -90,24 +89,24 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
             transactionsSelectorDialog(
                 state = state.transactionSelector,
                 neighbours = playerNeighbours(),
-                prepareMove = ::prepareMove,
+                prepareMove = ::prepareMoveAndCloseTransactions,
                 cancelTransactionSelection = ::resetTransactionSelector,
             )
-            boardSummaries(turnInfo)
-            handRotationIndicator(turnInfo.table.handRotationDirection)
-            handCards(turnInfo, props.preparedMove, props.prepareMove, ::startTransactionSelection)
+            boardSummaries(game)
+            handRotationIndicator(game.handRotationDirection)
+            handCards(game, props.prepareMove, ::startTransactionSelection)
             val card = props.preparedCard
             val move = props.preparedMove
             if (card != null && move != null) {
                 preparedMove(card, move)
             }
-            if (turnInfo.action is TurnAction.SayReady) {
+            if (game.action is TurnAction.SayReady) {
                 sayReadyButton()
             }
         }
     }
 
-    private fun prepareMove(move: PlayerMove) {
+    private fun prepareMoveAndCloseTransactions(move: PlayerMove) {
         props.prepareMove(move)
         setState { transactionSelector = null }
     }
@@ -125,7 +124,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
         if (onlyMeInTheGame || props.preparedMove != null) {
             return false
         }
-        val gameState = props.gameState ?: return false
+        val gameState = props.game ?: return false
         return gameState.preparedCardsByUsername.values.count { it != null } == props.players.size - 1
     }
 
@@ -156,11 +155,11 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
         }
     }
 
-    private fun RBuilder.boardSummaries(turnInfo: PlayerTurnInfo) {
-        val leftBoard = turnInfo.getBoard(RelativeBoardPosition.LEFT)
-        val rightBoard = turnInfo.getBoard(RelativeBoardPosition.RIGHT)
-        val topBoards = turnInfo.getNonNeighbourBoards().reversed()
-        selfBoardSummary(turnInfo.getOwnBoard())
+    private fun RBuilder.boardSummaries(game: GameState) {
+        val leftBoard = game.getBoard(RelativeBoardPosition.LEFT)
+        val rightBoard = game.getBoard(RelativeBoardPosition.RIGHT)
+        val topBoards = game.getNonNeighbourBoards().reversed()
+        selfBoardSummary(game.getOwnBoard())
         leftPlayerBoardSummary(leftBoard)
         rightPlayerBoardSummary(rightBoard)
         if (topBoards.isNotEmpty()) {
@@ -295,7 +294,7 @@ private val gameScene: RClass<GameSceneProps> =
         mapStateToProps = { state, _ ->
             currentPlayer = state.currentPlayer
             players = state.gameState?.players ?: emptyList()
-            gameState = state.gameState
+            game = state.gameState
             preparedMove = state.gameState?.currentPreparedMove
             preparedCard = state.gameState?.currentPreparedCard
         },
