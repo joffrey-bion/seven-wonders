@@ -95,7 +95,7 @@ class Game internal constructor(
     private fun computeEndGameAction(player: Player): TurnAction {
         val guilds = table.getNeighbourGuildCards(player.index).toHandCards(player, true)
         return when {
-            player.canCopyGuild() && guilds.isEmpty() -> TurnAction.PickNeighbourGuild(guilds)
+            player.canCopyGuild() && guilds.isNotEmpty() -> TurnAction.PickNeighbourGuild(guilds)
             else -> TurnAction.Wait(ActionMessages.WAIT_OTHER_PICK_GUILD)
         }
     }
