@@ -4,7 +4,13 @@ import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.transform
 import kotlinx.css.properties.translate
-import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.client.GameState
+import org.luxons.sevenwonders.client.getBoard
+import org.luxons.sevenwonders.client.getNonNeighbourBoards
+import org.luxons.sevenwonders.client.getOwnBoard
+import org.luxons.sevenwonders.model.MoveType
+import org.luxons.sevenwonders.model.PlayerMove
+import org.luxons.sevenwonders.model.TurnAction
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition

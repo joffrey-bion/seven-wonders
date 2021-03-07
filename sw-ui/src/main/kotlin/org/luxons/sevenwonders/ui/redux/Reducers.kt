@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.ui.redux
 
-import org.luxons.sevenwonders.model.GameState
+import org.luxons.sevenwonders.client.GameState
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO

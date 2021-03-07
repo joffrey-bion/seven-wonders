@@ -4,6 +4,8 @@ import com.palantir.blueprintjs.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
+import org.luxons.sevenwonders.client.GameState
+import org.luxons.sevenwonders.client.getOwnBoard
 import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.model.cards.CardPlayability
