@@ -14,4 +14,4 @@ data class PlayerTurnInfo(
 }
 
 // TODO move to server code
-fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() = map { it.copy(action = TurnAction.SayReady()) }
+fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() = map { it.copy(action = TurnAction.SayReady) }

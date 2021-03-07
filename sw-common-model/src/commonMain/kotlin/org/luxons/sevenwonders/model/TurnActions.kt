@@ -23,9 +23,11 @@ sealed class TurnAction {
     abstract val message: String
 
     @Serializable
-    data class SayReady(
-        override val message: String = ActionMessages.SAY_READY,
-    ) : TurnAction()
+    object SayReady : TurnAction() {
+        override val message: String = ActionMessages.SAY_READY
+
+        override fun toString(): String = "Say Ready"
+    }
 
     @Serializable
     data class PlayFromHand(
