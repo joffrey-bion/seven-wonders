@@ -19,7 +19,7 @@ data class UpdateLobbyAction(val lobby: LobbyDTO) : RAction
 
 data class EnterLobbyAction(val lobby: LobbyDTO) : RAction
 
-data class LeaveLobbyAction(val lobbyId: Long) : RAction
+object LeaveLobbyAction : RAction
 
 data class EnterGameAction(val lobby: LobbyDTO, val turnInfo: PlayerTurnInfo<TurnAction.SayReady>) : RAction
 

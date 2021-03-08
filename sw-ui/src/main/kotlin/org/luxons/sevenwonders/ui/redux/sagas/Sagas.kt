@@ -105,8 +105,8 @@ private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, sessio
     }
 
     scope.launch {
-        session.watchLobbyLeft().collect { leftLobbyId ->
-            dispatch(LeaveLobbyAction(leftLobbyId))
+        session.watchLobbyLeft().collect {
+            dispatch(LeaveLobbyAction)
             dispatch(Navigate(Route.GAME_BROWSER))
         }
     }
