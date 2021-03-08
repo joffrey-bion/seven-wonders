@@ -1,19 +1,10 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
 import org.luxons.sevenwonders.client.SevenWondersSession
-import org.luxons.sevenwonders.model.api.events.GameEvent
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
-
-suspend fun SwSagaContext.homeSaga(session: SevenWondersSession) {
-    val action = next<RequestChooseName>()
-    val player = session.chooseName(action.playerName)
-    dispatch(SetCurrentPlayerAction(player))
-    dispatch(Navigate(Route.GAME_BROWSER))
-}
 
 suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
     // browser navigation could have brought us here: we should leave the game/lobby
@@ -23,42 +14,29 @@ suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
 
 private suspend fun SwSagaContext.ensureNoCurrentGameNorLobby(session: SevenWondersSession) {
     if (reduxState.gameState != null) {
-        console.warn("User left a game via browser navigation, cleaning up...")
+        console.warn("User left a game via browser navigation, telling the server...")
         session.leaveGame()
     } else if (reduxState.currentLobby != null) {
-        console.warn("User left the lobby via browser navigation, cleaning up...")
+        console.warn("User left the lobby via browser navigation, telling the server...")
         session.leaveLobby()
     }
 }
 
 suspend fun SwSagaContext.lobbySaga(session: SevenWondersSession) {
-    // browser navigation could have brought us here: we should leave the current game in that case
     if (reduxState.gameState != null) {
         console.warn("User left a game via browser navigation, telling the server...")
         session.leaveGame()
-        return
-    }
-    // browser navigation could have brought us here: we should go back to game browser if no lobby
-    if (reduxState.currentLobby == null) {
-        console.warn("User went to lobby via browser navigation, cleaning up...")
+    } else if (reduxState.currentLobby == null) {
+        console.warn("User went to lobby page via browser navigation, redirecting to game browser...")
         dispatch(Navigate(Route.GAME_BROWSER))
-        return
     }
-    session.watchLobbyUpdates().map { UpdateLobbyAction(it) }.dispatchAll()
 }
 
 suspend fun SwSagaContext.gameSaga(session: SevenWondersSession) {
-    val game = reduxState.gameState ?: error("Game saga run without a current game")
-    coroutineScope {
-        session.watchGameEvents(game.gameId).map {
-            when (it) {
-                is GameEvent.NewTurnStarted -> TurnInfoEvent(it.turnInfo)
-                is GameEvent.MovePrepared -> PreparedMoveEvent(it.move)
-                is GameEvent.CardPrepared -> PreparedCardEvent(it.preparedCard)
-                is GameEvent.PlayerIsReady -> PlayerReadyEvent(it.username)
-            }
-        }.dispatchAllIn(this)
-        session.sayReady()
+    if (reduxState.gameState == null) {
+        // TODO properly redirect somewhere
+        error("Game saga run without a current game")
     }
-    console.log("End of game saga")
+    // notifies the server that the client is ready to receive the first hand
+    session.sayReady()
 }

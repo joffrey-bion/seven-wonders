@@ -4,8 +4,8 @@ import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.PlayerTurnInfo
 import org.luxons.sevenwonders.model.TurnAction
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
-import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.LobbyDTO
+import org.luxons.sevenwonders.model.api.events.GameListEvent
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import redux.RAction
 

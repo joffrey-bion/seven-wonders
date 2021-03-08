@@ -1,11 +1,11 @@
 package org.luxons.sevenwonders.server.controllers
 
-import org.luxons.sevenwonders.model.api.GameListEvent
-import org.luxons.sevenwonders.model.api.GameListEventWrapper
-import org.luxons.sevenwonders.model.api.LobbyDTO
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
-import org.luxons.sevenwonders.model.api.wrap
+import org.luxons.sevenwonders.model.api.events.GameEvent
+import org.luxons.sevenwonders.model.api.events.GameListEvent
+import org.luxons.sevenwonders.model.api.events.GameListEventWrapper
+import org.luxons.sevenwonders.model.api.events.wrap
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
@@ -14,8 +14,7 @@ import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.messaging.simp.annotation.SendToUser
+import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.messaging.simp.annotation.SubscribeMapping
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
@@ -26,10 +25,10 @@ import java.security.Principal
  */
 @Controller
 class GameBrowserController(
+    private val messenger: SimpMessageSendingOperations,
     private val lobbyController: LobbyController,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
-    private val template: SimpMessagingTemplate,
 ) {
     /**
      * Gets the created or updated games. The list of existing games is received on this topic at once upon
@@ -54,8 +53,7 @@ class GameBrowserController(
      * @return the newly created [Lobby]
      */
     @MessageMapping("/lobby/create")
-    @SendToUser("/queue/lobby/joined")
-    fun createGame(@Validated action: CreateGameAction, principal: Principal): LobbyDTO {
+    fun createGame(@Validated action: CreateGameAction, principal: Principal) {
         checkThatUserIsNotInAGame(principal, "cannot create another game")
 
         val player = playerRepository.get(principal.name)
@@ -65,8 +63,8 @@ class GameBrowserController(
 
         // notify everyone that a new game exists
         val lobbyDto = lobby.toDTO()
-        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
-        return lobbyDto
+        messenger.sendGameListEvent(GameListEvent.CreateOrUpdate(lobbyDto))
+        messenger.sendGameEvent(player, GameEvent.LobbyJoined(lobbyDto))
     }
 
     /**
@@ -78,8 +76,7 @@ class GameBrowserController(
      * @return the [Lobby] that has just been joined
      */
     @MessageMapping("/lobby/join")
-    @SendToUser("/queue/lobby/joined")
-    fun joinGame(@Validated action: JoinGameAction, principal: Principal): LobbyDTO {
+    fun joinGame(@Validated action: JoinGameAction, principal: Principal) {
         checkThatUserIsNotInAGame(principal, "cannot join another game")
 
         val lobby = lobbyRepository.get(action.gameId)
@@ -90,7 +87,7 @@ class GameBrowserController(
             logger.info("Player '{}' ({}) joined game {}", player.displayName, player.username, lobby.name)
             lobbyController.sendLobbyUpdateToPlayers(lobby)
         }
-        return lobby.toDTO()
+        messenger.sendGameEvent(player, GameEvent.LobbyJoined(lobby.toDTO()))
     }
 
     private fun checkThatUserIsNotInAGame(principal: Principal, impossibleActionDescription: String) {

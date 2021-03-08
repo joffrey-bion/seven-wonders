@@ -7,6 +7,7 @@ import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.actions.BotConfig
 import org.luxons.sevenwonders.model.api.actions.Icon
+import org.luxons.sevenwonders.model.api.events.GameEvent
 import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import org.slf4j.LoggerFactory
@@ -21,7 +22,7 @@ suspend fun SevenWondersClient.connectBot(
 ): SevenWondersBot {
     logger.info("Connecting new bot '$name' to $serverUrl")
     val session = connect(serverUrl)
-    val player = session.chooseName(name, Icon("desktop"), isHuman = false)
+    val player = session.chooseNameAndAwait(name, Icon("desktop"), isHuman = false)
     return SevenWondersBot(player, config, session)
 }
 
@@ -62,40 +63,51 @@ class SevenWondersBot(
 
         return withContext(Dispatchers.Default) {
             otherBots.forEach {
-                launch {
-                    val turn = it.session.watchGameStarted().first()
-                    it.autoPlayUntilEnd(turn)
+                launch { it.autoPlayUntilEnd() }
+            }
+            val endTurn = async { autoPlayUntilEnd() }
+            session.startGame()
+            endTurn.await()
+        }
+    }
+
+    suspend fun joinAndAutoPlay(gameId: Long) = coroutineScope {
+        launch { autoPlayUntilEnd() }
+        session.joinGame(gameId)
+    }
+
+    private suspend fun autoPlayUntilEnd(): PlayerTurnInfo<TurnAction.WatchScore> = coroutineScope {
+        val endGameTurnInfo = async {
+            @Suppress("UNCHECKED_CAST")
+            session.watchTurns()
+                .filter { it.action is TurnAction.WatchScore }
+                .first() as PlayerTurnInfo<TurnAction.WatchScore>
+        }
+        session.watchGameEvents()
+            .catch { e -> logger.error("BOT $player: error in game events flow", e) }
+            .takeWhile { it !is GameEvent.LobbyLeft }
+            .collect { event ->
+                when (event) {
+                    is GameEvent.NameChosen -> error("Unexpected name chosen event in bot")
+                    is GameEvent.GameStarted -> session.sayReady()
+                    is GameEvent.NewTurnStarted -> if (event.turnInfo.action is TurnAction.WatchScore) {
+                        logger.info("BOT $player: leaving the game")
+                        session.leaveGame()
+                    } else {
+                        botDelay()
+                        logger.info("BOT $player: playing turn (action ${event.turnInfo.action})")
+                        session.autoPlayTurn(event.turnInfo)
+                    }
+                    is GameEvent.LobbyJoined,
+                    is GameEvent.LobbyUpdated,
+                    is GameEvent.PlayerIsReady,
+                    is GameEvent.MovePrepared,
+                    GameEvent.MoveUnprepared,
+                    is GameEvent.CardPrepared -> Unit // ignore those
+                    GameEvent.LobbyLeft -> error("Unexpected lobby left event in bot") // collect should have ended
                 }
             }
-            val firstTurn = session.startGameAndAwaitFirstTurn()
-            autoPlayUntilEnd(firstTurn)
-        }
-    }
-
-    suspend fun joinAndAutoPlay(gameId: Long): PlayerTurnInfo<*> {
-        val firstTurn = session.joinGameAndAwaitFirstTurn(gameId)
-        return autoPlayUntilEnd(firstTurn)
-    }
-
-    private suspend fun autoPlayUntilEnd(currentTurn: PlayerTurnInfo<*>) = coroutineScope {
-        val endGameTurnInfo = async {
-            session.watchTurns().filter { it.action is TurnAction.WatchScore }.first()
-        }
-        session.watchTurns()
-            .onStart {
-                session.sayReady()
-                emit(currentTurn)
-            }
-            .takeWhile { it.action !is TurnAction.WatchScore }
-            .catch { e -> logger.error("BOT $player: error in turnInfo flow", e) }
-            .collect { turn ->
-                botDelay()
-                logger.info("BOT $player: playing turn (action ${turn.action})")
-                session.autoPlayTurn(turn)
-            }
         val lastTurn = endGameTurnInfo.await()
-        logger.info("BOT $player: leaving the game")
-        session.leaveGameAndAwaitEnd()
         session.disconnect()
         logger.info("BOT $player: disconnected")
         lastTurn

@@ -2,11 +2,9 @@ package org.luxons.sevenwonders.server.controllers
 
 import io.micrometer.core.instrument.MeterRegistry
 import org.luxons.sevenwonders.engine.Game
-import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.PrepareMoveAction
 import org.luxons.sevenwonders.model.api.events.GameEvent
-import org.luxons.sevenwonders.model.api.events.wrap
-import org.luxons.sevenwonders.model.api.wrap
+import org.luxons.sevenwonders.model.api.events.GameListEvent
 import org.luxons.sevenwonders.model.cards.PreparedCard
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
@@ -16,7 +14,7 @@ import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Controller
 import java.security.Principal
 
@@ -25,7 +23,7 @@ import java.security.Principal
  */
 @Controller
 class GameController(
-    private val template: SimpMessagingTemplate,
+    private val messenger: SimpMessageSendingOperations,
     private val playerRepository: PlayerRepository,
     private val lobbyRepository: LobbyRepository,
     private val meterRegistry: MeterRegistry,
@@ -49,7 +47,7 @@ class GameController(
         synchronized(game) {
             player.isReady = true
             if (lobby.settings.askForReadiness) {
-                sendPlayerReady(game.id, player)
+                messenger.sendGameEvent(lobby.getPlayers(), GameEvent.PlayerIsReady(player.username))
             }
             logger.info("Game {}: player {} is ready for the next turn", game.id, player)
 
@@ -94,7 +92,7 @@ class GameController(
             logger.info("Game {}: player {} preparing move {}", game.id, player, action.move)
             val preparedCardBack = game.prepareMove(player.index, action.move)
             val preparedCard = PreparedCard(player.username, preparedCardBack)
-            sendPreparedCard(game.id, preparedCard)
+            messenger.sendGameEvent(lobby.getPlayers(), GameEvent.CardPrepared(preparedCard))
 
             if (game.allPlayersPreparedTheirMove()) {
                 logger.info("Game {}: all players have prepared their move, executing turn...", game.id)
@@ -104,7 +102,7 @@ class GameController(
                     handleEndOfGame(game, player, lobby)
                 }
             } else {
-                template.convertAndSendToUser(player.username, "/queue/game/events", GameEvent.MovePrepared(action.move).wrap())
+                messenger.sendGameEvent(player, GameEvent.MovePrepared(action.move))
             }
         }
     }
@@ -113,7 +111,7 @@ class GameController(
         meterRegistry.counter("games.finished").increment()
         logger.info("Game {}: end of game, displaying score board", game.id)
         player.lobby.setEndOfGame()
-        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
+        messenger.sendGameListEvent(GameListEvent.CreateOrUpdate(lobby.toDTO()))
     }
 
     @MessageMapping("/game/unprepareMove")
@@ -128,16 +126,9 @@ class GameController(
             game.unprepareMove(player.index)
             val preparedCard = PreparedCard(player.username, null)
             logger.info("Game {}: player {} unprepared his move", game.id, player)
-            sendPreparedCard(game.id, preparedCard)
+            messenger.sendGameEvent(player.lobby.getPlayers(), GameEvent.CardPrepared(preparedCard))
+            messenger.sendGameEvent(player, GameEvent.MoveUnprepared)
         }
-    }
-
-    private fun sendPlayerReady(gameId: Long, player: Player) {
-        template.convertAndSend("/topic/game/$gameId/events", GameEvent.PlayerIsReady(player.username).wrap())
-    }
-
-    private fun sendPreparedCard(gameId: Long, preparedCard: PreparedCard) {
-        template.convertAndSend("/topic/game/$gameId/events", GameEvent.CardPrepared(preparedCard).wrap())
     }
 
     private fun sendTurnInfo(players: List<Player>, game: Game, hideHands: Boolean) {
@@ -145,7 +136,7 @@ class GameController(
         val turnsToSend = if (hideHands) turns.hideHandsAndWaitForReadiness() else turns
         for (turnInfo in turnsToSend) {
             val player = players[turnInfo.playerIndex]
-            template.convertAndSendToUser(player.username, "/queue/game/events", GameEvent.NewTurnStarted(turnInfo).wrap())
+            messenger.sendGameEvent(player, GameEvent.NewTurnStarted(turnInfo))
         }
     }
 
@@ -162,13 +153,13 @@ class GameController(
         synchronized(game) {
             lobby.removePlayer(player.username)
             logger.info("Game {}: player {} left the game", game.id, player)
-            template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
+            messenger.sendGameEvent(player, GameEvent.LobbyLeft)
 
             // This could cause problems if the humans are faster than bots to leave a finished game,
             // but this case should be quite rare, so it does not matter much
             if (lobby.getPlayers().none { it.isHuman }) {
                 lobbyRepository.remove(lobby.id)
-                template.convertAndSend("/topic/games", GameListEvent.Delete(lobby.id).wrap())
+                messenger.sendGameListEvent(GameListEvent.Delete(lobby.id))
                 logger.info("Game {}: game deleted", game.id)
             }
         }

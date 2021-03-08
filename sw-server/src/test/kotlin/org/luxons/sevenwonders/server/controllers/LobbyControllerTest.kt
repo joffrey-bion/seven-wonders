@@ -14,7 +14,8 @@ import org.luxons.sevenwonders.server.lobby.PlayerNotInLobbyException
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
-import org.luxons.sevenwonders.server.test.mockSimpMessagingTemplate
+import org.luxons.sevenwonders.server.test.MockMessageChannel
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import java.util.*
 import kotlin.test.*
 
@@ -29,10 +30,10 @@ class LobbyControllerTest {
     @Before
     fun setUp() {
         val meterRegistry = SimpleMeterRegistry()
-        val template = mockSimpMessagingTemplate()
+        val template = SimpMessagingTemplate(MockMessageChannel())
         playerRepository = PlayerRepository(meterRegistry)
         lobbyRepository = LobbyRepository(meterRegistry)
-        lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED", meterRegistry)
+        lobbyController = LobbyController(template, lobbyRepository, playerRepository, "UNUSED", meterRegistry)
     }
 
     @Test

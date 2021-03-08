@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.collect
 import org.hildan.krossbow.stomp.ConnectionException
 import org.hildan.krossbow.stomp.MissingHeartBeatException
 import org.hildan.krossbow.stomp.WebSocketClosedUnexpectedly
-import org.luxons.sevenwonders.client.SevenWondersClient
-import org.luxons.sevenwonders.client.SevenWondersSession
+import org.luxons.sevenwonders.client.*
+import org.luxons.sevenwonders.model.api.events.GameEvent
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
@@ -34,12 +34,12 @@ suspend fun SwSagaContext.rootSaga() = try {
         launchApiActionHandlersIn(this, session)
         launchApiEventHandlersIn(this, session)
 
-        val player = session.chooseName(action.playerName)
+        val player = session.chooseNameAndAwait(action.playerName)
         dispatch(SetCurrentPlayerAction(player))
 
         routerSaga(Route.GAME_BROWSER) {
             when (it) {
-                Route.HOME -> homeSaga(session)
+                Route.HOME -> Unit
                 Route.LOBBY -> lobbySaga(session)
                 Route.GAME_BROWSER -> gameBrowserSaga(session)
                 Route.GAME -> gameSaga(session)
@@ -78,6 +78,7 @@ private suspend fun serverErrorSaga(session: SevenWondersSession) {
 }
 
 private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, session: SevenWondersSession) {
+    scope.launchOnEach<RequestChooseName> { session.chooseName(it.playerName) }
 
     scope.launchOnEach<RequestCreateGame> { session.createGame(it.gameName) }
     scope.launchOnEach<RequestJoinGame> { session.joinGame(it.gameId) }
@@ -96,26 +97,37 @@ private fun SwSagaContext.launchApiActionHandlersIn(scope: CoroutineScope, sessi
 }
 
 private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, session: SevenWondersSession) {
-
     scope.launch {
-        session.watchLobbyJoined().collect { lobby ->
-            dispatch(EnterLobbyAction(lobby))
-            dispatch(Navigate(Route.LOBBY))
-        }
-    }
-
-    scope.launch {
-        session.watchLobbyLeft().collect {
-            dispatch(LeaveLobbyAction)
-            dispatch(Navigate(Route.GAME_BROWSER))
-        }
-    }
-
-    scope.launch {
-        session.watchGameStarted().collect { turnInfo ->
-            val currentLobby = reduxState.currentLobby ?: error("Received game started event without being in a lobby")
-            dispatch(EnterGameAction(currentLobby, turnInfo))
-            dispatch(Navigate(Route.GAME))
+        session.watchGameEvents().collect { event ->
+            when (event) {
+                is GameEvent.NameChosen -> {
+                    dispatch(SetCurrentPlayerAction(event.player))
+                    dispatch(Navigate(Route.GAME_BROWSER))
+                }
+                is GameEvent.LobbyJoined -> {
+                    dispatch(EnterLobbyAction(event.lobby))
+                    dispatch(Navigate(Route.LOBBY))
+                }
+                is GameEvent.LobbyUpdated -> {
+                    dispatch(UpdateLobbyAction(event.lobby))
+                }
+                GameEvent.LobbyLeft -> {
+                    dispatch(LeaveLobbyAction)
+                    dispatch(Navigate(Route.GAME_BROWSER))
+                }
+                is GameEvent.GameStarted -> {
+                    val currentLobby = reduxState.currentLobby ?: error("Received game started event without being in a lobby")
+                    dispatch(EnterGameAction(currentLobby, event.turnInfo))
+                    dispatch(Navigate(Route.GAME))
+                }
+                is GameEvent.NewTurnStarted -> dispatch(TurnInfoEvent(event.turnInfo))
+                is GameEvent.MovePrepared -> dispatch(PreparedMoveEvent(event.move))
+                is GameEvent.CardPrepared -> dispatch(PreparedCardEvent(event.preparedCard))
+                is GameEvent.PlayerIsReady -> dispatch(PlayerReadyEvent(event.username))
+                // Currently the move is already unprepared when launching the unprepare request
+                // TODO add a "unpreparing" state and only update redux when the move is successfully unprepared
+                GameEvent.MoveUnprepared -> {}
+            }
         }
     }
 }

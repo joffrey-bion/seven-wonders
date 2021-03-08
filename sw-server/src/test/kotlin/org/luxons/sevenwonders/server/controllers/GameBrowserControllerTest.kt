@@ -3,14 +3,18 @@ package org.luxons.sevenwonders.server.controllers
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.Before
 import org.junit.Test
-import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
+import org.luxons.sevenwonders.model.api.events.GameEvent
+import org.luxons.sevenwonders.model.api.events.GameListEvent
 import org.luxons.sevenwonders.server.controllers.GameBrowserController.UserAlreadyInGameException
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerNotFoundException
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
-import org.luxons.sevenwonders.server.test.mockSimpMessagingTemplate
+import org.luxons.sevenwonders.server.test.MockMessageChannel
+import org.luxons.sevenwonders.server.test.expectSentGameEventTo
+import org.luxons.sevenwonders.server.test.expectSentGameListEvent
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
@@ -18,18 +22,21 @@ import kotlin.test.assertTrue
 
 class GameBrowserControllerTest {
 
+    private lateinit var messageChannel: MockMessageChannel
+
     private lateinit var playerRepository: PlayerRepository
 
     private lateinit var gameBrowserController: GameBrowserController
 
     @Before
     fun setUp() {
+        messageChannel = MockMessageChannel()
+        val messenger = SimpMessagingTemplate(messageChannel)
         val meterRegistry = SimpleMeterRegistry()
-        playerRepository = PlayerRepository(meterRegistry)
         val lobbyRepository = LobbyRepository(meterRegistry)
-        val template = mockSimpMessagingTemplate()
-        val lobbyController = LobbyController(lobbyRepository, playerRepository, template, "UNUSED", meterRegistry)
-        gameBrowserController = GameBrowserController(lobbyController, lobbyRepository, playerRepository, template)
+        playerRepository = PlayerRepository(meterRegistry)
+        val lobbyController = LobbyController(messenger, lobbyRepository, playerRepository, "UNUSED", meterRegistry)
+        gameBrowserController = GameBrowserController(messenger, lobbyController, lobbyRepository, playerRepository)
     }
 
     @Test
@@ -46,9 +53,16 @@ class GameBrowserControllerTest {
 
         val action = CreateGameAction("Test Game")
 
-        val createdLobby = gameBrowserController.createGame(action, principal)
+        gameBrowserController.createGame(action, principal)
+
+        val createdEvent = messageChannel.expectSentGameListEvent<GameListEvent.CreateOrUpdate>()
+        val lobbyJoinedEvent = messageChannel.expectSentGameEventTo<GameEvent.LobbyJoined>("testuser")
+        val createdLobby = createdEvent.lobby
 
         assertEquals("Test Game", createdLobby.name)
+        assertEquals(createdLobby, lobbyJoinedEvent.lobby)
+
+        messageChannel.expectNoMoreMessages()
 
         val gameListEvent = gameBrowserController.listGames(principal).event as GameListEvent.ReplaceList
         assertFalse(gameListEvent.lobbies.isEmpty())
@@ -91,17 +105,34 @@ class GameBrowserControllerTest {
         val ownerPrincipal = TestPrincipal("testowner")
         val createGameAction = CreateGameAction("Test Game")
 
-        val createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal)
+        gameBrowserController.createGame(createGameAction, ownerPrincipal)
+
+        val createdEvent = messageChannel.expectSentGameListEvent<GameListEvent.CreateOrUpdate>()
+        messageChannel.expectSentGameEventTo<GameEvent.LobbyJoined>("testowner")
+        val createdLobby = createdEvent.lobby
         assertEquals(owner.username, createdLobby.players[0].username)
+
+        messageChannel.expectNoMoreMessages()
 
         val joiner = playerRepository.createOrUpdate("testjoiner", "Test User Joiner")
         val joinerPrincipal = TestPrincipal("testjoiner")
         val joinGameAction = JoinGameAction(createdLobby.id)
 
-        val joinedLobby = gameBrowserController.joinGame(joinGameAction, joinerPrincipal)
+        gameBrowserController.joinGame(joinGameAction, joinerPrincipal)
+
+        // lobby update for existing players
+        messageChannel.expectSentGameEventTo<GameEvent.LobbyUpdated>("testowner")
+        messageChannel.expectSentGameEventTo<GameEvent.LobbyUpdated>("testjoiner")
+        // lobby update for people on game browser page
+        messageChannel.expectSentGameListEvent<GameListEvent.CreateOrUpdate>()
+        // lobby joined for the player who joined
+        val joinedLobbyEvent = messageChannel.expectSentGameEventTo<GameEvent.LobbyJoined>("testjoiner")
+        val joinedLobby = joinedLobbyEvent.lobby
 
         assertEquals(owner.username, joinedLobby.players[0].username)
         assertEquals(joiner.username, joinedLobby.players[1].username)
+
+        messageChannel.expectNoMoreMessages()
     }
 
     @Test
@@ -110,7 +141,11 @@ class GameBrowserControllerTest {
         val ownerPrincipal = TestPrincipal("testowner")
         val createGameAction = CreateGameAction("Test Game")
 
-        val createdLobby = gameBrowserController.createGame(createGameAction, ownerPrincipal)
+        gameBrowserController.createGame(createGameAction, ownerPrincipal)
+
+        val createdEvent = messageChannel.expectSentGameListEvent<GameListEvent.CreateOrUpdate>()
+        messageChannel.expectSentGameEventTo<GameEvent.LobbyJoined>("testowner")
+        val createdLobby = createdEvent.lobby
 
         playerRepository.createOrUpdate("testjoiner", "Test User Joiner")
         val joinerPrincipal = TestPrincipal("testjoiner")

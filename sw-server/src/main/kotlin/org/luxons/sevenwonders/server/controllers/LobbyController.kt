@@ -7,12 +7,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import org.luxons.sevenwonders.bot.connectBot
 import org.luxons.sevenwonders.client.SevenWondersClient
-import org.luxons.sevenwonders.model.api.GameListEvent
 import org.luxons.sevenwonders.model.api.actions.AddBotAction
 import org.luxons.sevenwonders.model.api.actions.ReassignWondersAction
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
 import org.luxons.sevenwonders.model.api.actions.UpdateSettingsAction
-import org.luxons.sevenwonders.model.api.wrap
+import org.luxons.sevenwonders.model.api.events.GameEvent
+import org.luxons.sevenwonders.model.api.events.GameListEvent
 import org.luxons.sevenwonders.model.hideHandsAndWaitForReadiness
 import org.luxons.sevenwonders.server.api.toDTO
 import org.luxons.sevenwonders.server.lobby.Lobby
@@ -23,7 +23,7 @@ import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
@@ -34,9 +34,9 @@ import kotlin.time.milliseconds
  */
 @Controller
 class LobbyController(
+    private val messenger: SimpMessageSendingOperations,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
-    private val template: SimpMessagingTemplate,
     @Value("\${server.port}") private val serverPort: String,
     private val meterRegistry: MeterRegistry,
 ) {
@@ -56,7 +56,7 @@ class LobbyController(
         synchronized(lobby) {
             lobby.removePlayer(principal.name)
             logger.info("Player {} left the lobby of game '{}'", player, lobby.name)
-            template.convertAndSendToUser(player.username, "/queue/lobby/left", lobby.id)
+            messenger.sendGameEvent(player, GameEvent.LobbyLeft)
 
             if (lobby.getPlayers().none { it.isHuman }) {
                 deleteLobby(lobby)
@@ -79,7 +79,7 @@ class LobbyController(
         synchronized(lobby) {
             lobby.getPlayers().forEach {
                 it.leave()
-                template.convertAndSendToUser(it.username, "/queue/lobby/left", lobby.id)
+                messenger.sendGameEvent(it, GameEvent.LobbyLeft)
             }
             logger.info("Player {} disbanded game '{}'", player, lobby.name)
             deleteLobby(lobby)
@@ -89,7 +89,7 @@ class LobbyController(
 
     private fun deleteLobby(lobby: Lobby) {
         lobbyRepository.remove(lobby.id)
-        template.convertAndSend("/topic/games", GameListEvent.Delete(lobby.id).wrap())
+        messenger.sendGameListEvent(GameListEvent.Delete(lobby.id))
         logger.info("Game '{}' removed", lobby.name)
     }
 
@@ -147,9 +147,9 @@ class LobbyController(
     internal fun sendLobbyUpdateToPlayers(lobby: Lobby) {
         val lobbyDto = lobby.toDTO()
         lobby.getPlayers().forEach {
-            template.convertAndSendToUser(it.username, "/queue/lobby/updated", lobbyDto)
+            messenger.sendGameEvent(it, GameEvent.LobbyUpdated(lobbyDto))
         }
-        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobbyDto).wrap())
+        messenger.sendGameListEvent(GameListEvent.CreateOrUpdate(lobbyDto))
     }
 
     @MessageMapping("/lobby/addBot")
@@ -191,9 +191,9 @@ class LobbyController(
 
         currentTurnInfo.forEach {
             val player = lobby.getPlayers()[it.playerIndex]
-            template.convertAndSendToUser(player.username, "/queue/lobby/started", it)
+            messenger.sendGameEvent(player, GameEvent.GameStarted(it))
         }
-        template.convertAndSend("/topic/games", GameListEvent.CreateOrUpdate(lobby.toDTO()).wrap())
+        messenger.sendGameListEvent(GameListEvent.CreateOrUpdate(lobby.toDTO()))
     }
 
     private fun Lobby.resetPlayersReadyState() {
