@@ -7,7 +7,6 @@ import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
 import org.luxons.sevenwonders.model.api.actions.BotConfig
 import org.luxons.sevenwonders.model.api.actions.Icon
-import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.noTransactions
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
 import org.slf4j.LoggerFactory
@@ -46,7 +45,7 @@ class SevenWondersBot(
         otherBots: List<SevenWondersBot>,
         customWonders: List<AssignedWonder>? = null,
         customSettings: Settings? = null,
-    ): PlayerTurnInfo {
+    ): PlayerTurnInfo<*> {
         val nJoinerBots = otherBots.size
         require(nJoinerBots >= 2) { "At least 2 more bots must join the game" }
         require(customWonders == null || customWonders.size == nJoinerBots + 1) {
@@ -73,12 +72,12 @@ class SevenWondersBot(
         }
     }
 
-    suspend fun joinAndAutoPlay(gameId: Long): PlayerTurnInfo {
+    suspend fun joinAndAutoPlay(gameId: Long): PlayerTurnInfo<*> {
         val firstTurn = session.joinGameAndAwaitFirstTurn(gameId)
         return autoPlayUntilEnd(firstTurn)
     }
 
-    private suspend fun autoPlayUntilEnd(currentTurn: PlayerTurnInfo) = coroutineScope {
+    private suspend fun autoPlayUntilEnd(currentTurn: PlayerTurnInfo<*>) = coroutineScope {
         val endGameTurnInfo = async {
             session.watchTurns().filter { it.action is TurnAction.WatchScore }.first()
         }
@@ -112,18 +111,21 @@ class SevenWondersBot(
     }
 }
 
-private suspend fun SevenWondersSession.autoPlayTurn(turn: PlayerTurnInfo) {
+@Suppress("UNCHECKED_CAST")
+private suspend fun SevenWondersSession.autoPlayTurn(turn: PlayerTurnInfo<*>) {
     when (val action = turn.action) {
-        is TurnAction.PlayFromHand -> prepareMove(createPlayCardMove(turn, action.hand))
+        is TurnAction.PlayFromHand -> prepareMove(createPlayCardMove(turn as PlayerTurnInfo<TurnAction.PlayFromHand>))
         is TurnAction.PlayFromDiscarded -> prepareMove(createPlayFreeDiscardedCardMove(action))
         is TurnAction.PickNeighbourGuild -> prepareMove(createPickGuildMove(action))
         is TurnAction.SayReady -> sayReady()
-        is TurnAction.Wait, is TurnAction.WatchScore -> Unit
+        is TurnAction.Wait,
+        is TurnAction.WatchScore -> Unit
     }
 }
 
-private fun createPlayCardMove(turnInfo: PlayerTurnInfo, hand: List<HandCard>): PlayerMove {
+private fun createPlayCardMove(turnInfo: PlayerTurnInfo<TurnAction.PlayFromHand>): PlayerMove {
     val wonderBuildability = turnInfo.wonderBuildability
+    val hand = turnInfo.action.hand
     if (wonderBuildability.isBuildable) {
         val transactions = wonderBuildability.transactionsOptions.random()
         return PlayerMove(MoveType.UPGRADE_WONDER, hand.random().name, transactions)

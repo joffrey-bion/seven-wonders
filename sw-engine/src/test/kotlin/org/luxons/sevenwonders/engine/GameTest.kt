@@ -52,7 +52,7 @@ class GameTest {
         } while (!game.getCurrentTurnInfo().first().isStartOfAge(age + 1))
     }
 
-    private fun PlayerTurnInfo.isStartOfAge(age: Int) = action is TurnAction.WatchScore || currentAge == age
+    private fun PlayerTurnInfo<*>.isStartOfAge(age: Int) = action is TurnAction.WatchScore || currentAge == age
 
     private fun playTurn(nbPlayers: Int, game: Game, ageToCheck: Int) {
         val turnInfos = game.getCurrentTurnInfo()
@@ -72,7 +72,7 @@ class GameTest {
         assertEquals(expectedMoves, game.getCurrentTurnInfo()[0].table.lastPlayedMoves)
     }
 
-    private fun PlayerTurnInfo.firstAvailableMove(): MoveExpectation? = when (val a = action) {
+    private fun PlayerTurnInfo<*>.firstAvailableMove(): MoveExpectation? = when (val a = action) {
         is TurnAction.PlayFromHand -> createPlayCardMove(this, a.hand)
         is TurnAction.PlayFromDiscarded -> createPlayFreeDiscardedCardMove(this, a.discardedCards)
         is TurnAction.PickNeighbourGuild -> createPickGuildMove(this, a.neighbourGuildCards)
@@ -81,7 +81,7 @@ class GameTest {
         is TurnAction.WatchScore -> fail("should not have WATCH_SCORE action before end of game")
     }
 
-    private fun createPlayCardMove(turnInfo: PlayerTurnInfo, hand: List<HandCard>): MoveExpectation {
+    private fun createPlayCardMove(turnInfo: PlayerTurnInfo<*>, hand: List<HandCard>): MoveExpectation {
         val wonderBuildability = turnInfo.wonderBuildability
         if (wonderBuildability.isBuildable) {
             val transactions = wonderBuildability.transactionsOptions.first()
@@ -95,7 +95,7 @@ class GameTest {
         }
     }
 
-    private fun createPlayFreeDiscardedCardMove(turn: PlayerTurnInfo, discardedCards: List<HandCard>): MoveExpectation {
+    private fun createPlayFreeDiscardedCardMove(turn: PlayerTurnInfo<*>, discardedCards: List<HandCard>): MoveExpectation {
         val card = discardedCards.random()
         return MoveExpectation(
             turn.playerIndex,
@@ -105,7 +105,7 @@ class GameTest {
     }
 
     private fun planMove(
-        turnInfo: PlayerTurnInfo,
+        turnInfo: PlayerTurnInfo<*>,
         moveType: MoveType,
         card: HandCard,
         transactions: ResourceTransactions,
@@ -115,7 +115,7 @@ class GameTest {
         PlayedMove(turnInfo.playerIndex, moveType, card.toPlayedCard(), transactions),
     )
 
-    private fun createPickGuildMove(turnInfo: PlayerTurnInfo, neighbourGuilds: List<HandCard>): MoveExpectation {
+    private fun createPickGuildMove(turnInfo: PlayerTurnInfo<*>, neighbourGuilds: List<HandCard>): MoveExpectation {
         // the game should send action WAIT if no guild cards are available around
         assertFalse(neighbourGuilds.isEmpty())
         val card = neighbourGuilds.first()

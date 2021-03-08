@@ -26,7 +26,7 @@ class Game internal constructor(
     private val players: List<Player> = boards.map { SimplePlayer(it.playerIndex, table) }
     private val discardedCards: MutableList<Card> = mutableListOf()
     private val preparedMoves: MutableMap<Int, Move> = mutableMapOf()
-    private var currentTurnInfo: List<PlayerTurnInfo> = emptyList()
+    private var currentTurnInfo: List<PlayerTurnInfo<*>> = emptyList()
     private var hands: Hands = Hands(emptyList())
     private var militaryConflictsResolved = false
 
@@ -88,7 +88,11 @@ class Game internal constructor(
         }
         val scoreBoard = computeScore()
         currentTurnInfo = currentTurnInfo.map {
-            it.copy(action = TurnAction.WatchScore(message = ActionMessages.WATCH_SCORE, scoreBoard = scoreBoard))
+            PlayerTurnInfo(
+                playerIndex = it.playerIndex,
+                table = it.table,
+                action = TurnAction.WatchScore(message = ActionMessages.WATCH_SCORE, scoreBoard = scoreBoard),
+            )
         }
     }
 
@@ -105,7 +109,7 @@ class Game internal constructor(
     /**
      * Returns information for each player about the current turn.
      */
-    fun getCurrentTurnInfo(): List<PlayerTurnInfo> = currentTurnInfo
+    fun getCurrentTurnInfo(): List<PlayerTurnInfo<*>> = currentTurnInfo
 
     /**
      * Prepares the given [move] for the player at the given [playerIndex].

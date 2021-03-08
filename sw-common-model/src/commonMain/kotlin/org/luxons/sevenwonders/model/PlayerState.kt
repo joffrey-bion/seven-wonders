@@ -4,14 +4,20 @@ import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
 
 @Serializable
-data class PlayerTurnInfo(
+data class PlayerTurnInfo<out A : TurnAction>(
     val playerIndex: Int,
     val table: TableState,
-    val action: TurnAction,
+    val action: A,
 ) {
     val currentAge: Int = table.currentAge
     val wonderBuildability: WonderBuildability = table.boards[playerIndex].wonder.buildability
 }
 
 // TODO move to server code
-fun Collection<PlayerTurnInfo>.hideHandsAndWaitForReadiness() = map { it.copy(action = TurnAction.SayReady) }
+fun Collection<PlayerTurnInfo<*>>.hideHandsAndWaitForReadiness() = map {
+    PlayerTurnInfo(
+        playerIndex = it.playerIndex,
+        table = it.table,
+        action = TurnAction.SayReady,
+    )
+}
