@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.server.repositories
 
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Tag
 import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.server.ApiMisuseException
 import org.luxons.sevenwonders.server.lobby.Player
@@ -11,7 +12,16 @@ import java.util.concurrent.ConcurrentHashMap
 class PlayerRepository(
     meterRegistry: MeterRegistry,
 ) {
-    private val players = meterRegistry.gaugeMapSize("players.count", emptyList(), ConcurrentHashMap<String, Player>())!!
+    private val players = ConcurrentHashMap<String, Player>()
+
+    init {
+        meterRegistry.gauge("players.count", listOf(Tag.of("type", "human")), this) {
+            players.count { it.value.isHuman }.toDouble()
+        }
+        meterRegistry.gauge("players.count", listOf(Tag.of("type", "robot")), this) {
+            players.count { !it.value.isHuman }.toDouble()
+        }
+    }
 
     operator fun contains(username: String): Boolean = players.containsKey(username)
 
