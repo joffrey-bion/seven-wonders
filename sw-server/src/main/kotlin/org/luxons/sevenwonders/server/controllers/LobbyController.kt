@@ -164,10 +164,10 @@ class LobbyController(
                 bot.joinAndAutoPlay(lobby.id)
             }
             if (result == null) {
+                meterRegistry.counter("bot.timeout", lobby.playerCountsTags()).increment()
                 val timeoutDuration = action.globalBotTimeoutMillis.milliseconds
                 logger.error("Bot {} timed out after {}", action.botDisplayName, timeoutDuration)
                 bot.disconnect()
-                meterRegistry.counter("bot.timeout", lobby.playerCountsTags()).increment()
             }
         }
     }

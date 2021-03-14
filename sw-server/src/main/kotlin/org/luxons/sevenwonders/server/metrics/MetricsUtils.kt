@@ -7,7 +7,7 @@ fun Lobby.playerCountsTags(): List<Tag> {
     val players = getPlayers()
     return listOf(
         Tag.of("nPlayers", players.size.toString()),
-        Tag.of("nHumans", players.filter { it.isHuman }.size.toString()),
-        Tag.of("nBots", players.filterNot { it.isHuman }.size.toString()),
+        Tag.of("nHumans", players.count { it.isHuman }.toString()),
+        Tag.of("nBots", players.count { !it.isHuman }.toString()),
     )
 }
