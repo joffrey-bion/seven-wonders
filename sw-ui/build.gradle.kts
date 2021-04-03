@@ -5,11 +5,15 @@ plugins {
 }
 
 repositories {
-    // repository added for kotlin-wrappers resolutions
-    maven(url = "https://kotlin.bintray.com/kotlin-js-wrappers")
+    mavenCentral()
+    // for kotlin-wrappers resolutions
+    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
+    // for kotlinx-html (dependency of kotlin-react-dom)
+    maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
+    jcenter() // for kotlinx-html-jvm:0.7.2 needed by dokka (and not migrated)
 }
 
-val kotlinWrappersVersion = "pre.144-kotlin-1.4.30"
+val kotlinWrappersVersion = "pre.150-kotlin-1.4.31"
 
 kotlin {
     js {
@@ -21,13 +25,13 @@ kotlin {
             dependencies {
                 implementation(project(":sw-client"))
 
-                val reactVersion = "17.0.1"
+                val reactVersion = "17.0.2"
                 implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react", reactVersion))
                 implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react-dom", reactVersion))
 
-                val reactReduxVersion = "7.2.1"
+                val reactReduxVersion = "7.2.2"
                 implementation("org.jetbrains:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
                 implementation(npm("react-redux", reactReduxVersion))
                 // redux version aligned with the wrapper's build:
@@ -38,7 +42,7 @@ kotlin {
                 implementation("org.jetbrains:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
                 implementation(npm("react-router-dom", reactRouterDomVersion))
 
-                val styledComponentsVersion = "5.2.0"
+                val styledComponentsVersion = "5.2.1"
                 implementation("org.jetbrains:kotlin-styled:$styledComponentsVersion-$kotlinWrappersVersion")
                 implementation(npm("styled-components", styledComponentsVersion))
                 implementation(npm("inline-style-prefixer", "6.0.0"))
