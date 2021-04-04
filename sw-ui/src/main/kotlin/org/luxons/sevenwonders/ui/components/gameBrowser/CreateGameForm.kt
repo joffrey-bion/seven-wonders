@@ -1,8 +1,9 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpInputGroup
+import blueprintjs.core.Intent
+import blueprintjs.core.bpButton
+import blueprintjs.core.bpInputGroup
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestCreateGame
@@ -57,7 +58,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
     }
 
     private fun createGameButton() = buildElement {
-        bpButton(minimal = true, intent = Intent.PRIMARY, icon = "add", onClick = { e -> createGame(e) })
+        bpButton(minimal = true, intent = Intent.PRIMARY, icon = IconNames.ADD, onClick = { e -> createGame(e) })
     }
 
     private fun createGame(e: Event) {

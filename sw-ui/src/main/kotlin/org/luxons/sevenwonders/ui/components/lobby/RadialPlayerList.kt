@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import com.palantir.blueprintjs.bpIcon
-import com.palantir.blueprintjs.bpTag
+import blueprintjs.core.bpIcon
+import blueprintjs.core.bpTag
 import kotlinx.css.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.PlayerDTO

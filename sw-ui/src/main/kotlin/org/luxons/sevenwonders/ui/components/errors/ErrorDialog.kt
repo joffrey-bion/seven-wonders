@@ -1,9 +1,10 @@
 package org.luxons.sevenwonders.ui.components.errors
 
-import com.palantir.blueprintjs.Classes
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpDialog
+import blueprintjs.core.Classes
+import blueprintjs.core.Intent
+import blueprintjs.core.bpButton
+import blueprintjs.core.bpDialog
+import blueprintjs.icons.IconNames
 import kotlinx.browser.window
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
@@ -32,7 +33,7 @@ class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProp
         bpDialog(
             isOpen = errorMessage != null,
             title = "Oops!",
-            icon = "error",
+            icon = IconNames.ERROR,
             iconIntent = Intent.DANGER,
             onClose = { goHomeAndRefresh() }
         ) {
@@ -48,7 +49,7 @@ class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProp
                 css {
                     classes.add(Classes.DIALOG_FOOTER)
                 }
-                bpButton(icon = "log-out", onClick = { goHomeAndRefresh() }) {
+                bpButton(icon = IconNames.LOG_OUT, onClick = { goHomeAndRefresh() }) {
                     +"HOME"
                 }
             }

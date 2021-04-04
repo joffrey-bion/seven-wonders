@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.*
+import blueprintjs.core.*
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
 import kotlinx.html.classes
 import kotlinx.html.title
@@ -36,7 +37,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
 
     private fun RBuilder.noGamesInfo() {
         bpNonIdealState(
-            icon = "geosearch",
+            icon = IconNames.GEOSEARCH,
             title = "No games to join",
         ) {
             styledDiv {

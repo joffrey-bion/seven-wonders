@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.Classes
-import com.palantir.blueprintjs.bpCard
+import blueprintjs.core.Classes
+import blueprintjs.core.bpCard
 import kotlinx.css.*
 import kotlinx.html.classes
 import org.luxons.sevenwonders.ui.components.GlobalStyles

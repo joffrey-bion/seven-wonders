@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.*
+import blueprintjs.core.*
 import kotlinx.css.*
 import kotlinx.html.TD
 import kotlinx.html.TH

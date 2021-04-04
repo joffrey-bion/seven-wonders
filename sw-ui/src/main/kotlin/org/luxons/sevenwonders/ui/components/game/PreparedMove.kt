@@ -1,7 +1,8 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
+import blueprintjs.core.Intent
+import blueprintjs.core.bpButton
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
@@ -41,7 +42,7 @@ fun RBuilder.preparedMove(
                 right = 0.px
             }
             bpButton(
-                icon = "cross",
+                icon = IconNames.CROSS,
                 title = "Cancel prepared move",
                 small = true,
                 intent = Intent.DANGER,

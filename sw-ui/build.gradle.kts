@@ -47,8 +47,13 @@ kotlin {
                 implementation(npm("styled-components", styledComponentsVersion))
                 implementation(npm("inline-style-prefixer", "6.0.0"))
 
-                implementation(npm("@blueprintjs/core", "3.38.1"))
-                implementation(npm("@blueprintjs/icons", "3.24.0"))
+                val bpCoreVersion = "3.42.0"
+                val bpIconsVersion = "3.26.0"
+                val bpWrapperVersion = "1"
+                implementation("org.hildan.blueprintjs:kotlin-blueprintjs-core:$bpCoreVersion-$bpWrapperVersion")
+                implementation("org.hildan.blueprintjs:kotlin-blueprintjs-icons:$bpIconsVersion-$bpWrapperVersion")
+                implementation(npm("@blueprintjs/core", bpCoreVersion))
+                implementation(npm("@blueprintjs/icons", bpIconsVersion))
             }
         }
         test {

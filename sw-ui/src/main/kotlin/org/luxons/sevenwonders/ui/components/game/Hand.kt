@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.*
+import blueprintjs.core.*
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
+import kotlinx.css.Position
 import kotlinx.css.properties.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.client.GameState
@@ -12,6 +14,7 @@ import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
+import org.w3c.dom.HTMLButtonElement
 import react.*
 import styled.StyledDOMBuilder
 import styled.css
@@ -165,7 +168,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
             title = "DISCARD (+3 coins)", // TODO remove hardcoded value
             large = true,
             intent = Intent.DANGER,
-            icon = "cross",
+            icon = IconNames.CROSS,
             onClick = { props.prepareMove(PlayerMove(MoveType.DISCARD, card.name)) },
         )
     }
@@ -192,7 +195,7 @@ private fun pricePrefix(amount: Int) = when {
     else -> ""
 }
 
-private fun RElementBuilder<IButtonProps>.priceInfo(amount: Int) {
+private fun RElementBuilder<IButtonProps<HTMLButtonElement>>.priceInfo(amount: Int) {
     val size = 1.rem
     goldIndicator(
         amount = amount,

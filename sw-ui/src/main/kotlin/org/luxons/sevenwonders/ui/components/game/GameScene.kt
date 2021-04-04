@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.*
+import blueprintjs.core.*
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
+import kotlinx.css.Position
 import kotlinx.css.properties.transform
 import kotlinx.css.properties.translate
 import org.luxons.sevenwonders.client.GameState
@@ -64,7 +66,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
             }
             val game = props.game
             if (game == null) {
-                bpNonIdealState(icon = "error", title = "Error: no game data")
+                bpNonIdealState(icon = IconNames.ERROR, title = "Error: no game data")
             } else {
                 boardScene(game)
             }
@@ -156,7 +158,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
                 attrs {
                     this.className = GlobalStyles.getClassName { it::noPadding }
                 }
-                bpCallout(intent = Intent.PRIMARY, icon = "info-sign") { +message }
+                bpCallout(intent = Intent.PRIMARY, icon = IconNames.INFO_SIGN) { +message }
             }
         }
     }
@@ -272,13 +274,13 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
                     large = true,
                     disabled = isReady,
                     intent = intent,
-                    icon = if (isReady) "tick-circle" else "play",
+                    icon = if (isReady) IconNames.TICK_CIRCLE else IconNames.PLAY,
                     onClick = { props.sayReady() },
                 ) {
                     +"READY"
                 }
                 // not really a button, but nice for style
-                bpButton(large = true, icon = "people", disabled = isReady, intent = intent) {
+                bpButton(large = true, icon = IconNames.PEOPLE, disabled = isReady, intent = intent) {
                     +"${props.players.count { it.isReady }}/${props.players.size}"
                 }
             }

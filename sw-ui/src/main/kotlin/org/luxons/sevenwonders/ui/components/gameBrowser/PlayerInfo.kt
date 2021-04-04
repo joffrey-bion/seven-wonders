@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import com.palantir.blueprintjs.bpIcon
+import blueprintjs.core.bpIcon
 import kotlinx.css.*
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.BasicPlayerInfo

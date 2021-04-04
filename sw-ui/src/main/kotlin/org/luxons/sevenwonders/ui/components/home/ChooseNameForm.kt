@@ -1,8 +1,9 @@
 package org.luxons.sevenwonders.ui.components.home
 
-import com.palantir.blueprintjs.Intent
-import com.palantir.blueprintjs.bpButton
-import com.palantir.blueprintjs.bpInputGroup
+import blueprintjs.core.Intent
+import blueprintjs.core.bpButton
+import blueprintjs.core.bpInputGroup
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
 import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
@@ -51,7 +52,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
     private fun submitButton(): ReactElement = buildElement {
         bpButton(
             minimal = true,
-            icon = "arrow-right",
+            icon = IconNames.ARROW_RIGHT,
             intent = Intent.PRIMARY,
             onClick = { e -> chooseUsername(e) },
         )
@@ -61,7 +62,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
         bpButton(
             title = "Generate random name",
             large = true,
-            icon = "random",
+            icon = IconNames.RANDOM,
             intent = Intent.PRIMARY,
             onClick = { fillRandomUsername() },
         )

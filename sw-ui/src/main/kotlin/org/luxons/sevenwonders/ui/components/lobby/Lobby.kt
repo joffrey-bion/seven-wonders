@@ -1,7 +1,9 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import com.palantir.blueprintjs.*
+import blueprintjs.core.*
+import blueprintjs.icons.IconNames
 import kotlinx.css.*
+import kotlinx.css.Position
 import kotlinx.css.properties.transform
 import kotlinx.css.properties.translate
 import org.luxons.sevenwonders.model.api.LobbyDTO
@@ -42,7 +44,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         val currentGame = props.currentGame
         val currentPlayer = props.currentPlayer
         if (currentGame == null || currentPlayer == null) {
-            bpNonIdealState(icon = "error", title = "Error: no current game")
+            bpNonIdealState(icon = IconNames.ERROR, title = "Error: no current game")
             return
         }
         styledDiv {
@@ -108,7 +110,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         bpButton(
             large = true,
             intent = Intent.PRIMARY,
-            icon = "play",
+            icon = IconNames.PLAY,
             title = startability.tooltip,
             disabled = !startability.canDo,
             onClick = { props.startGame() },
@@ -146,8 +148,8 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
     private fun RBuilder.addBotButton(currentGame: LobbyDTO) {
         bpButton(
             large = true,
-            icon = "plus",
-            rightIcon = "desktop",
+            icon = IconNames.PLUS,
+            rightIcon = IconNames.DESKTOP,
             intent = Intent.PRIMARY,
             title = if (currentGame.maxPlayersReached) "Max players reached" else "Add a bot to this game",
             disabled = currentGame.maxPlayersReached,
@@ -164,8 +166,8 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
 
     private fun RBuilder.reorderPlayersButton(currentGame: LobbyDTO) {
         bpButton(
-            icon = "random",
-            rightIcon = "people",
+            icon = IconNames.RANDOM,
+            rightIcon = IconNames.PEOPLE,
             title = "Re-order players randomly",
             onClick = { reorderPlayers(currentGame) },
         ) {
@@ -179,7 +181,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
 
     private fun RBuilder.randomizeWondersButton(currentGame: LobbyDTO) {
         bpButton(
-            icon = "random",
+            icon = IconNames.RANDOM,
             title = "Re-assign wonders to players randomly",
             onClick = { randomizeWonders(currentGame) },
         ) {
@@ -193,7 +195,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         }
         bpButtonGroup {
             bpButton(
-                icon = "random",
+                icon = IconNames.RANDOM,
                 title = "Re-roll wonder sides randomly",
                 onClick = { randomizeWonderSides(currentGame) },
             )
@@ -240,7 +242,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) 
         bpButton(
             large = true,
             intent = Intent.DANGER,
-            icon = "delete",
+            icon = IconNames.DELETE,
             title = "Disband the group and go back to the game browser",
             onClick = { props.disbandLobby() },
         ) {

@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import com.palantir.blueprintjs.PopoverPosition
-import com.palantir.blueprintjs.bpDivider
-import com.palantir.blueprintjs.bpPopover
+import blueprintjs.core.PopoverPosition
+import blueprintjs.core.bpDivider
+import blueprintjs.core.bpPopover
 import kotlinx.css.*
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.PlayerDTO
