@@ -4,18 +4,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ScoreBoard(val scores: List<PlayerScore>) {
+    init {
+        require(scores.sortedDescending() == scores) { "Scores must be sorted highest-to-lowest" }
+    }
 
     @OptIn(ExperimentalStdlibApi::class)
     val ranks: List<Int>
-        get() = buildList {
-            var r = 1
+        get() = buildList<Int> {
             add(1)
-            for (i in 1..scores.lastIndex) {
-                if (scores[i] < scores[i - 1]) {
-                    add(++r)
-                } else {
-                    add(r)
-                }
+            scores.zipWithNext { prev, current -> current.compareTo(prev) == 0 }.forEach { exAequoWithPrev ->
+                add(if (exAequoWithPrev) last() else size + 1)
             }
         }
 }
