@@ -66,7 +66,7 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
             scoreBoard.scores.forEachIndexed { index, score ->
                 val player = players[score.playerIndex]
                 tr {
-                    centeredTd { +"${scoreBoard.ranks[index]}" }
+                    centeredTd { ordinal(scoreBoard.ranks[index]) }
                     centeredTd { bpIcon(player.icon?.name ?: "user", size = 25) }
                     styledTd {
                         inlineStyles {
@@ -96,6 +96,18 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
             }
         }
     }
+}
+
+private fun RBuilder.ordinal(value: Int) {
+    +"$value"
+    sup { +value.ordinalIndicator() }
+}
+
+private fun Int.ordinalIndicator() = when {
+    this % 10 == 1 && this != 11 -> "st"
+    this % 10 == 2 && this != 12 -> "nd"
+    this % 10 == 3 && this != 13 -> "rd"
+    else -> "th"
 }
 
 private fun RBuilder.centeredTh(block: RDOMBuilder<TH>.() -> Unit) {
