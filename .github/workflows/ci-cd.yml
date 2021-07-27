@@ -1,8 +1,7 @@
 name: ci-cd
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch: {}
 
 env:
   DOCKERHUB_USER: hildan
