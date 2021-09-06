@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":sw-common-model"))
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation(projects.swCommonModel)
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
 }

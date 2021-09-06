@@ -23,7 +23,7 @@ kotlin {
     sourceSets {
         main {
             dependencies {
-                implementation(project(":sw-client"))
+                implementation(projects.swClient)
 
                 val reactVersion = "17.0.2"
                 implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")

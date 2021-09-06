@@ -3,8 +3,6 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val kotlinSerialization = "1.0.0"
-
 kotlin {
     jvm()
     js {
@@ -17,7 +15,7 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinSerialization")
+                api(libs.kotlinx.serialization.core)
             }
         }
         val commonTest by getting {

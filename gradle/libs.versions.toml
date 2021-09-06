@@ -1,0 +1,19 @@
+[versions]
+kotlinx-coroutines = "1.4.2"
+kotlinx-serialization = "1.0.1"
+krossbow = "1.1.5"
+logback-classic = "1.2.3"
+loki-logback-appender = "1.0.0"
+micrometer-registry-prometheus = "1.6.1"
+slf4j = "1.7.30"
+
+[libraries]
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+krossbow-stomp-kxserialization = { module = "org.hildan.krossbow:krossbow-stomp-kxserialization", version.ref = "krossbow" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
+loki-logback-appender = { module = "com.github.loki4j:loki-logback-appender", version.ref = "loki-logback-appender" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-registry-prometheus" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }

@@ -13,10 +13,10 @@ kotlin {
         }
         val commonMain by getting {
             dependencies {
-                api(project(":sw-common-model"))
-                api("org.hildan.krossbow:krossbow-stomp-kxserialization:1.1.5")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+                api(projects.swCommonModel)
+                api(libs.krossbow.stomp.kxserialization)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
         val commonTest by getting {

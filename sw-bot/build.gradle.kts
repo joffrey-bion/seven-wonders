@@ -3,11 +3,11 @@ plugins {
 }
 
 dependencies {
-    api(project(":sw-client"))
+    api(projects.swClient)
     implementation(kotlin("stdlib-jdk8"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+    implementation(libs.kotlinx.coroutines.core)
 
-    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation(libs.slf4j.api)
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))

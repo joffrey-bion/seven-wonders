@@ -8,15 +8,14 @@ plugins {
 apply(plugin = "io.spring.dependency-management")
 
 dependencies {
-    implementation(project(":sw-common-model"))
-    implementation(project(":sw-engine"))
-    implementation(project(":sw-bot"))
+    implementation(projects.swCommonModel)
+    implementation(projects.swEngine)
+    implementation(projects.swBot)
     implementation(kotlin("reflect")) // required by Spring 5
 
-    val coroutinesVersion = "1.4.2"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$coroutinesVersion") // for Spring
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor) // for Spring
+    implementation(libs.kotlinx.serialization.json)
 
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -24,16 +23,16 @@ dependencies {
     implementation("org.springframework.security:spring-security-messaging")
 
     // logging
-    implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation("com.github.loki4j:loki-logback-appender:1.0.0")
+    implementation(libs.logback.classic)
+    implementation(libs.loki.logback.appender)
 
     // monitoring / metrics
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.6.1")
+    implementation(libs.micrometer.registry.prometheus)
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
-    testImplementation(project(":sw-client"))
+    testImplementation(projects.swClient)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
