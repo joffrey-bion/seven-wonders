@@ -2,7 +2,7 @@ name: ci-build
 
 on:
   push:
-    branches-ignore: [ main ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
