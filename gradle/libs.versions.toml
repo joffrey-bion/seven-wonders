@@ -1,11 +1,23 @@
 [versions]
-kotlinx-coroutines = "1.4.2"
-kotlinx-serialization = "1.0.1"
-krossbow = "1.1.5"
+kotlinx-coroutines = "1.5.2"
+kotlinx-serialization = "1.2.2"
+krossbow = "2.4.0"
 logback-classic = "1.2.3"
 loki-logback-appender = "1.0.0"
 micrometer-registry-prometheus = "1.6.1"
 slf4j = "1.7.30"
+
+# Frontend wrapper versions from https://github.com/JetBrains/kotlin-wrappers/blob/master/gradle.properties
+kotlin-wrappers = "pre.242-kotlin-1.5.30"
+react = "17.0.2"
+reactRedux = "7.2.4"
+reactRouterDom = "5.2.0"
+redux = "4.1.1"
+styledComponents = "5.3.1"
+
+blueprintjs-wrapper = "3"
+blueprintjs-core = "3.42.0"
+blueprintjs-icons = "3.26.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }

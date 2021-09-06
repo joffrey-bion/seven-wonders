@@ -1,47 +1,43 @@
 package org.luxons.sevenwonders.ui.redux
 
-import react.RClass
-import react.RComponent
-import react.RProps
-import react.RState
-import react.invoke
+import react.*
 import react.redux.rConnect
 import redux.RAction
 import redux.WrapperAction
 import kotlin.reflect.KClass
 
-inline fun <reified DP : RProps> connectDispatch(
-    clazz: KClass<out RComponent<DP, out RState>>,
-    noinline mapDispatchToProps: DP.((RAction) -> WrapperAction, RProps) -> Unit,
-): RClass<RProps> {
+inline fun <reified DP : PropsWithChildren> connectDispatch(
+    clazz: KClass<out RComponent<DP, out State>>,
+    noinline mapDispatchToProps: DP.((RAction) -> WrapperAction, PropsWithChildren) -> Unit,
+): ComponentClass<PropsWithChildren> {
     val connect = rConnect(mapDispatchToProps = mapDispatchToProps)
-    return connect.invoke(clazz.js.unsafeCast<RClass<DP>>())
+    return connect.invoke(clazz.js.unsafeCast<ComponentClass<DP>>())
 }
 
-inline fun <reified SP : RProps> connectState(
-    clazz: KClass<out RComponent<SP, out RState>>,
-    noinline mapStateToProps: SP.(SwState, RProps) -> Unit,
-): RClass<RProps> {
+inline fun <reified SP : PropsWithChildren> connectState(
+    clazz: KClass<out RComponent<SP, out State>>,
+    noinline mapStateToProps: SP.(SwState, PropsWithChildren) -> Unit,
+): ComponentClass<PropsWithChildren> {
     val connect = rConnect(mapStateToProps = mapStateToProps)
-    return connect.invoke(clazz.js.unsafeCast<RClass<SP>>())
+    return connect.invoke(clazz.js.unsafeCast<ComponentClass<SP>>())
 }
 
-inline fun <reified SP : RProps, OP : RProps> connectStateWithOwnProps(
-    clazz: KClass<out RComponent<SP, out RState>>,
+inline fun <reified SP : PropsWithChildren, OP : PropsWithChildren> connectStateWithOwnProps(
+    clazz: KClass<out RComponent<SP, out State>>,
     noinline mapStateToProps: SP.(SwState, OP) -> Unit,
-): RClass<OP> {
+): ComponentClass<OP> {
     val connect = rConnect(mapStateToProps = mapStateToProps)
-    return connect.invoke(clazz.js.unsafeCast<RClass<SP>>())
+    return connect.invoke(clazz.js.unsafeCast<ComponentClass<SP>>())
 }
 
-inline fun <reified SP : RProps, reified DP : RProps, reified P : RProps> connectStateAndDispatch(
-    clazz: KClass<out RComponent<P, out RState>>,
-    noinline mapStateToProps: SP.(SwState, RProps) -> Unit,
-    noinline mapDispatchToProps: DP.((RAction) -> WrapperAction, RProps) -> Unit,
-): RClass<RProps> {
-    val connect = rConnect<SwState, RAction, WrapperAction, RProps, SP, DP, P>(
+inline fun <reified SP : PropsWithChildren, reified DP : PropsWithChildren, reified P : PropsWithChildren> connectStateAndDispatch(
+    clazz: KClass<out RComponent<P, out State>>,
+    noinline mapStateToProps: SP.(SwState, PropsWithChildren) -> Unit,
+    noinline mapDispatchToProps: DP.((RAction) -> WrapperAction, PropsWithChildren) -> Unit,
+): ComponentClass<PropsWithChildren> {
+    val connect = rConnect<SwState, RAction, WrapperAction, PropsWithChildren, SP, DP, P>(
         mapStateToProps = mapStateToProps,
         mapDispatchToProps = mapDispatchToProps,
     )
-    return connect.invoke(clazz.js.unsafeCast<RClass<P>>())
+    return connect.invoke(clazz.js.unsafeCast<ComponentClass<P>>())
 }

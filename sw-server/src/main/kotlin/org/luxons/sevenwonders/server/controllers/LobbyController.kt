@@ -27,6 +27,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
+import kotlin.time.Duration
 import kotlin.time.milliseconds
 
 /**
@@ -165,7 +166,7 @@ class LobbyController(
             }
             if (result == null) {
                 meterRegistry.counter("bot.timeout", lobby.playerCountsTags()).increment()
-                val timeoutDuration = action.globalBotTimeoutMillis.milliseconds
+                val timeoutDuration = Duration.milliseconds(action.globalBotTimeoutMillis)
                 logger.error("Bot {} timed out after {}", action.botDisplayName, timeoutDuration)
                 bot.disconnect()
             }

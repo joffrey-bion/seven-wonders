@@ -13,13 +13,14 @@ import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
 import react.*
 import react.dom.*
 import styled.*
+import react.State as RState
 
-interface GameListStateProps : RProps {
+interface GameListStateProps : PropsWithChildren {
     var connectedPlayer: ConnectedPlayer
     var games: List<LobbyDTO>
 }
 
-interface GameListDispatchProps : RProps {
+interface GameListDispatchProps : PropsWithChildren {
     var joinGame: (Long) -> Unit
 }
 
@@ -71,7 +72,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
     }
 
     private fun RElementBuilder<IHTMLTableProps>.columnWidthsSpec() {
-        colGroup {
+        colgroup {
             styledCol {
                 css {
                     width = 40.rem

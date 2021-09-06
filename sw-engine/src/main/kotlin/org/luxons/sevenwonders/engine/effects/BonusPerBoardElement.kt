@@ -25,7 +25,7 @@ internal data class BonusPerBoardElement(
 
     override fun computePoints(player: Player): Int = points * nbMatchingElementsFor(player)
 
-    private fun nbMatchingElementsFor(player: Player): Int = boards.sumBy { nbMatchingElementsIn(player.getBoard(it)) }
+    private fun nbMatchingElementsFor(player: Player): Int = boards.sumOf { nbMatchingElementsIn(player.getBoard(it)) }
 
     private fun nbMatchingElementsIn(board: Board): Int = when (type) {
         BoardElementType.CARD -> board.getNbCardsOfColor(colors!!)

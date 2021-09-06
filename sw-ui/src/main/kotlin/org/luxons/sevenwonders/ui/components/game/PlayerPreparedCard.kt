@@ -6,21 +6,19 @@ import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.ui.redux.connectStateWithOwnProps
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
+import react.dom.attrs
 import styled.animation
 import styled.css
 import styled.styledDiv
 import styled.styledImg
 
-interface PlayerPreparedCardProps : RProps {
+interface PlayerPreparedCardProps : PropsWithChildren {
     var playerDisplayName: String
     var cardBack: CardBack?
 }
 
-interface PlayerPreparedCardContainerProps : RProps {
+interface PlayerPreparedCardContainerProps : PropsWithChildren {
     var playerDisplayName: String
     var username: String
 }
@@ -32,7 +30,7 @@ fun RBuilder.playerPreparedCard(player: PlayerDTO) = playerPreparedCard {
     }
 }
 
-private class PlayerPreparedCard(props: PlayerPreparedCardProps) : RComponent<PlayerPreparedCardProps, RState>(props) {
+private class PlayerPreparedCard(props: PlayerPreparedCardProps) : RComponent<PlayerPreparedCardProps, State>(props) {
 
     override fun RBuilder.render() {
         val cardBack = props.cardBack

@@ -16,6 +16,7 @@ import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
 import org.w3c.dom.HTMLButtonElement
 import react.*
+import react.dom.attrs
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
@@ -32,7 +33,7 @@ private enum class HandAction(
     COPY_GUILD("Copy this guild card", MoveType.COPY_GUILD, "duplicate")
 }
 
-interface HandProps : RProps {
+interface HandProps : PropsWithChildren {
     var action: TurnAction
     var ownBoard: Board
     var preparedMove: PlayerMove?
@@ -40,7 +41,7 @@ interface HandProps : RProps {
     var startTransactionsSelection: (TransactionSelectorState) -> Unit
 }
 
-class HandComponent(props: HandProps) : RComponent<HandProps, RState>(props) {
+class HandComponent(props: HandProps) : RComponent<HandProps, State>(props) {
 
     override fun RBuilder.render() {
         val hand = props.action.cardsToPlay() ?: return
@@ -214,7 +215,7 @@ private fun RElementBuilder<IButtonProps<HTMLButtonElement>>.priceInfo(amount: I
     }
 }
 
-private fun CSSBuilder.handStyle() {
+private fun CssBuilder.handStyle() {
     alignItems = Align.center
     bottom = 0.px
     display = Display.flex
@@ -237,14 +238,14 @@ private fun CSSBuilder.handStyle() {
     }
 }
 
-private fun CSSBuilder.handCardStyle() {
+private fun CssBuilder.handCardStyle() {
     classes.add("hand-card")
     alignItems = Align.flexEnd
     display = Display.grid
     margin(all = 0.2.rem)
 }
 
-private fun CSSBuilder.handCardImgStyle(isPlayable: Boolean) {
+private fun CssBuilder.handCardImgStyle(isPlayable: Boolean) {
     gridRow = GridRow("1")
     gridColumn = GridColumn("1")
     maxWidth = 13.vw

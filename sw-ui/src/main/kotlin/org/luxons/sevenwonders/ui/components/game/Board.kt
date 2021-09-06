@@ -194,7 +194,7 @@ private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMB
     }
 }
 
-private fun CSSBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
+private fun CssBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
     position = Position.absolute
     top = 60.pct // makes the cards stick out of the bottom of the wonder
     left = stagePositionPercent(stageIndex, nbStages).pct
@@ -209,6 +209,6 @@ private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when 
     else -> 7.9 + stageIndex * 30.0
 }
 
-private fun CSSBuilder.hoverHighlightStyle() {
+private fun CssBuilder.hoverHighlightStyle() {
     highlightStyle(Color.paleGoldenrod)
 }

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
-import kotlin.time.hours
+import kotlin.time.Duration
 
 /**
  * The action to choose the player's name. This is the first action that should be called.
@@ -110,7 +110,7 @@ class AddBotAction(
     /**
      * The global timeout for the bot, after which it disconnects (whether the game is over or not).
      */
-    val globalBotTimeoutMillis: Long = 6.hours.toLongMilliseconds(),
+    val globalBotTimeoutMillis: Long = Duration.hours(6).inWholeMilliseconds,
     /**
      * The configuration of the bot to add.
      */

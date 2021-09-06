@@ -22,11 +22,11 @@ fun <T> RBuilder.radialList(
     itemHeight: Int,
     options: RadialConfig = RadialConfig(),
     block: StyledDOMBuilder<DIV>.() -> Unit = {},
-): ReactElement {
+) {
     val containerWidth = options.diameter + itemWidth
     val containerHeight = options.diameter + itemHeight
 
-    return styledDiv {
+    styledDiv {
         css {
             zeroMargins()
             +GlobalStyles.fixedCenter
@@ -45,9 +45,9 @@ private fun <T> RBuilder.radialListItems(
     renderItem: (T) -> ReactElement,
     getKey: (T) -> String,
     radialConfig: RadialConfig,
-): ReactElement {
+) {
     val offsets = offsetsFromCenter(items.size, radialConfig)
-    return styledUl {
+    styledUl {
         css {
             zeroMargins()
             transition(property = "all", duration = 500.ms, timing = Timing.easeInOut)
@@ -68,8 +68,8 @@ private fun <T> RBuilder.radialListItems(
     }
 }
 
-private fun RBuilder.radialListItem(item: ReactElement, key: String, offset: CartesianCoords): ReactElement {
-    return styledLi {
+private fun RBuilder.radialListItem(item: ReactElement, key: String, offset: CartesianCoords) {
+    styledLi {
         css {
             display = Display.block
             position = Position.absolute
@@ -91,11 +91,11 @@ private fun RBuilder.radialListItem(item: ReactElement, key: String, offset: Car
     }
 }
 
-private fun RBuilder.radialListCenter(centerElement: ReactElement?): ReactElement? {
+private fun RBuilder.radialListCenter(centerElement: ReactElement?) {
     if (centerElement == null) {
-        return null
+        return
     }
-    return styledDiv {
+    styledDiv {
         css {
             zIndex = 0
             absoluteCenter()
@@ -104,7 +104,7 @@ private fun RBuilder.radialListCenter(centerElement: ReactElement?): ReactElemen
     }
 }
 
-private fun CSSBuilder.absoluteCenter() {
+private fun CssBuilder.absoluteCenter() {
     position = Position.absolute
     left = 50.pct
     top = 50.pct
@@ -113,7 +113,7 @@ private fun CSSBuilder.absoluteCenter() {
     }
 }
 
-private fun CSSBuilder.zeroMargins() {
+private fun CssBuilder.zeroMargins() {
     margin(all = 0.px)
     padding(all = 0.px)
 }

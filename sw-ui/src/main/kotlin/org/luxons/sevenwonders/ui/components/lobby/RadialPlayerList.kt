@@ -16,7 +16,7 @@ fun RBuilder.radialPlayerList(
     players: List<PlayerDTO>,
     currentPlayer: PlayerDTO,
     block: StyledDOMBuilder<DIV>.() -> Unit = {},
-): ReactElement {
+) {
     val playerItems = players //
         .map { PlayerItem.Player(it) }
         .growWithPlaceholders(targetSize = 3)
@@ -24,7 +24,7 @@ fun RBuilder.radialPlayerList(
 
     val tableImg = buildElement { lobbyWoodenTable(diameter = 200.px, borderSize = 15.px) }
 
-    return radialList(
+    radialList(
         items = playerItems,
         centerElement = tableImg,
         renderItem = { buildElement { playerElement(it) } },
@@ -85,7 +85,7 @@ private sealed class PlayerItem {
     }
 }
 
-private fun RBuilder.userIcon(icon: Icon, title: String?): ReactElement = bpIcon(
+private fun RBuilder.userIcon(icon: Icon, title: String?) = bpIcon(
     name = icon.name,
     size = 50,
     title = title,

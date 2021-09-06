@@ -28,7 +28,7 @@ enum class SpecialAbility {
     COPY_GUILD {
         override fun computePoints(player: Player): Int {
             // there can be no copiedGuild if no neighbour had any guild cards
-            return player.board.copiedGuild?.effects?.sumBy { it.computePoints(player) } ?: 0
+            return player.board.copiedGuild?.effects?.sumOf { it.computePoints(player) } ?: 0
         }
     };
 

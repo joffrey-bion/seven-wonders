@@ -7,10 +7,7 @@ import org.luxons.sevenwonders.ui.components.home.home
 import org.luxons.sevenwonders.ui.components.lobby.lobby
 import org.luxons.sevenwonders.ui.router.Route
 import react.RBuilder
-import react.router.dom.hashRouter
-import react.router.dom.redirect
-import react.router.dom.route
-import react.router.dom.switch
+import react.router.dom.*
 
 fun RBuilder.application() = hashRouter {
     errorDialog()

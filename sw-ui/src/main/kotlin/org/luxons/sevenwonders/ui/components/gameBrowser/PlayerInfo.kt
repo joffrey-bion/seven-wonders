@@ -6,15 +6,13 @@ import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.BasicPlayerInfo
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.ui.redux.connectState
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
+import react.dom.attrs
 import styled.css
 import styled.styledDiv
 import styled.styledSpan
 
-interface PlayerInfoProps : RProps {
+interface PlayerInfoProps : PropsWithChildren {
     var player: BasicPlayerInfo?
     var showUsername: Boolean
     var iconSize: Int
@@ -22,7 +20,7 @@ interface PlayerInfoProps : RProps {
     var ellipsize: Boolean
 }
 
-class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, RState>(props) {
+class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, State>(props) {
 
     override fun RBuilder.render() {
         styledDiv {
@@ -46,7 +44,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
         }
     }
 
-    private fun RBuilder.playerName(displayName: String, style: CSSBuilder.() -> Unit = {}) {
+    private fun RBuilder.playerName(displayName: String, style: CssBuilder.() -> Unit = {}) {
         styledSpan {
             css {
                 fontSize = 1.rem
@@ -70,7 +68,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
 
     private fun String.ellipsize(maxLength: Int) = take(maxLength - 1) + "…"
 
-    private fun CSSBuilder.iconSeparationMargin() {
+    private fun CssBuilder.iconSeparationMargin() {
         val margin = 0.4.rem
         when (props.orientation) {
             FlexDirection.row -> marginLeft = margin
@@ -84,7 +82,7 @@ class PlayerInfoPresenter(props: PlayerInfoProps) : RComponent<PlayerInfoProps, 
     private fun RBuilder.playerNameWithUsername(
         displayName: String,
         username: String,
-        style: CSSBuilder.() -> Unit = {}
+        style: CssBuilder.() -> Unit = {}
     ) {
         styledDiv {
             css {

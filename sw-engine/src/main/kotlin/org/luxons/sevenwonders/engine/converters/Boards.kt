@@ -36,7 +36,7 @@ internal fun InternalBoard.toApiBoard(player: Player, lastMove: Move?, currentAg
     gold = gold,
     bluePoints = getPlayedCards().filter { it.color == Color.BLUE }
         .flatMap { it.effects.filterIsInstance<RawPointsIncrease>() }
-        .sumBy { it.points },
+        .sumOf { it.points },
     canPlayAnyCardForFree = canPlayFreeCard(currentAge),
 )
 

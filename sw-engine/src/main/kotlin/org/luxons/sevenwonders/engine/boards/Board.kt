@@ -94,11 +94,11 @@ internal class Board(
     )
 
     private fun computePointsForCards(player: Player, color: Color): Int =
-        playedCards.filter { it.color === color }.flatMap { it.effects }.sumBy { it.computePoints(player) }
+        playedCards.filter { it.color === color }.flatMap { it.effects }.sumOf { it.computePoints(player) }
 
     private fun copiedGuildPoints(player: Player): Int = copiedGuild?.computePoints(player) ?: 0
 
-    private fun Card.computePoints(player: Player): Int = effects.sumBy { it.computePoints(player) }
+    private fun Card.computePoints(player: Player): Int = effects.sumOf { it.computePoints(player) }
 
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
 

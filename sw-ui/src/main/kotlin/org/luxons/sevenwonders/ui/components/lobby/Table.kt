@@ -64,7 +64,7 @@ private fun RBuilder.circle(diameter: LinearDimension, block: StyledDOMBuilder<D
     }
 }
 
-private fun CSSBuilder.opacityAnimation(duration: Time) {
+private fun CssBuilder.opacityAnimation(duration: Time) {
     animation(
         duration = duration,
         direction = AnimationDirection.alternate,

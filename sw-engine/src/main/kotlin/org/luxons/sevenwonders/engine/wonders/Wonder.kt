@@ -46,7 +46,7 @@ internal class Wonder(
         lastBuiltStage!!.activate(player, boughtResources)
 
     fun computePoints(player: Player): Int =
-        stages.filter { it.isBuilt }.flatMap { it.effects }.sumBy { it.computePoints(player) }
+        stages.filter { it.isBuilt }.flatMap { it.effects }.sumOf { it.computePoints(player) }
 }
 
 private object Buildability {

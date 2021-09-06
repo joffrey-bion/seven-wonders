@@ -6,6 +6,7 @@ import kotlinx.css.*
 import kotlinx.html.classes
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import react.RBuilder
+import react.dom.attrs
 import react.dom.h1
 import styled.css
 import styled.getClassName

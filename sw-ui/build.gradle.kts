@@ -4,16 +4,7 @@ plugins {
     kotlin("js")
 }
 
-repositories {
-    mavenCentral()
-    // for kotlin-wrappers resolutions
-    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
-    // for kotlinx-html (dependency of kotlin-react-dom)
-    maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
-    jcenter() // for kotlinx-html-jvm:0.7.2 needed by dokka (and not migrated)
-}
-
-val kotlinWrappersVersion = "pre.150-kotlin-1.4.31"
+val kotlinWrappersVersion = libs.versions.kotlin.wrappers.get()
 
 kotlin {
     js {
@@ -25,31 +16,29 @@ kotlin {
             dependencies {
                 implementation(projects.swClient)
 
-                val reactVersion = "17.0.2"
-                implementation("org.jetbrains:kotlin-react:$reactVersion-$kotlinWrappersVersion")
+                val reactVersion = libs.versions.react.get()
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react", reactVersion))
-                implementation("org.jetbrains:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
                 implementation(npm("react-dom", reactVersion))
 
-                val reactReduxVersion = "7.2.2"
-                implementation("org.jetbrains:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
+                val reactReduxVersion = libs.versions.reactRedux.get()
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
                 implementation(npm("react-redux", reactReduxVersion))
-                // redux version aligned with the wrapper's build:
-                // https://github.com/JetBrains/kotlin-wrappers/blob/master/gradle.properties#L42
-                implementation(npm("redux", "4.0.5"))
+                implementation(npm("redux", libs.versions.redux.get()))
 
-                val reactRouterDomVersion = "5.2.0"
-                implementation("org.jetbrains:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
+                val reactRouterDomVersion = libs.versions.reactRouterDom.get()
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
                 implementation(npm("react-router-dom", reactRouterDomVersion))
 
-                val styledComponentsVersion = "5.2.1"
-                implementation("org.jetbrains:kotlin-styled:$styledComponentsVersion-$kotlinWrappersVersion")
+                val styledComponentsVersion = libs.versions.styledComponents.get()
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:$styledComponentsVersion-$kotlinWrappersVersion")
                 implementation(npm("styled-components", styledComponentsVersion))
-                implementation(npm("inline-style-prefixer", "6.0.0"))
+                implementation(npm("inline-style-prefixer", "6.0.0")) // FIXME is this still needed
 
-                val bpCoreVersion = "3.42.0"
-                val bpIconsVersion = "3.26.0"
-                val bpWrapperVersion = "1"
+                val bpWrapperVersion = libs.versions.blueprintjs.wrapper.get()
+                val bpCoreVersion = libs.versions.blueprintjs.core.get()
+                val bpIconsVersion = libs.versions.blueprintjs.icons.get()
                 implementation("org.hildan.blueprintjs:kotlin-blueprintjs-core:$bpCoreVersion-$bpWrapperVersion")
                 implementation("org.hildan.blueprintjs:kotlin-blueprintjs-icons:$bpIconsVersion-$bpWrapperVersion")
                 implementation(npm("@blueprintjs/core", bpCoreVersion))

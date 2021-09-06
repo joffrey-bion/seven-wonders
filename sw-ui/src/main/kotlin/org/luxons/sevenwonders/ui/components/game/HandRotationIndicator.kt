@@ -5,6 +5,7 @@ import kotlinx.css.*
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.cards.HandRotationDirection
 import react.RBuilder
+import react.dom.attrs
 import styled.css
 import styled.styledDiv
 import styled.styledImg

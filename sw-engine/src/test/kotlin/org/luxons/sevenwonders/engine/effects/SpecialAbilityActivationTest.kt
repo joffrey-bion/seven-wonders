@@ -48,7 +48,7 @@ class SpecialAbilityActivationTest {
 
         player.board.copiedGuild = guildCard
 
-        val directPointsFromGuildCard = guildCard.effects.sumBy { it.computePoints(player) }
+        val directPointsFromGuildCard = guildCard.effects.sumOf { it.computePoints(player) }
         assertEquals(directPointsFromGuildCard, effect.computePoints(player))
     }
 

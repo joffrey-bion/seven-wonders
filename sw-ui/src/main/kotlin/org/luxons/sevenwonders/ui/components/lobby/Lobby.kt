@@ -11,10 +11,7 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.wonders.*
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import react.dom.h1
 import react.dom.h3
 import react.dom.h4
@@ -22,12 +19,12 @@ import styled.*
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS", "R2-D2", "Bender", "AWESOM-O")
 
-interface LobbyStateProps : RProps {
+interface LobbyStateProps : PropsWithChildren {
     var currentGame: LobbyDTO?
     var currentPlayer: PlayerDTO?
 }
 
-interface LobbyDispatchProps : RProps {
+interface LobbyDispatchProps : PropsWithChildren {
     var startGame: () -> Unit
     var addBot: (displayName: String) -> Unit
     var leaveLobby: () -> Unit
@@ -38,7 +35,7 @@ interface LobbyDispatchProps : RProps {
 
 interface LobbyProps : LobbyDispatchProps, LobbyStateProps
 
-class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, RState>(props) {
+class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, State>(props) {
 
     override fun RBuilder.render() {
         val currentGame = props.currentGame

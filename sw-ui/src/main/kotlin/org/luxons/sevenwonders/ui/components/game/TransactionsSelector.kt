@@ -10,6 +10,7 @@ import kotlinx.html.js.onClickFunction
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.resources.*
+import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
 import react.*
 import react.dom.*
@@ -91,12 +92,12 @@ private fun RBuilder.optionsTable(
     }
 }
 
-private interface OptionsTableProps : RProps {
+private interface OptionsTableProps : PropsWithChildren {
     var state: TransactionSelectorState
     var prepareMove: (PlayerMove) -> Unit
 }
 
-private val optionsTable = functionalComponent<OptionsTableProps> { props ->
+private val optionsTable = fc<OptionsTableProps> { props ->
     val state = props.state
     val prepareMove = props.prepareMove
 

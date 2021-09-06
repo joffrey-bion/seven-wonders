@@ -20,7 +20,7 @@ internal class TradingRules(private val defaultCost: Int) {
         costs.computeIfAbsent(type) { mutableMapOf() }[provider] = cost
     }
 
-    internal fun computeCost(transactions: ResourceTransactions): Int = transactions.sumBy { computeCost(it) }
+    internal fun computeCost(transactions: ResourceTransactions): Int = transactions.sumOf { computeCost(it) }
 
     internal fun computeCost(transact: ResourceTransaction) = computeCost(transact.asResources(), transact.provider)
 

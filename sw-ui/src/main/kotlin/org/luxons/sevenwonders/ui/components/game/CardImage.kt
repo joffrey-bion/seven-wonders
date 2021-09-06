@@ -7,6 +7,7 @@ import kotlinx.html.title
 import org.luxons.sevenwonders.model.cards.Card
 import org.luxons.sevenwonders.model.cards.CardBack
 import react.RBuilder
+import react.dom.attrs
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledImg
@@ -62,13 +63,13 @@ fun RBuilder.cardPlaceholderImage(block: StyledDOMBuilder<IMG>.() -> Unit = {}) 
     }
 }
 
-private fun CSSBuilder.cardImageStyle(highlightColor: Color?) {
+private fun CssBuilder.cardImageStyle(highlightColor: Color?) {
     borderRadius = 5.pct
     boxShadow(offsetX = 2.px, offsetY = 2.px, blurRadius = 5.px, color = Color.black)
     highlightStyle(highlightColor)
 }
 
-internal fun CSSBuilder.highlightStyle(highlightColor: Color?) {
+internal fun CssBuilder.highlightStyle(highlightColor: Color?) {
     if (highlightColor != null) {
         boxShadow(
             offsetX = 0.px,

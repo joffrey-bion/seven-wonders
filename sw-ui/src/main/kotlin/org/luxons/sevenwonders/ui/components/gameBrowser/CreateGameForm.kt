@@ -10,21 +10,16 @@ import org.luxons.sevenwonders.ui.redux.RequestCreateGame
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.events.Event
-import react.RBuilder
-import react.RClass
-import react.RComponent
-import react.RProps
-import react.RState
-import react.buildElement
+import react.*
 import react.dom.*
 import styled.css
 import styled.styledDiv
 
-private interface CreateGameFormProps : RProps {
+private interface CreateGameFormProps : PropsWithChildren {
     var createGame: (String) -> Unit
 }
 
-private data class CreateGameFormState(var gameName: String = "") : RState
+private data class CreateGameFormState(var gameName: String = "") : State
 
 private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGameFormProps, CreateGameFormState>(props) {
 
@@ -67,6 +62,6 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
     }
 }
 
-val createGameForm: RClass<RProps> = connectDispatch(CreateGameForm::class) { dispatch, _ ->
+val createGameForm: ComponentClass<PropsWithChildren> = connectDispatch(CreateGameForm::class) { dispatch, _ ->
     createGame = { name -> dispatch(RequestCreateGame(name)) }
 }

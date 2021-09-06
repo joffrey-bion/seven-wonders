@@ -15,11 +15,13 @@ import styled.css
 import styled.styledDiv
 import styled.styledForm
 
-private interface ChooseNameFormProps : RProps {
+private interface ChooseNameFormProps : PropsWithChildren {
     var chooseUsername: (String) -> Unit
 }
 
-private data class ChooseNameFormState(var username: String = "") : RState
+private external interface ChooseNameFormState : State {
+    var username: String
+}
 
 private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseNameFormProps, ChooseNameFormState>(props) {
 
@@ -43,7 +45,9 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
                 value = state.username,
                 onChange = { e ->
                     val input = e.currentTarget as HTMLInputElement
-                    setState(transformState = { ChooseNameFormState(username = input.value) })
+                    setState {
+                        username = input.value
+                    }
                 },
             )
         }
@@ -69,7 +73,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
     }
 
     private fun fillRandomUsername() {
-        setState(ChooseNameFormState(username = randomGreekName()))
+        setState { username = randomGreekName() }
     }
 
     private fun chooseUsername(e: Event) {
@@ -87,6 +91,6 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
     }
 }
 
-val chooseNameForm: RClass<RProps> = connectDispatch(ChooseNameForm::class) { dispatch, _ ->
+val chooseNameForm: ComponentClass<PropsWithChildren> = connectDispatch(ChooseNameForm::class) { dispatch, _ ->
     chooseUsername = { name -> dispatch(RequestChooseName(name)) }
 }

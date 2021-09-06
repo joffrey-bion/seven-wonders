@@ -25,7 +25,7 @@ import styled.css
 import styled.getClassName
 import styled.styledDiv
 
-interface GameSceneStateProps : RProps {
+interface GameSceneStateProps : PropsWithChildren {
     var currentPlayer: PlayerDTO?
     var players: List<PlayerDTO>
     var game: GameState?
@@ -33,7 +33,7 @@ interface GameSceneStateProps : RProps {
     var preparedCard: HandCard?
 }
 
-interface GameSceneDispatchProps : RProps {
+interface GameSceneDispatchProps : PropsWithChildren {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
     var unprepareMove: () -> Unit
@@ -44,7 +44,7 @@ interface GameSceneProps : GameSceneStateProps, GameSceneDispatchProps
 
 data class GameSceneState(
     var transactionSelector: TransactionSelectorState?
-) : RState
+) : State
 
 data class TransactionSelectorState(
     val moveType: MoveType,
@@ -258,10 +258,10 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
         }
     }
 
-    private fun RBuilder.sayReadyButton(): ReactElement {
+    private fun RBuilder.sayReadyButton() {
         val isReady = props.currentPlayer?.isReady == true
         val intent = if (isReady) Intent.SUCCESS else Intent.PRIMARY
-        return styledDiv {
+        styledDiv {
             css {
                 position = Position.absolute
                 bottom = 6.rem
@@ -290,7 +290,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
 
 fun RBuilder.gameScene() = gameScene {}
 
-private val gameScene: RClass<GameSceneProps> =
+private val gameScene: ComponentClass<GameSceneProps> =
     connectStateAndDispatch<GameSceneStateProps, GameSceneDispatchProps, GameSceneProps>(
         clazz = GameScene::class,
         mapDispatchToProps = { dispatch, _ ->

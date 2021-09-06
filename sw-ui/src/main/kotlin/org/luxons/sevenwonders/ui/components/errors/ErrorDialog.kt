@@ -9,25 +9,22 @@ import kotlinx.browser.window
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
 import org.luxons.sevenwonders.ui.router.Route
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
+import react.*
 import react.dom.p
 import styled.css
 import styled.styledDiv
 
-interface ErrorDialogStateProps : RProps {
+interface ErrorDialogStateProps : PropsWithChildren {
     var errorMessage: String?
 }
 
-interface ErrorDialogDispatchProps : RProps {
+interface ErrorDialogDispatchProps : PropsWithChildren {
     var goHome: () -> Unit
 }
 
 interface ErrorDialogProps : ErrorDialogDispatchProps, ErrorDialogStateProps
 
-class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProps, RState>(props) {
+class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProps, State>(props) {
     override fun RBuilder.render() {
         val errorMessage = props.errorMessage
         bpDialog(
