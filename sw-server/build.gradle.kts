@@ -31,7 +31,6 @@ dependencies {
     implementation(libs.micrometer.registry.prometheus)
 
     testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit"))
     testImplementation(projects.swClient)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
