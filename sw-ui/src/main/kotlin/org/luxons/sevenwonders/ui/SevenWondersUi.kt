@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.ui
 
 import kotlinx.browser.document
 import kotlinx.browser.window
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.ui.components.application
@@ -37,6 +38,7 @@ private fun initializeAndRender(rootElement: Element) {
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 private fun initRedux(): Store<SwState, RAction, WrapperAction> {
     val sagaManager = SagaManager<SwState, RAction, WrapperAction>()
     val store = configureStore(sagaManager = sagaManager)
