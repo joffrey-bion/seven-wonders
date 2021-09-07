@@ -162,7 +162,7 @@ private fun RDOMBuilder<TBODY>.transactionsOptionRow(
             styledDiv {
                 css { opacity = if (leftTr == null) 0.5 else 1 }
                 transactionCellInnerCss()
-                bpIcon(name = "caret-left", size = Icon.SIZE_LARGE)
+                bpIcon(name = "caret-left", size = IconSize.LARGE)
                 goldIndicator(leftTr?.totalPrice ?: 0, imgSize = 2.5.rem)
             }
         }
@@ -191,7 +191,7 @@ private fun RDOMBuilder<TBODY>.transactionsOptionRow(
                 css { opacity = if (rightTr == null) 0.5 else 1 }
                 transactionCellInnerCss()
                 goldIndicator(rightTr?.totalPrice ?: 0, imgSize = 2.5.rem)
-                bpIcon(name = "caret-right", size = Icon.SIZE_LARGE)
+                bpIcon(name = "caret-right", size = IconSize.LARGE)
             }
         }
     }
