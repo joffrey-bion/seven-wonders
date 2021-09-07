@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
 import io.micrometer.core.instrument.MeterRegistry
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
@@ -20,6 +19,7 @@ import org.luxons.sevenwonders.server.lobby.Player
 import org.luxons.sevenwonders.server.metrics.playerCountsTags
 import org.luxons.sevenwonders.server.repositories.LobbyRepository
 import org.luxons.sevenwonders.server.repositories.PlayerRepository
+import org.luxons.sevenwonders.server.utils.CoroutineScopedComponent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -28,7 +28,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
 import kotlin.time.Duration
-import kotlin.time.milliseconds
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -40,7 +39,7 @@ class LobbyController(
     private val playerRepository: PlayerRepository,
     @Value("\${server.port}") private val serverPort: String,
     private val meterRegistry: MeterRegistry,
-) {
+) : CoroutineScopedComponent() {
     private val Principal.player: Player
         get() = playerRepository.get(name)
 
@@ -160,7 +159,7 @@ class LobbyController(
             SevenWondersClient().connectBot("ws://localhost:$serverPort", action.botDisplayName, action.config)
         }
         logger.info("Starting bot {} in game '{}'", action.botDisplayName, lobby.name)
-        GlobalScope.launch {
+        componentScope.launch {
             val result = withTimeoutOrNull(action.globalBotTimeoutMillis) {
                 bot.joinAndAutoPlay(lobby.id)
             }
