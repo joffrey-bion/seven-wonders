@@ -4,8 +4,6 @@ plugins {
     kotlin("js")
 }
 
-val kotlinWrappersVersion = libs.versions.kotlin.wrappers.get()
-
 kotlin {
     js {
         browser()
@@ -16,33 +14,13 @@ kotlin {
             dependencies {
                 implementation(projects.swClient)
 
-                val reactVersion = libs.versions.react.get()
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:$reactVersion-$kotlinWrappersVersion")
-                implementation(npm("react", reactVersion))
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:$reactVersion-$kotlinWrappersVersion")
-                implementation(npm("react-dom", reactVersion))
-
-                val reactReduxVersion = libs.versions.reactRedux.get()
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-redux:$reactReduxVersion-$kotlinWrappersVersion")
-                implementation(npm("react-redux", reactReduxVersion))
-                implementation(npm("redux", libs.versions.redux.get()))
-
-                val reactRouterDomVersion = libs.versions.reactRouterDom.get()
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:$reactRouterDomVersion-$kotlinWrappersVersion")
-                implementation(npm("react-router-dom", reactRouterDomVersion))
-
-                val styledComponentsVersion = libs.versions.styledComponents.get()
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-styled:$styledComponentsVersion-$kotlinWrappersVersion")
-                implementation(npm("styled-components", styledComponentsVersion))
-                implementation(npm("inline-style-prefixer", "6.0.0")) // FIXME is this still needed
-
-                val bpWrapperVersion = libs.versions.blueprintjs.wrapper.get()
-                val bpCoreVersion = libs.versions.blueprintjs.core.get()
-                val bpIconsVersion = libs.versions.blueprintjs.icons.get()
-                implementation("org.hildan.blueprintjs:kotlin-blueprintjs-core:$bpCoreVersion-$bpWrapperVersion")
-                implementation("org.hildan.blueprintjs:kotlin-blueprintjs-icons:$bpIconsVersion-$bpWrapperVersion")
-                implementation(npm("@blueprintjs/core", bpCoreVersion))
-                implementation(npm("@blueprintjs/icons", bpIconsVersion))
+                implementation(libs.kotlin.wrappers.react.base)
+                implementation(libs.kotlin.wrappers.react.dom)
+                implementation(libs.kotlin.wrappers.react.redux)
+                implementation(libs.kotlin.wrappers.react.router.dom)
+                implementation(libs.kotlin.wrappers.styled)
+                implementation(libs.kotlin.wrappers.blueprintjs.core)
+                implementation(libs.kotlin.wrappers.blueprintjs.icons)
             }
         }
         test {

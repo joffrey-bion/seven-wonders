@@ -7,17 +7,13 @@ loki-logback-appender = "1.0.0"
 micrometer-registry-prometheus = "1.6.1"
 slf4j = "1.7.30"
 
-# Frontend wrapper versions from https://github.com/JetBrains/kotlin-wrappers/blob/master/gradle.properties
-kotlin-wrappers = "pre.242-kotlin-1.5.30"
-react = "17.0.2"
-reactRedux = "7.2.4"
-reactRouterDom = "5.2.0"
-redux = "4.1.1"
-styledComponents = "5.3.1"
+kotlin-react = "17.0.2-pre.242-kotlin-1.5.30"
+kotlin-reactRedux = "7.2.4-pre.242-kotlin-1.5.30"
+kotlin-reactRouterDom = "5.2.0-pre.242-kotlin-1.5.30"
+kotlin-styled = "5.3.1-pre.242-kotlin-1.5.30"
 
-blueprintjs-wrapper = "4"
-blueprintjs-core = "3.49.1"
-blueprintjs-icons = "3.29.0"
+kotlin-blueprintjs-core = "3.49.1-4"
+kotlin-blueprintjs-icons = "3.29.0-4"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
@@ -29,3 +25,12 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "lo
 loki-logback-appender = { module = "com.github.loki4j:loki-logback-appender", version.ref = "loki-logback-appender" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-registry-prometheus" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+
+kotlin-wrappers-react-base = { module = "org.jetbrains.kotlin-wrappers:kotlin-react", version.ref = "kotlin-react" }
+kotlin-wrappers-react-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom", version.ref = "kotlin-react" }
+kotlin-wrappers-react-redux = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-redux", version.ref = "kotlin-reactRedux" }
+kotlin-wrappers-react-router-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-router-dom", version.ref = "kotlin-reactRouterDom" }
+kotlin-wrappers-styled = { module = "org.jetbrains.kotlin-wrappers:kotlin-styled", version.ref = "kotlin-styled" }
+
+kotlin-wrappers-blueprintjs-core = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-core", version.ref = "kotlin-blueprintjs-core" }
+kotlin-wrappers-blueprintjs-icons = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-icons", version.ref = "kotlin-blueprintjs-icons" }
