@@ -15,9 +15,9 @@ reactRouterDom = "5.2.0"
 redux = "4.1.1"
 styledComponents = "5.3.1"
 
-blueprintjs-wrapper = "3"
-blueprintjs-core = "3.42.0"
-blueprintjs-icons = "3.26.0"
+blueprintjs-wrapper = "4"
+blueprintjs-core = "3.49.1"
+blueprintjs-icons = "3.29.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
