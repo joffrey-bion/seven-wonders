@@ -28,10 +28,6 @@ jobs:
           job-id: jdk15
           arguments: build
 
-      # technically optional, brings support for more platform to Docker Buildx
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
       # required for Docker build/push
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
