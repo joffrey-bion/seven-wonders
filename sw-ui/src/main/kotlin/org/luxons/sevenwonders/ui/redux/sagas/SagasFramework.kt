@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import redux.Middleware
@@ -14,7 +15,7 @@ class SagaManager<S, A : RAction, R>(
 ) {
     private lateinit var context: SagaContext<S, A, R>
 
-    private val actions = BroadcastChannel<A>(16)
+    private val actions = BroadcastChannel<A>(BUFFERED)
 
     fun createMiddleware(): Middleware<S, A, R, A, R> = ::sagasMiddleware
 
@@ -34,6 +35,7 @@ class SagaManager<S, A : RAction, R>(
         monitor?.invoke(action)
     }
 
+    @OptIn(DelicateCoroutinesApi::class) // Ok because almost never suspends - if it does, we have bigger problems
     private fun handleAction(action: A) {
         GlobalScope.launch { actions.send(action) }
     }
