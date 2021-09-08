@@ -27,7 +27,6 @@ subprojects {
         kotlinOptions.jvmTarget = "15"
     }
 
-    // this doesn't cover multiplatform projects, see sw-common-model's build.gradle.kts
     tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>> {
         kotlinOptions.freeCompilerArgs += listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
