@@ -9,13 +9,26 @@ import org.luxons.sevenwonders.ui.router.Route
 import react.RBuilder
 import react.router.dom.*
 
-fun RBuilder.application() = hashRouter {
+fun RBuilder.application() = HashRouter {
     errorDialog()
-    switch {
+    Switch {
         route(Route.GAME_BROWSER.path) { gameBrowser() }
         route(Route.GAME.path) { gameScene() }
         route(Route.LOBBY.path) { lobby() }
         route(Route.HOME.path, exact = true) { home() }
-        redirect(from = "*", to = "/")
+        Redirect {
+            attrs {
+                from = "*"
+                to = "/"
+            }
+        }
+    }
+}
+
+private fun RBuilder.route(path: String, exact: Boolean = false, render: RBuilder.() -> Unit) {
+    Route {
+        attrs.path = arrayOf(path)
+        attrs.exact = exact
+        render()
     }
 }
