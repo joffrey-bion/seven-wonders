@@ -1,8 +1,7 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.promise
+import kotlinx.coroutines.*
+import org.luxons.sevenwonders.ui.test.runSuspendingTest
 import redux.RAction
 import redux.Store
 import redux.WrapperAction
@@ -41,8 +40,7 @@ private data class TestRedux(
 class SagaContextTest {
 
     @Test
-    fun dispatch(): dynamic = GlobalScope.promise {
-
+    fun dispatch() = runSuspendingTest {
         val redux = configureTestStore(State("initial"))
 
         redux.sagas.runSaga {
@@ -53,7 +51,7 @@ class SagaContextTest {
     }
 
     @Test
-    fun next(): dynamic = GlobalScope.promise {
+    fun next() = runSuspendingTest {
         val redux = configureTestStore(State("initial"))
 
         val job = redux.sagas.launchSaga(this) {
@@ -69,8 +67,7 @@ class SagaContextTest {
     }
 
     @Test
-    fun onEach(): dynamic = GlobalScope.promise {
-
+    fun onEach() = runSuspendingTest {
         val redux = configureTestStore(State("initial"))
 
         val job = redux.sagas.launchSaga(this) {

@@ -1,15 +1,14 @@
 package org.luxons.sevenwonders.ui.utils
 
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.promise
+import org.luxons.sevenwonders.ui.test.runSuspendingTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CoroutineUtilsTest {
 
     @Test
-    fun awaitFirstTest(): dynamic = GlobalScope.promise {
+    fun awaitFirstTest() = runSuspendingTest {
         val s = awaitFirst(
             { delay(100); "1" },
             { delay(200); "2" },
