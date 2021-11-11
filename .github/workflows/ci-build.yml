@@ -13,14 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK 15
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: 15
+          java-version: 17
 
       - name: Build with Gradle
         uses: burrunan/gradle-cache-action@v1
         with:
-          job-id: jdk15
+          job-id: jdk17
           arguments: build
