@@ -24,3 +24,22 @@ jobs:
         with:
           job-id: jdk17
           arguments: build
+
+  qodana:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Qodana
+        uses: JetBrains/qodana-action@v3.2.1
+        with:
+          linter: qodana-jvm-community
+          fail-threshold: 10
+
+      - name: Upload Qodana report
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: qodana-report
+          path: ${{ github.workspace }}/qodana
