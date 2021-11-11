@@ -1,7 +1,7 @@
 [versions]
 kotlinx-coroutines = "1.5.2"
 kotlinx-serialization = "1.2.2"
-krossbow = "2.4.0"
+krossbow = "2.7.0"
 logback-classic = "1.2.3"
 loki-logback-appender = "1.0.0"
 micrometer-registry-prometheus = "1.6.1"
