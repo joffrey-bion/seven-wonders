@@ -21,6 +21,7 @@ subprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>> {
+        kotlinOptions.allWarningsAsErrors = true
         kotlinOptions.freeCompilerArgs += listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xopt-in=kotlin.time.ExperimentalTime", // for measureTimedValue and withTimeout(Duration)
