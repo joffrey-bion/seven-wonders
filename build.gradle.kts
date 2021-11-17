@@ -24,7 +24,6 @@ subprojects {
         kotlinOptions.freeCompilerArgs += listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xopt-in=kotlin.time.ExperimentalTime", // for measureTimedValue and withTimeout(Duration)
-            "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
         )
     }
 
