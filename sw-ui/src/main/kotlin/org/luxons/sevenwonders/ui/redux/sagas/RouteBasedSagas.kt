@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.ui.redux.*
@@ -9,7 +10,9 @@ import org.luxons.sevenwonders.ui.router.Route
 suspend fun SwSagaContext.gameBrowserSaga(session: SevenWondersSession) {
     // browser navigation could have brought us here: we should leave the game/lobby
     ensureNoCurrentGameNorLobby(session)
-    session.watchGames().map { UpdateGameListAction(it) }.dispatchAll()
+    session.watchGames()
+        .map { UpdateGameListAction(it) }
+        .collect { dispatch(it) }
 }
 
 private suspend fun SwSagaContext.ensureNoCurrentGameNorLobby(session: SevenWondersSession) {
