@@ -1,4 +1,4 @@
-FROM openjdk:15
+FROM openjdk:17
 
 EXPOSE 80
 

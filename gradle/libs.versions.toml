@@ -7,10 +7,11 @@ loki-logback-appender = "1.0.0"
 micrometer-registry-prometheus = "1.6.1"
 slf4j = "1.7.30"
 
-kotlin-react = "17.0.2-pre.265-kotlin-1.5.31"
-kotlin-reactRedux = "7.2.4-pre.265-kotlin-1.5.31"
-kotlin-reactRouterDom = "5.3.0-pre.265-kotlin-1.5.31"
-kotlin-styled = "5.3.3-pre.265-kotlin-1.5.31"
+# See https://github.com/JetBrains/kotlin-wrappers
+kotlin-react = "17.0.2-pre.266-kotlin-1.6.0"
+kotlin-reactRedux = "7.2.6-pre.266-kotlin-1.6.0"
+kotlin-reactRouterDom = "5.3.0-pre.266-kotlin-1.6.0"
+kotlin-styled = "5.3.3-pre.266-kotlin-1.6.0"
 
 kotlin-blueprintjs-core = "3.49.1-4"
 kotlin-blueprintjs-icons = "3.29.0-4"

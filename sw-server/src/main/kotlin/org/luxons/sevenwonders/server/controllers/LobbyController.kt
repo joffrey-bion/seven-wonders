@@ -27,7 +27,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.stereotype.Controller
 import org.springframework.validation.annotation.Validated
 import java.security.Principal
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Handles actions in the game's lobby. The lobby is the place where players gather before a game.
@@ -165,7 +165,7 @@ class LobbyController(
             }
             if (result == null) {
                 meterRegistry.counter("bot.timeout", lobby.playerCountsTags()).increment()
-                val timeoutDuration = Duration.milliseconds(action.globalBotTimeoutMillis)
+                val timeoutDuration = action.globalBotTimeoutMillis.milliseconds
                 logger.error("Bot {} timed out after {}", action.botDisplayName, timeoutDuration)
                 bot.disconnect()
             }

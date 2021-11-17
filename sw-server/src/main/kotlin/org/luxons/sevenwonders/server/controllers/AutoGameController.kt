@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.measureTimedValue
-import kotlin.time.minutes
 import kotlin.time.toJavaDuration
 
 /**
@@ -33,7 +32,7 @@ class AutoGameController(
         val client = SevenWondersClient()
         val serverUrl = "ws://localhost:$serverPort"
 
-        val lastTurn = withTimeout(Duration.minutes(5)) {
+        val lastTurn = withTimeout(5.minutes) {
             val (lastTurn, duration) = measureTimedValue {
                 val otherBotNames = List(action.nbPlayers - 1) { "JoinerBot${it + 1}" }
                 val owner = client.connectBot(serverUrl, "OwnerBot", action.config)
