@@ -23,12 +23,14 @@ import org.luxons.sevenwonders.model.api.actions.*
 import org.luxons.sevenwonders.model.api.errors.ErrorDTO
 import org.luxons.sevenwonders.model.api.events.*
 import org.luxons.sevenwonders.model.wonders.AssignedWonder
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class SevenWondersClient {
 
     private val stompClient = StompClient {
-        heartBeat = HeartBeat(10000, 10000)
-        heartBeatTolerance = HeartBeatTolerance(0, 10000) // wide margin to account for heroku cold start
+        heartBeat = HeartBeat(10.seconds, 10.seconds)
+        heartBeatTolerance = HeartBeatTolerance(Duration.ZERO, 10.seconds) // wide margin to account for heroku cold start
     }
 
     suspend fun connect(serverUrl: String): SevenWondersSession {
