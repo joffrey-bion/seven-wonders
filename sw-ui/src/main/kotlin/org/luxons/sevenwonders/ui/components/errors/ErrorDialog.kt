@@ -8,7 +8,7 @@ import blueprintjs.icons.IconNames
 import kotlinx.browser.window
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
-import org.luxons.sevenwonders.ui.router.Route
+import org.luxons.sevenwonders.ui.router.SwRoute
 import react.*
 import react.dom.p
 import styled.css
@@ -56,7 +56,7 @@ class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProp
 
 private fun goHomeAndRefresh() {
     // we don't use a redux action here because we actually want to redirect and refresh the page
-    window.location.href = Route.HOME.path
+    window.location.href = SwRoute.HOME.path
 }
 
 fun RBuilder.errorDialog() = errorDialog {}
@@ -67,6 +67,6 @@ private val errorDialog = connectStateAndDispatch<ErrorDialogStateProps, ErrorDi
         errorMessage = state.fatalError
     },
     mapDispatchToProps = { dispatch, _ ->
-        goHome = { dispatch(Navigate(Route.HOME)) }
+        goHome = { dispatch(Navigate(SwRoute.HOME)) }
     },
 )

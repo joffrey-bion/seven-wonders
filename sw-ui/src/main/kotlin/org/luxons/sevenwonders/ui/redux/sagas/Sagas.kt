@@ -2,7 +2,6 @@ package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.browser.window
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import org.hildan.krossbow.stomp.ConnectionException
 import org.hildan.krossbow.stomp.MissingHeartBeatException
 import org.hildan.krossbow.stomp.WebSocketClosedUnexpectedly
@@ -10,7 +9,7 @@ import org.luxons.sevenwonders.client.*
 import org.luxons.sevenwonders.model.api.events.GameEvent
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.Navigate
-import org.luxons.sevenwonders.ui.router.Route
+import org.luxons.sevenwonders.ui.router.SwRoute
 import org.luxons.sevenwonders.ui.router.routerSaga
 import redux.RAction
 import redux.WrapperAction
@@ -37,12 +36,12 @@ suspend fun SwSagaContext.rootSaga() = try {
         val player = session.chooseNameAndAwait(action.playerName)
         dispatch(SetCurrentPlayerAction(player))
 
-        routerSaga(Route.GAME_BROWSER) {
+        routerSaga(SwRoute.GAME_BROWSER) {
             when (it) {
-                Route.HOME -> Unit
-                Route.LOBBY -> lobbySaga(session)
-                Route.GAME_BROWSER -> gameBrowserSaga(session)
-                Route.GAME -> gameSaga(session)
+                SwRoute.HOME -> Unit
+                SwRoute.LOBBY -> lobbySaga(session)
+                SwRoute.GAME_BROWSER -> gameBrowserSaga(session)
+                SwRoute.GAME -> gameSaga(session)
             }
         }
     }
@@ -102,23 +101,23 @@ private fun SwSagaContext.launchApiEventHandlersIn(scope: CoroutineScope, sessio
             when (event) {
                 is GameEvent.NameChosen -> {
                     dispatch(SetCurrentPlayerAction(event.player))
-                    dispatch(Navigate(Route.GAME_BROWSER))
+                    dispatch(Navigate(SwRoute.GAME_BROWSER))
                 }
                 is GameEvent.LobbyJoined -> {
                     dispatch(EnterLobbyAction(event.lobby))
-                    dispatch(Navigate(Route.LOBBY))
+                    dispatch(Navigate(SwRoute.LOBBY))
                 }
                 is GameEvent.LobbyUpdated -> {
                     dispatch(UpdateLobbyAction(event.lobby))
                 }
                 GameEvent.LobbyLeft -> {
                     dispatch(LeaveLobbyAction)
-                    dispatch(Navigate(Route.GAME_BROWSER))
+                    dispatch(Navigate(SwRoute.GAME_BROWSER))
                 }
                 is GameEvent.GameStarted -> {
                     val currentLobby = reduxState.currentLobby ?: error("Received game started event without being in a lobby")
                     dispatch(EnterGameAction(currentLobby, event.turnInfo))
-                    dispatch(Navigate(Route.GAME))
+                    dispatch(Navigate(SwRoute.GAME))
                 }
                 is GameEvent.NewTurnStarted -> dispatch(TurnInfoEvent(event.turnInfo))
                 is GameEvent.MovePrepared -> dispatch(PreparedMoveEvent(event.move))

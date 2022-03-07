@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import org.luxons.sevenwonders.ui.redux.sagas.SwSagaContext
 import redux.RAction
 
-enum class Route(val path: String) {
+enum class SwRoute(val path: String) {
     HOME("/"),
     GAME_BROWSER("/games"),
     LOBBY("/lobby"),
@@ -20,18 +20,18 @@ enum class Route(val path: String) {
     }
 }
 
-data class Navigate(val route: Route) : RAction
+data class Navigate(val route: SwRoute) : RAction
 
 suspend fun SwSagaContext.routerSaga(
-    startRoute: Route,
-    runRouteSaga: suspend SwSagaContext.(Route) -> Unit,
+    startRoute: SwRoute,
+    runRouteSaga: suspend SwSagaContext.(SwRoute) -> Unit,
 ) {
     coroutineScope {
         window.location.hash = startRoute.path
         launch { changeRouteOnNavigateAction() }
         var currentSaga: Job = launch { runRouteSaga(startRoute) }
         window.onhashchange = { event ->
-            val route = Route.from(event.newURL.substringAfter("#"))
+            val route = SwRoute.from(event.newURL.substringAfter("#"))
             currentSaga.cancel()
             currentSaga = this@coroutineScope.launch {
                 runRouteSaga(route)
