@@ -1,7 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    val kotlinVersion = "1.6.10"
+    val kotlinVersion = "1.7.0"
     kotlin("js") version kotlinVersion apply false
     kotlin("jvm") version kotlinVersion apply false
     kotlin("multiplatform") version kotlinVersion apply false
@@ -22,10 +22,6 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>> {
         kotlinOptions.allWarningsAsErrors = true
-        kotlinOptions.freeCompilerArgs += listOf(
-            "-Xopt-in=kotlin.RequiresOptIn",
-            "-Xopt-in=kotlin.time.ExperimentalTime", // for measureTimedValue and withTimeout(Duration)
-        )
     }
 
     tasks.withType<AbstractTestTask> {

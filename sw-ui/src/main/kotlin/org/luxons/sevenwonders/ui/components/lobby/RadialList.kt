@@ -39,7 +39,6 @@ fun <T> RBuilder.radialList(
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 private fun <T> RBuilder.radialListItems(
     items: List<T>,
     renderItem: (T) -> ReactElement,
@@ -58,7 +57,7 @@ private fun <T> RBuilder.radialListItems(
         }
         // We ensure a stable order of the DOM elements so that position animations look nice.
         // We still respect the order of the items in the list when placing them along the circle.
-        val indexByKey = buildMap<String, Int> {
+        val indexByKey = buildMap {
             items.forEachIndexed { index, item -> put(getKey(item), index) }
         }
         items.sortedBy { getKey(it) }.forEach { item ->

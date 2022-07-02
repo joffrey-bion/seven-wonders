@@ -8,9 +8,8 @@ data class ScoreBoard(val scores: List<PlayerScore>) {
         require(scores.sortedDescending() == scores) { "Scores must be sorted highest-to-lowest" }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     val ranks: List<Int>
-        get() = buildList<Int> {
+        get() = buildList {
             add(1)
             scores.zipWithNext { prev, current -> current.compareTo(prev) == 0 }.forEach { exAequoWithPrev ->
                 add(if (exAequoWithPrev) last() else size + 1)
