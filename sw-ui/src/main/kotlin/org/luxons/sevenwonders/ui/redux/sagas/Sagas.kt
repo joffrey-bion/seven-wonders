@@ -17,7 +17,6 @@ import webpack.isProdEnv
 
 typealias SwSagaContext = SagaContext<SwState, RAction, WrapperAction>
 
-@OptIn(ExperimentalCoroutinesApi::class)
 suspend fun SwSagaContext.rootSaga() = try {
     coroutineScope {
         val action = next<RequestChooseName>()

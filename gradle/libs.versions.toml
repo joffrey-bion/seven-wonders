@@ -1,5 +1,5 @@
 [versions]
-kotlinx-coroutines = "1.6.0"
+kotlinx-coroutines = "1.6.3"
 kotlinx-serialization = "1.3.2"
 krossbow = "3.0.0"
 logback-classic = "1.2.10"

@@ -145,7 +145,6 @@ suspend fun SevenWondersSession.joinGameAndAwaitLobby(gameId: Long): LobbyDTO = 
     subscribe = { watchLobbyJoined() },
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
 private suspend fun <T> doAndWaitForEvent(send: suspend () -> Unit, subscribe: suspend () -> Flow<T>): T =
     coroutineScope {
         val eventsFlow = subscribe()
