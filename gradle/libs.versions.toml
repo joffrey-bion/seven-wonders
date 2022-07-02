@@ -1,7 +1,7 @@
 [versions]
 kotlinx-coroutines = "1.6.3"
 kotlinx-serialization = "1.3.2"
-krossbow = "3.0.0"
+krossbow = "4.0.2"
 logback-classic = "1.2.10"
 loki-logback-appender = "1.3.1"
 micrometer-registry-prometheus = "1.8.1"
@@ -21,7 +21,8 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-krossbow-stomp-kxserialization = { module = "org.hildan.krossbow:krossbow-stomp-kxserialization", version.ref = "krossbow" }
+krossbow-stomp-kxserialization-json = { module = "org.hildan.krossbow:krossbow-stomp-kxserialization-json", version.ref = "krossbow" }
+krossbow-websocket-builtin = { module = "org.hildan.krossbow:krossbow-websocket-builtin", version.ref = "krossbow" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 loki-logback-appender = { module = "com.github.loki4j:loki-logback-appender", version.ref = "loki-logback-appender" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-registry-prometheus" }

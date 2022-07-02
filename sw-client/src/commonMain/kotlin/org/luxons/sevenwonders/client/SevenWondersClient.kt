@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.client
 
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -14,8 +13,10 @@ import org.hildan.krossbow.stomp.config.HeartBeatTolerance
 import org.hildan.krossbow.stomp.conversions.kxserialization.StompSessionWithKxSerialization
 import org.hildan.krossbow.stomp.conversions.kxserialization.convertAndSend
 import org.hildan.krossbow.stomp.conversions.kxserialization.subscribe
-import org.hildan.krossbow.stomp.conversions.kxserialization.withJsonConversions
+import org.hildan.krossbow.stomp.conversions.kxserialization.json.withJsonConversions
 import org.hildan.krossbow.stomp.sendEmptyMsg
+import org.hildan.krossbow.websocket.WebSocketClient
+import org.hildan.krossbow.websocket.default
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.*
@@ -28,7 +29,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class SevenWondersClient {
 
-    private val stompClient = StompClient {
+    private val stompClient = StompClient(WebSocketClient.default()) {
         heartBeat = HeartBeat(10.seconds, 10.seconds)
         heartBeatTolerance = HeartBeatTolerance(Duration.ZERO, 10.seconds) // wide margin to account for heroku cold start
     }

@@ -11,8 +11,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api(projects.swCommonModel)
-                api(libs.krossbow.stomp.kxserialization)
-                implementation(libs.kotlinx.serialization.json)
+                api(libs.krossbow.stomp.kxserialization.json)
+                api(libs.krossbow.websocket.builtin)
                 implementation(libs.kotlinx.coroutines.core)
             }
         }
