@@ -9,7 +9,7 @@ import org.luxons.sevenwonders.model.api.events.GameListEvent
 import org.luxons.sevenwonders.server.test.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.Test
 import kotlin.test.assertEquals
