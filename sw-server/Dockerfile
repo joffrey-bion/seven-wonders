@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM amazoncorretto:17
 
 EXPOSE 80
 
