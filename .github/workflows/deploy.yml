@@ -23,9 +23,8 @@ jobs:
           java-version: 17
 
       - name: Build with Gradle
-        uses: burrunan/gradle-cache-action@v1
+        uses: gradle/gradle-build-action@v2
         with:
-          job-id: jdk17
           arguments: build
 
       # required for Docker build/push
