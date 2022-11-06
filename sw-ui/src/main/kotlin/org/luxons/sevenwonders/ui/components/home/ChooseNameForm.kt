@@ -9,7 +9,6 @@ import kotlinx.html.js.onSubmitFunction
 import org.luxons.sevenwonders.ui.redux.RequestChooseName
 import org.luxons.sevenwonders.ui.redux.connectDispatch
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.Event
 import react.*
 import styled.css
 import styled.styledDiv
@@ -35,7 +34,10 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
                 display = Display.flex
                 flexDirection = FlexDirection.row
             }
-            attrs.onSubmitFunction = { e -> chooseUsername(e) }
+            attrs.onSubmitFunction = { e ->
+                e.preventDefault()
+                chooseUsername()
+            }
             randomNameButton()
             spacer()
             bpInputGroup(
@@ -53,12 +55,15 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
         }
     }
 
-    private fun submitButton(): ReactElement = buildElement {
+    private fun submitButton(): ReactElement<*> = buildElement {
         bpButton(
             minimal = true,
             icon = IconNames.ARROW_RIGHT,
             intent = Intent.PRIMARY,
-            onClick = { e -> chooseUsername(e) },
+            onClick = { e ->
+                e.preventDefault()
+                chooseUsername()
+            },
         )
     }
 
@@ -76,8 +81,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
         setState { username = randomGreekName() }
     }
 
-    private fun chooseUsername(e: Event) {
-        e.preventDefault()
+    private fun chooseUsername() {
         props.chooseUsername(state.username)
     }
 

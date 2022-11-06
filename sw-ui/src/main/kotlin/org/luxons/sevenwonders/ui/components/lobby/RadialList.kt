@@ -15,8 +15,8 @@ import styled.styledUl
 
 fun <T> RBuilder.radialList(
     items: List<T>,
-    centerElement: ReactElement,
-    renderItem: (T) -> ReactElement,
+    centerElement: ReactElement<*>,
+    renderItem: (T) -> ReactElement<*>,
     getKey: (T) -> String,
     itemWidth: Int,
     itemHeight: Int,
@@ -41,7 +41,7 @@ fun <T> RBuilder.radialList(
 
 private fun <T> RBuilder.radialListItems(
     items: List<T>,
-    renderItem: (T) -> ReactElement,
+    renderItem: (T) -> ReactElement<*>,
     getKey: (T) -> String,
     radialConfig: RadialConfig,
 ) {
@@ -67,7 +67,7 @@ private fun <T> RBuilder.radialListItems(
     }
 }
 
-private fun RBuilder.radialListItem(item: ReactElement, key: String, offset: CartesianCoords) {
+private fun RBuilder.radialListItem(item: ReactElement<*>, key: String, offset: CartesianCoords) {
     styledLi {
         css {
             display = Display.block
@@ -90,7 +90,7 @@ private fun RBuilder.radialListItem(item: ReactElement, key: String, offset: Car
     }
 }
 
-private fun RBuilder.radialListCenter(centerElement: ReactElement?) {
+private fun RBuilder.radialListCenter(centerElement: ReactElement<*>?) {
     if (centerElement == null) {
         return
     }

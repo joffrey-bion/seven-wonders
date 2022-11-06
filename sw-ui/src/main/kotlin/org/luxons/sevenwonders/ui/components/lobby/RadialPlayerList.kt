@@ -55,7 +55,7 @@ private sealed class PlayerItem {
     abstract val key: String
     abstract val playerText: String
     abstract val opacity: Double
-    abstract val icon: ReactElement
+    abstract val icon: ReactElement<*>
 
     data class Player(val player: PlayerDTO) : PlayerItem() {
         override val key = player.username

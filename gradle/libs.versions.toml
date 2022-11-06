@@ -25,40 +25,10 @@ slf4j = "1.7.36"
 ## ⬆ = "2.0.3" # Wait for Spring Boot 3.0.0
 
 # See https://github.com/JetBrains/kotlin-wrappers
-kotlin-react = "17.0.2-pre.266-kotlin-1.6.0"
-##        ⬆ = "17.0.2-pre.280-kotlin-1.6.0"
-##        ⬆ = "17.0.2-pre.323-kotlin-1.6.10"
-##        ⬆ = "18.0.0-pre.325-kotlin-1.6.10"
-##        ⬆ = "18.0.0-pre.331-kotlin-1.6.20"
-##        ⬆ = "18.0.0-pre.332-kotlin-1.6.21"
-##        ⬆ = "18.2.0-pre.426"
-kotlin-reactRedux = "7.2.6-pre.266-kotlin-1.6.0"
-##             ⬆ = "7.2.6-pre.280-kotlin-1.6.0"
-##             ⬆ = "7.2.6-pre.325-kotlin-1.6.10"
-##             ⬆ = "7.2.6-pre.331-kotlin-1.6.20"
-##             ⬆ = "7.2.6-pre.332-kotlin-1.6.21"
-##             ⬆ = "7.2.6-pre.426"
-kotlin-reactRouterDom = "5.3.0-pre.266-kotlin-1.6.0"
-##                 ⬆ = "5.3.0-pre.267-kotlin-1.6.0"
-##                 ⬆ = "6.0.2-pre.279-kotlin-1.6.0"
-##                 ⬆ = "6.1.1-pre.280-kotlin-1.6.0"
-##                 ⬆ = "6.1.1-pre.282-kotlin-1.6.10"
-##                 ⬆ = "6.2.1-pre.322-kotlin-1.6.10"
-##                 ⬆ = "6.2.2-pre.324-kotlin-1.6.10"
-##                 ⬆ = "6.3.0-pre.325-kotlin-1.6.10"
-##                 ⬆ = "6.3.0-pre.326-kotlin-1.6.20"
-##                 ⬆ = "6.3.0-pre.332-kotlin-1.6.21"
-##                 ⬆ = "6.3.0-pre.426"
-kotlin-styled = "5.3.3-pre.266-kotlin-1.6.0"
-##         ⬆ = "5.3.3-pre.280-kotlin-1.6.0"
-##         ⬆ = "5.3.3-pre.322-kotlin-1.6.10"
-##         ⬆ = "5.3.5-pre.325-kotlin-1.6.10"
-##         ⬆ = "5.3.5-pre.331-kotlin-1.6.20"
-##         ⬆ = "5.3.5-pre.332-kotlin-1.6.21"
-##         ⬆ = "5.3.6-pre.426"
+kotlin-wrappers = "1.0.0-pre.426"
 
-kotlin-blueprintjs-core = "3.49.1-4"
-kotlin-blueprintjs-icons = "3.29.0-4"
+kotlin-blueprintjs-core = "3.49.1-6"
+kotlin-blueprintjs-icons = "3.29.0-6"
 ##                    ⬆ = "3.42.0-2"
 
 [libraries]
@@ -74,11 +44,13 @@ loki-logback-appender = { module = "com.github.loki4j:loki-logback-appender", ve
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-registry-prometheus" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
-kotlin-wrappers-react-base = { module = "org.jetbrains.kotlin-wrappers:kotlin-react", version.ref = "kotlin-react" }
-kotlin-wrappers-react-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom", version.ref = "kotlin-react" }
-kotlin-wrappers-react-redux = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-redux", version.ref = "kotlin-reactRedux" }
-kotlin-wrappers-react-router-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-router-dom", version.ref = "kotlin-reactRouterDom" }
-kotlin-wrappers-styled = { module = "org.jetbrains.kotlin-wrappers:kotlin-styled", version.ref = "kotlin-styled" }
+kotlin-wrappers-bom = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version.ref = "kotlin-wrappers" }
+kotlin-wrappers-react-base = { module = "org.jetbrains.kotlin-wrappers:kotlin-react" }
+kotlin-wrappers-react-legacy = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-legacy" }
+kotlin-wrappers-react-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom" }
+kotlin-wrappers-react-redux = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-redux" }
+kotlin-wrappers-react-router-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-router-dom" }
+kotlin-wrappers-styled = { module = "org.jetbrains.kotlin-wrappers:kotlin-styled" }
 
 kotlin-wrappers-blueprintjs-core = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-core", version.ref = "kotlin-blueprintjs-core" }
 kotlin-wrappers-blueprintjs-icons = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-icons", version.ref = "kotlin-blueprintjs-icons" }

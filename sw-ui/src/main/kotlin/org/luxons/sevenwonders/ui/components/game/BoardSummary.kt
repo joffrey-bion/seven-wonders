@@ -4,13 +4,11 @@ import blueprintjs.core.PopoverPosition
 import blueprintjs.core.bpDivider
 import blueprintjs.core.bpPopover
 import kotlinx.css.*
-import kotlinx.html.DIV
+import kotlinx.html.*
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.boards.Board
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
-import react.RBuilder
-import react.ReactElement
-import react.buildElement
+import react.*
 import styled.*
 
 enum class BoardSummarySide(
@@ -45,7 +43,7 @@ fun RBuilder.boardSummaryWithPopover(
     }
 }
 
-private fun createFullBoardPreview(board: Board): ReactElement = buildElement {
+private fun createFullBoardPreview(board: Board): ReactElement<*> = buildElement {
     boardComponent(board = board) {
         css {
             +GameStyles.fullBoardPreview

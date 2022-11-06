@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 implementation(projects.swClient)
 
+                implementation(project.dependencies.enforcedPlatform(libs.kotlin.wrappers.bom))
                 implementation(libs.kotlin.wrappers.react.base)
                 implementation(libs.kotlin.wrappers.react.dom)
                 implementation(libs.kotlin.wrappers.react.redux)

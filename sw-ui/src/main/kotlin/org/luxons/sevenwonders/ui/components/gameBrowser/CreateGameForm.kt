@@ -1,19 +1,14 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import blueprintjs.core.Intent
-import blueprintjs.core.bpButton
-import blueprintjs.core.bpInputGroup
-import blueprintjs.icons.IconNames
+import blueprintjs.core.*
+import blueprintjs.icons.*
 import kotlinx.css.*
-import kotlinx.html.js.onSubmitFunction
-import org.luxons.sevenwonders.ui.redux.RequestCreateGame
-import org.luxons.sevenwonders.ui.redux.connectDispatch
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.Event
+import kotlinx.html.js.*
+import org.luxons.sevenwonders.ui.redux.*
+import org.w3c.dom.*
 import react.*
 import react.dom.*
-import styled.css
-import styled.styledDiv
+import styled.*
 
 private interface CreateGameFormProps : PropsWithChildren {
     var createGame: (String) -> Unit
@@ -36,7 +31,10 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
             }
             form {
                 attrs {
-                    onSubmitFunction = { e -> createGame(e) }
+                    onSubmitFunction = { e ->
+                        e.preventDefault()
+                        createGame()
+                    }
                 }
 
                 bpInputGroup(
@@ -53,11 +51,13 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
     }
 
     private fun createGameButton() = buildElement {
-        bpButton(minimal = true, intent = Intent.PRIMARY, icon = IconNames.ADD, onClick = { e -> createGame(e) })
+        bpButton(minimal = true, intent = Intent.PRIMARY, icon = IconNames.ADD, onClick = { e ->
+            e.preventDefault() // prevents refreshing the page when pressing Enter
+            createGame()
+        })
     }
 
-    private fun createGame(e: Event) {
-        e.preventDefault() // prevents refreshing the page when pressing Enter
+    private fun createGame() {
         props.createGame(state.gameName)
     }
 }

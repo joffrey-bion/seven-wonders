@@ -31,6 +31,10 @@ fun main() {
 private fun initializeAndRender(rootElement: Element) {
     val store = initRedux()
 
+    // With the new API this might look something like:
+    // createRoot(rootElement).render(FC<Props> { .. }.create())
+    // See: https://github.com/karakum-team/kotlin-mui-showcase/blob/main/src/main/kotlin/team/karakum/App.kt
+    @Suppress("DEPRECATION")
     render(rootElement) {
         provider(store) {
             application()
