@@ -1,7 +1,9 @@
 import com.gradle.scan.plugin.BuildScanExtension
+import de.fayard.refreshVersions.core.*
 
 plugins {
     id("com.gradle.enterprise") version "3.10.2"
+    id("de.fayard.refreshVersions") version "0.51.0"
 }
 
 rootProject.name = "seven-wonders"
@@ -45,5 +47,11 @@ fun BuildScanExtension.addGithubActionsData() {
         value("Tag", ref.removePrefix("refs/tags/"))
     } else {
         value("Branch", ref.removePrefix("refs/heads/"))
+    }
+}
+
+refreshVersions {
+    rejectVersionIf {
+        candidate.stabilityLevel != StabilityLevel.Stable || "-alpha" in candidate.value || "-beta" in candidate.value
     }
 }
