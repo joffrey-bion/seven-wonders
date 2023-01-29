@@ -15,12 +15,12 @@ import react.dom.*
 import styled.*
 import react.State as RState
 
-interface GameListStateProps : PropsWithChildren {
+external interface GameListStateProps : PropsWithChildren {
     var connectedPlayer: ConnectedPlayer
     var games: List<LobbyDTO>
 }
 
-interface GameListDispatchProps : PropsWithChildren {
+external interface GameListDispatchProps : PropsWithChildren {
     var joinGame: (Long) -> Unit
 }
 

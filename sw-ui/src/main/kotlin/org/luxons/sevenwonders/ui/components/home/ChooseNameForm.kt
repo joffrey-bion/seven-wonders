@@ -14,7 +14,7 @@ import styled.css
 import styled.styledDiv
 import styled.styledForm
 
-private interface ChooseNameFormProps : PropsWithChildren {
+private external interface ChooseNameFormProps : PropsWithChildren {
     var chooseUsername: (String) -> Unit
 }
 

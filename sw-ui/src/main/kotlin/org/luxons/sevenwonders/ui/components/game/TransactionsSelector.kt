@@ -92,7 +92,7 @@ private fun RBuilder.optionsTable(
     }
 }
 
-private interface OptionsTableProps : PropsWithChildren {
+private external interface OptionsTableProps : PropsWithChildren {
     var state: TransactionSelectorState
     var prepareMove: (PlayerMove) -> Unit
 }

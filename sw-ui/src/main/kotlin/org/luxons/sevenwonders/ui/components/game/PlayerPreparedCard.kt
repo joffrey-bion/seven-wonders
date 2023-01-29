@@ -13,12 +13,12 @@ import styled.css
 import styled.styledDiv
 import styled.styledImg
 
-interface PlayerPreparedCardProps : PropsWithChildren {
+external interface PlayerPreparedCardProps : PropsWithChildren {
     var playerDisplayName: String
     var cardBack: CardBack?
 }
 
-interface PlayerPreparedCardContainerProps : PropsWithChildren {
+external interface PlayerPreparedCardContainerProps : PropsWithChildren {
     var playerDisplayName: String
     var username: String
 }

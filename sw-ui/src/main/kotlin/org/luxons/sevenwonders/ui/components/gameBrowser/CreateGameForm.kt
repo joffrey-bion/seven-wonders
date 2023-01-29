@@ -10,11 +10,13 @@ import react.*
 import react.dom.*
 import styled.*
 
-private interface CreateGameFormProps : PropsWithChildren {
+private external interface CreateGameFormProps : PropsWithChildren {
     var createGame: (String) -> Unit
 }
 
-private data class CreateGameFormState(var gameName: String = "") : State
+private external interface CreateGameFormState : State {
+    var gameName: String
+}
 
 private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGameFormProps, CreateGameFormState>(props) {
 
@@ -42,7 +44,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
                     placeholder = "Game name",
                     onChange = { e ->
                         val input = e.currentTarget as HTMLInputElement
-                        setState(transformState = { CreateGameFormState(input.value) })
+                        state.gameName = input.value
                     },
                     rightElement = createGameButton(),
                 )

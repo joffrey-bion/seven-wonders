@@ -12,7 +12,7 @@ import styled.css
 import styled.styledDiv
 import styled.styledSpan
 
-interface PlayerInfoProps : PropsWithChildren {
+external interface PlayerInfoProps : PropsWithChildren {
     var player: BasicPlayerInfo?
     var showUsername: Boolean
     var iconSize: Int

@@ -19,12 +19,12 @@ import styled.*
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS", "R2-D2", "Bender", "AWESOM-O")
 
-interface LobbyStateProps : PropsWithChildren {
+external interface LobbyStateProps : PropsWithChildren {
     var currentGame: LobbyDTO?
     var currentPlayer: PlayerDTO?
 }
 
-interface LobbyDispatchProps : PropsWithChildren {
+external interface LobbyDispatchProps : PropsWithChildren {
     var startGame: () -> Unit
     var addBot: (displayName: String) -> Unit
     var leaveLobby: () -> Unit

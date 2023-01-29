@@ -14,15 +14,15 @@ import react.dom.p
 import styled.css
 import styled.styledDiv
 
-interface ErrorDialogStateProps : PropsWithChildren {
+external interface ErrorDialogStateProps : PropsWithChildren {
     var errorMessage: String?
 }
 
-interface ErrorDialogDispatchProps : PropsWithChildren {
+external interface ErrorDialogDispatchProps : PropsWithChildren {
     var goHome: () -> Unit
 }
 
-interface ErrorDialogProps : ErrorDialogDispatchProps, ErrorDialogStateProps
+external interface ErrorDialogProps : ErrorDialogDispatchProps, ErrorDialogStateProps
 
 class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProps, State>(props) {
     override fun RBuilder.render() {

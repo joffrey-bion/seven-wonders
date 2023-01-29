@@ -25,7 +25,7 @@ import styled.css
 import styled.getClassName
 import styled.styledDiv
 
-interface GameSceneStateProps : PropsWithChildren {
+external interface GameSceneStateProps : PropsWithChildren {
     var currentPlayer: PlayerDTO?
     var players: List<PlayerDTO>
     var game: GameState?
@@ -33,7 +33,7 @@ interface GameSceneStateProps : PropsWithChildren {
     var preparedCard: HandCard?
 }
 
-interface GameSceneDispatchProps : PropsWithChildren {
+external interface GameSceneDispatchProps : PropsWithChildren {
     var sayReady: () -> Unit
     var prepareMove: (move: PlayerMove) -> Unit
     var unprepareMove: () -> Unit

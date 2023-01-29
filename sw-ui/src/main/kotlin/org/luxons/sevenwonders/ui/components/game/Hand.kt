@@ -33,7 +33,7 @@ private enum class HandAction(
     COPY_GUILD("Copy this guild card", MoveType.COPY_GUILD, "duplicate")
 }
 
-interface HandProps : PropsWithChildren {
+external interface HandProps : PropsWithChildren {
     var action: TurnAction
     var ownBoard: Board
     var preparedMove: PlayerMove?
