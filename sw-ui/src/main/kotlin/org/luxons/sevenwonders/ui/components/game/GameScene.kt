@@ -20,9 +20,9 @@ import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import styled.css
-import styled.getClassName
 import styled.styledDiv
 
 external interface GameSceneStateProps : PropsWithChildren {
@@ -147,7 +147,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
     private fun RBuilder.actionInfo(message: String) {
         styledDiv {
             css {
-                classes.add("bp3-dark")
+                classes.add(Classes.DARK)
                 position = Position.fixed
                 top = 0.pct
                 left = 0.pct
@@ -156,7 +156,7 @@ private class GameScene(props: GameSceneProps) : RComponent<GameSceneProps, Game
             }
             bpCard(elevation = Elevation.TWO) {
                 attrs {
-                    this.className = GlobalStyles.getClassName { it::noPadding }
+                    this.className = GlobalStyles.getTypedClassName { it::noPadding }
                 }
                 bpCallout(intent = Intent.PRIMARY, icon = IconNames.INFO_SIGN) { +message }
             }

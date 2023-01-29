@@ -1,17 +1,13 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
-import blueprintjs.core.Classes
-import blueprintjs.core.bpCard
+import blueprintjs.core.*
 import kotlinx.css.*
-import kotlinx.html.classes
+import kotlinx.html.*
 import org.luxons.sevenwonders.ui.components.GlobalStyles
-import react.RBuilder
-import react.dom.attrs
-import react.dom.h1
-import styled.css
-import styled.getClassName
-import styled.styledDiv
-import styled.styledH2
+import org.luxons.sevenwonders.ui.utils.*
+import react.*
+import react.dom.*
+import styled.*
 
 fun RBuilder.gameBrowser() = styledDiv {
     css {
@@ -36,7 +32,7 @@ fun RBuilder.gameBrowser() = styledDiv {
             currentPlayerInfo()
         }
 
-        bpCard(className = GameBrowserStyles.getClassName { it::createGameCard }) {
+        bpCard(className = GameBrowserStyles.getTypedClassName { it::createGameCard }) {
             styledH2 {
                 css { +GameBrowserStyles.cardTitle }
                 +"Create a Game"

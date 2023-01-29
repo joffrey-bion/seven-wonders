@@ -2,7 +2,13 @@ package org.luxons.sevenwonders.ui.components.lobby
 
 import blueprintjs.core.bpIcon
 import blueprintjs.core.bpTag
+import csstype.*
 import kotlinx.css.*
+import kotlinx.css.Color
+import kotlinx.css.Display
+import kotlinx.css.FlexDirection
+import kotlinx.css.px
+import kotlinx.css.rem
 import kotlinx.html.DIV
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.api.actions.Icon
@@ -112,16 +118,16 @@ private fun RBuilder.playerElement(playerItem: PlayerItem) {
                 css {
                     marginTop = 0.3.rem
 
-                    // this is to overcome ".bp3-dark .bp3-tag" on the nested bpTag
+                    // this is to overcome ".bp4-dark .bp4-tag" on the nested bpTag
                     children(".wonder-tag") {
-                        color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp3-tag)
+                        color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp4-tag)
                         backgroundColor = when (wonder.side) {
                             WonderSide.A -> Color.seaGreen
                             WonderSide.B -> Color.darkRed
                         }
                     }
                 }
-                bpTag(round = true, className = "wonder-tag") {
+                bpTag(round = true, className = ClassName("wonder-tag")) {
                     +"${wonder.name} ${wonder.side}"
                 }
             }

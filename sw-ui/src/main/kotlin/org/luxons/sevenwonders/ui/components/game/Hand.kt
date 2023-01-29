@@ -14,12 +14,12 @@ import org.luxons.sevenwonders.model.cards.CardPlayability
 import org.luxons.sevenwonders.model.cards.HandCard
 import org.luxons.sevenwonders.model.resources.ResourceTransactionOptions
 import org.luxons.sevenwonders.model.wonders.WonderBuildability
-import org.w3c.dom.HTMLButtonElement
 import react.*
 import react.dom.attrs
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
+import web.html.*
 import kotlin.math.absoluteValue
 
 private enum class HandAction(
@@ -126,7 +126,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, State>(props) {
         }
     }
 
-    private fun RElementBuilder<IButtonGroupProps>.playCardButton(card: HandCard, handAction: HandAction) {
+    private fun RElementBuilder<ButtonGroupProps>.playCardButton(card: HandCard, handAction: HandAction) {
         bpButton(
             title = "${handAction.buttonTitle} (${cardPlayabilityInfo(card.playability)})",
             large = true,
@@ -141,7 +141,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, State>(props) {
         }
     }
 
-    private fun RElementBuilder<IButtonGroupProps>.upgradeWonderButton(card: HandCard) {
+    private fun RElementBuilder<ButtonGroupProps>.upgradeWonderButton(card: HandCard) {
         val wonderBuildability = props.ownBoard.wonder.buildability
         bpButton(
             title = "UPGRADE WONDER (${wonderBuildabilityInfo(wonderBuildability)})",
@@ -164,7 +164,7 @@ class HandComponent(props: HandProps) : RComponent<HandProps, State>(props) {
         }
     }
 
-    private fun RElementBuilder<IButtonGroupProps>.discardButton(card: HandCard) {
+    private fun RElementBuilder<ButtonGroupProps>.discardButton(card: HandCard) {
         bpButton(
             title = "DISCARD (+3 coins)", // TODO remove hardcoded value
             large = true,
@@ -196,7 +196,7 @@ private fun pricePrefix(amount: Int) = when {
     else -> ""
 }
 
-private fun RElementBuilder<IButtonProps<HTMLButtonElement>>.priceInfo(amount: Int) {
+private fun RElementBuilder<ButtonProps<HTMLButtonElement>>.priceInfo(amount: Int) {
     val size = 1.rem
     goldIndicator(
         amount = amount,

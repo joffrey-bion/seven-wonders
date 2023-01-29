@@ -1,21 +1,15 @@
 package org.luxons.sevenwonders.ui
 
-import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.luxons.sevenwonders.ui.components.application
-import org.luxons.sevenwonders.ui.redux.SwState
-import org.luxons.sevenwonders.ui.redux.configureStore
-import org.luxons.sevenwonders.ui.redux.sagas.SagaManager
-import org.luxons.sevenwonders.ui.redux.sagas.rootSaga
-import org.w3c.dom.Element
+import kotlinx.coroutines.*
+import org.luxons.sevenwonders.ui.components.*
+import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.redux.sagas.*
 import react.dom.*
-import react.redux.provider
-import redux.RAction
-import redux.Store
-import redux.WrapperAction
+import react.redux.*
+import redux.*
+import web.dom.*
+import web.dom.document
 
 fun main() {
     window.onload = {

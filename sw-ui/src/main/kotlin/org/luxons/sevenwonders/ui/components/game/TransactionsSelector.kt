@@ -12,6 +12,7 @@ import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
+import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.*
 import styled.*
@@ -31,7 +32,7 @@ fun RBuilder.transactionsSelectorDialog(
         onClose = cancelTransactionSelection,
     ) {
         attrs {
-            className = GameStyles.getClassName { it::transactionsSelector }
+            className = GameStyles.getTypedClassName { it::transactionsSelector }
         }
         div {
             attrs {
@@ -51,7 +52,7 @@ fun RBuilder.transactionsSelectorDialog(
                     neighbour(neighbours.first)
                     styledDiv {
                         css {
-                            grow(Grow.GROW)
+                            flex(Flex.GROW)
                             margin(horizontal = 0.5.rem)
                             display = Display.flex
                             flexDirection = FlexDirection.column
@@ -237,7 +238,7 @@ private fun RBuilder.resourceList(countedResources: List<CountedResource>) {
             flexDirection = FlexDirection.column
             alignItems = Align.center
             justifyContent = JustifyContent.center
-            grow(Grow.GROW)
+            flex(Flex.GROW)
             // this ensures stable dimensions, no matter how many resources (up to 2x3 matrix)
             width = imgSize * 3
             height = imgSize * 2

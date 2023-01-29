@@ -1,18 +1,13 @@
 package org.luxons.sevenwonders.ui.components.errors
 
-import blueprintjs.core.Classes
-import blueprintjs.core.Intent
-import blueprintjs.core.bpButton
-import blueprintjs.core.bpDialog
-import blueprintjs.icons.IconNames
-import kotlinx.browser.window
+import blueprintjs.core.*
+import blueprintjs.icons.*
+import kotlinx.browser.*
 import org.luxons.sevenwonders.ui.redux.*
-import org.luxons.sevenwonders.ui.router.Navigate
-import org.luxons.sevenwonders.ui.router.SwRoute
+import org.luxons.sevenwonders.ui.router.*
 import react.*
 import react.dom.p
-import styled.css
-import styled.styledDiv
+import styled.*
 
 external interface ErrorDialogStateProps : PropsWithChildren {
     var errorMessage: String?

@@ -1,13 +1,21 @@
 package org.luxons.sevenwonders.ui.components.game
 
 import blueprintjs.core.*
+import csstype.*
 import kotlinx.css.*
+import kotlinx.css.Display
+import kotlinx.css.FlexDirection
+import kotlinx.css.TextAlign
+import kotlinx.css.VerticalAlign
+import kotlinx.css.px
+import kotlinx.css.rem
 import kotlinx.html.TD
 import kotlinx.html.TH
 import org.luxons.sevenwonders.model.api.PlayerDTO
 import org.luxons.sevenwonders.model.score.ScoreBoard
 import org.luxons.sevenwonders.model.score.ScoreCategory
 import org.luxons.sevenwonders.ui.components.GlobalStyles
+import org.luxons.sevenwonders.ui.utils.*
 import react.RBuilder
 import react.dom.*
 import styled.*
@@ -18,7 +26,7 @@ fun RBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>,
             attrs {
                 val fixedCenterClass = GlobalStyles.getClassName { it::fixedCenter }
                 val scoreBoardClass = GameStyles.getClassName { it::scoreBoard }
-                className = "$fixedCenterClass $scoreBoardClass"
+                className = ClassName("$fixedCenterClass $scoreBoardClass")
             }
             styledDiv {
                 css {
@@ -77,7 +85,7 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
                     centeredTd {
                         bpTag(large = true, round = true, minimal = true) {
                             attrs {
-                                this.className = GameStyles.getClassName { it::totalScore }
+                                this.className = GameStyles.getTypedClassName { it::totalScore }
                             }
                             +"${score.totalPoints}"
                         }
@@ -132,7 +140,7 @@ private fun RBuilder.centeredTd(block: RDOMBuilder<TD>.() -> Unit) {
     }
 }
 
-private fun classNameForCategory(cat: ScoreCategory): String = GameStyles.getClassName {
+private fun classNameForCategory(cat: ScoreCategory): ClassName = GameStyles.getTypedClassName {
     when (cat) {
         ScoreCategory.CIVIL -> it::civilScore
         ScoreCategory.SCIENCE -> it::scienceScore

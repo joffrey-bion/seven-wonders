@@ -1,18 +1,12 @@
 package org.luxons.sevenwonders.ui.components.home
 
-import blueprintjs.core.Intent
-import blueprintjs.core.bpButton
-import blueprintjs.core.bpInputGroup
-import blueprintjs.icons.IconNames
+import blueprintjs.core.*
+import blueprintjs.icons.*
 import kotlinx.css.*
-import kotlinx.html.js.onSubmitFunction
-import org.luxons.sevenwonders.ui.redux.RequestChooseName
-import org.luxons.sevenwonders.ui.redux.connectDispatch
-import org.w3c.dom.HTMLInputElement
+import kotlinx.html.js.*
+import org.luxons.sevenwonders.ui.redux.*
 import react.*
-import styled.css
-import styled.styledDiv
-import styled.styledForm
+import styled.*
 
 private external interface ChooseNameFormProps : PropsWithChildren {
     var chooseUsername: (String) -> Unit
@@ -46,7 +40,7 @@ private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseName
                 rightElement = submitButton(),
                 value = state.username,
                 onChange = { e ->
-                    val input = e.currentTarget as HTMLInputElement
+                    val input = e.currentTarget
                     setState {
                         username = input.value
                     }

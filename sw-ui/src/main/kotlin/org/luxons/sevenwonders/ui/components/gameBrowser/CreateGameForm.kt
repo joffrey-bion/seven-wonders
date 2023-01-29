@@ -5,7 +5,6 @@ import blueprintjs.icons.*
 import kotlinx.css.*
 import kotlinx.html.js.*
 import org.luxons.sevenwonders.ui.redux.*
-import org.w3c.dom.*
 import react.*
 import react.dom.*
 import styled.*
@@ -43,7 +42,7 @@ private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGame
                     large = true,
                     placeholder = "Game name",
                     onChange = { e ->
-                        val input = e.currentTarget as HTMLInputElement
+                        val input = e.currentTarget
                         state.gameName = input.value
                     },
                     rightElement = createGameButton(),

@@ -27,13 +27,13 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
         borderRadius = 0.5.rem
         padding(all = 0.5.rem)
 
-        children(".bp3-popover-content") {
+        children(".bp4-popover-content") {
             background = "none" // overrides default white background
         }
-        descendants(".bp3-popover-arrow-fill") {
+        descendants(".bp4-popover-arrow-fill") {
             put("fill", bgColor.toString()) // overrides default white arrow
         }
-        descendants(".bp3-popover-arrow::before") {
+        descendants(".bp4-popover-arrow::before") {
             // The popover arrow is implemented with a simple square rotated 45 degrees (like a rhombus).
             // Since we use a semi-transparent background, we can see the box shadow of the rest of the arrow through
             // the popover, and thus we see the square. This boxShadow(transparent) is to avoid that.
@@ -54,7 +54,7 @@ object GameStyles : StyleSheet("GameStyles", isStatic = true) {
         backgroundColor = sandBgColor
         width = 40.rem // default is 500px, we want to fit players on the side
 
-        children(".bp3-dialog-header") {
+        children(".bp4-dialog-header") {
             background = "none" // overrides default white background
         }
     }

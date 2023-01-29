@@ -1,20 +1,23 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
 import blueprintjs.core.*
-import blueprintjs.icons.IconNames
+import blueprintjs.icons.*
+import csstype.*
 import kotlinx.css.*
+import kotlinx.css.Display
+import kotlinx.css.JustifyContent
 import kotlinx.css.Position
-import kotlinx.css.properties.transform
-import kotlinx.css.properties.translate
-import org.luxons.sevenwonders.model.api.LobbyDTO
-import org.luxons.sevenwonders.model.api.PlayerDTO
+import kotlinx.css.pct
+import kotlinx.css.properties.*
+import kotlinx.css.px
+import kotlinx.css.rem
+import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.wonders.*
 import org.luxons.sevenwonders.ui.components.GlobalStyles
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
-import react.dom.h1
-import react.dom.h3
-import react.dom.h4
+import react.State
+import react.dom.*
 import styled.*
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS", "R2-D2", "Bender", "AWESOM-O")
@@ -121,7 +124,7 @@ class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, State>(props) {
             css {
                 +LobbyStyles.setupPanel
             }
-            bpCard(Elevation.TWO, className = Classes.DARK) {
+            bpCard(Elevation.TWO, className = ClassName(Classes.DARK)) {
                 styledH2 {
                     css {
                         margin(top = 0.px)

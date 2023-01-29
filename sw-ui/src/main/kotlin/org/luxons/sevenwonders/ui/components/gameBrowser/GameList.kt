@@ -2,7 +2,14 @@ package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import blueprintjs.core.*
 import blueprintjs.icons.IconNames
+import csstype.*
 import kotlinx.css.*
+import kotlinx.css.Display
+import kotlinx.css.FlexDirection
+import kotlinx.css.JustifyContent
+import kotlinx.css.TextAlign
+import kotlinx.css.VerticalAlign
+import kotlinx.css.rem
 import kotlinx.html.classes
 import kotlinx.html.title
 import org.luxons.sevenwonders.model.api.ConnectedPlayer
@@ -24,7 +31,7 @@ external interface GameListDispatchProps : PropsWithChildren {
     var joinGame: (Long) -> Unit
 }
 
-interface GameListProps : GameListStateProps, GameListDispatchProps
+external interface GameListProps : GameListStateProps, GameListDispatchProps
 
 class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState>(props) {
 
@@ -43,7 +50,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         ) {
             styledDiv {
                 attrs {
-                    classes += "bp3-running-text"
+                    classes += Classes.RUNNING_TEXT
                 }
                 css {
                     maxWidth = 35.rem
@@ -57,7 +64,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
     private fun RBuilder.gamesTable() {
         bpHtmlTable {
             attrs {
-                className = GameBrowserStyles.getClassName { it::gameTable }
+                className = ClassName(GameBrowserStyles.getClassName { it::gameTable })
             }
             columnWidthsSpec()
             thead {
@@ -71,7 +78,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RElementBuilder<IHTMLTableProps>.columnWidthsSpec() {
+    private fun RElementBuilder<HTMLTableProps>.columnWidthsSpec() {
         colgroup {
             styledCol {
                 css {
