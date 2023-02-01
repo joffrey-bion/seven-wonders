@@ -2,93 +2,89 @@ package org.luxons.sevenwonders.ui.components.home
 
 import blueprintjs.core.*
 import blueprintjs.icons.*
-import kotlinx.css.*
-import kotlinx.html.js.*
+import csstype.*
+import emotion.react.*
 import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.utils.*
 import react.*
-import styled.*
+import react.dom.events.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.form
+import web.html.*
 
-private external interface ChooseNameFormProps : PropsWithChildren {
+val ChooseNameForm = VFC {
+    val dispatch = useSwDispatch()
+    ChooseNameFormPresenter {
+        chooseUsername = { name -> dispatch(RequestChooseName(name)) }
+    }
+}
+
+private external interface ChooseNameFormPresenterProps : PropsWithChildren {
     var chooseUsername: (String) -> Unit
 }
 
-private external interface ChooseNameFormState : State {
-    var username: String
-}
+private val ChooseNameFormPresenter = FC<ChooseNameFormPresenterProps> { props ->
+    var usernameState by useState("")
 
-private class ChooseNameForm(props: ChooseNameFormProps) : RComponent<ChooseNameFormProps, ChooseNameFormState>(props) {
-
-    override fun ChooseNameFormState.init(props: ChooseNameFormProps) {
-        username = ""
-    }
-
-    override fun RBuilder.render() {
-        styledForm {
-            css {
-                display = Display.flex
-                flexDirection = FlexDirection.row
-            }
-            attrs.onSubmitFunction = { e ->
-                e.preventDefault()
-                chooseUsername()
-            }
-            randomNameButton()
-            spacer()
-            bpInputGroup(
-                large = true,
-                placeholder = "Username",
-                rightElement = submitButton(),
-                value = state.username,
-                onChange = { e ->
-                    val input = e.currentTarget
-                    setState {
-                        username = input.value
-                    }
-                },
-            )
+    form {
+        css {
+            display = Display.flex
+            flexDirection = FlexDirection.row
         }
-    }
-
-    private fun submitButton(): ReactElement<*> = buildElement {
-        bpButton(
-            minimal = true,
-            icon = IconNames.ARROW_RIGHT,
-            intent = Intent.PRIMARY,
-            onClick = { e ->
-                e.preventDefault()
-                chooseUsername()
-            },
-        )
-    }
-
-    private fun RBuilder.randomNameButton() {
-        bpButton(
-            title = "Generate random name",
-            large = true,
-            icon = IconNames.RANDOM,
-            intent = Intent.PRIMARY,
-            onClick = { fillRandomUsername() },
-        )
-    }
-
-    private fun fillRandomUsername() {
-        setState { username = randomGreekName() }
-    }
-
-    private fun chooseUsername() {
-        props.chooseUsername(state.username)
-    }
-
-    // TODO this is so bad I'm dying inside
-    private fun RBuilder.spacer() {
-        styledDiv {
-            css {
-                margin(2.px)
+        onSubmit = { e ->
+            e.preventDefault()
+            props.chooseUsername(usernameState)
+        }
+        RandomNameButton {
+            onClick = { usernameState = randomGreekName() }
+        }
+        spacer()
+        BpInputGroup {
+            large = true
+            placeholder = "Username"
+            rightElement = SubmitButton.create {
+                onClick = { e ->
+                    e.preventDefault()
+                    props.chooseUsername(usernameState)
+                }
+            }
+            value = usernameState
+            onChange = { e ->
+                val input = e.currentTarget
+                usernameState = input.value
             }
         }
     }
 }
 
-val chooseNameForm: ComponentClass<PropsWithChildren> = connectDispatch(ChooseNameForm::class) { dispatch, _ ->
-    chooseUsername = { name -> dispatch(RequestChooseName(name)) }
+private external interface SpecificButtonProps : Props {
+    var onClick: MouseEventHandler<HTMLElement>?
+}
+
+private val SubmitButton = FC<SpecificButtonProps> { props ->
+    BpButton {
+        minimal = true
+        icon = IconNames.ARROW_RIGHT
+        intent = Intent.PRIMARY
+        onClick = props.onClick
+    }
+}
+
+private val RandomNameButton = FC<SpecificButtonProps> { props ->
+    BpButton {
+        title = "Generate random name"
+        large = true
+        icon = IconNames.RANDOM
+        intent = Intent.PRIMARY
+        onClick = props.onClick
+    }
+}
+
+// TODO this is so bad I'm dying inside
+private fun ChildrenBuilder.spacer() {
+    div {
+        css {
+            margin = Margin(all = 2.px)
+        }
+    }
 }

@@ -1,17 +1,17 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import kotlinx.css.*
-import org.luxons.sevenwonders.ui.components.GlobalStyles
-import styled.StyleSheet
+import csstype.*
+import emotion.css.*
+import org.luxons.sevenwonders.ui.components.*
 
-object LobbyStyles : StyleSheet("LobbyStyles", isStatic = true) {
+object LobbyStyles {
 
-    val contentContainer by css {
-        margin(horizontal = LinearDimension.auto)
+    val contentContainer = ClassName {
+        margin = Margin(vertical = 0.px, horizontal = Auto.auto)
         maxWidth = GlobalStyles.preGameWidth
     }
 
-    val setupPanel by css {
+    val setupPanel = ClassName {
         position = Position.fixed
         top = 2.rem
         right = 1.rem

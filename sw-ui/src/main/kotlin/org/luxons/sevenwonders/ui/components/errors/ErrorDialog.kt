@@ -6,44 +6,46 @@ import kotlinx.browser.*
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.router.*
 import react.*
-import react.dom.p
-import styled.*
+import react.dom.html.ReactHTML.p
+import react.redux.*
+import redux.*
 
-external interface ErrorDialogStateProps : PropsWithChildren {
-    var errorMessage: String?
+val ErrorDialog = VFC {
+    val dispatch = useDispatch<RAction, WrapperAction>()
+
+    ErrorDialogPresenter {
+        errorMessage = useSwSelector { it.fatalError }
+        goHome = { dispatch(Navigate(SwRoute.HOME)) }
+    }
 }
 
-external interface ErrorDialogDispatchProps : PropsWithChildren {
+private external interface ErrorDialogProps : Props {
+    var errorMessage: String?
     var goHome: () -> Unit
 }
 
-external interface ErrorDialogProps : ErrorDialogDispatchProps, ErrorDialogStateProps
+private val ErrorDialogPresenter = FC<ErrorDialogProps>("ErrorDialogPresenter") { props ->
+    val errorMessage = props.errorMessage
+    BpDialog {
+        isOpen = errorMessage != null
+        titleText = "Oops!"
+        icon = BpIcon.create {
+            icon = IconNames.ERROR
+            intent = Intent.DANGER
+        }
+        onClose = { goHomeAndRefresh() }
 
-class ErrorDialogPresenter(props: ErrorDialogProps) : RComponent<ErrorDialogProps, State>(props) {
-    override fun RBuilder.render() {
-        val errorMessage = props.errorMessage
-        bpDialog(
-            isOpen = errorMessage != null,
-            title = "Oops!",
-            icon = IconNames.ERROR,
-            iconIntent = Intent.DANGER,
-            onClose = { goHomeAndRefresh() }
-        ) {
-            styledDiv {
-                css {
-                    classes.add(Classes.DIALOG_BODY)
-                }
-                p {
-                    +(errorMessage ?: "fatal error")
-                }
+        BpDialogBody {
+            p {
+                +(errorMessage ?: "fatal error")
             }
-            styledDiv {
-                css {
-                    classes.add(Classes.DIALOG_FOOTER)
-                }
-                bpButton(icon = IconNames.LOG_OUT, onClick = { goHomeAndRefresh() }) {
-                    +"HOME"
-                }
+        }
+        BpDialogFooter {
+            BpButton {
+                icon = IconNames.LOG_OUT
+                onClick = { goHomeAndRefresh() }
+
+                +"HOME"
             }
         }
     }
@@ -53,15 +55,3 @@ private fun goHomeAndRefresh() {
     // we don't use a redux action here because we actually want to redirect and refresh the page
     window.location.href = SwRoute.HOME.path
 }
-
-fun RBuilder.errorDialog() = errorDialog {}
-
-private val errorDialog = connectStateAndDispatch<ErrorDialogStateProps, ErrorDialogDispatchProps, ErrorDialogProps>(
-    clazz = ErrorDialogPresenter::class,
-    mapStateToProps = { state, _ ->
-        errorMessage = state.fatalError
-    },
-    mapDispatchToProps = { dispatch, _ ->
-        goHome = { dispatch(Navigate(SwRoute.HOME)) }
-    },
-)

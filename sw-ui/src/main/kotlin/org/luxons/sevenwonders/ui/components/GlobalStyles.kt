@@ -1,19 +1,20 @@
 package org.luxons.sevenwonders.ui.components
 
-import kotlinx.css.*
-import kotlinx.css.properties.*
-import styled.StyleSheet
+import csstype.*
+import emotion.css.*
+import org.luxons.sevenwonders.ui.utils.*
 
-object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
+
+object GlobalStyles {
 
     val preGameWidth = 60.rem
 
-    val zeusBackground by css {
-        background = "url('images/backgrounds/zeus-temple.jpg') center no-repeat"
-        backgroundSize = "cover"
+    val zeusBackground = ClassName {
+        background = "url('images/backgrounds/zeus-temple.jpg') center no-repeat".unsafeCast<Background>()
+        backgroundSize = BackgroundSize.cover
     }
 
-    val fullscreen by css {
+    val fullscreen = ClassName {
         position = Position.fixed
         top = 0.px
         left = 0.px
@@ -22,30 +23,26 @@ object GlobalStyles : StyleSheet("GlobalStyles", isStatic = true) {
         overflow = Overflow.hidden
     }
 
-    val papyrusBackground by css {
-        background = "url('images/backgrounds/papyrus.jpg')"
-        backgroundSize = "cover"
+    val papyrusBackground = ClassName {
+        background = "url('images/backgrounds/papyrus.jpg')".unsafeCast<Background>()
+        backgroundSize = BackgroundSize.cover
     }
 
-    val fixedCenter by css {
-        position = Position.fixed
-        +centerLeftTopTransform
-    }
-
-    val centerInPositionedParent by css {
-        position = Position.absolute
-        +centerLeftTopTransform
-    }
-
-    val centerLeftTopTransform by css {
+    val centerLeftTopTransform = ClassName {
         left = 50.pct
         top = 50.pct
-        transform {
-            translate((-50).pct, (-50).pct)
-        }
+        transform = translate((-50).pct, (-50).pct)
     }
 
-    val noPadding by css {
-        padding(all = 0.px)
+    val fixedCenter = ClassName(centerLeftTopTransform) {
+        position = Position.fixed
+    }
+
+    val centerInPositionedParent = ClassName(centerLeftTopTransform) {
+        position = Position.absolute
+    }
+
+    val noPadding = ClassName {
+        padding = Padding(all = 0.px)
     }
 }

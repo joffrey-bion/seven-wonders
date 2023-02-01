@@ -1,14 +1,15 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import kotlinx.css.*
-import kotlinx.html.DIV
-import kotlinx.html.IMG
-import kotlinx.html.title
-import org.luxons.sevenwonders.model.resources.ResourceType
-import org.luxons.sevenwonders.ui.components.GlobalStyles
-import react.RBuilder
-import react.dom.attrs
-import styled.*
+import csstype.*
+import emotion.react.*
+import org.luxons.sevenwonders.model.resources.*
+import org.luxons.sevenwonders.ui.components.*
+import react.*
+import react.dom.html.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.img
+import react.dom.html.ReactHTML.span
+import web.html.*
 
 private fun getResourceTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().lowercase()}"
 
@@ -20,12 +21,12 @@ enum class TokenCountPosition {
     OVER,
 }
 
-fun RBuilder.goldIndicator(
+fun ChildrenBuilder.goldIndicator(
     amount: Int,
     amountPosition: TokenCountPosition = TokenCountPosition.OVER,
-    imgSize: LinearDimension = 3.rem,
-    customCountStyle: CssBuilder.() -> Unit = {},
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
+    imgSize: Length = 3.rem,
+    customCountStyle: PropertiesBuilder.() -> Unit = {},
+    block: HTMLAttributes<HTMLDivElement>.() -> Unit = {},
 ) {
     tokenWithCount(
         tokenName = "coin",
@@ -38,54 +39,39 @@ fun RBuilder.goldIndicator(
     )
 }
 
-fun RBuilder.resourceWithCount(
-    resourceType: ResourceType,
-    count: Int,
-    title: String = resourceType.toString(),
-    imgSize: LinearDimension? = null,
-    countPosition: TokenCountPosition = TokenCountPosition.RIGHT,
-    brightText: Boolean = false,
-    customCountStyle: CssBuilder.() -> Unit = {},
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
-) {
-    tokenWithCount(
-        tokenName = getResourceTokenName(resourceType),
-        count = count,
-        title = title,
-        imgSize = imgSize,
-        countPosition = countPosition,
-        brightText = brightText,
-        customCountStyle = customCountStyle,
-        block = block
-    )
-}
-
-fun RBuilder.resourceImage(
+fun ChildrenBuilder.resourceImage(
     resourceType: ResourceType,
     title: String = resourceType.toString(),
-    size: LinearDimension?,
-    block: StyledDOMBuilder<IMG>.() -> Unit = {},
+    size: Length?,
 ) {
-    tokenImage(getResourceTokenName(resourceType), title, size, block)
+    TokenImage {
+        this.tokenName = getResourceTokenName(resourceType)
+        this.title = title
+        this.size = size
+    }
 }
 
-fun RBuilder.tokenWithCount(
+fun ChildrenBuilder.tokenWithCount(
     tokenName: String,
     count: Int,
     title: String = tokenName,
-    imgSize: LinearDimension? = null,
+    imgSize: Length? = null,
     countPosition: TokenCountPosition = TokenCountPosition.RIGHT,
     brightText: Boolean = false,
-    customCountStyle: CssBuilder.() -> Unit = {},
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
+    customCountStyle: PropertiesBuilder.() -> Unit = {},
+    block: HTMLAttributes<HTMLDivElement>.() -> Unit = {},
 ) {
-    styledDiv {
+    div {
         block()
-        val tokenCountSize = if (imgSize != null) imgSize * 0.6 else 1.5.rem
+        val tokenCountSize = if (imgSize != null) 0.6 * imgSize else 1.5.rem
         when (countPosition) {
             TokenCountPosition.RIGHT -> {
-                tokenImage(tokenName, title = title, size = imgSize)
-                styledSpan {
+                TokenImage {
+                    this.tokenName = tokenName
+                    this.title = title
+                    this.size = imgSize
+                }
+                span {
                     css {
                         tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         marginLeft = 0.2.rem
@@ -93,27 +79,36 @@ fun RBuilder.tokenWithCount(
                     +"× $count"
                 }
             }
+
             TokenCountPosition.LEFT -> {
-                styledSpan {
+                span {
                     css {
                         tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         marginRight = 0.2.rem
                     }
                     +"$count ×"
                 }
-                tokenImage(tokenName, title = title, size = imgSize)
+                TokenImage {
+                    this.tokenName = tokenName
+                    this.title = title
+                    this.size = imgSize
+                }
             }
+
             TokenCountPosition.OVER -> {
-                styledDiv {
+                div {
                     css {
                         position = Position.relative
                         // if container becomes large, this one stays small so that children stay on top of each other
-                        width = LinearDimension.fitContent
+                        width = Length.fitContent
                     }
-                    tokenImage(tokenName, title = title, size = imgSize)
-                    styledSpan {
-                        css {
-                            +GlobalStyles.centerInPositionedParent
+                    TokenImage {
+                        this.tokenName = tokenName
+                        this.title = title
+                        this.size = imgSize
+                    }
+                    span {
+                        css(GlobalStyles.centerInPositionedParent) {
                             tokenCountStyle(tokenCountSize, brightText, customCountStyle)
                         }
                         +"$count"
@@ -124,36 +119,36 @@ fun RBuilder.tokenWithCount(
     }
 }
 
-fun RBuilder.tokenImage(
-    tokenName: String,
-    title: String = tokenName,
-    size: LinearDimension?,
-    block: StyledDOMBuilder<IMG>.() -> Unit = {},
-) {
-    styledImg(src = getTokenImagePath(tokenName)) {
+external interface TokenImageProps : Props {
+    var tokenName: String
+    var title: String?
+    var size: Length?
+}
+
+val TokenImage = FC<TokenImageProps> { props ->
+    img {
+        src = getTokenImagePath(props.tokenName)
+        title = props.title ?: props.tokenName
+        alt = props.tokenName
+
         css {
-            height = size ?: 100.pct
-            if (size != null) {
-                width = size
+            height = props.size ?: 100.pct
+            if (props.size != null) {
+                width = props.size
             }
             verticalAlign = VerticalAlign.middle
         }
-        attrs {
-            this.title = title
-            this.alt = tokenName
-        }
-        block()
     }
 }
 
-private fun CssBuilder.tokenCountStyle(
-    size: LinearDimension,
+private fun PropertiesBuilder.tokenCountStyle(
+    size: Length,
     brightText: Boolean,
-    customStyle: CssBuilder.() -> Unit = {},
+    customStyle: PropertiesBuilder.() -> Unit = {},
 ) {
-    fontFamily = "Acme"
+    fontFamily = string("Acme")
     fontSize = size
     verticalAlign = VerticalAlign.middle
-    color = if (brightText) Color.white else Color.black
+    color = if (brightText) NamedColor.white else NamedColor.black
     customStyle()
 }

@@ -1,21 +1,22 @@
 package org.luxons.sevenwonders.ui.components.home
 
-import org.luxons.sevenwonders.ui.components.GlobalStyles
-import react.RBuilder
-import react.dom.*
-import styled.css
-import styled.styledDiv
+import emotion.react.*
+import org.luxons.sevenwonders.ui.components.*
+import react.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.img
 
 private const val LOGO = "images/logo-7-wonders.png"
 
-fun RBuilder.home() = styledDiv {
-    css {
-        +GlobalStyles.fullscreen
-        +GlobalStyles.zeusBackground
-        +HomeStyles.centerChildren
+val Home = VFC("Home") {
+    div {
+        css(GlobalStyles.fullscreen, GlobalStyles.zeusBackground, HomeStyles.centerChildren) {}
+
+        img {
+            src = LOGO
+            alt = "Seven Wonders"
+        }
+
+        ChooseNameForm()
     }
-
-    img(src = LOGO, alt = "Seven Wonders") {}
-
-    chooseNameForm {}
 }

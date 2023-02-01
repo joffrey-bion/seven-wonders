@@ -1,109 +1,134 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import blueprintjs.core.PopoverPosition
-import blueprintjs.core.bpDivider
-import blueprintjs.core.bpPopover
-import kotlinx.css.*
-import kotlinx.html.*
-import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.model.boards.Board
-import org.luxons.sevenwonders.ui.components.gameBrowser.playerInfo
+import blueprintjs.core.*
+import csstype.*
+import emotion.css.*
+import emotion.react.*
+import org.luxons.sevenwonders.model.api.*
+import org.luxons.sevenwonders.model.boards.*
+import org.luxons.sevenwonders.ui.components.gameBrowser.*
+import org.luxons.sevenwonders.ui.utils.*
 import react.*
-import styled.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.hr
 
 enum class BoardSummarySide(
     val tokenCountPosition: TokenCountPosition,
-    val alignment: Align,
+    val alignment: AlignItems,
     val popoverPosition: PopoverPosition,
 ) {
-    LEFT(TokenCountPosition.RIGHT, Align.flexStart, PopoverPosition.RIGHT),
-    TOP(TokenCountPosition.OVER, Align.flexStart, PopoverPosition.BOTTOM),
-    RIGHT(TokenCountPosition.LEFT, Align.flexEnd, PopoverPosition.LEFT),
-    BOTTOM(TokenCountPosition.OVER, Align.flexStart, PopoverPosition.TOP),
+    LEFT(TokenCountPosition.RIGHT, AlignItems.flexStart, PopoverPosition.RIGHT),
+    TOP(TokenCountPosition.OVER, AlignItems.flexStart, PopoverPosition.BOTTOM),
+    RIGHT(TokenCountPosition.LEFT, AlignItems.flexEnd, PopoverPosition.LEFT),
+    BOTTOM(TokenCountPosition.OVER, AlignItems.flexStart, PopoverPosition.TOP),
 }
 
-fun RBuilder.boardSummaryWithPopover(
-    player: PlayerDTO,
-    board: Board,
-    boardSummarySide: BoardSummarySide,
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
-) {
-    val popoverClass = GameStyles.getClassName { it::fullBoardPreviewPopover }
-    bpPopover(
-        content = createFullBoardPreview(board),
-        position = boardSummarySide.popoverPosition,
-        popoverClassName = popoverClass,
-    ) {
-        boardSummary(
-            player = player,
-            board = board,
-            side = boardSummarySide,
-            block = block,
-        )
-    }
+external interface BoardSummaryWithPopoverProps : PropsWithClassName {
+    var player: PlayerDTO
+    var board: Board
+    var side: BoardSummarySide
 }
 
-private fun createFullBoardPreview(board: Board): ReactElement<*> = buildElement {
-    boardComponent(board = board) {
-        css {
-            +GameStyles.fullBoardPreview
+val BoardSummaryWithPopover = FC<BoardSummaryWithPopoverProps>("BoardSummaryWithPopover") { props ->
+    BpPopover {
+        content = BoardComponent.create {
+            className = GameStyles.fullBoardPreview
+            board = props.board
+        }
+        position = props.side.popoverPosition
+        interactionKind = PopoverInteractionKind.HOVER
+        popoverClassName = ClassName {
+            val bgColor = GameStyles.sandBgColor.withAlpha(0.7)
+            backgroundColor = bgColor
+            borderRadius = 0.5.rem
+            padding = Padding(all = 0.5.rem)
+
+            children(".bp4-popover-content") {
+                background = None.none // overrides default white background
+            }
+            descendants(".bp4-popover-arrow-fill") {
+                set(Variable("fill"), bgColor.toString()) // overrides default white arrow
+            }
+            descendants(".bp4-popover-arrow::before") {
+                // The popover arrow is implemented with a simple square rotated 45 degrees (like a rhombus).
+                // Since we use a semi-transparent background, we can see the box shadow of the rest of the arrow through
+                // the popover, and thus we see the square. This boxShadow(transparent) is to avoid that.
+                boxShadow = BoxShadow(0.px, 0.px, 0.px, 0.px, NamedColor.transparent)
+            }
+        }.toString()
+
+        BoardSummary {
+            this.className = props.className
+            this.player = props.player
+            this.board = props.board
+            this.side = props.side
         }
     }
 }
 
-fun RBuilder.boardSummary(
-    player: PlayerDTO,
-    board: Board,
-    side: BoardSummarySide,
-    showPreparationStatus: Boolean = true,
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
-) {
-    styledDiv {
-        css {
+external interface BoardSummaryProps : PropsWithClassName {
+    var player: PlayerDTO
+    var board: Board
+    var side: BoardSummarySide
+    var showPreparationStatus: Boolean?
+}
+
+val BoardSummary = FC<BoardSummaryProps>("BoardSummary") { props ->
+    div {
+        css(props.className) {
             display = Display.flex
             flexDirection = FlexDirection.column
-            alignItems = side.alignment
-            padding(all = 0.5.rem)
-            backgroundColor = Color.paleGoldenrod.withAlpha(0.5)
-            zIndex = 50 // above table cards
+            alignItems = props.side.alignment
+            padding = Padding(all = 0.5.rem)
+            backgroundColor = NamedColor.palegoldenrod.withAlpha(0.5)
+            zIndex = integer(50) // above table cards
 
             hover {
-                backgroundColor = Color.paleGoldenrod
+                backgroundColor = NamedColor.palegoldenrod
             }
         }
 
-        topBar(player, side, showPreparationStatus)
-        styledHr {
+        val showPreparationStatus = props.showPreparationStatus ?: true
+        topBar(props.player, props.side, showPreparationStatus)
+        hr {
             css {
-                margin(vertical = 0.5.rem)
+                margin = Margin(vertical = 0.5.rem, horizontal = 0.rem)
                 width = 100.pct
             }
         }
-        bottomBar(side, board, player, showPreparationStatus)
-        block()
+        bottomBar(props.side, props.board, props.player, showPreparationStatus)
     }
 }
 
-private fun RBuilder.topBar(player: PlayerDTO, side: BoardSummarySide, showPreparationStatus: Boolean) {
+private fun ChildrenBuilder.topBar(player: PlayerDTO, side: BoardSummarySide, showPreparationStatus: Boolean) {
     val playerIconSize = 25
     if (showPreparationStatus && side == BoardSummarySide.TOP) {
-        styledDiv {
+        div {
             css {
                 display = Display.flex
                 flexDirection = FlexDirection.row
                 justifyContent = JustifyContent.spaceBetween
                 width = 100.pct
             }
-            playerInfo(player, iconSize = playerIconSize)
-            playerPreparedCard(player)
+            PlayerInfo {
+                this.player = player
+                this.iconSize = playerIconSize
+            }
+            PlayerPreparedCard {
+                this.playerDisplayName = player.displayName
+                this.username = player.username
+            }
         }
     } else {
-        playerInfo(player, iconSize = playerIconSize)
+        PlayerInfo {
+            this.player = player
+            this.iconSize = playerIconSize
+        }
     }
 }
 
-private fun RBuilder.bottomBar(side: BoardSummarySide, board: Board, player: PlayerDTO, showPreparationStatus: Boolean) {
-    styledDiv {
+private fun ChildrenBuilder.bottomBar(side: BoardSummarySide, board: Board, player: PlayerDTO, showPreparationStatus: Boolean) {
+    div {
         css {
             display = Display.flex
             flexDirection = if (side == BoardSummarySide.TOP || side == BoardSummarySide.BOTTOM) FlexDirection.row else FlexDirection.column
@@ -114,26 +139,29 @@ private fun RBuilder.bottomBar(side: BoardSummarySide, board: Board, player: Pla
         }
         val tokenSize = 2.rem
         generalCounts(board, tokenSize, side.tokenCountPosition)
-        bpDivider()
+        BpDivider()
         scienceTokens(board, tokenSize, side.tokenCountPosition)
         if (showPreparationStatus && side != BoardSummarySide.TOP) {
-            bpDivider()
-            styledDiv {
+            BpDivider()
+            div {
                 css {
                     width = 100.pct
-                    alignItems = Align.center
+                    alignItems = AlignItems.center
                     display = Display.flex
                     flexDirection = FlexDirection.column
                 }
-                playerPreparedCard(player)
+                PlayerPreparedCard {
+                    this.playerDisplayName = player.displayName
+                    this.username = player.username
+                }
             }
         }
     }
 }
 
-private fun StyledDOMBuilder<DIV>.generalCounts(
+private fun ChildrenBuilder.generalCounts(
     board: Board,
-    tokenSize: LinearDimension,
+    tokenSize: Length,
     countPosition: TokenCountPosition,
 ) {
     goldIndicator(amount = board.gold, imgSize = tokenSize, amountPosition = countPosition)
@@ -153,9 +181,9 @@ private fun StyledDOMBuilder<DIV>.generalCounts(
     )
 }
 
-private fun RBuilder.scienceTokens(
+private fun ChildrenBuilder.scienceTokens(
     board: Board,
-    tokenSize: LinearDimension,
+    tokenSize: Length,
     sciencePosition: TokenCountPosition,
 ) {
     tokenWithCount(

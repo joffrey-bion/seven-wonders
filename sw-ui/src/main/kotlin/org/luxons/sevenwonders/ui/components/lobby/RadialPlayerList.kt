@@ -1,39 +1,36 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import blueprintjs.core.bpIcon
-import blueprintjs.core.bpTag
+import blueprintjs.core.*
+import blueprintjs.icons.*
 import csstype.*
-import kotlinx.css.*
-import kotlinx.css.Color
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.px
-import kotlinx.css.rem
-import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.api.PlayerDTO
+import emotion.react.*
+import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.api.actions.Icon
-import org.luxons.sevenwonders.model.wonders.WonderSide
-import react.RBuilder
-import react.ReactElement
-import react.buildElement
-import styled.*
+import org.luxons.sevenwonders.model.wonders.*
+import org.luxons.sevenwonders.ui.utils.*
+import react.*
+import react.dom.html.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.span
+import web.html.*
 
-fun RBuilder.radialPlayerList(
+fun ChildrenBuilder.radialPlayerList(
     players: List<PlayerDTO>,
     currentPlayer: PlayerDTO,
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
+    block: HTMLAttributes<HTMLDivElement>.() -> Unit = {},
 ) {
     val playerItems = players //
         .map { PlayerItem.Player(it) }
         .growWithPlaceholders(targetSize = 3)
         .withUserFirst(currentPlayer)
 
-    val tableImg = buildElement { lobbyWoodenTable(diameter = 200.px, borderSize = 15.px) }
-
     radialList(
         items = playerItems,
-        centerElement = tableImg,
-        renderItem = { buildElement { playerElement(it) } },
+        centerElement = LobbyWoodenTable.create {
+            diameter = 200.px
+            borderSize = 15.px
+        },
+        renderItem = { PlayerElement.create { playerItem = it } },
         getKey = { it.key },
         itemWidth = 120,
         itemHeight = 100,
@@ -60,74 +57,79 @@ private fun List<PlayerItem>.withUserFirst(me: PlayerDTO): List<PlayerItem> {
 private sealed class PlayerItem {
     abstract val key: String
     abstract val playerText: String
-    abstract val opacity: Double
+    abstract val opacity: Opacity
     abstract val icon: ReactElement<*>
 
     data class Player(val player: PlayerDTO) : PlayerItem() {
         override val key = player.username
         override val playerText = player.displayName
-        override val opacity = 1.0
-        override val icon = buildElement {
-            userIcon(
-                icon = player.icon ?: when {
-                    player.isGameOwner -> Icon("badge")
-                    else -> Icon("user")
-                },
-                title = if (player.isGameOwner) "Game owner" else null,
-            )
-        }
+        override val opacity = number(1.0)
+        override val icon = createUserIcon(
+            icon = player.icon ?: when {
+                player.isGameOwner -> Icon(IconNames.BADGE)
+                else -> Icon(IconNames.USER)
+            },
+            title = if (player.isGameOwner) "Game owner" else null,
+        )
     }
 
     data class Placeholder(val index: Int) : PlayerItem() {
         override val key = "player-placeholder-$index"
         override val playerText = "?"
-        override val opacity = 0.4
-        override val icon = buildElement {
-            userIcon(
-                icon = Icon("user"),
-                title = "Waiting for player...",
-            )
-        }
+        override val opacity = number(0.4)
+        override val icon = createUserIcon(
+            icon = Icon(IconNames.USER),
+            title = "Waiting for player...",
+        )
     }
 }
 
-private fun RBuilder.userIcon(icon: Icon, title: String?) = bpIcon(
-    name = icon.name,
-    size = 50,
-    title = title,
-)
+private fun createUserIcon(icon: Icon, title: String?) = BpIcon.create {
+    this.icon = icon.name
+    this.size = 50
+    this.title = title
+}
 
-private fun RBuilder.playerElement(playerItem: PlayerItem) {
-    styledDiv {
+private external interface PlayerElementProps : Props {
+    var playerItem: PlayerItem
+}
+
+private val PlayerElement = FC<PlayerElementProps>(displayName = "PlayerElement") { props ->
+    val playerItem = props.playerItem
+    div {
         css {
             display = Display.flex
             flexDirection = FlexDirection.column
-            alignItems = Align.center
+            alignItems = AlignItems.center
             opacity = playerItem.opacity
         }
         child(playerItem.icon)
-        styledSpan {
+        span {
             css {
                 fontSize = if (playerItem is PlayerItem.Placeholder) 1.5.rem else 0.9.rem
             }
             +playerItem.playerText
         }
         if (playerItem is PlayerItem.Player) {
-            styledDiv {
+            div {
                 val wonder = playerItem.player.wonder
+
                 css {
                     marginTop = 0.3.rem
 
-                    // this is to overcome ".bp4-dark .bp4-tag" on the nested bpTag
                     children(".wonder-tag") {
                         color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp4-tag)
                         backgroundColor = when (wonder.side) {
-                            WonderSide.A -> Color.seaGreen
-                            WonderSide.B -> Color.darkRed
+                            WonderSide.A -> NamedColor.seagreen
+                            WonderSide.B -> NamedColor.darkred
                         }
                     }
                 }
-                bpTag(round = true, className = ClassName("wonder-tag")) {
+
+                BpTag {
+                    round = true
+                    className = ClassName("wonder-tag")
+
                     +"${wonder.name} ${wonder.side}"
                 }
             }

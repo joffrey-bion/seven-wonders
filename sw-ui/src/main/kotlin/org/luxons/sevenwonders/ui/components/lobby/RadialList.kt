@@ -1,19 +1,16 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import kotlinx.css.*
-import kotlinx.css.properties.*
-import kotlinx.html.DIV
-import org.luxons.sevenwonders.ui.components.GlobalStyles
-import react.RBuilder
-import react.ReactElement
-import react.dom.*
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
-import styled.styledLi
-import styled.styledUl
+import csstype.*
+import emotion.react.*
+import org.luxons.sevenwonders.ui.components.*
+import react.*
+import react.dom.html.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.li
+import react.dom.html.ReactHTML.ul
+import web.html.*
 
-fun <T> RBuilder.radialList(
+fun <T> ChildrenBuilder.radialList(
     items: List<T>,
     centerElement: ReactElement<*>,
     renderItem: (T) -> ReactElement<*>,
@@ -21,15 +18,14 @@ fun <T> RBuilder.radialList(
     itemWidth: Int,
     itemHeight: Int,
     options: RadialConfig = RadialConfig(),
-    block: StyledDOMBuilder<DIV>.() -> Unit = {},
+    block: HTMLAttributes<HTMLDivElement>.() -> Unit = {},
 ) {
     val containerWidth = options.diameter + itemWidth
     val containerHeight = options.diameter + itemHeight
 
-    styledDiv {
-        css {
+    div {
+        css(GlobalStyles.fixedCenter) {
             zeroMargins()
-            +GlobalStyles.fixedCenter
             width = containerWidth.px
             height = containerHeight.px
         }
@@ -39,18 +35,22 @@ fun <T> RBuilder.radialList(
     }
 }
 
-private fun <T> RBuilder.radialListItems(
+private fun <T> ChildrenBuilder.radialListItems(
     items: List<T>,
     renderItem: (T) -> ReactElement<*>,
     getKey: (T) -> String,
     radialConfig: RadialConfig,
 ) {
     val offsets = offsetsFromCenter(items.size, radialConfig)
-    styledUl {
+    ul {
         css {
             zeroMargins()
-            transition(property = "all", duration = 500.ms, timing = Timing.easeInOut)
-            zIndex = 1
+            transition = Transition(
+                property = TransitionProperty.all,
+                duration = 500.ms,
+                timingFunction = TransitionTimingFunction.easeInOut,
+            )
+            zIndex = integer(1)
             width = radialConfig.diameter.px
             height = radialConfig.diameter.px
             absoluteCenter()
@@ -67,52 +67,50 @@ private fun <T> RBuilder.radialListItems(
     }
 }
 
-private fun RBuilder.radialListItem(item: ReactElement<*>, key: String, offset: CartesianCoords) {
-    styledLi {
+private fun ChildrenBuilder.radialListItem(item: ReactElement<*>, key: String, offset: CartesianCoords) {
+    li {
         css {
             display = Display.block
             position = Position.absolute
             top = 50.pct
             left = 50.pct
             zeroMargins()
-            listStyleType = ListStyleType.unset
-            transition("all", 500.ms, Timing.easeInOut)
-            zIndex = 1
-            transform {
-                translate(offset.x.px, offset.y.px)
-                translate((-50).pct, (-50).pct)
-            }
+            listStyleType = Globals.unset
+            transition = Transition(
+                property = TransitionProperty.all,
+                duration = 500.ms,
+                timingFunction = TransitionTimingFunction.easeInOut,
+            )
+            zIndex = integer(1)
+            transform = translate(offset.x.px - 50.pct, offset.y.px - 50.pct)
         }
-        attrs {
-            this.key = key
-        }
+        this.key = key
+
         child(item)
     }
 }
 
-private fun RBuilder.radialListCenter(centerElement: ReactElement<*>?) {
+private fun ChildrenBuilder.radialListCenter(centerElement: ReactElement<*>?) {
     if (centerElement == null) {
         return
     }
-    styledDiv {
+    div {
         css {
-            zIndex = 0
+            zIndex = integer(0)
             absoluteCenter()
         }
         child(centerElement)
     }
 }
 
-private fun CssBuilder.absoluteCenter() {
+private fun PropertiesBuilder.absoluteCenter() {
     position = Position.absolute
     left = 50.pct
     top = 50.pct
-    transform {
-        translate((-50).pct, (-50).pct)
-    }
+    transform = translate((-50).pct, (-50).pct)
 }
 
-private fun CssBuilder.zeroMargins() {
-    margin(all = 0.px)
-    padding(all = 0.px)
+private fun PropertiesBuilder.zeroMargins() {
+    margin = Margin(vertical = 0.px, horizontal = 0.px)
+    padding = Padding(vertical = 0.px, horizontal = 0.px)
 }

@@ -1,52 +1,55 @@
 package org.luxons.sevenwonders.ui.components.game
 
 import blueprintjs.core.*
+import blueprintjs.icons.*
 import csstype.*
-import kotlinx.css.*
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.TextAlign
-import kotlinx.css.VerticalAlign
-import kotlinx.css.px
-import kotlinx.css.rem
-import kotlinx.html.TD
-import kotlinx.html.TH
-import org.luxons.sevenwonders.model.api.PlayerDTO
-import org.luxons.sevenwonders.model.score.ScoreBoard
-import org.luxons.sevenwonders.model.score.ScoreCategory
-import org.luxons.sevenwonders.ui.components.GlobalStyles
+import emotion.react.*
+import org.luxons.sevenwonders.model.api.*
+import org.luxons.sevenwonders.model.score.*
+import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.utils.*
-import react.RBuilder
-import react.dom.*
-import styled.*
+import react.*
+import react.dom.html.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.h1
+import react.dom.html.ReactHTML.sup
+import react.dom.html.ReactHTML.tbody
+import react.dom.html.ReactHTML.td
+import react.dom.html.ReactHTML.th
+import react.dom.html.ReactHTML.thead
+import react.dom.html.ReactHTML.tr
 
-fun RBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>, leaveGame: () -> Unit) {
-    bpOverlay(isOpen = true) {
-        bpCard {
-            attrs {
-                val fixedCenterClass = GlobalStyles.getClassName { it::fixedCenter }
-                val scoreBoardClass = GameStyles.getClassName { it::scoreBoard }
-                className = ClassName("$fixedCenterClass $scoreBoardClass")
-            }
-            styledDiv {
-                css {
+fun ChildrenBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>, leaveGame: () -> Unit) {
+    BpOverlay {
+        isOpen = true
+
+        BpCard {
+            css(GlobalStyles.fixedCenter, GameStyles.scoreBoard) {}
+
+            div {
+                // FIXME this doesn't look right, the scoreBoard class is applied at both levels
+                css(GameStyles.scoreBoard) { // loads the styles so that they can be picked up by bpCard
                     display = Display.flex
                     flexDirection = FlexDirection.column
-                    alignItems = Align.center
-                    +GameStyles.scoreBoard // loads the styles so that they can be picked up by bpCard
+                    alignItems = AlignItems.center
                 }
-                styledH1 {
+                h1 {
                     css {
                         marginTop = 0.px
                     }
                     +"Score Board"
                 }
                 scoreTable(scoreBoard, players)
-                styledDiv {
+                div {
                     css {
                         marginTop = 1.rem
                     }
-                    bpButton(intent = Intent.WARNING, rightIcon = "log-out", large = true, onClick = { leaveGame() }) {
+                    BpButton {
+                        intent = Intent.WARNING
+                        rightIcon = "log-out"
+                        large = true
+                        onClick = { leaveGame() }
+
                         +"LEAVE"
                     }
                 }
@@ -55,18 +58,32 @@ fun RBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>,
     }
 }
 
-private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>) {
-    bpHtmlTable(bordered = false, interactive = true) {
+private fun ChildrenBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>) {
+    BpHTMLTable {
+        bordered = false
+        interactive = true
+
         thead {
             tr {
-                centeredTh { +"Rank" }
-                centeredTh {
-                    attrs { colSpan = "2" }
+                th {
+                    fullCenterInlineStyle()
+                    +"Rank"
+                }
+                th {
+                    fullCenterInlineStyle()
+                    colSpan = 2
+
                     +"Player"
                 }
-                centeredTh { +"Score" }
+                th {
+                    fullCenterInlineStyle()
+                    +"Score"
+                }
                 ScoreCategory.values().forEach {
-                    centeredTh { +it.title }
+                    th {
+                        fullCenterInlineStyle()
+                        +it.title
+                    }
                 }
             }
         }
@@ -74,28 +91,44 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
             scoreBoard.scores.forEachIndexed { index, score ->
                 val player = players[score.playerIndex]
                 tr {
-                    centeredTd { ordinal(scoreBoard.ranks[index]) }
-                    centeredTd { bpIcon(player.icon?.name ?: "user", size = 25) }
-                    styledTd {
+                    td {
+                        fullCenterInlineStyle()
+                        ordinal(scoreBoard.ranks[index])
+                    }
+                    td {
+                        fullCenterInlineStyle()
+                        BpIcon {
+                            icon = player.icon?.name ?: IconNames.USER
+                            size = 25
+                        }
+                    }
+                    td {
                         inlineStyles {
                             verticalAlign = VerticalAlign.middle
                         }
                         +player.displayName
                     }
-                    centeredTd {
-                        bpTag(large = true, round = true, minimal = true) {
-                            attrs {
-                                this.className = GameStyles.getTypedClassName { it::totalScore }
-                            }
+                    td {
+                        fullCenterInlineStyle()
+                        BpTag {
+                            large = true
+                            round = true
+                            minimal = true
+                            className = GameStyles.totalScore
+
                             +"${score.totalPoints}"
                         }
                     }
                     ScoreCategory.values().forEach { cat ->
-                        centeredTd {
-                            bpTag(large = true, round = true, icon = cat.icon, fill = true) {
-                                attrs {
-                                    this.className = classNameForCategory(cat)
-                                }
+                        td {
+                            fullCenterInlineStyle()
+                            BpTag {
+                                large = true
+                                round = true
+                                fill = true
+                                icon = cat.icon
+                                className = classNameForCategory(cat)
+
                                 +"${score.pointsByCategory[cat]}"
                             }
                         }
@@ -106,7 +139,7 @@ private fun RBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>
     }
 }
 
-private fun RBuilder.ordinal(value: Int) {
+private fun ChildrenBuilder.ordinal(value: Int) {
     +"$value"
     sup { +value.ordinalIndicator() }
 }
@@ -118,49 +151,33 @@ private fun Int.ordinalIndicator() = when {
     else -> "th"
 }
 
-private fun RBuilder.centeredTh(block: RDOMBuilder<TH>.() -> Unit) {
-    th {
-        // inline styles necessary to overcome blueprintJS overrides
-        inlineStyles {
-            textAlign = TextAlign.center
-            verticalAlign = VerticalAlign.middle
-        }
-        block()
+private fun HTMLAttributes<*>.fullCenterInlineStyle() {
+    // inline styles necessary to overcome blueprintJS overrides
+    inlineStyles {
+        textAlign = TextAlign.center
+        verticalAlign = VerticalAlign.middle
     }
 }
 
-private fun RBuilder.centeredTd(block: RDOMBuilder<TD>.() -> Unit) {
-    td {
-        // inline styles necessary to overcome blueprintJS overrides
-        inlineStyles {
-            textAlign = TextAlign.center
-            verticalAlign = VerticalAlign.middle
-        }
-        block()
-    }
-}
-
-private fun classNameForCategory(cat: ScoreCategory): ClassName = GameStyles.getTypedClassName {
-    when (cat) {
-        ScoreCategory.CIVIL -> it::civilScore
-        ScoreCategory.SCIENCE -> it::scienceScore
-        ScoreCategory.MILITARY -> it::militaryScore
-        ScoreCategory.TRADE -> it::tradeScore
-        ScoreCategory.GUILD -> it::guildScore
-        ScoreCategory.WONDER -> it::wonderScore
-        ScoreCategory.GOLD -> it::goldScore
-    }
+private fun classNameForCategory(cat: ScoreCategory): ClassName = when (cat) {
+    ScoreCategory.CIVIL -> GameStyles.civilScore
+    ScoreCategory.SCIENCE -> GameStyles.scienceScore
+    ScoreCategory.MILITARY -> GameStyles.militaryScore
+    ScoreCategory.TRADE -> GameStyles.tradeScore
+    ScoreCategory.GUILD -> GameStyles.guildScore
+    ScoreCategory.WONDER -> GameStyles.wonderScore
+    ScoreCategory.GOLD -> GameStyles.goldScore
 }
 
 private val ScoreCategory.icon: String
     get() = when (this) {
-        ScoreCategory.CIVIL -> "office"
-        ScoreCategory.SCIENCE -> "lab-test"
-        ScoreCategory.MILITARY -> "cut"
-        ScoreCategory.TRADE -> "swap-horizontal"
-        ScoreCategory.GUILD -> "clean" // stars
-        ScoreCategory.WONDER -> "symbol-triangle-up"
-        ScoreCategory.GOLD -> "dollar"
+        ScoreCategory.CIVIL -> IconNames.OFFICE
+        ScoreCategory.SCIENCE -> IconNames.LAB_TEST
+        ScoreCategory.MILITARY -> IconNames.CUT
+        ScoreCategory.TRADE -> IconNames.SWAP_HORIZONTAL
+        ScoreCategory.GUILD -> IconNames.CLEAN // stars
+        ScoreCategory.WONDER -> IconNames.SYMBOL_TRIANGLE_UP
+        ScoreCategory.GOLD -> IconNames.DOLLAR
     }
 
 // Potentially useful emojis:

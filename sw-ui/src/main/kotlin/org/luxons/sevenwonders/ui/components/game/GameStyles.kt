@@ -1,100 +1,86 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import kotlinx.css.*
-import kotlinx.css.properties.*
-import styled.StyleSheet
-import styled.animation
+import csstype.*
+import emotion.css.*
+import org.luxons.sevenwonders.ui.utils.*
 
-object GameStyles : StyleSheet("GameStyles", isStatic = true) {
+object GameStyles {
 
-    val totalScore by css {
+    val totalScore = ClassName {
         fontWeight = FontWeight.bold
     }
 
-    val civilScore by scoreTagColorCss(Color("#2a73c9"))
-    val scienceScore by scoreTagColorCss(Color("#0f9960"))
-    val militaryScore by scoreTagColorCss(Color("#d03232"))
-    val tradeScore by scoreTagColorCss(Color("#e2c11b"))
-    val guildScore by scoreTagColorCss(Color("#663399"))
-    val wonderScore by scoreTagColorCss(Color.darkCyan)
-    val goldScore by scoreTagColorCss(Color.goldenrod)
+    val civilScore = scoreTagColorCss(Color("#2a73c9"))
+    val scienceScore = scoreTagColorCss(Color("#0f9960"))
+    val militaryScore = scoreTagColorCss(Color("#d03232"))
+    val tradeScore = scoreTagColorCss(Color("#e2c11b"))
+    val guildScore = scoreTagColorCss(Color("#663399"))
+    val wonderScore = scoreTagColorCss(NamedColor.darkcyan)
+    val goldScore = scoreTagColorCss(NamedColor.goldenrod)
 
-    private val sandBgColor = Color.paleGoldenrod
+    val sandBgColor = NamedColor.palegoldenrod
 
-    val fullBoardPreviewPopover by css {
-        val bgColor = sandBgColor.withAlpha(0.7)
-        backgroundColor = bgColor
-        borderRadius = 0.5.rem
-        padding(all = 0.5.rem)
 
-        children(".bp4-popover-content") {
-            background = "none" // overrides default white background
-        }
-        descendants(".bp4-popover-arrow-fill") {
-            put("fill", bgColor.toString()) // overrides default white arrow
-        }
-        descendants(".bp4-popover-arrow::before") {
-            // The popover arrow is implemented with a simple square rotated 45 degrees (like a rhombus).
-            // Since we use a semi-transparent background, we can see the box shadow of the rest of the arrow through
-            // the popover, and thus we see the square. This boxShadow(transparent) is to avoid that.
-            boxShadow(Color.transparent)
-        }
-    }
-
-    val fullBoardPreview by css {
+    val fullBoardPreview = ClassName {
         width = 40.vw
         height = 50.vh
     }
 
-    val dimmedCard by css {
-        filter = "brightness(60%) grayscale(50%)"
+    val dimmedCard = ClassName {
+        filter = brightness(60.pct) + grayscale(50.pct)
     }
 
-    val transactionsSelector by css {
+    val transactionsSelector = ClassName {
         backgroundColor = sandBgColor
         width = 40.rem // default is 500px, we want to fit players on the side
 
         children(".bp4-dialog-header") {
-            background = "none" // overrides default white background
+            background = None.none // overrides default white background
         }
     }
 
-    val bestPrice by css {
+    val bestPrice = ClassName {
         fontWeight = FontWeight.bold
         color = rgb(50, 120, 50)
-        transform {
-            rotate((-20).deg)
-        }
+        transform = rotate((-20).deg)
     }
 
-    val discardMoveText by css {
+    val discardMoveText = ClassName {
         display = Display.flex
-        alignItems = Align.center
+        alignItems = AlignItems.center
         height = 3.rem
         fontSize = 2.rem
-        color = Color.goldenrod
+        color = NamedColor.goldenrod
         fontWeight = FontWeight.bold
-        borderTop(0.2.rem, BorderStyle.solid, Color.goldenrod)
-        borderBottom(0.2.rem, BorderStyle.solid, Color.goldenrod)
+        borderTop = Border(0.2.rem, LineStyle.solid, NamedColor.goldenrod)
+        borderBottom = Border(0.2.rem, LineStyle.solid, NamedColor.goldenrod)
     }
 
-    val scoreBoard by css {
+    val scoreBoard = ClassName {
         backgroundColor = sandBgColor
     }
 
-    private fun scoreTagColorCss(color: Color) = css {
+    private fun scoreTagColorCss(color: Color) = ClassName {
         backgroundColor = color
     }
 
-    val pulsatingRed by css {
-        animation(
+    val pulsatingRed = ClassName {
+        animation = Animation(
+            name = keyframes {
+                to {
+                    boxShadow = BoxShadow(
+                        inset = BoxShadowInset.inset,
+                        offsetX = 0.px,
+                        offsetY = 0.px,
+                        blurRadius = 20.px,
+                        spreadRadius = 8.px,
+                        color = NamedColor.red,
+                    )
+                }
+            },
             duration = 2.s,
-            iterationCount = IterationCount.infinite,
-            direction = AnimationDirection.alternate,
-        ) {
-            to {
-                boxShadowInset(color = Color.red, blurRadius = 20.px, spreadRadius = 8.px)
-            }
-        }
+        )
+        animationIterationCount = AnimationIterationCount.infinite
+        animationDirection = AnimationDirection.alternate
     }
 }

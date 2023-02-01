@@ -1,37 +1,34 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import kotlinx.css.*
-import kotlinx.css.properties.*
-import kotlinx.html.DIV
-import kotlinx.html.HTMLTag
-import kotlinx.html.IMG
-import kotlinx.html.title
-import org.luxons.sevenwonders.model.boards.Board
-import org.luxons.sevenwonders.model.boards.Military
-import org.luxons.sevenwonders.model.cards.TableCard
-import org.luxons.sevenwonders.model.wonders.ApiWonder
-import org.luxons.sevenwonders.model.wonders.ApiWonderStage
-import react.RBuilder
-import react.dom.*
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
-import styled.styledImg
+import csstype.*
+import emotion.react.*
+import org.luxons.sevenwonders.model.boards.*
+import org.luxons.sevenwonders.model.cards.*
+import org.luxons.sevenwonders.model.wonders.*
+import react.*
+import react.dom.html.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.img
+import web.html.*
 
 // card offsets in % of their size when displayed in columns
 private const val xOffset = 20
 private const val yOffset = 21
 
-fun RBuilder.boardComponent(board: Board, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
-    styledDiv {
-        block()
-        tableCards(cardColumns = board.playedCards)
-        wonderComponent(wonder = board.wonder, military = board.military)
+external interface BoardComponentProps : PropsWithClassName {
+    var board: Board
+}
+
+val BoardComponent = FC<BoardComponentProps>("Board") { props ->
+    div {
+        className = props.className
+        tableCards(cardColumns = props.board.playedCards)
+        wonderComponent(wonder = props.board.wonder, military = props.board.military)
     }
 }
 
-private fun RBuilder.tableCards(cardColumns: List<List<TableCard>>) {
-    styledDiv {
+private fun ChildrenBuilder.tableCards(cardColumns: List<List<TableCard>>) {
+    div {
         css {
             display = Display.flex
             justifyContent = JustifyContent.spaceAround
@@ -39,101 +36,109 @@ private fun RBuilder.tableCards(cardColumns: List<List<TableCard>>) {
             width = 100.pct
         }
         cardColumns.forEach { cards ->
-            tableCardColumn(cards = cards) {
-                attrs {
-                    key = cards.first().color.toString()
-                }
+            TableCardColumn {
+                this.key = cards.first().color.toString()
+                this.cards = cards
             }
         }
     }
 }
 
-private fun RBuilder.tableCardColumn(cards: List<TableCard>, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
-    styledDiv {
+private external interface TableCardColumnProps : PropsWithClassName {
+    var cards: List<TableCard>
+}
+
+private val TableCardColumn = FC<TableCardColumnProps>("TableCardColumn") { props ->
+    div {
         css {
             height = 100.pct
             width = 13.pct
             marginRight = 4.pct
             position = Position.relative
         }
-        block()
-        cards.forEachIndexed { index, card ->
-            tableCard(card = card, indexInColumn = index) {
-                attrs { key = card.name }
+        props.cards.forEachIndexed { index, card ->
+            TableCard {
+                this.card = card
+                this.indexInColumn = index
+                this.key = card.name
             }
         }
     }
 }
 
-private fun RBuilder.tableCard(card: TableCard, indexInColumn: Int, block: StyledDOMBuilder<IMG>.() -> Unit = {}) {
-    val highlightColor = if (card.playedDuringLastMove) Color.gold else null
-    cardImage(card = card, highlightColor = highlightColor) {
+private external interface TableCardProps : PropsWithClassName {
+    var card: TableCard
+    var indexInColumn: Int
+}
+
+private val TableCard = FC<TableCardProps>("TableCard") { props ->
+    val highlightColor = if (props.card.playedDuringLastMove) NamedColor.gold else null
+    CardImage {
+        this.card = props.card
+        this.highlightColor = highlightColor
+
         css {
             position = Position.absolute
-            zIndex = indexInColumn + 2 // go above the board and the built wonder cards
-            transform {
-                translate(
-                    tx = (indexInColumn * xOffset).pct,
-                    ty = (indexInColumn * yOffset).pct,
-                )
-            }
+            zIndex = integer(props.indexInColumn + 2) // go above the board and the built wonder cards
+            transform = translate(
+                tx = (props.indexInColumn * xOffset).pct,
+                ty = (props.indexInColumn * yOffset).pct,
+            )
             maxWidth = 100.pct
             maxHeight = 70.pct
 
             hover {
-                zIndex = 1000
+                zIndex = integer(1000)
                 maxWidth = 110.pct
                 maxHeight = 75.pct
                 hoverHighlightStyle()
             }
         }
-        block()
     }
 }
 
-private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
-    styledDiv {
+private fun ChildrenBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
+    div {
         css {
             position = Position.relative
             width = 100.pct
             height = 40.pct
         }
-        styledDiv {
+        div {
             css {
                 position = Position.absolute
                 left = 50.pct
                 top = 0.px
-                transform { translateX((-50).pct) }
+                transform = translatex((-50).pct)
                 height = 100.pct
                 maxWidth = 95.pct // same as wonder
 
                 // bring to the foreground on hover
-                hover { zIndex = 1000 }
+                hover { zIndex = integer(1000) }
             }
-            styledImg(src = "/images/wonders/${wonder.image}") {
+            img {
+                src =  "/images/wonders/${wonder.image}"
+                title = wonder.name
+                alt = "Wonder ${wonder.name}"
+
                 css {
-                    classes.add("wonder-image")
-                    declarations["border-radius"] = "0.5%/1.5%"
-                    boxShadow(color = Color.black, offsetX = 0.2.rem, offsetY = 0.2.rem, blurRadius = 0.5.rem)
+                    borderRadius = "0.5%/1.5%".unsafeCast<BorderRadius>()
+                    boxShadow = BoxShadow(color = NamedColor.black, offsetX = 0.2.rem, offsetY = 0.2.rem, blurRadius = 0.5.rem)
                     maxHeight = 100.pct
                     maxWidth = 100.pct
-                    zIndex = 1 // go above the built wonder cards, but below the table cards
+                    zIndex = integer(1) // go above the built wonder cards, but below the table cards
 
                     hover { hoverHighlightStyle() }
                 }
-                attrs {
-                    this.title = wonder.name
-                    this.alt = "Wonder ${wonder.name}"
-                }
             }
-            styledDiv {
+            div {
                 css {
                     position = Position.absolute
                     top = 20.pct
                     right = (-80).px
                     display = Display.flex
                     flexDirection = FlexDirection.column
-                    alignItems = Align.start
+                    alignItems = AlignItems.start
                 }
                 victoryPoints(military.victoryPoints) {
                     css {
@@ -147,7 +152,8 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
                 }
             }
             wonder.stages.forEachIndexed { index, stage ->
-                wonderStageElement(stage) {
+                WonderStageElement {
+                    this.stage = stage
                     css {
                         wonderCardStyle(index, wonder.stages.size)
                     }
@@ -157,15 +163,15 @@ private fun RBuilder.wonderComponent(wonder: ApiWonder, military: Military) {
     }
 }
 
-private fun RBuilder.victoryPoints(points: Int, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
+private fun ChildrenBuilder.victoryPoints(points: Int, block: HTMLAttributes<HTMLDivElement>.() -> Unit = {}) {
     boardToken("military/victory1", points, block)
 }
 
-private fun RBuilder.defeatTokenCount(nbDefeatTokens: Int, block: StyledDOMBuilder<DIV>.() -> Unit = {}) {
+private fun ChildrenBuilder.defeatTokenCount(nbDefeatTokens: Int, block: HTMLAttributes<HTMLDivElement>.() -> Unit = {}) {
     boardToken("military/defeat1", nbDefeatTokens, block)
 }
 
-private fun RBuilder.boardToken(tokenName: String, count: Int, block: StyledDOMBuilder<DIV>.() -> Unit) {
+private fun ChildrenBuilder.boardToken(tokenName: String, count: Int, block: HTMLAttributes<HTMLDivElement>.() -> Unit) {
     tokenWithCount(
         tokenName = tokenName,
         count = count,
@@ -173,34 +179,40 @@ private fun RBuilder.boardToken(tokenName: String, count: Int, block: StyledDOMB
         brightText = true,
     ) {
         css {
-            filter = "drop-shadow(0.2rem 0.2rem 0.5rem black)"
+            filter = dropShadow(0.2.rem, 0.2.rem, 0.5.rem, NamedColor.black)
             height = 15.pct
         }
         block()
     }
 }
 
-private fun RBuilder.wonderStageElement(stage: ApiWonderStage, block: StyledDOMBuilder<HTMLTag>.() -> Unit) {
-    val back = stage.cardBack
+private external interface WonderStageElementProps : PropsWithClassName {
+    var stage: ApiWonderStage
+}
+
+private val WonderStageElement = FC<WonderStageElementProps>("WonderStageElement") { props ->
+    val back = props.stage.cardBack
     if (back != null) {
-        val highlightColor = if (stage.builtDuringLastMove) Color.gold else null
-        cardBackImage(cardBack = back, highlightColor = highlightColor) {
-            block()
+        val highlightColor = if (props.stage.builtDuringLastMove) NamedColor.gold else null
+        CardBackImage {
+            this.cardBack = back
+            this.highlightColor = highlightColor
+            this.className = props.className
         }
     } else {
-        cardPlaceholderImage {
-            block()
+        CardPlaceholderImage {
+            this.className = props.className
         }
     }
 }
 
-private fun CssBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
+private fun PropertiesBuilder.wonderCardStyle(stageIndex: Int, nbStages: Int) {
     position = Position.absolute
     top = 60.pct // makes the cards stick out of the bottom of the wonder
     left = stagePositionPercent(stageIndex, nbStages).pct
     maxWidth = 24.pct // ratio of card width to wonder width
     maxHeight = 90.pct // ratio of card height to wonder height
-    zIndex = -1 // below wonder (somehow 0 is not sufficient)
+    zIndex = integer(-1) // below wonder (somehow 0 is not sufficient)
 }
 
 private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when (nbStages) {
@@ -209,6 +221,6 @@ private fun stagePositionPercent(stageIndex: Int, nbStages: Int): Double = when 
     else -> 7.9 + stageIndex * 30.0
 }
 
-private fun CssBuilder.hoverHighlightStyle() {
-    highlightStyle(Color.paleGoldenrod)
+private fun PropertiesBuilder.hoverHighlightStyle() {
+    highlightStyle(NamedColor.palegoldenrod)
 }

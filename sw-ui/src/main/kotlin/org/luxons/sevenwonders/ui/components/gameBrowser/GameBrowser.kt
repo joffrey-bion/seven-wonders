@@ -1,51 +1,69 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import blueprintjs.core.*
-import kotlinx.css.*
-import kotlinx.html.*
-import org.luxons.sevenwonders.ui.components.GlobalStyles
+import csstype.*
+import emotion.react.*
+import org.luxons.sevenwonders.ui.components.*
+import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.utils.*
 import react.*
-import react.dom.*
-import styled.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.h1
+import react.dom.html.ReactHTML.h2
 
-fun RBuilder.gameBrowser() = styledDiv {
-    css {
-        +GlobalStyles.fullscreen
-        +GlobalStyles.zeusBackground
-        padding(all = 1.rem)
+val GameBrowser = VFC {
+    div {
+        css(GlobalStyles.fullscreen, GlobalStyles.zeusBackground) {
+            padding = Padding(all = 1.rem)
+        }
+        div {
+            css(ClassName(Classes.DARK)) {
+                margin = Margin(vertical = 0.px, horizontal = Auto.auto)
+                maxWidth = GlobalStyles.preGameWidth
+            }
+            div {
+                css {
+                    display = Display.flex
+                    justifyContent = JustifyContent.spaceBetween
+                }
+                h1 { +"Games" }
+                CurrentPlayerInfo()
+            }
+
+            BpCard {
+                css {
+                    marginBottom = 1.rem
+                }
+
+                h2 {
+                    css {
+                        marginTop = 0.px
+                    }
+                    +"Create a Game"
+                }
+                CreateGameForm()
+            }
+
+            BpCard {
+                h2 {
+                    css {
+                        marginTop = 0.px
+                    }
+                    +"Join a Game"
+                }
+                GameList()
+            }
+        }
     }
-    styledDiv {
-        attrs {
-            classes += Classes.DARK
-        }
-        css {
-            margin(horizontal = LinearDimension.auto)
-            maxWidth = GlobalStyles.preGameWidth
-        }
-        styledDiv {
-            css {
-                display = Display.flex
-                justifyContent = JustifyContent.spaceBetween
-            }
-            h1 { +"Games" }
-            currentPlayerInfo()
-        }
+}
 
-        bpCard(className = GameBrowserStyles.getTypedClassName { it::createGameCard }) {
-            styledH2 {
-                css { +GameBrowserStyles.cardTitle }
-                +"Create a Game"
-            }
-            createGameForm {}
-        }
-
-        bpCard {
-            styledH2 {
-                css { +GameBrowserStyles.cardTitle }
-                +"Join a Game"
-            }
-            gameList()
-        }
+val CurrentPlayerInfo = VFC {
+    val connectedPlayer = useSwSelector { it.connectedPlayer }
+    PlayerInfo {
+        player = connectedPlayer
+        iconSize = 30
+        showUsername = true
+        orientation = FlexDirection.row
+        ellipsize = false
     }
 }

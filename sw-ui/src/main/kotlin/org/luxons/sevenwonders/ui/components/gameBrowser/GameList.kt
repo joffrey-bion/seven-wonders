@@ -1,41 +1,50 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import blueprintjs.core.*
-import blueprintjs.icons.IconNames
+import blueprintjs.icons.*
 import csstype.*
-import kotlinx.css.*
-import kotlinx.css.Display
-import kotlinx.css.FlexDirection
-import kotlinx.css.JustifyContent
-import kotlinx.css.TextAlign
-import kotlinx.css.VerticalAlign
-import kotlinx.css.rem
-import kotlinx.html.classes
-import kotlinx.html.title
-import org.luxons.sevenwonders.model.api.ConnectedPlayer
-import org.luxons.sevenwonders.model.api.LobbyDTO
+import emotion.react.*
+import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.api.State
-import org.luxons.sevenwonders.ui.redux.RequestJoinGame
-import org.luxons.sevenwonders.ui.redux.connectStateAndDispatch
+import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.utils.*
 import react.*
-import react.dom.*
-import styled.*
+import react.dom.html.ReactHTML.col
+import react.dom.html.ReactHTML.colgroup
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.span
+import react.dom.html.ReactHTML.tbody
+import react.dom.html.ReactHTML.td
+import react.dom.html.ReactHTML.th
+import react.dom.html.ReactHTML.thead
+import react.dom.html.ReactHTML.tr
 import react.State as RState
 
-external interface GameListStateProps : PropsWithChildren {
+external interface GameListStateProps : Props {
     var connectedPlayer: ConnectedPlayer
     var games: List<LobbyDTO>
 }
 
-external interface GameListDispatchProps : PropsWithChildren {
+external interface GameListDispatchProps : Props {
     var joinGame: (Long) -> Unit
 }
 
 external interface GameListProps : GameListStateProps, GameListDispatchProps
 
-class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState>(props) {
+val GameList = connectStateAndDispatch<GameListStateProps, GameListDispatchProps, GameListProps>(
+    clazz = GameListPresenter::class,
+    mapStateToProps = { state, _ ->
+        connectedPlayer = state.connectedPlayer ?: error("there should be a connected player")
+        games = state.games
+    },
+    mapDispatchToProps = { dispatch, _ ->
+        joinGame = { gameId -> dispatch(RequestJoinGame(gameId = gameId)) }
+    },
+)
 
-    override fun RBuilder.render() {
+private class GameListPresenter(props: GameListProps) : Component<GameListProps, RState>(props) {
+
+    override fun render() = Fragment.create {
         if (props.games.isEmpty()) {
             noGamesInfo()
         } else {
@@ -43,16 +52,13 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RBuilder.noGamesInfo() {
-        bpNonIdealState(
-            icon = IconNames.GEOSEARCH,
-            title = "No games to join",
-        ) {
-            styledDiv {
-                attrs {
-                    classes += Classes.RUNNING_TEXT
-                }
-                css {
+    private fun ChildrenBuilder.noGamesInfo() {
+        BpNonIdealState {
+            icon = IconNames.GEOSEARCH
+            titleText = "No games to join"
+
+            div {
+                css(ClassName(Classes.RUNNING_TEXT)) {
                     maxWidth = 35.rem
                 }
                 +"Nobody seems to be playing at the moment. "
@@ -61,11 +67,12 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RBuilder.gamesTable() {
-        bpHtmlTable {
-            attrs {
-                className = ClassName(GameBrowserStyles.getClassName { it::gameTable })
+    private fun ChildrenBuilder.gamesTable() {
+        BpHTMLTable {
+            css {
+                width = 100.pct
             }
+
             columnWidthsSpec()
             thead {
                 gameListHeaderRow()
@@ -78,26 +85,26 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RElementBuilder<HTMLTableProps>.columnWidthsSpec() {
+    private fun ChildrenBuilder.columnWidthsSpec() {
         colgroup {
-            styledCol {
+            col {
                 css {
                     width = 40.rem
                 }
             }
-            styledCol {
+            col {
                 css {
                     width = 5.rem
                     textAlign = TextAlign.center
                 }
             }
-            styledCol {
+            col {
                 css {
                     width = 5.rem
                     textAlign = TextAlign.center // use inline style on th instead to overcome blueprint style
                 }
             }
-            styledCol {
+            col {
                 css {
                     width = 3.rem
                     textAlign = TextAlign.center
@@ -106,7 +113,7 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RBuilder.gameListHeaderRow() = tr {
+    private fun ChildrenBuilder.gameListHeaderRow() = tr {
         th {
             +"Name"
         }
@@ -124,10 +131,8 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RBuilder.gameListItemRow(lobby: LobbyDTO) = styledTr {
-        attrs {
-            key = lobby.id.toString()
-        }
+    private fun ChildrenBuilder.gameListItemRow(lobby: LobbyDTO) = tr {
+        key = lobby.id.toString()
         // inline styles necessary to overcome BlueprintJS's verticalAlign=top
         td {
             inlineStyles { gameTableCellStyle() }
@@ -150,37 +155,41 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun StyledElement.gameTableHeaderCellStyle() {
+    private fun PropertiesBuilder.gameTableHeaderCellStyle() {
         textAlign = TextAlign.center
     }
 
-    private fun StyledElement.gameTableCellStyle() {
+    private fun PropertiesBuilder.gameTableCellStyle() {
         verticalAlign = VerticalAlign.middle
     }
 
-    private fun RBuilder.gameStatus(state: State) {
+    private fun ChildrenBuilder.gameStatus(state: State) {
         val intent = when (state) {
             State.LOBBY -> Intent.SUCCESS
             State.PLAYING -> Intent.WARNING
             State.FINISHED -> Intent.DANGER
         }
-        bpTag(minimal = true, intent = intent) {
+        BpTag {
+            this.minimal = true
+            this.intent = intent
+
             +state.toString()
         }
     }
 
-    private fun RBuilder.playerCount(nPlayers: Int) {
-        styledDiv {
+    private fun ChildrenBuilder.playerCount(nPlayers: Int) {
+        div {
             css {
                 display = Display.flex
                 flexDirection = FlexDirection.row
                 justifyContent = JustifyContent.center
             }
-            attrs {
-                title = "Number of players"
+            title = "Number of players"
+            BpIcon {
+                icon = IconNames.PEOPLE
+                title = null
             }
-            bpIcon(name = "people", title = null)
-            styledSpan {
+            span {
                 css {
                     marginLeft = 0.3.rem
                 }
@@ -189,28 +198,15 @@ class GameListPresenter(props: GameListProps) : RComponent<GameListProps, RState
         }
     }
 
-    private fun RBuilder.joinButton(lobby: LobbyDTO) {
+    private fun ChildrenBuilder.joinButton(lobby: LobbyDTO) {
         val joinability = lobby.joinability(props.connectedPlayer.displayName)
-        bpButton(
-            minimal = true,
-            large = true,
-            title = joinability.tooltip,
-            icon = "arrow-right",
-            disabled = !joinability.canDo,
-            onClick = { props.joinGame(lobby.id) },
-        )
+        BpButton {
+            minimal = true
+            large = true
+            title = joinability.tooltip
+            icon = "arrow-right"
+            disabled = !joinability.canDo
+            onClick = { props.joinGame(lobby.id) }
+        }
     }
 }
-
-fun RBuilder.gameList() = gameList {}
-
-private val gameList = connectStateAndDispatch<GameListStateProps, GameListDispatchProps, GameListProps>(
-    clazz = GameListPresenter::class,
-    mapStateToProps = { state, _ ->
-        connectedPlayer = state.connectedPlayer ?: error("there should be a connected player")
-        games = state.games
-    },
-    mapDispatchToProps = { dispatch, _ ->
-        joinGame = { gameId -> dispatch(RequestJoinGame(gameId = gameId)) }
-    },
-)

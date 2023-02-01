@@ -3,31 +3,51 @@ package org.luxons.sevenwonders.ui.components.lobby
 import blueprintjs.core.*
 import blueprintjs.icons.*
 import csstype.*
-import kotlinx.css.*
-import kotlinx.css.Display
-import kotlinx.css.JustifyContent
-import kotlinx.css.Position
-import kotlinx.css.pct
-import kotlinx.css.properties.*
-import kotlinx.css.px
-import kotlinx.css.rem
+import csstype.Position
+import emotion.react.*
 import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.wonders.*
-import org.luxons.sevenwonders.ui.components.GlobalStyles
+import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.utils.*
 import react.*
-import react.State
-import react.dom.*
-import styled.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.h1
+import react.dom.html.ReactHTML.h2
+import react.dom.html.ReactHTML.h3
+import react.dom.html.ReactHTML.h4
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS", "R2-D2", "Bender", "AWESOM-O")
 
-external interface LobbyStateProps : PropsWithChildren {
-    var currentGame: LobbyDTO?
-    var currentPlayer: PlayerDTO?
+val Lobby = VFC(displayName = "Lobby") {
+    val lobby = useSwSelector { it.currentLobby }
+    val player = useSwSelector { it.currentPlayer }
+
+    val dispatch = useSwDispatch()
+
+    if (lobby == null || player == null) {
+        BpNonIdealState {
+            icon = IconNames.ERROR
+            titleText = "Error: no current game"
+        }
+    } else {
+        LobbyPresenter {
+            currentGame = lobby
+            currentPlayer = player
+
+            startGame = { dispatch(RequestStartGame()) }
+            addBot = { name -> dispatch(RequestAddBot(name)) }
+            leaveLobby = { dispatch(RequestLeaveLobby()) }
+            disbandLobby = { dispatch(RequestDisbandLobby()) }
+            reorderPlayers = { orderedPlayers -> dispatch(RequestReorderPlayers(orderedPlayers)) }
+            reassignWonders = { wonders -> dispatch(RequestReassignWonders(wonders)) }
+        }
+    }
 }
 
-external interface LobbyDispatchProps : PropsWithChildren {
+private external interface LobbyPresenterProps : Props {
+    var currentGame: LobbyDTO
+    var currentPlayer: PlayerDTO
     var startGame: () -> Unit
     var addBot: (displayName: String) -> Unit
     var leaveLobby: () -> Unit
@@ -36,235 +56,217 @@ external interface LobbyDispatchProps : PropsWithChildren {
     var reassignWonders: (wonders: List<AssignedWonder>) -> Unit
 }
 
-interface LobbyProps : LobbyDispatchProps, LobbyStateProps
-
-class LobbyPresenter(props: LobbyProps) : RComponent<LobbyProps, State>(props) {
-
-    override fun RBuilder.render() {
-        val currentGame = props.currentGame
-        val currentPlayer = props.currentPlayer
-        if (currentGame == null || currentPlayer == null) {
-            bpNonIdealState(icon = IconNames.ERROR, title = "Error: no current game")
-            return
+private val LobbyPresenter = FC<LobbyPresenterProps> { props ->
+    div {
+        css(GlobalStyles.fullscreen, GlobalStyles.zeusBackground) {
+            padding = Padding(all = 1.rem)
         }
-        styledDiv {
-            css {
-                +GlobalStyles.fullscreen
-                +GlobalStyles.zeusBackground
-                padding(all = 1.rem)
+        div {
+            css(ClassName(Classes.DARK), LobbyStyles.contentContainer) {
+                margin = Margin(vertical = 0.rem, horizontal = Auto.auto)
+                maxWidth = GlobalStyles.preGameWidth
             }
-            styledDiv {
+            h1 { +"${props.currentGame.name} — Lobby" }
+
+            radialPlayerList(props.currentGame.players, props.currentPlayer) {
                 css {
-                    classes.add(Classes.DARK)
-                    +LobbyStyles.contentContainer
-                }
-                h1 { +"${currentGame.name} — Lobby" }
-
-                radialPlayerList(currentGame.players, currentPlayer) {
-                    css {
-                        // to make players more readable on the background
-                        background = "radial-gradient(closest-side, black 20%, transparent)"
-                        // make it bigger so the background covers more ground
-                        width = 40.rem
-                        height = 40.rem
-                    }
-                }
-                actionButtons(currentPlayer, currentGame)
-
-                if (currentPlayer.isGameOwner) {
-                    setupPanel(currentGame)
+                    // to make players more readable on the background
+                    background = "radial-gradient(closest-side, black 20%, transparent)".unsafeCast<Gradient>()
+                    // make it bigger so the background covers more ground
+                    width = 40.rem
+                    height = 40.rem
                 }
             }
-        }
-    }
+            actionButtons(props.currentPlayer, props.currentGame, props.startGame, props.leaveLobby, props.disbandLobby, props.addBot)
 
-    private fun RBuilder.actionButtons(currentPlayer: PlayerDTO, currentGame: LobbyDTO) {
-        styledDiv {
-            css {
-                position = Position.absolute
-                bottom = 2.rem
-                left = 50.pct
-                transform { translate((-50).pct) }
-
-                width = 70.pct
-                display = Display.flex
-                justifyContent = JustifyContent.spaceAround
+            if (props.currentPlayer.isGameOwner) {
+                setupPanel(props.currentGame, props.reorderPlayers, props.reassignWonders)
             }
-            if (currentPlayer.isGameOwner) {
-                bpButtonGroup {
-                    leaveButton()
-                    disbandButton()
-                }
-                bpButtonGroup {
-                    addBotButton(currentGame)
-                    startButton(currentGame, currentPlayer)
-                }
-            } else {
-                leaveButton()
-            }
-        }
-    }
-
-    private fun RBuilder.startButton(currentGame: LobbyDTO, currentPlayer: PlayerDTO) {
-        val startability = currentGame.startability(currentPlayer.username)
-        bpButton(
-            large = true,
-            intent = Intent.PRIMARY,
-            icon = IconNames.PLAY,
-            title = startability.tooltip,
-            disabled = !startability.canDo,
-            onClick = { props.startGame() },
-        ) {
-            +"START"
-        }
-    }
-
-    private fun RBuilder.setupPanel(currentGame: LobbyDTO) {
-        styledDiv {
-            css {
-                +LobbyStyles.setupPanel
-            }
-            bpCard(Elevation.TWO, className = ClassName(Classes.DARK)) {
-                styledH2 {
-                    css {
-                        margin(top = 0.px)
-                    }
-                    +"Game setup"
-                }
-                bpDivider()
-                h3 {
-                    +"Players"
-                }
-                reorderPlayersButton(currentGame)
-                h3 {
-                    +"Wonders"
-                }
-                randomizeWondersButton(currentGame)
-                wonderSideSelectionGroup(currentGame)
-            }
-        }
-    }
-
-    private fun RBuilder.addBotButton(currentGame: LobbyDTO) {
-        bpButton(
-            large = true,
-            icon = IconNames.PLUS,
-            rightIcon = IconNames.DESKTOP,
-            intent = Intent.PRIMARY,
-            title = if (currentGame.maxPlayersReached) "Max players reached" else "Add a bot to this game",
-            disabled = currentGame.maxPlayersReached,
-            onClick = { addBot(currentGame) },
-        )
-    }
-
-    private fun addBot(currentGame: LobbyDTO) {
-        val availableBotNames = BOT_NAMES.filter { name ->
-            currentGame.players.all { it.displayName != name }
-        }
-        props.addBot(availableBotNames.random())
-    }
-
-    private fun RBuilder.reorderPlayersButton(currentGame: LobbyDTO) {
-        bpButton(
-            icon = IconNames.RANDOM,
-            rightIcon = IconNames.PEOPLE,
-            title = "Re-order players randomly",
-            onClick = { reorderPlayers(currentGame) },
-        ) {
-            +"Reorder players"
-        }
-    }
-
-    private fun reorderPlayers(currentGame: LobbyDTO) {
-        props.reorderPlayers(currentGame.players.map { it.username }.shuffled())
-    }
-
-    private fun RBuilder.randomizeWondersButton(currentGame: LobbyDTO) {
-        bpButton(
-            icon = IconNames.RANDOM,
-            title = "Re-assign wonders to players randomly",
-            onClick = { randomizeWonders(currentGame) },
-        ) {
-            +"Randomize wonders"
-        }
-    }
-
-    private fun RBuilder.wonderSideSelectionGroup(currentGame: LobbyDTO) {
-        h4 {
-            +"Select wonder sides:"
-        }
-        bpButtonGroup {
-            bpButton(
-                icon = IconNames.RANDOM,
-                title = "Re-roll wonder sides randomly",
-                onClick = { randomizeWonderSides(currentGame) },
-            )
-            bpButton(
-                title = "Choose side A for everyone",
-                onClick = { setWonderSides(currentGame, WonderSide.A) },
-            ) {
-                +"A"
-            }
-            bpButton(
-                title = "Choose side B for everyone",
-                onClick = { setWonderSides(currentGame, WonderSide.B) },
-            ) {
-                +"B"
-            }
-        }
-    }
-
-    private fun randomizeWonders(currentGame: LobbyDTO) {
-        props.reassignWonders(currentGame.allWonders.deal(currentGame.players.size))
-    }
-
-    private fun randomizeWonderSides(currentGame: LobbyDTO) {
-        props.reassignWonders(currentGame.players.map { currentGame.findWonder(it.wonder.name).withRandomSide() })
-    }
-
-    private fun setWonderSides(currentGame: LobbyDTO, side: WonderSide) {
-        props.reassignWonders(currentGame.players.map { currentGame.findWonder(it.wonder.name).withSide(side) })
-    }
-
-    private fun RBuilder.leaveButton() {
-        bpButton(
-            large = true,
-            intent = Intent.WARNING,
-            icon = "arrow-left",
-            title = "Leave the lobby and go back to the game browser",
-            onClick = { props.leaveLobby() },
-        ) {
-            +"LEAVE"
-        }
-    }
-
-    private fun RBuilder.disbandButton() {
-        bpButton(
-            large = true,
-            intent = Intent.DANGER,
-            icon = IconNames.DELETE,
-            title = "Disband the group and go back to the game browser",
-            onClick = { props.disbandLobby() },
-        ) {
-            +"DISBAND"
         }
     }
 }
 
-fun RBuilder.lobby() = lobby {}
+private fun ChildrenBuilder.actionButtons(
+    currentPlayer: PlayerDTO,
+    currentGame: LobbyDTO,
+    startGame: () -> Unit,
+    leaveLobby: () -> Unit,
+    disbandLobby: () -> Unit,
+    addBot: (String) -> Unit,
+) {
+    div {
+        css {
+            position = Position.absolute
+            bottom = 2.rem
+            left = 50.pct
+            transform = translate((-50).pct)
 
-private val lobby = connectStateAndDispatch<LobbyStateProps, LobbyDispatchProps, LobbyProps>(
-    clazz = LobbyPresenter::class,
-    mapStateToProps = { state, _ ->
-        currentGame = state.currentLobby
-        currentPlayer = state.currentPlayer
-    },
-    mapDispatchToProps = { dispatch, _ ->
-        startGame = { dispatch(RequestStartGame()) }
-        addBot = { name -> dispatch(RequestAddBot(name)) }
-        leaveLobby = { dispatch(RequestLeaveLobby()) }
-        disbandLobby = { dispatch(RequestDisbandLobby()) }
-        reorderPlayers = { orderedPlayers -> dispatch(RequestReorderPlayers(orderedPlayers)) }
-        reassignWonders = { wonders -> dispatch(RequestReassignWonders(wonders)) }
-    },
-)
+            width = 70.pct
+            display = Display.flex
+            justifyContent = JustifyContent.spaceAround
+        }
+        if (currentPlayer.isGameOwner) {
+            BpButtonGroup {
+                leaveButton(leaveLobby)
+                disbandButton(disbandLobby)
+            }
+            BpButtonGroup {
+                addBotButton(currentGame, addBot)
+                startButton(currentGame.startability(currentPlayer.username), startGame)
+            }
+        } else {
+            leaveButton(leaveLobby)
+        }
+    }
+}
+
+private fun ChildrenBuilder.startButton(startability: Actionability, startGame: () -> Unit) {
+    BpButton {
+        large = true
+        intent = Intent.PRIMARY
+        icon = IconNames.PLAY
+        title = startability.tooltip
+        disabled = !startability.canDo
+        onClick = { startGame() }
+
+        +"START"
+    }
+}
+
+private fun ChildrenBuilder.setupPanel(
+    currentGame: LobbyDTO,
+    reorderPlayers: (usernames: List<String>) -> Unit,
+    reassignWonders: (wonders: List<AssignedWonder>) -> Unit,
+) {
+    div {
+        className = LobbyStyles.setupPanel
+
+        BpCard {
+            elevation = Elevation.TWO
+            className = ClassName(Classes.DARK)
+
+            h2 {
+                css {
+                    marginTop = 0.px
+                }
+                +"Game setup"
+            }
+            BpDivider()
+            h3 {
+                +"Players"
+            }
+            reorderPlayersButton(currentGame, reorderPlayers)
+            h3 {
+                +"Wonders"
+            }
+            WonderSettingsGroup {
+                this.currentGame = currentGame
+                this.reassignWonders = reassignWonders
+            }
+        }
+    }
+}
+
+private fun ChildrenBuilder.addBotButton(currentGame: LobbyDTO, addBot: (String) -> Unit) {
+    BpButton {
+        large = true
+        icon = IconNames.PLUS
+        rightIcon = IconNames.DESKTOP
+        intent = Intent.PRIMARY
+        title = if (currentGame.maxPlayersReached) "Max players reached" else "Add a bot to this game"
+        disabled = currentGame.maxPlayersReached
+        onClick = { addBot(randomBotNameUnusedIn(currentGame)) }
+    }
+}
+
+private fun randomBotNameUnusedIn(currentGame: LobbyDTO): String {
+    val availableBotNames = BOT_NAMES.filter { name ->
+        currentGame.players.none { it.displayName == name }
+    }
+    return availableBotNames.random()
+}
+
+private fun ChildrenBuilder.reorderPlayersButton(currentGame: LobbyDTO, reorderPlayers: (usernames: List<String>) -> Unit) {
+    BpButton {
+        icon = IconNames.RANDOM
+        rightIcon = IconNames.PEOPLE
+        title = "Re-order players randomly"
+        onClick = { reorderPlayers(currentGame.players.map { it.username }.shuffled()) }
+
+        +"Reorder players"
+    }
+}
+
+private external interface WonderSettingsGroupProps : Props {
+    var currentGame: LobbyDTO
+    var reassignWonders: (List<AssignedWonder>) -> Unit
+}
+
+private val WonderSettingsGroup = FC<WonderSettingsGroupProps> { props ->
+    val reassignWonders = props.reassignWonders
+
+    BpButton {
+        icon = IconNames.RANDOM
+        title = "Re-assign wonders to players randomly"
+        onClick = { reassignWonders(randomWonderAssignments(props.currentGame)) }
+
+        +"Randomize wonders"
+    }
+    h4 {
+        +"Select wonder sides:"
+    }
+    BpButtonGroup {
+        BpButton {
+            icon = IconNames.RANDOM
+            title = "Re-roll wonder sides randomly"
+            onClick = { reassignWonders(assignedWondersWithRandomSides(props.currentGame)) }
+        }
+        BpButton {
+            title = "Choose side A for everyone"
+            onClick = { reassignWonders(assignedWondersWithForcedSide(props.currentGame, WonderSide.A)) }
+
+            +"A"
+        }
+        BpButton {
+            title = "Choose side B for everyone"
+            onClick = { reassignWonders(assignedWondersWithForcedSide(props.currentGame, WonderSide.B)) }
+
+            +"B"
+        }
+    }
+}
+
+private fun randomWonderAssignments(currentGame: LobbyDTO): List<AssignedWonder> =
+    currentGame.allWonders.deal(currentGame.players.size)
+
+private fun assignedWondersWithForcedSide(
+    currentGame: LobbyDTO,
+    side: WonderSide
+) = currentGame.players.map { currentGame.findWonder(it.wonder.name).withSide(side) }
+
+private fun assignedWondersWithRandomSides(currentGame: LobbyDTO) =
+    currentGame.players.map { currentGame.findWonder(it.wonder.name) }.map { it.withRandomSide() }
+
+private fun ChildrenBuilder.leaveButton(leaveLobby: () -> Unit) {
+    BpButton {
+        large = true
+        intent = Intent.WARNING
+        icon = "arrow-left"
+        title = "Leave the lobby and go back to the game browser"
+        onClick = { leaveLobby() }
+
+        +"LEAVE"
+    }
+}
+
+private fun ChildrenBuilder.disbandButton(disbandLobby: () -> Unit) {
+    BpButton {
+        large = true
+        intent = Intent.DANGER
+        icon = IconNames.DELETE
+        title = "Disband the group and go back to the game browser"
+        onClick = { disbandLobby() }
+
+        +"DISBAND"
+    }
+}

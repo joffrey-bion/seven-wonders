@@ -5,35 +5,33 @@ import kotlinx.coroutines.*
 import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.redux.sagas.*
-import react.dom.*
+import react.*
+import react.dom.client.*
 import react.redux.*
 import redux.*
-import web.dom.*
 import web.dom.document
+import web.html.*
 
 fun main() {
-    window.onload = {
-        val rootElement = document.getElementById("root")
-        if (rootElement != null) {
-            initializeAndRender(rootElement)
-        } else {
-            console.error("Element with ID 'root' was not found, cannot bootstrap react app")
-        }
-    }
+    window.onload = { init() }
 }
 
-private fun initializeAndRender(rootElement: Element) {
-    val store = initRedux()
-
-    // With the new API this might look something like:
-    // createRoot(rootElement).render(FC<Props> { .. }.create())
-    // See: https://github.com/karakum-team/kotlin-mui-showcase/blob/main/src/main/kotlin/team/karakum/App.kt
-    @Suppress("DEPRECATION")
-    render(rootElement) {
-        provider(store) {
-            application()
-        }
+private fun init() {
+    val rootElement = document.getElementById("root")
+    if (rootElement == null) {
+        console.error("Element with ID 'root' was not found, cannot bootstrap react app")
+        return
     }
+    renderRoot(rootElement)
+}
+
+private fun renderRoot(rootElement: HTMLElement) {
+    val store = initRedux()
+    val connectedApp = Provider.create {
+        this.store = store
+        Application()
+    }
+    createRoot(rootElement).render(connectedApp)
 }
 
 @OptIn(DelicateCoroutinesApi::class)

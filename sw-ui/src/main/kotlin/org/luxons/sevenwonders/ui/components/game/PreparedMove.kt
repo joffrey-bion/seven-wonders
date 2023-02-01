@@ -1,32 +1,31 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import blueprintjs.core.Intent
-import blueprintjs.core.bpButton
-import blueprintjs.icons.IconNames
-import kotlinx.css.*
-import kotlinx.css.properties.*
-import kotlinx.html.DIV
-import org.luxons.sevenwonders.model.MoveType
-import org.luxons.sevenwonders.model.PlayerMove
-import org.luxons.sevenwonders.model.cards.HandCard
-import org.luxons.sevenwonders.ui.components.GlobalStyles
-import react.RBuilder
-import styled.StyledDOMBuilder
-import styled.css
-import styled.styledDiv
-import styled.styledImg
+import blueprintjs.core.*
+import blueprintjs.icons.*
+import csstype.*
+import csstype.Position
+import emotion.react.*
+import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.cards.*
+import org.luxons.sevenwonders.ui.components.*
+import react.*
+import react.dom.html.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.img
+import web.html.*
 
-fun RBuilder.preparedMove(
+fun ChildrenBuilder.preparedMove(
     card: HandCard,
     move: PlayerMove,
     unprepareMove: () -> Unit,
-    block: StyledDOMBuilder<DIV>.() -> Unit,
+    block: HTMLAttributes<HTMLDivElement>.() -> Unit,
 ) {
-    styledDiv {
+    div {
         block()
-        cardImage(card) {
+        CardImage {
+            this.card = card
             if (move.type == MoveType.DISCARD || move.type == MoveType.UPGRADE_WONDER) {
-                css { +GameStyles.dimmedCard }
+                this.className = GameStyles.dimmedCard
             }
         }
         if (move.type == MoveType.DISCARD) {
@@ -35,43 +34,39 @@ fun RBuilder.preparedMove(
         if (move.type == MoveType.UPGRADE_WONDER) {
             upgradeWonderSymbol()
         }
-        styledDiv {
+        div {
             css {
                 position = Position.absolute
                 top = 0.px
                 right = 0.px
             }
-            bpButton(
-                icon = IconNames.CROSS,
-                title = "Cancel prepared move",
-                small = true,
-                intent = Intent.DANGER,
-                onClick = { unprepareMove() },
-            )
+            BpButton {
+                icon = IconNames.CROSS
+                title = "Cancel prepared move"
+                small = true
+                intent = Intent.DANGER
+                onClick = { unprepareMove() }
+            }
         }
     }
 }
 
-private fun StyledDOMBuilder<DIV>.discardText() {
-    styledDiv {
-        css {
-            +GlobalStyles.centerInPositionedParent
-            +GameStyles.discardMoveText
-        }
+private fun ChildrenBuilder.discardText() {
+    div {
+        css(GlobalStyles.centerInPositionedParent, GameStyles.discardMoveText) {}
         +"DISCARD"
     }
 }
 
-private fun StyledDOMBuilder<DIV>.upgradeWonderSymbol() {
-    styledImg(src = "/images/wonder-upgrade-bright.png") {
+private fun ChildrenBuilder.upgradeWonderSymbol() {
+    img {
+        src = "/images/wonder-upgrade-bright.png"
         css {
             width = 8.rem
             position = Position.absolute
             left = 10.pct
             top = 50.pct
-            transform {
-                translate((-50).pct, (-50).pct)
-            }
+            transform = translate((-50).pct, (-50).pct)
         }
     }
 }

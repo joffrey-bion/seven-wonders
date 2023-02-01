@@ -20,9 +20,9 @@ kotlin {
                 implementation(libs.kotlin.wrappers.react.dom)
                 implementation(libs.kotlin.wrappers.react.redux)
                 implementation(libs.kotlin.wrappers.react.router.dom)
-                implementation(libs.kotlin.wrappers.styled.next)
                 implementation(libs.kotlin.wrappers.blueprintjs.core)
                 implementation(libs.kotlin.wrappers.blueprintjs.icons)
+                implementation(libs.kotlin.wrappers.emotion)
             }
         }
         test {

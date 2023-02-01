@@ -1,14 +1,14 @@
 package org.luxons.sevenwonders.ui.components.home
 
-import kotlinx.css.*
-import styled.StyleSheet
+import csstype.*
+import emotion.css.*
 
-object HomeStyles : StyleSheet("HomeStyles", isStatic = true) {
+object HomeStyles {
 
-    val centerChildren by css {
+    val centerChildren = ClassName {
         display = Display.flex
         flexDirection = FlexDirection.column
-        alignItems = Align.center
+        alignItems = AlignItems.center
         justifyContent = JustifyContent.center
     }
 }

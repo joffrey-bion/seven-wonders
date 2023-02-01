@@ -1,40 +1,43 @@
 package org.luxons.sevenwonders.ui.components
 
-import org.luxons.sevenwonders.ui.components.errors.errorDialog
-import org.luxons.sevenwonders.ui.components.game.gameScene
-import org.luxons.sevenwonders.ui.components.gameBrowser.gameBrowser
-import org.luxons.sevenwonders.ui.components.home.home
-import org.luxons.sevenwonders.ui.components.lobby.lobby
-import org.luxons.sevenwonders.ui.router.SwRoute
-import react.Props
-import react.RBuilder
-import react.RElementBuilder
-import react.createElement
-import react.router.Navigate
-import react.router.Route
-import react.router.Routes
-import react.router.RoutesProps
+import org.luxons.sevenwonders.ui.components.errors.*
+import org.luxons.sevenwonders.ui.components.game.*
+import org.luxons.sevenwonders.ui.components.gameBrowser.*
+import org.luxons.sevenwonders.ui.components.home.*
+import org.luxons.sevenwonders.ui.components.lobby.*
+import org.luxons.sevenwonders.ui.router.*
+import react.*
+import react.router.*
 import react.router.dom.*
 
-fun RBuilder.application() = HashRouter {
-    errorDialog()
-    Routes {
-        route(SwRoute.GAME_BROWSER.path) { gameBrowser() }
-        route(SwRoute.GAME.path) { gameScene() }
-        route(SwRoute.LOBBY.path) { lobby() }
-        route(SwRoute.HOME.path) { home() }
-        route("*") {
-            Navigate {
-                attrs.to = "/"
-                attrs.replace = true
+val Application = VFC("Application") {
+    HashRouter {
+        ErrorDialog()
+        Routes {
+            Route {
+                path = SwRoute.GAME_BROWSER.path
+                element = GameBrowser.create()
+            }
+            Route {
+                path = SwRoute.GAME.path
+                element = GameScene.create()
+            }
+            Route {
+                path = SwRoute.LOBBY.path
+                element = Lobby.create()
+            }
+            Route {
+                path = SwRoute.HOME.path
+                element = Home.create()
+            }
+            Route {
+                path = "*"
+                element = Navigate.create {
+                    to = "/"
+                    replace = true
+                }
             }
         }
     }
 }
 
-private fun RElementBuilder<RoutesProps>.route(path: String, render: RBuilder.() -> Unit) {
-    Route {
-        attrs.path = path
-        attrs.element = createElement<Props>(render)
-    }
-}

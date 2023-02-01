@@ -2,67 +2,48 @@ package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import blueprintjs.core.*
 import blueprintjs.icons.*
-import kotlinx.css.*
-import kotlinx.html.js.*
+import csstype.*
+import emotion.react.*
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
-import react.dom.*
-import styled.*
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.form
 
-private external interface CreateGameFormProps : PropsWithChildren {
-    var createGame: (String) -> Unit
-}
+val CreateGameForm = VFC {
+    var gameName by useState("")
 
-private external interface CreateGameFormState : State {
-    var gameName: String
-}
+    val dispatch = useSwDispatch()
+    val createGame = { dispatch(RequestCreateGame(gameName)) }
 
-private class CreateGameForm(props: CreateGameFormProps) : RComponent<CreateGameFormProps, CreateGameFormState>(props) {
-
-    override fun CreateGameFormState.init(props: CreateGameFormProps) {
-        gameName = ""
-    }
-
-    override fun RBuilder.render() {
-        styledDiv {
-            css {
-                display = Display.flex
-                flexDirection = FlexDirection.row
-                justifyContent = JustifyContent.spaceBetween
+    div {
+        css {
+            display = Display.flex
+            flexDirection = FlexDirection.row
+            justifyContent = JustifyContent.spaceBetween
+        }
+        form {
+            onSubmit = { e ->
+                e.preventDefault()
+                createGame()
             }
-            form {
-                attrs {
-                    onSubmitFunction = { e ->
-                        e.preventDefault()
+
+            BpInputGroup {
+                large = true
+                placeholder = "Game name"
+                onChange = { e ->
+                    val input = e.currentTarget
+                    gameName = input.value
+                }
+                rightElement = BpButton.create {
+                    minimal = true
+                    intent = Intent.PRIMARY
+                    icon = IconNames.ADD
+                    onClick = { e ->
+                        e.preventDefault() // prevents refreshing the page when pressing Enter
                         createGame()
                     }
                 }
-
-                bpInputGroup(
-                    large = true,
-                    placeholder = "Game name",
-                    onChange = { e ->
-                        val input = e.currentTarget
-                        state.gameName = input.value
-                    },
-                    rightElement = createGameButton(),
-                )
             }
         }
     }
-
-    private fun createGameButton() = buildElement {
-        bpButton(minimal = true, intent = Intent.PRIMARY, icon = IconNames.ADD, onClick = { e ->
-            e.preventDefault() // prevents refreshing the page when pressing Enter
-            createGame()
-        })
-    }
-
-    private fun createGame() {
-        props.createGame(state.gameName)
-    }
-}
-
-val createGameForm: ComponentClass<PropsWithChildren> = connectDispatch(CreateGameForm::class) { dispatch, _ ->
-    createGame = { name -> dispatch(RequestCreateGame(name)) }
 }
