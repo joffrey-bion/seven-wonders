@@ -1,10 +1,8 @@
 package org.luxons.sevenwonders.server.test
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.produceIn
-import kotlinx.coroutines.withTimeoutOrNull
 import org.luxons.sevenwonders.client.SevenWondersSession
 import org.luxons.sevenwonders.model.api.events.GameEvent
 import org.luxons.sevenwonders.model.api.events.GameListEvent
@@ -18,7 +16,12 @@ import kotlin.time.Duration.Companion.seconds
 class EventAsserter(
     val gameListEvents: ReceiveChannel<GameListEvent>,
     val gameEvents: ReceiveChannel<GameEvent>,
-)
+) {
+    fun cancel() {
+        gameListEvents.cancel()
+        gameEvents.cancel()
+    }
+}
 
 @OptIn(FlowPreview::class)
 suspend fun SevenWondersSession.eventAsserter(scope: CoroutineScope): EventAsserter {

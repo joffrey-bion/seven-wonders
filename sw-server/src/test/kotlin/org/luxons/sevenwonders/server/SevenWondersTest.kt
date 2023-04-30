@@ -59,13 +59,16 @@ class SevenWondersTest {
         session2.joinGameAndAwaitLobby(lobby.id)
 
         val outsiderSession = newPlayer("Outsider")
-        val outsiderAsserter = outsiderSession.eventAsserter(scope = this)
 
+        val outsiderAsserter = outsiderSession.eventAsserter(scope = this)
         val ownerAsserter = ownerSession.eventAsserter(scope = this)
+
         ownerSession.startGame()
         ownerAsserter.expectGameEvent<GameEvent.GameStarted>()
         outsiderAsserter.expectNoGameEvent("outsider should not receive the game start event of this game")
 
+        ownerAsserter.cancel()
+        outsiderAsserter.cancel()
         disconnect(ownerSession, session1, session2, outsiderSession)
     }
 
@@ -97,6 +100,7 @@ class SevenWondersTest {
         assertEquals(createdLobby.id, receivedLobby.id)
         assertEquals(createdLobby.name, receivedLobby.name)
 
+        asserter.cancel()
         disconnect(ownerSession, otherSession)
     }
 
@@ -141,6 +145,10 @@ class SevenWondersTest {
         asserter1.expectPlayFromHandTurn()
         asserter2.expectPlayFromHandTurn()
         asserter3.expectPlayFromHandTurn()
+
+        asserter1.cancel()
+        asserter2.cancel()
+        asserter3.cancel()
 
         session1.disconnect()
         session2.disconnect()
