@@ -98,7 +98,7 @@ internal fun testCard(
     effect: Effect? = null,
 ): Card {
     val effects = if (effect == null) emptyList() else listOf(effect)
-    return Card(name, color, requirements, effects, null, emptyList(), "path/to/card/image", CardBack("image-III"))
+    return Card(name, color, requirements, effects, emptyList(), emptyList(), "path/to/card/image", CardBack("image-III"))
 }
 
 internal fun addCards(board: Board, nbCardsOfColor: Int, nbOtherCards: Int, color: Color) {

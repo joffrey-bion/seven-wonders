@@ -15,7 +15,7 @@ internal data class Card(
     val color: Color,
     val requirements: Requirements,
     val effects: List<Effect>,
-    val chainParent: String?,
+    val chainParents: List<String>,
     val chainChildren: List<String>,
     val image: String,
     val back: CardBack,
@@ -23,18 +23,18 @@ internal data class Card(
     fun computePlayabilityBy(player: Player, forceSpecialFree: Boolean = false): CardPlayability = when {
         isAlreadyOnBoard(player.board) -> Playability.alreadyPlayed() // cannot play twice the same card
         forceSpecialFree -> Playability.specialFree()
-        isParentOnBoard(player.board) -> Playability.chainable()
+        isAnyParentOnBoard(player.board) -> Playability.chainable()
         else -> Playability.requirementDependent(requirements.assess(player))
     }
 
     fun isPlayableOnBoardWith(board: Board, transactions: ResourceTransactions) =
         isChainableOn(board) || requirements.areMetWithHelpBy(board, transactions)
 
-    private fun isChainableOn(board: Board): Boolean = !isAlreadyOnBoard(board) && isParentOnBoard(board)
+    private fun isChainableOn(board: Board): Boolean = !isAlreadyOnBoard(board) && isAnyParentOnBoard(board)
 
     private fun isAlreadyOnBoard(board: Board): Boolean = board.isPlayed(name)
 
-    private fun isParentOnBoard(board: Board): Boolean = chainParent != null && board.isPlayed(chainParent)
+    private fun isAnyParentOnBoard(board: Board): Boolean = chainParents.any { board.isPlayed(it) }
 
     fun applyTo(player: Player, transactions: ResourceTransactions) {
         if (!isChainableOn(player.board)) {

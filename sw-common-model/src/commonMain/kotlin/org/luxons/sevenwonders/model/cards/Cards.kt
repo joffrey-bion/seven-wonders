@@ -9,7 +9,7 @@ interface Card {
     val name: String
     val color: Color
     val requirements: Requirements
-    val chainParent: String?
+    val chainParents: List<String>
     val chainChildren: List<String>
     val image: String
     val back: CardBack
@@ -20,7 +20,7 @@ data class TableCard(
     override val name: String,
     override val color: Color,
     override val requirements: Requirements,
-    override val chainParent: String?,
+    override val chainParents: List<String>,
     override val chainChildren: List<String>,
     override val image: String,
     override val back: CardBack,
@@ -36,7 +36,7 @@ data class HandCard(
     override val name: String,
     override val color: Color,
     override val requirements: Requirements,
-    override val chainParent: String?,
+    override val chainParents: List<String>,
     override val chainChildren: List<String>,
     override val image: String,
     override val back: CardBack,

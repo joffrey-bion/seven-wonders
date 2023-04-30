@@ -12,7 +12,7 @@ internal class CardDefinition(
     private val color: Color,
     private val effect: EffectsDefinition,
     private val requirements: Requirements? = null,
-    private val chainParent: String? = null,
+    private val chainParents: List<String>? = null,
     private val chainChildren: List<String>? = null,
     private val countPerNbPlayer: Map<Int, Int>? = null,
     private val image: String,
@@ -21,7 +21,8 @@ internal class CardDefinition(
 
     fun create(back: CardBack): Card {
         val reqs = requirements ?: Requirements()
+        val parents = chainParents ?: emptyList()
         val children = chainChildren ?: emptyList()
-        return Card(name, color, reqs, effect.create(), chainParent, children, image, back)
+        return Card(name, color, reqs, effect.create(), parents, children, image, back)
     }
 }

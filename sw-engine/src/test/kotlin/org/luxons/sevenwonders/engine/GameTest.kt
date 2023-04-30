@@ -129,5 +129,5 @@ class GameTest {
     data class MoveExpectation(val playerIndex: Int, val moveToSend: PlayerMove, val expectedPlayedMove: PlayedMove)
 
     private fun HandCard.toPlayedCard(): TableCard =
-        TableCard(name, color, requirements, chainParent, chainChildren, image, back, true)
+        TableCard(name, color, requirements, chainParents, chainChildren, image, back, true)
 }

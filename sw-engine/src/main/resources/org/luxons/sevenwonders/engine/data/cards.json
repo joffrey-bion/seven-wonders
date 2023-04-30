@@ -713,7 +713,9 @@
         "requirements": {
           "resources": "WW"
         },
-        "chainParent": "Marketplace",
+        "chainParents": [
+          "Marketplace"
+        ],
         "chainChildren": [
           "Lighthouse"
         ],
@@ -738,7 +740,10 @@
         "requirements": {
           "resources": "CC"
         },
-        "chainParent": "East Trading Post",
+        "chainParents": [
+          "East Trading Post",
+          "West Trading Post"
+        ],
         "chainChildren": [
           "Haven"
         ],
@@ -786,7 +791,9 @@
         "requirements": {
           "resources": "SSS"
         },
-        "chainParent": "Baths",
+        "chainParents": [
+          "Baths"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -805,7 +812,9 @@
         "requirements": {
           "resources": "CCL"
         },
-        "chainParent": "Scriptorium",
+        "chainParents": [
+          "Scriptorium"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -824,7 +833,9 @@
         "requirements": {
           "resources": "WOO"
         },
-        "chainParent": "Theater",
+        "chainParents": [
+          "Theater"
+        ],
         "chainChildren": [
           "Gardens"
         ],
@@ -846,7 +857,9 @@
         "requirements": {
           "resources": "WCG"
         },
-        "chainParent": "Altar",
+        "chainParents": [
+          "Altar"
+        ],
         "chainChildren": [
           "Pantheon"
         ],
@@ -868,7 +881,9 @@
         "requirements": {
           "resources": "OOG"
         },
-        "chainParent": "Apothecary",
+        "chainParents": [
+          "Apothecary"
+        ],
         "chainChildren": [
           "Arena",
           "Lodge"
@@ -891,7 +906,9 @@
         "requirements": {
           "resources": "CCP"
         },
-        "chainParent": "Workshop",
+        "chainParents": [
+          "Workshop"
+        ],
         "chainChildren": [
           "Siege Workshop",
           "Observatory"
@@ -914,7 +931,9 @@
         "requirements": {
           "resources": "SSL"
         },
-        "chainParent": "Scriptorium",
+        "chainParents": [
+          "Scriptorium"
+        ],
         "chainChildren": [
           "Senate",
           "University"
@@ -959,7 +978,9 @@
         "requirements": {
           "resources": "WWO"
         },
-        "chainParent": "Workshop",
+        "chainParents": [
+          "Workshop"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -978,7 +999,9 @@
         "requirements": {
           "resources": "WOC"
         },
-        "chainParent": "Apothecary",
+        "chainParents": [
+          "Apothecary"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1051,7 +1074,9 @@
         "requirements": {
           "resources": "SSO"
         },
-        "chainParent": "Dispensary",
+        "chainParents": [
+          "Dispensary"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1108,7 +1133,9 @@
         "requirements": {
           "resources": "WOL"
         },
-        "chainParent": "Forum",
+        "chainParents": [
+          "Forum"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 2,
@@ -1137,7 +1164,9 @@
         "requirements": {
           "resources": "SG"
         },
-        "chainParent": "Caravansery",
+        "chainParents": [
+          "Caravansery"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1156,7 +1185,9 @@
         "requirements": {
           "resources": "WCC"
         },
-        "chainParent": "Statue",
+        "chainParents": [
+          "Statue"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 2,
@@ -1193,7 +1224,9 @@
         "requirements": {
           "resources": "OCCGPL"
         },
-        "chainParent": "Temple",
+        "chainParents": [
+          "Temple"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1212,7 +1245,9 @@
         "requirements": {
           "resources": "WWSO"
         },
-        "chainParent": "Library",
+        "chainParents": [
+          "Library"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1249,7 +1284,9 @@
         "requirements": {
           "resources": "SSSG"
         },
-        "chainParent": "School",
+        "chainParents": [
+          "School"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1268,7 +1305,9 @@
         "requirements": {
           "resources": "CCPL"
         },
-        "chainParent": "Dispensary",
+        "chainParents": [
+          "Dispensary"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1287,7 +1326,9 @@
         "requirements": {
           "resources": "OOGL"
         },
-        "chainParent": "Laboratory",
+        "chainParents": [
+          "Laboratory"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1306,7 +1347,9 @@
         "requirements": {
           "resources": "WPL"
         },
-        "chainParent": "School",
+        "chainParents": [
+          "School"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1325,7 +1368,9 @@
         "requirements": {
           "resources": "WWGP"
         },
-        "chainParent": "Library",
+        "chainParents": [
+          "Library"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 2,
@@ -1362,7 +1407,9 @@
         "requirements": {
           "resources": "SSSO"
         },
-        "chainParent": "Training Ground",
+        "chainParents": [
+          "Training Ground"
+        ],
         "countPerNbPlayer": {
           "3": 0,
           "4": 1,
@@ -1381,7 +1428,9 @@
         "requirements": {
           "resources": "SOOO"
         },
-        "chainParent": "Walls",
+        "chainParents": [
+          "Walls"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
@@ -1400,7 +1449,9 @@
         "requirements": {
           "resources": "WCCC"
         },
-        "chainParent": "Laboratory",
+        "chainParents": [
+          "Laboratory"
+        ],
         "countPerNbPlayer": {
           "3": 1,
           "4": 1,
