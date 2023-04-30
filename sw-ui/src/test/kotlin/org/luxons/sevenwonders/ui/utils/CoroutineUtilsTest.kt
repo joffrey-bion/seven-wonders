@@ -1,14 +1,15 @@
 package org.luxons.sevenwonders.ui.utils
 
-import kotlinx.coroutines.delay
-import org.luxons.sevenwonders.ui.test.runSuspendingTest
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CoroutineUtilsTest {
 
+    @OptIn(ExperimentalCoroutinesApi::class) // for runTest
     @Test
-    fun awaitFirstTest() = runSuspendingTest {
+    fun awaitFirstTest() = runTest {
         val s = awaitFirst(
             { delay(100); "1" },
             { delay(200); "2" },

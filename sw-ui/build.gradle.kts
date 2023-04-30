@@ -15,6 +15,9 @@ kotlin {
             dependencies {
                 implementation(projects.swClient)
 
+                implementation(libs.kotlinx.coroutines.core)
+                implementation(libs.kotlinx.coroutines.test)
+
                 implementation(project.dependencies.enforcedPlatform(libs.kotlin.wrappers.bom))
                 implementation(libs.kotlin.wrappers.react.base)
                 implementation(libs.kotlin.wrappers.react.dom)

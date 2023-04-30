@@ -1,7 +1,7 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.*
-import org.luxons.sevenwonders.ui.test.runSuspendingTest
+import kotlinx.coroutines.test.*
 import redux.RAction
 import redux.Store
 import redux.WrapperAction
@@ -37,10 +37,11 @@ private data class TestRedux(
     val sagas: SagaManager<State, RAction, WrapperAction>,
 )
 
+@OptIn(ExperimentalCoroutinesApi::class) // for runTest
 class SagaContextTest {
 
     @Test
-    fun dispatch() = runSuspendingTest {
+    fun dispatch_dispatchesToStore() = runTest {
         val redux = configureTestStore(State("initial"))
 
         redux.sagas.runSaga {
@@ -51,13 +52,14 @@ class SagaContextTest {
     }
 
     @Test
-    fun next() = runSuspendingTest {
+    fun next_waitsForNextAction() = runTest {
         val redux = configureTestStore(State("initial"))
 
         val job = redux.sagas.launchSaga(this) {
             val action = next<SideEffectAction>()
             dispatch(UpdateData("effect-${action.data}"))
         }
+        advanceUntilIdle() // make sure the saga is launched
 
         assertEquals(State("initial"), redux.store.getState())
 
@@ -67,7 +69,7 @@ class SagaContextTest {
     }
 
     @Test
-    fun onEach() = runSuspendingTest {
+    fun onEach() = runTest {
         val redux = configureTestStore(State("initial"))
 
         val job = redux.sagas.launchSaga(this) {
@@ -75,11 +77,12 @@ class SagaContextTest {
                 dispatch(UpdateData("effect-${it.data}"))
             }
         }
+        advanceUntilIdle() // make sure the saga is launched
 
         assertEquals(State("initial"), redux.store.getState())
 
         redux.store.dispatch(SideEffectAction("data"))
-        delay(50)
+        yield()
         assertEquals(State("effect-data"), redux.store.getState())
         job.cancel()
     }
