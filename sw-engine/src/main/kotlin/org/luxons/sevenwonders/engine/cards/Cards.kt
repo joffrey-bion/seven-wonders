@@ -32,7 +32,7 @@ internal data class Card(
 
     private fun isChainableOn(board: Board): Boolean = !isAlreadyOnBoard(board) && isAnyParentOnBoard(board)
 
-    private fun isAlreadyOnBoard(board: Board): Boolean = board.isPlayed(name)
+    fun isAlreadyOnBoard(board: Board): Boolean = board.isPlayed(name)
 
     private fun isAnyParentOnBoard(board: Board): Boolean = chainParents.any { board.isPlayed(it) }
 

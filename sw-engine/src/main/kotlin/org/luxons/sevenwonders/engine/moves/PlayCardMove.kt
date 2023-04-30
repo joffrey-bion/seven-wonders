@@ -9,6 +9,9 @@ internal class PlayCardMove(move: PlayerMove, card: Card, player: PlayerContext)
     CardFromHandMove(move, card, player) {
 
     init {
+        if (card.isAlreadyOnBoard(player.board)) {
+            throw InvalidMoveException(this, "card ${card.name} is already on the board")
+        }
         if (!card.isPlayableOnBoardWith(player.board, transactions)) {
             throw InvalidMoveException(this, "requirements not met to play the card ${card.name}")
         }

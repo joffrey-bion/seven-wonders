@@ -13,6 +13,9 @@ internal class PlayFreeCardMove(move: PlayerMove, card: Card, playerContext: Pla
         if (!board.canPlayFreeCard(playerContext.currentAge)) {
             throw InvalidMoveException(this, "no free card available for the current age ${playerContext.currentAge}")
         }
+        if (card.isAlreadyOnBoard(board)) {
+            throw InvalidMoveException(this, "card ${card.name} is already on the board")
+        }
     }
 
     override fun place(discardedCards: MutableList<Card>) = playerContext.board.addCard(card)
