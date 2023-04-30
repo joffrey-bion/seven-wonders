@@ -17,14 +17,17 @@ fun ChildrenBuilder.handRotationIndicator(direction: HandRotationDirection) {
             display = Display.flex
             alignItems = AlignItems.center
             bottom = 25.vh
+            val sideDistance = 2.rem
+            when (direction) {
+                HandRotationDirection.LEFT -> left = sideDistance
+                HandRotationDirection.RIGHT -> right = sideDistance
+            }
         }
 
         title = "Your hand will be passed to the player on your $direction after playing this card."
 
-        val sideDistance = 2.rem
         when (direction) {
             HandRotationDirection.LEFT -> {
-                css { left = sideDistance }
                 BpIcon {
                     icon = IconNames.ARROW_LEFT
                     size = 25
@@ -32,7 +35,6 @@ fun ChildrenBuilder.handRotationIndicator(direction: HandRotationDirection) {
                 handCardsImg()
             }
             HandRotationDirection.RIGHT -> {
-                css { right = sideDistance }
                 handCardsImg()
                 BpIcon {
                     icon = IconNames.ARROW_RIGHT
