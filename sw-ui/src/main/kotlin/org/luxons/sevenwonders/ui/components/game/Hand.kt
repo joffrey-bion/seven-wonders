@@ -192,7 +192,7 @@ private fun ChildrenBuilder.discardButton(card: HandCard, prepareMove: (MoveType
         large = true
         intent = Intent.DANGER
         icon = IconNames.CROSS
-        onClick = { prepareMove(MoveType.DISCARD, card, emptyList()) }
+        onClick = { prepareMove(MoveType.DISCARD, card, singleOptionNoTransactionNeeded()) }
     }
 }
 
