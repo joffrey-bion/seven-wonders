@@ -1,6 +1,5 @@
 package org.luxons.sevenwonders.server
 
-import kotlinx.coroutines.*
 import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.*
 import org.luxons.sevenwonders.model.TurnAction
@@ -101,7 +100,6 @@ class SevenWondersTest {
         disconnect(ownerSession, otherSession)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     @Test
     fun startGame_3players() = runAsyncTest {
         val session1 = newPlayer("Player1")
