@@ -17,7 +17,7 @@ internal class AnonymousUsersHandshakeHandler : DefaultHandshakeHandler() {
         request: ServerHttpRequest,
         wsHandler: WebSocketHandler,
         attributes: Map<String, Any>,
-    ): Principal? {
+    ): Principal {
         var p = super.determineUser(request, wsHandler, attributes)
         if (p == null) {
             p = UsernamePasswordAuthenticationToken("player" + playerId++, null)

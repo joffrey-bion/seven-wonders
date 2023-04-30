@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.serialization")
-    id("org.springframework.boot") version "2.7.5"
+    id("org.springframework.boot") version "3.0.6"
 }
 
 apply(plugin = "io.spring.dependency-management")
@@ -21,6 +21,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     // required by spring security when using websockets
     implementation("org.springframework.security:spring-security-messaging")
+    implementation(libs.javax.annotation.api)
 
     // logging
     implementation(libs.logback.classic)
