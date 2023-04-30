@@ -1,6 +1,7 @@
 package org.luxons.sevenwonders.ui.redux.sagas
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import redux.Middleware
 import redux.MiddlewareApi
@@ -11,7 +12,7 @@ class SagaManager<S, A : RAction, R>(
 ) {
     private lateinit var context: SagaContext<S, A, R>
 
-    private val actions = MutableSharedFlow<A>(extraBufferCapacity = 16)
+    private val actions = MutableSharedFlow<A>(extraBufferCapacity = Channel.UNLIMITED)
 
     fun createMiddleware(): Middleware<S, A, R, A, R> = ::sagasMiddleware
 
@@ -31,9 +32,12 @@ class SagaManager<S, A : RAction, R>(
         monitor?.invoke(action)
     }
 
-    @OptIn(DelicateCoroutinesApi::class) // Ok because almost never suspends - if it does, we have bigger problems
     private fun handleAction(action: A) {
-        GlobalScope.launch { actions.emit(action) }
+        val emitted = actions.tryEmit(action)
+        if (!emitted) {
+            // should never happen since our buffer is 'unlimited' (in reality it's Int.MAX_VALUE)
+            error("Couldn't dispatch redux action, buffer is full")
+        }
     }
 
     fun launchSaga(coroutineScope: CoroutineScope, saga: suspend SagaContext<S, A, R>.() -> Unit): Job {
