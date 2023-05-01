@@ -1,5 +1,64 @@
 # Technical decisions and issues log
 
+## 2023.01-02 Kotlin/React migration to new DSL
+
+As of `kotlin-react` [version pre.282](https://github.com/JetBrains/kotlin-wrappers/blob/master/CHANGELOG.md#pre282),
+the Kotlin wrappers now offer a new DSL to integrate with React.
+
+Basically, the new version uses the new "`ChildrenBuilder`" instead of `RBuilder` as receiver to build the DOM, and
+really puts the emphasis on functional components (with the `FC`/`VFC` helper functions).
+Migrating was really not easy because there is no documentation apart from
+[a tiny snippet in the CHANGELOG](https://github.com/JetBrains/kotlin-wrappers/blob/master/CHANGELOG.md#pre280).
+
+It turned out I *also* needed to switch my styling approach to use the Emotion library, because `kotlin-styled-next`
+was not compatible with the new DSL (at least as far as I remember).
+
+Of course, I also needed to migrate my [BlueprintJS Kotlin wrapper](https://github.com/joffrey-bion/kotlin-blueprintjs)
+to use the new DSL before I could really use it in the Seven Wonders project.
+
+Here are the [changes](https://github.com/joffrey-bion/seven-wonders/commit/d09c3e7128fbb8b9f1500153b12ef657dcb76694)
+that I ended up doing for the migration.
+When I have time, maybe I should document my learnings about this, maybe even contribute an actual documentation for 
+them.
+
+## 2023.01.29 Kotlin/React wrappers BOM
+
+The [kotlin-wrappers](https://github.com/JetBrains/kotlin-wrappers) repository now provides a BOM to align dependency
+versions. Switching to this BOM will make the upgrades of the Kotlin Wrapper dependencies way more convenient!
+
+## 2021.09-2022.11 Streamlining the process
+
+During this period, the work was mostly about maintaining dependency versions and streamlining the process.
+
+This is when I improved or cleaned up my GitHub Actions workflows, switched to Gradle's Dependency Catalog to manage
+dependencies centrally, etc.
+
+## 2021.04 Extract BlueprintJS wrappers into a separate library
+
+Using Kotlin/React for the frontend implies writing Kotlin bindings for JavaScript libraries.
+So far, I had written those bindings right in the Seven Wonders project, but it would be rude to not share this effort
+with the world.
+
+This is why I decided to extract the BlueprintJS Kotlin wrappers as an
+[external OSS library](https://github.com/joffrey-bion/kotlin-blueprintjs) on GitHub.
+
+## 2021.02 Switch from Heroku to DigitalOcean
+
+Heroku's free plan is nice because it's free, but the server is shutdown after 30min of inactivity.
+Technically, the Seven Wonders server takes only about 4s to start, but the Heroku workers can take much more
+(~30s-1min), which makes this pretty annoying when people click on the link for the first time.
+
+To provide a better experience to users, and also to learn a bit about Kubernetes and cloud providers, I set up a 
+Kubernetes cluster on DigitalOcean and started deploying the public instance of Seven Wonders Online there.
+
+I also got lots of help from [@ArchangelX360](https://github.com/ArchangelX360) for the Kubernetes setup, and also when
+setting up proper monitoring with Prometheus, Loki, and Grafana Cloud.
+
+## 2020.05 Dockerize the application
+
+With a target goal to later deploy "more easily" a Seven Wonders server, publishing a Docker image seems to be a rather
+good first step. It also has the benefit of allowing people to run their own server locally more easily. 
+
 ## 2019.07-2020.04 Full Kotlin migration
 
 Synchronizing backend and frontend when making changes to the API is a pain.
