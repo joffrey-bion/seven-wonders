@@ -9,12 +9,12 @@ kotlin {
         browser() // necessary for local dependency from JS UI module
     }
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(libs.kotlinx.serialization.core)
             }
         }
-        val commonTest by getting {
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
             }
