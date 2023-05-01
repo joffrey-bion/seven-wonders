@@ -1,39 +1,31 @@
 # Technical decisions and issues log
 
 ## 2019.07-2020.04 Full Kotlin migration
-[@joffrey-bion][1] — :key: *Frontend, Kotlin*
 
 Synchronizing backend and frontend when making changes to the API is a pain.
 Model classes need to be written and modified twice to be kept in sync.
-Moreover, a Java client also needs to be maintained to run integration tests
-for the server.
-
-This is why I decided to leverage Kotlin multiplatform capabilities to define
-a reusable common model and client.
+Moreover, a Java client also needs to be maintained to run integration tests for the server.
+This is why I decided to leverage Kotlin multiplatform capabilities to define a reusable common model and client.
 It took some time because Kotlin itself changed a lot during the past year.
 
-Also, there was no existing solution for a multiplatform STOMP client, so I
-ended up building [Krossbow](https://github.com/joffrey-bion/krossbow).
-This took a bit of time too.
+Also, there was no existing solution for a multiplatform STOMP client, so I ended up building
+[Krossbow](https://github.com/joffrey-bion/krossbow).
+This took a lot of time too.
 
-Once a common client and model was defined, there is the problem of the local
-project dependencies.
-Using a TypeScript/React frontend built with npm, it wasn't possible to depend
-on a local gradle subproject.
+Once a common client and model was defined, there is the problem of the local project dependencies.
+Using a TypeScript/React frontend built with npm, it wasn't possible to depend on a local gradle subprojects for the 
+model and the client.
 That's why it was time to try out Kotlin React.
 
-Kotlin React is easy to use in itself, but using React component libraries 
-from Kotlin is quite tedious at the time.
-Dukat, the TypeScript to Kotlin externals conversion tool, doesn't work 
-reliably and doesn't work at all for React stuff, so the declarations have to 
-be written manually.
+Kotlin React is easy to use in itself, but using React component libraries from Kotlin is quite tedious at the time.
+Dukat, the TypeScript to Kotlin externals conversion tool, doesn't work reliably and doesn't work at all for React 
+stuff, so the declarations have to be written manually.
 
 ## 2019.05.02-07 Frontend migration to TypeScript
-[@joffrey-bion][1] — :key: *Frontend, TypeScript*
 
 Flow is nice, but doesn't give me the safety I expect. In its nature, Flow is a type checker aside from the build of 
-the project. This means that it is possible to build the project successfully even with type errors in it, depending on how it is 
-configured.
+the project. This means that it is possible to build the project successfully even with type errors in it, depending on 
+how it is configured.
 
 I also wasn't too happy about the performance of the IDE integration of Flow. Maybe I didn't put much effort into 
 configuring things properly, but I did try multiple settings with more or less safety/performance. The overall 
@@ -43,7 +35,6 @@ TypeScript came and saved the day. During the migration, it spotted several plac
 where the types were incorrect. Also, I could clean up a bit the types of the redux actions and their creators.
 
 ## 2018.07.05-10 Backend migration to Kotlin
-[@joffrey-bion][1] — :key: *Backend, Kotlin*
 
 Kotlin really improves on Java on multiple aspects:
 
@@ -59,7 +50,6 @@ I migrated the game engine and backend server of Seven Wonders to see how it goe
 kind of change at work. For now, this has been quite a success.
 
 ## 2017.08-2018.04 Livedoc development
-[@joffrey-bion][1] — :key: *API, Documentation*
 
 Not much has been done on the Seven Wonders project for a while, because I stopped to build 
 [Livedoc](https://joffrey-bion.github.io/livedoc/).
@@ -72,7 +62,6 @@ It still lacks a couple features:
 I feel like we're not far from having something very useful now.
 
 ## 2017.05.25-28 Flow type-checking + ImmutableJS
-[@joffrey-bion][1] — :key: *Frontend*
 
 Javascript can easily become a mess when the code base grows, and static typing helps wrapping one's head around 
 what's going on, especially when multiple people are involved in writing code in the same project.
@@ -90,7 +79,6 @@ Of course, there is still the problem of debugging immutable structures in the c
 that for now. Here we are, back to Immutable JS.   
 
 ## 2017.05.25-27 Web socket integration tests - Jackstomp
-[@joffrey-bion][1] — :key: *Backend, Tests*
 
 Unit tests are great, but only check individual components. To build a more robust test suite, we needed to add 
 tests that validate:
@@ -107,7 +95,6 @@ Since the configuration of such a client was not as smooth as I expected, I crea
 running with sensible defaults. 
 
 ## 2017.05.13 Migration to seamless-immutable
-[@joffrey-bion][1] — :key: *Frontend, Immutable*
 
 Using Immutable JS has proved to be a pain, especially because the cumbersome API is not contained in the reducers but 
 leaks out in the React components. As far as accessing the data is concerned, I dislike not being able to do it the 
@@ -126,7 +113,6 @@ Seamless Immutable required using [redux-seamless-immutable](https://github.com/
 seamless-immutable-compatible `combineReducers()` and `routerReducer()` functions.
 
 ## 2017.04.06 Live API documentation
-[@joffrey-bion][1] — :key: *Backend, API, Documentation*
 
 As frontend development was starting, we felt the need for a better API doc than a plain shared Google Sheet.
 The best doc is an up-to-date doc that stays so. The easiest way I found to keep it up-to-date is to generate it.
@@ -144,23 +130,22 @@ That being said, Fabio Mafioletti does not seem to have a lot of time available 
 this support, so I might have to release from my own fork of the project, or create a new project based on JsonDoc.
 
 ## 2017.01.20 Frontend architecture refactoring
-[@victorchabbert][2] — :key: Frontend, Redux*
 
-I based the frontend architecture on [mxstbr](https://twitter.com/mxstbr)'s
+[@victorchabbert][2] based the frontend architecture on [mxstbr](https://twitter.com/mxstbr)'s
 [react-boilerplate](https://github.com/mxstbr/react-boilerplate) (thanks Max!). The recommended structure for his 
 boilerplate is to group files by features. As such, in a feature folder, you would find reducers, actions types and 
 creators, selectors, sagas as well as containers.
 
-At first, this choice seemed suitable for our project but with time, I found out that it was causing us headaches 
-because of the amount of shared data and logic we have between containers and pages. This is when I remembered 
+At first, this choice seemed suitable for our project but with time, we found out that it was causing us headaches 
+because of the amount of shared data and logic we have between containers and pages. This is when Victor remembered 
 [Matteo's](https://twitter.com/mazzarolomatteo) blog post on 
-[a maintainable project structure](https://hackernoon.com/my-journey-toward-a-maintainable-project-structure-for-react-redux-b05dfd999b5#.o9pn60cv9) from last october. I highly recommend reading.
+[a maintainable project structure](https://hackernoon.com/my-journey-toward-a-maintainable-project-structure-for-react-redux-b05dfd999b5#.o9pn60cv9)
+from last october. He highly recommends reading it.
 
-I refactored our code to use the `Ducks` principle (the word comes from re*DUX*) and I can already see the ease to 
-import all redux specific files. I will update this section with more info after using it more extensively.
+He refactored our code to use the `Ducks` principle (the word comes from re*DUX*) and can already see the ease to 
+import all redux specific files.
 
 ## 2017.01.20 Unified build Spring Boot + React
-[@joffrey-bion][1] — :key: *Build, CI, Deployment*
 
 Some nice plugins allowed for bundling, minification etc. directly from Gradle, but I wanted to make use of the local 
 `package.json` scripts to be consistent with the frontend development workflow. 
@@ -192,12 +177,11 @@ to add a Procfile to manually specify the `backend` subproject in the process co
     web: java -Dserver.port=$PORT $JAVA_OPTS -jar backend/build/libs/*.jar
 
 ## 2016.12.08 React frontend
-[@joffrey-bion][1] — :key: *Frontend*
 
 We decided to put the react stuff into `src/main/js` as it matches maven/gradle project structure conventions. As 
 `src/main/java` contains the Java sources, why not put the JavaScript sources in `src/main/js`?
 
-The technical choices were mostly guided by [@victorchabbert][1], as I had little experience with React, and the 
+The technical choices were mostly guided by [@victorchabbert][2], as I had little experience with React, and the 
 frontend stuff in general.
 
 Technical decisions:
@@ -214,7 +198,6 @@ So far, no special build including the produced static inside the webapp's Jar. 
 independently and both the frontend dev server and the spring boot server can run locally and communicate.
 
 ## 2016.12.04 Spring Boot backend
-[@joffrey-bion][1] — :key: *Backend*
 
 Technical decisions:
 
