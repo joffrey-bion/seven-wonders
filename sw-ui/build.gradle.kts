@@ -18,7 +18,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.coroutines.test)
 
-                implementation(project.dependencies.enforcedPlatform(libs.kotlin.wrappers.bom))
+                implementation(platform(libs.kotlin.wrappers.bom.get()))
                 implementation(libs.kotlin.wrappers.react.base)
                 implementation(libs.kotlin.wrappers.react.dom)
                 implementation(libs.kotlin.wrappers.react.redux)
