@@ -8,7 +8,7 @@ kotlinx-serialization = "1.5.1"
 krossbow = "5.2.0"
 logback-classic = "1.4.7"
 loki-logback-appender = "1.4.1"
-micrometer-registry-prometheus = "1.10.6"
+micrometer-registry-prometheus = "1.11.0"
 slf4j = "2.0.7"
 
 # See https://github.com/JetBrains/kotlin-wrappers
