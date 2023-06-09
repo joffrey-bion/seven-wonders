@@ -1,11 +1,69 @@
-package org.luxons.sevenwonders.ui.components.home
+package org.luxons.sevenwonders.ui.names
 
 import kotlin.random.Random
+
+internal fun randomGameName(): String = gameNames.random()
 
 internal fun randomGreekName(): String {
     val randName = prefixes.random() + suffixes.random()
     return if (Random.nextBoolean()) randName else "$randName of ${cities.random()}"
 }
+
+private val gameNames = listOf(
+    "Age of Antiquity",
+    "Age of Civilization",
+    "Age of Discovery",
+    "Age of Empires",
+    "Age of Wonders",
+    "Ancient Capitals",
+    "Ancient Kingdoms",
+    "Ancient Wonders",
+    "Cities of Antiquity",
+    "City of Wonders",
+    "Empire Builders",
+    "Empires of the Past",
+    "Great Monuments",
+    "Legendary Cities",
+    "Legends of the Past",
+    "Lost Empires",
+    "Magnificent Monuments",
+    "Magnificent Seven",
+    "Monuments of the Past",
+    "Monuments of the World",
+    "Mythical Kingdoms",
+    "Secrets of the Past",
+    "Seven Ancient Wonders",
+    "Seven Colossi",
+    "Seven Kingdoms",
+    "Seven Marvels",
+    "Seven Wonders Adventures",
+    "Seven Wonders Chronicles",
+    "Seven Wonders Enigma",
+    "Seven Wonders Expedition",
+    "Seven Wonders Frontier",
+    "Seven Wonders Legacy",
+    "Seven Wonders Odyssey",
+    "Seven Wonders Quest",
+    "Seven Wonders Saga",
+    "Seven Wonders Treasures",
+    "Seven Wonders Voyage",
+    "Seven Wonders and Beyond",
+    "The Great Discoveries",
+    "The Legacy of Wonders",
+    "The Magic of Seven",
+    "The Marvelous Seven",
+    "The Mysteries of Antiquity",
+    "The Seven Continents",
+    "The Seven Kingdoms",
+    "The Seven Legends",
+    "The Seven Secrets",
+    "The Seven Treasures",
+    "Wonders of Nature",
+    "Wonders of the Ages",
+    "Wonders of the World",
+    "Wonders of Time",
+    "World Treasures",
+)
 
 private val prefixes =
     listOf(
