@@ -51,6 +51,7 @@ fun BuildScanExtension.addGithubActionsData() {
 }
 
 refreshVersions {
+    versionsPropertiesFile = file("build/tmp/refreshVersions/versions.properties").apply { parentFile.mkdirs() }
     rejectVersionIf {
         candidate.stabilityLevel != StabilityLevel.Stable || "-alpha" in candidate.value || "-beta" in candidate.value
     }
