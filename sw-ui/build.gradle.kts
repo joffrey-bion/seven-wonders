@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
-    kotlin("js")
+    kotlin("multiplatform")
 }
 
 kotlin {
@@ -11,12 +11,11 @@ kotlin {
         useCommonJs()
     }
     sourceSets {
-        main {
+        val jsMain by getting {
             dependencies {
                 implementation(projects.swClient)
 
                 implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kotlinx.coroutines.test)
 
                 implementation(platform(libs.kotlin.wrappers.bom.get()))
                 implementation(libs.kotlin.wrappers.react.base)
@@ -28,23 +27,22 @@ kotlin {
                 implementation(libs.kotlin.wrappers.emotion)
             }
         }
-        test {
+        val jsTest by getting {
             dependencies {
                 implementation(kotlin("test-js"))
+                implementation(libs.kotlinx.coroutines.test)
             }
         }
     }
 }
 
-tasks {
-    "processResources"(ProcessResources::class) {
-        val webpack = project.tasks.withType(KotlinWebpack::class).first()
+tasks.named<ProcessResources>("jsProcessResources") {
+    val webpack = project.tasks.withType(KotlinWebpack::class).first()
 
-        val bundleFile = webpack.outputFileName
-        val publicPath = "./" // TODO get public path from webpack config
+    val bundleFile = webpack.outputFileName
+    val publicPath = "./" // TODO get public path from webpack config
 
-        filesMatching("*.html") {
-            expand("bundle" to bundleFile, "publicPath" to publicPath)
-        }
+    filesMatching("*.html") {
+        expand("bundle" to bundleFile, "publicPath" to publicPath)
     }
 }

@@ -27,9 +27,11 @@ private fun init() {
 
 private fun renderRoot(rootElement: HTMLElement) {
     val store = initRedux()
-    val connectedApp = Provider.create {
-        this.store = store
-        Application()
+    val connectedApp = StrictMode.create {
+        Provider {
+            this.store = store
+            Application()
+        }
     }
     createRoot(rootElement).render(connectedApp)
 }
