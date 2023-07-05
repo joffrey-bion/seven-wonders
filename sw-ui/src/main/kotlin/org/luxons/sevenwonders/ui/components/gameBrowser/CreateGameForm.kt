@@ -2,14 +2,14 @@ package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import blueprintjs.core.*
 import blueprintjs.icons.*
-import csstype.*
 import emotion.react.*
 import org.luxons.sevenwonders.ui.names.*
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
 import react.dom.html.ReactHTML.form
+import web.cssom.*
 
-val CreateGameForm = VFC {
+val CreateGameForm = FC {
     var gameName by useState("")
 
     val dispatch = useSwDispatch()

@@ -1,11 +1,12 @@
 package org.luxons.sevenwonders.ui.components.game
 
 import csstype.*
-import csstype.Color
 import emotion.react.*
 import org.luxons.sevenwonders.model.cards.*
 import react.*
 import react.dom.html.ReactHTML.img
+import web.cssom.*
+import web.cssom.Color
 
 external interface CardImageProps : PropsWithClassName {
     var card: Card

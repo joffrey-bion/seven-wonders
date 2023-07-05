@@ -8,6 +8,7 @@ import react.*
 import react.State
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
+import web.cssom.*
 
 external interface PlayerInfoProps : PropsWithChildren {
     var player: BasicPlayerInfo?

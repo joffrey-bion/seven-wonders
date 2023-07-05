@@ -3,6 +3,7 @@ package org.luxons.sevenwonders.ui.utils
 import csstype.*
 import js.core.*
 import react.dom.html.*
+import web.cssom.*
 
 /**
  * The cubic-bezier() function defines a Cubic Bezier curve.

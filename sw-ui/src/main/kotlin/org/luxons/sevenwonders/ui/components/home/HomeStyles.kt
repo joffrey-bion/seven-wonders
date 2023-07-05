@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.ui.components.home
 
 import csstype.*
 import emotion.css.*
+import web.cssom.*
 
 object HomeStyles {
 

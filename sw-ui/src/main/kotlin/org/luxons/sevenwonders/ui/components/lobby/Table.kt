@@ -7,6 +7,7 @@ import emotion.styled.*
 import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.html.ReactHTML.div
+import web.cssom.*
 
 private val FIRE_REFLECTION_COLOR = Color("#b85e00")
 
@@ -25,7 +26,7 @@ private val Circle = FC<CircleProps>("Circle") { props ->
     }
 }
 
-private val OverlayCircle = Circle.styled { _, _ ->
+private val OverlayCircle = Circle.styled {
     position = Position.absolute
     top = 0.px
     left = 0.px

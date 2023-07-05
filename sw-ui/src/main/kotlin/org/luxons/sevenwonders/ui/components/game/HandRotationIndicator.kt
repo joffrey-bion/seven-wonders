@@ -3,12 +3,13 @@ package org.luxons.sevenwonders.ui.components.game
 import blueprintjs.core.*
 import blueprintjs.icons.*
 import csstype.*
-import csstype.Position
 import emotion.react.*
 import org.luxons.sevenwonders.model.cards.*
 import react.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
+import web.cssom.*
+import web.cssom.Position
 
 fun ChildrenBuilder.handRotationIndicator(direction: HandRotationDirection) {
     div {

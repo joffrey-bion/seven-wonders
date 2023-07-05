@@ -18,6 +18,7 @@ import react.dom.html.ReactHTML.td
 import react.dom.html.ReactHTML.th
 import react.dom.html.ReactHTML.thead
 import react.dom.html.ReactHTML.tr
+import web.cssom.*
 import react.State as RState
 
 external interface GameListStateProps : Props {

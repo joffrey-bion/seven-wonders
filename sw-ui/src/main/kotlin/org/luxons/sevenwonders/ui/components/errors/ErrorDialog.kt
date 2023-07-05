@@ -10,7 +10,7 @@ import react.dom.html.ReactHTML.p
 import react.redux.*
 import redux.*
 
-val ErrorDialog = VFC {
+val ErrorDialog = FC {
     val dispatch = useDispatch<RAction, WrapperAction>()
 
     ErrorDialogPresenter {

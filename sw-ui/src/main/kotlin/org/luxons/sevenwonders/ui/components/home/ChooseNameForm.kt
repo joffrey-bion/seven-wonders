@@ -2,14 +2,14 @@ package org.luxons.sevenwonders.ui.components.home
 
 import blueprintjs.core.*
 import blueprintjs.icons.*
-import csstype.*
 import emotion.react.*
 import org.luxons.sevenwonders.ui.names.*
 import org.luxons.sevenwonders.ui.redux.*
 import react.*
 import react.dom.html.ReactHTML.form
+import web.cssom.*
 
-val ChooseNameForm = VFC {
+val ChooseNameForm = FC {
     val dispatch = useSwDispatch()
     ChooseNameFormPresenter {
         chooseUsername = { name -> dispatch(RequestChooseName(name)) }

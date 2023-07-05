@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.ui.components.lobby
 
-import csstype.*
 import emotion.css.*
 import org.luxons.sevenwonders.ui.components.*
+import web.cssom.*
 
 object LobbyStyles {
 

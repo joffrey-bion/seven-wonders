@@ -11,6 +11,7 @@ import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.hr
+import web.cssom.*
 
 enum class BoardSummarySide(
     val tokenCountPosition: TokenCountPosition,

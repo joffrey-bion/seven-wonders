@@ -2,8 +2,6 @@ package org.luxons.sevenwonders.ui.components.lobby
 
 import blueprintjs.core.*
 import blueprintjs.icons.*
-import csstype.*
-import csstype.Position
 import emotion.react.*
 import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.wonders.*
@@ -16,10 +14,12 @@ import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.h2
 import react.dom.html.ReactHTML.h3
 import react.dom.html.ReactHTML.h4
+import web.cssom.*
+import web.cssom.Position
 
 private val BOT_NAMES = listOf("Wall-E", "B-Max", "Sonny", "T-800", "HAL", "GLaDOS", "R2-D2", "Bender", "AWESOM-O")
 
-val Lobby = VFC(displayName = "Lobby") {
+val Lobby = FC(displayName = "Lobby") {
     val lobby = useSwSelector { it.currentLobby }
     val player = useSwSelector { it.currentPlayer }
 

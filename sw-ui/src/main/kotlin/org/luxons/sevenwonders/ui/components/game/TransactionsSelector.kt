@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.ui.components.gameBrowser.*
 import org.luxons.sevenwonders.ui.utils.*
+import org.luxons.sevenwonders.ui.utils.Margin
 import react.*
 import react.dom.html.*
 import react.dom.html.ReactHTML.div
@@ -17,6 +18,7 @@ import react.dom.html.ReactHTML.p
 import react.dom.html.ReactHTML.tbody
 import react.dom.html.ReactHTML.td
 import react.dom.html.ReactHTML.tr
+import web.cssom.*
 import web.html.*
 
 fun ChildrenBuilder.transactionsSelectorDialog(

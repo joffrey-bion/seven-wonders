@@ -8,7 +8,7 @@ import react.dom.html.ReactHTML.img
 
 private const val LOGO = "images/logo-7-wonders.png"
 
-val Home = VFC("Home") {
+val Home = FC("Home") {
     div {
         css(GlobalStyles.fullscreen, GlobalStyles.zeusBackground, HomeStyles.centerChildren) {}
 

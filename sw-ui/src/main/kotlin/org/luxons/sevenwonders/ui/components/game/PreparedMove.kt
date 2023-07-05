@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.ui.components.game
 import blueprintjs.core.*
 import blueprintjs.icons.*
 import csstype.*
-import csstype.Position
 import emotion.react.*
 import org.luxons.sevenwonders.model.*
 import org.luxons.sevenwonders.model.cards.*
@@ -12,6 +11,8 @@ import react.*
 import react.dom.html.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
+import web.cssom.*
+import web.cssom.Position
 import web.html.*
 
 fun ChildrenBuilder.preparedMove(
@@ -36,7 +37,7 @@ fun ChildrenBuilder.preparedMove(
         }
         div {
             css {
-                position = Position.absolute
+                position = web.cssom.Position.absolute
                 top = 0.px
                 right = 0.px
             }

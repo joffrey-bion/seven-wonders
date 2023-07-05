@@ -9,6 +9,7 @@ import react.dom.html.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
 import react.dom.html.ReactHTML.span
+import web.cssom.*
 import web.html.*
 
 private fun getResourceTokenName(resourceType: ResourceType) = "resources/${resourceType.toString().lowercase()}"

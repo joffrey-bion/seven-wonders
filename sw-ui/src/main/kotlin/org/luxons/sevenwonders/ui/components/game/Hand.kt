@@ -3,7 +3,6 @@ package org.luxons.sevenwonders.ui.components.game
 import blueprintjs.core.*
 import blueprintjs.icons.*
 import csstype.*
-import csstype.Position
 import emotion.react.*
 import org.luxons.sevenwonders.client.*
 import org.luxons.sevenwonders.model.*
@@ -14,6 +13,8 @@ import org.luxons.sevenwonders.model.wonders.*
 import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.html.ReactHTML.div
+import web.cssom.*
+import web.cssom.Position
 import kotlin.math.*
 
 fun ChildrenBuilder.handCards(

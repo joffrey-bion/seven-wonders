@@ -9,6 +9,7 @@ import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
+import web.cssom.*
 
 external interface PlayerPreparedCardProps : Props {
     var playerDisplayName: String

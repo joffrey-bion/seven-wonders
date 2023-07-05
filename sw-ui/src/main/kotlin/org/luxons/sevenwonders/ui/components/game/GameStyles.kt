@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.ui.components.game
 
-import csstype.*
 import emotion.css.*
 import org.luxons.sevenwonders.ui.utils.*
+import web.cssom.*
 
 object GameStyles {
 

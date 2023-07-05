@@ -1,8 +1,8 @@
 package org.luxons.sevenwonders.ui.components
 
-import csstype.*
 import emotion.css.*
 import org.luxons.sevenwonders.ui.utils.*
+import web.cssom.*
 
 
 object GlobalStyles {

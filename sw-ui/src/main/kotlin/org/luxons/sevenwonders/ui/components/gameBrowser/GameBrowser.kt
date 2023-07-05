@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.ui.components.gameBrowser
 
 import blueprintjs.core.*
-import csstype.*
 import emotion.react.*
 import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.redux.*
@@ -10,8 +9,9 @@ import react.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.h2
+import web.cssom.*
 
-val GameBrowser = VFC {
+val GameBrowser = FC {
     div {
         css(GlobalStyles.fullscreen, GlobalStyles.zeusBackground) {
             padding = Padding(all = 1.rem)
@@ -57,7 +57,7 @@ val GameBrowser = VFC {
     }
 }
 
-val CurrentPlayerInfo = VFC {
+val CurrentPlayerInfo = FC {
     val connectedPlayer = useSwSelector { it.connectedPlayer }
     PlayerInfo {
         player = connectedPlayer

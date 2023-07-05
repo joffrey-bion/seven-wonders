@@ -2,8 +2,6 @@ package org.luxons.sevenwonders.ui.components.game
 
 import blueprintjs.core.*
 import blueprintjs.icons.*
-import csstype.*
-import csstype.Position
 import emotion.react.*
 import org.luxons.sevenwonders.client.*
 import org.luxons.sevenwonders.model.*
@@ -14,8 +12,11 @@ import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.redux.*
 import org.luxons.sevenwonders.ui.utils.*
+import org.luxons.sevenwonders.ui.utils.Padding
 import react.*
 import react.dom.html.ReactHTML.div
+import web.cssom.*
+import web.cssom.Position
 
 external interface GameSceneProps : Props {
     var currentPlayer: PlayerDTO?
@@ -35,7 +36,7 @@ data class TransactionSelectorState(
     val transactionsOptions: ResourceTransactionOptions,
 )
 
-val GameScene = VFC("GameScene") {
+val GameScene = FC("GameScene") {
 
     val player = useSwSelector { it.currentPlayer }
     val gameState = useSwSelector { it.gameState }

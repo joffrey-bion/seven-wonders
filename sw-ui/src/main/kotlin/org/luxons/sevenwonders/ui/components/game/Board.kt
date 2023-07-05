@@ -9,6 +9,7 @@ import react.*
 import react.dom.html.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.img
+import web.cssom.*
 import web.html.*
 
 // card offsets in % of their size when displayed in columns
