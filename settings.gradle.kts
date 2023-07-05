@@ -21,9 +21,9 @@ gradleEnterprise {
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         termsOfServiceAgree = "yes"
+        publishAlways()
 
         val isCIBuild = !System.getenv("CI").isNullOrEmpty()
-        publishAlwaysIf(isCIBuild)
         tag(if (isCIBuild) "CI" else "local")
 
         val isGithubActionsBuild = !System.getenv("GITHUB_ACTIONS").isNullOrEmpty()
