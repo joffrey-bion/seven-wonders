@@ -10,6 +10,7 @@ logback-classic = "1.4.8"
 loki-logback-appender = "1.4.1"
 micrometer-registry-prometheus = "1.11.1"
 slf4j = "2.0.7"
+spring-boot = "3.1.1"
 
 # See https://github.com/JetBrains/kotlin-wrappers
 kotlin-wrappers = "1.0.0-pre.488"
@@ -33,6 +34,7 @@ logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "lo
 loki-logback-appender = { module = "com.github.loki4j:loki-logback-appender", version.ref = "loki-logback-appender" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-registry-prometheus" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 
 kotlin-wrappers-bom = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version.ref = "kotlin-wrappers" }
 kotlin-wrappers-emotion = { module = "org.jetbrains.kotlin-wrappers:kotlin-emotion" } # typed CSS styles
@@ -44,3 +46,7 @@ kotlin-wrappers-styled-next = { module = "org.jetbrains.kotlin-wrappers:kotlin-s
 
 kotlin-wrappers-blueprintjs-core = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-core", version.ref = "kotlin-blueprintjs-core" }
 kotlin-wrappers-blueprintjs-icons = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-icons", version.ref = "kotlin-blueprintjs-icons" }
+
+[plugins]
+
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

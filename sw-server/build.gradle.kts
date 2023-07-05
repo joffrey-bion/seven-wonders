@@ -2,10 +2,8 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.serialization")
-    id("org.springframework.boot") version "3.1.1"
+    alias(libs.plugins.spring.boot)
 }
-
-apply(plugin = "io.spring.dependency-management")
 
 dependencies {
     implementation(projects.swCommonModel)
@@ -17,6 +15,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.reactor) // for Spring
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(platform(libs.spring.boot.bom))
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")
     // required by spring security when using websockets
