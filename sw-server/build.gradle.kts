@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
     kotlin("plugin.serialization")
-    id("org.springframework.boot") version "3.0.6"
+    id("org.springframework.boot") version "3.1.1"
 }
 
 apply(plugin = "io.spring.dependency-management")

@@ -10,5 +10,5 @@ class WebSecurityConfig {
 
     // this disables default authentication settings
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain? = http.cors().and().csrf().disable().build()
+    fun filterChain(http: HttpSecurity): SecurityFilterChain? = http.cors {}.csrf { it.disable() }.build()
 }
