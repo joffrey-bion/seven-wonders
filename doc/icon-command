@@ -1,2 +1,0 @@
-Using inkscape, export svg as a png with transparent background. Then use imagemagick convert to build an ico file.
-convert -transparent '#000000' 7w.png -define icon:auto-resize=16,24,32,48,256 -compress zip icon.ico

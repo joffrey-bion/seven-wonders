@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="${publicPath}favicon.ico">
+
+    <!-- The .ico is for compatibliity with Safari, which doesn't support SVG -->
+    <link rel="icon" href="${publicPath}favicon.ico" sizes="48x48">
+    <link rel="icon" href="${publicPath}favicon.svg" sizes="any" type="image/svg+xml">
+
     <title>Seven Wonders</title>
     <link href='https://fonts.googleapis.com/css2?family=Acme&display=swap' rel='stylesheet'>
     <!-- Style dependencies -->
