@@ -42,6 +42,6 @@ fun GameState.getNonNeighbourBoards(): List<Board> {
     }
     val first = (playerIndex + 2) % nPlayers
     val last = (playerIndex - 2 + nPlayers) % nPlayers
-    val range = if (first <= last) first..last else ((first until nPlayers) + (0..last))
+    val range = if (first <= last) first..last else ((first..<nPlayers) + (0..last))
     return range.map { boards[it] }
 }
