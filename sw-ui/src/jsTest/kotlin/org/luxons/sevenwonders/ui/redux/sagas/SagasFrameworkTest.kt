@@ -37,7 +37,7 @@ private data class TestRedux(
     val sagas: SagaManager<State, RAction, WrapperAction>,
 )
 
-@OptIn(ExperimentalCoroutinesApi::class) // for runTest
+@OptIn(ExperimentalCoroutinesApi::class) // for advanceUntilIdle
 class SagaContextTest {
 
     @Test
