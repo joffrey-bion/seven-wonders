@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import java.security.Principal
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 import kotlin.time.toJavaDuration
 
@@ -27,7 +26,6 @@ class AutoGameController(
     @Value("\${server.port}") private val serverPort: String,
     private val meterRegistry: MeterRegistry,
 ) {
-    @OptIn(ExperimentalTime::class)
     @PostMapping("/autoGame")
     suspend fun autoGame(@RequestBody action: AutoGameAction, principal: Principal): AutoGameResult {
         logger.info("Starting auto-game {}", action.gameName)

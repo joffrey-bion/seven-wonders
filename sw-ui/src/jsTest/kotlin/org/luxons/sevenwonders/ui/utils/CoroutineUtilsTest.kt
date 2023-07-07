@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 
 class CoroutineUtilsTest {
 
-    @OptIn(ExperimentalCoroutinesApi::class) // for runTest
     @Test
     fun awaitFirstTest() = runTest {
         val s = awaitFirst(
