@@ -9,6 +9,7 @@ import org.luxons.sevenwonders.engine.test.createTransactions
 import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.model.resources.ResourceType
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
@@ -60,10 +61,10 @@ class DiscountTest {
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
+        fun resourceTypes(): EnumEntries<ResourceType> = ResourceType.entries
 
         @JvmStatic
         @DataPoints
-        fun providers(): Array<Provider> = Provider.values()
+        fun providers(): EnumEntries<Provider> = Provider.entries
     }
 }

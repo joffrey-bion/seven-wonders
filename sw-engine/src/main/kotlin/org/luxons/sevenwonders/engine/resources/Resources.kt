@@ -51,7 +51,7 @@ interface Resources {
     fun containsAll(resources: Resources): Boolean = resources.quantities.all { it.value <= this[it.key] }
 
     operator fun plus(resources: Resources): Resources =
-        ResourceType.values().map { it to this[it] + resources[it] }.toResources()
+        ResourceType.entries.map { it to this[it] + resources[it] }.toResources()
 
     /**
      * Returns new resources containing these resources minus the given [resources]. If the given resources contain

@@ -12,6 +12,7 @@ import org.luxons.sevenwonders.engine.test.createGuildCard
 import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.Color
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -64,7 +65,7 @@ class SpecialAbilityActivationTest {
 
         @JvmStatic
         @DataPoints
-        fun abilities(): Array<SpecialAbility> = SpecialAbility.values()
+        fun abilities(): EnumEntries<SpecialAbility> = SpecialAbility.entries
 
         @JvmStatic
         @DataPoints

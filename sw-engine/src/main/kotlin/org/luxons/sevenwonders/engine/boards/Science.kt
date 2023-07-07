@@ -31,7 +31,7 @@ internal class Science {
     fun getQuantity(type: ScienceType): Int = quantities.getOrDefault(type, 0)
 
     fun computePoints(): Int {
-        val values = ScienceType.values().map(::getQuantity).toMutableList()
+        val values = ScienceType.entries.map(::getQuantity).toMutableList()
         return computePoints(values, jokers)
     }
 

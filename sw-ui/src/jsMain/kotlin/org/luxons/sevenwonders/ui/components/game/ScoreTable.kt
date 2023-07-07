@@ -92,7 +92,7 @@ private val ScoreTable = FC<ScoreTableProps>("ScoreTable") { props ->
                     fullCenterInlineStyle()
                     +"Score"
                 }
-                ScoreCategory.values().forEach {
+                ScoreCategory.entries.forEach {
                     th {
                         fullCenterInlineStyle()
                         +it.title
@@ -132,7 +132,7 @@ private val ScoreTable = FC<ScoreTableProps>("ScoreTable") { props ->
                             +"${score.totalPoints}"
                         }
                     }
-                    ScoreCategory.values().forEach { cat ->
+                    ScoreCategory.entries.forEach { cat ->
                         td {
                             fullCenterInlineStyle()
                             BpTag {

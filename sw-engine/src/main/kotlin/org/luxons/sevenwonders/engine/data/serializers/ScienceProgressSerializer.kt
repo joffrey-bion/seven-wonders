@@ -25,7 +25,7 @@ internal object ScienceProgressSerializer : KSerializer<ScienceProgress> {
             encoder.encodeString("any")
             return
         }
-        for (type in ScienceType.values()) {
+        for (type in ScienceType.entries) {
             val quantity = value.science.getQuantity(type)
             if (quantity == 1) {
                 encoder.encodeSerializableValue(serializer(), type)

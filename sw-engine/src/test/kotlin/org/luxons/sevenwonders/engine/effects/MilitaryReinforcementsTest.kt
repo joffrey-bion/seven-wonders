@@ -8,6 +8,7 @@ import org.luxons.sevenwonders.engine.SimplePlayer
 import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.resources.ResourceType
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
@@ -39,6 +40,6 @@ class MilitaryReinforcementsTest {
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
+        fun resourceTypes(): EnumEntries<ResourceType> = ResourceType.entries
     }
 }

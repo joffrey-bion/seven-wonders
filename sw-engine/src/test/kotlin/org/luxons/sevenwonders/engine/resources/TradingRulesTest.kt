@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.engine.test.createTransactions
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.model.resources.noTransactions
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
@@ -120,10 +121,10 @@ class TradingRulesTest {
 
         @JvmStatic
         @DataPoints
-        fun providers(): Array<Provider> = Provider.values()
+        fun providers(): EnumEntries<Provider> = Provider.entries
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
+        fun resourceTypes(): EnumEntries<ResourceType> = ResourceType.entries
     }
 }

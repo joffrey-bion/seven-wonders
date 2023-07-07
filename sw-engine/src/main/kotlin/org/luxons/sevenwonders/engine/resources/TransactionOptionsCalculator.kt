@@ -36,7 +36,7 @@ private class TransactionOptionsCalculator(resourcesToPay: Resources, player: Pl
         // we only take alternative resources here, because fixed resources were already removed for optimization
         val ownBoardChoices = player.board.production.getAlternativeResources()
         val ownPool = ResourcePool(null, player.board.tradingRules, ownBoardChoices)
-        val providerPools = Provider.values().map { it.toResourcePoolFor(player) }
+        val providerPools = Provider.entries.map { it.toResourcePoolFor(player) }
 
         return providerPools + ownPool
     }
@@ -60,7 +60,7 @@ private class TransactionOptionsCalculator(resourcesToPay: Resources, player: Pl
             addCurrentOption()
             return
         }
-        for (type in ResourceType.values()) {
+        for (type in ResourceType.entries) {
             if (resourcesLeftToPay[type] > 0) {
                 for (pool in pools) {
                     if (pool.provider == null) {
