@@ -80,7 +80,7 @@ private fun ChildrenBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<Pla
                     fullCenterInlineStyle()
                     +"Score"
                 }
-                ScoreCategory.values().forEach {
+                ScoreCategory.entries.forEach {
                     th {
                         fullCenterInlineStyle()
                         +it.title
@@ -120,7 +120,7 @@ private fun ChildrenBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<Pla
                             +"${score.totalPoints}"
                         }
                     }
-                    ScoreCategory.values().forEach { cat ->
+                    ScoreCategory.entries.forEach { cat ->
                         td {
                             fullCenterInlineStyle()
                             BpTag {

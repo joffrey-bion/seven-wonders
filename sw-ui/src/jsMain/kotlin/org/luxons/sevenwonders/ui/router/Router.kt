@@ -14,7 +14,7 @@ enum class SwRoute(val path: String) {
     GAME("/game");
 
     companion object {
-        private val all = values().associateBy { it.path }
+        private val all = entries.associateBy { it.path }
 
         fun from(path: String) = all.getValue(path)
     }

@@ -51,7 +51,7 @@ data class Production internal constructor(
         if (resources.isEmpty()) {
             return true
         }
-        for (type in ResourceType.values()) {
+        for (type in ResourceType.entries) {
             if (resources[type] <= 0) {
                 continue
             }

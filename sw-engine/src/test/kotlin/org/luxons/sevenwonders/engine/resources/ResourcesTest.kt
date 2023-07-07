@@ -20,7 +20,7 @@ class ResourcesTest {
     @Test
     fun init_shouldBeEmpty() {
         val resources = emptyResources()
-        for (resourceType in ResourceType.values()) {
+        for (resourceType in ResourceType.entries) {
             assertEquals(0, resources[resourceType])
         }
         assertEquals(0, resources.size)

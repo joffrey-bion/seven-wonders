@@ -13,6 +13,7 @@ import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.CardBack
 import org.luxons.sevenwonders.model.cards.Color
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 
 @RunWith(Theories::class)
@@ -133,10 +134,10 @@ class BonusPerBoardElementTest {
 
         @JvmStatic
         @DataPoints
-        fun colors(): Array<Color> = Color.values()
+        fun colors(): EnumEntries<Color> = Color.entries
 
         @JvmStatic
         @DataPoints
-        fun positions(): Array<RelativeBoardPosition> = RelativeBoardPosition.values()
+        fun positions(): EnumEntries<RelativeBoardPosition> = RelativeBoardPosition.entries
     }
 }

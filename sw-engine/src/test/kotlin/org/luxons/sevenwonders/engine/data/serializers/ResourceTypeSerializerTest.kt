@@ -12,7 +12,7 @@ class ResourceTypeSerializerTest {
 
     @Test
     fun serialize_useSymbolForEachType() {
-        ResourceType.values().forEach { type ->
+        ResourceType.entries.forEach { type ->
             val expectedjson = "\"" + type.symbol + "\""
             assertEquals(expectedjson, Json.encodeToString(ResourceTypeSerializer, type))
         }
@@ -20,7 +20,7 @@ class ResourceTypeSerializerTest {
 
     @Test
     fun deserialize_useSymbolForEachType() {
-        ResourceType.values().forEach { type ->
+        ResourceType.entries.forEach { type ->
             val typeInjson = "\"" + type.symbol + "\""
             assertEquals(type, Json.decodeFromString(ResourceTypeSerializer, typeInjson))
         }

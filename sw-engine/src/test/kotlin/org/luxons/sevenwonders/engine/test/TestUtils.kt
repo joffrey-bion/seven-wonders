@@ -111,7 +111,7 @@ internal fun addCards(board: Board, nbCards: Int, color: Color) {
 }
 
 internal fun getDifferentColorFrom(vararg colors: Color): Color =
-    Color.values().firstOrNull { it !in colors } ?: throw IllegalArgumentException("All colors are forbidden!")
+    Color.entries.firstOrNull { it !in colors } ?: throw IllegalArgumentException("All colors are forbidden!")
 
 internal fun createScienceProgress(compasses: Int, wheels: Int, tablets: Int, jokers: Int): ScienceProgress =
     ScienceProgress(createScience(compasses, wheels, tablets, jokers))

@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.engine.test.fixedProduction
 import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.engine.test.testTable
 import org.luxons.sevenwonders.model.resources.ResourceType
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -68,6 +69,6 @@ class ProductionIncreaseTest {
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
+        fun resourceTypes(): EnumEntries<ResourceType> = ResourceType.entries
     }
 }

@@ -30,7 +30,7 @@ enum class WonderSide {
 fun List<PreGameWonder>.deal(nbPlayers: Int, random: Random = Random): List<AssignedWonder> =
     shuffled(random).take(nbPlayers).map { it.withRandomSide(random) }
 
-fun PreGameWonder.withRandomSide(random: Random = Random): AssignedWonder = withSide(WonderSide.values().random(random))
+fun PreGameWonder.withRandomSide(random: Random = Random): AssignedWonder = withSide(WonderSide.entries.random(random))
 
 fun PreGameWonder.withSide(side: WonderSide): AssignedWonder = AssignedWonder(name, side)
 

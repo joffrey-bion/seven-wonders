@@ -16,6 +16,7 @@ import org.luxons.sevenwonders.model.boards.RelativeBoardPosition
 import org.luxons.sevenwonders.model.cards.Color
 import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.model.score.ScoreCategory
+import kotlin.enums.EnumEntries
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
@@ -215,14 +216,14 @@ class BoardTest {
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
+        fun resourceTypes(): EnumEntries<ResourceType> = ResourceType.entries
 
         @JvmStatic
         @DataPoints
-        fun colors(): Array<Color> = Color.values()
+        fun colors(): EnumEntries<Color> = Color.entries
 
         @JvmStatic
         @DataPoints
-        fun specialAbilities(): Array<SpecialAbility> = SpecialAbility.values()
+        fun specialAbilities(): EnumEntries<SpecialAbility> = SpecialAbility.entries
     }
 }

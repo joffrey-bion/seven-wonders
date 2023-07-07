@@ -16,6 +16,7 @@ import org.luxons.sevenwonders.engine.test.testBoard
 import org.luxons.sevenwonders.model.resources.Provider
 import org.luxons.sevenwonders.model.resources.ResourceType
 import org.luxons.sevenwonders.model.resources.noTransactions
+import kotlin.enums.EnumEntries
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -190,6 +191,6 @@ class RequirementsTest {
 
         @JvmStatic
         @DataPoints
-        fun resourceTypes(): Array<ResourceType> = ResourceType.values()
+        fun resourceTypes(): EnumEntries<ResourceType> = ResourceType.entries
     }
 }
