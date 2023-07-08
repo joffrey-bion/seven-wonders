@@ -26,12 +26,14 @@ external interface ScoreTableProps : Props {
 }
 
 external interface ScoreTableOverlayProps : ScoreTableProps {
+    var isOpen: Boolean
     var leaveGame: () -> Unit
+    var hideScoreBoard: () -> Unit
 }
 
 val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props ->
     BpOverlay {
-        isOpen = true
+        isOpen = props.isOpen
 
         BpCard {
             css(GlobalStyles.fixedCenter, GameStyles.scoreBoard) {}
@@ -56,10 +58,25 @@ val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props 
                 div {
                     css {
                         marginTop = 1.rem
+                        display = Display.flex
+                        flexDirection = FlexDirection.row
+                        alignItems = AlignItems.center
                     }
                     BpButton {
-                        intent = Intent.WARNING
-                        rightIcon = "log-out"
+                        intent = Intent.PRIMARY
+                        rightIcon = IconNames.EYE_OPEN
+                        large = true
+                        onClick = { props.hideScoreBoard() }
+
+                        css {
+                            marginRight = 0.6.rem
+                        }
+
+                        +"VIEW TABLE"
+                    }
+                    BpButton {
+                        intent = Intent.DANGER
+                        rightIcon = IconNames.LOG_OUT
                         large = true
                         onClick = { props.leaveGame() }
 

@@ -115,7 +115,7 @@ private fun ChildrenBuilder.wonderComponent(wonder: ApiWonder, military: Militar
                 maxWidth = 95.pct // same as wonder
 
                 // bring to the foreground on hover
-                hover { zIndex = integer(1000) }
+                hover { zIndex = integer(50) }
             }
             img {
                 src =  "/images/wonders/${wonder.image}"

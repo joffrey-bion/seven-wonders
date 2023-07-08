@@ -11,7 +11,6 @@ import org.luxons.sevenwonders.model.cards.*
 import org.luxons.sevenwonders.model.resources.*
 import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.redux.*
-import org.luxons.sevenwonders.ui.utils.*
 import org.luxons.sevenwonders.ui.utils.Padding
 import react.*
 import react.dom.html.ReactHTML.div
@@ -69,6 +68,12 @@ val GameScene = FC("GameScene") {
 
 private val GameScenePresenter = FC<GameSceneProps>("GameScenePresenter") { props ->
     var transactionSelectorState by useState<TransactionSelectorState>()
+    var scoreBoardVisible by useState(false)
+
+    // we can't initialize a state from props, we have to use an effect so that it's recomputed
+    useEffect(props.game.action) {
+        scoreBoardVisible = props.game.action is TurnAction.WatchScore
+    }
 
     val game = props.game
     val board = game.getOwnBoard()
@@ -80,9 +85,17 @@ private val GameScenePresenter = FC<GameSceneProps>("GameScenePresenter") { prop
         val action = game.action
         if (action is TurnAction.WatchScore) {
             ScoreTableOverlay {
+                isOpen = scoreBoardVisible
                 scoreBoard = action.scoreBoard
                 players = props.players
                 leaveGame = props.leaveGame
+                hideScoreBoard = { scoreBoardVisible = false }
+            }
+            if (!scoreBoardVisible) {
+                EndGameButtons {
+                    showScoreBoard = { scoreBoardVisible = true }
+                    leaveGame = props.leaveGame
+                }
             }
         }
         actionInfo(game.action.message)
@@ -309,6 +322,43 @@ private val SayReadyButton = FC<SayReadyButtonProps>("SayReadyButton") { props -
 
                 +"${props.players.count { it.isReady }}/${props.players.size}"
             }
+        }
+    }
+}
+
+private external interface EndGameButtonsProps : Props {
+    var showScoreBoard: () -> Unit
+    var leaveGame: () -> Unit
+}
+
+private val EndGameButtons = FC<EndGameButtonsProps>("EndGameButtons") { props ->
+    div {
+        css {
+            position = Position.absolute
+            bottom = 3.rem
+            left = 50.pct
+            transform = translate(tx = (-50).pct)
+            zIndex = integer(100) // go above the wonder-upgrade cards (0), wonder (1), and hovered wonder (50)
+        }
+        BpButton {
+            large = true
+            intent = Intent.PRIMARY
+            icon = IconNames.PANEL_TABLE
+            onClick = { props.showScoreBoard() }
+
+            css {
+                marginRight = 0.6.rem
+            }
+
+            +"SHOW SCORE"
+        }
+        BpButton {
+            large = true
+            intent = Intent.DANGER
+            icon = IconNames.LOG_OUT
+            onClick = { props.leaveGame() }
+
+            +"LEAVE"
         }
     }
 }
