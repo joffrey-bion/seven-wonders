@@ -46,3 +46,12 @@ tasks.named<ProcessResources>("jsProcessResources") {
         expand("bundle" to bundleFile, "publicPath" to publicPath)
     }
 }
+
+private val frontendDistribution by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
+artifacts {
+    add(frontendDistribution.name, tasks.named("jsBrowserDistribution"))
+}

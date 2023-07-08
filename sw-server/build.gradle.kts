@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.spring.boot)
 }
 
+private val staticFiles by configurations.creating {
+    isCanBeConsumed = false
+}
+
 dependencies {
     implementation(projects.swCommonModel)
     implementation(projects.swEngine)
@@ -30,18 +34,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation(libs.micrometer.registry.prometheus)
 
+    // package the frontend app within the Spring boot jar as static
+    staticFiles(project(path = ":sw-ui", configuration = "frontendDistribution"))
+
     testImplementation(kotlin("test"))
     testImplementation(projects.swClient)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.processResources {
-    // make sure we build the frontend before creating the jar
-    dependsOn(":sw-ui:jsBrowserDistribution")
-    // package the frontend app within the jar as static
-    val frontendBuildDir = project(":sw-ui").buildDir
-    val frontendDist = frontendBuildDir.toPath().resolve("distributions")
-    from(frontendDist) {
+    from(staticFiles) {
         include("**/*")
         into("static")
     }
