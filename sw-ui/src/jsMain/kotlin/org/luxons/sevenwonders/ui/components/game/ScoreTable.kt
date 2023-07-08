@@ -20,7 +20,16 @@ import react.dom.html.ReactHTML.thead
 import react.dom.html.ReactHTML.tr
 import web.cssom.*
 
-fun ChildrenBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<PlayerDTO>, leaveGame: () -> Unit) {
+external interface ScoreTableProps : Props {
+    var scoreBoard: ScoreBoard
+    var players: List<PlayerDTO>
+}
+
+external interface ScoreTableOverlayProps : ScoreTableProps {
+    var leaveGame: () -> Unit
+}
+
+val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props ->
     BpOverlay {
         isOpen = true
 
@@ -40,7 +49,10 @@ fun ChildrenBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<Play
                     }
                     +"Score Board"
                 }
-                scoreTable(scoreBoard, players)
+                ScoreTable {
+                    scoreBoard = props.scoreBoard
+                    players = props.players
+                }
                 div {
                     css {
                         marginTop = 1.rem
@@ -49,7 +61,7 @@ fun ChildrenBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<Play
                         intent = Intent.WARNING
                         rightIcon = "log-out"
                         large = true
-                        onClick = { leaveGame() }
+                        onClick = { props.leaveGame() }
 
                         +"LEAVE"
                     }
@@ -59,7 +71,7 @@ fun ChildrenBuilder.scoreTableOverlay(scoreBoard: ScoreBoard, players: List<Play
     }
 }
 
-private fun ChildrenBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<PlayerDTO>) {
+private val ScoreTable = FC<ScoreTableProps>("ScoreTable") { props ->
     BpHTMLTable {
         bordered = false
         interactive = true
@@ -89,12 +101,12 @@ private fun ChildrenBuilder.scoreTable(scoreBoard: ScoreBoard, players: List<Pla
             }
         }
         tbody {
-            scoreBoard.scores.forEachIndexed { index, score ->
-                val player = players[score.playerIndex]
+            props.scoreBoard.scores.forEachIndexed { index, score ->
+                val player = props.players[score.playerIndex]
                 tr {
                     td {
                         fullCenterInlineStyle()
-                        ordinal(scoreBoard.ranks[index])
+                        ordinal(props.scoreBoard.ranks[index])
                     }
                     td {
                         fullCenterInlineStyle()

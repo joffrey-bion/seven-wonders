@@ -79,7 +79,11 @@ private val GameScenePresenter = FC<GameSceneProps>("GameScenePresenter") { prop
         }
         val action = game.action
         if (action is TurnAction.WatchScore) {
-            scoreTableOverlay(action.scoreBoard, props.players, props.leaveGame)
+            ScoreTableOverlay {
+                scoreBoard = action.scoreBoard
+                players = props.players
+                leaveGame = props.leaveGame
+            }
         }
         actionInfo(game.action.message)
         BoardComponent {
