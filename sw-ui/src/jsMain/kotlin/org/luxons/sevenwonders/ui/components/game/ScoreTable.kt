@@ -34,6 +34,9 @@ external interface ScoreTableOverlayProps : ScoreTableProps {
 val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props ->
     BpOverlay {
         isOpen = props.isOpen
+        canOutsideClickClose = true
+        canEscapeKeyClose = true
+        onClose = { props.hideScoreBoard() }
 
         BpCard {
             css(GlobalStyles.fixedCenter, GameStyles.scoreBoard) {}
@@ -64,7 +67,7 @@ val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props 
                     }
                     BpButton {
                         intent = Intent.PRIMARY
-                        rightIcon = IconNames.EYE_OPEN
+                        icon = IconNames.EYE_OPEN
                         large = true
                         onClick = { props.hideScoreBoard() }
 
@@ -76,7 +79,7 @@ val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props 
                     }
                     BpButton {
                         intent = Intent.DANGER
-                        rightIcon = IconNames.LOG_OUT
+                        icon = IconNames.LOG_OUT
                         large = true
                         onClick = { props.leaveGame() }
 
