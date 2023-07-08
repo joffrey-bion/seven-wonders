@@ -5,14 +5,14 @@ plugins {
 kotlin {
     jvm()
     js {
-        browser() // necessary for local dependency from JS UI module
+        browser()
     }
     sourceSets {
         commonMain {
             dependencies {
                 api(projects.swCommonModel)
                 api(libs.krossbow.stomp.kxserialization.json)
-                api(libs.krossbow.websocket.builtin)
+                implementation(libs.krossbow.websocket.builtin)
                 implementation(libs.kotlinx.coroutines.core)
             }
         }
