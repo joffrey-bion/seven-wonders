@@ -7,6 +7,7 @@ import emotion.react.*
 import org.luxons.sevenwonders.model.api.*
 import org.luxons.sevenwonders.model.score.*
 import org.luxons.sevenwonders.ui.components.*
+import org.luxons.sevenwonders.ui.components.gameBrowser.PlayerInfo
 import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.html.*
@@ -104,7 +105,6 @@ private val ScoreTable = FC<ScoreTableProps>("ScoreTable") { props ->
                 }
                 th {
                     fullCenterInlineStyle()
-                    colSpan = 2
 
                     +"Player"
                 }
@@ -129,17 +129,13 @@ private val ScoreTable = FC<ScoreTableProps>("ScoreTable") { props ->
                         ordinal(props.scoreBoard.ranks[index])
                     }
                     td {
-                        fullCenterInlineStyle()
-                        BpIcon {
-                            icon = player.icon?.name ?: IconNames.USER
-                            size = 25
-                        }
-                    }
-                    td {
                         inlineStyles {
                             verticalAlign = VerticalAlign.middle
                         }
-                        +player.displayName
+                        PlayerInfo {
+                            this.player = player
+                            iconSize = 25
+                        }
                     }
                     td {
                         fullCenterInlineStyle()

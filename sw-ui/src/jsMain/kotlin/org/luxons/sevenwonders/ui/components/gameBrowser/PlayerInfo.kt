@@ -10,7 +10,7 @@ import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 import web.cssom.*
 
-external interface PlayerInfoProps : PropsWithChildren {
+external interface PlayerInfoProps : PropsWithChildren, PropsWithClassName {
     var player: BasicPlayerInfo?
     var showUsername: Boolean?
     var iconSize: Int?
@@ -24,7 +24,7 @@ private class PlayerInfoPresenter(props: PlayerInfoProps) : Component<PlayerInfo
 
     override fun render() = div.create {
         val orientation = props.orientation ?: FlexDirection.row
-        css {
+        css(props.className) {
             display = Display.flex
             alignItems = AlignItems.center
             flexDirection = orientation
@@ -47,36 +47,21 @@ private class PlayerInfoPresenter(props: PlayerInfoProps) : Component<PlayerInfo
     }
 
     private fun ChildrenBuilder.playerName(displayName: String, style: PropertiesBuilder.() -> Unit = {}) {
-        span {
+        BpText {
             css {
                 fontSize = 1.rem
                 if (props.orientation == FlexDirection.column) {
                     textAlign = TextAlign.center
+                } else {
+
                 }
                 style()
             }
-            // TODO replace by BlueprintJS's Text elements (built-in ellipsize based on width)
-            val maxDisplayNameLength = 15
-            val ellipsize = props.ellipsize ?: true
-            if (ellipsize && displayName.length > maxDisplayNameLength) {
-                title = displayName
-                +displayName.ellipsize(maxDisplayNameLength)
-            } else {
-                +displayName
-            }
-        }
-    }
+            title = displayName
+            ellipsize = props.ellipsize
 
-    private fun String.ellipsize(maxLength: Int) = take(maxLength - 1) + "…"
 
-    private fun PropertiesBuilder.iconSeparationMargin(orientation: FlexDirection) {
-        val margin = 0.4.rem
-        when (orientation) {
-            FlexDirection.row -> marginLeft = margin
-            FlexDirection.column -> marginTop = margin
-            FlexDirection.rowReverse -> marginRight = margin
-            FlexDirection.columnReverse -> marginBottom = margin
-            else -> error("Unsupported orientation '$orientation' for player info component")
+            +displayName
         }
     }
 
@@ -101,5 +86,16 @@ private class PlayerInfoPresenter(props: PlayerInfoProps) : Component<PlayerInfo
                 +"($username)"
             }
         }
+    }
+}
+
+private fun PropertiesBuilder.iconSeparationMargin(orientation: FlexDirection) {
+    val margin = 0.4.rem
+    when (orientation) {
+        FlexDirection.row -> marginLeft = margin
+        FlexDirection.column -> marginTop = margin
+        FlexDirection.rowReverse -> marginRight = margin
+        FlexDirection.columnReverse -> marginBottom = margin
+        else -> error("Unsupported orientation '$orientation' for player info component")
     }
 }
