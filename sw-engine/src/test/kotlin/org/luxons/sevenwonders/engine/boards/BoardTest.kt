@@ -183,7 +183,7 @@ class BoardTest {
     fun computePoints_countsCopiedGuild(@FromDataPoints("gold") gold: Int) {
         assumeTrue(gold >= 0)
         val left = testBoard(initialGold = gold)
-        val self = testBoard(initialGold = gold)
+        val self = testBoard(initialGold = gold) // TODO use Olympia B
         val right = testBoard(initialGold = gold)
 
         left.addCard(testCard(color = Color.YELLOW))
@@ -201,7 +201,7 @@ class BoardTest {
         )
 
         val score = self.computeScore(testPlayer(left, self, right))
-        assertEquals(3, score.pointsByCategory[ScoreCategory.GUILD])
+        assertEquals("points should be counted in the wonder category", 0, score.pointsByCategory[ScoreCategory.GUILD])
     }
 
     companion object {
