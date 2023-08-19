@@ -75,7 +75,7 @@ val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props 
                             marginRight = 0.6.rem
                         }
 
-                        +"VIEW TABLE"
+                        +"EXPLORE BOARDS"
                     }
                     BpButton {
                         intent = Intent.DANGER
