@@ -87,7 +87,7 @@ internal class Board(
             ScoreCategory.MILITARY to military.totalPoints,
             ScoreCategory.SCIENCE to science.computePoints(),
             ScoreCategory.TRADE to computePointsForCards(player, Color.YELLOW),
-            ScoreCategory.GUILD to computePointsForCards(player, Color.PURPLE) + copiedGuildPoints(player),
+            ScoreCategory.GUILD to computePointsForCards(player, Color.PURPLE),
             ScoreCategory.WONDER to wonder.computePoints(player),
             ScoreCategory.GOLD to computeGoldPoints(),
         ),
@@ -95,10 +95,6 @@ internal class Board(
 
     private fun computePointsForCards(player: Player, color: Color): Int =
         playedCards.filter { it.color === color }.flatMap { it.effects }.sumOf { it.computePoints(player) }
-
-    private fun copiedGuildPoints(player: Player): Int = copiedGuild?.computePoints(player) ?: 0
-
-    private fun Card.computePoints(player: Player): Int = effects.sumOf { it.computePoints(player) }
 
     private fun computeGoldPoints(): Int = gold / 3 * pointsPer3Gold
 
