@@ -33,7 +33,7 @@ internal fun testTable(nbPlayers: Int = 5): Table = testTable(nbPlayers, testSet
 
 internal fun testTable(nbPlayers: Int, settings: Settings): Table = Table(testBoards(nbPlayers, settings))
 
-private fun testBoards(count: Int, settings: Settings): List<Board> = List(count) { testBoard(settings) }
+private fun testBoards(count: Int, settings: Settings): List<Board> = List(count) { testBoard(settings, index = it) }
 
 internal fun testBoard(
     initialResource: ResourceType = ResourceType.WOOD,
@@ -41,13 +41,13 @@ internal fun testBoard(
     vararg production: ResourceType,
 ): Board {
     val settings = testSettings(initialGold = initialGold)
-    val board = testBoard(settings, initialResource)
+    val board = testBoard(settings, index = 0, initialResource)
     board.production.addAll(fixedProduction(*production))
     return board
 }
 
-private fun testBoard(settings: Settings, initialResource: ResourceType = ResourceType.WOOD): Board =
-    Board(testWonder(initialResource), 0, settings)
+private fun testBoard(settings: Settings, index: Int, initialResource: ResourceType = ResourceType.WOOD): Board =
+    Board(testWonder(initialResource), index, settings)
 
 internal fun testWonder(initialResource: ResourceType = ResourceType.WOOD): Wonder {
     val stage1 = WonderStage(Requirements(), emptyList())
