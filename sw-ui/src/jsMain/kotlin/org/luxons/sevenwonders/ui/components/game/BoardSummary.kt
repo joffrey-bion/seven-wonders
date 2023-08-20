@@ -48,7 +48,7 @@ val BoardSummaryWithPopover = FC<BoardSummaryWithPopoverProps>("BoardSummaryWith
                 background = None.none // overrides default white background
             }
             descendants(".bp4-popover-arrow-fill") {
-                set(Variable("fill"), bgColor.toString()) // overrides default white arrow
+                set(CustomPropertyName("fill"), bgColor.toString()) // overrides default white arrow
             }
             descendants(".bp4-popover-arrow::before") {
                 // The popover arrow is implemented with a simple square rotated 45 degrees (like a rhombus).

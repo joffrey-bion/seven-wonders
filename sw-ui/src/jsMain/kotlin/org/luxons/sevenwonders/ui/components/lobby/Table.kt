@@ -22,7 +22,7 @@ private val Circle = FC<CircleProps>("Circle") { props ->
             height = props.diameter
             borderRadius = 50.pct
         }
-        child(props.children)
+        +props.children
     }
 }
 

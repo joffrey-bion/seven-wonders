@@ -104,7 +104,7 @@ private val PlayerElement = FC<PlayerElementProps>(displayName = "PlayerElement"
             alignItems = AlignItems.center
             opacity = playerItem.opacity
         }
-        child(playerItem.icon)
+        +playerItem.icon
         span {
             css {
                 fontSize = if (playerItem is PlayerItem.Placeholder) 1.5.rem else 0.9.rem

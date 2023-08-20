@@ -26,6 +26,7 @@ fun Padding(all: Length) = Padding(vertical = all, horizontal = all)
 
 // this should work because NamedColor is ultimately a hex string in JS, not the actual name
 fun NamedColor.withAlpha(alpha: Double) = "$this${(alpha * 255).toInt().toString(16)}".unsafeCast<BackgroundColor>()
+fun Color.withAlpha(alpha: Double) = "$this${(alpha * 255).toInt().toString(16)}".unsafeCast<BackgroundColor>()
 
 operator fun FilterFunction.plus(other: FilterFunction) = "$this $other".unsafeCast<FilterFunction>()
 

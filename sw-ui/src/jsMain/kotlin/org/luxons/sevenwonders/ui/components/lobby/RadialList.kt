@@ -87,7 +87,7 @@ private fun ChildrenBuilder.radialListItem(item: ReactElement<*>, key: String, o
         }
         this.key = key
 
-        child(item)
+        +item
     }
 }
 
@@ -100,7 +100,7 @@ private fun ChildrenBuilder.radialListCenter(centerElement: ReactElement<*>?) {
             zIndex = integer(0)
             absoluteCenter()
         }
-        child(centerElement)
+        +centerElement
     }
 }
 
