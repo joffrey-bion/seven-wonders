@@ -22,9 +22,6 @@ gradleEnterprise {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         termsOfServiceAgree = "yes"
         publishAlways()
-
-        val isCIBuild = !System.getenv("CI").isNullOrEmpty()
-        tag(if (isCIBuild) "CI" else "local")
     }
 }
 
