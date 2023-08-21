@@ -24,3 +24,4 @@ jobs:
         uses: gradle-update/update-gradle-wrapper-action@v1
         with:
           repo-token: ${{ secrets.GH_PAT }}
+          labels: dependencies, internal
