@@ -8,3 +8,10 @@ updates:
     labels:
       - internal
       - dependencies
+
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - dependencies
