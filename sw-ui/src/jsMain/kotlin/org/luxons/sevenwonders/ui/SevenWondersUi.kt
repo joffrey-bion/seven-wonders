@@ -1,5 +1,6 @@
 package org.luxons.sevenwonders.ui
 
+import kotlinext.js.require
 import kotlinx.browser.window
 import kotlinx.coroutines.*
 import org.luxons.sevenwonders.ui.components.*
@@ -13,6 +14,9 @@ import web.dom.document
 import web.html.*
 
 fun main() {
+    require<Unit>("@blueprintjs/core/lib/css/blueprint.css")
+    require<Unit>("@blueprintjs/icons/lib/css/blueprint-icons.css")
+
     window.onload = { init() }
 }
 

@@ -7,7 +7,13 @@ plugins {
 kotlin {
     js {
         binaries.executable()
-        browser()
+        browser {
+            commonWebpackConfig {
+                cssSupport {
+                    enabled = true
+                }
+            }
+        }
         useCommonJs()
     }
     sourceSets {
