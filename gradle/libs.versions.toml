@@ -50,7 +50,6 @@ kotlin-wrappers-react-base = { module = "org.jetbrains.kotlin-wrappers:kotlin-re
 kotlin-wrappers-react-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom" }
 kotlin-wrappers-react-redux = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-redux" }
 kotlin-wrappers-react-router-dom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-router-dom" }
-kotlin-wrappers-styled-next = { module = "org.jetbrains.kotlin-wrappers:kotlin-styled-next" }
 
 kotlin-wrappers-blueprintjs-core = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-core", version.ref = "kotlin-blueprintjs-core" }
 kotlin-wrappers-blueprintjs-icons = { module = "org.hildan.blueprintjs:kotlin-blueprintjs-icons", version.ref = "kotlin-blueprintjs-icons" }
