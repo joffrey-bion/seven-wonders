@@ -58,8 +58,13 @@ metadata:
   name: seven-wonders-ingress
   namespace: seven-wonders
   annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "nginx"
 spec:
+  tls:
+    - hosts:
+        - seven-wonders.hildan.org
+      secretName: seven-wonders-tls
   rules:
     - host: "seven-wonders.hildan.org"
       http:
