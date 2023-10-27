@@ -1,8 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: seven-wonders
+  name: seven-wonders-deployment
   namespace: seven-wonders
+  labels:
+    app: seven-wonders
 spec:
   selector:
     matchLabels:
@@ -37,7 +39,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: seven-wonders
+  name: seven-wonders-service
   namespace: seven-wonders
   labels:
     app: seven-wonders
@@ -73,6 +75,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: seven-wonders
+                name: seven-wonders-service
                 port:
                   number: 80
