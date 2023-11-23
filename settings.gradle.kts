@@ -3,7 +3,7 @@ import de.fayard.refreshVersions.core.*
 
 plugins {
     id("com.gradle.enterprise") version "3.15.1"
-    id("de.fayard.refreshVersions") version "0.60.2"
+    id("de.fayard.refreshVersions") version "0.60.3"
 }
 
 rootProject.name = "seven-wonders"
