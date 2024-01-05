@@ -15,7 +15,7 @@ You can play it for free on http://seven-wonders.hildan.org.
 :construction: The game is still under development.
 It is possible that you experience a server restart when new versions are released.
 
-### Locally
+### Self-hosted
 
 The game is published as a [Docker image on DockerHub](https://hub.docker.com/r/hildan/seven-wonders-server).
 
@@ -37,13 +37,13 @@ For this, it uses the [krossbow](https://github.com/joffrey-bion/krossbow) multi
 
 ## How does it look?
 
-The game contains all features of the actual board game:
+The game contains all the features of the actual board game:
 
 - Play cards, discard, or upgrade your wonder
 - Buy resources from your neighbours
-- Special bonuses: pick from discarded cards, play your 2 last cards, copy neighbour guild etc.
+- Special bonuses: pick from discarded cards, play your last 2 cards, copy neighbour guild etc.
 
-Online-only features:
+There are also some features you can only get online:
 
 - Add bots to play with you, even if you're less than the minimum 3 players
 - The game greys out the cards you can't afford and the actions you can't perform
