@@ -17,7 +17,7 @@ kotlin {
         useCommonJs()
     }
     sourceSets {
-        val jsMain by getting {
+        jsMain {
             dependencies {
                 implementation(projects.swClient)
 
@@ -33,7 +33,7 @@ kotlin {
                 implementation(libs.kotlin.wrappers.emotion)
             }
         }
-        val jsTest by getting {
+        jsTest {
             dependencies {
                 implementation(kotlin("test-js"))
                 implementation(libs.kotlinx.coroutines.test)
