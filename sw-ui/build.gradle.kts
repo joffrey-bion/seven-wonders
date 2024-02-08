@@ -43,9 +43,7 @@ kotlin {
 }
 
 tasks.named<ProcessResources>("jsProcessResources") {
-    val webpack = project.tasks.withType(KotlinWebpack::class).first()
-
-    val bundleFile = webpack.mainOutputFileName
+    val bundleFile = provider { tasks.withType(KotlinWebpack::class).first().mainOutputFileName.get() }
     val publicPath = "./" // TODO get public path from webpack config
 
     filesMatching("*.html") {
