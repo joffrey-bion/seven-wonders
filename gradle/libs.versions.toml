@@ -18,7 +18,7 @@ krossbow = "6.0.0"
 logback-classic = "1.5.4"
 loki-logback-appender = "1.5.1"
 micrometer-registry-prometheus = "1.12.5"
-slf4j = "2.0.12"
+slf4j = "2.0.13"
 spring-boot = "3.2.4"
 
 # See https://github.com/JetBrains/kotlin-wrappers
