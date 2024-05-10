@@ -2,7 +2,7 @@ import com.gradle.scan.plugin.BuildScanExtension
 import de.fayard.refreshVersions.core.*
 
 plugins {
-    id("com.gradle.enterprise") version "3.17.2"
+    id("com.gradle.enterprise") version "3.17.3"
     id("de.fayard.refreshVersions") version "0.60.5"
 }
 
