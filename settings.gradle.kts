@@ -7,6 +7,12 @@ plugins {
 
 rootProject.name = "seven-wonders"
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 include("sw-common-model")
 include("sw-engine")
 include("sw-server")
