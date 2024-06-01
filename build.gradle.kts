@@ -1,5 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
@@ -20,13 +18,5 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>> {
         kotlinOptions.allWarningsAsErrors = true
-    }
-
-    tasks.withType<AbstractTestTask> {
-        testLogging {
-            events(TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-            showStackTraces = true
-        }
     }
 }
