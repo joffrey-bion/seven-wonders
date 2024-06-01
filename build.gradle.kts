@@ -5,12 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.spring) apply false
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-    }
-}
-
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { // JVM only
         kotlinOptions.jvmTarget = "17"
