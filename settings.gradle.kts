@@ -1,8 +1,7 @@
-import com.gradle.scan.plugin.BuildScanExtension
 import de.fayard.refreshVersions.core.*
 
 plugins {
-    id("com.gradle.enterprise") version "3.17.3"
+    id("com.gradle.develocity") version "3.17.4"
     id("de.fayard.refreshVersions") version "0.60.5"
 }
 
@@ -17,11 +16,11 @@ include("sw-bot")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
-        publishAlways()
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
+        uploadInBackground = false // background upload is bad for CI, and not critical for local runs
     }
 }
 
