@@ -33,6 +33,7 @@ develocity {
 refreshVersions {
     versionsPropertiesFile = file("build/tmp/refreshVersions/versions.properties").apply { parentFile.mkdirs() }
     rejectVersionIf {
+        @Suppress("UnstableApiUsage")
         candidate.stabilityLevel != StabilityLevel.Stable || "-alpha" in candidate.value || "-beta" in candidate.value
     }
 }
