@@ -8,6 +8,7 @@ plugins {
 rootProject.name = "seven-wonders"
 
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenCentral()
     }
