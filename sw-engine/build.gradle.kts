@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")
+    id("sw.kotlin-jvm")
     kotlin("plugin.serialization")
 }
 
