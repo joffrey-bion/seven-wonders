@@ -32,7 +32,7 @@ external interface ScoreTableOverlayProps : ScoreTableProps {
 }
 
 val ScoreTableOverlay = FC<ScoreTableOverlayProps>("ScoreTableOverlay") { props ->
-    BpOverlay {
+    BpOverlay2 {
         isOpen = props.isOpen
         canOutsideClickClose = true
         canEscapeKeyClose = true

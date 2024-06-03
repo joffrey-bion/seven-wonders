@@ -128,7 +128,7 @@ private val GameScenePresenter = FC<GameSceneProps>("GameScenePresenter") { prop
         val card = props.preparedCard
         val move = props.preparedMove
         if (card != null && move != null) {
-            BpOverlay {
+            BpOverlay2 {
                 isOpen = true
                 onClose = { props.unprepareMove() }
 
