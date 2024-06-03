@@ -1,6 +1,6 @@
 package org.luxons.sevenwonders.ui.components
 
-import js.core.jso
+import js.objects.*
 import org.luxons.sevenwonders.ui.components.errors.*
 import org.luxons.sevenwonders.ui.components.game.*
 import org.luxons.sevenwonders.ui.components.gameBrowser.*
@@ -10,6 +10,7 @@ import org.luxons.sevenwonders.ui.router.*
 import react.*
 import react.router.*
 import react.router.dom.*
+import react.router.dom.RouterProvider
 
 val Application = FC("Application") {
     ErrorDialog()

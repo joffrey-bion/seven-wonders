@@ -119,7 +119,7 @@ private val PlayerElement = FC<PlayerElementProps>(displayName = "PlayerElement"
                     marginTop = 0.3.rem
 
                     children(".wonder-tag") {
-                        color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp4-tag)
+                        color = Color("#f5f8fa") // blueprintjs dark theme color (removed by .bp5-tag)
                         backgroundColor = when (wonder.side) {
                             WonderSide.A -> NamedColor.seagreen
                             WonderSide.B -> NamedColor.darkred

@@ -34,7 +34,7 @@ object GameStyles {
         backgroundColor = sandBgColor
         width = 40.rem // default is 500px, we want to fit players on the side
 
-        children(".bp4-dialog-header") {
+        children(".bp5-dialog-header") {
             background = None.none // overrides default white background
         }
     }

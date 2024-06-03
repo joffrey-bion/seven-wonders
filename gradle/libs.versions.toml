@@ -24,8 +24,8 @@ spring-boot = "3.3.0"
 # See https://github.com/JetBrains/kotlin-wrappers
 kotlin-wrappers = "1.0.0-pre.620"
 
-kotlin-blueprintjs-core = "4.15.0-8"
-kotlin-blueprintjs-icons = "4.13.0-8"
+kotlin-blueprintjs-core = "5.10.2-9"
+kotlin-blueprintjs-icons = "5.9.0-9"
 
 [libraries]
 

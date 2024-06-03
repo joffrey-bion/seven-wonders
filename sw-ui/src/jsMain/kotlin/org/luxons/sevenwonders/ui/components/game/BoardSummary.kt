@@ -44,13 +44,13 @@ val BoardSummaryWithPopover = FC<BoardSummaryWithPopoverProps>("BoardSummaryWith
             borderRadius = 0.5.rem
             padding = Padding(all = 0.5.rem)
 
-            children(".bp4-popover-content") {
+            children(".bp5-popover-content") {
                 background = None.none // overrides default white background
             }
-            descendants(".bp4-popover-arrow-fill") {
+            descendants(".bp5-popover-arrow-fill") {
                 set(CustomPropertyName("fill"), bgColor.toString()) // overrides default white arrow
             }
-            descendants(".bp4-popover-arrow::before") {
+            descendants(".bp5-popover-arrow::before") {
                 // The popover arrow is implemented with a simple square rotated 45 degrees (like a rhombus).
                 // Since we use a semi-transparent background, we can see the box shadow of the rest of the arrow through
                 // the popover, and thus we see the square. This boxShadow(transparent) is to avoid that.
