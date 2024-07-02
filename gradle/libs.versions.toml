@@ -22,7 +22,7 @@ slf4j = "2.0.13"
 spring-boot = "3.3.1"
 
 # See https://github.com/JetBrains/kotlin-wrappers
-kotlin-wrappers = "1.0.0-pre.757"
+kotlin-wrappers = "1.0.0-pre.767"
 
 kotlin-blueprintjs-core = "5.10.2-10"
 kotlin-blueprintjs-icons = "5.9.0-10"
