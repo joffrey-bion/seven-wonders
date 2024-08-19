@@ -23,7 +23,7 @@ spring-boot = "3.3.2"
 
 # kotlin-react-redux no longer exists after pre.785
 # See: https://github.com/JetBrains/kotlin-wrappers/issues/2385
-kotlin-wrappers = "1.0.0-pre.785"
+kotlin-wrappers = "1.0.0-pre.793"
 
 kotlin-blueprintjs-core = "5.10.2-10"
 kotlin-blueprintjs-icons = "5.9.0-10"
