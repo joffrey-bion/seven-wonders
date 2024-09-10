@@ -17,7 +17,7 @@ kotlinx-serialization = "1.7.2"
 krossbow = "7.2.0"
 logback-classic = "1.5.7"
 loki-logback-appender = "1.5.2"
-micrometer-registry-prometheus = "1.13.3"
+micrometer-registry-prometheus = "1.13.4"
 slf4j = "2.0.16"
 spring-boot = "3.3.3"
 
