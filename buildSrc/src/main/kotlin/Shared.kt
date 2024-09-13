@@ -12,4 +12,6 @@ const val JdkVersion = 17
 fun KotlinCommonCompilerOptions.setCommonCompilerOptions() {
     progressiveMode = true
     allWarningsAsErrors = true
+
+    freeCompilerArgs.add("-Xconsistent-data-class-copy-visibility")
 }
