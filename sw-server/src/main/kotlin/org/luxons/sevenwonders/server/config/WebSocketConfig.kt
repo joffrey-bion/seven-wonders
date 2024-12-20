@@ -44,6 +44,7 @@ class WebSocketConfig(
     }
 
     override fun configureMessageConverters(messageConverters: MutableList<MessageConverter>): Boolean {
+        messageConverters.clear() // remove jackson and other undesired defaults
         messageConverters.add(KotlinSerializationJsonMessageConverter())
         return true
     }
