@@ -1,0 +1,17 @@
+name: dependabot-auto-merge
+
+on: pull_request
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      # "gh pr" command requires that we are in a git repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --rebase ${{ github.event.pull_request.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
