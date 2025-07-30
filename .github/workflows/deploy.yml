@@ -72,7 +72,7 @@ jobs:
       - name: Notify deploy start
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_SEVEN_WONDERS }}
-        uses: Ilshidur/action-discord@0.3.2
+        uses: Ilshidur/action-discord@0.4.0
         with:
           args: "[Build #${{github.run_id}}](<https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}>): Deploying new version `${{ env.DOCKERHUB_USER }}/${{ env.DOCKER_IMAGE_NAME }}:${{ env.DOCKER_IMAGE_TAG_BUILD }}` ([see changes](<{{ EVENT_PAYLOAD.compare }}>))..."
 
@@ -85,6 +85,6 @@ jobs:
       - name: Notify deploy success
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_SEVEN_WONDERS }}
-        uses: Ilshidur/action-discord@0.3.2
+        uses: Ilshidur/action-discord@0.4.0
         with:
           args: 'Deployment successful!'
