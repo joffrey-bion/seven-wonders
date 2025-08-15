@@ -2,7 +2,7 @@ import de.fayard.refreshVersions.core.*
 
 plugins {
     id("com.gradle.develocity") version "4.0.2"
-    id("de.fayard.refreshVersions") version "0.60.5"
+    id("de.fayard.refreshVersions") version "0.60.6"
 }
 
 rootProject.name = "seven-wonders"
