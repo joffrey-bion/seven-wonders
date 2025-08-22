@@ -9,7 +9,7 @@ jobs:
     steps:
       # "gh pr" command requires that we are in a git repository
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Enable auto-merge for Dependabot PRs
         run: gh pr merge --auto --rebase ${{ github.event.pull_request.number }}
