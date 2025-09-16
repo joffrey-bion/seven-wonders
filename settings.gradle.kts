@@ -1,7 +1,7 @@
 import de.fayard.refreshVersions.core.*
 
 plugins {
-    id("com.gradle.develocity") version "4.1.1"
+    id("com.gradle.develocity") version "4.2"
     id("de.fayard.refreshVersions") version "0.60.6"
 }
 
