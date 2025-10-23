@@ -76,7 +76,6 @@ private class PlayerInfoPresenter(props: PlayerInfoProps) : Component<PlayerInfo
             FlexDirection.column -> marginTop = margin
             FlexDirection.rowReverse -> marginRight = margin
             FlexDirection.columnReverse -> marginBottom = margin
-            else -> error("Unsupported orientation '$orientation' for player info component")
         }
     }
 
