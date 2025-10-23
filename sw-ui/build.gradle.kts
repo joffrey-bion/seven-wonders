@@ -23,7 +23,7 @@ kotlin {
 
                 implementation(libs.kotlinx.coroutines.core)
 
-                implementation(platform(libs.kotlin.wrappers.bom.get()))
+                implementation(project.dependencies.platform(libs.kotlin.wrappers.bom.get()))
                 implementation(libs.kotlin.wrappers.react.base)
                 implementation(libs.kotlin.wrappers.react.dom)
                 implementation(libs.kotlin.wrappers.react.redux)

@@ -23,7 +23,7 @@ import kotlin.time.toJavaDuration
  */
 @RestController
 class AutoGameController(
-    @Value("\${server.port}") private val serverPort: String,
+    @param:Value("\${server.port}") private val serverPort: String,
     private val meterRegistry: MeterRegistry,
 ) {
     @PostMapping("/autoGame")

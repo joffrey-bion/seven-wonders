@@ -37,7 +37,7 @@ class LobbyController(
     private val messenger: SimpMessageSendingOperations,
     private val lobbyRepository: LobbyRepository,
     private val playerRepository: PlayerRepository,
-    @Value("\${server.port}") private val serverPort: String,
+    @param:Value("\${server.port}") private val serverPort: String,
     private val meterRegistry: MeterRegistry,
 ) : CoroutineScopedComponent() {
     private val Principal.player: Player
