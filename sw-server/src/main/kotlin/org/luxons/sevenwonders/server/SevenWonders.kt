@@ -24,7 +24,7 @@ class SevenWonders {
             .commonTags("instance", findInstanceName())
     }
 
-    private fun findInstanceName(): String? {
+    private fun findInstanceName(): String {
         val hostname = System.getenv("HOSTNAME")?.takeIf { it.isNotBlank() }
         if (hostname != null) {
             return hostname
