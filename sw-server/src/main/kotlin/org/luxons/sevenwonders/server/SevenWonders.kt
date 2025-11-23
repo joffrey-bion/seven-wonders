@@ -1,21 +1,18 @@
 package org.luxons.sevenwonders.server
 
-import io.micrometer.core.instrument.MeterRegistry
-import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.http.HttpMessageConverters
-import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Bean
-import org.springframework.http.converter.json.KotlinSerializationJsonHttpMessageConverter
-import java.net.InetAddress
+import io.micrometer.core.instrument.*
+import org.springframework.boot.*
+import org.springframework.boot.autoconfigure.*
+import org.springframework.boot.micrometer.metrics.autoconfigure.*
+import org.springframework.context.annotation.*
+import org.springframework.http.converter.json.*
+import java.net.*
 
 @SpringBootApplication
 class SevenWonders {
 
     @Bean
-    fun additionalConverters(): HttpMessageConverters? {
-        return HttpMessageConverters(KotlinSerializationJsonHttpMessageConverter())
-    }
+    fun additionalConverters() = KotlinSerializationJsonHttpMessageConverter()
 
     @Bean
     fun metricsCommonTags(): MeterRegistryCustomizer<MeterRegistry>? = MeterRegistryCustomizer { registry ->

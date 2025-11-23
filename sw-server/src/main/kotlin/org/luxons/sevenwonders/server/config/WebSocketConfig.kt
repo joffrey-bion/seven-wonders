@@ -52,6 +52,6 @@ class WebSocketConfig(
 
 private fun createTaskScheduler() = ThreadPoolTaskScheduler().apply {
     poolSize = 1
-    threadNamePrefix = "stomp-heartbeat-thread-"
+    setThreadNamePrefix("stomp-heartbeat-thread-")
     initialize()
 }
