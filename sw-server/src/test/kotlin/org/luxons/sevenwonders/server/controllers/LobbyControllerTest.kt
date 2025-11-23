@@ -1,8 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import org.junit.Before
-import org.junit.Test
 import org.luxons.sevenwonders.model.Settings
 import org.luxons.sevenwonders.model.api.State
 import org.luxons.sevenwonders.model.api.actions.ReorderPlayersAction
@@ -27,7 +25,7 @@ class LobbyControllerTest {
 
     private lateinit var lobbyController: LobbyController
 
-    @Before
+    @BeforeTest
     fun setUp() {
         val meterRegistry = SimpleMeterRegistry()
         val template = SimpMessagingTemplate(MockMessageChannel())

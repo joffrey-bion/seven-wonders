@@ -1,15 +1,9 @@
 package org.luxons.sevenwonders.server.validation
 
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import org.junit.Before
-import org.junit.Test
-import org.luxons.sevenwonders.server.lobby.Lobby
-import org.luxons.sevenwonders.server.lobby.Player
-import org.luxons.sevenwonders.server.repositories.LobbyNotFoundException
-import org.luxons.sevenwonders.server.repositories.LobbyRepository
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import io.micrometer.core.instrument.simple.*
+import org.luxons.sevenwonders.server.lobby.*
+import org.luxons.sevenwonders.server.repositories.*
+import kotlin.test.*
 
 class DestinationAccessValidatorTest {
 
@@ -17,7 +11,7 @@ class DestinationAccessValidatorTest {
 
     private lateinit var destinationAccessValidator: DestinationAccessValidator
 
-    @Before
+    @BeforeTest
     fun setup() {
         val meterRegistry = SimpleMeterRegistry()
         lobbyRepository = LobbyRepository(meterRegistry)

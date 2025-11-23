@@ -1,9 +1,9 @@
 package org.luxons.sevenwonders.server.repositories
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import org.junit.Before
-import org.junit.Test
 import org.luxons.sevenwonders.server.lobby.Player
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
@@ -14,7 +14,7 @@ class LobbyRepositoryTest {
 
     private lateinit var repository: LobbyRepository
 
-    @Before
+    @BeforeTest
     fun setUp() {
         val meterRegistry = SimpleMeterRegistry()
         repository = LobbyRepository(meterRegistry)

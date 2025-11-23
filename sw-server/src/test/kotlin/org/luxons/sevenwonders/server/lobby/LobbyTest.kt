@@ -1,37 +1,23 @@
 package org.luxons.sevenwonders.server.lobby
 
-import org.junit.Assume.assumeTrue
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
-import org.junit.experimental.theories.DataPoints
-import org.junit.experimental.theories.Theories
-import org.junit.experimental.theories.Theory
-import org.junit.runner.RunWith
-import org.luxons.sevenwonders.engine.data.GameDefinition
-import org.luxons.sevenwonders.model.Settings
-import org.luxons.sevenwonders.model.api.State
-import org.luxons.sevenwonders.server.lobby.Lobby.GameAlreadyStartedException
-import org.luxons.sevenwonders.server.lobby.Lobby.PlayerListMismatchException
-import org.luxons.sevenwonders.server.lobby.Lobby.PlayerNameAlreadyUsedException
-import org.luxons.sevenwonders.server.lobby.Lobby.PlayerOverflowException
-import org.luxons.sevenwonders.server.lobby.Lobby.PlayerUnderflowException
-import org.luxons.sevenwonders.server.lobby.Lobby.UnknownPlayerException
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
+import org.junit.jupiter.api.Assumptions.assumeTrue
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.params.*
+import org.junit.jupiter.params.provider.*
+import org.luxons.sevenwonders.engine.data.*
+import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.api.*
+import org.luxons.sevenwonders.server.lobby.Lobby.*
+import kotlin.test.*
 import kotlin.test.assertNotNull
-import kotlin.test.assertSame
-import kotlin.test.assertTrue
 
-@RunWith(Theories::class)
 class LobbyTest {
 
     private lateinit var gameOwner: Player
 
     private lateinit var lobby: Lobby
 
-    @Before
+    @BeforeTest
     fun setUp() {
         gameOwner = Player("gameowner", "Game owner")
         lobby = Lobby(42, "Test Game", gameOwner, gameDefinition)
@@ -194,7 +180,8 @@ class LobbyTest {
         }
     }
 
-    @Theory
+    @ParameterizedTest
+    @MethodSource("nbPlayers")
     fun startGame_failsBelowMinPlayers(nbPlayers: Int) {
         assumeTrue(nbPlayers < gameDefinition.minPlayers)
 
@@ -206,7 +193,8 @@ class LobbyTest {
         }
     }
 
-    @Theory
+    @ParameterizedTest
+    @MethodSource("nbPlayers")
     fun startGame_succeedsAboveMinPlayers(nbPlayers: Int) {
         assumeTrue(nbPlayers >= gameDefinition.minPlayers)
         assumeTrue(nbPlayers <= gameDefinition.maxPlayers)
@@ -252,11 +240,10 @@ class LobbyTest {
         private lateinit var gameDefinition: GameDefinition
 
         @JvmStatic
-        @DataPoints
         fun nbPlayers(): IntArray = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
         @JvmStatic
-        @BeforeClass
+        @BeforeAll
         fun loadDefinition() {
             gameDefinition = GameDefinition.load()
         }

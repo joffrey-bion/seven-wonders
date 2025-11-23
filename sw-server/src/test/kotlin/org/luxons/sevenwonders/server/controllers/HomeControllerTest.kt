@@ -1,7 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import org.junit.Test
 import org.luxons.sevenwonders.model.api.actions.ChooseNameAction
 import org.luxons.sevenwonders.model.api.actions.Icon
 import org.luxons.sevenwonders.model.api.events.GameEvent
@@ -9,6 +8,7 @@ import org.luxons.sevenwonders.server.repositories.PlayerRepository
 import org.luxons.sevenwonders.server.test.MockMessageChannel
 import org.luxons.sevenwonders.server.test.expectSentGameEventTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class HomeControllerTest {

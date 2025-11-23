@@ -1,20 +1,14 @@
 package org.luxons.sevenwonders.server
 
-import org.junit.runner.RunWith
 import org.luxons.sevenwonders.client.*
-import org.luxons.sevenwonders.model.TurnAction
-import org.luxons.sevenwonders.model.api.events.GameEvent
-import org.luxons.sevenwonders.model.api.events.GameListEvent
+import org.luxons.sevenwonders.model.*
+import org.luxons.sevenwonders.model.api.events.*
 import org.luxons.sevenwonders.server.test.*
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import org.springframework.boot.test.context.*
+import org.springframework.boot.test.context.SpringBootTest.*
+import org.springframework.boot.test.web.server.*
+import kotlin.test.*
 
-@RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class SevenWondersTest {
 

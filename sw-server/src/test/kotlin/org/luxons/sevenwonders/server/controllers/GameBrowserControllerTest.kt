@@ -1,8 +1,6 @@
 package org.luxons.sevenwonders.server.controllers
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import org.junit.Before
-import org.junit.Test
 import org.luxons.sevenwonders.model.api.actions.CreateGameAction
 import org.luxons.sevenwonders.model.api.actions.JoinGameAction
 import org.luxons.sevenwonders.model.api.events.GameEvent
@@ -15,6 +13,8 @@ import org.luxons.sevenwonders.server.test.MockMessageChannel
 import org.luxons.sevenwonders.server.test.expectSentGameEventTo
 import org.luxons.sevenwonders.server.test.expectSentGameListEvent
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
@@ -28,7 +28,7 @@ class GameBrowserControllerTest {
 
     private lateinit var gameBrowserController: GameBrowserController
 
-    @Before
+    @BeforeTest
     fun setUp() {
         messageChannel = MockMessageChannel()
         val messenger = SimpMessagingTemplate(messageChannel)
