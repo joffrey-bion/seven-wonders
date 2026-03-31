@@ -4,14 +4,24 @@ import blueprintjs.core.*
 import emotion.react.*
 import org.luxons.sevenwonders.ui.components.*
 import org.luxons.sevenwonders.ui.redux.*
+import org.luxons.sevenwonders.ui.router.SwRoute
 import org.luxons.sevenwonders.ui.utils.*
 import react.*
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.h1
 import react.dom.html.ReactHTML.h2
+import react.router.*
 import web.cssom.*
 
 val GameBrowser = FC {
+    val connectedPlayer = useSwSelector { it.connectedPlayer }
+    if (connectedPlayer == null) {
+        Navigate {
+            to = SwRoute.HOME.path
+            replace = true
+        }
+        return@FC
+    }
     div {
         css(GlobalStyles.fullscreen, GlobalStyles.zeusBackground) {
             padding = Padding(all = 1.rem)
