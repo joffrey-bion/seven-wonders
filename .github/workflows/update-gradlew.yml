@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # The update-gradle-wrapper-action cannot work if we leave the default credentials.
           # See https://github.com/gradle-update/update-gradle-wrapper-action/issues/988
