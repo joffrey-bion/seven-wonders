@@ -18,7 +18,7 @@ krossbow = "9.3.0"
 logback-classic = "1.5.37"
 loki-logback-appender = "2.0.3"
 micrometer-registry-prometheus = "1.17.0"
-slf4j = "2.0.17"
+slf4j = "2.0.18"
 spring-boot = "4.0.2"
 
 # kotlin-react-redux no longer exists after pre.785
