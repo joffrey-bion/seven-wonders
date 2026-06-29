@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong
 class LobbyRepository(
     meterRegistry: MeterRegistry,
 ) {
-    private val lobbies = meterRegistry.gaugeMapSize("games.count", emptyList(), ConcurrentHashMap<Long, Lobby>())!!
+    private val lobbies = meterRegistry.gaugeMapSize("games.count", emptyList(), ConcurrentHashMap<Long, Lobby>())
 
     private var lastGameId: AtomicLong = AtomicLong(0)
 
