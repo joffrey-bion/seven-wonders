@@ -22,7 +22,7 @@ internal class StompDisconnectionListener(
 
     private val logger = LoggerFactory.getLogger(StompDisconnectionListener::class.java)
 
-    private val activeConnections: AtomicInteger = meterRegistry.gauge("clients.connected", AtomicInteger(0))!!
+    private val activeConnections: AtomicInteger = meterRegistry.gauge("clients.connected", AtomicInteger(0))
 
     override fun onApplicationEvent(event: AbstractSubProtocolEvent) {
         when (event) {
