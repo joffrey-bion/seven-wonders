@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.spring.boot)
 }
 
-private val staticFiles by configurations.creating {
+private val staticFiles = configurations.create("staticFiles") {
     isCanBeConsumed = false
 }
 

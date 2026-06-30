@@ -51,7 +51,7 @@ tasks.named<ProcessResources>("jsProcessResources") {
     }
 }
 
-private val frontendDistribution by configurations.creating {
+private val frontendDistribution = configurations.create("frontendDistribution") {
     isCanBeConsumed = true
     isCanBeResolved = false
 }
