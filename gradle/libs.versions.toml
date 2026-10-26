@@ -19,7 +19,7 @@ logback-classic = "1.6.5"
 loki-logback-appender = "2.1.0"
 micrometer-registry-prometheus = "1.17.1"
 slf4j = "2.0.20"
-spring-boot = "4.1.1"
+spring-boot = "4.1.2"
 
 # kotlin-react-redux no longer exists after pre.785
 # See: https://github.com/JetBrains/kotlin-wrappers/issues/2385
