@@ -2,6 +2,7 @@ package org.luxons.sevenwonders.engine.moves
 
 import org.luxons.sevenwonders.engine.PlayerContext
 import org.luxons.sevenwonders.engine.cards.Card
+import org.luxons.sevenwonders.engine.effects.ScienceProgress
 import org.luxons.sevenwonders.engine.effects.SpecialAbility
 import org.luxons.sevenwonders.model.PlayerMove
 import org.luxons.sevenwonders.model.Settings
@@ -33,5 +34,6 @@ internal class CopyGuildMove(move: PlayerMove, card: Card, player: PlayerContext
 
     override fun activate(discardedCards: List<Card>, settings: Settings) {
         playerContext.board.copiedGuild = card
+        card.effects.filterIsInstance<ScienceProgress>().forEach { it.applyTo(playerContext) }
     }
 }
