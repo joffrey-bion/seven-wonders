@@ -206,8 +206,11 @@ class Game internal constructor(
         if (boardsWithPlayDiscardedAbility.isEmpty()) {
             return false
         }
-        if (discardedCards.isEmpty()) {
-            // it was wasted for this turn, no discarded card to play
+        val someCardCanBePlayed = boardsWithPlayDiscardedAbility.any { board ->
+            discardedCards.any { !it.isAlreadyOnBoard(board) }
+        }
+        if (!someCardCanBePlayed) {
+            // it was wasted for this turn, no discarded card can be played
             boardsWithPlayDiscardedAbility.forEach { it.removeSpecial(SpecialAbility.PLAY_DISCARDED) }
             return false
         }
