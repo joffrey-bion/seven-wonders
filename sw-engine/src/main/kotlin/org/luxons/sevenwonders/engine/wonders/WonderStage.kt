@@ -25,7 +25,7 @@ internal class WonderStage(
     }
 
     fun activate(player: Player, boughtResources: ResourceTransactions) {
-        effects.forEach { it.applyTo(player) }
         requirements.pay(player, boughtResources)
+        effects.forEach { it.applyTo(player) }
     }
 }
